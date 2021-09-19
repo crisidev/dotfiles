@@ -1,0 +1,353 @@
+###########################
+# Crisidev i3 config
+###########################
+# vim:filetype=i3config
+# i3 config file (v4)
+
+###########################
+# General i3 configs
+###########################
+# Use win as mod. Win and alt are switched via xmodmap, hence you use alt.
+set $mod Mod4
+
+# Editor
+set $editor vim
+
+# font
+font pango:Inter Regular, Font Awesome 5 Free 9
+
+# Gaps configuration
+gaps inner 5
+gaps outer 3
+
+# Go back to previous workspace pressing the same move combination
+workspace_auto_back_and_forth yes
+
+# Unconstrained float size
+floating_minimum_size -1 x -1
+floating_maximum_size -1 x -1
+
+# Split orientation
+default_orientation horizontal
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+###########################
+# Appearance
+###########################
+# client.focused          #7789cb #7789cb #ffffff #7789cb #7789cb
+client.focused           #918ad2 #918ad2 #ffffff #918ad2 #918ad2
+# client.focused_inactive #7789cb #7789cb #ffffff #7789cb #7789cb
+client.urgent           #ff6961 #ff6961 #ff6961 #ff6961 #ff6961
+
+###########################
+# Workspaces
+###########################
+set $w1 1: shell
+set $w2 2: www
+set $w3 3: irc
+set $w4 4: videoconf
+set $w5 5: chime
+set $w6 6: mail
+set $w7 7: calendar
+set $w8 8: chat
+set $w9 9: slack
+set $w10 10: outlook
+set $w11 11: spotify
+set $w12 12: quip
+set $w13 13: var1
+
+###########################
+# Marks
+###########################
+show_marks yes
+
+###########################
+# Windows rules
+###########################
+# Border options
+for_window [class="^.*"] border pixel 2
+
+# Float windows
+for_window [class="Vpnui"] floating enable border pixel 1
+for_window [class="Gpick"] floating enable border pixel 1
+for_window [class="Arandr"] floating enable border pixel 1
+for_window [class="System-config-printer.py"] floating enable border pixel 1
+for_window [class="Nautilus"] floating enable border pixel 1
+for_window [class="Gnome-disks"] floating enable border pixel 1
+for_window [class="Volti"] floating enable border pixel 1
+for_window [class="VirtualBox Manager"] floating enable border pixel 1
+for_window [class="VirtualBox Machine"] floating enable border pixel 1
+for_window [class="Steam"] floating enable border pixel 1
+for_window [class="Blueman-manager"] floating enable border pixel 1
+for_window [class="Shutter"] floating enable border pixel 1
+for_window [class="kitty" instance="floating"] floating enable border pixel 1
+for_window [class="Zeal"] floating enable border pixel 1
+for_window [class="Nm-connection-editor"] floating enable border pixel 1
+for_window [class="KibanaAWSElectron"] floating enable border pixel 1
+for_window [class="Lxappearance"] floating enable border pixel 1
+for_window [class="Linphone"] floating enable border pixel 1
+for_window [class="Pavucontrol"] floating enable border pixel 1
+for_window [class="Pavumeter"] floating enable border pixel 1
+for_window [class="Eog"] floating enable border pixel 1
+for_window [class="qemu-system-x86_64"] floating enable border pixel 1
+for_window [class="Gnome-control-center"] floating enable border pixel 1
+for_window [class="Evince"] floating enable border pixel 1
+for_window [class="Xsane"] floating enable border pixel 1
+for_window [class="vlc"] floating enable border pixel 1
+for_window [class="flameshot"] floating enable border pixel 1
+for_window [class="feh"] floating enable border pixel 1
+for_window [class="Geeqie"] floating enable border pixel 1
+for_window [class="python3.6"] floating enable border pixel 1
+for_window [class="Cisco AnyConnect Secure Mobility Client"] floating enable border pixel 1
+for_window [class="Gnome-tweaks"] floating enable  border pixel 1
+for_window [class="Software-properties-gtk"] floating enable border pixel 1
+for_window [class="Dconf-editor"] foggle" ]; thenloating enable border pixel 1
+for_window [class="python3.8"] floating enable border pixel 1
+for_window [class="Simple-scan"] floating enable border pixel 1
+for_window [class="Dconf-editor"] floating enable border pixel 1
+for_window [class="Evolution-alarm-notify"] floating enable border pixel 1
+for_window [class="Gnome-font-viewer"] floating enable border pixel 1
+
+# Special borders and floats
+for_window [class="^ide$"] floating enable border pixel 2
+for_window [class="Ulauncher"] floating enable border pixel 0
+
+assign [class="Google-chrome" instance="google-chrome.*\(/home/.*/.local/share/chrome-chime\)"] $w4
+assign [class="Google-chrome" instance="app.chime.aws"] $w5
+assign [title=".*Calendar.*"] $w7
+assign [class="Evolution.real" title=".*Meeting.*"] $w7
+assign [class="Evolution.real"] $w6
+assign [class="signal"] $w8
+assign [class="Signal"] $w8
+assign [class="Google-chrome" instance="web.whatsapp.com"] $w8
+assign [class="Slack"] $w9
+assign [class="slack"] $w9
+assign [class="Google-chrome" instance="ballard.amazon.com__owa"] $w10
+assign [class="Spotify"] $w11
+assign [class="spotify"] $w11
+assign [class="Google-chrome" instance="google-chrome.*\(/home/.*/.local/share/chrome-quip\)"] $w12
+assign [class="Google-chrome" instance="quip-amazon.com"] $w12
+
+###########################
+# HW keys
+###########################
+# Volume (Fn-F(8-9-10))
+bindsym XF86AudioPlay exec --no-startup-id "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause"
+bindsym XF86AudioNext exec --no-startup-id "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next"
+bindsym XF86AudioPrev exec --no-startup-id "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.previous"
+bindsym Mod1+F10 exec --no-startup-id $psst pactl set-source-mute @DEFAULT_SOURCE@ toggle"
+
+# Sleep (Fn-F1)
+bindsym XF86Sleep exec --no-startup-id "$HOME/.bin/i3exit suspend"
+
+# Monitor
+bindsym XF86Display exec --no-startup-id "$HOME/.bin/i3monitor duplicate all"
+
+# Print focused window
+bindsym Print exec --no-startup-id "flameshot gui"
+
+###########################
+# i3 bindings
+###########################
+# Restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+r restart 
+
+# Reload i3 config 
+bindsym $mod+Shift+c reload
+
+# Exit i3 (logs you out of your X session)
+bindsym $mod+Shift+e exec --no-startup-id "gnome-session-quit"
+
+# Ulauncher toogle
+bindsym $mod+space exec --no-startup-id "ulauncher-toggle"
+
+# Start a terminal
+bindsym $mod+Return exec --no-startup-id "$HOME/.bin/kitty --detach"
+
+# Start a floating terminal
+bindsym $mod+Shift+Return exec --no-startup-id "$HOME/.bin/kitty --name floating --detach"
+
+# Start a file browser:
+bindsym Control+space exec --no-startup-id "nautilus && i3-msg move position center"
+
+# Kill focused window
+bindsym $mod+q kill
+bindsym --release $mod+Shift+q exec --no-startup-id xkill
+
+# Focus parent
+bindsym $mod+k exec --no-startup-id $HOME/.bin/mff focus parent
+
+# Paste from selection
+bindsym $mod+Shift+slash exec --no-startup-id xdotool click 2
+
+# Split in horizontal orientation
+bindsym $mod+Shift+h split v
+
+# Split in vertical orientation
+bindsym $mod+Shift+v split h
+
+# Enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# Change container layout (bsp, stacked, tabbed)
+bindsym $mod+b layout splith
+# bindsym $mod+s layout stacking
+bindsym $mod+t layout tabbed
+
+# Toggle tiling / floating
+bindsym $mod+backslash floating toggle
+
+# Hide and restore windoes
+bindsym $mod+x [floating] move scratchpad
+bindsym $mod+Shift+x [floating] scratchpad show
+
+# IDE
+bindsym $mod+e exec --no-startup-id "$HOME/.bin/ide toggle"
+bindsym $mod+r focus mode_toggle
+
+###########################
+# i3 movements
+###########################
+# Switch to workspace
+bindsym $mod+Escape exec --no-startup-id $HOME/.bin/mff workspace $w1
+bindsym $mod+F2 exec --no-startup-id $HOME/.bin/mff workspace $w2 
+bindsym $mod+F1 exec --no-startup-id $HOME/.bin/mff workspace $w3
+bindsym $mod+1 exec --no-startup-id $HOME/.bin/mff workspace $w4
+bindsym $mod+2 exec --no-startup-id $HOME/.bin/mff workspace $w5
+bindsym $mod+4 exec --no-startup-id $HOME/.bin/mff workspace $w6 
+bindsym $mod+3 exec --no-startup-id $HOME/.bin/mff workspace $w9
+bindsym $mod+F4 exec --no-startup-id $HOME/.bin/mff workspace $w7
+bindsym $mod+F3 exec --no-startup-id $HOME/.bin/mff workspace $w8
+bindsym $mod+5 exec --no-startup-id $HOME/.bin/mff workspace $w10
+bindsym $mod+F5 exec --no-startup-id $HOME/.bin/mff workspace $w11
+bindsym $mod+6 exec --no-startup-id $HOME/.bin/mff workspace $w12
+bindsym $mod+F6 exec --no-startup-id $HOME/.bin/mff workspace $w13
+
+# Move focused workspace to output
+bindsym $mod+Mod1+plus exec --no-startup-id $HOME/.bin/mff move workspace to output DP-2-1
+bindsym $mod+Mod1+BackSpace exec --no-startup-id $HOME/.bin/mff move workspace to output DP-2-2
+bindsym $mod+Mod1+Home exec --no-startup-id $HOME/.bin/mff move workspace to output eDP-1
+
+# Move focused container to workspace
+bindsym $mod+Shift+Escape exec --no-startup-id $HOME/.bin/mff move container to workspace $w1 
+bindsym $mod+Shift+F2 exec --no-startup-id $HOME/.bin/mff move container to workspace $w2
+bindsym $mod+Shift+F1 exec --no-startup-id $HOME/.bin/mff move container to workspace $w3
+bindsym $mod+Shift+1 exec --no-startup-id $HOME/.bin/mff move container to workspace $w4
+bindsym $mod+Shift+2 exec --no-startup-id $HOME/.bin/mff move container to workspace $w5
+bindsym $mod+Shift+4 exec --no-startup-id $HOME/.bin/mff move container to workspace $w6
+bindsym $mod+Shift+3 exec --no-startup-id $HOME/.bin/mff move container to workspace $w9
+bindsym $mod+Shift+F4 exec --no-startup-id $HOME/.bin/mff move container to workspace $w7
+bindsym $mod+Shift+F3 exec --no-startup-id $HOME/.bin/mff move container to workspace $w8
+bindsym $mod+Shift+5 exec --no-startup-id $HOME/.bin/mff move container to workspace $w10
+bindsym $mod+Shift+F5 exec --no-startup-id $HOME/.bin/mff move container to workspace $w11
+bindsym $mod+Shift+6 exec --no-startup-id $HOME/.bin/mff move container to workspace $w12
+bindsym $mod+Shift+F6 exec --no-startup-id $HOME/.bin/mff move container to workspace $w13
+
+# Focus window
+bindsym $mod+Tab exec --no-startup-id $HOME/.bin/i3cycle
+bindsym $mod+Left exec --no-startup-id $HOME/.bin/mff "focus mode_toggle focus left"
+bindsym $mod+Down exec --no-startup-id $HOME/.bin/mff "focus mode_toggle focus down"
+bindsym $mod+Up exec --no-startup-id $HOME/.bin/mff "focus mode_toggle focus up"
+bindsym $mod+Right exec --no-startup-id $HOME/.bin/mff "focus mode_toggle focus right"
+
+# Move windows
+bindsym $mod+Shift+Left exec --no-startup-id $HOME/.bin/i3window swap left
+bindsym $mod+Shift+Down exec --no-startup-id $HOME/.bin/i3window swap down
+bindsym $mod+Shift+Up exec --no-startup-id $HOME/.bin/i3window swap up
+bindsym $mod+Shift+Right exec --no-startup-id $HOME/.bin/i3window swap right
+# bindsym --whole-window Control+button3 mark --add quickswap
+# bindsym --whole-window Control+Shift+button3 unmark quickswap
+# bindsym --whole-window Control+button2 swap with mark quickswap; [con_mark="quickswap"] focus; unmark quickswap
+
+# Resize mode
+bindsym $mod+Mod1+Left exec --no-startup-id $HOME/.bin/i3resize "Left" "5 px or 5 ppt"
+bindsym $mod+Mod1+Right exec --no-startup-id $HOME/.bin/i3resize "Right" "5 px or 5 ppt"
+bindsym $mod+Mod1+Up exec --no-startup-id $HOME/.bin/i3resize "Up" "5 px or 5 ppt"
+bindsym $mod+Mod1+Down exec --no-startup-id $HOME/.bin/i3resize "Down" "5 px or 5 ppt"
+
+
+###########################
+# Power mode
+###########################
+bindsym XF86PowerOff mode " [l]ock [e]xit [s]uspend [h]ibernate [r]eboot [p]oweroff"
+bindsym $mod+Mod1+p mode " [l]ock [e]xit [s]uspend [h]ibernate [r]eboot [p]oweroff"
+mode " [l]ock [e]xit [s]uspend [h]ibernate [r]eboot [p]oweroff" {
+    bindsym l mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3exit lock
+    bindsym e mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3exit logout
+    bindsym s mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3exit suspend
+    bindsym h mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3exit hibernate
+    bindsym r mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3exit reboot
+    bindsym p mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3exit shutdown
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+###########################
+# Monitor mode
+###########################
+bindsym $mod+Mod1+m mode " [a]uto [l]aptop [h]ome [w]ork [d]uplicate [D]uplicate_all"
+mode " [a]uto [l]aptop [h]ome [w]ork [d]uplicate [D]uplicate_all" {
+    bindsym a mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3monitor auto
+    bindsym l mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3monitor laptop
+    bindsym h mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3monitor home
+    bindsym w mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3monitor work
+    bindsym d mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3monitor duplicate
+    bindsym D mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3monitor duplicate all
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+###########################
+# i3blocks bar
+###########################
+bar {
+    tray_output none
+    font pango:Inter Regular, DejaVu Sans Mono for Powerline, Font Awesome 5 Free 9
+    position top
+    status_command source $HOME/.zsh_secrets && $HOME/.cargo/bin/i3status-rs $HOME/.config/i3/top.toml
+    strip_workspace_numbers yes
+    workspace_buttons yes
+    height 24
+    colors {
+        separator            #666666
+        background           #222222
+        statusline           #dddddd
+        focused_workspace    #7789cb #7789cb #ffffff
+        active_workspace     #7789cb #7789cb #ffffff
+        inactive_workspace   #333333 #333333 #888888
+        urgent_workspace     #918ad2 #918ad2 #ffffff
+    }
+}
+
+bar {
+    output primary
+    tray_output primary
+    font pango:Inter Regular, DejaVu Sans Mono for Powerline, Font Awesome 5 Free 9
+    status_command source $HOME/.zsh_secrets && $HOME/.cargo/bin/i3status-rs $HOME/.config/i3/bottom.toml
+    position bottom
+    workspace_buttons no
+    height 26
+    colors {
+        separator            #666666
+        background           #222222
+        statusline           #dddddd
+        focused_workspace    #7789cb #7789cb #ffffff
+        active_workspace     #7789cb #7789cb #ffffff
+        inactive_workspace   #333333 #333333 #888888
+        urgent_workspace     #918ad2 #918ad2 #ffffff
+    }
+}
+
+
+###########################
+# Startup commands
+###########################
+exec_always --no-startup-id "$HOME/.bin/import-gsettings gtk-theme:gtk-theme-name icon-theme:gtk-icon-theme-name cursor-theme:gtk-cursor-theme-name font-name:gtk-font-name"
+
+exec "systemctl --user start wm.target"
+exec "zsh -c 'GDK_BACKEND=x11 /usr/bin/ulauncher --hide-window'"
+
+# Exec always
+exec_always --no-startup-id "feh --bg-fill $HOME/Pictures/wallpapers/fishing.jpeg"

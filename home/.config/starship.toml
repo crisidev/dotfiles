@@ -1,0 +1,81 @@
+# Don't print a new line at the start of the prompt
+add_newline = false
+command_timeout = 1000
+
+format = """[❯](red)[❯](yellow)[❯](green) $directory$character"""
+right_format = """
+$git_branch\
+$git_state\
+$git_status\
+$hg_branch\
+$package\
+$cmake\
+$dart\
+$deno\
+$dotnet\
+$elixir\
+$elm\
+$erlang\
+$golang\
+$helm\
+$java\
+$julia\
+$kotlin\
+$nim\
+$nodejs\
+$ocaml\
+$perl\
+$php\
+$purescript\
+$python\
+$ruby\
+$rust\
+$red\
+$scala\
+$swift\
+$terraform\
+$vlang\
+$vagrant\
+$nix_shell\
+$zig\
+$lua\
+$crystal\
+$custom\
+$battery\
+$cmd_duration\
+$jobs\
+$status\
+"""
+
+[cmd_duration]
+min_time = 1000
+format = "took [$duration](bold yellow) "
+
+[directory]
+truncation_length = 50
+truncate_to_repo = false
+truncation_symbol = "…/"
+style = "blue"
+format = "[$path]($style)[$read_only]($read_only_style) "
+
+[git_branch]
+format = "[$symbol$branch]($style) "
+
+[package]
+format = "is [$symbol$version]($style) "
+
+[status]
+disabled = false
+map_symbol = false
+format = "errno [$status]($style)"
+
+[rust]
+detect_folders = ["cargo-project"]
+
+[custom.path_type]
+description = "Brazil path type"
+when = "true"
+command = "starship-brazil-context path-type 'BR|' 'PE|' '📂' '📦'" 
+shell = ["bash", "--noprofile", "--norc"]
+style = "bold fg:yellow"
+format = "[($output )]($style)"

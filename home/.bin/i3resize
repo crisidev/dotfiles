@@ -1,0 +1,41 @@
+#!/usr/bin/env /home/bigo/.pyenv/shims/python
+#
+# Copyright 2016 Damien Riegel <damien.riegel@gmail.com>
+#
+# Licensed under the terms of the GNU GPL v3, or any later version.
+#
+# Resize the focused window depending on its position in the layout
+# Example: bindsym Left exec i3-smart-resize "Left"
+
+import sys
+import i3ipc
+
+DEFAULT_INCREMENT = "10 px or 10 ppt"
+
+if len(sys.argv) < 2:
+    sys.exit(-1)
+key = sys.argv[1].lower()
+
+if len(sys.argv) == 3:
+    inc = sys.argv[2]
+else:
+    inc = DEFAULT_INCREMENT
+
+i3 = i3ipc.Connection()
+focused = i3.get_tree().find_focused()
+
+if key == "up":
+    i3.command(f"resize grow up {inc}")
+    i3.command(f"resize shrink down {inc}")
+elif key == "down":
+    i3.command(f"resize grow down {inc}")
+    i3.command(f"resize shrink up {inc}")
+elif key == "right":
+    i3.command(f"resize grow right {inc}")
+    i3.command(f"resize shrink left {inc}")
+elif key == "left":
+    i3.command(f"resize grow left {inc}")
+    i3.command(f"resize shrink right {inc}")
+else:
+    sys.exit(1)
+sys.exit(0)

@@ -1,0 +1,97 @@
+#!/bin/zsh -l
+
+# Declare a list of profiles like
+# PROFILES[profile_name]="server_uri::enable_ssl_verify::api_key::attach_cmd::query_icon::group_icon"
+# where
+#   * server_uri: Full URI of the server to poll, like https://my.service.com/messages
+#   * enable_ssl_verify: true or false
+#   * api_key: 64 char API key, buildable with something like `echo something |sha256sum
+#   * attach_cmd: cmd to run via SSH to attach to the remote chat
+#   * query_icon: Icon to use for a query notification
+#   * group_icon: Icon to use for a chat group notification
+typeset -A PROFILES
+PROFILES[crisidev]="\
+https://notify.crisidev.org/messages::\
+true::\
+stuff::\
+bash -c 'tmux attach-session -t irc || tmux new-session -s irc weechat'::\
+/usr/share/icons/Paper/32x32/apps/bash.png::\
+/usr/share/icons/Paper/32x32/apps/chat.png"
+
+function usage() {
+    echo "usage: $0 profile <retention>"
+    echo
+    echo "available profiles: ${(@k)PROFILES}"
+    echo "default retention: 5 s"
+    exit 1
+}
+
+if [ $# -lt 1 ]; then
+    usage
+fi
+
+PROFILE=$1
+
+if ! echo "${(@k)PROFILES}" |grep -Eq "${PROFILE}"; then
+    usage
+fi
+
+# Variables
+RETENTION=${2:-5}
+ADDRESS=$(echo ${PROFILES[${PROFILE}]}|awk -F"::" '{print $1}')
+VERIFY_SSL=$(echo ${PROFILES[${PROFILE}]}|awk -F"::" '{print $2}')
+API_KEY=$(echo ${PROFILES[${PROFILE}]}|awk -F"::" '{print $3}')
+ATTACH_CMD=$(echo ${PROFILES[${PROFILE}]} |awk -F"::" '{print $4}')
+QUERY_ICON=$(echo ${PROFILES[${PROFILE}]} |awk -F"::" '{print $5}')
+GROUP_ICON=$(echo ${PROFILES[${PROFILE}]} |awk -F"::" '{print $6}')
+IRC_HOST="${PROFILE}_irc"
+PID_FILE="/tmp/${PROFILE}.pid"
+LOG_FILE="/tmp/${PROFILE}.log"
+
+# Autossh configuration
+# AUTOSSH_LOGFILE=/tmp/$HOST.log
+# AUTOSSH_DEBUG=yes
+AUTOSSH_FIRST_POLL=60
+AUTOSSH_POLL=10
+AUTOSSH_PORT=$(awk 'BEGIN { srand(); do r = rand()*32000; while ( r < 20000 ); printf("%d\n",r)  }' < /dev/null)
+AUTOSSH_GATETIME=5
+AUTOSSH_PATH=/usr/bin/ssh
+export AUTOSSH_POLL AUTOSSH_LOGFILE AUTOSSH_DEBUG AUTOSSH_PATH AUTOSSH_GATETIME AUTOSSH_PORT
+
+# Cleanup
+trap cleanup EXIT
+function cleanup() {
+  if [ "${API_KEY}" != "false" ]; then
+    local PID=$(cat "${PID_FILE}")
+    echo "stopping notifyd, PID ${PID}"
+    kill $PID
+    kill -9 $PID > /dev/null 2>&1
+  fi
+}
+
+# Set terminal name
+printf "\033]%s irc\07\n" "${PROFILE}"
+
+# Cleanup leftover tmux
+echo "finding and killing leftover tmux sessions"
+ssh "${IRC_HOST}" -q -t 'kill $(pgrep -f "[a]ttach-session -t irc")' > /dev/null 2>&1
+
+# Start notifyd
+if [ "${API_KEY}" != "false" ]; then
+  echo "starting notifyd against ${ADDRESS}"
+  if [ "${VERIFY_SSL}" = "true" ]; then
+    nohup notifyc --api-key "${API_KEY}" --address "${ADDRESS}" \
+      --retention "${RETENTION}" \
+      --query-icon "${QUERY_ICON}" --group-icon "${GROUP_ICON}" > "${LOG_FILE}" &
+  else
+    nohup notifyc --api-key "${API_KEY}" --address "${ADDRESS}" \
+      --retention "${RETENTION}" --no-verify-ssl \
+      --query-icon "${QUERY_ICON}" --group-icon "${GROUP_ICON}" > "${LOG_FILE}" &
+  fi
+  echo $! |tee "${PID_FILE}" > /dev/null
+fi
+
+# Start autossh and attatch
+autossh -q -t "${IRC_HOST}" "${ATTACH_CMD}"
+
+exit 0

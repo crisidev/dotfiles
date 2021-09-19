@@ -1,0 +1,30 @@
+set_title = false
+disable = ["system", "flatpak", "snap"]
+
+[git]
+repos = [
+    # Zsh
+    "~/.zprezto",
+    # Vim
+    "~/.local/share/lunarvim/lvim",
+    # Password store
+    "~/.password-store",
+    # Envs
+    "~/.nodenv",
+    "~/.pyenv",
+    "~/.rbenv",
+    # Home sick
+    "~/.homesick/repos/homeshick",
+    "~/.homesick/repos/MatbigoiDotFiles",
+    # Updates
+    "~/github/0updates/bandwhich",
+    "~/github/0updates/neovide",
+    "~/github/0updates/starship",
+    "~/github/0updates/fzf-marks",
+    "~/github/0updates/dunst",
+]
+arguments = "--ff-only --rebase --autostash"
+
+[commands]
+"Python upgrade" = "pip-review -a"
+"Amzn toolbox upgrade" = "toolbox update"

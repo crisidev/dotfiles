@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+i=0
+i3subscribe window dump | grep --line-buffered -e "^window:floating" -e "floating' => 'user_" | sed -u 's/^\s*//' |
+  while read -r line; do
+    [ "$line" == "window:floating" ] && i=1 && continue
+    [ "$i" == 1 -a "$line" == "'floating' => 'user_on'," ] && i3-msg border normal
+    [ "$i" == 1 -a "$line" == "'floating' => 'user_off'," ] && i3-msg border 1pixel
+    i=0
+  done

@@ -1,0 +1,11 @@
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=Cronotpete
+Comment=Cronopete Backup System
+Exec=/usr/bin/cronopete
+Icon=cronopete-backup
+Terminal=false
+Categories=Office;

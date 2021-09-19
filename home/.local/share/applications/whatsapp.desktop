@@ -1,0 +1,11 @@
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=Whatsapp
+Comment=Whatsapp
+Exec=google-chrome --user-data-dir=/home/bigo/.local/share/chrome-whatsapp -app=https://web.whatsapp.com
+Icon=whatsapp
+Terminal=false
+Categories=Office;

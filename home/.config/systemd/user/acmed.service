@@ -1,0 +1,10 @@
+[Unit]
+Description=Acmed session 
+PartOf=graphical-session.target
+
+[Service]
+ExecStart=/usr/local/amazon/sbin/acmed-session.sh
+Restart=always
+
+[Install]
+WantedBy=graphical-session.target

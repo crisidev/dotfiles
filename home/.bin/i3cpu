@@ -1,0 +1,29 @@
+#!/bin/bash
+
+function freq_set() {
+  for i in {0..7}; do
+    echo ${1} > /sys/devices/system/cpu/cpu${i}/cpufreq/scaling_governor
+  done 
+}
+
+if [ "$1" == "ac" ] || [ "$1" == "performance" ]; then
+  freq_set performance
+elif [ "$1" == "battery" ] || [ "$1" == "powersave" ]; then
+  freq_set powersave
+elif [ "$1" = "-h" ] || [ "$1" = "--help" ] || [ "$1" = "help" ]; then
+  echo "Usage: $(basename $0) <performance|powersave>"
+elif [ "$1" = "cycle" ]; then
+  CURRENT=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor)
+  if [ "${CURRENT}" = "performance" ]; then
+    freq_set powersave
+  else
+    freq_set performance
+  fi
+else
+  CURRENT=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor)
+  if [ "${CURRENT}" = "performance" ]; then
+    echo ""
+  else
+    echo ""
+  fi
+fi

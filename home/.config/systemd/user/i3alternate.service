@@ -1,0 +1,10 @@
+[Unit]
+Description=Switch layout 
+PartOf=graphical-session.target
+
+[Service]
+ExecStart=/home/bigo/.bin/i3alternate
+Restart=always
+
+[Install]
+WantedBy=graphical-session.target

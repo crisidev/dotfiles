@@ -1,0 +1,9 @@
+#!/bin/bash
+
+chown root:video /sys/class/backlight/intel_backlight/brightness
+chmod 664 /sys/class/backlight/intel_backlight/brightness
+
+for i in {0..7}; do
+  chown root:video /sys/devices/system/cpu/cpu${i}/cpufreq/scaling_governor
+  chmod 664 /sys/devices/system/cpu/cpu${i}/cpufreq/scaling_governor
+done

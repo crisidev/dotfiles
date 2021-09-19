@@ -1,0 +1,10 @@
+[Unit]
+Description=NetworkManager tray applet
+PartOf=graphical-session.target
+
+[Service]
+ExecStart=/usr/bin/nm-applet
+Restart=always
+
+[Install]
+WantedBy=graphical-session.target

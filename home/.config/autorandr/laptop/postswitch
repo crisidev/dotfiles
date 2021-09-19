@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+source "$HOME/.config/crisidev-common"
+
+declare -a arr=(
+  "workspace 2: www"
+)
+i3_msg_dispatcher "${arr[@]}"
+
+killall imwheel || true
+
+pacmd set-default-source alsa_input.pci-0000_00_1f.3.analog-stereo
+
+finish_autorandr_switch "$AUTORANDR_CURRENT_PROFILE"

@@ -1,0 +1,10 @@
+[Unit]
+Description=Stop working idiot
+PartOf=graphical-session.target
+
+[Service]
+ExecStart=/usr/bin/workrave
+Restart=always
+
+[Install]
+WantedBy=graphical-session.target

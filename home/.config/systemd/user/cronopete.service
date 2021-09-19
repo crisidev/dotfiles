@@ -1,0 +1,10 @@
+[Unit]
+Description=Cronopete backup
+PartOf=graphical-session.target
+
+[Service]
+ExecStart=/usr/bin/cronopete
+Type=oneshot
+
+[Install]
+WantedBy=graphical-session.target

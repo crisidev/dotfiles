@@ -1,0 +1,27 @@
+#!/bin/sh
+
+IFACE=$1
+ACTION=$2
+
+source "/home/bigo/.zsh_secrets"
+
+ntfy () {
+	sudo -u $MY_USER \
+		DISPLAY=:0 \
+		notify-send "$1" "$2"
+}
+
+case ${IFACE} in
+	eth*|usb*|en*)
+		case ${ACTION} in
+			up)
+				ntfy "Ethernet connected" "Disabling Wifi"
+				nmcli radio wifi off
+				;;
+			down)
+				ntfy "Ethernet disconnected" "Enabling Wifi"
+				nmcli radio wifi on
+				;;
+		esac
+		;;
+esac

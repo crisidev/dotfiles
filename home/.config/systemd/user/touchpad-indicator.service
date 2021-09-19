@@ -1,0 +1,10 @@
+[Unit]
+Description=Touchpad Indicator tray applet
+PartOf=graphical-session.target
+
+[Service]
+ExecStart=/usr/bin/touchpad-indicator
+Restart=always
+
+[Install]
+WantedBy=graphical-session.target

@@ -1,0 +1,10 @@
+[Unit]
+Description=Bluetooth indicator tray applet
+PartOf=graphical-session.target
+
+[Service]
+ExecStart=/usr/bin/blueman-applet
+Type=oneshot
+
+[Install]
+WantedBy=graphical-session.target

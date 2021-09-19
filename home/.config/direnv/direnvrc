@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Amazon git configs
+direnvrc_git_amazon="$(cd $(dirname $BASH_SOURCE) &> /dev/null; pwd)/direnvrc-git-amazon"
+if [ -f "$direnvrc_git_amazon" ]; then
+    source "$direnvrc_git_amazon"
+fi
+unset direnvrc_git_amazon
+
+# Crisidev git configs
+direnvrc_git_crisidev="$(cd $(dirname $BASH_SOURCE) &> /dev/null; pwd)/direnvrc-git-crisidev"
+if [ -f "$direnvrc_git_crisidev" ]; then
+    source "$direnvrc_git_crisidev"
+fi
+unset direnvrc_git_crisidev

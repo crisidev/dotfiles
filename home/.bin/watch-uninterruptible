@@ -1,0 +1,5 @@
+#!/bin/bash
+for x in $(seq 100); do 
+    ps -eo ppid,pid,user,stat,pcpu,wchan:32,cmd | awk '$4 ~ /D/  { print $0 }' 
+    sleep 0.5
+done

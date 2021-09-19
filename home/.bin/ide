@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+usage() {
+  echo "usage: $0 [toggle]"
+  exit 2
+}
+
+multigrid=""
+if [ "$1" = "-m" ]; then
+  multigrid=1
+  shift
+fi
+
+export LUNARVIM_CONFIG_DIR="${LUNARVIM_CONFIG_DIR:-$HOME/.config/lvim}"
+export LUNARVIM_RUNTIME_DIR="${LUNARVIM_RUNTIME_DIR:-$HOME/.local/share/lunarvim}"
+
+start_ide() {
+  NVIM_LISTEN_ADDRESS=/tmp/nvimsocket neovide $multigrid --x11-wm-class ide -- -u ~/.local/share/lunarvim/lvim/init.lua -c 'let g:guifont="FiraCode Nerd Font Mono:h10"' "$@"
+}
+
+start_neovide() {
+  # neovide --multigrid -- -u ~/.local/share/lunarvim/lvim/init.lua -c 'let g:guifont="FiraCode Nerd Font Mono:h10"' "$@"
+  neovide $multigrid -- -u ~/.local/share/lunarvim/lvim/init.lua -c 'let g:guifont="FiraCode Nerd Font Mono:h10"' "$@"
+}
+
+if [ "$1" = "--help" ]; then
+  usage
+elif [ "$1" = "toggle" ]; then
+  shift
+  if ! i3-msg '[class="^ide$"]' scratchpad show >/dev/null 2>&1; then
+    start_ide "$@"
+    sleep 1
+    i3-msg '[class="^ide$"]' "move position center move scratchpad scratchpad show" >/dev/null 2>&1
+  fi
+elif [ "$1" = "new" ]; then
+  start_neovide "$@"
+else
+  nvr --remote "$@"
+fi
+
+exit 0

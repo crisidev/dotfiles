@@ -1,0 +1,79 @@
+[global]
+    font = "Inter Regular 10"
+    allow_markup = yes
+    markup = full
+    format = "<b>%s</b>\n%b"
+    sort = yes
+    indicate_hidden = yes
+    alignment = center
+    bounce_freq = 0
+    stack_duplicates = yes
+    hide_duplicates_count = no
+    show_age_threshold = 60
+    show_indicators = no
+    word_wrap = yes
+    ignore_newline = no
+    geometry = "450x80-10+32"
+    transparency = 4
+    idle_threshold = 60
+    monitor = 0
+    follow = mouse
+    mouse_middle_click = do_action
+    sticky_history = yes
+    line_height = 0
+    separator_height = 3
+    padding = 8
+    horizontal_padding = 8
+    separator_color = frame
+    startup_notification = false
+    # https://github.com/knopwob/dunst/issues/26#issuecomment-36159395
+    icon_position = left
+    # dmenu path.
+    dmenu = /usr/bin/dmenu -p dunst:
+    # Browser for opening urls in context menu.
+    browser = /usr/bin/firefox -new-tab
+    # Align icons left/right/off
+    icon_position = off
+    max_icon_size = 32
+    # Paths to default icons.
+    icon_path = /usr/share/icons/Paper/32x32:/usr/share/icons/Paper/32x32/actions:/usr/share/icons/Paper/32x32/apps:/usr/share/icons/Paper/32x32/categories:/usr/share/icons/Paper/32x32/devices:/usr/share/icons/Paper/32x32/emblems:/usr/share/icons/Paper/32x32/emotes:/usr/share/icons/Paper/32x32/mimetypes:/usr/share/icons/Paper/32x32/places:/usr/share/icons/Paper/32x32/status:/usr/share/icons/Paper/32x32/web:/usr/share/icons/Paper/32x32@2x:/usr/share/icons/Paper/32x32@2x/actions:/usr/share/icons/Paper/32x32@2x/apps:/usr/share/icons/Paper/32x32@2x/categories:/usr/share/icons/Paper/32x32@2x/devices:/usr/share/icons/Paper/32x32@2x/emblems:/usr/share/icons/Paper/32x32@2x/emotes:/usr/share/icons/Paper/32x32@2x/mimetypes:/usr/share/icons/Paper/32x32@2x/places:/usr/share/icons/Paper/32x32@2x/status:/usr/share/icons/Paper/32x32@2x/web:/usr/share/pixmaps
+    frame_width = 2
+    frame_color = "#4C566A"
+    corner_radius = 7
+
+[ircnoise]
+    summary = ":irssi: &bitlbee: root"
+    format = ""
+
+[slack]
+    appname = "Slack"
+    new_icon = "slack"
+
+[shortcuts]
+    close = mod1+q
+    close_all = mod1+shift+q
+    history = mod1+space
+    context = mod1+grave
+
+[urgency_low]
+    background = "#3b4252"
+    foreground = "#eceff4"
+    frame_color = "#4c566a"
+    timeout = 5
+
+[urgency_normal]
+    background = "#3b4252"
+    foreground = "#eceff4"
+    timeout = 10
+
+[urgency_critical]
+    background = "#3b4252"
+    foreground = "#eceff4"
+    frame_color = "#bf616a"
+    timeout = 30
+
+[urgency_slack]
+    background = "#3b4252"
+    foreground = "#eceff4"
+    timeout = 10
+    icon = "slack"

@@ -1,0 +1,4 @@
+# see also: /lib/udev/hwdb.d/60-keyboard.hwdb
+evdev:atkbd:dmi:bvn*:bvr*:bd*:svnHP*:pn*EliteBook*:pvr*
+ KEYBOARD_KEY_81=f20                          # Fn+F8 on Elitebook, map to F20
+# KEYBOARD_KEY_81=fn_esc                      # org entry

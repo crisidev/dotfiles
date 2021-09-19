@@ -1,0 +1,11 @@
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=Stadia
+Comment=Stadia
+Exec=google-chrome --user-data-dir=/home/matbigoi/.local/share/chrome-stadia -app=https://stadia.google.com/u/1/home?hl=en
+Icon=google-stadia
+Terminal=false
+Categories=Office;

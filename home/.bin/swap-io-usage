@@ -1,0 +1,13 @@
+#!/bin/bash
+
+COUNT=5
+if [[ "$1" != "" ]]; then
+    COUNT=$1
+fi
+
+echo "Percentage of IO used by swapping"
+echo "      in      out"
+vmstat -n 1 $COUNT | tail -n +3 -f | awk '{ 
+    $9>0 ? swapin=$7/$9*100 : swapin=0; 
+    $10>0 ? swapout=$8/$10*100 : swapout=0; 
+    printf ("%8.2f %8.2f\n", swapin, swapout);}'

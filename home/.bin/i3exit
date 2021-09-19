@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+
+notify() {
+  notify-send --icon=display i3monitor "$@"
+}
+
+# Control the dunst daemon, if it is running.
+dunst() {
+  case "${1:-}" in
+    set)
+      if dunstctl is-paused | grep -q false; then
+        notify-send "Pausing notification system"
+      else
+        notify-send "Resuming notification system"
+      fi
+      dunstctl set-paused toggle
+      ;;
+    get)
+      if dunstctl is-paused | grep -q false; then
+        echo '{"icon":"","state":"Good","text":""}'
+      else
+        echo '{"icon":"","state":"Info","text":""}'
+      fi
+      ;;
+    suspend)
+      if dunstctl is-paused | grep -q false; then
+        notify-send "Pausing notification system"
+        sleep 1
+        dunstctl set-paused true 
+      fi
+      ;;
+    resume)
+      if dunstctl is-paused | grep -q true; then
+        dunstctl set-paused false
+        sleep 1
+        notify-send "Resuming notification system"
+      fi
+      ;;
+    *)
+      echo "Usage: $0 dunst suspend|resume|get|set"
+      exit 2
+      ;;
+  esac
+}
+
+lock() {
+  dunst suspend
+  dbus-send --type=method_call --dest=org.gnome.ScreenSaver /org/gnome/ScreenSaver org.gnome.ScreenSaver.Lock
+  sleep 5
+  dunst resume
+}
+
+case "${1:-}" in
+  lock)
+    lock
+    ;;
+  logout)
+    i3-msg exit
+    ;;
+  suspend)
+    lock
+    systemctl suspend -i
+    ;;
+  hibernate)
+    lock
+    systemctl hibernate -i
+    ;;
+  reboot)
+    systemctl reboot -i
+    ;;
+  shutdown)
+    systemctl poweroff -i
+    ;;
+  dunst)
+    dunst "${2}"
+    ;;
+  *)
+    echo "Usage: $0 lock|logout|suspend|hibernate|reboot|shutdown|dunst"
+    exit 2
+    ;;
+esac
+
+exit 0

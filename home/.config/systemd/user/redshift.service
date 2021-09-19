@@ -1,0 +1,10 @@
+[Unit]
+Description=Redshift 
+PartOf=graphical-session.target
+
+[Service]
+ExecStart=/usr/bin/redshift-gtk
+Restart=always
+
+[Install]
+WantedBy=graphical-session.target

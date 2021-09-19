@@ -1,0 +1,138 @@
+function nvim_sync() {
+  if (( ${+NVIM_SYNC_FILE} )); then
+    cd $(cat $HOME/.config/nvim/filedir)
+    return
+  fi
+  if (( ${+NVIM_SYNC_PROJECT} )); then
+    cd $(cat $HOME/.config/nvim/projdir)
+    return
+  fi
+}
+
+function nvim-sync-on() {
+  echo "Staring Neovim sync file working directory"
+  export NVIM_SYNC_FILE=1
+}
+
+function nvim-sync-off() {
+  echo "Stopping Neovim sync working directory"
+  unset NVIM_SYNC_FILE
+  unset NVIM_SYNC_PROJECT
+}
+
+function nvim-sync-on-project() {
+  echo "Staring Neovim sync project working directory"
+  export NVIM_SYNC_PROJECT=1
+}
+
+function setup_gpg_agent() {
+	envfile="$HOME/.gnupg/gpg-agent.env"
+	if [[ -e "$envfile" ]] && kill -0 $(grep GPG_AGENT_INFO "$envfile" | cut -d: -f 2) 2>/dev/null; then
+		eval "$(cat "$envfile")"
+	else
+		eval "$(gpg-agent --daemon --enable-ssh-support --write-env-file "$envfile")"
+	fi
+	export GPG_AGENT_INFO  # the env file does not contain the export statement
+	export SSH_AUTH_SOCK   # enable gpg-agent for ssh
+	export SSH_AGENT_PID
+}
+
+# Simple calculator
+function calc() {
+        local result=""
+        result="$(printf "scale=10;$*\n" | bc --mathlib | tr -d '\\\n')"
+        #                       └─ default (when `--mathlib` is used) is 20
+        #
+        if [[ "$result" == *.* ]]; then
+                # improve the output for decimal numbers
+                printf "$result" |
+                sed -e 's/^\./0./'        `# add "0" for cases like ".5"` \
+                    -e 's/^-\./-0./'      `# add "0" for cases like "-.5"`\
+                    -e 's/0*$//;s/\.$//'   # remove trailing zeros
+        else
+                printf "$result"
+        fi
+        printf "\n"
+}
+
+# homeshick
+function homeshick () {
+  if [ "$1" = "cd" ] && [ -n "$2" ]
+  then
+    cd "$HOME/.homesick/repos/$2"
+  else
+    $HOME/.homesick/repos/homeshick/bin/homeshick "$@"
+  fi
+}
+
+function convert-raw-to-jpg() {
+  local quality=${1:-80};
+  local max_dim=${2:-2650};
+  local source_files=${3:-\*.CR2};
+  echo "Usage: convert-raw-to-jpg [quality=80] [max-dimension-px=2560] [source=\*.RAW]";
+  echo "Converting all ${source_files} to JPEG (${quality} quality, ${max_dim}px max) to output/...";
+  mkdir -p output 2> /dev/null;
+  find . -type f -iname "${source_files}" -print0 | \
+      xargs -0 -n 1 -P 8 -I {} convert -verbose -units PixelsPerInch {} \
+      -colorspace sRGB -resize ${max_dim}x${max_dim} -set filename:new '%t-%wx%h' \
+      -density 72 -format JPG -quality ${quality} 'output/%[filename:new].jpg';
+  echo 'Done.';
+}
+
+# Disable globbing on the remote path.
+alias scp='noglob scp_wrap'
+function scp_wrap {
+  local -a args
+  local i
+  for i in "$@"; do case $i in
+    (*:*) args+=($i) ;;
+    (*) args+=(${~i}) ;;
+  esac; done
+  command scp "${(@)args}"
+}
+
+function irc_cleanup {
+  killall -9 autossh
+  killall -9 rino
+  for x in $(pgrep -f _irc); do kill -9 $x; done
+}
+
+function light {
+    if  [ $# -lt 2 ]; then
+        echo "usage: light syntax filename [fontsize] [additional args]"
+        return 1
+    fi
+    local fontsize=18
+    local syntax=$1; shift
+    local filename=$1; shift
+    if [ $# -ge 1 ]; then
+        fontsize=$1; shift
+    fi
+    local rest=$@
+    cat $filename | highlight -O rtf --syntax $syntax --font Inconsolata --style moria --font-size $fontsize --inline-css $@ | pbcopy
+}
+
+function lsfunc {
+    exa $* || /bin/ls -G $*
+}
+
+function G {
+  xdg-open "https://www.google.com/search?q=$*" > /dev/null 2>&1
+}
+
+function runbg {
+  nohup $* > /dev/null 2>&1 &
+}
+
+function gitupdate {
+   for x in $(/bin/ls -1); do cd $x; git pulf --autostash; cd ..; done
+}
+
+function pyenv_deactivate {
+  export PATH=$(echo $PATH | python -c "import sys; print(':'.join(x for x in sys.stdin.read().strip().split(':') if not 'pyenv' in x))")
+}
+
+function weather {
+  local city=$(curl -s https://ipvigilante.com/$(curl -s https://ipinfo.io/ip) | jq -r '.data.city_name')
+  curl --silent "wttr.in/${city}?m" | grep -v Follow
+}

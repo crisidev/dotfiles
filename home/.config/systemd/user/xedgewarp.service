@@ -1,0 +1,10 @@
+[Unit]
+Description=Xedge Warp
+PartOf=graphical-session.target
+
+[Service]
+ExecStart=/usr/bin/xedgewarp -m closest
+Restart=always
+
+[Install]
+WantedBy=graphical-session.target

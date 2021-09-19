@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+source "$HOME/.config/crisidev-common"
+
+# let xrandr do its thing
+notify "Reorganizing windows for profile $AUTORANDR_CURRENT_PROFILE"
+sleep 1
+
+declare -a arr=(
+  "workspace 1: shell, move workspace to output DP-2-1"
+  "workspace 2: www, move workspace to output DP-2-2"
+  "workspace 3: irc, move workspace to output eDP-1"
+  "workspace 4: videoconf, move workspace to output DP-2-1"
+  "workspace 5: chime, move workspace to output eDP-1"
+  "workspace 6: mail, move workspace to output DP-2-2"
+  "workspace 7: calendar, move workspace to output DP-2-1"
+  "workspace 8: chat, move workspace to output DP-2-2"
+  "workspace 9: slack, move workspace to output eDP-1"
+  "workspace 10: outlook, move workspace to output DP-2-1"
+  "workspace 11: spotify, move workspace to output DP-2-1"
+  "workspace 12: quip, move workspace to output DP-2-1"
+  "workspace 13: var1, move workspace to output DP-2-2"
+  "workspace 2: www"
+)
+i3_msg_dispatcher "${arr[@]}"
+
+imwheel -k
+
+pacmd set-default-source alsa_input.usb-21102019_THRONMAX_PULSE_MICROPHONE-00.iec958-stereo
+
+finish_autorandr_switch "$AUTORANDR_CURRENT_PROFILE"

@@ -1,0 +1,21 @@
+#!/bin/bash
+
+CURRENT=$(cat /sys/class/backlight/intel_backlight/brightness)
+SET=${CURRENT}
+if [ "$1" == "down" ]; then
+  SET=$((CURRENT - 100))
+  if [ "${SET}" -le 0 ]; then
+    SET=0
+  fi
+elif [ "$1" == "up" ]; then
+  SET=$((CURRENT + 100))
+  if [ "${SET}" -ge 1500 ]; then
+    SET=1500
+  fi
+elif [ "$1" == "ac" ]; then
+  SET=1500
+elif [ "$1" == "battery" ]; then
+  SET=600
+fi
+
+echo "${SET}" | tee /sys/class/backlight/intel_backlight/brightness > /dev/null

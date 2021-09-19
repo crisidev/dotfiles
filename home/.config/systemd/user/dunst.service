@@ -1,0 +1,11 @@
+[Unit]
+Description=Dunst 
+PartOf=graphical-session.target
+Before=gnome-flashback.service
+
+[Service]
+ExecStart=/usr/bin/dunst
+Restart=always
+
+[Install]
+WantedBy=graphical-session.target

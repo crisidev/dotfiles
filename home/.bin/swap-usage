@@ -1,0 +1,74 @@
+#!/bin/bash 
+# Get current swap usage for all running processes
+# Erik Ljungstrom 27/05/2011
+# Modified by Mikko Rantalainen 2012-08-09
+# Pipe the output to "sort -nk3" to get sorted output
+
+function usage {
+    dif=$(basename $0)
+    cat <<EOF
+
+        USAGE:
+        $dif [-h] [-i size_in_kb]
+
+        By default it will print the registered size in KB or MB of the swap space for each process if it is using any swap space
+
+        OPTIONS:
+            -i: ignore processes with a swap size of less than <arg> kb
+
+EOF
+    exit 0
+}
+
+IGNORE=0
+
+while getopts hi: flag; do
+    case $flag in
+        i)
+            IGNORE=$(printf "%.0f" $OPTARG)
+            ;;
+        h)
+            usage
+            exit 0
+            ;;
+    esac
+done
+
+function echo_if {
+    PID=$1
+    VALUE=$2
+    PROGNAME=$3
+    if [[ $VALUE -eq 0 ]]; then
+        return
+    fi
+    if [[ $IGNORE -gt 0 && $VALUE -lt $IGNORE ]]; then
+        return
+    fi
+    if [[ $VALUE -lt 1024 ]]; then
+        echo "PID=$PID swapped $VALUE KB ($PROGNAME)"
+    else
+        let MB=$VALUE/1024
+        echo "PID=$PID swapped $MB MB ($PROGNAME)"
+    fi
+}
+
+OVERALL=0
+SUM=0
+for DIR in `find /proc/ -maxdepth 1 -type d -regex "^/proc/[0-9]+"`
+do
+    PID=`echo $DIR | cut -d / -f 3`
+    PROGNAME=`ps -p $PID -o comm --no-headers`
+    for SWAP in `grep Swap $DIR/smaps 2>/dev/null | awk '{ print $2 }'`
+    do
+        let SUM=$SUM+$SWAP
+    done
+    echo_if $PID $SUM $PROGNAME
+    let OVERALL=$OVERALL+$SUM
+    SUM=0
+done
+if (( $OVERALL < 1024 )); then
+    echo "Overall swap used: $OVERALL KB"
+else
+    let MB=$OVERALL/1024
+    echo "Overall swap used: $MB MB"
+fi
