@@ -1,8 +1,8 @@
 # 🤟 Crisidev Dotfiles 🤟
+
 Take what you need, it also comes warrant free 😊
 
-<!-- vim-markdown-toc Marked -->
-
+* [Version](#version)
 * [Configurations](#configurations)
     * [Terminal](#terminal)
     * [Editor](#editor)
@@ -11,9 +11,12 @@ Take what you need, it also comes warrant free 😊
 * [Gnome i3 startup](#gnome-i3-startup)
 * [Installation](#installation)
 
-<!-- vim-markdown-toc -->
+## Version
+The current version is 0.1
+
 ## Configurations
 My personal dotfiles are compatible with [homesick](https://github.com/technicalpickles/homesick) / [homeshick](https://github.com/andsens/homeshick)
+
 ### Terminal
 * [Zsh rc](/blob/main/home/.zshrc) file
 * [Zsh aliases](/blob/main/home/.zsh_aliases) file
