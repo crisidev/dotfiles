@@ -58,6 +58,19 @@ I use [i3-gnome](https://github.com/i3-gnome/i3-gnome) to start i3 inside a Gnom
 
 My [i3 config](/blob/main/home/.config/i3/config) ends with a call to systemctl which starts the userspace **wm.target**, starting all the software needed for my graphical session. The systemd units and configuration can be found [here](/blob/main/home/.config/systemd/user).
 
+If you want to start any of the service files in the directory above, just add this line to your i3 config
+
+```config
+exec "systemctl --user start wm.target"
+```
+
+and enable the units you want to start when **wm.target** has started:
+
+```sh
+❯❯❯ systemctl --user enable dunst.service picom.service gnome-polkit.service gnome-flashback.service ...
+❯❯❯ systemctl --user start wm.target
+```
+
 ## Installation
 ```sh
 ❯❯❯ git clone https://github.com/andsens/homeshick.git $HOME/.homesick/repos/homeshick
