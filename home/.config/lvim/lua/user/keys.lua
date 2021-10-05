@@ -9,7 +9,7 @@ M.config = function()
         ["<F3>"] = "<cmd>NvimTreeToggle<cr>",
         ["<F4>"] = "<cmd>MouseToggle<cr>",
         -- Yank current path
-        ["<F5>"] = "<cmd>let @+ = expand(\"%:p\")<cr>",
+        ["<F5>"] = '<cmd>let @+ = expand("%:p")<cr>',
         -- Windows navigation
         ["<A-Up>"] = "<cmd>wincmd k<cr>",
         ["<A-Down>"] = "<cmd>wincmd j<cr>",
@@ -38,7 +38,7 @@ M.config = function()
         ["<F1>"] = "<Esc><cmd>BufferPrevious<cr>",
         ["<F3>"] = "<Esc><cmd>NvimTreeToggle<cr>",
         -- Yank current path
-        ["<F5>"] = "<Esc><cmd>let @+ = expand(\"%:p\")<cr>",
+        ["<F5>"] = '<Esc><cmd>let @+ = expand("%:p")<cr>',
         -- Symbols
         ["<F10>"] = "<Esc><cmd>SymbolsOutline<cr>",
         -- Windows navigation
@@ -49,7 +49,7 @@ M.config = function()
     }
     -- VISUAL
     lvim.keys.visual_mode = {
-        ["p"] = [["_dP]]
+        ["p"] = [["_dP]],
     }
 end
 

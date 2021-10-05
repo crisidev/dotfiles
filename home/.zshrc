@@ -116,6 +116,7 @@ export PYENV_ROOT="$HOME/.pyenv"
 if which pyenv > /dev/null; then 
   eval "$(pyenv init --path)"
   eval "$(pyenv virtualenv-init -)"
+  source $HOME/.pyenv/completions/pyenv.zsh
   export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 fi
 
@@ -130,9 +131,6 @@ compdef sshrc=ssh
 # fzf
 [ -f ~/github/0updates/fzf-marks/fzf-marks.plugin.zsh ] && source ~/github/0updates/fzf-marks/fzf-marks.plugin.zsh
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude build'
-
-# aws cli
-source ~/.pyenv/versions/3.8.6/bin/aws_zsh_completer.sh
 
 # docktor
 export DOCKTOR_API_URL=https://docktor.crisidev.org

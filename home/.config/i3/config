@@ -36,7 +36,6 @@ floating_modifier $mod
 ###########################
 # Appearance
 ###########################
-# client.focused          #7789cb #7789cb #ffffff #7789cb #7789cb
 client.focused           #918ad2 #918ad2 #ffffff #918ad2 #918ad2
 # client.focused_inactive #7789cb #7789cb #ffffff #7789cb #7789cb
 client.urgent           #ff6961 #ff6961 #ff6961 #ff6961 #ff6961
@@ -109,6 +108,7 @@ for_window [class="Simple-scan"] floating enable border pixel 1
 for_window [class="Dconf-editor"] floating enable border pixel 1
 for_window [class="Evolution-alarm-notify"] floating enable border pixel 1
 for_window [class="Gnome-font-viewer"] floating enable border pixel 1
+for_window [class="Blueman-services"] floating enable border pixel 1
 
 # Special borders and floats
 for_window [class="^ide$"] floating enable border pixel 2

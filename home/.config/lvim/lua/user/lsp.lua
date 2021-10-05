@@ -21,131 +21,121 @@ local short_line_limit = 20
 
 -- Shows the current line's diagnostics in a floating window.
 function M.show_line_diagnostics()
-	vim.lsp.diagnostic.show_line_diagnostics({ severity_limit = "Warning" }, vim.fn.bufnr(""))
+    vim.lsp.diagnostic.show_line_diagnostics({ severity_limit = "Warning" }, vim.fn.bufnr "")
 end
 
 -- Prints the first diagnostic for the current line.
 function M.echo_diagnostic()
-	if echo_timer then
-		echo_timer:stop()
-	end
+    if echo_timer then
+        echo_timer:stop()
+    end
 
-	echo_timer = vim.defer_fn(function()
-		local line = vim.fn.line(".") - 1
-		local bufnr = vim.api.nvim_win_get_buf(0)
+    echo_timer = vim.defer_fn(function()
+        local line = vim.fn.line "." - 1
+        local bufnr = vim.api.nvim_win_get_buf(0)
 
-		if last_echo[1] and last_echo[2] == bufnr and last_echo[3] == line then
-			return
-		end
+        if last_echo[1] and last_echo[2] == bufnr and last_echo[3] == line then
+            return
+        end
 
-		local diags = vim.lsp.diagnostic.get_line_diagnostics(bufnf, line, { severity_limit = "Hint" })
+        local diags = vim.lsp.diagnostic.get_line_diagnostics(bufnf, line, { severity_limit = "Hint" })
 
-		if #diags == 0 then
-			-- If we previously echo'd a message, clear it out by echoing an empty
-			-- message.
-			if last_echo[1] then
-				last_echo = { false, -1, -1 }
+        if #diags == 0 then
+            -- If we previously echo'd a message, clear it out by echoing an empty
+            -- message.
+            if last_echo[1] then
+                last_echo = { false, -1, -1 }
 
-				vim.api.nvim_command('echo ""')
-			end
+                vim.api.nvim_command 'echo ""'
+            end
 
-			return
-		end
+            return
+        end
 
-		last_echo = { true, bufnr, line }
+        last_echo = { true, bufnr, line }
 
-		local diag = diags[1]
-		local width = vim.api.nvim_get_option("columns") - 15
-		local lines = vim.split(diag.message, "\n")
-		local message = lines[1]
-		local trimmed = false
+        local diag = diags[1]
+        local width = vim.api.nvim_get_option "columns" - 15
+        local lines = vim.split(diag.message, "\n")
+        local message = lines[1]
+        local trimmed = false
 
-		if #lines > 1 and #message <= short_line_limit then
-			message = message .. " " .. lines[2]
-		end
+        if #lines > 1 and #message <= short_line_limit then
+            message = message .. " " .. lines[2]
+        end
 
-		if width > 0 and #message >= width then
-			message = message:sub(1, width) .. "..."
-		end
+        if width > 0 and #message >= width then
+            message = message:sub(1, width) .. "..."
+        end
 
-		local kind = "hint"
-		local hlgroup = hint_hlgroup
+        local kind = "hint"
+        local hlgroup = hint_hlgroup
 
-		if diag.severity == vim.lsp.protocol.DiagnosticSeverity.Error then
-			kind = "error"
-			hlgroup = error_hlgroup
-		elseif diag.severity == vim.lsp.protocol.DiagnosticSeverity.Warning then
-			kind = "warning"
-			hlgroup = warning_hlgroup
-		elseif diag.severity == vim.lsp.protocol.DiagnosticSeverity.Info then
-			kind = "info"
-			hlgroup = info_hlgroup
-		end
+        if diag.severity == vim.lsp.protocol.DiagnosticSeverity.Error then
+            kind = "error"
+            hlgroup = error_hlgroup
+        elseif diag.severity == vim.lsp.protocol.DiagnosticSeverity.Warning then
+            kind = "warning"
+            hlgroup = warning_hlgroup
+        elseif diag.severity == vim.lsp.protocol.DiagnosticSeverity.Info then
+            kind = "info"
+            hlgroup = info_hlgroup
+        end
 
-		local chunks = {
-			{ kind .. ": ", hlgroup },
-			{ message },
-		}
+        local chunks = {
+            { kind .. ": ", hlgroup },
+            { message },
+        }
 
-		vim.api.nvim_echo(chunks, false, {})
-	end, echo_timeout)
+        vim.api.nvim_echo(chunks, false, {})
+    end, echo_timeout)
 end
 
 M.config = function()
-	-- Use rust-tools.nvim
-	lvim.lsp.override = { "rust" }
+    -- Use rust-tools.nvim
+    lvim.lsp.override = { "rust" }
+    lvim.lsp.automatic_servers_installation = true
 
-	-- Disable inline diagnostics
-	lvim.lsp.diagnostics.virtual_text = false
+    -- Disable inline diagnostics
+    lvim.lsp.diagnostics.virtual_text = false
 
-	-- Enable markdown
-	vim.g.markdown_fenced_languages = { "python", "rust", "ruby", "sh" }
-	lvim.lang.markdown = {}
-	lvim.builtin.lspinstall.on_config_done = function()
-		lvim.lang.tailwindcss.lsp.setup.filetypes = { "markdown" }
-		lvim.lang.tailwindcss.lsp.active = true
-		require("lsp").setup("tailwindcss")
-	end
-
-	-- Enable dockerfile
-	lvim.lang.dockerfile.lsp.setup.root_dir = function(fname)
-		return require("lspconfig").util.root_pattern(".git")(fname) or require("lspconfig").util.path.dirname(fname)
-	end
+    -- Enable markdown
+    vim.g.markdown_fenced_languages = { "python", "rust", "ruby", "sh" }
 end
 
 local lspkind = {}
 
 local kind_symbols = {
-	Class = " ",
-	Color = " ",
-	Constant = "ﲀ ",
-	Constructor = " ",
-	Enum = "練",
-	EnumMember = " ",
-	Event = " ",
-	Field = "ﰠ ",
-	File = " ",
-	Folder = " ",
-	Function = " ",
-	Interface = " ",
-	Keyword = " ",
-	Method = "ƒ ",
-	Module = " ",
-	Operator = " ",
-	Property = " ",
-	Reference = " ",
-	Snippet = " ",
-	Text = " ",
-	Unit = "塞",
-	Value = " ",
-	Variable = " ",
-	Struct = " ",
-	TypeParameter = "  ",
-	Default = " ",
+    Class = " ",
+    Color = " ",
+    Constant = "ﲀ ",
+    Constructor = " ",
+    Enum = "練",
+    EnumMember = " ",
+    Event = " ",
+    Field = "ﰠ ",
+    File = " ",
+    Folder = " ",
+    Function = " ",
+    Interface = " ",
+    Keyword = " ",
+    Method = "ƒ ",
+    Module = " ",
+    Operator = " ",
+    Property = " ",
+    Reference = " ",
+    Snippet = " ",
+    Text = " ",
+    Unit = "塞",
+    Value = " ",
+    Variable = " ",
+    Struct = " ",
+    TypeParameter = "  ",
+    Default = " ",
 }
 
 function M.cmp_kind(kind)
-	return kind_symbols[kind] or ""
+    return kind_symbols[kind] or ""
 end
 
 return M

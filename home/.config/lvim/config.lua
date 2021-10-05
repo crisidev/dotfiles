@@ -10,7 +10,7 @@ lvim.debug = false
 lvim.leader = "space"
 
 -- Vimscript if needed
-vim.cmd("source ~/.config/lvim/user.pre.vim")
+vim.cmd "source ~/.config/lvim/user.pre.vim"
 
 -- Builtin
 require("user.neovim").config()
@@ -22,7 +22,9 @@ require("user.builtin").config()
 require("user.barbar").config()
 
 -- Status line
-require("user.lualine").config()
+if not lvim.builtin.firevim then
+    require("user.lualine").config()
+end
 
 -- Additional Plugins
 require("user.plugins").config()
@@ -39,14 +41,20 @@ require("user.autocmd").config()
 -- Lsp
 require("user.lsp").config()
 
+-- Formatters
+require("user.providers").formatters()
+
+-- Linters
+require("user.providers").linters()
+
 -- Glrnvim
 if lvim.builtin.grlnvim then
-	require("user.glrnvim").config()
+    require("user.glrnvim").config()
 end
 
 -- Neovide
 if lvim.builtin.neovide then
-	require("user.neovide").config()
+    require("user.neovide").config()
 end
 
 -- Debugging
@@ -55,8 +63,13 @@ require("user.dap").config()
 -- Custom work stuff
 local ok, amzn = pcall(require, "user.amzn")
 if ok then
-	amzn.config()
+    amzn.config()
+end
+
+-- Firevim
+if lvim.builtin.firevim then
+    require("user.firevim").config()
 end
 
 -- Vimscript if needed
-vim.cmd("source ~/.config/lvim/user.post.vim")
+vim.cmd "source ~/.config/lvim/user.post.vim"
