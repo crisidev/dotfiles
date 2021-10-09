@@ -24,6 +24,8 @@ M.config = function()
     vim.opt.cmdheight = 1
     -- Python2 provider
     vim.g.python_host_prog = "$HOME/.pyenv/versions/2.7.17/bin/python"
+    -- Disable statusline in dashboard
+    vim.g.dashboard_disable_statusline = 1
 
     -- Better fillchars
     vim.opt.fillchars = {
@@ -48,6 +50,9 @@ M.config = function()
     vim.g.gitblame_enabled = 0
     vim.g.gitblame_message_template = "<date> • <author> • <summary>"
     vim.g.gitblame_date_format = "%r"
+
+    -- Enable markdown
+    vim.g.markdown_fenced_languages = { "python", "rust", "ruby", "sh" }
 end
 
 M.setcwd = function()

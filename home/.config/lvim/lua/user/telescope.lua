@@ -126,6 +126,14 @@ function M.code_actions()
     builtin.lsp_code_actions(themes.get_dropdown(opts))
 end
 
+function M.codelens_actions()
+    local opts = {
+        border = true,
+        previewer = false,
+    }
+    builtin.lsp_codelens_actions(themes.get_dropdown(opts))
+end
+
 function M.lsp_references()
     builtin.lsp_references(M.default_opts())
 end
