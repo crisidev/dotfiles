@@ -196,8 +196,8 @@ M.config = function()
                     },
                     server = {
                         cmd = { vim.fn.stdpath "data" .. "/lspinstall/rust/rust-analyzer" },
-                        on_attach = require("lsp").common_on_attach,
-                        on_init = require("lsp").common_on_init,
+                        on_attach = require("lvim.lsp").common_on_attach,
+                        on_init = require("lvim.lsp").common_on_init,
                     },
                 }
                 require("rust-tools").setup(opts)
