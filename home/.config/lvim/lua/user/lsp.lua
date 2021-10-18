@@ -19,39 +19,42 @@ local error_hlgroup = "ErrorMsg"
 -- the second line to it.
 local short_line_limit = 20
 
-local lspkind = {}
-
 local kind_symbols = {
-    Class = " ",
-    Color = " ",
-    Constant = "ﲀ ",
-    Constructor = " ",
-    Enum = "練",
-    EnumMember = " ",
-    Event = " ",
-    Field = "ﰠ ",
-    File = " ",
-    Folder = " ",
-    Function = " ",
-    Interface = " ",
-    Keyword = " ",
-    Method = "ƒ ",
-    Module = " ",
-    Operator = " ",
-    Property = " ",
-    Reference = " ",
-    Snippet = " ",
-    Text = " ",
-    Unit = "塞",
-    Value = " ",
-    Variable = " ",
-    Struct = " ",
-    TypeParameter = "  ",
-    Default = " ",
+  Class = " ",
+  Color = " ",
+  Constant = "",
+  Constructor = " ",
+  Default = " ",
+  Enum = "練",
+  EnumMember = " ",
+  Event = " ",
+  Field = "ﰠ ",
+  File = " ",
+  Folder = " ",
+  Function = " ",
+  Interface = " ",
+  Keyword = " ",
+  Method = "ƒ ",
+  Module = " ",
+  Operator = " ",
+  Property = " ",
+  Reference = "",
+  Snippet = " ",
+  Struct = "פּ",
+  Text = " ",
+  TypeParameter = "  ",
+  Unit = "塞",
+  Value = " ",
+  Variable = " ",
 }
 
-function M.cmp_kind(kind)
+M.cmp_kind = function(kind)
     return kind_symbols[kind] or ""
+end
+
+
+M.symbols = function()
+  return kind_symbols
 end
 
 -- Prints the first diagnostic for the current line.
@@ -133,9 +136,9 @@ M.normal_buffer_mappings = function()
         ["gi"] = { "<cmd>lua require('user.telescope').lsp_implementations()<cr>", "Goto Implementation" },
         ["gr"] = { "<cmd>lua require('user.telescope').lsp_references()<cr>", "Goto References" },
         ["gs"] = { "<cmd>lua vim.lsp.buf.signature_help()<CR>", "Show signature help" },
-        ["gl"] = { "<cmd>lua require'lsp.handlers'.show_line_diagnostics()<CR>", "Show line diagnostics" },
+        ["gl"] = { "<cmd>lua require('lvim.lsp.handlers').show_line_diagnostics()<CR>", "Show line diagnostics" },
         -- Peek
-        ["gp"] = { "<cmd>lua require'lsp.peek'.Peek('definition')<CR>", "Peek definition" },
+        ["gp"] = { "<cmd>lua require('lvim.lsp.peek').Peek('definition')<CR>", "Peek definition" },
         ["gP"] = {
             name = "Peek",
             d = { "<cmd>lua require('goto-preview').goto_preview_definition()<cr>", "Preview definition" },
@@ -199,7 +202,7 @@ end
 
 M.config = function()
     -- Use rust-tools.nvim
-    lvim.lsp.override = { "rust" }
+    lvim.lsp.override = { "rust_analyzer" }
     lvim.lsp.automatic_servers_installation = true
     lvim.lsp.document_highlight = true
     lvim.lsp.code_lens_refresh = true

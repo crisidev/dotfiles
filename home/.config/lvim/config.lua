@@ -48,12 +48,12 @@ require("user.providers").formatters()
 require("user.providers").linters()
 
 -- Glrnvim
-if lvim.builtin.grlnvim then
+if vim.g.glrnvim_gui then
     require("user.glrnvim").config()
 end
 
 -- Neovide
-if lvim.builtin.neovide then
+if vim.g.neovide then
     require("user.neovide").config()
 end
 
@@ -67,7 +67,7 @@ if ok then
 end
 
 -- Firevim
-if lvim.builtin.firevim then
+if vim.g.started_by_firenvim then
     require("user.firevim").config()
 end
 

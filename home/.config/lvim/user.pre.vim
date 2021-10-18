@@ -31,3 +31,7 @@ function! s:NoNuModeFunc()
     set nonumber
 endfunction            
 command! NoNuMode :call <SID>NoNuModeFunc()
+
+" Clean search with <esc>
+nnoremap <silent><esc> :noh<CR>
+nnoremap <esc>[ <esc>[

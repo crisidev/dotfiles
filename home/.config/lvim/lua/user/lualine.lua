@@ -1,5 +1,23 @@
 local M = {}
 
+local function lsp_progress()
+    local messages = vim.lsp.util.get_progress_messages()
+    if #messages == 0 then
+        return ""
+    end
+    local status = {}
+    for _, msg in pairs(messages) do
+        table.insert(status, (msg.percentage or 0) .. "%% " .. (msg.title or ""))
+    end
+    -- local spinners = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
+    local spinners = { "🌑 ", "🌒 ", "🌓 ", "🌔 ", "🌕 ", "🌖 ", "🌗 ", "🌘 " }
+    local millis = vim.loop.hrtime() / 1000000
+    local frame = math.floor(millis / 120) % #spinners
+    return spinners[frame + 1] .. table.concat(status, " | ")
+end
+
+vim.cmd [[autocmd User LspProgressUpdate let &ro = &ro]]
+
 local function diff_source()
     local gitsigns = vim.b.gitsigns_status_dict
     if gitsigns then
@@ -306,28 +324,7 @@ M.config = function()
         cond = conditions.hide_in_width,
     }
     ins_left {
-        "lsp_progress",
-        colors = {
-            percentage = default_colors.green,
-            title = default_colors.fg,
-            message = default_colors.white,
-            spinner = default_colors.yellow,
-            lsp_client_name = default_colors.fg,
-            use = true,
-        },
-        separators = {
-            component = " ",
-            progress = " | ",
-            message = { pre = "(", post = ")" },
-            percentage = { pre = "", post = "%% " },
-            title = { pre = "", post = ": " },
-            lsp_client_name = { pre = "[", post = "]" },
-            spinner = { pre = "", post = "" },
-            message = { commenced = "In Progress", completed = "Completed" },
-        },
-        display_components = { "lsp_client_name", "spinner", { "title", "message" } },
-        timer = { progress_enddelay = 500, spinner = 1000, lsp_client_name_enddelay = 1000 },
-        spinner_symbols = { "🌑", "🌒", "🌓", "🌔", "🌕", "🌖", "🌗", "🌘" },
+        lsp_progress,
         cond = conditions.hide_small,
     }
     -- Insert mid section. You can make any number of sections in neovim :)
@@ -393,7 +390,7 @@ M.config = function()
                     table.insert(buf_client_names, _added_client)
                 end
             end
-            vim.list_extend(buf_client_names, active_client or {})
+            -- vim.list_extend(buf_client_names, active_client or {})
 
             -- add formatter
             local formatters = require "lvim.lsp.null-ls.formatters"
@@ -405,7 +402,7 @@ M.config = function()
                 end
                 table.insert(supported_formatters, _added_formatter)
             end
-            -- vim.list_extend(buf_client_names, supported_formatters)
+            vim.list_extend(buf_client_names, supported_formatters)
 
             -- add linter
             local linters = require "lvim.lsp.null-ls.linters"

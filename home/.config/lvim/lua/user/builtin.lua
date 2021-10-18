@@ -14,8 +14,25 @@ M.config = function()
     -- Telescope
     lvim.builtin.telescope.defaults.path_display = { shorten = 10 }
     lvim.builtin.telescope.defaults.layout_strategy = "horizontal"
-    lvim.builtin.telescope.defaults.mappings.i["<esc>"] = require("telescope.actions").close
     lvim.builtin.telescope.defaults.layout_config = require("user.telescope").layout_config()
+    lvim.builtin.telescope.defaults.mappings = {
+        i = {
+            ["<esc>"] = require("telescope.actions").close,
+            ["<C-y>"] = require("telescope.actions").which_key,
+        },
+    }
+    lvim.builtin.telescope.defaults.file_ignore_patterns = {
+        "vendor/*",
+        "node_modules",
+        "%.jpg",
+        "%.jpeg",
+        "%.png",
+        "%.svg",
+        "%.otf",
+        "%.ttf",
+        ".git",
+        "target/*",
+    }
 
     -- Debugging
     lvim.builtin.dap.active = true
@@ -45,56 +62,41 @@ M.config = function()
         },
     }
 
-    -- terminal
-    lvim.builtin.terminal.open_mapping = [[<c-\>]]
-
-    -- Comp
-    lvim.builtin.cmp.formatting = {
-        format = function(entry, vim_item)
-            local cmp_kind = require("user.lsp").cmp_kind
-            vim_item.kind = cmp_kind(vim_item.kind)
-            vim_item.menu = ({
-                buffer = "(Buffer)",
-                nvim_lsp = "(LSP)",
-                luasnip = "(Snip)",
-                treesitter = " ",
-                nvim_lua = "(NvLua)",
-                spell = " 暈",
-                emoji = "  ",
-                path = "  ",
-                calc = "  ",
-                cmp_tabnine = "  ",
-            })[entry.source.name]
-            vim_item.dup = ({
-                buffer = 1,
-                path = 1,
-                nvim_lsp = 0,
-            })[entry.source.name] or 0
-            return vim_item
-        end,
+    -- Cmp
+    lvim.builtin.cmp.sources = {
+        { name = "nvim_lsp" },
+        { name = "cmp_tabnine", max_item_count = 3 },
+        { name = "buffer", max_item_count = 5 },
+        { name = "path", max_item_count = 5 },
+        { name = "luasnip", max_item_count = 3 },
+        { name = "nvim_lua" },
+        { name = "calc" },
+        { name = "emoji" },
+        { name = "treesitter" },
+        { name = "crates" },
+    }
+    lvim.builtin.cmp.documentation.border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" }
+    lvim.builtin.cmp.experimental = {
+        ghost_text = false,
+        native_menu = false,
+        custom_menu = true,
+    }
+    lvim.builtin.cmp.formatting.kind_icons = require("user.lsp").symbols()
+    lvim.builtin.cmp.formatting.source_names = {
+        buffer = "(Buffer)",
+        nvim_lsp = "(LSP)",
+        luasnip = "(Snip)",
+        treesitter = " ",
+        nvim_lua = "(NvLua)",
+        spell = " 暈",
+        emoji = "  ",
+        path = "  ",
+        calc = "  ",
+        cmp_tabnine = "  ",
     }
 
-    -- Discover GUIs
-    local f = io.open("/proc/self/cmdline", "rb")
-    local cmdline = f:read "*all"
-    f:close()
-    if string.find(cmdline, 'let g:guifont="FiraCode Nerd Font Mono:h10"') then
-        lvim.builtin.neovide = true
-    else
-        lvim.builtin.neovide = false
-    end
-
-    if vim.g.glrnvim_gui then
-        lvim.builtin.glrnvim = true
-    else
-        lvim.builtin.glrnvim = false
-    end
-
-    if vim.g.started_by_firenvim then
-        lvim.builtin.firevim = true
-    else
-        lvim.builtin.firevim = false
-    end
+    -- terminal
+    lvim.builtin.terminal.open_mapping = [[<c-\>]]
 end
 
 return M

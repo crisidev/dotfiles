@@ -26,8 +26,6 @@ M.config = function()
         -- Align text
         ["<"] = "<<",
         [">"] = ">>",
-        -- Disable highlight
-        ["<Esc><Esc>"] = "<cmd>nohlsearch<cr>",
         -- Yank to the end of line
         ["Y"] = "y$",
     }

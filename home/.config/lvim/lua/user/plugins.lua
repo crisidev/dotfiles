@@ -8,7 +8,6 @@ M.config = function()
             config = function()
                 require("user/theme").tokyonight()
             end,
-            rocks = { "inspect", "luaposix" },
         },
         { "folke/lsp-colors.nvim" },
         { "lunarvim/colorschemes" },
@@ -28,26 +27,6 @@ M.config = function()
             "ellisonleao/glow.nvim",
             ft = { "markdown" },
         },
-        -- Rainbow parentheses
-        -- {
-        -- 	"p00f/nvim-ts-rainbow",
-        --             ft = not { "rust", "rs" },
-        -- 	config = function()
-        -- 		require("nvim-treesitter.configs").setup({
-        -- 			rainbow = {
-        -- 				enable = true,
-        -- 				extended_mode = true,
-        -- 			},
-        -- 		})
-        -- 	end,
-        -- },
-        -- Smooth scrolling
-        -- {
-        -- 	"karb94/neoscroll.nvim",
-        -- 	config = function()
-        -- 		require("neoscroll").setup()
-        -- 	end,
-        -- },
         -- Better diff view
         {
             "sindrets/diffview.nvim",
@@ -109,20 +88,6 @@ M.config = function()
             end,
             event = "BufRead",
         },
-        -- Autosave work
-        -- {
-        -- 	"Pocco81/AutoSave.nvim",
-        -- 	config = function()
-        -- 		require("autosave").setup({
-        --                     execution_message = "AutoSave: saved at " .. vim.fn.strftime("%H:%M:%S"),
-        -- 			clean_command_line_interval = 0,
-        -- 			debounce_delay = 500,
-        --                     conditions = {
-        --                         filetype_is_not = { "picomconf" }
-        --                     }
-        -- 		})
-        -- 	end,
-        -- },
         -- Session manager
         {
             "folke/persistence.nvim",
@@ -182,20 +147,28 @@ M.config = function()
             "simrat39/rust-tools.nvim",
             ft = { "rust", "rs" },
             config = function()
+                local lsp_installer_servers = require "nvim-lsp-installer.servers"
+                local _, requested_server = lsp_installer_servers.get_server "rust_analyzer"
                 local opts = {
                     tools = {
                         autoSetHints = true,
                         hover_with_actions = true,
+                        runnables = {
+                            use_telescope = true,
+                        },
+                        debuggables = {
+                            use_telescope = true,
+                        },
                         inlay_hints = {
                             only_current_line = true,
                             show_parameter_hints = false,
                         },
                         hover_actions = {
-                            auto_focus = true,
+                            auto_focus = false,
                         },
                     },
                     server = {
-                        cmd = { vim.fn.stdpath "data" .. "/lspinstall/rust/rust-analyzer" },
+                        cmd = requested_server._default_options.cmd,
                         on_attach = require("lvim.lsp").common_on_attach,
                         on_init = require("lvim.lsp").common_on_init,
                     },
@@ -295,15 +268,6 @@ M.config = function()
                 }
             end,
         },
-        -- Telescope fzf
-        {
-            "nvim-telescope/telescope-fzf-native.nvim",
-            run = "make",
-            after = "telescope.nvim",
-            config = function()
-                require("telescope").load_extension "fzf"
-            end,
-        },
         -- i3 syntax
         { "mboughaba/i3config.vim" },
         -- Firevim
@@ -312,6 +276,59 @@ M.config = function()
             run = function()
                 vim.fn["firenvim#install"](0)
             end,
+        },
+        -- TODO comments
+        {
+            "folke/todo-comments.nvim",
+            requires = "nvim-lua/plenary.nvim",
+            config = function()
+                require("todo-comments").setup {}
+            end,
+        },
+        -- Qbf
+        {
+            "kevinhwang91/nvim-bqf",
+            config = function()
+                require("bqf").setup {
+                    auto_resize_height = true,
+                    func_map = {
+                        tab = "st",
+                        split = "sv",
+                        vsplit = "sg",
+
+                        stoggleup = "K",
+                        stoggledown = "J",
+                        stogglevm = "<Space>",
+
+                        ptoggleitem = "p",
+                        ptoggleauto = "P",
+                        ptogglemode = "zp",
+
+                        pscrollup = "<C-b>",
+                        pscrolldown = "<C-f>",
+
+                        prevfile = "gk",
+                        nextfile = "gj",
+
+                        prevhist = "<S-Tab>",
+                        nexthist = "<Tab>",
+                    },
+                    preview = {
+                        auto_preview = true,
+                        should_preview_cb = function(bufnr)
+                            local ret = true
+                            local filename = vim.api.nvim_buf_get_name(bufnr)
+                            local fsize = vim.fn.getfsize(filename)
+                            -- file size greater than 10k can't be previewed automatically
+                            if fsize > 100 * 1024 then
+                                ret = false
+                            end
+                            return ret
+                        end,
+                    },
+                }
+            end,
+            event = "BufRead",
         },
     }
 end

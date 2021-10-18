@@ -11,6 +11,9 @@ if [ "$1" = "-m" ]; then
   shift
 fi
 
+# paths
+export GOPATH=~/.go
+export PATH=~/.bin:~/.toolbox/bin:~/.pyenv/bin:~/.rbenv/bin:~/.nodenv/bin:~/.nodenv/versions/15.5.1/bin:~/.bin:$GOPATH/bin:~/.cargo/bin:$PATH
 export LUNARVIM_CONFIG_DIR="${LUNARVIM_CONFIG_DIR:-$HOME/.config/lvim}"
 export LUNARVIM_RUNTIME_DIR="${LUNARVIM_RUNTIME_DIR:-$HOME/.local/share/lunarvim}"
 
@@ -20,7 +23,7 @@ start_ide() {
 
 start_neovide() {
   # neovide --multigrid -- -u ~/.local/share/lunarvim/lvim/init.lua -c 'let g:guifont="FiraCode Nerd Font Mono:h10"' "$@"
-  neovide $multigrid -- -u ~/.local/share/lunarvim/lvim/init.lua -c 'let g:guifont="FiraCode Nerd Font Mono:h10"' "$@"
+  NVIM_LISTEN_ADDRESS=/tmp/nvimsocket neovide $multigrid -- -u ~/.local/share/lunarvim/lvim/init.lua -c 'let g:guifont="FiraCode Nerd Font Mono:h10"' "$@"
 }
 
 if [ "$1" = "--help" ]; then
