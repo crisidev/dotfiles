@@ -162,9 +162,9 @@ M.normal_buffer_mappings = function()
             },
         },
         -- Format
-        ["gf"] = { "<cmd>lua vim.lsp.buf.formatting_seq_sync()<cr>", "Format file" },
+        ["gF"] = { "<cmd>lua vim.lsp.buf.formatting_seq_sync()<cr>", "Format file" },
         -- Find
-        ["gF"] = {
+        ["gf"] = {
             name = "Find",
             b = { "<cmd>lua require('user.telescope').file_browser()<cr>", "File browser" },
             f = { "<cmd>lua require('user.telescope').find_files()<cr>", "Find files" },
@@ -190,6 +190,7 @@ M.normal_buffer_mappings = function()
         },
         -- Git
         ["gG"] = {
+            name = "Git",
             b = { "<cmd>GitBlameToggle<cr>", "Toggle inline git blame" },
             B = { "<cmd>Git blame<cr>", "Open git blame" },
             L = {

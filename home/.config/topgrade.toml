@@ -15,11 +15,11 @@ repos = [
     "~/.rbenv",
     # Home sick
     "~/.homesick/repos/homeshick",
+    "~/.homesick/repos/dotfiles",
     "~/.homesick/repos/MatbigoiDotFiles",
     # Updates
     "~/github/0updates/bandwhich",
     "~/github/0updates/neovide",
-    "~/github/0updates/starship",
     "~/github/0updates/fzf-marks",
     "~/github/0updates/dunst",
 ]

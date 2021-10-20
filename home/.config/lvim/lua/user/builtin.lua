@@ -1,24 +1,45 @@
 local M = {}
 
 M.config = function()
-    -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
-    lvim.builtin.terminal.active = true
+    -- Tree sitter
     lvim.builtin.nvimtree.side = "left"
     lvim.builtin.nvimtree.show_icons.git = 0
-
-    -- if you don't want all the parsers change this to a table of the ones you want
     lvim.builtin.treesitter.ensure_installed = "maintained"
     lvim.builtin.treesitter.highlight.enabled = true
-    lvim.builtin.treesitter.ignore_install = { "haskell", "kotlin" }
+    lvim.builtin.treesitter.ignore_install = { "haskell" }
+    lvim.builtin.treesitter.ensure_installed = {
+        "bash",
+        "c",
+        "go",
+        "cpp",
+        "json",
+        "lua",
+        "python",
+        "rust",
+        "java",
+        "yaml",
+        "kotlin",
+    }
 
     -- Telescope
     lvim.builtin.telescope.defaults.path_display = { shorten = 10 }
     lvim.builtin.telescope.defaults.layout_strategy = "horizontal"
     lvim.builtin.telescope.defaults.layout_config = require("user.telescope").layout_config()
+    local actions = require "telescope.actions"
     lvim.builtin.telescope.defaults.mappings = {
         i = {
-            ["<esc>"] = require("telescope.actions").close,
-            ["<C-y>"] = require("telescope.actions").which_key,
+            ["<esc>"] = actions.close,
+            ["<C-y>"] = actions.which_key,
+            ["<C-n>"] = actions.cycle_history_next,
+            ["<C-p>"] = actions.cycle_history_prev,
+            ["<C-j>"] = actions.move_selection_next,
+            ["<C-k>"] = actions.move_selection_previous,
+        },
+        n = {
+            ["<C-n>"] = actions.cycle_history_next,
+            ["<C-p>"] = actions.cycle_history_prev,
+            ["<C-j>"] = actions.move_selection_next,
+            ["<C-k>"] = actions.move_selection_previous,
         },
     }
     lvim.builtin.telescope.defaults.file_ignore_patterns = {
@@ -33,6 +54,9 @@ M.config = function()
         ".git",
         "target/*",
     }
+
+    -- Terminal
+    lvim.builtin.terminal.active = true
 
     -- Debugging
     lvim.builtin.dap.active = true

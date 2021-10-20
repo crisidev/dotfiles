@@ -330,6 +330,11 @@ M.config = function()
             end,
             event = "BufRead",
         },
+        -- Context aware comments
+        {
+            "JoosepAlviste/nvim-ts-context-commentstring",
+            event = "BufRead",
+        },
     }
 end
 

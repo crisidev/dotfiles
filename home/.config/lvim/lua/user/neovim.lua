@@ -10,6 +10,9 @@ M.config = function()
     vim.opt.tabstop = 4
     -- Creates a swapfile
     vim.opt.swapfile = true
+    -- Crates backups
+    vim.opt.backup = true
+    vim.opt.backupdir = { "/home/bigo/.config/nvim/backups/" }
     -- The font used in graphical neovim applications
     vim.opt.guifont = "FiraCode Nerd Font:h10"
     -- Display lines as one long line
@@ -22,10 +25,48 @@ M.config = function()
     vim.opt.ignorecase = true
     -- Space in the neovim command line for displaying messages
     vim.opt.cmdheight = 1
-    -- Python2 provider
-    vim.g.python_host_prog = "$HOME/.pyenv/versions/2.7.17/bin/python"
-    -- Disable statusline in dashboard
-    vim.g.dashboard_disable_statusline = 1
+    -- Searches wrap around the end of the file
+    vim.opt.wrapscan = true
+    vim.opt.list = true
+    -- Make vim prompt me to save before doing destructive things
+    vim.opt.confirm = true
+    -- Automatically :write before running commands and changing files
+    vim.opt.autowriteall = true
+
+    vim.opt.shortmess = {
+        t = true, -- truncate file messages at start
+        A = true, -- ignore annoying swap file messages
+        o = true, -- file-read message overwrites previous
+        O = true, -- file-read message overwrites previous
+        T = true, -- truncate non-file messages in middle
+        f = true, -- (file x of x) instead of just (x of x
+        F = true, -- Don't give file info when editing a file, NOTE: this breaks autocommand messages
+        s = true,
+        c = true,
+        W = true, -- Don't show [w] or written when writing
+    }
+    vim.opt.formatoptions = {
+        ["1"] = true,
+        ["2"] = true, -- Use indent from 2nd line of a paragraph
+        q = true, -- continue comments with gq"
+        c = true, -- Auto-wrap comments using textwidth
+        r = true, -- Continue comments when pressing Enter
+        n = true, -- Recognize numbered lists
+        t = false, -- autowrap lines using text width value
+        j = true, -- remove a comment leader when joining lines.
+        -- Only break if the line was not longer than 'textwidth' when the insert
+        -- started and only at a white character that has been entered during the
+        -- current insert command.
+        l = true,
+        v = true,
+    }
+    vim.opt.listchars = {
+        eol = nil,
+        tab = "│ ",
+        extends = "›", -- Alternatives: … »
+        precedes = "‹", -- Alternatives: … «
+        trail = "•", -- BULLET (U+2022, UTF-8: E2 80 A2)
+    }
 
     -- Better fillchars
     vim.opt.fillchars = {
@@ -63,6 +104,11 @@ M.config = function()
         -- version control
         ".git,.svn",
     }
+
+    -- Python2 provider
+    vim.g.python_host_prog = "$HOME/.pyenv/versions/2.7.17/bin/python"
+    -- Disable statusline in dashboard
+    vim.g.dashboard_disable_statusline = 1
 
     -- GitBlame
     vim.g.gitblame_enabled = 0

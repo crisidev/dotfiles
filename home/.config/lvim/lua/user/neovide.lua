@@ -8,6 +8,7 @@ M.config = function()
     vim.g.neovide_cursor_trail_length = 0.0
     vim.g.neovide_cursor_vfx_particle_lifetime = 0.0
     vim.g.neovide_cursor_antialiasing = true
+    vim.g.neovide_input_use_logo = false
 
     -- Remember window size
     vim.g.neovide_remember_window_size = true
