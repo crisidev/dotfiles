@@ -20,41 +20,40 @@ local error_hlgroup = "ErrorMsg"
 local short_line_limit = 20
 
 local kind_symbols = {
-  Class = " ",
-  Color = " ",
-  Constant = "",
-  Constructor = " ",
-  Default = " ",
-  Enum = "練",
-  EnumMember = " ",
-  Event = " ",
-  Field = "ﰠ ",
-  File = " ",
-  Folder = " ",
-  Function = " ",
-  Interface = " ",
-  Keyword = " ",
-  Method = "ƒ ",
-  Module = " ",
-  Operator = " ",
-  Property = " ",
-  Reference = "",
-  Snippet = " ",
-  Struct = "פּ",
-  Text = " ",
-  TypeParameter = "  ",
-  Unit = "塞",
-  Value = " ",
-  Variable = " ",
+    Class = " ",
+    Color = " ",
+    Constant = "",
+    Constructor = " ",
+    Default = " ",
+    Enum = "練",
+    EnumMember = " ",
+    Event = " ",
+    Field = "ﰠ ",
+    File = " ",
+    Folder = " ",
+    Function = " ",
+    Interface = " ",
+    Keyword = " ",
+    Method = "ƒ ",
+    Module = " ",
+    Operator = " ",
+    Property = " ",
+    Reference = "",
+    Snippet = " ",
+    Struct = "פּ",
+    Text = " ",
+    TypeParameter = "  ",
+    Unit = "塞",
+    Value = " ",
+    Variable = " ",
 }
 
 M.cmp_kind = function(kind)
     return kind_symbols[kind] or ""
 end
 
-
 M.symbols = function()
-  return kind_symbols
+    return kind_symbols
 end
 
 -- Prints the first diagnostic for the current line.

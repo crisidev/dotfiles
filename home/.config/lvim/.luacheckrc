@@ -20,6 +20,7 @@ stds.nvim = {
 		"jit",
 		"os",
 		"vim",
+        "lvim",
 		-- vim = { fields = { "cmd", "api", "fn", "o" } },
 	},
 }

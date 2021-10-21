@@ -3,7 +3,7 @@ local M = {}
 M.config = function()
     -- Configure Firevim
     vim.api.nvim_command [[ let g:firenvim_config = { 'globalSettings': { 'C-w': 'noop', 'C-n': 'default' }, 'localSettings': { '.*': { 'selector': 'textarea', 'takeover': 'never' } } } ]]
-    
+
     -- Configure vim
     lvim.builtin.bufferline.active = false
     lvim.builtin.lualine.active = false

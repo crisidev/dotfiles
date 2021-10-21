@@ -149,5 +149,8 @@ run-nvim-sync () {
 }
 zle -N accept-line run-nvim-sync
 
+# zoxide
+eval "$(zoxide init zsh)"
+
 # spaceship
 eval "$(starship init zsh)"
