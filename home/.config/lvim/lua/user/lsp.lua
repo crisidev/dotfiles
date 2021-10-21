@@ -192,9 +192,10 @@ M.normal_buffer_mappings = function()
             name = "Git",
             b = { "<cmd>GitBlameToggle<cr>", "Toggle inline git blame" },
             B = { "<cmd>Git blame<cr>", "Open git blame" },
-            L = {
-                "<cmd>lua require('user.amzn').link_to_code_browser(1, vim.api.nvim_win_get_cursor(0)[1])<cr>",
-                "Copy browser line",
+            l = {
+                "<cmd>lua require('gitlinker').get_buf_range_url('n', {action_callback = require('gitlinker.actions').open_in_browser})<cr>",
+                "Open line in browser",
+                silent=true
             },
         },
     }
