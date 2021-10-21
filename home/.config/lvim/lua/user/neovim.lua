@@ -12,7 +12,9 @@ M.config = function()
     vim.opt.swapfile = true
     -- Crates backups
     vim.opt.backup = true
-    vim.opt.backupdir = { "/home/bigo/.config/nvim/backups/" }
+    vim.opt.backupdir = { vim.fn.stdpath("cache") .. "/backups" }
+    -- Undodir
+    vim.opt.undodir = vim.fn.stdpath("cache") .. "/undo"
     -- The font used in graphical neovim applications
     vim.opt.guifont = "FiraCode Nerd Font:h10"
     -- Display lines as one long line

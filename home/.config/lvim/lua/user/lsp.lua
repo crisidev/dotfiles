@@ -183,9 +183,9 @@ M.normal_buffer_mappings = function()
         -- Session management
         ["gh"] = {
             name = "Session",
-            s = { "<cmd>lua require('persistence').load()<cr>", "Restore for current dir" },
+            s = { "<cmd>lua require('persistence').load()<cr>", "Restore last session for current dir" },
             l = { "<cmd>lua require('persistence').load({ last = true})<cr>", "Restore last session" },
-            d = { "<cmd>lua require('persistence').stop()<cr>", "Quit without saving session" },
+            q = { "<cmd>lua require('persistence').stop()<cr>", "Quit without saving session" },
         },
         -- Git
         ["gG"] = {

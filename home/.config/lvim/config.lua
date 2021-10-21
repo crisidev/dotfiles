@@ -41,12 +41,6 @@ require("user.autocmd").config()
 -- Lsp
 require("user.lsp").config()
 
--- Formatters
-require("user.providers").formatters()
-
--- Linters
-require("user.providers").linters()
-
 -- Glrnvim
 if vim.g.glrnvim_gui then
     require("user.glrnvim").config()
