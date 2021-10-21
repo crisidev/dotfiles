@@ -2,6 +2,7 @@ set_title = false
 disable = ["system", "flatpak", "snap"]
 
 [git]
+max_concurrency = 5
 repos = [
     # Zsh
     "~/.zprezto",

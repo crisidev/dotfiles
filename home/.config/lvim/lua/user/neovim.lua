@@ -12,9 +12,9 @@ M.config = function()
     vim.opt.swapfile = true
     -- Crates backups
     vim.opt.backup = true
-    vim.opt.backupdir = { vim.fn.stdpath("cache") .. "/backups" }
+    vim.opt.backupdir = { vim.fn.stdpath "cache" .. "/backups" }
     -- Undodir
-    vim.opt.undodir = vim.fn.stdpath("cache") .. "/undo"
+    vim.opt.undodir = vim.fn.stdpath "cache" .. "/undo"
     -- The font used in graphical neovim applications
     vim.opt.guifont = "FiraCode Nerd Font:h10"
     -- Display lines as one long line
@@ -111,28 +111,6 @@ M.config = function()
     vim.g.python_host_prog = "$HOME/.pyenv/versions/2.7.17/bin/python"
     -- Disable statusline in dashboard
     vim.g.dashboard_disable_statusline = 1
-
-    -- GitBlame
-    vim.g.gitblame_enabled = 0
-    vim.g.gitblame_message_template = "<date> • <author> • <summary>"
-    vim.g.gitblame_date_format = "%r"
-
-    -- Enable markdown
-    vim.g.markdown_fenced_languages = { "python", "rust", "ruby", "sh" }
-end
-
-M.setcwd = function()
-    local filename = vim.fn.expand "%:p:h"
-    local filedir = io.open(os.getenv "HOME" .. "/.config/nvim/filedir", "w")
-    io.output(filedir)
-    io.write(filename)
-    io.close(filedir)
-
-    local projname = vim.fn.getcwd()
-    local projdir = io.open(os.getenv "HOME" .. "/.config/nvim/projdir", "w")
-    io.output(projdir)
-    io.write(projname)
-    io.close(projdir)
 end
 
 return M

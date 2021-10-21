@@ -78,6 +78,9 @@ M.config = function()
             "f-person/git-blame.nvim",
             config = function()
                 vim.cmd "highlight default link gitblame Question"
+                vim.g.gitblame_enabled = 0
+                vim.g.gitblame_message_template = "<date> • <author> • <summary>"
+                vim.g.gitblame_date_format = "%r"
             end,
         },
         -- Github management
@@ -95,15 +98,18 @@ M.config = function()
             config = function()
                 require("gitlinker").setup {
                     opts = {
-                        -- remote = 'github', -- force the use of a specific remote
                         -- adds current line nr in the url for normal mode
                         add_current_line_on_normal_mode = true,
                         -- callback for what to do with the url
-                        action_callback = require("gitlinker.actions").open_in_browser,
+                        action_callback = require("gitlinker.actions").copy_to_clipboard,
                         -- print the url after performing the action
-                        print_url = true,
+                        print_url = false,
                         -- mapping to call url generation
                         mappings = "gy",
+                    },
+                    callbacks = {
+                        ["code.crisidev.org"] = require("gitlinker.hosts").get_gitea_type_url,
+                        ["git.amazon.com"] = require("user.amzn").get_amazon_type_url,
                     },
                 }
             end,
@@ -186,7 +192,7 @@ M.config = function()
                             show_parameter_hints = false,
                         },
                         hover_actions = {
-                            auto_focus = false,
+                            auto_focus = true,
                         },
                     },
                     server = {
@@ -254,7 +260,8 @@ M.config = function()
                 }
                 require("symbols-outline").setup(opts)
             end,
-            cmd = "SymbolsOutline",
+            -- cmd = "SymbolsOutline",
+            event = "BufReadPost",
         },
         -- Diagnostics
         {

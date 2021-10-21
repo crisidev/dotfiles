@@ -2,9 +2,9 @@
 local formatters = require "lvim.lsp.null-ls.formatters"
 formatters.setup {
     {
-        exe = "ktlint",
-        args = { "-F" },
-        filetypes = { "kotlin" },
+        -- exe = "ktlint",
+        -- args = { "-F" },
+        -- filetypes = { "kotlin" },
     },
 }
 

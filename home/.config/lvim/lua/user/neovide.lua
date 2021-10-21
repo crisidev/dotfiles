@@ -15,9 +15,6 @@ M.config = function()
 
     -- What the title of the window will be set to
     vim.opt.titlestring = "ide | %<%F"
-
-    -- Store CWD in file to allow nvim sync with terminal CWD
-    table.insert(lvim.autocommands.custom_groups, { "BufEnter", "*", "lua require('user.neovim').setcwd()" })
 end
 
 return M

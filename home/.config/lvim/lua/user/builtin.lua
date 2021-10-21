@@ -23,8 +23,8 @@ M.config = function()
 
     -- Telescope
     lvim.builtin.telescope.defaults.path_display = { shorten = 10 }
+    lvim.builtin.telescope.defaults.winblend = 6
     lvim.builtin.telescope.defaults.layout_strategy = "horizontal"
-    lvim.builtin.telescope.defaults.layout_config = require("user.telescope").layout_config()
     local actions = require "telescope.actions"
     lvim.builtin.telescope.defaults.mappings = {
         i = {
@@ -36,6 +36,8 @@ M.config = function()
             ["<C-k>"] = actions.move_selection_previous,
         },
         n = {
+            ["<esc>"] = actions.close,
+            ["<C-y>"] = actions.which_key,
             ["<C-n>"] = actions.cycle_history_next,
             ["<C-p>"] = actions.cycle_history_prev,
             ["<C-j>"] = actions.move_selection_next,
@@ -54,6 +56,7 @@ M.config = function()
         ".git",
         "target/*",
     }
+    lvim.builtin.telescope.defaults.layout_config = require("user.telescope").layout_config()
 
     -- Terminal
     lvim.builtin.terminal.active = true
@@ -99,7 +102,7 @@ M.config = function()
         { name = "treesitter" },
         { name = "crates" },
     }
-    lvim.builtin.cmp.documentation.border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" }
+    -- lvim.builtin.cmp.documentation.border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" }
     lvim.builtin.cmp.experimental = {
         ghost_text = false,
         native_menu = false,
