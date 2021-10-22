@@ -134,23 +134,27 @@ M.config = function()
             ft = { "kotlin", "kt" },
         },
         -- Lsp
-        -- Lsp progress
-        { "arkav/lualine-lsp-progress" },
         -- Lsp signature
-        {
-            "ray-x/lsp_signature.nvim",
-            ft = { "rust", "rs" },
-            event = "InsertEnter",
-            config = function()
-                require("lsp_signature").on_attach {
-                    bind = true,
-                    handler_opts = {
-                        border = "single",
-                    },
-                    -- extra_trigger_chars = { "(", "," },
-                }
-            end,
-        },
+        -- {
+        --     "ray-x/lsp_signature.nvim",
+        --     ft = { "rust", "rs" },
+        --     event = "BufRead",
+        --     config = function()
+        --         require("lsp_signature").on_attach {
+        --             bind = true,
+        --             handler_opts = {
+        --                 border = "single",
+        --             },
+        --             doc_lines = 0,
+        --             transpancy = 60,
+        --             shadow_blend = 30,
+        --             hint_enable = false,
+        --             toggle_key = "<C-L>",
+        --             padding = " ",
+        --             -- extra_trigger_chars = { "(", "," },
+        --         }
+        --     end,
+        -- },
         -- Lsp goto preview
         {
             "rmagatti/goto-preview",
@@ -308,17 +312,17 @@ M.config = function()
             disable = not lvim.builtin.dap.active,
         },
         -- Peek line number
-        {
-            "nacro90/numb.nvim",
-            event = "BufRead",
-            config = function()
-                require("numb").setup {
-                    show_numbers = true,
-                    show_cursorline = true,
-                }
-            end,
-        },
-        -- Spelling
+        -- {
+        --     "nacro90/numb.nvim",
+        --     event = "BufRead",
+        --     config = function()
+        --         require("numb").setup {
+        --             show_numbers = true,
+        --             show_cursorline = true,
+        --         }
+        --     end,
+        -- },
+        -- -- Spelling
         {
             "lewis6991/spellsitter.nvim",
             config = function()

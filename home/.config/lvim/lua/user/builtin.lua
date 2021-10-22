@@ -122,8 +122,15 @@ M.config = function()
         cmp_tabnine = "  ",
     }
 
-    -- terminal
+    -- Terminal
     lvim.builtin.terminal.open_mapping = [[<c-\>]]
+
+    -- Which key
+    lvim.builtin.which_key.setup.window.winblend = 10
+    lvim.builtin.which_key.setup.window.border = "none"
+
+    -- Notify popup
+    lvim.builtin.notify.active = true
 end
 
 return M

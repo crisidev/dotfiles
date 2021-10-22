@@ -134,7 +134,7 @@ M.normal_buffer_mappings = function()
         "Code action",
     }
     lvim.lsp.buffer_mappings.normal_mode["gA"] = {
-        "<cmd>lua require('user.telescope').codelens_actions()<cr>",
+        "<cmd>lua vim.lsp.codelens.run()<cr>",
         "Codelens action",
     }
     -- Goto
@@ -169,11 +169,11 @@ M.normal_buffer_mappings = function()
     lvim.lsp.buffer_mappings.normal_mode["gR"] = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename symbol" }
     -- Diagnostics
     lvim.lsp.buffer_mappings.normal_mode["gn"] = {
-        "<cmd>lua vim.lsp.diagnostic.goto_next({popup_opts = {border = 'rounded', focusable = false, source = 'always'}})<cr>",
+        "<cmd>lua vim.diagnostic.goto_next({float = {border = 'rounded', focusable = false, source = 'always'}})<cr>",
         "Next Diagnostic",
     }
     lvim.lsp.buffer_mappings.normal_mode["gp"] = {
-        "<cmd>lua vim.lsp.diagnostic.goto_prev({popup_opts = {border = 'rounded', focusable = false, source = 'always'}})<cr>",
+        "<cmd>lua vim.diagnostic.goto_prev({float = {border = 'rounded', focusable = false, source = 'always'}})<cr>",
         "Prev Diagnostic",
     }
     lvim.lsp.buffer_mappings.normal_mode["ge"] = {
@@ -182,11 +182,11 @@ M.normal_buffer_mappings = function()
         l = { "<cmd>Trouble loclist<cr>", "Trouble loclist" },
         q = { "<cmd>Trouble quickfix<cr>", "Trouble quifix" },
         n = {
-            "<cmd>lua vim.lsp.diagnostic.goto_next({popup_opts = {border = 'rounded', focusable = false, source = 'always'}})<cr>",
+            "<cmd>lua vim.diagnostic.goto_next({float = {border = 'rounded', focusable = false, source = 'always'}})<cr>",
             "Next Diagnostic",
         },
         p = {
-            "<cmd>lua vim.lsp.diagnostic.goto_prev({popup_opts = {border = 'rounded', focusable = false, source = 'always'}})<cr>",
+            "<cmd>lua vim.diagnostic.goto_prev({float = {border = 'rounded', focusable = false, source = 'always'}})<cr>",
             "Prev Diagnostic",
         },
     }

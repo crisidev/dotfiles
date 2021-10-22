@@ -46,9 +46,7 @@ M.config = function()
         ["<A-Right>"] = "<Esc><Esc> <cmd>wincmd l<cr>",
     }
     -- VISUAL
-    lvim.keys.visual_mode = {
-        ["p"] = [["_dP]],
-    }
+    lvim.keys.visual_mode = {}
 end
 
 return M

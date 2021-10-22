@@ -10,7 +10,7 @@ lvim.debug = false
 lvim.leader = "space"
 
 -- Vimscript if needed
-vim.cmd "source ~/.config/lvim/user.pre.vim"
+vim.cmd("source ~/.config/lvim/vimscript/user.pre.vim")
 
 -- Builtin
 require("user.neovim").config()
@@ -66,4 +66,4 @@ if vim.g.started_by_firenvim then
 end
 
 -- Vimscript if needed
-vim.cmd "source ~/.config/lvim/user.post.vim"
+vim.cmd("source ~/.config/lvim/vimscript/user.post.vim")

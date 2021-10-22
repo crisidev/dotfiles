@@ -159,10 +159,6 @@ function M.code_actions()
     builtin.lsp_code_actions(M.get_dropdown())
 end
 
-function M.codelens_actions()
-    builtin.lsp_codelens_actions(M.get_dropdown())
-end
-
 -- show refrences to this using language server
 function M.lsp_references()
     builtin.lsp_references(M.get_lsp_opts())
