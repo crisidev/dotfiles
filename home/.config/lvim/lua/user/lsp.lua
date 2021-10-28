@@ -145,7 +145,7 @@ M.normal_buffer_mappings = function()
         "Goto Implementation",
     }
     lvim.lsp.buffer_mappings.normal_mode["gr"] = {
-        "<cmd>lua require('user.telescope').lsp_references()<cr>",
+        "<cmd>lua vim.lsp.buf.references()<cr>",
         "Goto References",
     }
     lvim.lsp.buffer_mappings.normal_mode["gs"] = { "<cmd>lua vim.lsp.buf.signature_help()<CR>", "Show signature help" }

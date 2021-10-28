@@ -139,8 +139,7 @@ export DOCKTOR_API_URL=https://docktor.crisidev.org
 export GRAVEYARD=~/.local/share/Trash
 
 # android
-export ANDROID_SDK_ROOT=~/.android/sdk
-export NDK_HOME=~/.android/sdk/ndk/22.0.7026061
+export ANDROID_SDK_ROOT=/home/bigo/.android/Sdk
 
 # Sync nvim path if $NVIM_SYNC is set
 run-nvim-sync () {

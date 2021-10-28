@@ -9,7 +9,7 @@ M.config = function()
         -- Shell
         { "FileType", "sh,zsh", "setlocal ts=2 sw=2 sts=2 et" },
         -- LSP diagnostics
-        { "CursorMoved", "*", "lua require('user.lsp').echo_diagnostic()" },
+        -- { "CursorMoved", "*", "lua require('user.lsp').echo_diagnostic()" },
     }
 end
 

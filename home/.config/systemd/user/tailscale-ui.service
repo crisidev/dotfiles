@@ -1,0 +1,10 @@
+[Unit]
+Description=Tailscale UI 
+PartOf=graphical-session.target
+
+[Service]
+ExecStart=/usr/local/bin/tailscale-ui
+Restart=always
+
+[Install]
+WantedBy=graphical-session.target

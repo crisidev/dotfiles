@@ -1,5 +1,5 @@
 set_title = false
-disable = ["system", "flatpak", "snap"]
+disable = ["system", "flatpak", "snap", "gnome_shell_extensions"]
 
 [git]
 max_concurrency = 5

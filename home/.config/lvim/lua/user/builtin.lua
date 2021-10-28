@@ -81,7 +81,7 @@ M.config = function()
         },
         d = {
             description = { "  Find Word          " },
-            command = "lua require('user.telescope').live_grep()",
+            command = "lua require('user.telescope').find_string()",
         },
         e = {
             description = { "  Configuration      " },
@@ -102,7 +102,7 @@ M.config = function()
         { name = "treesitter" },
         { name = "crates" },
     }
-    -- lvim.builtin.cmp.documentation.border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" }
+    lvim.builtin.cmp.documentation.border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" }
     lvim.builtin.cmp.experimental = {
         ghost_text = false,
         native_menu = false,
@@ -131,6 +131,7 @@ M.config = function()
 
     -- Notify popup
     lvim.builtin.notify.active = true
+    lvim.log.level = "info"
 end
 
 return M

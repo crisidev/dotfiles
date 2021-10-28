@@ -34,37 +34,9 @@ function M.layout_config()
     }
 end
 
--- another file string search
-function M.find_string()
-    local opts = {
-        border = true,
-        previewer = false,
-        shorten_path = false,
-        layout_strategy = "flex",
-        layout_config = {
-            width = 0.9,
-            height = 0.8,
-            horizontal = { width = { padding = 0.15 } },
-            vertical = { preview_height = 0.75 },
-        },
-        file_ignore_patterns = {
-            "vendor/*",
-            "node_modules",
-            "%.jpg",
-            "%.jpeg",
-            "%.png",
-            "%.svg",
-            "%.otf",
-            "%.ttf",
-            ".git",
-            ".svn",
-        },
-    }
-    builtin.live_grep(opts)
-end
-
 function M.get_files_opts()
     return {
+        border = true,
         sorting_strategy = "ascending",
         scroll_strategy = "cycle",
         layout_config = {
@@ -84,6 +56,21 @@ function M.get_files_opts()
         },
         hidden = true,
     }
+end
+
+-- another file string search
+function M.find_string()
+    local opts = M.get_files_opts()
+    opts.previewer = false
+    opts.layout_strategy = "flex"
+    builtin.live_grep(opts)
+end
+
+function M.recent_files()
+    local opts = M.get_files_opts()
+    opts.previewer = false
+    opts.layout_strategy = "flex"
+    builtin.oldfiles(opts)
 end
 
 -- fince file browser using telescope instead of lir
@@ -159,9 +146,50 @@ function M.code_actions()
     builtin.lsp_code_actions(M.get_dropdown())
 end
 
+-- show code actions in a fancy floating window
+function M.codelens_actions()
+    builtin.lsp_codelens_actions(M.get_dropdown())
+end
+
 -- show refrences to this using language server
 function M.lsp_references()
-    builtin.lsp_references(M.get_lsp_opts())
+    local pickers = require "telescope.pickers"
+    local make_entry = require "telescope.make_entry"
+    local finders = require "telescope.finders"
+    local conf = require("telescope.config").values
+    local params = vim.lsp.util.make_position_params()
+    params.context = { includeDeclaration = true }
+
+    local results_lsp, err = vim.lsp.buf_request_sync(0, "textDocument/references", params, 10000)
+    if err then
+        vim.api.nvim_err_writeln("Error when finding references: " .. err)
+        return
+    end
+
+    local locations = {}
+    for _, server_results in pairs(results_lsp) do
+        if server_results.result then
+            local r = vim.lsp.util.locations_to_items(server_results.result)
+            print(r)
+            vim.list_extend(locations, r or {})
+        end
+    end
+
+    if vim.tbl_isempty(locations) then
+        return
+    end
+
+    local opts = M.get_dropdown()
+
+    pickers.new(opts, {
+        prompt_title = "LSP References",
+        finder = finders.new_table {
+            results = locations,
+            entry_maker = opts.entry_maker or make_entry.gen_from_quickfix(opts),
+        },
+        previewer = conf.qflist_previewer(opts),
+        sorter = conf.generic_sorter(opts),
+    }):find()
 end
 
 -- show implementations of the current thingy using language server

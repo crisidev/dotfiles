@@ -179,8 +179,8 @@ M.config = function()
             "simrat39/rust-tools.nvim",
             ft = { "rust", "rs" },
             config = function()
-                local lsp_installer_servers = require "nvim-lsp-installer.servers"
-                local _, requested_server = lsp_installer_servers.get_server "rust_analyzer"
+                local lsp_installer_servers = require("nvim-lsp-installer.servers")
+                local _, requested_server = lsp_installer_servers.get_server("rust_analyzer")
                 local opts = {
                     tools = {
                         autoSetHints = true,
@@ -193,10 +193,10 @@ M.config = function()
                         },
                         inlay_hints = {
                             only_current_line = true,
-                            show_parameter_hints = false,
+                            show_parameter_hints = true,
                         },
                         hover_actions = {
-                            auto_focus = true,
+                            auto_focus = false,
                         },
                     },
                     server = {
@@ -401,6 +401,13 @@ M.config = function()
         },
         -- Zoxide
         { "nanotee/zoxide.vim" },
+        -- Neoscrpll
+        {
+            "karb94/neoscroll.nvim",
+            config = function()
+                require("neoscroll").setup()
+            end,
+        },
     }
 end
 
