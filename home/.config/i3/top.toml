@@ -21,13 +21,6 @@ warning = 20.0
 alert = 10.0
 
 [[block]]
-block = "custom"
-cycle = ["~/.bin/i3vpn"]
-on_click = "~/.bin/i3vpn cycle"
-hide_when_empty = false
-interval = 5
-
-[[block]]
 block = "net"
 device = "wlp1s0"
 format = "{ssid} {speed_up} {speed_down}"
@@ -35,7 +28,7 @@ interval = 5
 
 [[block]]
 block = "net"
-device = "enp0s31f6"
+device = "eno1"
 interval = 5
 
 [[block]]
@@ -56,32 +49,27 @@ block = "cpu"
 warning = 60
 critical = 90
 interval = 2
-format = "{barchart} {utilization} {frequency}"
+format = "{barchart} {utilization} {frequency} {boost}"
 
-[[block]]
-block = "custom"
-cycle = ["~/.bin/i3cpu"]
-on_click = "~/.bin/i3cpu cycle"
-interval = 5
+# [[block]]
+# block = "custom"
+# cycle = ["~/.bin/i3cpu"]
+# interval = 5
 
 [[block]]
 block = "load"
 format = "{1m}"
-interval = 5
+interval = 3
 
-[[block]]
-# block = "custom"
-# cycle = ["sensors |grep Package |awk '{print $4}' |sed 's#+##g' |sed 's#C##g'"]
-# interval = 5
 [[block]]
 block = "temperature"
 collapsed = false
 interval = 10
-good = 40
-idle = 60
-info = 80
+good = 30
+idle = 50
+info = 75
 warning = 90
-chip = "*-isa-*"
+chip = "k10temp-pci-00c3"
 format = "{average}"
 
 [[block]]

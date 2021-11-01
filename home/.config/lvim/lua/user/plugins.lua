@@ -179,8 +179,8 @@ M.config = function()
             "simrat39/rust-tools.nvim",
             ft = { "rust", "rs" },
             config = function()
-                local lsp_installer_servers = require("nvim-lsp-installer.servers")
-                local _, requested_server = lsp_installer_servers.get_server("rust_analyzer")
+                local lsp_installer_servers = require "nvim-lsp-installer.servers"
+                local _, requested_server = lsp_installer_servers.get_server "rust_analyzer"
                 local opts = {
                     tools = {
                         autoSetHints = true,
@@ -407,6 +407,23 @@ M.config = function()
             config = function()
                 require("neoscroll").setup()
             end,
+        },
+        -- Tabnine cmp
+        {
+            "tzachar/cmp-tabnine",
+            run = "./install.sh",
+            requires = "hrsh7th/nvim-cmp",
+            config = function()
+                local tabnine = require "cmp_tabnine.config"
+                tabnine:setup {
+                    max_lines = 1000,
+                    max_num_results = 20,
+                    sort = true,
+                    run_on_every_keystroke = true,
+                    snippet_placeholder = "..",
+                }
+            end,
+            disable = not lvim.builtin.tabnine.active,
         },
     }
 end

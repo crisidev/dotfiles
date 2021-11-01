@@ -132,6 +132,9 @@ M.config = function()
     -- Notify popup
     lvim.builtin.notify.active = true
     lvim.log.level = "info"
+
+    -- Enable tabnine
+    lvim.builtin.tabnine = { active = true }
 end
 
 return M

@@ -1,96 +1,55 @@
 #!/bin/bash
 
 usage() {
-  echo "usage $0 auto|laptop|home|ita|work|duplicate|startup|key|fix"
+  echo "usage $0 auto|laptop|home|ita|work|mirror|startup|key|fix"
   exit 2
 }
 
 source "$HOME/.config/crisidev-common"
 
 mode=${1}
-output=${2:-HDMI-1}
-
-arrange_for_work() {
-  xrandr --output eDP-1 \
-    --mode 1600x900 --pos 1920x180 --rotate normal \
-    --output HDMI-1 --primary --mode 1920x1080 --pos 0x0 --rotate normal \
-    --output HDMI-2 --off --output VIRTUAL1 --off --output DP-1 --off --output DP-2 --off --output DP-2-1 --off --output DP-2-2 --off --output DP-2-3 --off
-  declare -a arr=(
-    "workspace 1: shell, move workspace to output HDMI-1"
-    "workspace 2: www, move workspace to output HDMI-1"
-    "workspace 3: irc, move workspace to output eDP-1"
-    "workspace 4: videoconf, move workspace to output HDMI-1"
-    "workspace 5: chime, move workspace to output eDP-1"
-    "workspace 6: mail, move workspace to output HDMI-1"
-    "workspace 7: calendar, move workspace to output HDMI-1"
-    "workspace 8: chat, move workspace to output HDMI-1"
-    "workspace 9: slack, move workspace to output eDP-1"
-    "workspace 10: outlook, move workspace to output HDMI-1"
-    "workspace 11: spotify, move workspace to output HDMI-1"
-    "workspace 12: quip, move workspace to output HDMI-1"
-    "workspace 13: var1, move workspace to output eDP-1"
-  )
-  i3_msg_dispatcher "${arr[@]}"
-  imwheel -k
-}
 
 case "$mode" in
   auto)
     autorandr --change
-    setup_keyboard_speed
     ;;
   laptop)
-    autorandr --load laptop
-    setup_keyboard_speed
+    autorandr --load laptop --force
+    xrandr --output HDMI-A-0 --off
     ;;
   home)
-    autorandr --load home
-    setup_keyboard_speed
+    autorandr --load home --force
     ;;
   ita)
-    arrange_for_work
-    finish_autorandr_switch work
+    autorandr --load ita --force
     ;;
   work)
-    arrange_for_work
-    finish_autorandr_switch work
+    autorandr --load work --force
     ;;
-  duplicate)
-    display_off
-    if [ "${output}" == "all" ]; then
-      xrandr --output DP-2-1 --mode 1920x1080
-      xrandr --output DP-2-2 --mode 1920x1080
-    else
-      xrandr --output "${output}" --mode 1920x1080
-    fi
-    xrandr --output eDP-1 --auto
-    finish_autorandr_switch duplicate
+  mirror)
+    mirror_display
     ;;
   startup)
+    setup_keyboard_speed
+    add_resolutions
     declare -a arr=(
       "workspace 1: shell; exec kitty --detach"
       "workspace 2: www; exec --no-startup-id firefox"
       "workspace 3: irc; exec kitty --detach"
       "workspace 5: chime; exec --no-startup-id google-chrome --user-data-dir=$HOME/.local/share/chrome-chime --disable-session-crashed-bubble -app=https://app.chime.aws"
-      "workspace 6: mail; exec --no-startup-id env GTK_THEME=Adwaita evolution -c mail"
-      "workspace 7: calendar; exec --no-startup-id env GTK_THEME=Adwaita evolution -c calendar"
+      "workspace 6: mail; exec --no-startup-id env GTK_THEME=Adwaita evolution -c mail; exec --no-startup-id  env GTK_THEME=Adwaita evolution -c calendar"
       "workspace 8: chat; exec --no-startup-id google-chrome --user-data-dir=$HOME/.local/share/chrome-whatsapp --disable-session-crashed-bubble -app=https://web.whatsapp.com; exec --no-startup-id signal-desktop"
       "workspace 9: slack; exec --no-startup-id slack"
       "workspace 11: spotify; exec --no-startup-id spotify"
-      "rename workspace 1 to 1: shell"
       "workspace 2: www"
     )
     i3_msg_dispatcher "${arr[@]}"
     sleep 5
-    autorandr --change
+    autorandr --change --force
     setup_keyboard_speed
-    while :; do sleep 2073600; done
     ;;
   key)
     setup_keyboard_speed
-    ;;
-  fix)
-    fix_desktop
     ;;
   *)
     usage

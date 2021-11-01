@@ -13,19 +13,25 @@ notify() {
 }
 
 finish_autorandr_switch() {
-  # Disable tit
-  xinput -set-prop "PS/2 Generic Mouse" "Device Enabled" 0
-  # Setup keyboard
-  setup_keyboard_speed
-  # Setup background
   feh --bg-fill "${HOME}/Pictures/wallpapers/fishing.jpeg"
   notify "$1"
 }
 
 display_off() {
-  xrandr --output VIRTUAL-1 --off --output eDP-1 --off \
-    --output DP-1 --off --output DP-2 --off --output DP-2-1 \
-    --off --output DP-2-2 --off --output HDMI-1 --off --output HDMI-2 --off
+  xrandr --output eDP --off --output HDMI-A-0 --off 
+}
+
+mirror_display() {
+    display_off
+    xrandr --output HDMI-A-0 --mode 1920x1080
+    xrandr --output eDP --auto
+    finish_autorandr_switch mirror
+}
+
+add_resolutions() {
+    xrandr --newmode "1600x900" 118.25 1600 1696 1856 2112 900 903 908 934 -hsync +vsync
+    xrandr --addmode eDP "1600x900"
+    xrandr --output eDP --set "scaling mode" "Full aspect"
 }
 
 # set keyboard speed
@@ -34,3 +40,5 @@ setup_keyboard_speed() {
   xset m 2 60
   xset b off
 }
+
+

@@ -91,8 +91,7 @@ HISTFILE="$HOME/.zsh_history"
 [ -f ~/.zsh_secrets ] && source ~/.zsh_secrets
 
 # paths
-export GOPATH=~/.go
-export PATH=~/.bin:~/.toolbox/bin:~/.pyenv/bin:~/.rbenv/bin:~/.nodenv/bin:~/.nodenv/versions/15.5.1/bin:~/.bin:$GOPATH/bin:~/.cargo/bin:$PATH
+export PATH=~/.bin:~/.toolbox/bin:~/.pyenv/bin:~/.rbenv/bin:~/.nodenv/bin:~/.goenv/bin:~/.bin:~/.cargo/bin:$PATH
 
 # terminal
 # export TERM="xterm-kitty"
@@ -122,8 +121,18 @@ fi
 
 # nodenv
 export NODENV_ROOT="$HOME/.nodenv"
-if which nodenv > /dev/null; then eval "$(nodenv init -)"; fi
+if which nodenv > /dev/null; then 
+  eval "$(nodenv init -)"
+  export PATH=$PATH:~/.nodenv/versions/17.0.1/bin
+fi
 
+# nodenv
+export GOENV_ROOT="$HOME/.goenv"
+if which goenv > /dev/null; then 
+  export GOENV_GOPATH_PREFIX=$HOME/.go
+  eval "$(goenv init -)" 
+  export PATH=$PATH:$GOPATH/bin
+fi
 
 # sshrc
 compdef sshrc=ssh
@@ -153,3 +162,5 @@ eval "$(zoxide init zsh)"
 
 # spaceship
 eval "$(starship init zsh)"
+
+export PATH=$PATH:$HOME/.toolbox/bin

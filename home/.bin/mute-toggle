@@ -3,7 +3,7 @@
 if [ "$1" == "set" ]; then
   pactl set-source-mute @DEFAULT_SOURCE@ toggle
 elif [ "$1" == "get" ]; then
-  if pacmd list-sources | grep -e 'index:' -e 'name:' -e 'muted:' |grep -A2 "\*" |grep -q "muted: yes"; then
+  if pactl list sources | grep -q 'Mute: yes'; then
     echo '{"icon":"","state":"Info","text":""}'
   else
     echo '{"icon":"","state":"Critical","text":""}'

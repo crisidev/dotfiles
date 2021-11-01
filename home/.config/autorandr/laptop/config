@@ -1,19 +1,8 @@
-output DP-1
+output HDMI-A-0
 off
-output HDMI-1
-off
-output DP-2
-off
-output HDMI-2
-off
-output DP-2-1
-off
-output DP-2-2
-off
-output DP-2-3
-off
-output eDP-1
+output eDP
 crtc 0
+gamma 1.493:1.0:0.667
 mode 1920x1080
 pos 0x0
 primary

@@ -14,7 +14,7 @@ set $mod Mod4
 set $editor vim
 
 # font
-font pango:Inter Regular, Font Awesome 5 Free 9
+font pango:Inter Regular, Font Awesome 5 Free 10
 
 # Gaps configuration
 gaps inner 5
@@ -109,6 +109,8 @@ for_window [class="Dconf-editor"] floating enable border pixel 1
 for_window [class="Evolution-alarm-notify"] floating enable border pixel 1
 for_window [class="Gnome-font-viewer"] floating enable border pixel 1
 for_window [class="Blueman-services"] floating enable border pixel 1
+for_window [class="tuxedo-control-center"] floating enable border pixel 1
+for_window [class="cemu.exe"] floating enable border pixel 1
 
 # Special borders and floats
 for_window [class="^ide$"] floating enable border pixel 2
@@ -116,8 +118,8 @@ for_window [class="Ulauncher"] floating enable border pixel 0
 
 assign [class="Google-chrome" instance="google-chrome.*\(/home/.*/.local/share/chrome-chime\)"] $w4
 assign [class="Google-chrome" instance="app.chime.aws"] $w5
-assign [title=".*Calendar.*"] $w7
-assign [class="Evolution.real" title=".*Meeting.*"] $w7
+# assign [title=".*Calendar.*"] $w7
+# assign [class="Evolution.real" title=".*Meeting.*"] $w7
 assign [class="Evolution.real"] $w6
 assign [class="signal"] $w8
 assign [class="Signal"] $w8
@@ -137,13 +139,13 @@ assign [class="Google-chrome" instance="quip-amazon.com"] $w12
 bindsym XF86AudioPlay exec --no-startup-id "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause"
 bindsym XF86AudioNext exec --no-startup-id "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next"
 bindsym XF86AudioPrev exec --no-startup-id "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.previous"
-bindsym Mod1+F10 exec --no-startup-id $psst pactl set-source-mute @DEFAULT_SOURCE@ toggle"
+bindsym Mod1+F10 exec --no-startup-id "$HOME/.bin/mute-toggle"
 
 # Sleep (Fn-F1)
 bindsym XF86Sleep exec --no-startup-id "$HOME/.bin/i3exit suspend"
 
 # Monitor
-bindsym XF86Display exec --no-startup-id "$HOME/.bin/i3monitor duplicate all"
+bindsym XF86Display exec --no-startup-id "$HOME/.bin/i3monitor mirror"
 
 # Print focused window
 bindsym Print exec --no-startup-id "flameshot gui"
@@ -226,8 +228,8 @@ bindsym $mod+6 exec --no-startup-id $HOME/.bin/mff workspace $w12
 bindsym $mod+F6 exec --no-startup-id $HOME/.bin/mff workspace $w13
 
 # Move focused workspace to output
-bindsym $mod+Mod1+plus exec --no-startup-id $HOME/.bin/mff move workspace to output DP-2-1
-bindsym $mod+Mod1+BackSpace exec --no-startup-id $HOME/.bin/mff move workspace to output DP-2-2
+bindsym $mod+Mod1+plus exec --no-startup-id $HOME/.bin/mff move workspace to output DVI-I-1-1
+bindsym $mod+Mod1+BackSpace exec --no-startup-id $HOME/.bin/mff move workspace to output HDMI-1
 bindsym $mod+Mod1+Home exec --no-startup-id $HOME/.bin/mff move workspace to output eDP-1
 
 # Move focused container to workspace
@@ -293,8 +295,7 @@ mode " [a]uto [l]aptop [h]ome [w]ork [d]uplicate [D]uplicate_all" {
     bindsym l mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3monitor laptop
     bindsym h mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3monitor home
     bindsym w mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3monitor work
-    bindsym d mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3monitor duplicate
-    bindsym D mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3monitor duplicate all
+    bindsym m mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3monitor mirror
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
@@ -304,9 +305,9 @@ mode " [a]uto [l]aptop [h]ome [w]ork [d]uplicate [D]uplicate_all" {
 ###########################
 bar {
     tray_output none
-    font pango:Inter Regular, DejaVu Sans Mono for Powerline, Font Awesome 5 Free 9
+    font pango:Inter Regular, DejaVu Sans Mono for Powerline, Font Awesome 5 Free 10
     position top
-    status_command source $HOME/.zsh_secrets && $HOME/.cargo/bin/i3status-rs $HOME/.config/i3/top.toml
+    status_command bash -c "source $HOME/.zsh_secrets && $HOME/.cargo/bin/i3status-rs $HOME/.config/i3/top.toml"
     strip_workspace_numbers yes
     workspace_buttons yes
     height 24
@@ -324,8 +325,8 @@ bar {
 bar {
     output primary
     tray_output primary
-    font pango:Inter Regular, DejaVu Sans Mono for Powerline, Font Awesome 5 Free 9
-    status_command source $HOME/.zsh_secrets && $HOME/.cargo/bin/i3status-rs $HOME/.config/i3/bottom.toml
+    font pango:Inter Regular, DejaVu Sans Mono for Powerline, Font Awesome 5 Free 10
+    status_command bash -c "source $HOME/.zsh_secrets && $HOME/.cargo/bin/i3status-rs $HOME/.config/i3/bottom.toml"
     position bottom
     workspace_buttons no
     height 26
@@ -344,10 +345,32 @@ bar {
 ###########################
 # Startup commands
 ###########################
-exec_always --no-startup-id "$HOME/.bin/import-gsettings gtk-theme:gtk-theme-name icon-theme:gtk-icon-theme-name cursor-theme:gtk-cursor-theme-name font-name:gtk-font-name"
+# Start compositor and X stuff first
+exec --no-startup-id "/usr/bin/picom"
+exec --no-startup-id "/usr/bin/unclutter --ignore-scrolling"
+exec --no-startup-id "/usr/bin/xedgewarp -m closest"
+exec --no-startup-id "/usr/bin/dunst -c ~/.config/dunst/dunstrc"
 
-exec "systemctl --user start wm.target"
-exec --no-startup-id "zsh -c 'GDK_BACKEND=x11 /usr/bin/ulauncher --hide-window'"
+# Gnome stuff
+exec --no-startup-id "$HOME/.bin/import-gsettings gtk-theme:gtk-theme-name icon-theme:gtk-icon-theme-name cursor-theme:gtk-cursor-theme-name font-name:gtk-font-name"
+exec --no-startup-id "/usr/bin/gnome-flashback"
+
+# Amzn
+exec --no-startup-id "/usr/local/amazon/sbin/acmed-session.sh"
+
+# Appletts
+exec --no-startup-id "/usr/bin/tuxedo-control-center"
+exec --no-startup-id "/usr/bin/cronopete"
+exec --no-startup-id "/usr/bin/nm-applet"
+exec --no-startup-id "/usr/local/bin/tailscale-ui"
+exec --no-startup-id "/usr/bin/systemctl --user start gotify-dunst"
+
+# i3 specific
+exec --no-startup-id "$HOME/.bin/i3alternate"
+exec --no-startup-id "$HOME/.bin/i3chime"
+
+# Startup monitors and apps
+exec --no-startup-id "$HOME/.bin/i3monitor startup"
 
 # Exec always
 exec_always --no-startup-id "feh --bg-fill $HOME/Pictures/wallpapers/fishing.jpeg"

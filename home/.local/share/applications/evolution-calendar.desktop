@@ -1,7 +1,7 @@
 [Desktop Entry]
-Name=Evolution Calendar
+Name=Calendar
 GenericName=Groupware Suite
-X-GNOME-FullName=Evolution Calendar
+X-GNOME-FullName=Calendar
 Comment=Manage your email, contacts and schedule
 Keywords=email;calendar;contact;addressbook;task;
 Actions=new-window;compose;contacts;calendar;mail;memos;tasks;

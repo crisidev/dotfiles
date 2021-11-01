@@ -141,7 +141,7 @@ M.normal_buffer_mappings = function()
     lvim.lsp.buffer_mappings.normal_mode["gg"] = { "<cmd>lua vim.lsp.buf.definition()<CR>", "Goto Definition" }
     lvim.lsp.buffer_mappings.normal_mode["gd"] = { "<cmd>lua vim.lsp.buf.declaration()<CR>", "Goto Declaration" }
     lvim.lsp.buffer_mappings.normal_mode["gi"] = {
-        "<cmd>lua require('user.telescope').lsp_implementations()<cr>",
+        "<cmd>lua vim.lsp.buf.implementation()<cr>",
         "Goto Implementation",
     }
     lvim.lsp.buffer_mappings.normal_mode["gr"] = {
@@ -200,7 +200,7 @@ end
 
 M.config = function()
     -- Use rust-tools.nvim
-    lvim.lsp.override = { "rust_analyzer" }
+    vim.list_extend(lvim.lsp.override, { "rust_analyzer" })
     lvim.lsp.automatic_servers_installation = true
     lvim.lsp.document_highlight = true
     lvim.lsp.code_lens_refresh = true

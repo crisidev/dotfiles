@@ -35,3 +35,4 @@ alias vim-packer-sync="rm -f ~/.config/lvim/plugin/packer_compiled.lua && vim -c
 alias vim-packer-update="vim -c 'autocmd User PackerComplete quitall' -c 'PackerUpdate'"
 alias userctl="systemctl --user"
 alias userjournal="journalctl --user"
+alias dog=dig

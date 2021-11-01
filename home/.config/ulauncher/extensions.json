@@ -6,13 +6,6 @@
         "last_commit": "036a0b3b24fb325f7aa648872c916d04966e7101",
         "last_commit_time": "2021-02-03T13:17:59"
     },
-    "com.github.yannishuber.pass-ulauncher": {
-        "id": "com.github.yannishuber.pass-ulauncher",
-        "url": "https://github.com/yannishuber/pass-ulauncher",
-        "updated_at": "2021-06-11T19:09:40.205071",
-        "last_commit": "25160ce85e731cf40e30ca1fe354b29c1fe6e494",
-        "last_commit_time": "2019-05-28T05:27:22"
-    },
     "com.github.friday.ulauncher-clipboard": {
         "id": "com.github.friday.ulauncher-clipboard",
         "url": "https://github.com/friday/ulauncher-clipboard",
@@ -75,5 +68,12 @@
         "updated_at": "2021-09-10T13:25:00.666567",
         "last_commit": "ee0903174c8b87cd1f7c3b6c1acef10702547507",
         "last_commit_time": "2021-08-12T06:39:56"
+    },
+    "com.github.yannishuber.pass-ulauncher": {
+        "id": "com.github.yannishuber.pass-ulauncher",
+        "url": "https://github.com/yannishuber/pass-ulauncher",
+        "updated_at": "2021-10-29T18:21:49.582058",
+        "last_commit": "25160ce85e731cf40e30ca1fe354b29c1fe6e494",
+        "last_commit_time": "2019-05-28T05:27:22"
     }
 }

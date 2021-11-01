@@ -9,7 +9,7 @@ while true; do
     stringarray=(${WS})
     if [ "${stringarray[0]}" = "${I3_EVENT}" ] && [ "${stringarray[1]}" = "${VIDECONF_WS_SHORT}" ]; then
       if xrandr --listactivemonitors | grep -q DP-2-2; then
-        i3-msg "[workspace=\"${VIDECONF_WS}\"]" "move workspace to output DP-2-2; workspace ${VIDECONF_WS}"
+        i3-msg "[workspace=\"${VIDECONF_WS}\"]" "move workspace to output eDP-1; workspace ${VIDECONF_WS}"
       fi
     fi
   done

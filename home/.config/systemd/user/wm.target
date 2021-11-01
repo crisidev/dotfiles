@@ -1,3 +1,0 @@
-[Unit]
-Description=Window manager target
-BindsTo=graphical-session.target

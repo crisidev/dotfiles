@@ -55,6 +55,7 @@ function M.get_files_opts()
             ".svn",
         },
         hidden = true,
+        shorten_path = false,
     }
 end
 

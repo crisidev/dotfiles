@@ -1,9 +1,5 @@
 #!/bin/bash
 
-chown root:video /sys/class/backlight/intel_backlight/brightness
-chmod 664 /sys/class/backlight/intel_backlight/brightness
+chown root:video /sys/class/backlight/amdgpu_bl0/brightness
+chmod 664 /sys/class/backlight/amdgpu_bl0/brightness
 
-for i in {0..7}; do
-  chown root:video /sys/devices/system/cpu/cpu${i}/cpufreq/scaling_governor
-  chmod 664 /sys/devices/system/cpu/cpu${i}/cpufreq/scaling_governor
-done

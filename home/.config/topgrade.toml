@@ -1,5 +1,5 @@
 set_title = false
-disable = ["system", "flatpak", "snap", "gnome_shell_extensions"]
+disable = ["system", "flatpak", "snap", "gnome_shell_extensions", "pnpm"]
 
 [git]
 max_concurrency = 5
@@ -14,18 +14,29 @@ repos = [
     "~/.nodenv",
     "~/.pyenv",
     "~/.rbenv",
+    "~/.goenv",
     # Home sick
     "~/.homesick/repos/homeshick",
     "~/.homesick/repos/dotfiles",
     "~/.homesick/repos/MatbigoiDotFiles",
     # Updates
+    "~/github/0updates/autorandr",
     "~/github/0updates/bandwhich",
-    "~/github/0updates/neovide",
-    "~/github/0updates/fzf-marks",
+    "~/github/0updates/default-opener",
     "~/github/0updates/dunst",
+    "~/github/0updates/fzf-marks",
+    "~/github/0updates/i3-gnome",
+    "~/github/0updates/i3status-rust",
+    "~/github/0updates/keyd",
+    "~/github/0updates/neovide",
+    "~/github/0updates/unclutter-xfixes",
+    "~/github/0updates/xedgewarp",
+    "~/github/0updates/dog",
 ]
 arguments = "--ff-only --rebase --autostash"
 
 [commands]
+"Node upgrade" = "npm update -g"
 "Python upgrade" = "pip-review -a"
 "Amzn toolbox upgrade" = "toolbox update"
+
