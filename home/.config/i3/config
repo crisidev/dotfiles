@@ -372,5 +372,8 @@ exec --no-startup-id "$HOME/.bin/i3chime"
 # Startup monitors and apps
 exec --no-startup-id "$HOME/.bin/i3monitor startup"
 
+# uLauncher
+exec --no-startup-id "/usr/bin/ulauncher"
+
 # Exec always
 exec_always --no-startup-id "feh --bg-fill $HOME/Pictures/wallpapers/fishing.jpeg"

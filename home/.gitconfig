@@ -51,7 +51,7 @@
 [help]
     autocorrect = 20
 [commit]
-    gpgSign = false
+    gpgSign = true
 [delta]
     features = line-numbers decorations
 [delta "interactive"]
