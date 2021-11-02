@@ -1,27 +1,19 @@
-#!/bin/sh
+#!/bin/bash
+export LC_ALL=C
 
-IFACE=$1
-ACTION=$2
-
-source "/home/bigo/.zsh_secrets"
-
-ntfy () {
-	sudo -u $MY_USER \
-		DISPLAY=:0 \
-		notify-send "$1" "$2"
+enable_disable_wifi() {
+    result=$(nmcli dev | grep "ethernet" | grep -w "connected")
+    if [ -n "$result" ]; then
+        nmcli radio wifi off
+    else
+        nmcli radio wifi on
+    fi
 }
 
-case ${IFACE} in
-	eth*|usb*|en*)
-		case ${ACTION} in
-			up)
-				ntfy "Ethernet connected" "Disabling Wifi"
-				nmcli radio wifi off
-				;;
-			down)
-				ntfy "Ethernet disconnected" "Enabling Wifi"
-				nmcli radio wifi on
-				;;
-		esac
-		;;
-esac
+if [ "$2" = "up" ]; then
+    enable_disable_wifi
+fi
+
+if [ "$2" = "down" ]; then
+    enable_disable_wifi
+fi

@@ -133,6 +133,11 @@ assign [class="Google-chrome" instance="google-chrome.*\(/home/.*/.local/share/c
 assign [class="Google-chrome" instance="quip-amazon.com"] $w12
 
 ###########################
+# Helpers
+###########################
+set $focus_mouse "sh -c 'eval `xdotool getactivewindow getwindowgeometry --shell`; xdotool mousemove $((X+WIDTH/2)) $((Y+HEIGHT/2))'"
+
+###########################
 # HW keys
 ###########################
 # Volume (Fn-F(8-9-10))
@@ -179,7 +184,7 @@ bindsym $mod+q kill
 bindsym --release $mod+Shift+q exec --no-startup-id xkill
 
 # Focus parent
-bindsym $mod+k exec --no-startup-id $HOME/.bin/mff focus parent
+bindsym $mod+k focus parent; exec $focus_mouse
 
 # Paste from selection
 bindsym $mod+Shift+slash exec --no-startup-id xdotool click 2
@@ -213,46 +218,46 @@ bindsym $mod+r focus mode_toggle
 # i3 movements
 ###########################
 # Switch to workspace
-bindsym $mod+Escape exec --no-startup-id $HOME/.bin/mff workspace $w1
-bindsym $mod+F2 exec --no-startup-id $HOME/.bin/mff workspace $w2 
-bindsym $mod+F1 exec --no-startup-id $HOME/.bin/mff workspace $w3
-bindsym $mod+1 exec --no-startup-id $HOME/.bin/mff workspace $w4
-bindsym $mod+2 exec --no-startup-id $HOME/.bin/mff workspace $w5
-bindsym $mod+4 exec --no-startup-id $HOME/.bin/mff workspace $w6 
-bindsym $mod+3 exec --no-startup-id $HOME/.bin/mff workspace $w9
-bindsym $mod+F4 exec --no-startup-id $HOME/.bin/mff workspace $w7
-bindsym $mod+F3 exec --no-startup-id $HOME/.bin/mff workspace $w8
-bindsym $mod+5 exec --no-startup-id $HOME/.bin/mff workspace $w10
-bindsym $mod+F5 exec --no-startup-id $HOME/.bin/mff workspace $w11
-bindsym $mod+6 exec --no-startup-id $HOME/.bin/mff workspace $w12
-bindsym $mod+F6 exec --no-startup-id $HOME/.bin/mff workspace $w13
+bindsym $mod+Escape workspace $w1; exec $focus_mouse 
+bindsym $mod+F2 workspace $w2; exec $focus_mouse  
+bindsym $mod+F1 workspace $w3; exec $focus_mouse 
+bindsym $mod+1 workspace $w4; exec $focus_mouse 
+bindsym $mod+2 workspace $w5; exec $focus_mouse 
+bindsym $mod+4 workspace $w6; exec $focus_mouse 
+bindsym $mod+3 workspace $w9; exec $focus_mouse 
+bindsym $mod+F4 workspace $w7; exec $focus_mouse
+bindsym $mod+F3 workspace $w8; exec $focus_mouse
+bindsym $mod+5 workspace $w10; exec $focus_mouse
+bindsym $mod+F5 workspace $w11; exec $focus_mouse
+bindsym $mod+6 workspace $w12; exec $focus_mouse
+bindsym $mod+F6 workspace $w13; exec $focus_mouse
 
 # Move focused workspace to output
-bindsym $mod+Mod1+plus exec --no-startup-id $HOME/.bin/mff move workspace to output DVI-I-1-1
-bindsym $mod+Mod1+BackSpace exec --no-startup-id $HOME/.bin/mff move workspace to output HDMI-1
-bindsym $mod+Mod1+Home exec --no-startup-id $HOME/.bin/mff move workspace to output eDP-1
+bindsym $mod+Mod1+plus move workspace to output DVI-I-1-1; exec $focus_mouse 
+bindsym $mod+Mod1+BackSpace move workspace to output HDMI-1; exec $focus_mouse 
+bindsym $mod+Mod1+Home move workspace to output eDP-1; exec $focus_mouse 
 
 # Move focused container to workspace
-bindsym $mod+Shift+Escape exec --no-startup-id $HOME/.bin/mff move container to workspace $w1 
-bindsym $mod+Shift+F2 exec --no-startup-id $HOME/.bin/mff move container to workspace $w2
-bindsym $mod+Shift+F1 exec --no-startup-id $HOME/.bin/mff move container to workspace $w3
-bindsym $mod+Shift+1 exec --no-startup-id $HOME/.bin/mff move container to workspace $w4
-bindsym $mod+Shift+2 exec --no-startup-id $HOME/.bin/mff move container to workspace $w5
-bindsym $mod+Shift+4 exec --no-startup-id $HOME/.bin/mff move container to workspace $w6
-bindsym $mod+Shift+3 exec --no-startup-id $HOME/.bin/mff move container to workspace $w9
-bindsym $mod+Shift+F4 exec --no-startup-id $HOME/.bin/mff move container to workspace $w7
-bindsym $mod+Shift+F3 exec --no-startup-id $HOME/.bin/mff move container to workspace $w8
-bindsym $mod+Shift+5 exec --no-startup-id $HOME/.bin/mff move container to workspace $w10
-bindsym $mod+Shift+F5 exec --no-startup-id $HOME/.bin/mff move container to workspace $w11
-bindsym $mod+Shift+6 exec --no-startup-id $HOME/.bin/mff move container to workspace $w12
-bindsym $mod+Shift+F6 exec --no-startup-id $HOME/.bin/mff move container to workspace $w13
+bindsym $mod+Shift+Escape move container to workspace $w1; exec $focus_mouse 
+bindsym $mod+Shift+F2 move container to workspace $w2; exec $focus_mouse   
+bindsym $mod+Shift+F1 move container to workspace $w3; exec $focus_mouse 
+bindsym $mod+Shift+1 move container to workspace $w4; exec $focus_mouse 
+bindsym $mod+Shift+2 move container to workspace $w5; exec $focus_mouse 
+bindsym $mod+Shift+4 move container to workspace $w6; exec $focus_mouse 
+bindsym $mod+Shift+3 move container to workspace $w9; exec $focus_mouse 
+bindsym $mod+Shift+F4 move container to workspace $w7; exec $focus_mouse 
+bindsym $mod+Shift+F3 move container to workspace $w8; exec $focus_mouse 
+bindsym $mod+Shift+5 move container to workspace $w10; exec $focus_mouse 
+bindsym $mod+Shift+F5 move container to workspace $w11; exec $focus_mouse 
+bindsym $mod+Shift+6 move container to workspace $w12; exec $focus_mouse 
+bindsym $mod+Shift+F6 move container to workspace $w13; exec $focus_mouse 
 
 # Focus window
 bindsym $mod+Tab exec --no-startup-id $HOME/.bin/i3cycle
-bindsym $mod+Left exec --no-startup-id $HOME/.bin/mff "focus mode_toggle focus left"
-bindsym $mod+Down exec --no-startup-id $HOME/.bin/mff "focus mode_toggle focus down"
-bindsym $mod+Up exec --no-startup-id $HOME/.bin/mff "focus mode_toggle focus up"
-bindsym $mod+Right exec --no-startup-id $HOME/.bin/mff "focus mode_toggle focus right"
+bindsym $mod+Left focus left; exec $focus_mouse
+bindsym $mod+Right focus right; exec $focus_mouse
+bindsym $mod+Down focus down; exec $focus_mouse
+bindsym $mod+Up focus up; exec $focus_mouse
 
 # Move windows
 bindsym $mod+Shift+Left exec --no-startup-id $HOME/.bin/i3window swap left
@@ -289,8 +294,8 @@ mode " [l]ock [e]xit [s]uspend [h]ibernate [r]eboot [p]oweroff" {
 ###########################
 # Monitor mode
 ###########################
-bindsym $mod+Mod1+m mode " [a]uto [l]aptop [h]ome [w]ork [d]uplicate [D]uplicate_all"
-mode " [a]uto [l]aptop [h]ome [w]ork [d]uplicate [D]uplicate_all" {
+bindsym $mod+Mod1+m mode " [a]uto [l]aptop [h]ome [w]ork [m]irror"
+mode " [a]uto [l]aptop [h]ome [w]ork [m]irror" {
     bindsym a mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3monitor auto
     bindsym l mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3monitor laptop
     bindsym h mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3monitor home

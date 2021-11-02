@@ -26,7 +26,7 @@ i3_msg_dispatcher "${arr[@]}"
 
 imwheel -k
 
-pactl set-default-source alsa_input.usb-21102019_THRONMAX_PULSE_MICROPHONE-00.analog-stereo
+pactl set-default-source alsa_input.usb-21102019_THRONMAX_PULSE_MICROPHONE-00.iec958-stereo
 pactl set-default-sink alsa_output.pci-0000_04_00.1.hdmi-stereo 
 
 finish_autorandr_switch "$AUTORANDR_CURRENT_PROFILE"

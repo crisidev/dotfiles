@@ -136,3 +136,8 @@ function weather {
   local city=$(curl -s https://ipvigilante.com/$(curl -s https://ipinfo.io/ip) | jq -r '.data.city_name')
   curl --silent "wttr.in/${city}?m" | grep -v Follow
 }
+
+function joycond-cemuhook {
+  cd ~/github/0updates/joycond-cemuhook && python joycond-cemuhook.py
+  cd -
+}
