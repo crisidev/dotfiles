@@ -9,7 +9,6 @@ i3_msg_dispatcher "${arr[@]}"
 
 killall imwheel || true
 
-pacmd set-default-source alsa_input.pci-0000_04_00.6.analog-stereo
-pacmd set-default-sink alsa_output.pci-0000_04_00.6.analog-stereo
+set_audio alsa_input.pci-0000_04_00.6.analog-stereo alsa_output.pci-0000_04_00.6.analog-stereo
 
-finish_autorandr_switch "$AUTORANDR_CURRENT_PROFILE"
+finish_autorandr_switch

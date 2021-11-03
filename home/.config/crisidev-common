@@ -8,30 +8,38 @@ i3_msg_dispatcher() {
   done
 }
 
-notify() {
-  notify-send -i display "Display profile" "$1"
-}
-
-finish_autorandr_switch() {
-  feh --bg-fill "${HOME}/Pictures/wallpapers/fishing.jpeg"
-  notify "$1"
-}
-
 display_off() {
-  xrandr --output eDP --off --output HDMI-A-0 --off 
+  xrandr --output eDP --off --output HDMI-A-0 --off
 }
 
 mirror_display() {
-    display_off
-    xrandr --output HDMI-A-0 --mode 1920x1080
-    xrandr --output eDP --auto
-    finish_autorandr_switch mirror
+  display_off
+  xrandr --output HDMI-A-0 --mode 1920x1080
+  xrandr --output eDP --auto
+  finish_autorandr_switch mirror
 }
 
 add_resolutions() {
-    xrandr --newmode "1600x900" 118.25 1600 1696 1856 2112 900 903 908 934 -hsync +vsync
-    xrandr --addmode eDP "1600x900"
-    xrandr --output eDP --set "scaling mode" "Full aspect"
+  xrandr --newmode "1600x900" 118.25 1600 1696 1856 2112 900 903 908 934 -hsync +vsync
+  xrandr --addmode eDP "1600x900"
+  xrandr --output eDP --set "scaling mode" "Full aspect"
+}
+
+set_audio() {
+  pactl set-default-source "$1"
+  pactl set-default-sink "$2"
+}
+
+finish_autorandr_switch() {
+  notify-send -i display "Autorandr" "Switch to profile $1 finished"
+  feh --bg-fill "${HOME}/Pictures/wallpapers/fishing.jpeg"
+}
+
+autorandr_safe() {
+  loaded=$(autorandr "$@" 2>&1)
+  if echo "$loaded" |grep -q "Config already loaded"; then
+    bash "$HOME/.config/autorandr/$2/postswitch"
+  fi
 }
 
 # set keyboard speed
@@ -47,14 +55,14 @@ setup_zsh_paths() {
 
   # rbenv
   export RBENV_ROOT="$HOME/.rbenv"
-  if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+  if which rbenv >/dev/null; then eval "$(rbenv init -)"; fi
 
   # direnv
-  if which direnv > /dev/null; then eval "$(direnv hook bash)"; fi
+  if which direnv >/dev/null; then eval "$(direnv hook bash)"; fi
 
   # pyenv
   export PYENV_ROOT="$HOME/.pyenv"
-  if which pyenv > /dev/null; then 
+  if which pyenv >/dev/null; then
     eval "$(pyenv init --path)"
     eval "$(pyenv virtualenv-init -)"
     export PYENV_VIRTUALENV_DISABLE_PROMPT=1
@@ -62,16 +70,16 @@ setup_zsh_paths() {
 
   # nodenv
   export NODENV_ROOT="$HOME/.nodenv"
-  if which nodenv > /dev/null; then 
+  if which nodenv >/dev/null; then
     eval "$(nodenv init -)"
     export PATH=$PATH:~/.nodenv/versions/17.0.1/bin
   fi
 
   # nodenv
   export GOENV_ROOT="$HOME/.goenv"
-  if which goenv > /dev/null; then 
+  if which goenv >/dev/null; then
     export GOENV_GOPATH_PREFIX=$HOME/.go
-    eval "$(goenv init -)" 
+    eval "$(goenv init -)"
     export PATH=$PATH:$GOPATH/bin
   fi
 }

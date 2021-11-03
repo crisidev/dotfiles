@@ -13,6 +13,7 @@ dunst() {
       else
         notify-send "Resuming notification system"
       fi
+      sleep 5
       dunstctl set-paused toggle
       ;;
     get)
@@ -25,14 +26,13 @@ dunst() {
     suspend)
       if dunstctl is-paused | grep -q false; then
         notify-send "Pausing notification system"
-        sleep 1
+        sleep 5
         dunstctl set-paused true 
       fi
       ;;
     resume)
       if dunstctl is-paused | grep -q true; then
         dunstctl set-paused false
-        sleep 1
         notify-send "Resuming notification system"
       fi
       ;;
@@ -55,7 +55,7 @@ case "${1:-}" in
     lock
     ;;
   logout)
-    i3-msg exit
+    gnome-session-quit --logout
     ;;
   suspend)
     lock
@@ -66,10 +66,10 @@ case "${1:-}" in
     systemctl hibernate -i
     ;;
   reboot)
-    systemctl reboot -i
+    gnome-session-quit --reboot
     ;;
   shutdown)
-    systemctl poweroff -i
+    gnome-session-quit --poweroff
     ;;
   dunst)
     dunst "${2}"

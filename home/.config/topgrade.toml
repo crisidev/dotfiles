@@ -32,6 +32,8 @@ repos = [
     "~/github/0updates/unclutter-xfixes",
     "~/github/0updates/xedgewarp",
     "~/github/0updates/dog",
+    "~/github/0updates/joycond",
+    "~/github/0updates/joycond-cemuhook",
 ]
 arguments = "--ff-only --rebase --autostash"
 

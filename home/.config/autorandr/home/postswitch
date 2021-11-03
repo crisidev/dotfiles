@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
 
 source "$HOME/.config/crisidev-common"
-
-# let xrandr do its thing
-notify "Reorganizing windows for profile $AUTORANDR_CURRENT_PROFILE"
-sleep 1
-
 declare -a arr=(
   "workspace 1: shell, move workspace to output HDMI-A-0"
   "workspace 2: www, move workspace to output HDMI-A-0"
@@ -20,13 +15,13 @@ declare -a arr=(
   "workspace 11: spotify, move workspace to output HDMI-A-0"
   "workspace 12: quip, move workspace to output HDMI-A-0"
   "workspace 13: var1, move workspace to output eDP"
+  "workspace 9: slack"
   "workspace 2: www"
 )
 i3_msg_dispatcher "${arr[@]}"
 
 imwheel -k
 
-pactl set-default-source alsa_input.usb-21102019_THRONMAX_PULSE_MICROPHONE-00.iec958-stereo
-pactl set-default-sink alsa_output.pci-0000_04_00.1.hdmi-stereo 
+set_audio alsa_input.usb-21102019_THRONMAX_PULSE_MICROPHONE-00.iec958-stereo alsa_output.pci-0000_04_00.1.hdmi-stereo 
 
-finish_autorandr_switch "$AUTORANDR_CURRENT_PROFILE"
+finish_autorandr_switch

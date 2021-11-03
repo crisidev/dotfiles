@@ -12,20 +12,19 @@ mode=${1}
 
 case "$mode" in
   auto)
-    autorandr --change
+    autorandr_safe --change --force
     ;;
   laptop)
-    autorandr --load laptop --force
-    xrandr --output HDMI-A-0 --off
+    autorandr_safe --load laptop
     ;;
   home)
-    autorandr --load home --force
+    autorandr_safe --load home
     ;;
   ita)
-    autorandr --load ita --force
+    autorandr_safe --load ita
     ;;
   work)
-    autorandr --load work --force
+    autorandr_safe --load work
     ;;
   mirror)
     mirror_display

@@ -1,0 +1,10 @@
+[Unit]
+Description=Gnome flashback
+PartOf=graphical-session.target
+
+[Service]
+ExecStart=/usr/bin/gnome-flashback
+Restart=always
+
+[Install]
+WantedBy=graphical-session.target
