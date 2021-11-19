@@ -1,9 +1,12 @@
 local M = {}
 
 M.config = function()
-    -- Tree sitter
+    -- Nvimtree
     lvim.builtin.nvimtree.side = "left"
     lvim.builtin.nvimtree.show_icons.git = 0
+    lvim.builtin.nvimtree.icons = require("user.lsp").nvim_tree_icons
+
+    -- Tree sitter
     lvim.builtin.treesitter.ensure_installed = "maintained"
     lvim.builtin.treesitter.highlight.enabled = true
     lvim.builtin.treesitter.ignore_install = { "haskell" }
@@ -68,22 +71,26 @@ M.config = function()
     lvim.builtin.dashboard.active = true
     lvim.builtin.dashboard.custom_section = {
         a = {
+            description = { "  New File           " },
+            command = "DashboardNewFile",
+        },
+        b = {
             description = { "  Recent Projects    " },
             command = "Telescope projects",
         },
-        b = {
+        c = {
             description = { "  Recently Used Files" },
             command = "lua require('user.telescope').recent_files()",
         },
-        c = {
+        e = {
             description = { "  Find File          " },
             command = "lua require('user.telescope').find_files()",
         },
-        d = {
+        f = {
             description = { "  Find Word          " },
             command = "lua require('user.telescope').find_string()",
         },
-        e = {
+        g = {
             description = { "  Configuration      " },
             command = ":e ~/.config/lvim/config.lua",
         },
@@ -108,10 +115,10 @@ M.config = function()
         native_menu = false,
         custom_menu = true,
     }
-    lvim.builtin.cmp.formatting.kind_icons = require("user.lsp").symbols()
+    lvim.builtin.cmp.formatting.kind_icons = require("user.lsp").cmp_kind
     lvim.builtin.cmp.formatting.source_names = {
-        buffer = "(Buffer)",
-        nvim_lsp = "(LSP)",
+        buffer = "(Buf)",
+        nvim_lsp = "(Lsp)",
         luasnip = "(Snip)",
         treesitter = " ",
         nvim_lua = "(NvLua)",
@@ -133,8 +140,16 @@ M.config = function()
     lvim.builtin.notify.active = true
     lvim.log.level = "info"
 
-    -- Enable tabnine
-    lvim.builtin.tabnine = { active = true }
+    -- Evil stuff
+    lvim.builtin.copilot = { active = true }
+    lvim.builtin.tabnine = { active = false }
+
+    -- Status line
+    lvim.builtin.global_status_line = { active = true }
+    lvim.builtin.fancy_bufferline = { active = true }
+    if lvim.builtin.fancy_bufferline.active then
+        lvim.builtin.bufferline.active = false
+    end
 end
 
 return M

@@ -49,6 +49,13 @@ setup_keyboard_speed() {
   xset b off
 }
 
+
+restart_night_light() {
+  gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled false
+  sleep 2
+  gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled true
+}
+
 setup_zsh_paths() {
   # paths
   export PATH=~/.bin:~/.toolbox/bin:~/.pyenv/bin:~/.rbenv/bin:~/.nodenv/bin:~/.goenv/bin:~/.bin:~/.cargo/bin:$PATH

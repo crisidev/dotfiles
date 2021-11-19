@@ -19,8 +19,8 @@ if lvim.builtin.dap.active then
 end
 
 -- Rust tools mappings
-lvim.lsp.buffer_mappings.normal_mode["gR"] = {
-    name = "Rust",
+lvim.lsp.buffer_mappings.normal_mode["gT"] = {
+    name = "Rust Tools",
     i = { "<cmd>RustToggleInlayHints<cr>", "Toggle inlay hints" },
     r = { "<cmd>RustRunnables<cr>", "Run targes" },
     D = { "<cmd>RustDebuggables<cr>", "Debug targes" },

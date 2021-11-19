@@ -60,6 +60,9 @@ if ok then
     amzn.config()
 end
 
+-- Copilot
+require("user.copilot").config()
+
 -- Firevim
 if vim.g.started_by_firenvim then
     require("user.firevim").config()

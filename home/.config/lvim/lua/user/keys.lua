@@ -3,9 +3,6 @@ local M = {}
 M.config = function()
     -- NORMAL
     lvim.keys.normal_mode = {
-        -- Buffer navigation
-        ["<F2>"] = "<cmd>BufferNext<cr>",
-        ["<F1>"] = "<cmd>BufferPrevious<cr>",
         ["<F3>"] = "<cmd>NvimTreeToggle<cr>",
         ["<F4>"] = "<cmd>MouseToggle<cr>",
         -- Yank current path
@@ -15,9 +12,6 @@ M.config = function()
         ["<A-Down>"] = "<cmd>wincmd j<cr>",
         ["<A-Left>"] = "<cmd>wincmd h<cr>",
         ["<A-Right>"] = "<cmd>wincmd l<cr>",
-        -- Move buffers
-        ["<A-S-Left>"] = "<cmd>BufferMovePrevious<cr>",
-        ["<A-S-Right>"] = "<cmd>BufferMoveNext<cr>",
         -- Symbols
         ["<F10>"] = "<cmd>SymbolsOutline<cr>",
         -- Toggle numbers
@@ -32,8 +26,6 @@ M.config = function()
     -- INSERT
     lvim.keys.insert_mode = {
         -- Buffer navigation
-        ["<F2>"] = "<Esc><cmd>BufferNext<cr>",
-        ["<F1>"] = "<Esc><cmd>BufferPrevious<cr>",
         ["<F3>"] = "<Esc><cmd>NvimTreeToggle<cr>",
         -- Yank current path
         ["<F5>"] = '<Esc><cmd>let @+ = expand("%:p")<cr>',
@@ -47,6 +39,30 @@ M.config = function()
     }
     -- VISUAL
     lvim.keys.visual_mode = {}
+
+    if lvim.builtin.fancy_bufferline.active then
+        -- Buffer navigation
+        lvim.keys.normal_mode["<F1>"] = "<cmd>BufferLineCyclePrev<cr>"
+        lvim.keys.normal_mode["<F2>"] = "<cmd>BufferLineCycleNext<cr>"
+        lvim.keys.insert_mode["<F1>"] = "<cmd>BufferLineCyclePrev<cr>"
+        lvim.keys.insert_mode["<F2>"] = "<cmd>BufferLineCycleNext<cr>"
+        -- Move buffers
+        lvim.keys.normal_mode["<A-S-Left>"] = "<cmd>BufferLineMovePrev<cr>"
+        lvim.keys.normal_mode["<A-S-Right>"] = "<cmd>BufferLineMoveNext<cr>"
+        lvim.keys.insert_mode["<A-S-Left>"] = "<cmd>BufferLineMovePrev<cr>"
+        lvim.keys.insert_mode["<A-S-Right>"] = "<cmd>BufferLineMoveNext<cr>"
+    else
+        -- Buffer navigation
+        lvim.keys.normal_mode["<F1>"] = "<cmd>BufferPrev<cr>"
+        lvim.keys.normal_mode["<F2>"] = "<cmd>BufferNext<cr>"
+        lvim.keys.insert_mode["<F1>"] = "<cmd>BufferPrev<cr>"
+        lvim.keys.insert_mode["<F2>"] = "<cmd>BufferNext<cr>"
+        -- Move buffers
+        lvim.keys.normal_mode["<A-S-Left>"] = "<cmd>BufferMovePrevious<cr>"
+        lvim.keys.normal_mode["<A-S-Right>"] = "<cmd>BufferMoveNext<cr>"
+        lvim.keys.insert_mode["<A-S-Left>"] = "<cmd>BufferMovePrevious<cr>"
+        lvim.keys.insert_mode["<A-S-Right>"] = "<cmd>BufferMoveNext<cr>"
+    end
 end
 
 return M

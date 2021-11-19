@@ -17,6 +17,14 @@ interval = 60
 
 [[block]]
 block = "custom"
+cycle = ["~/.bin/i3vpn"]
+on_click = "~/.bin/i3vpn cycle"
+hide_when_empty = false
+json = true
+interval = 5
+
+[[block]]
+block = "custom"
 cycle = ["~/.bin/mute-toggle get"]
 on_click = "~/.bin/mute-toggle set"
 json = true
@@ -28,13 +36,6 @@ cycle = ["~/.bin/i3exit dunst get"]
 on_click = "~/.bin/i3exit dunst set"
 json = true
 interval = 2
-
-[[block]]
-block = "custom"
-cycle = ["~/.bin/i3vpn"]
-on_click = "~/.bin/i3vpn cycle"
-hide_when_empty = false
-interval = 5
 
 # [[block]]
 # block = "xrandr"

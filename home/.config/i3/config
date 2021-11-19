@@ -111,6 +111,7 @@ for_window [class="Gnome-font-viewer"] floating enable border pixel 1
 for_window [class="Blueman-services"] floating enable border pixel 1
 for_window [class="tuxedo-control-center"] floating enable border pixel 1
 for_window [class="cemu.exe"] floating enable border pixel 1
+for_window [title="BOTW Cross-Platform Mod Loader"] floating enable border pixel 1
 
 # Special borders and floats
 for_window [class="^ide$"] floating enable border pixel 2
@@ -169,6 +170,7 @@ bindsym $mod+Shift+e exec --no-startup-id "gnome-session-quit"
 
 # Ulauncher toogle
 bindsym $mod+space exec --no-startup-id "ulauncher-toggle"
+bindsym $mod+d exec --no-startup-id "ulauncher-toggle"
 
 # Start a terminal
 bindsym $mod+Return exec --no-startup-id "$HOME/.bin/kitty --detach"
@@ -184,7 +186,7 @@ bindsym $mod+q kill
 bindsym --release $mod+Shift+q exec --no-startup-id xkill
 
 # Focus parent
-bindsym $mod+k focus parent; exec $focus_mouse
+bindsym $mod+k focus parent; exec --no-startup-id $focus_mouse
 
 # Paste from selection
 bindsym $mod+Shift+slash exec --no-startup-id xdotool click 2
@@ -199,9 +201,9 @@ bindsym $mod+Shift+v split h
 bindsym $mod+f fullscreen toggle
 
 # Change container layout (bsp, stacked, tabbed)
-bindsym $mod+b layout splith
+bindsym $mod+b layout splith; exec --no-startup-id "notify-send -i display 'i3' 'Switch to splith layout'"
 # bindsym $mod+s layout stacking
-bindsym $mod+t layout tabbed
+bindsym $mod+t layout tabbed; exec --no-startup-id "notify-send -i display 'i3' 'Switch to tabbed layout'"
 
 # Toggle tiling / floating
 bindsym $mod+backslash floating toggle
@@ -214,50 +216,55 @@ bindsym $mod+Shift+x [floating] scratchpad show
 bindsym $mod+e exec --no-startup-id "$HOME/.bin/ide toggle"
 bindsym $mod+r focus mode_toggle
 
+# Dunst
+bindsym Mod1+q exec --no-startup-id "$HOME/.bin/dunstctl close"
+bindsym Mod1+Shift+q exec --no-startup-id "$HOME/.bin/dunstctl close-all"
+bindsym Mod1+space exec --no-startup-id "$HOME/.bin/dunstctl history-pop"
+bindsym Mod1+` exec --no-startup-id "$HOME/.bin/dunstctl action"
+
 ###########################
 # i3 movements
 ###########################
 # Switch to workspace
-bindsym $mod+Escape workspace $w1; exec $focus_mouse 
-bindsym $mod+F2 workspace $w2; exec $focus_mouse  
-bindsym $mod+F1 workspace $w3; exec $focus_mouse 
-bindsym $mod+1 workspace $w4; exec $focus_mouse 
-bindsym $mod+2 workspace $w5; exec $focus_mouse 
-bindsym $mod+4 workspace $w6; exec $focus_mouse 
-bindsym $mod+3 workspace $w9; exec $focus_mouse 
-bindsym $mod+F4 workspace $w7; exec $focus_mouse
-bindsym $mod+F3 workspace $w8; exec $focus_mouse
-bindsym $mod+5 workspace $w10; exec $focus_mouse
-bindsym $mod+F5 workspace $w11; exec $focus_mouse
-bindsym $mod+6 workspace $w12; exec $focus_mouse
-bindsym $mod+F6 workspace $w13; exec $focus_mouse
+bindsym $mod+Escape workspace $w1; exec --no-startup-id $focus_mouse 
+bindsym $mod+F2 workspace $w2; exec --no-startup-id $focus_mouse  
+bindsym $mod+F1 workspace $w3; exec --no-startup-id $focus_mouse 
+bindsym $mod+1 workspace $w4; exec --no-startup-id $focus_mouse 
+bindsym $mod+2 workspace $w5; exec --no-startup-id $focus_mouse 
+bindsym $mod+4 workspace $w6; exec --no-startup-id $focus_mouse 
+bindsym $mod+3 workspace $w9; exec --no-startup-id $focus_mouse 
+bindsym $mod+F4 workspace $w7; exec --no-startup-id $focus_mouse
+bindsym $mod+F3 workspace $w8; exec --no-startup-id $focus_mouse
+bindsym $mod+5 workspace $w10; exec --no-startup-id $focus_mouse
+bindsym $mod+F5 workspace $w11; exec --no-startup-id $focus_mouse
+bindsym $mod+6 workspace $w12; exec --no-startup-id $focus_mouse
+bindsym $mod+F6 workspace $w13; exec --no-startup-id $focus_mouse
 
 # Move focused workspace to output
-bindsym $mod+Mod1+plus move workspace to output DVI-I-1-1; exec $focus_mouse 
-bindsym $mod+Mod1+BackSpace move workspace to output HDMI-1; exec $focus_mouse 
-bindsym $mod+Mod1+Home move workspace to output eDP-1; exec $focus_mouse 
+bindsym $mod+Mod1+BackSpace move workspace to output HDMI-A-0; exec --no-startup-id $focus_mouse 
+bindsym $mod+Mod1+Home move workspace to output eDP; exec --no-startup-id $focus_mouse 
 
 # Move focused container to workspace
-bindsym $mod+Shift+Escape move container to workspace $w1; exec $focus_mouse 
-bindsym $mod+Shift+F2 move container to workspace $w2; exec $focus_mouse   
-bindsym $mod+Shift+F1 move container to workspace $w3; exec $focus_mouse 
-bindsym $mod+Shift+1 move container to workspace $w4; exec $focus_mouse 
-bindsym $mod+Shift+2 move container to workspace $w5; exec $focus_mouse 
-bindsym $mod+Shift+4 move container to workspace $w6; exec $focus_mouse 
-bindsym $mod+Shift+3 move container to workspace $w9; exec $focus_mouse 
-bindsym $mod+Shift+F4 move container to workspace $w7; exec $focus_mouse 
-bindsym $mod+Shift+F3 move container to workspace $w8; exec $focus_mouse 
-bindsym $mod+Shift+5 move container to workspace $w10; exec $focus_mouse 
-bindsym $mod+Shift+F5 move container to workspace $w11; exec $focus_mouse 
-bindsym $mod+Shift+6 move container to workspace $w12; exec $focus_mouse 
-bindsym $mod+Shift+F6 move container to workspace $w13; exec $focus_mouse 
+bindsym $mod+Shift+Escape move container to workspace $w1; exec --no-startup-id $focus_mouse 
+bindsym $mod+Shift+F2 move container to workspace $w2; exec --no-startup-id $focus_mouse   
+bindsym $mod+Shift+F1 move container to workspace $w3; exec --no-startup-id $focus_mouse 
+bindsym $mod+Shift+1 move container to workspace $w4; exec --no-startup-id $focus_mouse 
+bindsym $mod+Shift+2 move container to workspace $w5; exec --no-startup-id $focus_mouse 
+bindsym $mod+Shift+4 move container to workspace $w6; exec --no-startup-id $focus_mouse 
+bindsym $mod+Shift+3 move container to workspace $w9; exec --no-startup-id $focus_mouse 
+bindsym $mod+Shift+F4 move container to workspace $w7; exec --no-startup-id $focus_mouse 
+bindsym $mod+Shift+F3 move container to workspace $w8; exec --no-startup-id $focus_mouse 
+bindsym $mod+Shift+5 move container to workspace $w10; exec --no-startup-id $focus_mouse 
+bindsym $mod+Shift+F5 move container to workspace $w11; exec --no-startup-id $focus_mouse 
+bindsym $mod+Shift+6 move container to workspace $w12; exec --no-startup-id $focus_mouse 
+bindsym $mod+Shift+F6 move container to workspace $w13; exec --no-startup-id $focus_mouse 
 
 # Focus window
 bindsym $mod+Tab exec --no-startup-id $HOME/.bin/i3cycle
-bindsym $mod+Left focus left; exec $focus_mouse
-bindsym $mod+Right focus right; exec $focus_mouse
-bindsym $mod+Down focus down; exec $focus_mouse
-bindsym $mod+Up focus up; exec $focus_mouse
+bindsym $mod+Left focus left; exec --no-startup-id $focus_mouse
+bindsym $mod+Right focus right; exec --no-startup-id $focus_mouse
+bindsym $mod+Down focus down; exec --no-startup-id $focus_mouse
+bindsym $mod+Up focus up; exec --no-startup-id $focus_mouse
 
 # Move windows
 bindsym $mod+Shift+Left exec --no-startup-id $HOME/.bin/i3window swap left

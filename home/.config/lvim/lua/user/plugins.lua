@@ -11,7 +11,6 @@ M.config = function()
         },
         { "folke/lsp-colors.nvim" },
         { "lunarvim/colorschemes" },
-        { "Pocco81/Catppuccino.nvim" },
         -- Markdown preview
         {
             "iamcco/markdown-preview.nvim",
@@ -30,10 +29,21 @@ M.config = function()
         -- Better diff view
         {
             "sindrets/diffview.nvim",
-            config = function()
-                require("diffview").setup()
+            cmd = { "DiffviewOpen", "DiffviewFileHistory" },
+            module = "diffview",
+            keys = "<leader>gd",
+            setup = function()
+                require("which-key").register { ["Gd"] = "diffview: diff HEAD" }
             end,
-            event = "BufRead",
+            config = function()
+                require("diffview").setup {
+                    enhanced_diff_hl = true,
+                    key_bindings = {
+                        file_panel = { q = "<Cmd>DiffviewClose<CR>" },
+                        view = { q = "<Cmd>DiffviewClose<CR>" },
+                    },
+                }
+            end,
         },
         -- Pick up where you left
         {
@@ -156,6 +166,7 @@ M.config = function()
         --     end,
         -- },
         -- Lsp goto preview
+        { "arkav/lualine-lsp-progress" },
         {
             "rmagatti/goto-preview",
             config = function()
@@ -167,6 +178,8 @@ M.config = function()
         -- Lsp Lua
         {
             "folke/lua-dev.nvim",
+            ft = "lua",
+            before = "williamboman/nvim-lsp-installer",
             config = function()
                 local luadev = require("lua-dev").setup {
                     lspconfig = lvim.lang.lua.lsp.setup,
@@ -185,6 +198,7 @@ M.config = function()
                     tools = {
                         autoSetHints = true,
                         hover_with_actions = true,
+                        executor = require("rust-tools/executors").termopen,
                         runnables = {
                             use_telescope = true,
                         },
@@ -208,10 +222,51 @@ M.config = function()
                 require("rust-tools").setup(opts)
             end,
         },
+        -- Copilot
+        {
+            "github/copilot.vim",
+            config = function()
+                vim.g.copilot_filetypes = {
+                    ["*"] = true,
+                    gitcommit = false,
+                    NeogitCommitMessage = false,
+                }
+            end,
+            disable = not lvim.builtin.copilot.active,
+        },
+        -- Renamer
+        {
+            "filipdutescu/renamer.nvim",
+            config = function()
+                require("renamer").setup {
+                    title = "Rename symbol",
+                }
+            end,
+        },
+        -- Tabnine cmp
+        {
+            "tzachar/cmp-tabnine",
+            run = "./install.sh",
+            requires = "hrsh7th/nvim-cmp",
+            config = function()
+                local tabnine = require "cmp_tabnine.config"
+                tabnine:setup {
+                    max_lines = 1000,
+                    max_num_results = 20,
+                    sort = true,
+                    run_on_every_keystroke = true,
+                    snippet_placeholder = "..",
+                }
+            end,
+            opt = true,
+            event = "InsertEnter",
+            disable = not lvim.builtin.tabnine.active,
+        },
         -- Symbol outline
         {
             "simrat39/symbols-outline.nvim",
             config = function()
+                local kind = require("user.lsp").symbols_outline
                 local opts = {
                     highlight_hovered_item = true,
                     show_guides = true,
@@ -234,32 +289,32 @@ M.config = function()
                     lsp_blacklist = {},
                     symbol_blacklist = {},
                     symbols = {
-                        File = { icon = "", hl = "TSURI" },
-                        Module = { icon = "", hl = "TSNamespace" },
-                        Namespace = { icon = "", hl = "TSNamespace" },
-                        Package = { icon = "", hl = "TSNamespace" },
-                        Class = { icon = "", hl = "TSType" },
-                        Method = { icon = "ƒ", hl = "TSMethod" },
-                        Property = { icon = "", hl = "TSMethod" },
-                        Field = { icon = "", hl = "TSField" },
-                        Constructor = { icon = "", hl = "TSConstructor" },
-                        Enum = { icon = "ℰ", hl = "TSType" },
-                        Interface = { icon = "ﰮ", hl = "TSType" },
-                        Function = { icon = "", hl = "TSFunction" },
-                        Variable = { icon = "", hl = "TSConstant" },
-                        Constant = { icon = "", hl = "TSConstant" },
-                        String = { icon = "𝓐", hl = "TSString" },
-                        Number = { icon = "#", hl = "TSNumber" },
-                        Boolean = { icon = "⊨", hl = "TSBoolean" },
-                        Array = { icon = "", hl = "TSConstant" },
-                        Object = { icon = "⦿", hl = "TSType" },
-                        Key = { icon = "", hl = "TSType" },
-                        Null = { icon = "NULL", hl = "TSType" },
-                        EnumMember = { icon = "", hl = "TSField" },
-                        Struct = { icon = "פּ", hl = "TSType" },
-                        Event = { icon = "", hl = "TSType" },
-                        Operator = { icon = "", hl = "TSOperator" },
-                        TypeParameter = { icon = "𝙏", hl = "TSParameter" },
+                        File = { icon = kind.File, hl = "TSURI" },
+                        Module = { icon = kind.Module, hl = "TSNamespace" },
+                        Namespace = { icon = kind.Namespace, hl = "TSNamespace" },
+                        Package = { icon = kind.Package, hl = "TSNamespace" },
+                        Class = { icon = kind.Class, hl = "TSType" },
+                        Method = { icon = kind.Method, hl = "TSMethod" },
+                        Property = { icon = kind.Property, hl = "TSMethod" },
+                        Field = { icon = kind.Field, hl = "TSField" },
+                        Constructor = { icon = kind.Constructor, hl = "TSConstructor" },
+                        Enum = { icon = kind.Enum, hl = "TSType" },
+                        Interface = { icon = kind.Interface, hl = "TSType" },
+                        Function = { icon = kind.Function, hl = "TSFunction" },
+                        Variable = { icon = kind.Variable, hl = "TSConstant" },
+                        Constant = { icon = kind.Constant, hl = "TSConstant" },
+                        String = { icon = kind.String, hl = "TSString" },
+                        Number = { icon = kind.Number, hl = "TSNumber" },
+                        Boolean = { icon = kind.Boolean, hl = "TSBoolean" },
+                        Array = { icon = kind.Array, hl = "TSConstant" },
+                        Object = { icon = kind.Object, hl = "TSType" },
+                        Key = { icon = kind.Key, hl = "TSType" },
+                        Null = { icon = kind.Null, hl = "TSType" },
+                        EnumMember = { icon = kind.EnumMember, hl = "TSField" },
+                        Struct = { icon = kind.Struct, hl = "TSType" },
+                        Event = { icon = kind.Event, hl = "TSType" },
+                        Operator = { icon = kind.Operator, hl = "TSOperator" },
+                        TypeParameter = { icon = kind.TypeParameter, hl = "TSParameter" },
                     },
                 }
                 require("symbols-outline").setup(opts)
@@ -267,9 +322,29 @@ M.config = function()
             -- cmd = "SymbolsOutline",
             event = "BufReadPost",
         },
+        {
+            "kosayoda/nvim-lightbulb",
+            config = function()
+                vim.fn.sign_define(
+                    "LightBulbSign",
+                    { text = require("user.lsp").icons.code_action, texthl = "DiagnosticInfo" }
+                )
+            end,
+            event = "BufRead",
+            ft = { "rust", "go" },
+        },
         -- Diagnostics
         {
             "folke/trouble.nvim",
+            config = function()
+                require("trouble").setup {
+                    auto_open = true,
+                    auto_close = true,
+                    padding = false,
+                    height = 10,
+                    use_lsp_diagnostic_signs = true,
+                }
+            end,
             cmd = "TroubleToggle",
         },
         -- Python coverage highlight
@@ -346,7 +421,29 @@ M.config = function()
             "folke/todo-comments.nvim",
             requires = "nvim-lua/plenary.nvim",
             config = function()
-                require("todo-comments").setup {}
+                local icons = require("user.lsp").todo_comments
+                require("todo-comments").setup {
+                    keywords = {
+                        FIX = { icon = icons.FIX },
+                        TODO = { icon = icons.TODO, alt = { "WIP" } },
+                        HACK = { icon = icons.HACK, color = "hack" },
+                        WARN = { icon = icons.WARN },
+                        PERF = { icon = icons.PERF },
+                        NOTE = { icon = icons.NOTE, alt = { "INFO", "NB" } },
+                        ERROR = { icon = icons.ERROR, color = "error", alt = { "ERR" } },
+                        REFS = { icon = icons.REFS },
+                    },
+                    highlight = { max_line_len = 120 },
+                    colors = {
+                        error = { "DiagnosticError" },
+                        warning = { "DiagnosticWarn" },
+                        info = { "DiagnosticInfo" },
+                        hint = { "DiagnosticHint" },
+                        hack = { "Function" },
+                        ref = { "FloatBorder" },
+                        default = { "Identifier" },
+                    },
+                }
             end,
         },
         -- Qbf
@@ -394,36 +491,52 @@ M.config = function()
             end,
             event = "BufRead",
         },
-        -- Context aware comments
-        {
-            "JoosepAlviste/nvim-ts-context-commentstring",
-            event = "BufRead",
-        },
         -- Zoxide
         { "nanotee/zoxide.vim" },
-        -- Neoscrpll
+        -- Faster filetype
         {
-            "karb94/neoscroll.nvim",
+            "nathom/filetype.nvim",
             config = function()
-                require("neoscroll").setup()
-            end,
-        },
-        -- Tabnine cmp
-        {
-            "tzachar/cmp-tabnine",
-            run = "./install.sh",
-            requires = "hrsh7th/nvim-cmp",
-            config = function()
-                local tabnine = require "cmp_tabnine.config"
-                tabnine:setup {
-                    max_lines = 1000,
-                    max_num_results = 20,
-                    sort = true,
-                    run_on_every_keystroke = true,
-                    snippet_placeholder = "..",
+                require("filetype").setup {
+                    overrides = {
+                        literal = {
+                            ["kitty.conf"] = "kitty",
+                            [".gitignore"] = "conf",
+                        },
+                    },
                 }
             end,
-            disable = not lvim.builtin.tabnine.active,
+        },
+        -- Telescope live grep extension
+        { "nvim-telescope/telescope-live-grep-raw.nvim" },
+        -- Stable window open
+        {
+            "luukvbaal/stabilize.nvim",
+            config = function()
+                require("stabilize").setup { forcemark = "f", nested = "QuickFixCmdPost,User LspDiagnosticsChanged" }
+            end,
+        },
+        -- Global status line
+        {
+            "windwp/floatline.nvim",
+            config = function()
+                require("floatline").setup()
+            end,
+            disable = not lvim.builtin.global_status_line.active,
+        },
+        -- Log highlight
+        {
+            "mtdl9/vim-log-highlighting",
+            ft = { "text", "log" },
+        },
+        -- Fancy bufferline
+        {
+            "akinsho/bufferline.nvim",
+            config = function()
+                require("user.bufferline").config()
+            end,
+            requires = "nvim-web-devicons",
+            disable = not lvim.builtin.fancy_bufferline.active,
         },
     }
 end

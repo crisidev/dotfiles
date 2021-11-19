@@ -12,10 +12,10 @@ elif [ "$1" = "cycle" ]; then
   fi
 else
   if nmcli dev status |grep vpn0 |grep -q connected > /dev/null 2>&1; then
-    echo ""
+    echo '{"icon":"","state":"Info","text":""}'
   elif ifconfig |grep -q cscotun0 > /dev/null 2>&1; then
-    echo ""
+    echo '{"icon":"","state":"Good","text":""}'
   else
-    echo ""
+    echo '{"text":""}'
   fi
 fi

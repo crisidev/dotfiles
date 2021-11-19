@@ -1,5 +1,6 @@
 set_title = false
 disable = ["system", "flatpak", "snap", "gnome_shell_extensions", "pnpm"]
+ignore_failures = ["git_repos"]
 
 [git]
 max_concurrency = 5
@@ -38,7 +39,5 @@ repos = [
 arguments = "--ff-only --rebase --autostash"
 
 [commands]
-"Node upgrade" = "npm update -g"
-"Python upgrade" = "pip-review -a"
-"Amzn toolbox upgrade" = "toolbox update"
-
+"Pip packages" = "pip-review -a"
+"Amzn toolbox" = "toolbox update"

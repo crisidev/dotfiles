@@ -18,9 +18,9 @@ dunst() {
       ;;
     get)
       if dunstctl is-paused | grep -q false; then
-        echo '{"icon":"","state":"Good","text":""}'
-      else
         echo '{"icon":"","state":"Info","text":""}'
+      else
+        echo '{"text":""}'
       fi
       ;;
     suspend)

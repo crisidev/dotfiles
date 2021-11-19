@@ -19,7 +19,7 @@ local error_hlgroup = "ErrorMsg"
 -- the second line to it.
 local short_line_limit = 20
 
-local kind_symbols = {
+M.cmp_kind = {
     Class = " ",
     Color = " ",
     Constant = "",
@@ -48,13 +48,121 @@ local kind_symbols = {
     Variable = " ",
 }
 
-M.cmp_kind = function(kind)
-    return kind_symbols[kind] or ""
-end
+M.icons = {
+    error = " ",
+    warn = "  ",
+    info = " ",
+    hint = " ",
+    code_action = "",
+    test = "",
+    docs = "",
+    clock = " ",
+    calendar = " ",
+    buffer = " ",
+    settings = " ",
+    ls_inactive = "轢",
+    ls_active = "歷",
+    question = "",
+    added = "  ",
+    modified = "柳",
+    removed = " ",
+}
 
-M.symbols = function()
-    return kind_symbols
-end
+M.nvim_tree_icons = {
+    default = "",
+    symlink = "",
+    git = {
+        unstaged = "",
+        staged = "",
+        unmerged = "",
+        renamed = "➜",
+        untracked = "",
+        deleted = "",
+        ignored = "◌",
+    },
+    folder = {
+        arrow_closed = "",
+        arrow_open = "",
+        default = "",
+        open = "",
+        empty = "",
+        empty_open = "",
+        symlink = "",
+        symlink_open = "",
+    },
+}
+
+M.symbols_outline = {
+    File = "",
+    Module = "",
+    Namespace = "",
+    Package = "",
+    Class = "",
+    Method = "ƒ",
+    Property = "",
+    Field = "",
+    Constructor = "",
+    Enum = "練",
+    Interface = "ﰮ",
+    Function = "",
+    Variable = "",
+    Constant = "",
+    String = "𝓐",
+    Number = "#",
+    Boolean = "⊨",
+    Array = "",
+    Object = "⦿",
+    Key = "",
+    Null = "NULL",
+    EnumMember = "",
+    Struct = "פּ",
+    Event = "",
+    Operator = "",
+    TypeParameter = "𝙏",
+}
+
+M.todo_comments = {
+    FIX = "律",
+    TODO = " ",
+    HACK = " ",
+    WARN = "裂",
+    PERF = "龍",
+    NOTE = " ",
+    ERROR = " ",
+    REFS = "",
+}
+
+M.numbers = {
+    " ",
+    " ",
+    " ",
+    " ",
+    " ",
+    " ",
+    " ",
+    " ",
+    " ",
+    " ",
+}
+
+M.file_icons = {
+    Brown = { "" },
+    Aqua = { "" },
+    LightBlue = { "", "" },
+    Blue = { "", "", "", "", "", "", "", "", "", "", "", "", "" },
+    Darkblue = { "", "" },
+    Purple = { "", "", "", "", "" },
+    Red = { "", "", "", "", "", "" },
+    Beige = { "", "", "" },
+    Yellow = { "", "", "λ", "", "" },
+    Orange = { "", "" },
+    Darkorange = { "", "", "", "", "" },
+    Pink = { "", "" },
+    Salmon = { "" },
+    Green = { "", "", "", "", "", "" },
+    Lightgreen = { "", "", "", "﵂" },
+    White = { "", "", "", "", "", "" },
+}
 
 -- Prints the first diagnostic for the current line.
 M.echo_diagnostic = function()
@@ -165,8 +273,18 @@ M.normal_buffer_mappings = function()
         i = { "<cmd>lua require('goto-preview').goto_preview_implementation()<cr>", "Preview implementation" },
         q = { "<cmd>lua require('goto-preview').close_all_win()<cr>", "Close all preview windows" },
     }
+    -- Copilot
+    if lvim.builtin.copilot.active then
+        lvim.lsp.buffer_mappings.normal_mode["gC"] = {
+            name = "Copilot",
+            e = { "<cmd>Copilot enable<cr>", "Enable" },
+            d = { "<cmd>Copilot disable<cr>", "Disable" },
+            s = { "<cmd>Copilot status<cr>", "Status" },
+        }
+    end
     -- Rename
-    lvim.lsp.buffer_mappings.normal_mode["gR"] = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename symbol" }
+    lvim.lsp.buffer_mappings.normal_mode["gR"] = { "cmd>lua require('renamer').rename()<cr>", "Rename symbol" }
+    -- lvim.lsp.buffer_mappings.normal_mode["gR"] = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename symbol" }
     -- Diagnostics
     lvim.lsp.buffer_mappings.normal_mode["gn"] = {
         "<cmd>lua vim.diagnostic.goto_next({float = {border = 'rounded', focusable = false, source = 'always'}})<cr>",
@@ -192,7 +310,6 @@ M.normal_buffer_mappings = function()
     }
     -- Format
     lvim.lsp.buffer_mappings.normal_mode["gF"] = { "<cmd>lua vim.lsp.buf.formatting_seq_sync()<cr>", "Format file" }
-    -- LazyGit
     -- Empty
     lvim.lsp.buffer_mappings.normal_mode["gb"] = {}
     lvim.lsp.buffer_mappings.normal_mode["gx"] = {}
@@ -208,6 +325,7 @@ M.config = function()
     -- Disable inline diagnostics
     lvim.lsp.diagnostics.virtual_text = false
 
+    -- Mappings
     M.normal_buffer_mappings()
 end
 

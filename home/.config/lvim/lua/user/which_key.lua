@@ -11,19 +11,23 @@ M.n_keys = function()
             name = "Find",
             F = { "<cmd>lua require('user.telescope').file_browser()<cr>", "File browser" },
             f = { "<cmd>lua require('user.telescope').find_files()<cr>", "Find files" },
-            B = { "<cmd>BufferPick<cr>", "Pick buffer" },
+            B = { "<cmd>BufferLinePick<cr>", "Pick buffer" },
             b = { "<cmd>lua require('user.telescope').buffers()<cr>", "Show buffers" },
             l = {
                 "<cmd>lua require('user.telescope').grep_last_search({layout_strategy = \"vertical\"})<cr>",
                 "Last Search",
+            },
+            L = {
+                "<cmd>lua require('telescope').extensions.live_grep_raw.live_grep_raw()<cr>",
+                "Live grep",
             },
             p = { "<cmd>Telescope projects<cr>", "Projects" },
             s = { "<cmd>lua require('user.telescope').find_string()<cr>", "Find string in file" },
             z = { "<cmd>lua require('user.telescope').search_only_certain_files()<cr>", "Certain Filetype" },
         },
         -- Buffers
-        ["gq"] = { "<cmd>BufferClose<cr>", "Close buffer" },
-        ["gQ"] = { "<cmd>BufferClose!<cr>", "Force close buffer" },
+        ["gq"] = { "<cmd>bclose<cr>", "Close buffer" },
+        ["gQ"] = { "<cmd>bclose!<cr>", "Force close buffer" },
         -- Session management
         ["gh"] = {
             name = "Session",
@@ -37,7 +41,7 @@ M.n_keys = function()
             name = "Git",
             b = { "<cmd>GitBlameToggle<cr>", "Toggle inline git blame" },
             B = { "<cmd>Git blame<cr>", "Open git blame" },
-            d = { "<cmdGitdiffsplit<cr>", "Git diff" },
+            d = { "<cmd>DiffviewOpen<cr>", "Git diff" },
             g = { "<cmd>lua _lazygit_toggle()<cr>", "LazyGit" },
             l = {
                 "<cmd>lua require('gitlinker').get_buf_range_url('n', {action_callback = require('gitlinker.actions').open_in_browser})<cr>",
@@ -53,7 +57,7 @@ M.config = function()
     lvim.builtin.which_key.mappings["B"] = { "<cmd>lua require('user.telescope').buffers()<cr>", "Buffers" }
 
     -- Close buffer with Leader-q
-    lvim.builtin.which_key.mappings["q"] = { "<cmd>BufferClose<cr>", "Close buffer" }
+    lvim.builtin.which_key.mappings["q"] = { "<cmd>bdelete<cr>", "Close buffer" }
     lvim.builtin.which_key.mappings["Q"] = { "<cmd>quit<cr>", "Quit" }
     -- Goyo
     lvim.builtin.which_key.mappings["G"] = { "<cmd>Goyo 90%x90%<cr>", "Start Goyo" }

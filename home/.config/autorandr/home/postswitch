@@ -22,6 +22,9 @@ i3_msg_dispatcher "${arr[@]}"
 
 imwheel -k
 
-set_audio alsa_input.usb-21102019_THRONMAX_PULSE_MICROPHONE-00.iec958-stereo alsa_output.pci-0000_04_00.1.hdmi-stereo 
+set_audio alsa_input.usb-21102019_THRONMAX_PULSE_MICROPHONE-00.iec958-stereo alsa_output.pci-0000_04_00.6.analog-stereo 
 
-finish_autorandr_switch
+xset -dpms
+restart_night_light
+
+finish_autorandr_switch home
