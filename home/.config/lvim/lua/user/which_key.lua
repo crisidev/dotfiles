@@ -1,9 +1,12 @@
 local M = {}
 
 M.n_keys = function()
-    local lazygit = require("toggleterm.terminal").Terminal:new { cmd = "lazygit", hidden = true }
-    function _lazygit_toggle()
-        lazygit:toggle()
+    local ok, lazygit = pcall(require, "toggleterm.terminal")
+    if ok then
+        local t = lazygit.Terminal:new { cmd = "lazygit", hidden = true }
+        function _lazygit_toggle()
+            t:toggle()
+        end
     end
     return {
         -- Find
@@ -26,8 +29,8 @@ M.n_keys = function()
             z = { "<cmd>lua require('user.telescope').search_only_certain_files()<cr>", "Certain Filetype" },
         },
         -- Buffers
-        ["gq"] = { "<cmd>bclose<cr>", "Close buffer" },
-        ["gQ"] = { "<cmd>bclose!<cr>", "Force close buffer" },
+        ["gq"] = { "<cmd>SmartQ<cr>", "Close buffer" },
+        ["gQ"] = { "<cmd>SmartQ!<cr>", "Force close buffer" },
         -- Session management
         ["gh"] = {
             name = "Session",
@@ -57,7 +60,7 @@ M.config = function()
     lvim.builtin.which_key.mappings["B"] = { "<cmd>lua require('user.telescope').buffers()<cr>", "Buffers" }
 
     -- Close buffer with Leader-q
-    lvim.builtin.which_key.mappings["q"] = { "<cmd>bdelete<cr>", "Close buffer" }
+    lvim.builtin.which_key.mappings["q"] = { "<cmd>SmartQ<cr>", "Close buffer" }
     lvim.builtin.which_key.mappings["Q"] = { "<cmd>quit<cr>", "Quit" }
     -- Goyo
     lvim.builtin.which_key.mappings["G"] = { "<cmd>Goyo 90%x90%<cr>", "Start Goyo" }

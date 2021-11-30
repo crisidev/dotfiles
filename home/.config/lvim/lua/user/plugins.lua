@@ -227,9 +227,16 @@ M.config = function()
             "github/copilot.vim",
             config = function()
                 vim.g.copilot_filetypes = {
-                    ["*"] = true,
-                    gitcommit = false,
-                    NeogitCommitMessage = false,
+                    ["*"] = false,
+                    python = true,
+                    lua = true,
+                    go = true,
+                    rust = true,
+                    html = true,
+                    c = true,
+                    cpp = true,
+                    javascript = true,
+                    typescript = true,
                 }
             end,
             disable = not lvim.builtin.copilot.active,
@@ -537,6 +544,13 @@ M.config = function()
             end,
             requires = "nvim-web-devicons",
             disable = not lvim.builtin.fancy_bufferline.active,
+        },
+        -- Smart quit
+        {
+            "marklcrns/vim-smartq",
+            config = function()
+                vim.g.smartq_default_mappings = 0
+            end,
         },
     }
 end

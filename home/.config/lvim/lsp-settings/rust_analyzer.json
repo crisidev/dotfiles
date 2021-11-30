@@ -11,5 +11,6 @@
   "rust-analyzer.lens.enumVariantReferences": true,
   "rust-analyzer.lens.methodReferences": true,
   "rust-analyzer.cargo.autoreload": true,
-  "rust-analyzer.hoverActions.enable": true
+  "rust-analyzer.hoverActions.enable": true,
+  "rust-analyzer.diagnostics.disabled": ["macro-error"]
 }

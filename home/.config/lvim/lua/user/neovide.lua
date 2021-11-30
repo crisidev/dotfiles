@@ -10,6 +10,9 @@ M.config = function()
     vim.g.neovide_cursor_antialiasing = true
     vim.g.neovide_input_use_logo = false
 
+    -- Multigrid workaround
+    vim.g.neovide_floating_blur = 0
+
     -- Remember window size
     vim.g.neovide_remember_window_size = true
 

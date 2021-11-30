@@ -53,14 +53,11 @@
 [commit]
     gpgSign = true
 [delta]
-    features = line-numbers decorations
-[delta "interactive"]
-    keep-plus-minus-markers = false
+        features = decorations
+        syntax-theme = Monokai Extended
+        whitespace-error-style = 22 reverse
 [delta "decorations"]
-    commit-decoration-style = blue ol
-    commit-style = raw
-    file-style = omit
-    hunk-header-decoration-style = blue box
-    hunk-header-file-style = red
-    hunk-header-line-number-style = "#067a00"
-    hunk-header-style = file line-number syntax
+        commit-decoration-style = bold yellow box
+        file-style = bold blue ul
+        file-decoration-style = none
+        hunk-header-style = omit

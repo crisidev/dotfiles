@@ -59,7 +59,7 @@ M.config = function()
             show_buffer_icons = true,
             separator_style = "thin",
             enforce_regular_tabs = false,
-            always_show_bufferline = false,
+            always_show_bufferline = true,
             diagnostics = "nvim_lsp",
             diagnostics_indicator = diagnostics_indicator,
             diagnostics_update_in_insert = false,
@@ -84,11 +84,6 @@ M.config = function()
                     padding = 1,
                 },
                 {
-                    filetype = "flutterToolsOutline",
-                    text = "Flutter Outline",
-                    highlight = "PanelHeading",
-                },
-                {
                     filetype = "packer",
                     text = "Packer",
                     highlight = "PanelHeading",
@@ -101,27 +96,6 @@ M.config = function()
                 },
                 items = {
                     groups.builtin.ungrouped,
-                    {
-                        highlight = { guisp = "#51AFEF" },
-                        name = "tests",
-                        icon = icons.test,
-                        matcher = function(buf)
-                            return buf.filename:match "_spec" or buf.filename:match "test"
-                        end,
-                    },
-                    {
-                        name = "view models",
-                        highlight = { guisp = "#03589C" },
-                        matcher = function(buf)
-                            return buf.filename:match "view_model%.dart"
-                        end,
-                    },
-                    {
-                        name = "screens",
-                        matcher = function(buf)
-                            return buf.path:match "screen"
-                        end,
-                    },
                     {
                         highlight = { guisp = "#C678DD" },
                         name = "docs",

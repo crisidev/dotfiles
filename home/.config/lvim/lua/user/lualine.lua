@@ -27,8 +27,9 @@ local mode = function()
         return " "
     elseif mod == "R" or mod == "Rc" or mod == "Rv" or mod == "Rv" then
         return " "
+    else
+        return " "
     end
-    return " "
 end
 
 local file_icon_colors = {
@@ -187,7 +188,6 @@ M.config = function()
                             "hi! LualineModeInactive guifg=" .. mode_color[vim.fn.mode()] .. " guibg=" .. colors.bg_alt
                         )
                         return ""
-                        -- return mode()
                     end,
                     color = "LualineModeInactive",
                     padding = { left = 1, right = 0 },
