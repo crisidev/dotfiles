@@ -100,7 +100,7 @@ M.config = function()
     lvim.builtin.cmp.sources = {
         { name = "nvim_lsp" },
         { name = "cmp_tabnine", max_item_count = 3 },
-        { name = "buffer", max_item_count = 5 },
+        { name = "buffer", max_item_count = 5, keyword_length = 5 },
         { name = "path", max_item_count = 5 },
         { name = "luasnip", max_item_count = 3 },
         { name = "nvim_lua" },
@@ -108,6 +108,7 @@ M.config = function()
         { name = "emoji" },
         { name = "treesitter" },
         { name = "crates" },
+        { name = "orgmode" },
     }
     lvim.builtin.cmp.documentation.border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" }
     lvim.builtin.cmp.experimental = {
@@ -126,7 +127,7 @@ M.config = function()
         emoji = "  ",
         path = "  ",
         calc = "  ",
-        cmp_tabnine = "  ",
+        cmp_tabnine = "ﮧ",
     }
 
     -- Terminal
@@ -143,12 +144,62 @@ M.config = function()
     -- Evil stuff
     lvim.builtin.copilot = { active = true }
     lvim.builtin.tabnine = { active = false }
+    if lvim.builtin.copilot.active then
+        lvim.keys.insert_mode["<c-h>"] = { [[copilot#Accept("\<CR>")]], { expr = true, script = true } }
+        local cmp = require "cmp"
+        lvim.builtin.cmp.mapping["<Tab>"] = cmp.mapping(M.tab, { "i", "c" })
+        lvim.builtin.cmp.mapping["<S-Tab>"] = cmp.mapping(M.shift_tab, { "i", "c" })
+    end
 
     -- Status line
     lvim.builtin.global_status_line = { active = true }
     lvim.builtin.fancy_bufferline = { active = true }
     if lvim.builtin.fancy_bufferline.active then
         lvim.builtin.bufferline.active = false
+    end
+    lvim.builtin.fancy_wild_menu = { active = false }
+end
+
+function M.tab(fallback)
+    local methods = require("lvim.core.cmp").methods
+    local cmp = require "cmp"
+    local luasnip = require "luasnip"
+    local copilot_keys = vim.fn["copilot#Accept"]()
+    if cmp.visible() then
+        cmp.select_next_item()
+    elseif vim.api.nvim_get_mode().mode == "c" then
+        fallback()
+    elseif copilot_keys ~= "" then -- prioritise copilot over snippets
+        -- Copilot keys do not need to be wrapped in termcodes
+        vim.api.nvim_feedkeys(copilot_keys, "i", true)
+    elseif luasnip.expandable() then
+        luasnip.expand()
+    elseif methods.jumpable() then
+        luasnip.jump(1)
+    elseif methods.check_backspace() then
+        fallback()
+    else
+        methods.feedkeys("<Plug>(Tabout)", "")
+    end
+end
+
+function M.shift_tab(fallback)
+    local methods = require("lvim.core.cmp").methods
+    local luasnip = require "luasnip"
+    local cmp = require "cmp"
+    if cmp.visible() then
+        cmp.select_prev_item()
+    elseif vim.api.nvim_get_mode().mode == "c" then
+        fallback()
+    elseif methods.jumpable(-1) then
+        luasnip.jump(-1)
+    else
+        local copilot_keys = vim.fn["copilot#Accept"]()
+        if copilot_keys ~= "" then
+            methods.feedkeys(copilot_keys, "i")
+        else
+            methods.feedkeys("<Plug>(Tabout)", "")
+        end
     end
 end
 

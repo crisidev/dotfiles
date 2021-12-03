@@ -36,9 +36,18 @@ M.config = function()
         ["<A-Down>"] = "<Esc><Esc> <cmd>wincmd j<cr>",
         ["<A-Left>"] = "<Esc><Esc> <cmd>wincmd h<cr>",
         ["<A-Right>"] = "<Esc><Esc> <cmd>wincmd l<cr>",
+        -- Paste with Ctrl-v
+        ["<C-v>"] = "<C-r><C-o>+",
     }
     -- VISUAL
-    lvim.keys.visual_mode = {}
+    lvim.keys.visual_mode = {
+        -- Yank with Ctrl-c
+        ["<C-c>"] = '"+yi',
+        -- Cut with Ctrl-x
+        ["<C-x>"] = '"+c',
+        -- Paste with Ctrl-v
+        ["<C-v>"] = 'c<Esc>"+p',
+    }
 
     if lvim.builtin.fancy_bufferline.active then
         -- Buffer navigation

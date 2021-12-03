@@ -50,7 +50,7 @@ M.cmp_kind = {
 
 M.icons = {
     error = " ",
-    warn = "  ",
+    warn = " ",
     info = " ",
     hint = " ",
     code_action = "",
@@ -324,6 +324,18 @@ M.config = function()
 
     -- Disable inline diagnostics
     lvim.lsp.diagnostics.virtual_text = false
+
+    -- Setup diagnostics icons
+    lvim.lsp.diagnostics.signs.values = {
+        { name = "LspDiagnosticsSignError", text = M.icons.error },
+        { name = "LspDiagnosticsSignWarning", text = M.icons.warn },
+        { name = "LspDiagnosticsSignInformation", text = M.icons.info },
+        { name = "LspDiagnosticsSignHint", text = M.icons.hint },
+    }
+    local ok, _ = pcall(require, "vim.diagnostic")
+    if ok then
+        vim.diagnostic.config { virtual_text = false }
+    end
 
     -- Mappings
     M.normal_buffer_mappings()

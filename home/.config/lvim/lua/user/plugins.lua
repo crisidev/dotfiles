@@ -175,18 +175,6 @@ M.config = function()
                 }
             end,
         },
-        -- Lsp Lua
-        {
-            "folke/lua-dev.nvim",
-            ft = "lua",
-            before = "williamboman/nvim-lsp-installer",
-            config = function()
-                local luadev = require("lua-dev").setup {
-                    lspconfig = lvim.lang.lua.lsp.setup,
-                }
-                lvim.lang.lua.lsp.setup = luadev
-            end,
-        },
         -- Lsp Rust
         {
             "simrat39/rust-tools.nvim",
@@ -222,10 +210,19 @@ M.config = function()
                 require("rust-tools").setup(opts)
             end,
         },
+        -- Lsp Lua
+        {
+            "folke/lua-dev.nvim",
+            ft = "lua",
+            before = "williamboman/nvim-lsp-installer",
+        },
         -- Copilot
         {
             "github/copilot.vim",
             config = function()
+                vim.g.copilot_no_tab_map = true
+                vim.g.copilot_assume_mapped = true
+                vim.g.copilot_tab_fallback = ""
                 vim.g.copilot_filetypes = {
                     ["*"] = false,
                     python = true,
@@ -241,6 +238,7 @@ M.config = function()
             end,
             disable = not lvim.builtin.copilot.active,
         },
+
         -- Renamer
         {
             "filipdutescu/renamer.nvim",
@@ -268,6 +266,18 @@ M.config = function()
             opt = true,
             event = "InsertEnter",
             disable = not lvim.builtin.tabnine.active,
+        },
+        -- Neogen
+        {
+            "danymat/neogen",
+            config = function()
+                require("neogen").setup {
+                    enabled = true,
+                }
+            end,
+            -- ft = { "lua", "python", "javascript", "typescriptreact", "c", "cpp", "go", "java" },
+            event = "InsertEnter",
+            requires = "nvim-treesitter/nvim-treesitter",
         },
         -- Symbol outline
         {
@@ -551,6 +561,18 @@ M.config = function()
             config = function()
                 vim.g.smartq_default_mappings = 0
             end,
+        },
+        -- Wilder
+        {
+            "gelguy/wilder.nvim",
+            -- event = { "CursorHold", "CmdlineEnter" },
+            rocks = { "luarocks-fetch-gitrec", "pcre2" },
+            requires = { "romgrk/fzy-lua-native" },
+            config = function()
+                vim.cmd(string.format("source %s", "~/.config/lvim/vimscript/wilder.vim"))
+            end,
+            run = ":UpdateRemotePlugins",
+            disable = not lvim.builtin.fancy_wild_menu.active,
         },
     }
 end
