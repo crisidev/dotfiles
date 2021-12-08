@@ -147,8 +147,8 @@ M.config = function()
         -- Lsp signature
         -- {
         --     "ray-x/lsp_signature.nvim",
-        --     ft = { "rust", "rs" },
-        --     event = "BufRead",
+        --     ft = { "python", "rust", "go" },
+        --     event = { "BufRead", "BufNew" },
         --     config = function()
         --         require("lsp_signature").on_attach {
         --             bind = true,
@@ -248,6 +248,7 @@ M.config = function()
                 }
             end,
         },
+        -- Cmp
         -- Tabnine cmp
         {
             "tzachar/cmp-tabnine",
@@ -266,6 +267,29 @@ M.config = function()
             opt = true,
             event = "InsertEnter",
             disable = not lvim.builtin.tabnine.active,
+        },
+        -- Dictionary cmp
+        {
+            "uga-rosa/cmp-dictionary",
+            config = function()
+                vim.g.cmp_dictionary_silent = false
+                vim.g.cmp_dictionary_async = true
+            end,
+            rocks = { "mpack" },
+        },
+        -- Crates cmp
+        {
+            "Saecki/crates.nvim",
+            event = { "BufRead Cargo.toml" },
+            requires = { "nvim-lua/plenary.nvim" },
+            config = function()
+                require("crates").setup()
+            end,
+        },
+        -- Treesitter cmp
+        {
+            "ray-x/cmp-treesitter",
+            requires = "nvim-treesitter/nvim-treesitter",
         },
         -- Neogen
         {
@@ -339,6 +363,7 @@ M.config = function()
             -- cmd = "SymbolsOutline",
             event = "BufReadPost",
         },
+        -- Lightbulb
         {
             "kosayoda/nvim-lightbulb",
             config = function()
@@ -535,7 +560,7 @@ M.config = function()
         },
         -- Global status line
         {
-            "windwp/floatline.nvim",
+            "simrat39/floatline.nvim",
             config = function()
                 require("floatline").setup()
             end,
@@ -573,6 +598,16 @@ M.config = function()
             end,
             run = ":UpdateRemotePlugins",
             disable = not lvim.builtin.fancy_wild_menu.active,
+        },
+        -- Tabout
+        {
+            "abecodes/tabout.nvim",
+            wants = { "nvim-treesitter" },
+            after = { "nvim-cmp" },
+            config = function()
+                require("user.tabout").config()
+            end,
+            disable = not lvim.builtin.copilot.active,
         },
     }
 end

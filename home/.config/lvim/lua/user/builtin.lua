@@ -1,6 +1,24 @@
 local M = {}
 
 M.config = function()
+    -- Evil stuff
+    lvim.builtin.copilot = { active = true }
+    lvim.builtin.tabnine = { active = false }
+    if lvim.builtin.copilot.active then
+        lvim.keys.insert_mode["<c-h>"] = { [[copilot#Accept("\<CR>")]], { expr = true, script = true } }
+        local cmp = require "cmp"
+        lvim.builtin.cmp.mapping["<Tab>"] = cmp.mapping(M.tab, { "i", "c" })
+        lvim.builtin.cmp.mapping["<S-Tab>"] = cmp.mapping(M.shift_tab, { "i", "c" })
+    end
+
+    -- Status line
+    lvim.builtin.global_status_line = { active = false }
+    lvim.builtin.fancy_bufferline = { active = true }
+    if lvim.builtin.fancy_bufferline.active then
+        lvim.builtin.bufferline.active = false
+    end
+    lvim.builtin.fancy_wild_menu = { active = false }
+
     -- Nvimtree
     lvim.builtin.nvimtree.side = "left"
     lvim.builtin.nvimtree.show_icons.git = 0
@@ -98,19 +116,19 @@ M.config = function()
     lvim.builtin.telescope.defaults.mappings = {
         i = {
             ["<esc>"] = actions.close,
-            ["<C-y>"] = actions.which_key,
-            ["<C-n>"] = actions.cycle_history_next,
-            ["<C-p>"] = actions.cycle_history_prev,
-            ["<C-j>"] = actions.move_selection_next,
-            ["<C-k>"] = actions.move_selection_previous,
+            ["<c-y>"] = actions.which_key,
+            ["<c-n>"] = actions.cycle_history_next,
+            ["<c-p>"] = actions.cycle_history_prev,
+            ["<c-j>"] = actions.move_selection_next,
+            ["<c-k>"] = actions.move_selection_previous,
         },
         n = {
             ["<esc>"] = actions.close,
-            ["<C-y>"] = actions.which_key,
-            ["<C-n>"] = actions.cycle_history_next,
-            ["<C-p>"] = actions.cycle_history_prev,
-            ["<C-j>"] = actions.move_selection_next,
-            ["<C-k>"] = actions.move_selection_previous,
+            ["<c-y>"] = actions.which_key,
+            ["<c-n>"] = actions.cycle_history_next,
+            ["<c-p>"] = actions.cycle_history_prev,
+            ["<c-j>"] = actions.move_selection_next,
+            ["<c-k>"] = actions.move_selection_previous,
         },
     }
     lvim.builtin.telescope.defaults.file_ignore_patterns = {
@@ -174,7 +192,7 @@ M.config = function()
         { name = "emoji" },
         { name = "treesitter" },
         { name = "crates" },
-        { name = "orgmode" },
+        { name = "dictionary", keyword_length = 2 }
     }
     lvim.builtin.cmp.documentation.border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" }
     lvim.builtin.cmp.experimental = {
@@ -184,16 +202,18 @@ M.config = function()
     }
     lvim.builtin.cmp.formatting.kind_icons = require("user.lsp").cmp_kind
     lvim.builtin.cmp.formatting.source_names = {
-        buffer = "(Buf)",
-        nvim_lsp = "(Lsp)",
-        luasnip = "(Snip)",
-        treesitter = " ",
-        nvim_lua = "(NvLua)",
-        spell = " 暈",
-        emoji = "  ",
-        path = "  ",
-        calc = "  ",
+        buffer = "(buf)",
+        nvim_lsp = "(lsp)",
+        luasnip = "(snip)",
+        treesitter = "",
+        nvim_lua = "(lua)",
+        spell = "暈",
+        dictionary = "暈",
+        emoji = "",
+        path = "",
+        calc = "",
         cmp_tabnine = "ﮧ",
+        crates = "(crates)"
     }
 
     -- Terminal
@@ -207,23 +227,6 @@ M.config = function()
     lvim.builtin.notify.active = true
     lvim.log.level = "info"
 
-    -- Evil stuff
-    lvim.builtin.copilot = { active = true }
-    lvim.builtin.tabnine = { active = false }
-    if lvim.builtin.copilot.active then
-        lvim.keys.insert_mode["<c-h>"] = { [[copilot#Accept("\<CR>")]], { expr = true, script = true } }
-        local cmp = require "cmp"
-        lvim.builtin.cmp.mapping["<Tab>"] = cmp.mapping(M.tab, { "i", "c" })
-        lvim.builtin.cmp.mapping["<S-Tab>"] = cmp.mapping(M.shift_tab, { "i", "c" })
-    end
-
-    -- Status line
-    lvim.builtin.global_status_line = { active = true }
-    lvim.builtin.fancy_bufferline = { active = true }
-    if lvim.builtin.fancy_bufferline.active then
-        lvim.builtin.bufferline.active = false
-    end
-    lvim.builtin.fancy_wild_menu = { active = false }
 end
 
 function M.tab(fallback)
@@ -266,6 +269,21 @@ function M.shift_tab(fallback)
         else
             methods.feedkeys("<Plug>(Tabout)", "")
         end
+    end
+end
+
+function M.dump(o)
+    if type(o) == "table" then
+        local s = "{ "
+        for k, v in pairs(o) do
+            if type(k) ~= "number" then
+                k = '"' .. k .. '"'
+            end
+            s = s .. "[" .. k .. "] = " .. M.dump(v) .. ","
+        end
+        return s .. "} "
+    else
+        return tostring(o)
     end
 end
 

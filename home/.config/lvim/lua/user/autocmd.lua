@@ -12,6 +12,7 @@ M.config = function()
         { "BufRead", "*", "Copilot disable" },
         -- LSP diagnostics
         -- { "CursorMoved", "*", "lua require('user.lsp').echo_diagnostic()" },
+        {"FileType", "*", "setlocal dictionary=/usr/share/dict/british-english,/usr/share/dict/italian" }
     }
     -- if not vim.g.neovide then
     --     table.insert(lvim.autocommands.custom_groups, { "BufRead", "*", "lua require('persistence').stop()" })

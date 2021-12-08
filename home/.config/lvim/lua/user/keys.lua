@@ -38,6 +38,7 @@ M.config = function()
         ["<A-Right>"] = "<Esc><Esc> <cmd>wincmd l<cr>",
         -- Paste with Ctrl-v
         ["<C-v>"] = "<C-r><C-o>+",
+        ["<A-s>"] = "<cmd>lua require('telescope').extensions.luasnip.luasnip(require('telescope.themes').get_cursor({}))<CR>",
     }
     -- VISUAL
     lvim.keys.visual_mode = {

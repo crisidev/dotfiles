@@ -316,6 +316,7 @@ M.normal_buffer_mappings = function()
 end
 
 M.config = function()
+    vim.lsp.set_log_level "warn"
     -- Use rust-tools.nvim
     vim.list_extend(lvim.lsp.override, { "rust_analyzer" })
     lvim.lsp.automatic_servers_installation = true
@@ -327,11 +328,12 @@ M.config = function()
 
     -- Setup diagnostics icons
     lvim.lsp.diagnostics.signs.values = {
-        { name = "LspDiagnosticsSignError", text = M.icons.error },
-        { name = "LspDiagnosticsSignWarning", text = M.icons.warn },
-        { name = "LspDiagnosticsSignInformation", text = M.icons.info },
-        { name = "LspDiagnosticsSignHint", text = M.icons.hint },
+        { name = "DiagnosticSignError", text = M.icons.error },
+        { name = "DiagnosticSignWarn", text = M.icons.warn },
+        { name = "DiagnosticSignInfo", text = M.icons.info },
+        { name = "DiagnosticSignHint", text = M.icons.hint },
     }
+
     local ok, _ = pcall(require, "vim.diagnostic")
     if ok then
         vim.diagnostic.config { virtual_text = false }

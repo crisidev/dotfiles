@@ -27,7 +27,7 @@ My personal dotfiles are compatible with [homesick](https://github.com/technical
 * [Direnv](https://direnv.net/) [config](/home/.config/direnv) directory
 
 ### Editor
-* I use [Neovim](https://neovim.io) 0.6 following HEAD
+* I use [Neovim](https://neovim.io) 0.7 following HEAD
 * My config is heavily based on the great work of [abzcoding](https://github.com/abzcoding/lvim)
 * [LunarVim](https://lunarvim.org):
     - [Lua config](/home/.config/lvim/config.lua)
