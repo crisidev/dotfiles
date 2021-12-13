@@ -7,7 +7,7 @@ usage() {
 
 multigrid=""
 if [ "$1" = "-m" ]; then
-  multigrid=1
+  multigrid=--multigrid
   shift
 fi
 

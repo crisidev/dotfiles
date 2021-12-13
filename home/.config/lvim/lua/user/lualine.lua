@@ -296,23 +296,12 @@ M.config = function()
             return "%="
         end,
     }
-
-    local ok, _ = pcall(require, "vim.diagnostic")
-    if ok then
-        ins_right {
-            "diagnostics",
-            sources = { "nvim" },
-            symbols = { error = " ", warn = "  ", info = " ", hint = " " },
-            cond = conditions.hide_in_width,
-        }
-    else
-        ins_right {
-            "diagnostics",
-            sources = { "nvim_lsp" },
-            symbols = { error = " ", warn = "  ", info = " ", hint = " " },
-            cond = conditions.hide_in_width,
-        }
-    end
+    ins_right {
+        "diagnostics",
+        sources = { "nvim_diagnostic" },
+        symbols = { error = " ", warn = "  ", info = " ", hint = " " },
+        cond = conditions.hide_in_width,
+    }
     ins_right {
         function()
             if next(vim.treesitter.highlighter.active) then

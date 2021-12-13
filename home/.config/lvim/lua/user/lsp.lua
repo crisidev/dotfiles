@@ -249,11 +249,11 @@ M.normal_buffer_mappings = function()
     lvim.lsp.buffer_mappings.normal_mode["gg"] = { "<cmd>lua vim.lsp.buf.definition()<CR>", "Goto Definition" }
     lvim.lsp.buffer_mappings.normal_mode["gd"] = { "<cmd>lua vim.lsp.buf.declaration()<CR>", "Goto Declaration" }
     lvim.lsp.buffer_mappings.normal_mode["gi"] = {
-        "<cmd>lua vim.lsp.buf.implementation()<cr>",
+        "<cmd>lua require('user.telescope').lsp_implementations()<cr>",
         "Goto Implementation",
     }
     lvim.lsp.buffer_mappings.normal_mode["gr"] = {
-        "<cmd>lua vim.lsp.buf.references()<cr>",
+        "<cmd>lua require('user.telescope').lsp_references()<cr>",
         "Goto References",
     }
     lvim.lsp.buffer_mappings.normal_mode["gs"] = { "<cmd>lua vim.lsp.buf.signature_help()<CR>", "Show signature help" }
@@ -283,7 +283,7 @@ M.normal_buffer_mappings = function()
         }
     end
     -- Rename
-    lvim.lsp.buffer_mappings.normal_mode["gR"] = { "cmd>lua require('renamer').rename()<cr>", "Rename symbol" }
+    lvim.lsp.buffer_mappings.normal_mode["gS"] = { "<cmd>lua require('renamer').rename()<cr>", "Rename symbol" }
     -- lvim.lsp.buffer_mappings.normal_mode["gR"] = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename symbol" }
     -- Diagnostics
     lvim.lsp.buffer_mappings.normal_mode["gn"] = {

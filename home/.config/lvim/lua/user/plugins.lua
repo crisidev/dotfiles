@@ -198,7 +198,7 @@ M.config = function()
                             show_parameter_hints = true,
                         },
                         hover_actions = {
-                            auto_focus = false,
+                            auto_focus = true,
                         },
                     },
                     server = {
@@ -272,7 +272,7 @@ M.config = function()
         {
             "uga-rosa/cmp-dictionary",
             config = function()
-                vim.g.cmp_dictionary_silent = false
+                vim.g.cmp_dictionary_silent = true
                 vim.g.cmp_dictionary_async = true
             end,
             rocks = { "mpack" },

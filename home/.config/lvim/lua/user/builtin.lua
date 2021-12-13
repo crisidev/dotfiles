@@ -113,10 +113,18 @@ M.config = function()
     lvim.builtin.telescope.defaults.winblend = 6
     lvim.builtin.telescope.defaults.layout_strategy = "horizontal"
     local actions = require "telescope.actions"
+    local custom_actions = require "user.telescope"
     lvim.builtin.telescope.defaults.mappings = {
         i = {
             ["<esc>"] = actions.close,
+            ["<c-c>"] = actions.close,
             ["<c-y>"] = actions.which_key,
+            ["<tab>"] = actions.toggle_selection + actions.move_selection_next,
+            ["<s-tab>"] = actions.toggle_selection + actions.move_selection_previous,
+            ["<cr>"] = custom_actions.multi_selection_open,
+            ["<c-v>"] = custom_actions.multi_selection_open_vsplit,
+            ["<c-s>"] = custom_actions.multi_selection_open_split,
+            ["<c-t>"] = custom_actions.multi_selection_open_tab,
             ["<c-n>"] = actions.cycle_history_next,
             ["<c-p>"] = actions.cycle_history_prev,
             ["<c-j>"] = actions.move_selection_next,
@@ -124,11 +132,17 @@ M.config = function()
         },
         n = {
             ["<esc>"] = actions.close,
-            ["<c-y>"] = actions.which_key,
-            ["<c-n>"] = actions.cycle_history_next,
-            ["<c-p>"] = actions.cycle_history_prev,
+            ["<tab>"] = actions.toggle_selection + actions.move_selection_next,
+            ["<s-tab>"] = actions.toggle_selection + actions.move_selection_previous,
+            ["<cr>"] = custom_actions.multi_selection_open,
+            ["<c-v>"] = custom_actions.multi_selection_open_vsplit,
+            ["<c-s>"] = custom_actions.multi_selection_open_split,
+            ["<c-t>"] = custom_actions.multi_selection_open_tab,
             ["<c-j>"] = actions.move_selection_next,
             ["<c-k>"] = actions.move_selection_previous,
+            ["<c-n>"] = actions.cycle_history_next,
+            ["<c-p>"] = actions.cycle_history_prev,
+            ["<c-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
         },
     }
     lvim.builtin.telescope.defaults.file_ignore_patterns = {
@@ -192,7 +206,7 @@ M.config = function()
         { name = "emoji" },
         { name = "treesitter" },
         { name = "crates" },
-        { name = "dictionary", keyword_length = 2 }
+        { name = "dictionary", keyword_length = 2 },
     }
     lvim.builtin.cmp.documentation.border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" }
     lvim.builtin.cmp.experimental = {
@@ -213,11 +227,15 @@ M.config = function()
         path = "",
         calc = "",
         cmp_tabnine = "ﮧ",
-        crates = "(crates)"
+        crates = "(crates)",
     }
 
     -- Terminal
-    lvim.builtin.terminal.open_mapping = [[<c-\>]]
+    lvim.builtin.terminal.open_mapping = [[<c-\\>]]
+    lvim.builtin.terminal.execs = {
+        { "zsh", "<c-\\>", "zsh", "float" },
+        { "lazygit", "<c-g>", "LazyGit", "float" },
+    }
 
     -- Which key
     lvim.builtin.which_key.setup.window.winblend = 10
@@ -226,7 +244,6 @@ M.config = function()
     -- Notify popup
     lvim.builtin.notify.active = true
     lvim.log.level = "info"
-
 end
 
 function M.tab(fallback)

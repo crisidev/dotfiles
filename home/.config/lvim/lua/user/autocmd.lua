@@ -12,11 +12,11 @@ M.config = function()
         { "BufRead", "*", "Copilot disable" },
         -- LSP diagnostics
         -- { "CursorMoved", "*", "lua require('user.lsp').echo_diagnostic()" },
-        {"FileType", "*", "setlocal dictionary=/usr/share/dict/british-english,/usr/share/dict/italian" }
+        -- Use dictionary completion
+        { "FileType", "markdown", "setlocal dictionary=/usr/share/dict/words,/usr/share/dict/italian" },
+        -- Codelense viewer
+        { "CursorHold", "*.rs,*.go", "lua require('user.codelens').show_line_sign()" },
     }
-    -- if not vim.g.neovide then
-    --     table.insert(lvim.autocommands.custom_groups, { "BufRead", "*", "lua require('persistence').stop()" })
-    -- end
 end
 
 return M
