@@ -272,8 +272,11 @@ M.config = function()
         {
             "uga-rosa/cmp-dictionary",
             config = function()
-                vim.g.cmp_dictionary_silent = true
-                vim.g.cmp_dictionary_async = true
+                require("cmp_dictionary").setup {
+                    dic = {
+                        ["*"] = { "/usr/share/dict/words", "/usr/share/dict/italian" },
+                    },
+                }
             end,
             rocks = { "mpack" },
         },
@@ -384,7 +387,7 @@ M.config = function()
                     auto_close = true,
                     padding = false,
                     height = 10,
-                    use_lsp_diagnostic_signs = true,
+                    use_diagnostic_signs = true,
                 }
             end,
             cmd = "TroubleToggle",

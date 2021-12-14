@@ -285,6 +285,7 @@ bindsym $mod+Mod1+Down exec --no-startup-id $HOME/.bin/i3resize "Down" "5 px or 
 ###########################
 # Power mode
 ###########################
+bindsym $mod+Mod1+l exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3exit lock
 bindsym XF86PowerOff mode " [l]ock [e]xit [s]uspend [h]ibernate [r]eboot [p]oweroff"
 bindsym $mod+Mod1+p mode " [l]ock [e]xit [s]uspend [h]ibernate [r]eboot [p]oweroff"
 mode " [l]ock [e]xit [s]uspend [h]ibernate [r]eboot [p]oweroff" {

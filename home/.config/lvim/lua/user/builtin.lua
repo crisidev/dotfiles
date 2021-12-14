@@ -112,8 +112,49 @@ M.config = function()
     lvim.builtin.telescope.defaults.path_display = { shorten = 10 }
     lvim.builtin.telescope.defaults.winblend = 6
     lvim.builtin.telescope.defaults.layout_strategy = "horizontal"
+    lvim.builtin.telescope.defaults.file_ignore_patterns = {
+        "vendor/*",
+        "%.lock",
+        "__pycache__/*",
+        "%.sqlite3",
+        "%.ipynb",
+        "node_modules/*",
+        "%.jpg",
+        "%.jpeg",
+        "%.png",
+        "%.svg",
+        "%.otf",
+        "%.ttf",
+        ".git/",
+        "%.webp",
+        ".dart_tool/",
+        ".github/",
+        ".gradle/",
+        ".idea/",
+        ".settings/",
+        ".vscode/",
+        "__pycache__/",
+        "build/",
+        "env/",
+        "gradle/",
+        "node_modules/",
+        "target/",
+        ".cargo/",
+        "%.pdb",
+        "%.dll",
+        "%.class",
+        "%.exe",
+        "%.cache",
+        "%.ico",
+        "%.pdf",
+        "%.dylib",
+        "%.jar",
+        "%.docx",
+        "%.met",
+        "smalljre_*/*",
+    }
+    lvim.builtin.telescope.defaults.layout_config = require("user.telescope").layout_config()
     local actions = require "telescope.actions"
-    local custom_actions = require "user.telescope"
     lvim.builtin.telescope.defaults.mappings = {
         i = {
             ["<esc>"] = actions.close,
@@ -121,23 +162,16 @@ M.config = function()
             ["<c-y>"] = actions.which_key,
             ["<tab>"] = actions.toggle_selection + actions.move_selection_next,
             ["<s-tab>"] = actions.toggle_selection + actions.move_selection_previous,
-            ["<cr>"] = custom_actions.multi_selection_open,
-            ["<c-v>"] = custom_actions.multi_selection_open_vsplit,
-            ["<c-s>"] = custom_actions.multi_selection_open_split,
-            ["<c-t>"] = custom_actions.multi_selection_open_tab,
-            ["<c-n>"] = actions.cycle_history_next,
-            ["<c-p>"] = actions.cycle_history_prev,
             ["<c-j>"] = actions.move_selection_next,
             ["<c-k>"] = actions.move_selection_previous,
+            ["<c-n>"] = actions.cycle_history_next,
+            ["<c-p>"] = actions.cycle_history_prev,
         },
         n = {
             ["<esc>"] = actions.close,
+            ["<c-c>"] = actions.close,
             ["<tab>"] = actions.toggle_selection + actions.move_selection_next,
             ["<s-tab>"] = actions.toggle_selection + actions.move_selection_previous,
-            ["<cr>"] = custom_actions.multi_selection_open,
-            ["<c-v>"] = custom_actions.multi_selection_open_vsplit,
-            ["<c-s>"] = custom_actions.multi_selection_open_split,
-            ["<c-t>"] = custom_actions.multi_selection_open_tab,
             ["<c-j>"] = actions.move_selection_next,
             ["<c-k>"] = actions.move_selection_previous,
             ["<c-n>"] = actions.cycle_history_next,
@@ -145,19 +179,21 @@ M.config = function()
             ["<c-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
         },
     }
-    lvim.builtin.telescope.defaults.file_ignore_patterns = {
-        "vendor/*",
-        "node_modules",
-        "%.jpg",
-        "%.jpeg",
-        "%.png",
-        "%.svg",
-        "%.otf",
-        "%.ttf",
-        ".git",
-        "target/*",
+    local telescope_actions = require "telescope.actions.set"
+    lvim.builtin.telescope.defaults.pickers.find_files = {
+        attach_mappings = function(_)
+            telescope_actions.select:enhance {
+                post = function()
+                    vim.cmd ":normal! zx"
+                end,
+            }
+            return true
+        end,
+        find_command = { "fd", "--type=file", "--hidden", "--smart-case" },
     }
-    lvim.builtin.telescope.defaults.layout_config = require("user.telescope").layout_config()
+    lvim.builtin.telescope.on_config_done = function(telescope)
+        telescope.load_extension "file_create"
+    end
 
     -- Terminal
     lvim.builtin.terminal.active = true

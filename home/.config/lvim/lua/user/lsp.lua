@@ -318,7 +318,7 @@ end
 M.config = function()
     vim.lsp.set_log_level "warn"
     -- Use rust-tools.nvim
-    vim.list_extend(lvim.lsp.override, { "rust_analyzer" })
+    vim.list_extend(lvim.lsp.override, { "rust_analyzer", "gopls", "jsonls", "dockerls" })
     lvim.lsp.automatic_servers_installation = true
     lvim.lsp.document_highlight = true
     lvim.lsp.code_lens_refresh = true

@@ -12,8 +12,6 @@ M.config = function()
         { "BufRead", "*", "Copilot disable" },
         -- LSP diagnostics
         -- { "CursorMoved", "*", "lua require('user.lsp').echo_diagnostic()" },
-        -- Use dictionary completion
-        { "FileType", "markdown", "setlocal dictionary=/usr/share/dict/words,/usr/share/dict/italian" },
         -- Codelense viewer
         { "CursorHold", "*.rs,*.go", "lua require('user.codelens').show_line_sign()" },
     }

@@ -138,7 +138,7 @@ fi
 compdef sshrc=ssh
 
 # fzf
-[ -f ~/github/0updates/fzf-marks/fzf-marks.plugin.zsh ] && source ~/github/0updates/fzf-marks/fzf-marks.plugin.zsh
+# [ -f ~/github/0updates/fzf-marks/fzf-marks.plugin.zsh ] && source ~/github/0updates/fzf-marks/fzf-marks.plugin.zsh
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude build'
 
 # docktor

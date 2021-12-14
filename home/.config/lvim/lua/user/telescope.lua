@@ -9,10 +9,12 @@ function M._multiopen(prompt_bufnr, open_cmd)
     local picker = action_state.get_current_picker(prompt_bufnr)
     local num_selections = table.getn(picker:get_multi_selection())
     local border_contents = picker.prompt_border.contents[1]
+    print "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     if string.find(border_contents, "LuaSnip") or string.find(border_contents, "LSP") then
         actions.select_default(prompt_bufnr)
         return
     end
+    print(prompt_bufnr)
     if num_selections > 1 then
         vim.cmd "bw!"
         for _, entry in ipairs(picker:get_multi_selection()) do
@@ -87,17 +89,6 @@ function M.find_string()
             horizontal = { width = { padding = 0.15 } },
             vertical = { preview_height = 0.75 },
         },
-        file_ignore_patterns = {
-            "vendor/*",
-            "node_modules",
-            "%.jpg",
-            "%.jpeg",
-            "%.png",
-            "%.svg",
-            "%.otf",
-            "%.ttf",
-            "target/*",
-        },
     }
     builtin.live_grep(opts)
 end
@@ -115,19 +106,25 @@ function M.find_files()
             horizontal = { width = { padding = 0.15 } },
             vertical = { preview_height = 0.75 },
         },
-        file_ignore_patterns = {
-            "vendor/*",
-            "node_modules",
-            "%.jpg",
-            "%.jpeg",
-            "%.png",
-            "%.svg",
-            "%.otf",
-            "%.ttf",
-            "target/*",
-        },
     }
     builtin.find_files(opts)
+end
+
+-- find only recent files
+function M.recent_files()
+    local opts = {
+        border = true,
+        previewer = false,
+        shorten_path = false,
+        layout_strategy = "flex",
+        layout_config = {
+            width = 0.9,
+            height = 0.8,
+            horizontal = { width = { padding = 0.15 } },
+            vertical = { preview_height = 0.75 },
+        },
+    }
+    builtin.oldfiles(opts)
 end
 
 -- fince file browser using telescope instead of lir
@@ -191,7 +188,6 @@ function M.code_actions()
             width = 80,
             height = 12,
         },
-        border = {},
         previewer = false,
         shorten_path = false,
     }
@@ -206,7 +202,6 @@ function M.codelens_actions()
             width = 80,
             height = 12,
         },
-        border = {},
         previewer = false,
         shorten_path = false,
     }
@@ -381,6 +376,10 @@ function M.grep_string_visual()
     require("telescope.builtin").live_grep {
         default_text = visual_selection(),
     }
+end
+
+function M.buffers()
+    builtin.buffers()
 end
 
 return M
