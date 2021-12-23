@@ -97,63 +97,11 @@ M.config = function()
             },
         },
     }
-    lvim.builtin.treesitter.on_config_done = function()
-        local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-        parser_config.jsonc.used_by = "json"
-        parser_config.markdown = {
-            install_info = {
-                url = "https://github.com/ikatyang/tree-sitter-markdown",
-                files = { "src/parser.c", "src/scanner.cc" },
-            },
-        }
-    end
 
     -- Telescope
     lvim.builtin.telescope.defaults.path_display = { shorten = 10 }
     lvim.builtin.telescope.defaults.winblend = 6
     lvim.builtin.telescope.defaults.layout_strategy = "horizontal"
-    lvim.builtin.telescope.defaults.file_ignore_patterns = {
-        "vendor/*",
-        "%.lock",
-        "__pycache__/*",
-        "%.sqlite3",
-        "%.ipynb",
-        "node_modules/*",
-        "%.jpg",
-        "%.jpeg",
-        "%.png",
-        "%.svg",
-        "%.otf",
-        "%.ttf",
-        ".git/",
-        "%.webp",
-        ".dart_tool/",
-        ".github/",
-        ".gradle/",
-        ".idea/",
-        ".settings/",
-        ".vscode/",
-        "__pycache__/",
-        "build/",
-        "env/",
-        "gradle/",
-        "node_modules/",
-        "target/",
-        ".cargo/",
-        "%.pdb",
-        "%.dll",
-        "%.class",
-        "%.exe",
-        "%.cache",
-        "%.ico",
-        "%.pdf",
-        "%.dylib",
-        "%.jar",
-        "%.docx",
-        "%.met",
-        "smalljre_*/*",
-    }
-    lvim.builtin.telescope.defaults.layout_config = require("user.telescope").layout_config()
     local actions = require "telescope.actions"
     lvim.builtin.telescope.defaults.mappings = {
         i = {

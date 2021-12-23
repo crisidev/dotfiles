@@ -18,10 +18,28 @@ M.tokyonight = function()
     vim.g.tokyonight_italic_keywords = true
     vim.g.tokyonight_italic_functions = false
     vim.g.tokyonight_italic_variables = false
-    vim.g.tokyonight_transparent = false
+    vim.g.tokyonight_transparent = lvim.transparent_window
     vim.g.tokyonight_hide_inactive_statusline = true
     vim.g.tokyonight_dark_sidebar = true
     vim.g.tokyonight_dark_float = true
+end
+
+M.kanagwa = function()
+    local kanagawa = require "kanagawa"
+    kanagawa.setup {
+        undercurl = true, -- enable undercurls
+        commentStyle = "italic",
+        functionStyle = "NONE",
+        keywordStyle = "italic",
+        statementStyle = "bold",
+        typeStyle = "NONE",
+        variablebuiltinStyle = "italic",
+        specialReturn = true, -- special highlight for the return keyword
+        specialException = true, -- special highlight for exception handling keywords
+        transparent = lvim.transparent_window,
+        colors = {},
+        overrides = {},
+    }
 end
 
 M.colors = {
@@ -61,6 +79,24 @@ M.colors = {
         git = { change = "#6183bb", add = "#449dab", delete = "#f7768e", conflict = "#bb7a61" },
         gitSigns = { add = "#164846", change = "#394b70", delete = "#823c41" },
     },
+    kanagawa_colors = {
+        bg = "#16161D",
+        bg_alt = "#1F1F28",
+        fg = "#DCD7BA",
+        red = "#43242B",
+        orange = "#FFA066",
+        yellow = "#DCA561",
+        blue = "#7FB4CA",
+        cyan = "#658594",
+        violet = "#957FB8",
+        magenta = "#938AA9",
+        git = {
+            add = "#76946A",
+            conflict = "#252535",
+            delete = "#C34043",
+            change = "#DCA561",
+        }
+    }
 }
 
 return M

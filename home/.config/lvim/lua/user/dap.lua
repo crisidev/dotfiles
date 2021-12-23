@@ -44,6 +44,12 @@ M.config = function()
         },
     }
 
+    dap.adapters.lldb = {
+        type = "executable",
+        command = "/usr/bin/lldb-vscode-12",
+        name = "lldb",
+    }
+
     dap.configurations.cpp = {
         {
             name = "Launch",
@@ -53,20 +59,41 @@ M.config = function()
                 return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
             end,
             cwd = "${workspaceFolder}",
-            stopOnEntry = false,
+            stopOnEntry = true,
             args = {},
             runInTerminal = false,
         },
     }
 
     dap.configurations.c = dap.configurations.cpp
-    dap.configurations.rust = dap.configurations.cpp
+    dap.configurations.rust = {
+        {
+            name = "Launch",
+            type = "lldb",
+            request = "launch",
+            program = function()
+                return sep_os_replacer(vim.fn.getcwd() .. "/target/debug/" .. "${workspaceFolderBasename}")
+            end,
+            env = function()
+                local variables = {}
+                for k, v in pairs(vim.fn.environ()) do
+                    table.insert(variables, string.format("%s=%s", k, v))
+                end
+                return variables
+            end,
+            cwd = "${workspaceFolder}",
+            stopOnEntry = false,
+            args = {},
+            runInTerminal = false,
+            externalConsole = true,
+        },
+    }
 
     -- overwrite program
-    dap.configurations.rust[1].externalConsole = true
-    dap.configurations.rust[1].program = function()
-        return sep_os_replacer(vim.fn.getcwd() .. "/target/debug/" .. "${workspaceFolderBasename}")
-    end
+    -- dap.configurations.rust[1].externalConsole = true
+    -- dap.configurations.rust[1].program = function()
+    --     return sep_os_replacer(vim.fn.getcwd() .. "/target/debug/" .. "${workspaceFolderBasename}")
+    -- end
 end
 
 return M

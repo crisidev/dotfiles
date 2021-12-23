@@ -9,6 +9,12 @@ M.config = function()
                 require("user.theme").tokyonight()
             end,
         },
+        {
+            "rebelot/kanagawa.nvim",
+            config = function()
+                require("user.theme").kanagwa()
+            end,
+        },
         { "folke/lsp-colors.nvim" },
         { "lunarvim/colorschemes" },
         -- Markdown preview
@@ -180,34 +186,7 @@ M.config = function()
             "simrat39/rust-tools.nvim",
             ft = { "rust", "rs" },
             config = function()
-                local lsp_installer_servers = require "nvim-lsp-installer.servers"
-                local _, requested_server = lsp_installer_servers.get_server "rust_analyzer"
-                local opts = {
-                    tools = {
-                        autoSetHints = true,
-                        hover_with_actions = true,
-                        executor = require("rust-tools/executors").termopen,
-                        runnables = {
-                            use_telescope = true,
-                        },
-                        debuggables = {
-                            use_telescope = true,
-                        },
-                        inlay_hints = {
-                            only_current_line = true,
-                            show_parameter_hints = true,
-                        },
-                        hover_actions = {
-                            auto_focus = true,
-                        },
-                    },
-                    server = {
-                        cmd = requested_server._default_options.cmd,
-                        on_attach = require("lvim.lsp").common_on_attach,
-                        on_init = require("lvim.lsp").common_on_init,
-                    },
-                }
-                require("rust-tools").setup(opts)
+                require("user.rust-tools").config()
             end,
         },
         -- Lsp Lua
@@ -274,7 +253,8 @@ M.config = function()
             config = function()
                 require("cmp_dictionary").setup {
                     dic = {
-                        ["*"] = { "/usr/share/dict/words", "/usr/share/dict/italian" },
+                        ["markdown"] = { "/usr/share/dict/words", "/usr/share/dict/british-english" },
+                        ["*"] = {},
                     },
                 }
             end,
@@ -561,6 +541,8 @@ M.config = function()
                 require("stabilize").setup { forcemark = "f", nested = "QuickFixCmdPost,User LspDiagnosticsChanged" }
             end,
         },
+        -- Telescope zoxide
+        { "jvgrootveld/telescope-zoxide" },
         -- Global status line
         {
             "simrat39/floatline.nvim",
@@ -612,6 +594,8 @@ M.config = function()
             end,
             disable = not lvim.builtin.copilot.active,
         },
+        -- Json
+        { "b0o/schemastore.nvim" },
     }
 end
 

@@ -12,12 +12,6 @@ formatters.setup {
 local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {}
 
--- Debugging
-if lvim.builtin.dap.active then
-    local dap_install = require "dap-install"
-    dap_install.config("codelldb", {})
-end
-
 -- Rust tools mappings
 lvim.lsp.buffer_mappings.normal_mode["gT"] = {
     name = "Rust Tools",
@@ -31,4 +25,8 @@ lvim.lsp.buffer_mappings.normal_mode["gT"] = {
     h = { "<cmd>RustHoverActions<cr>", "Hover actions" },
     H = { "<cmd>RustHoverRange<cr>", "Hover range" },
     c = { "<cmd>RustOpenCargo<cr>", "Open Cargo.toml" },
+}
+lvim.lsp.buffer_mappings.normal_mode["ga"] = {
+    "<cmd>RustCodeAction<cr>",
+    "Code action",
 }

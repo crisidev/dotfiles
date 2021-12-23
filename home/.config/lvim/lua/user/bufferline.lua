@@ -10,7 +10,10 @@ M.config = function()
 
     local symbols = { error = icons.error, warning = icons.warn, info = icons.info }
 
-    local function diagnostics_indicator(_, _, diagnostics)
+    local function diagnostics_indicator(_, _, diagnostics, context)
+      if context.buffer:current() then
+          return ""
+    end
         local result = {}
         for name, count in pairs(diagnostics) do
             if symbols[name] and count > 0 then
@@ -38,27 +41,17 @@ M.config = function()
         return (tab_num == last_tab and is_log) or (tab_num ~= last_tab and not is_log)
     end
 
-    ---@diagnostic disable-next-line: unused-function, unused-local
-    local function sort_by_mtime(a, b)
-        local astat = vim.loop.fs_stat(a.path)
-        local bstat = vim.loop.fs_stat(b.path)
-        local mod_a = astat and astat.mtime.sec or 0
-        local mod_b = bstat and bstat.mtime.sec or 0
-        return mod_a > mod_b
-    end
-
     local groups = require "bufferline.groups"
     local List = require "plenary.collections.py_list"
 
     require("bufferline").setup {
         options = {
             -- sort_by = sort_by_mtime,
-            sort_by = "id",
-            right_mouse_command = "vert sbuffer %d",
+            sort_by = "directory",
             show_close_icon = false,
             show_buffer_icons = true,
             separator_style = "thin",
-            enforce_regular_tabs = false,
+            enforce_regular_tabs = true,
             always_show_bufferline = true,
             diagnostics = "nvim_lsp",
             diagnostics_indicator = diagnostics_indicator,

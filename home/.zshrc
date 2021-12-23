@@ -164,3 +164,4 @@ eval "$(zoxide init zsh)"
 eval "$(starship init zsh)"
 
 export PATH=$PATH:$HOME/.toolbox/bin
+export JAVA_TOOLS_OPTIONS="-Dlog4j2.formatMsgNoLookups=true"

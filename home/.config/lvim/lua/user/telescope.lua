@@ -46,85 +46,61 @@ function M.multi_selection_open(prompt_bufnr)
     M._multiopen(prompt_bufnr, "edit")
 end
 
--- beautiful default layout for telescope prompt
-function M.layout_config()
-    return {
-        width = 0.90,
-        height = 0.85,
-        preview_cutoff = 120,
-        prompt_position = "bottom",
-        horizontal = {
-            preview_width = function(_, cols, _)
-                if cols > 200 then
-                    return math.floor(cols * 0.5)
-                else
-                    return math.floor(cols * 0.6)
-                end
-            end,
-        },
-        vertical = {
-            width = 0.9,
-            height = 0.95,
-            preview_height = 0.5,
-        },
-
-        flex = {
-            horizontal = {
-                preview_width = 0.9,
-            },
-        },
-    }
-end
+M.file_ignore_patterns = {
+    "vendor/*",
+    "%.lock",
+    "__pycache__/*",
+    "%.sqlite3",
+    "%.ipynb",
+    "node_modules/*",
+    "%.jpg",
+    "%.jpeg",
+    "%.png",
+    "%.svg",
+    "%.otf",
+    "%.ttf",
+    ".git/",
+    "%.webp",
+    ".dart_tool/",
+    ".github/",
+    ".gradle/",
+    ".idea/",
+    ".settings/",
+    ".vscode/",
+    "__pycache__/",
+    "build/",
+    "env/",
+    "gradle/",
+    "node_modules/",
+    "target/",
+    ".cargo/",
+    "%.pdb",
+    "%.dll",
+    "%.class",
+    "%.exe",
+    "%.cache",
+    "%.ico",
+    "%.pdf",
+    "%.dylib",
+    "%.jar",
+    "%.docx",
+    "%.met",
+    "smalljre_*/*",
+}
 
 -- another file string search
 function M.find_string()
-    local opts = {
-        border = true,
-        previewer = false,
-        shorten_path = false,
-        layout_strategy = "flex",
-        layout_config = {
-            width = 0.9,
-            height = 0.8,
-            horizontal = { width = { padding = 0.15 } },
-            vertical = { preview_height = 0.75 },
-        },
-    }
-    builtin.live_grep(opts)
+    builtin.live_grep()
 end
 
 -- find files
 function M.find_files()
-    local opts = {
-        border = true,
-        previewer = false,
-        shorten_path = false,
-        layout_strategy = "flex",
-        layout_config = {
-            width = 0.9,
-            height = 0.8,
-            horizontal = { width = { padding = 0.15 } },
-            vertical = { preview_height = 0.75 },
-        },
-    }
-    builtin.find_files(opts)
+    builtin.find_files()
 end
 
 -- find only recent files
 function M.recent_files()
-    local opts = {
-        border = true,
-        previewer = false,
-        shorten_path = false,
-        layout_strategy = "flex",
-        layout_config = {
-            width = 0.9,
-            height = 0.8,
-            horizontal = { width = { padding = 0.15 } },
-            vertical = { preview_height = 0.75 },
-        },
-    }
-    builtin.oldfiles(opts)
+    builtin.oldfiles()
 end
 
 -- fince file browser using telescope instead of lir
@@ -137,7 +113,7 @@ function M.file_browser()
         layout_config = {
             prompt_position = "bottom",
         },
-        file_ignore_patterns = { "vendor/*" },
+        file_ignore_patterns = M.file_ignore_patterns,
 
         attach_mappings = function(prompt_bufnr, map)
             local current_picker = action_state.get_current_picker(prompt_bufnr)
@@ -210,28 +186,12 @@ end
 
 -- show refrences to this using language server
 function M.lsp_references()
-    local opts = {
-        layout_strategy = "vertical",
-        layout_config = {
-            prompt_position = "bottom",
-        },
-        sorting_strategy = "ascending",
-        ignore_filename = false,
-    }
-    builtin.lsp_references(opts)
+    builtin.lsp_references()
 end
 
 -- show implementations of the current thingy using language server
 function M.lsp_implementations()
-    local opts = {
-        layout_strategy = "vertical",
-        layout_config = {
-            prompt_position = "bottom",
-        },
-        sorting_strategy = "ascending",
-        ignore_filename = false,
-    }
-    builtin.lsp_implementations(opts)
+    builtin.lsp_implementations()
 end
 
 -- find files in the upper directory

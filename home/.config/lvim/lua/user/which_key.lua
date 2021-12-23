@@ -9,24 +9,28 @@ M.n_keys = function()
         end
     end
     return {
+        -- Buffers
+        ["gb"] = {
+            name = "Buffers",
+            b = { "<cmd>lua require('user.telescope').buffers()<cr>", "Show buffers" },
+            P = { "<cmd>BufferLinePick<cr>", "Pick buffer" },
+            p = { "<cmd>BufferLineCyclePrev<cr>", "Pick buffer" },
+            n = { "<cmd>BufferLineCycleNext<cr>", "Pick buffer" },
+        },
         -- Find
         ["gf"] = {
             name = "Find",
-            F = { "<cmd>lua require('user.telescope').file_browser()<cr>", "File browser" },
             f = { "<cmd>lua require('user.telescope').find_files()<cr>", "Find files" },
-            B = { "<cmd>BufferLinePick<cr>", "Pick buffer" },
-            b = { "<cmd>lua require('user.telescope').buffers()<cr>", "Show buffers" },
+            F = { "<cmd>lua require('user.telescope').search_only_certain_files()<cr>", "File certain filetype" },
+            b = { "<cmd>lua require('user.telescope').file_browser()<cr>", "File browser" },
             l = {
                 "<cmd>lua require('user.telescope').grep_last_search({layout_strategy = \"vertical\"})<cr>",
                 "Last Search",
             },
-            L = {
-                "<cmd>lua require('telescope').extensions.live_grep_raw.live_grep_raw()<cr>",
-                "Live grep",
-            },
             p = { "<cmd>Telescope projects<cr>", "Projects" },
             s = { "<cmd>lua require('user.telescope').find_string()<cr>", "Find string in file" },
-            z = { "<cmd>lua require('user.telescope').search_only_certain_files()<cr>", "Certain Filetype" },
+            r = { "<cmd>lua require('user.telescope').recent_files()<cr>", "Recent files" },
+            z = { "<cmd>lua require'telescope'.extensions.zoxide.list{}<cr>", "Zoxide list" },
         },
         -- Buffers
         ["gq"] = { "<cmd>SmartQ<cr>", "Close buffer" },
@@ -47,6 +51,11 @@ M.n_keys = function()
             d = { "<cmd>DiffviewOpen<cr>", "Git diff" },
             g = { "<cmd>lua _lazygit_toggle()<cr>", "LazyGit" },
             l = {
+                "<cmd>lua require('gitlinker').get_buf_range_url('n', {action_callback = require('gitlinker.actions').copy_to_clipboard})<cr>",
+                "Copy line",
+                silent = false,
+            },
+            L = {
                 "<cmd>lua require('gitlinker').get_buf_range_url('n', {action_callback = require('gitlinker.actions').open_in_browser})<cr>",
                 "Open line in browser",
                 silent = true,
@@ -71,6 +80,10 @@ M.config = function()
             ["gG"] = {
                 name = "Git",
                 l = {
+                    "<cmd>lua require('gitlinker').get_buf_range_url('v', {action_callback = require('gitlinker.actions').copy_to_clipboard})<cr>",
+                    "Copy line",
+                },
+                L = {
                     "<cmd>lua require('gitlinker').get_buf_range_url('v', {action_callback = require('gitlinker.actions').open_in_browser})<cr>",
                     "Open line in browser",
                 },

@@ -12,5 +12,12 @@
   "rust-analyzer.lens.methodReferences": true,
   "rust-analyzer.cargo.autoreload": true,
   "rust-analyzer.hoverActions.enable": true,
-  "rust-analyzer.diagnostics.disabled": ["macro-error"]
+  "rust-analyzer.diagnostics.disabled": ["macro-error"],
+  "rust-analyzer.rustfmt.overrideCommand": [
+        "rustfmt",
+        "--edition",
+        "2018",
+        "--config",
+        "edition=2018,max_width=120,newline_style=Unix"
+   ]
 }

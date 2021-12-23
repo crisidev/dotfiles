@@ -17,9 +17,14 @@ export PATH=~/.bin:~/.toolbox/bin:~/.pyenv/bin:~/.rbenv/bin:~/.nodenv/bin:~/.nod
 export LUNARVIM_CONFIG_DIR="${LUNARVIM_CONFIG_DIR:-$HOME/.config/lvim}"
 export LUNARVIM_RUNTIME_DIR="${LUNARVIM_RUNTIME_DIR:-$HOME/.local/share/lunarvim}"
 
-start_ide() {
-    local class=$1; shift
-    kitty --class $class -- zsh -c "NVIM_LISTEN_ADDRESS=/tmp/nvimsocket lvim" 
+start_neovide() {
+  shift
+  NVIM_LISTEN_ADDRESS=/tmp/nvimsocket neovide $multigrid -- -u ~/.local/share/lunarvim/lvim/init.lua -c 'let g:guifont="FiraCode Nerd Font Mono:h10"' "$@"
+}
+
+start_ide_terminal() {
+    shift
+    NVIM_LISTEN_ADDRESS=/tmp/nvimsocket lvim "$@"
 }
 
 if [ "$1" = "--help" ]; then
@@ -32,7 +37,9 @@ elif [ "$1" = "toggle" ]; then
     i3-msg '[class="^ide$"]' "move position center move scratchpad scratchpad show" >/dev/null 2>&1
   fi
 elif [ "$1" = "new" ]; then
-  start_ide ide_terminal "$@"
+  start_neovide "$@"
+elif [ "$1" = "term" ]; then
+  start_ide_terminal "$@"
 else
   nvr --remote "$@"
 fi

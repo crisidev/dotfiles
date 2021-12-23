@@ -283,7 +283,7 @@ M.normal_buffer_mappings = function()
         }
     end
     -- Rename
-    lvim.lsp.buffer_mappings.normal_mode["gS"] = { "<cmd>lua require('renamer').rename()<cr>", "Rename symbol" }
+    lvim.lsp.buffer_mappings.normal_mode["gR"] = { "<cmd>lua require('renamer').rename()<cr>", "Rename symbol" }
     -- lvim.lsp.buffer_mappings.normal_mode["gR"] = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename symbol" }
     -- Diagnostics
     lvim.lsp.buffer_mappings.normal_mode["gn"] = {

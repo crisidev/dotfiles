@@ -89,22 +89,6 @@ local function get_file_icon_color()
     end
 end
 
-local default_colors = {
-    bg = "#202328",
-    bg_alt = "#202328",
-    fg = "#bbc2cf",
-    yellow = "#ECBE7B",
-    cyan = "#008080",
-    darkblue = "#081633",
-    green = "#98be65",
-    orange = "#FF8800",
-    violet = "#a9a1e1",
-    magenta = "#c678dd",
-    blue = "#51afef",
-    red = "#ec5f67",
-    git = { change = "#ECBE7B", add = "#98be65", delete = "#ec5f67", conflict = "#bb7a61" },
-}
-
 M.config = function()
     local theme = require "user.theme"
     local colors = theme.colors.tokyonight_colors
