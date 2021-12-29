@@ -74,6 +74,11 @@ M.config = function()
     lvim.builtin.which_key.mappings["Q"] = { "<cmd>quit<cr>", "Quit" }
     -- Goyo
     lvim.builtin.which_key.mappings["G"] = { "<cmd>Goyo 90%x90%<cr>", "Start Goyo" }
+    -- Command palette
+    lvim.builtin.which_key.mappings["C"] = {
+        "<cmd>lua require('telescope').extensions.command_palette.command_palette()<cr>",
+        "Command Palette",
+    }
     -- Mappings
     lvim.builtin.which_key.on_config_done = function(wk)
         local v_keys = {

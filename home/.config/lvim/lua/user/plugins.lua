@@ -39,7 +39,7 @@ M.config = function()
             module = "diffview",
             keys = "<leader>gd",
             setup = function()
-                require("which-key").register { ["Gd"] = "diffview: diff HEAD" }
+                -- require("which-key").register { ["Gd"] = "diffview: diff HEAD" }
             end,
             config = function()
                 require("diffview").setup {
@@ -188,12 +188,6 @@ M.config = function()
             config = function()
                 require("user.rust-tools").config()
             end,
-        },
-        -- Lsp Lua
-        {
-            "folke/lua-dev.nvim",
-            ft = "lua",
-            before = "williamboman/nvim-lsp-installer",
         },
         -- Copilot
         {
