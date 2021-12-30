@@ -100,7 +100,7 @@ end
 
 -- find only recent files
 function M.recent_files()
-    builtin.oldfiles()
+    require("telescope").extensions.frecency.frecency()
 end
 
 -- fince file browser using telescope instead of lir

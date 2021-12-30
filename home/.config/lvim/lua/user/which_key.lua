@@ -27,7 +27,7 @@ M.n_keys = function()
                 "<cmd>lua require('user.telescope').grep_last_search({layout_strategy = \"vertical\"})<cr>",
                 "Last Search",
             },
-            p = { "<cmd>Telescope projects<cr>", "Projects" },
+            p = { "<cmd>lua require'telescope'.extensions.project.project()<cr>", "Projects" },
             s = { "<cmd>lua require('user.telescope').find_string()<cr>", "Find string in file" },
             r = { "<cmd>lua require('user.telescope').recent_files()<cr>", "Recent files" },
             z = { "<cmd>lua require'telescope'.extensions.zoxide.list{}<cr>", "Zoxide list" },

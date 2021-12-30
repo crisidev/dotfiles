@@ -537,13 +537,19 @@ M.config = function()
         },
         -- Telescope zoxide
         { "jvgrootveld/telescope-zoxide" },
-        -- Global status line
+        -- Telescope frecency
         {
-            "simrat39/floatline.nvim",
+            "nvim-telescope/telescope-frecency.nvim",
             config = function()
-                require("floatline").setup()
+                require("telescope").load_extension "frecency"
             end,
-            disable = not lvim.builtin.global_status_line.active,
+            requires = { "tami5/sqlite.lua" },
+        },
+        {
+            "nvim-telescope/telescope-project.nvim",
+            config = function()
+                require("telescope").load_extension "project"
+            end,
         },
         -- Log highlight
         {

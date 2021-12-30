@@ -91,7 +91,6 @@ M.config = function()
     end
 
     -- Status line
-    lvim.builtin.global_status_line = { active = false }
     lvim.builtin.fancy_bufferline = { active = true }
     if lvim.builtin.fancy_bufferline.active then
         lvim.builtin.bufferline.active = false
@@ -117,7 +116,7 @@ M.config = function()
             node_decremental = "<C-r>",
         },
     }
-    lvim.builtin.treesitter.indent = { enable = true, disable = { "yaml", "python" } } -- treesitter is buggy :(
+    lvim.builtin.treesitter.indent = { enable = true }
     lvim.builtin.treesitter.matchup.enable = true
     -- lvim.treesitter.textsubjects.enable = true
     -- lvim.treesitter.playground.enable = true
@@ -241,7 +240,7 @@ M.config = function()
         },
         b = {
             description = { "  Recent Projects    " },
-            command = "Telescope projects",
+            command = "lua require('telescope').extensions.project.project()",
         },
         c = {
             description = { "  Recently Used Files" },

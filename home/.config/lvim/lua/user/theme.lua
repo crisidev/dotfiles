@@ -95,8 +95,8 @@ M.colors = {
             conflict = "#252535",
             delete = "#C34043",
             change = "#DCA561",
-        }
-    }
+        },
+    },
 }
 
 return M

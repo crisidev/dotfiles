@@ -11,9 +11,9 @@ M.config = function()
     local symbols = { error = icons.error, warning = icons.warn, info = icons.info }
 
     local function diagnostics_indicator(_, _, diagnostics, context)
-      if context.buffer:current() then
-          return ""
-    end
+        if context.buffer:current() then
+            return ""
+        end
         local result = {}
         for name, count in pairs(diagnostics) do
             if symbols[name] and count > 0 then
