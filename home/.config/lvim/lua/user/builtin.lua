@@ -183,7 +183,7 @@ M.config = function()
     local actions = require "telescope.actions"
     lvim.builtin.telescope.defaults.mappings = {
         i = {
-            ["<esc>"] = actions.close,
+            ["<esc><esc>"] = actions.close,
             ["<c-c>"] = actions.close,
             ["<c-y>"] = actions.which_key,
             ["<tab>"] = actions.toggle_selection + actions.move_selection_next,
@@ -194,7 +194,7 @@ M.config = function()
             ["<c-p>"] = actions.cycle_history_prev,
         },
         n = {
-            ["<esc>"] = actions.close,
+            ["<esc><esc>"] = actions.close,
             ["<c-c>"] = actions.close,
             ["<tab>"] = actions.toggle_selection + actions.move_selection_next,
             ["<s-tab>"] = actions.toggle_selection + actions.move_selection_previous,
@@ -240,7 +240,7 @@ M.config = function()
         },
         b = {
             description = { "  Recent Projects    " },
-            command = "lua require('telescope').extensions.project.project()",
+            command = "lua require('telescope').extensions.project.project{}",
         },
         c = {
             description = { "  Recently Used Files" },

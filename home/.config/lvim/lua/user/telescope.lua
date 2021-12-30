@@ -3,48 +3,6 @@ local M = {}
 local action_state = require "telescope.actions.state"
 local themes = require "telescope.themes"
 local builtin = require "telescope.builtin"
-local actions = require "telescope.actions"
-
-function M._multiopen(prompt_bufnr, open_cmd)
-    local picker = action_state.get_current_picker(prompt_bufnr)
-    local num_selections = table.getn(picker:get_multi_selection())
-    local border_contents = picker.prompt_border.contents[1]
-    print "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-    if string.find(border_contents, "LuaSnip") or string.find(border_contents, "LSP") then
-        actions.select_default(prompt_bufnr)
-        return
-    end
-    print(prompt_bufnr)
-    if num_selections > 1 then
-        vim.cmd "bw!"
-        for _, entry in ipairs(picker:get_multi_selection()) do
-            vim.cmd(string.format("%s %s", open_cmd, entry.value))
-        end
-        vim.cmd "stopinsert"
-    else
-        if open_cmd == "vsplit" then
-            actions.file_vsplit(prompt_bufnr)
-        elseif open_cmd == "split" then
-            actions.file_split(prompt_bufnr)
-        elseif open_cmd == "tabe" then
-            actions.file_tab(prompt_bufnr)
-        else
-            actions.file_edit(prompt_bufnr)
-        end
-    end
-end
-function M.multi_selection_open_vsplit(prompt_bufnr)
-    M._multiopen(prompt_bufnr, "vsplit")
-end
-function M.multi_selection_open_split(prompt_bufnr)
-    M._multiopen(prompt_bufnr, "split")
-end
-function M.multi_selection_open_tab(prompt_bufnr)
-    M._multiopen(prompt_bufnr, "tabe")
-end
-function M.multi_selection_open(prompt_bufnr)
-    M._multiopen(prompt_bufnr, "edit")
-end
 
 M.file_ignore_patterns = {
     "vendor/*",
@@ -90,12 +48,20 @@ M.file_ignore_patterns = {
 
 -- another file string search
 function M.find_string()
-    builtin.live_grep()
+    local opts = {
+        hidden = true,
+        file_ignore_patterns = M.file_ignore_patterns,
+    }
+    builtin.live_grep(opts)
 end
 
 -- find files
 function M.find_files()
-    builtin.find_files()
+    local opts = {
+        hidden = true,
+        file_ignore_patterns = M.file_ignore_patterns,
+    }
+    builtin.find_files(opts)
 end
 
 -- find only recent files
@@ -237,12 +203,6 @@ function M.curbuf()
         winblend = 10,
         previewer = false,
         shorten_path = false,
-        borderchars = {
-            prompt = { "─", "│", " ", "│", "╭", "╮", "│", "│" },
-            results = { "─", "│", "─", "│", "├", "┤", "╯", "╰" },
-            preview = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
-        },
-        border = {},
         layout_config = {
             width = 0.45,
             prompt_position = "bottom",
@@ -256,12 +216,6 @@ function M.git_status()
         winblend = 10,
         previewer = false,
         shorten_path = false,
-        borderchars = {
-            prompt = { "─", "│", " ", "│", "╭", "╮", "│", "│" },
-            results = { "─", "│", "─", "│", "├", "┤", "╯", "╰" },
-            preview = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
-        },
-        border = {},
         layout_config = {
             width = 0.45,
             prompt_position = "bottom",
@@ -306,12 +260,6 @@ function M.git_files()
         winblend = 5,
         previewer = false,
         shorten_path = false,
-        borderchars = {
-            prompt = { "─", "│", " ", "│", "╭", "╮", "│", "│" },
-            results = { "─", "│", "─", "│", "├", "┤", "╯", "╰" },
-            preview = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
-        },
-        border = {},
         cwd = path,
         layout_config = {
             width = width,
