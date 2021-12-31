@@ -281,7 +281,7 @@ function M.grep_string_visual()
         vim.fn.setreg("a", save_previous)
         return vim.fn.substitute(selection, [[\n]], [[\\n]], "g")
     end
-    require("telescope.builtin").live_grep {
+    builtin.live_grep {
         default_text = visual_selection(),
     }
 end
@@ -338,7 +338,7 @@ function M.config()
             ["<c-p>"] = actions.cycle_history_prev,
         },
         n = {
-            ["<esc><esc>"] = actions.close,
+            ["<esc>"] = actions.close,
             ["<c-c>"] = actions.close,
             ["<tab>"] = actions.toggle_selection + actions.move_selection_next,
             ["<s-tab>"] = actions.toggle_selection + actions.move_selection_previous,
@@ -349,7 +349,7 @@ function M.config()
             ["<c-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
         },
     }
-    lvim.builtin.telescope.defaults.layout_config = M.layout_config()
+    -- lvim.builtin.telescope.defaults.layout_config = M.layout_config()
     lvim.builtin.telescope.defaults.file_ignore_patterns = M.file_ignore_patterns
     local telescope_actions = require "telescope.actions.set"
     lvim.builtin.telescope.defaults.pickers.find_files = {
@@ -364,11 +364,8 @@ function M.config()
         find_command = { "fd", "--type=file", "--hidden", "--smart-case" },
     }
     lvim.builtin.telescope.on_config_done = function(telescope)
-        telescope.load_extension "file_create"
         telescope.load_extension "command_palette"
-        telescope.load_extension "project"
-        telescope.load_extension "frecency"
-        telescope.load_extension "smart_history"
+        telescope.load_extension "luasnip"
     end
 end
 

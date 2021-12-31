@@ -519,17 +519,6 @@ M.config = function()
                 }
             end,
         },
-        -- Telescope live grep extension
-        { "nvim-telescope/telescope-live-grep-raw.nvim" },
-        -- Stable window open
-        {
-            "luukvbaal/stabilize.nvim",
-            config = function()
-                require("stabilize").setup { forcemark = "f", nested = "QuickFixCmdPost,User LspDiagnosticsChanged" }
-            end,
-        },
-        -- Telescope zoxide
-        { "jvgrootveld/telescope-zoxide" },
         -- Telescope frecency
         {
             "nvim-telescope/telescope-frecency.nvim",
@@ -545,14 +534,13 @@ M.config = function()
                 require("telescope").load_extension "project"
             end,
         },
-        -- Telescope smart history
+        -- Stable window open
         {
-            "nvim-telescope/telescope-smart-history.nvim",
+            "luukvbaal/stabilize.nvim",
             config = function()
-                require("telescope").load_extension "smart_history"
+                require("stabilize").setup { forcemark = "f", nested = "QuickFixCmdPost,User LspDiagnosticsChanged" }
             end,
         },
-
         -- Log highlight
         {
             "mtdl9/vim-log-highlighting",
