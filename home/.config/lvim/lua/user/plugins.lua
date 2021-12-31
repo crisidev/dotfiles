@@ -428,13 +428,6 @@ M.config = function()
         },
         -- i3 syntax
         { "mboughaba/i3config.vim" },
-        -- Firevim
-        {
-            "glacambre/firenvim",
-            run = function()
-                vim.fn["firenvim#install"](0)
-            end,
-        },
         -- TODO comments
         {
             "folke/todo-comments.nvim",

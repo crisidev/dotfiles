@@ -31,9 +31,7 @@ require("user.cpmenu").config()
 require("user.barbar").config()
 
 -- Status line
-if not lvim.builtin.firevim then
-    require("user.lualine").config()
-end
+require("user.lualine").config()
 
 -- Additional Plugins
 require("user.plugins").config()
@@ -49,11 +47,6 @@ require("user.autocmd").config()
 
 -- Lsp
 require("user.lsp").config()
-
--- Glrnvim
-if vim.g.glrnvim_gui then
-    require("user.glrnvim").config()
-end
 
 -- Neovide
 if vim.g.neovide then
@@ -71,11 +64,6 @@ end
 
 -- Copilot
 require("user.copilot").config()
-
--- Firevim
-if vim.g.started_by_firenvim then
-    require("user.firevim").config()
-end
 
 -- Vimscript if needed
 vim.cmd "source ~/.config/lvim/vimscript/user.post.vim"
