@@ -102,132 +102,6 @@ M.config = function()
     lvim.builtin.nvimtree.show_icons.git = 0
     lvim.builtin.nvimtree.icons = require("user.lsp").nvim_tree_icons
 
-    -- Tree sitter
-    lvim.builtin.treesitter.highlight.enabled = true
-    lvim.builtin.treesitter.context_commentstring.enable = true
-    lvim.builtin.treesitter.ensure_installed = "maintained"
-    lvim.builtin.treesitter.ignore_install = { "haskell" }
-    lvim.builtin.treesitter.incremental_selection = {
-        enable = true,
-        keymaps = {
-            init_selection = "<C-n>",
-            node_incremental = "<C-n>",
-            scope_incremental = "<C-s>",
-            node_decremental = "<C-r>",
-        },
-    }
-    lvim.builtin.treesitter.indent = { enable = true }
-    lvim.builtin.treesitter.matchup.enable = true
-    -- lvim.treesitter.textsubjects.enable = true
-    -- lvim.treesitter.playground.enable = true
-    lvim.builtin.treesitter.query_linter = {
-        enable = true,
-        use_virtual_text = true,
-        lint_events = { "BufWrite", "CursorHold" },
-    }
-    lvim.builtin.treesitter.textobjects = {
-        select = {
-            enable = true,
-            lookahead = true,
-            keymaps = {
-                -- You can use the capture groups defined in textobjects.scm
-                ["af"] = "@function.outer",
-                ["if"] = "@function.inner",
-                ["ac"] = "@class.outer",
-                ["ic"] = "@class.inner",
-                ["al"] = "@loop.outer",
-                ["il"] = "@loop.inner",
-                ["aa"] = "@parameter.outer",
-                ["ia"] = "@parameter.inner",
-            },
-        },
-        swap = {
-            enable = true,
-            swap_next = {
-                ["<leader><M-a>"] = "@parameter.inner",
-                ["<leader><M-f>"] = "@function.outer",
-                ["<leader><M-e>"] = "@element",
-            },
-            swap_previous = {
-                ["<leader><M-A>"] = "@parameter.inner",
-                ["<leader><M-F>"] = "@function.outer",
-                ["<leader><M-E>"] = "@element",
-            },
-        },
-        move = {
-            enable = true,
-            set_jumps = true, -- whether to set jumps in the jumplist
-            goto_next_start = {
-                ["]f"] = "@function.outer",
-                ["]]"] = "@class.outer",
-            },
-            goto_next_end = {
-                ["]F"] = "@function.outer",
-                ["]["] = "@class.outer",
-            },
-            goto_previous_start = {
-                ["[f"] = "@function.outer",
-                ["[["] = "@class.outer",
-            },
-            goto_previous_end = {
-                ["[F"] = "@function.outer",
-                ["[]"] = "@class.outer",
-            },
-        },
-    }
-
-    -- Telescope
-    lvim.builtin.telescope.defaults.path_display = { shorten = 10 }
-    lvim.builtin.telescope.defaults.winblend = 6
-    lvim.builtin.telescope.defaults.layout_strategy = "horizontal"
-    local actions = require "telescope.actions"
-    lvim.builtin.telescope.defaults.mappings = {
-        i = {
-            ["<esc><esc>"] = actions.close,
-            ["<c-c>"] = actions.close,
-            ["<c-y>"] = actions.which_key,
-            ["<tab>"] = actions.toggle_selection + actions.move_selection_next,
-            ["<s-tab>"] = actions.toggle_selection + actions.move_selection_previous,
-            ["<c-j>"] = actions.move_selection_next,
-            ["<c-k>"] = actions.move_selection_previous,
-            ["<c-n>"] = actions.cycle_history_next,
-            ["<c-p>"] = actions.cycle_history_prev,
-        },
-        n = {
-            ["<esc><esc>"] = actions.close,
-            ["<c-c>"] = actions.close,
-            ["<tab>"] = actions.toggle_selection + actions.move_selection_next,
-            ["<s-tab>"] = actions.toggle_selection + actions.move_selection_previous,
-            ["<c-j>"] = actions.move_selection_next,
-            ["<c-k>"] = actions.move_selection_previous,
-            ["<c-n>"] = actions.cycle_history_next,
-            ["<c-p>"] = actions.cycle_history_prev,
-            ["<c-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
-        },
-    }
-    local telescope_actions = require "telescope.actions.set"
-    lvim.builtin.telescope.defaults.pickers.find_files = {
-        attach_mappings = function(_)
-            telescope_actions.select:enhance {
-                post = function()
-                    vim.cmd ":normal! zx"
-                end,
-            }
-            return true
-        end,
-        find_command = { "fd", "--type=file", "--hidden", "--smart-case" },
-    }
-    lvim.builtin.telescope.on_config_done = function(telescope)
-        telescope.load_extension "file_create"
-        telescope.load_extension "command_palette"
-    end
-
-    -- Command palette
-    lvim.builtin.cpmenu = M.cpmenu()
-
-    -- Terminal
-    lvim.builtin.terminal.active = true
-
     -- Debugging
     lvim.builtin.dap.active = true
 
@@ -297,15 +171,12 @@ M.config = function()
     }
 
     -- Terminal
+    lvim.builtin.terminal.active = true
     lvim.builtin.terminal.open_mapping = [[<c-\\>]]
     lvim.builtin.terminal.execs = {
         { "zsh", "<c-\\>", "zsh", "float" },
         { "lazygit", "<c-g>", "LazyGit", "float" },
     }
-
-    -- Which key
-    lvim.builtin.which_key.setup.window.winblend = 10
-    lvim.builtin.which_key.setup.window.border = "none"
 
     -- Notify popup
     lvim.builtin.notify.active = true

@@ -67,11 +67,18 @@ M.n_keys = function()
 end
 
 M.config = function()
+    -- Settings
+    lvim.builtin.which_key.setup.window.winblend = 10
+    lvim.builtin.which_key.setup.window.border = "none"
+
+    -- Telescope project
     lvim.builtin.which_key.mappings["P"] = {
         "<cmd>lua require('telescope').extensions.project.project{}<cr>",
         "Projects",
     }
+    -- Telescope buffers
     lvim.builtin.which_key.mappings["B"] = { "<cmd>lua require('user.telescope').buffers()<cr>", "Buffers" }
+    -- Telescope new file
     lvim.builtin.which_key.mappings["N"] = { "<cmd>Telescope file_create<CR>", "Create new file" }
 
     -- Close buffer with Leader-q

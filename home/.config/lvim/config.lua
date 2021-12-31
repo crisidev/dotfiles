@@ -18,6 +18,15 @@ require("user.neovim").config()
 -- Builtin
 require("user.builtin").config()
 
+-- Treesitter
+require("user.treesitter").config()
+
+-- Telescope
+require("user.telescope").config()
+
+-- Command palette
+require("user.cpmenu").config()
+
 -- Barbar
 require("user.barbar").config()
 

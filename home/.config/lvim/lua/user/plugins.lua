@@ -545,12 +545,21 @@ M.config = function()
             end,
             requires = { "tami5/sqlite.lua" },
         },
+        -- Telescope project
         {
             "nvim-telescope/telescope-project.nvim",
             config = function()
                 require("telescope").load_extension "project"
             end,
         },
+        -- Telescope smart history
+        {
+            "nvim-telescope/telescope-smart-history.nvim",
+            config = function()
+                require("telescope").load_extension "smart_history"
+            end,
+        },
+
         -- Log highlight
         {
             "mtdl9/vim-log-highlighting",

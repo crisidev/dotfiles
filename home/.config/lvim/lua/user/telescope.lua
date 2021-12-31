@@ -290,4 +290,86 @@ function M.buffers()
     builtin.buffers()
 end
 
+function M.layout_config()
+    return {
+        width = 0.90,
+        height = 0.85,
+        preview_cutoff = 120,
+        prompt_position = "bottom",
+        horizontal = {
+            preview_width = function(_, cols, _)
+                if cols > 200 then
+                    return math.floor(cols * 0.5)
+                else
+                    return math.floor(cols * 0.6)
+                end
+            end,
+        },
+        vertical = {
+            width = 0.9,
+            height = 0.95,
+            preview_height = 0.5,
+        },
+
+        flex = {
+            horizontal = {
+                preview_width = 0.9,
+            },
+        },
+    }
+end
+
+function M.config()
+    -- Telescope
+    lvim.builtin.telescope.defaults.path_display = { shorten = 10 }
+    lvim.builtin.telescope.defaults.winblend = 6
+    lvim.builtin.telescope.defaults.layout_strategy = "horizontal"
+    local actions = require "telescope.actions"
+    lvim.builtin.telescope.defaults.mappings = {
+        i = {
+            ["<esc><esc>"] = actions.close,
+            ["<c-c>"] = actions.close,
+            ["<c-y>"] = actions.which_key,
+            ["<tab>"] = actions.toggle_selection + actions.move_selection_next,
+            ["<s-tab>"] = actions.toggle_selection + actions.move_selection_previous,
+            ["<c-j>"] = actions.move_selection_next,
+            ["<c-k>"] = actions.move_selection_previous,
+            ["<c-n>"] = actions.cycle_history_next,
+            ["<c-p>"] = actions.cycle_history_prev,
+        },
+        n = {
+            ["<esc><esc>"] = actions.close,
+            ["<c-c>"] = actions.close,
+            ["<tab>"] = actions.toggle_selection + actions.move_selection_next,
+            ["<s-tab>"] = actions.toggle_selection + actions.move_selection_previous,
+            ["<c-j>"] = actions.move_selection_next,
+            ["<c-k>"] = actions.move_selection_previous,
+            ["<c-n>"] = actions.cycle_history_next,
+            ["<c-p>"] = actions.cycle_history_prev,
+            ["<c-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
+        },
+    }
+    lvim.builtin.telescope.defaults.layout_config = M.layout_config()
+    lvim.builtin.telescope.defaults.file_ignore_patterns = M.file_ignore_patterns
+    local telescope_actions = require "telescope.actions.set"
+    lvim.builtin.telescope.defaults.pickers.find_files = {
+        attach_mappings = function(_)
+            telescope_actions.select:enhance {
+                post = function()
+                    vim.cmd ":normal! zx"
+                end,
+            }
+            return true
+        end,
+        find_command = { "fd", "--type=file", "--hidden", "--smart-case" },
+    }
+    lvim.builtin.telescope.on_config_done = function(telescope)
+        telescope.load_extension "file_create"
+        telescope.load_extension "command_palette"
+        telescope.load_extension "project"
+        telescope.load_extension "frecency"
+        telescope.load_extension "smart_history"
+    end
+end
+
 return M
