@@ -134,20 +134,20 @@ M.config = function()
 
         -- Session manager
         {
-            "folke/persistence.nvim",
-            event = "BufReadPre",
-            module = "persistence",
+            "Shatur/neovim-session-manager",
             config = function()
-                require("persistence").setup {
-                    dir = vim.fn.expand(vim.fn.stdpath "config" .. "/sessions/"),
-                    options = { "buffers", "curdir", "tabpages", "winsize" },
+                local Path = require "plenary.path"
+                require("session_manager").setup {
+                    sessions_dir = Path:new(vim.fn.stdpath "config", "/sessions/"),
+                    path_replacer = "__",
+                    colon_replacer = "++",
+                    autoload_mode = require("session_manager.config").AutoloadMode.Disabled,
+                    autosave_last_session = true,
+                    autosave_ignore_not_normal = true,
+                    autosave_only_in_session = false,
                 }
             end,
-        },
-        -- Kotlin
-        {
-            "udalov/kotlin-vim",
-            ft = { "kotlin", "kt" },
+            requires = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope.nvim" },
         },
         -- Lsp
         -- Lsp signature
@@ -519,26 +519,32 @@ M.config = function()
                 }
             end,
         },
+        -- Telescope zoxide
+        {
+            "jvgrootveld/telescope-zoxide",
+            event = "BufWinEnter",
+            requires = { "nvim-telescope/telescope.nvim" },
+        },
         -- Telescope frecency
         {
             "nvim-telescope/telescope-frecency.nvim",
-            config = function()
-                require("telescope").load_extension "frecency"
-            end,
-            requires = { "tami5/sqlite.lua" },
+            event = "BufWinEnter",
+            requires = { "tami5/sqlite.lua", "nvim-telescope/telescope.nvim" },
         },
-        -- Telescope project
+        -- Telescope repo
         {
-            "nvim-telescope/telescope-project.nvim",
-            config = function()
-                require("telescope").load_extension "project"
-            end,
+            "cljoly/telescope-repo.nvim",
+            event = "BufWinEnter",
+            requires = { "nvim-lua/plenary.nvim" },
         },
         -- Stable window open
         {
             "luukvbaal/stabilize.nvim",
             config = function()
-                require("stabilize").setup { forcemark = "f", nested = "QuickFixCmdPost,User LspDiagnosticsChanged" }
+                require("stabilize").setup {
+                    forcemark = "f",
+                    nested = "QuickFixCmdPost,User LspDiagnosticsChanged",
+                }
             end,
         },
         -- Log highlight

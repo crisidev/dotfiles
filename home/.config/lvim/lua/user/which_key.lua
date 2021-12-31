@@ -27,20 +27,21 @@ M.n_keys = function()
                 "<cmd>lua require('user.telescope').grep_last_search({layout_strategy = \"vertical\"})<cr>",
                 "Last Search",
             },
-            p = { "<cmd>lua require('telescope').extensions.project.project{}<cr>", "Projects" },
+            p = { "<cmd>lua require('user.telescope').projects()<cr>", "Projects" },
             s = { "<cmd>lua require('user.telescope').find_string()<cr>", "Find string in file" },
             r = { "<cmd>lua require('user.telescope').recent_files()<cr>", "Recent files" },
-            z = { "<cmd>lua require'telescope'.extensions.zoxide.list{}<cr>", "Zoxide list" },
+            z = { "<cmd>lua require('user.telescope').zoxide()<cr>", "Zoxide list" },
         },
         -- Buffers
         ["gq"] = { "<cmd>SmartQ<cr>", "Close buffer" },
         ["gQ"] = { "<cmd>SmartQ!<cr>", "Force close buffer" },
         -- Session management
-        ["gh"] = {
+        ["gS"] = {
             name = "Session",
-            s = { "<cmd>lua require('persistence').load()<cr>", "Restore last session for current dir" },
-            l = { "<cmd>lua require('persistence').load({ last = true})<cr>", "Restore last session" },
-            q = { "<cmd>lua require('persistence').stop()<cr>", "Quit without saving session" },
+            l = { "<cmd>lua require('user.telescope').list_sessions()<cr>", "List available sessions" },
+            L = { "<cmd>LoadLastSession<cr>", "Restore last session" },
+            c = { "<cmd>LoadCurrentDirSession<cr>", "Restore current dir session" },
+            s = { "<cmd>SaveSession<cr>", "Save current session" },
         },
         -- Git
         ["gv"] = { "<cmd>lua _lazygit_toggle()<cr>", "LazyGit" },
@@ -73,7 +74,7 @@ M.config = function()
 
     -- Telescope project
     lvim.builtin.which_key.mappings["P"] = {
-        "<cmd>lua require('telescope').extensions.project.project{}<cr>",
+        "<cmd>lua require('user.telescope').projects()<cr>",
         "Projects",
     }
     -- Telescope buffers
@@ -86,7 +87,7 @@ M.config = function()
     lvim.builtin.which_key.mappings["G"] = { "<cmd>Goyo 90%x90%<cr>", "Start Goyo" }
     -- Command palette
     lvim.builtin.which_key.mappings["C"] = {
-        "<cmd>lua require('telescope').extensions.command_palette.command_palette()<cr>",
+        "<cmd>lua require('user.telescope').command_palett()<cr>",
         "Command Palette",
     }
     -- Mappings

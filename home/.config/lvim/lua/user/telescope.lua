@@ -50,7 +50,6 @@ M.file_ignore_patterns = {
 function M.find_string()
     local opts = {
         hidden = true,
-        file_ignore_patterns = M.file_ignore_patterns,
     }
     builtin.live_grep(opts)
 end
@@ -59,7 +58,6 @@ end
 function M.find_files()
     local opts = {
         hidden = true,
-        file_ignore_patterns = M.file_ignore_patterns,
     }
     builtin.find_files(opts)
 end
@@ -67,6 +65,19 @@ end
 -- find only recent files
 function M.recent_files()
     require("telescope").extensions.frecency.frecency()
+end
+
+-- find only recent files
+function M.projects()
+    require("telescope").extensions.repo.list {}
+end
+
+function M.zoxide()
+    require("telescope").extensions.zoxide.list {}
+end
+
+function M.command_palette()
+    require("telescope").extensions.command_palette.command_palette()
 end
 
 -- fince file browser using telescope instead of lir
@@ -119,6 +130,21 @@ function M.file_browser()
     }
 
     builtin.file_browser(opts)
+end
+
+-- list available sessions
+function M.list_sessions()
+    local opts = {
+        winblend = 15,
+        layout_config = {
+            prompt_position = "bottom",
+            width = 80,
+            height = 12,
+        },
+        previewer = false,
+        shorten_path = false,
+    }
+    require("telescope").extensions.sessions.sessions(themes.get_dropdown(opts))
 end
 
 -- show code actions in a fancy floating window
@@ -187,14 +213,6 @@ end
 function M.installed_plugins()
     builtin.find_files {
         cwd = join_paths(os.getenv "LUNARVIM_RUNTIME_DIR", "site", "pack", "packer"),
-    }
-end
-
-function M.project_search()
-    builtin.find_files {
-        previewer = false,
-        layout_strategy = "vertical",
-        cwd = require("lspconfig/util").root_pattern ".git"(vim.fn.expand "%:p"),
     }
 end
 
@@ -290,38 +308,9 @@ function M.buffers()
     builtin.buffers()
 end
 
-function M.layout_config()
-    return {
-        width = 0.90,
-        height = 0.85,
-        preview_cutoff = 120,
-        prompt_position = "bottom",
-        horizontal = {
-            preview_width = function(_, cols, _)
-                if cols > 200 then
-                    return math.floor(cols * 0.5)
-                else
-                    return math.floor(cols * 0.6)
-                end
-            end,
-        },
-        vertical = {
-            width = 0.9,
-            height = 0.95,
-            preview_height = 0.5,
-        },
-
-        flex = {
-            horizontal = {
-                preview_width = 0.9,
-            },
-        },
-    }
-end
-
 function M.config()
     -- Telescope
-    lvim.builtin.telescope.defaults.path_display = { shorten = 10 }
+    lvim.builtin.telescope.defaults.path_display = { shorten = 3 }
     lvim.builtin.telescope.defaults.winblend = 6
     lvim.builtin.telescope.defaults.layout_strategy = "horizontal"
     local actions = require "telescope.actions"
@@ -349,7 +338,7 @@ function M.config()
             ["<c-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
         },
     }
-    -- lvim.builtin.telescope.defaults.layout_config = M.layout_config()
+
     lvim.builtin.telescope.defaults.file_ignore_patterns = M.file_ignore_patterns
     local telescope_actions = require "telescope.actions.set"
     lvim.builtin.telescope.defaults.pickers.find_files = {
@@ -363,6 +352,7 @@ function M.config()
         end,
         find_command = { "fd", "--type=file", "--hidden", "--smart-case" },
     }
+
     lvim.builtin.telescope.on_config_done = function(telescope)
         telescope.load_extension "command_palette"
         telescope.load_extension "luasnip"

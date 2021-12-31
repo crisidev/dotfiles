@@ -18,6 +18,9 @@ require("user.neovim").config()
 -- Builtin
 require("user.builtin").config()
 
+-- Additional Plugins
+require("user.plugins").config()
+
 -- Treesitter
 require("user.treesitter").config()
 
@@ -32,9 +35,6 @@ require("user.barbar").config()
 
 -- Status line
 require("user.lualine").config()
-
--- Additional Plugins
-require("user.plugins").config()
 
 -- Keys
 require("user.keys").config()
