@@ -196,20 +196,6 @@ function M.find_updir()
     builtin.find_files(opts)
 end
 
-function M.grep_last_search(opts)
-    opts = opts or {}
-
-    -- \<getreg\>\C
-    -- -> Subs out the search things
-    local register = vim.fn.getreg("/"):gsub("\\<", ""):gsub("\\>", ""):gsub("\\C", "")
-
-    opts.path_display = { "shorten" }
-    opts.word_match = "-w"
-    opts.search = register
-
-    builtin.grep_string(opts)
-end
-
 function M.installed_plugins()
     builtin.find_files {
         cwd = join_paths(os.getenv "LUNARVIM_RUNTIME_DIR", "site", "pack", "packer"),
@@ -312,6 +298,7 @@ function M.config()
     -- Telescope
     lvim.builtin.telescope.defaults.path_display = { shorten = 3 }
     lvim.builtin.telescope.defaults.winblend = 6
+    lvim.builtin.telescope.defaults.cache_picker = { num_pickers = 3 }
     lvim.builtin.telescope.defaults.layout_strategy = "horizontal"
     local actions = require "telescope.actions"
     lvim.builtin.telescope.defaults.mappings = {

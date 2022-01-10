@@ -53,5 +53,5 @@ format_unavailable = ""
 [[block]]
 block = "weather"
 format = "{weather} ({location}) {temp}, {wind} m/s {direction}"
-# service = { name = "openweathermap", city_id = "2643743", units = "metric" }  # london
-service = { name = "openweathermap", city_id = "3169522", units = "metric" }  # reggio
+service = { name = "openweathermap", city_id = "2643743", units = "metric" }  # london
+# service = { name = "openweathermap", city_id = "3169522", units = "metric" }  # reggio

@@ -1,7 +1,37 @@
 local M = {}
 
 M.config = function()
+    -- Disable certain plugins
+    local disabled_plugins = {
+        "2html_plugin",
+        "getscript",
+        "getscriptPlugin",
+        "gzip",
+        "logipat",
+        "netrw",
+        "netrwPlugin",
+        "netrwSettings",
+        "netrwFileHandlers",
+        "matchit",
+        "tar",
+        "tarPlugin",
+        "rrhelper",
+        "spellfile_plugin",
+        "vimball",
+        "vimballPlugin",
+        "zip",
+        "zipPlugin",
+    }
+    for _, plugin in pairs(disabled_plugins) do
+        vim.g["loaded_" .. plugin] = 1
+    end
     -- Vim basic configurations
+    vim.g.did_load_filetypes = 1
+    vim.g.ultest_summary_width = 30
+    -- Set wrap
+    vim.opt.wrap = true
+    -- Enable term GUI
+    vim.opt.termguicolors = true
     -- Set relative numbered lines
     vim.opt.relativenumber = true
     -- The number of spaces inserted for each indentation
@@ -111,6 +141,19 @@ M.config = function()
     vim.g.python_host_prog = "$HOME/.pyenv/versions/2.7.17/bin/python"
     -- Disable statusline in dashboard
     vim.g.dashboard_disable_statusline = 1
+    vim.g.dashboard_enable_session = 0
+
+    -- Folding
+    vim.wo.foldmethod = "expr"
+    vim.wo.foldexpr = "nvim_treesitter#foldexpr()"
+    vim.wo.foldlevel = 4
+    vim.wo.foldtext =
+        [[substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g').'...'.trim(getline(v:foldend)) . ' (' . (v:foldend - v:foldstart + 1) . ' lines)']]
+    vim.wo.foldnestmax = 3
+    vim.wo.foldminlines = 1
+
+    -- Setup clipboard
+    vim.opt.clipboard = { "unnamedplus" }
 end
 
 return M

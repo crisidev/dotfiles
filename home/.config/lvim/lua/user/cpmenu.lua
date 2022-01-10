@@ -8,7 +8,7 @@ M.cpmenu = function()
             { "file browser", ":lua require('user.telescope').file_browser()", 1 },
             { "files", ":lua require('telescope.builtin').find_files()", 1 },
             { "git files", ":lua require('user.telescope').git_files()", 1 },
-            { "last search", ":lua require('user.telescope').grep_last_search()", 1 },
+            { "last search", ":lua require('telescope.builtin').resume({cache_index=3})" },
             { "quit", ":qa" },
             { "save all files", ":wa" },
             { "save current file", ":w" },

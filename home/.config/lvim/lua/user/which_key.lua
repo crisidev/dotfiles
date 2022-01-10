@@ -23,10 +23,7 @@ M.n_keys = function()
             f = { "<cmd>lua require('user.telescope').find_files()<cr>", "Find files" },
             F = { "<cmd>lua require('user.telescope').search_only_certain_files()<cr>", "File certain filetype" },
             b = { "<cmd>lua require('user.telescope').file_browser()<cr>", "File browser" },
-            l = {
-                "<cmd>lua require('user.telescope').grep_last_search({layout_strategy = \"vertical\"})<cr>",
-                "Last Search",
-            },
+            l = { "<cmd>lua require('telescope.builtin').resume()<cr>", "Last Search" },
             p = { "<cmd>lua require('user.telescope').projects()<cr>", "Projects" },
             s = { "<cmd>lua require('user.telescope').find_string()<cr>", "Find string in file" },
             r = { "<cmd>lua require('user.telescope').recent_files()<cr>", "Recent files" },

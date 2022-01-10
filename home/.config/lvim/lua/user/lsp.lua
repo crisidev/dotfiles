@@ -296,9 +296,11 @@ M.normal_buffer_mappings = function()
     }
     lvim.lsp.buffer_mappings.normal_mode["ge"] = {
         name = "Diagnostics",
-        e = { "<cmd>Trouble lsp_document_diagnostics<cr>", "Document diagnostics" },
+        e = { "<cmd>Trouble document_diagnostics<cr>", "Document diagnostics" },
         l = { "<cmd>Trouble loclist<cr>", "Trouble loclist" },
         q = { "<cmd>Trouble quickfix<cr>", "Trouble quifix" },
+        r = { "<cmd>Trouble lsp_references<cr>", "Trouble references" },
+        w = { "<cmd>Trouble workspace_diagnostics<cr>", "Workspace diagnostics" },
         n = {
             "<cmd>lua vim.diagnostic.goto_next({float = {border = 'rounded', focusable = false, source = 'always'}})<cr>",
             "Next Diagnostic",

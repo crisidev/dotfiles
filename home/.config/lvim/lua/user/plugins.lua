@@ -216,9 +216,7 @@ M.config = function()
         {
             "filipdutescu/renamer.nvim",
             config = function()
-                require("renamer").setup {
-                    title = "Rename symbol",
-                }
+                require("user.renamer").config()
             end,
         },
         -- Cmp
@@ -282,7 +280,8 @@ M.config = function()
         },
         -- Symbol outline
         {
-            "simrat39/symbols-outline.nvim",
+            "zeertzjq/symbols-outline.nvim",
+            branch = "patch-1",
             config = function()
                 local kind = require("user.lsp").symbols_outline
                 local opts = {
