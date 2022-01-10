@@ -591,6 +591,15 @@ M.config = function()
         },
         -- Json
         { "b0o/schemastore.nvim" },
+        -- Scala metals
+        {
+            "scalameta/nvim-metals",
+            requires = { "nvim-lua/plenary.nvim" },
+            config = function()
+                require("user.metals").config()
+            end,
+            ft = { "scala", "sbt" },
+        },
     }
 end
 

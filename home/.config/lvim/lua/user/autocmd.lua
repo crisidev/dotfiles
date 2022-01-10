@@ -14,6 +14,8 @@ M.config = function()
         -- { "CursorMoved", "*", "lua require('user.lsp').echo_diagnostic()" },
         -- Codelense viewer
         { "CursorHold", "*.rs,*.go", "lua require('user.codelens').show_line_sign()" },
+        -- Scala
+        { "Filetype", "scala,sbt,java", "lua require('user.metals').config()" },
     }
 end
 
