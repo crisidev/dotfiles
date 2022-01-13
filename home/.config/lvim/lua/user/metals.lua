@@ -17,7 +17,7 @@ M.config = function()
             "akka.stream.javadsl",
         },
         fallbackScalaVersion = "2.13.7",
-        serverVersion = "0.10.9+271-a8bb69f6-SNAPSHOT"
+        serverVersion = "0.10.9+271-a8bb69f6-SNAPSHOT",
     }
 
     metals_config.init_options.statusBarProvider = "on"

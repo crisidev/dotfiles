@@ -9,14 +9,7 @@ M.config = function()
                 require("user.theme").tokyonight()
             end,
         },
-        {
-            "rebelot/kanagawa.nvim",
-            config = function()
-                require("user.theme").kanagwa()
-            end,
-        },
         { "folke/lsp-colors.nvim" },
-        { "lunarvim/colorschemes" },
         -- Markdown preview
         {
             "iamcco/markdown-preview.nvim",
@@ -220,25 +213,6 @@ M.config = function()
             end,
         },
         -- Cmp
-        -- Tabnine cmp
-        {
-            "tzachar/cmp-tabnine",
-            run = "./install.sh",
-            requires = "hrsh7th/nvim-cmp",
-            config = function()
-                local tabnine = require "cmp_tabnine.config"
-                tabnine:setup {
-                    max_lines = 1000,
-                    max_num_results = 20,
-                    sort = true,
-                    run_on_every_keystroke = true,
-                    snippet_placeholder = "..",
-                }
-            end,
-            opt = true,
-            event = "InsertEnter",
-            disable = not lvim.builtin.tabnine.active,
-        },
         -- Dictionary cmp
         {
             "uga-rosa/cmp-dictionary",
@@ -246,6 +220,7 @@ M.config = function()
                 require("cmp_dictionary").setup {
                     dic = {
                         ["markdown"] = { "/usr/share/dict/words", "/usr/share/dict/british-english" },
+                        ["rst"] = { "/usr/share/dict/words", "/usr/share/dict/british-english" },
                         ["*"] = {},
                     },
                 }
@@ -274,7 +249,6 @@ M.config = function()
                     enabled = true,
                 }
             end,
-            -- ft = { "lua", "python", "javascript", "typescriptreact", "c", "cpp", "go", "java" },
             event = "InsertEnter",
             requires = "nvim-treesitter/nvim-treesitter",
         },
@@ -536,6 +510,8 @@ M.config = function()
             event = "BufWinEnter",
             requires = { "nvim-lua/plenary.nvim" },
         },
+        -- Telescope UI select
+        { "nvim-telescope/telescope-ui-select.nvim" },
         -- Stable window open
         {
             "luukvbaal/stabilize.nvim",

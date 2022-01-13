@@ -317,6 +317,34 @@ M.normal_buffer_mappings = function()
     lvim.lsp.buffer_mappings.normal_mode["gx"] = {}
 end
 
+M.config_prosemd = function()
+    local lsp_configs = require "lspconfig.configs"
+
+    lsp_configs.prosemd = {
+        default_config = {
+            -- Update the path to prosemd-lsp
+            cmd = { "prosemd-lsp", "--stdio" },
+            filetypes = { "markdown" },
+            root_dir = function(fname)
+                return require("lspconfig").util.find_git_ancestor(fname) or vim.fn.getcwd()
+            end,
+            settings = {},
+        },
+    }
+
+    -- Use your attach function here
+    local status_ok, lsp = pcall(require, "lspconfig")
+    if not status_ok then
+        return
+    end
+
+    lsp.prosemd.setup {
+        on_attach = require("lvim.lsp").common_on_attach,
+        on_init = require("lvim.lsp").common_on_init,
+        capabilities = require("lvim.lsp").common_capabilities(),
+    }
+end
+
 M.config = function()
     vim.lsp.set_log_level "warn"
     -- Use rust-tools.nvim
@@ -340,6 +368,9 @@ M.config = function()
     if ok then
         vim.diagnostic.config { virtual_text = false }
     end
+
+    -- Setup promsemd
+    M.config_prosemd()
 
     -- Mappings
     M.normal_buffer_mappings()

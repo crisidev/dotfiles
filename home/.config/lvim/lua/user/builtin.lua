@@ -3,7 +3,6 @@ local M = {}
 M.config = function()
     -- Evil stuff
     lvim.builtin.copilot = { active = true }
-    lvim.builtin.tabnine = { active = false }
     if lvim.builtin.copilot.active then
         lvim.keys.insert_mode["<c-h>"] = { [[copilot#Accept("\<CR>")]], { expr = true, script = true } }
         local cmp = require "cmp"
@@ -66,7 +65,6 @@ M.config = function()
     -- Cmp
     lvim.builtin.cmp.sources = {
         { name = "nvim_lsp" },
-        { name = "cmp_tabnine", max_item_count = 3 },
         { name = "buffer", max_item_count = 5, keyword_length = 5 },
         { name = "path", max_item_count = 5 },
         { name = "luasnip", max_item_count = 3 },
@@ -95,7 +93,6 @@ M.config = function()
         emoji = "",
         path = "",
         calc = "",
-        cmp_tabnine = "ﮧ",
         crates = "(crates)",
     }
 

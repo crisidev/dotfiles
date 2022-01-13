@@ -35,10 +35,11 @@ M.n_keys = function()
         -- Session management
         ["gS"] = {
             name = "Session",
-            l = { "<cmd>lua require('user.telescope').list_sessions()<cr>", "List available sessions" },
-            L = { "<cmd>LoadLastSession<cr>", "Restore last session" },
-            c = { "<cmd>LoadCurrentDirSession<cr>", "Restore current dir session" },
-            s = { "<cmd>SaveSession<cr>", "Save current session" },
+            l = { "<cmd>SessionManager load_session<cr>", "List available sessions" },
+            d = { "<cmd>SessionManager delete_session<cr>", "Delete session" },
+            L = { "<cmd>SessionManager load_last_session<cr>", "Restore last session" },
+            c = { "<cmd>SessionManager load_current_dir_session<cr>", "Restore current dir session" },
+            s = { "<cmd>SessionManager save_current_session<cr>", "Save current session" },
         },
         -- Git
         ["gv"] = { "<cmd>lua _lazygit_toggle()<cr>", "LazyGit" },
@@ -60,6 +61,13 @@ M.n_keys = function()
             },
             s = { "<cmd>lua require('user.telescope').git_status()<cr>", "Repository status" },
             f = { "<cmd>lua require('user.telescope').git_files()<cr>", "Repository files" },
+        },
+        ["gN"] = {
+            name = "Neogen",
+            c = { "<cmd>lua require('neogen').generate({ type = 'class'})<CR>", "Class Documentation" },
+            f = { "<cmd>lua require('neogen').generate({ type = 'func'})<CR>", "Function Documentation" },
+            t = { "<cmd>lua require('neogen').generate({ type = 'type'})<CR>", "Type Documentation" },
+            F = { "<cmd>lua require('neogen').generate({ type = 'file'})<CR>", "File Documentation" },
         },
     }
 end

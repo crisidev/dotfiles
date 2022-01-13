@@ -32,6 +32,11 @@ M.config = function()
     vim.opt.wrap = true
     -- Enable term GUI
     vim.opt.termguicolors = true
+    -- Set timeouts
+    vim.opt.updatetime = 100
+    vim.opt.timeoutlen = 500
+    vim.opt.redrawtime = 1500
+    vim.opt.ttimeoutlen = 10
     -- Set relative numbered lines
     vim.opt.relativenumber = true
     -- The number of spaces inserted for each indentation
