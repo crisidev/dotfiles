@@ -74,7 +74,6 @@ format = "{average}"
 
 [[block]]
 block = "battery"
-driver = "upower"
 format = "{time} ({percentage})"
 interval = 30
 

@@ -34,7 +34,7 @@ M.config = function()
     vim.opt.termguicolors = true
     -- Set timeouts
     vim.opt.updatetime = 100
-    vim.opt.timeoutlen = 500
+    vim.opt.timeoutlen = 250
     vim.opt.redrawtime = 1500
     vim.opt.ttimeoutlen = 10
     -- Set relative numbered lines

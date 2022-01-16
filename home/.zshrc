@@ -91,7 +91,7 @@ HISTFILE="$HOME/.zsh_history"
 [ -f ~/.zsh_secrets ] && source ~/.zsh_secrets
 
 # paths
-export PATH=~/.bin:~/.toolbox/bin:~/.pyenv/bin:~/.rbenv/bin:~/.nodenv/bin:~/.goenv/bin:~/.bin:~/.cargo/bin:$PATH
+export PATH=~/.bin:~/.toolbox/bin:~/.pyenv/bin:~/.rbenv/bin:~/.nodenv/bin:~/.goenv/bin:~/.bin:~/.cargo/bin:~/.android/Sdk/platform-tools:$PATH
 
 # terminal
 # export TERM="xterm-kitty"
@@ -148,20 +148,10 @@ export DOCKTOR_API_URL=https://docktor.crisidev.org
 export GRAVEYARD=~/.local/share/Trash
 
 # android
-export ANDROID_SDK_ROOT=/home/bigo/.android/Sdk
-
-# Sync nvim path if $NVIM_SYNC is set
-run-nvim-sync () {
-  nvim_sync
-  zle .accept-line
-}
-zle -N accept-line run-nvim-sync
+export ANDROID_SDK_ROOT=~/.android/Sdk
 
 # zoxide
 eval "$(zoxide init zsh)"
 
 # spaceship
 eval "$(starship init zsh)"
-
-export PATH=$PATH:$HOME/.toolbox/bin
-export JAVA_TOOLS_OPTIONS="-Dlog4j2.formatMsgNoLookups=true"
