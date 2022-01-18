@@ -38,7 +38,7 @@ M.config = function()
         },
         c = {
             description = { "  List Sessions      " },
-            command = "lua require('user.telescope').list_sessions()",
+            command = "SessionManager load_session",
         },
         d = {
             description = { "  Recently Used Files" },

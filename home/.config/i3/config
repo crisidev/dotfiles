@@ -223,6 +223,11 @@ bindsym Mod1+space exec --no-startup-id "$HOME/.bin/dunstctl history-pop"
 bindsym Mod1+` exec --no-startup-id "$HOME/.bin/dunstctl action"
 
 ###########################
+# accent keys
+###########################
+bindsym $Mod1+a exec --no-startup-id xdotool key U00E1
+
+###########################
 # i3 movements
 ###########################
 # Switch to workspace

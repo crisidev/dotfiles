@@ -13,9 +13,9 @@ M.n_keys = function()
         ["gb"] = {
             name = "Buffers",
             b = { "<cmd>lua require('user.telescope').buffers()<cr>", "Show buffers" },
-            P = { "<cmd>BufferLinePick<cr>", "Pick buffer" },
-            p = { "<cmd>BufferLineCyclePrev<cr>", "Pick buffer" },
-            n = { "<cmd>BufferLineCycleNext<cr>", "Pick buffer" },
+            l = { "<cmd>BufferLinePick<cr>", "Pick buffer" },
+            p = { "<cmd>BufferLineCyclePrev<cr>", "Next buffer" },
+            n = { "<cmd>BufferLineCycleNext<cr>", "Prev buffer" },
         },
         -- Find
         ["gf"] = {
