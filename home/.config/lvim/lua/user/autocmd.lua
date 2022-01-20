@@ -9,7 +9,7 @@ M.config = function()
         -- Shell
         { "BufRead", "*", "Copilot disable" },
         -- LSP diagnostics
-        -- { "CursorMoved", "*", "lua require('user.lsp').echo_diagnostic()" },
+        { "CursorMoved", "*", "lua require('user.lsp').echo_diagnostic()" },
         -- Codelense viewer
         { "CursorHold", "*.rs,*.go,*.ts,*.tsx", "lua require('user.codelens').show_line_sign()" },
     }

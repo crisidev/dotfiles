@@ -247,27 +247,24 @@ M.normal_buffer_mappings = function()
     }
     -- Goto
     lvim.lsp.buffer_mappings.normal_mode["gg"] = { "<cmd>lua vim.lsp.buf.definition()<CR>", "Goto Definition" }
-    lvim.lsp.buffer_mappings.normal_mode["gd"] = { "<cmd>lua vim.lsp.buf.declaration()<CR>", "Goto Declaration" }
-    lvim.lsp.buffer_mappings.normal_mode["gi"] = {
-        "<cmd>lua require('user.telescope').lsp_implementations()<cr>",
-        "Goto Implementation",
+    lvim.lsp.buffer_mappings.normal_mode["gt"] = {
+        name = "Goto",
+        g = { "<cmd>lua vim.lsp.buf.definition()<CR>", "Definition" },
+        d = { "<cmd>lua vim.lsp.buf.declaration()<CR>", "Declaration" },
+        i = { "<cmd>lua require('user.telescope').lsp_implementations()<cr>", "Implementation" },
+        r = { "<cmd>lua require('user.telescope').lsp_references()<cr>", "References" },
     }
-    lvim.lsp.buffer_mappings.normal_mode["gr"] = {
-        "<cmd>lua require('user.telescope').lsp_references()<cr>",
-        "Goto References",
-    }
+    -- Signature
     lvim.lsp.buffer_mappings.normal_mode["gs"] = { "<cmd>lua vim.lsp.buf.signature_help()<CR>", "Show signature help" }
+    -- Diagnostics
     lvim.lsp.buffer_mappings.normal_mode["gl"] = {
         "<cmd>lua require('lvim.lsp.handlers').show_line_diagnostics()<CR>",
         "Show line diagnostics",
     }
     -- Peek
-    lvim.lsp.buffer_mappings.normal_mode["gp"] = {
-        "<cmd>lua require('lvim.lsp.peek').Peek('definition')<CR>",
-        "Peek definition",
-    }
     lvim.lsp.buffer_mappings.normal_mode["gP"] = {
         name = "Peek",
+        p = { "<cmd>lua require('lvim.lsp.peek').Peek('definition')<CR>", "Peek definition" },
         d = { "<cmd>lua require('goto-preview').goto_preview_definition()<cr>", "Preview definition" },
         r = { "<cmd>lua require('goto-preview').goto_preview_references()<cr>", "Preview references" },
         i = { "<cmd>lua require('goto-preview').goto_preview_implementation()<cr>", "Preview implementation" },
@@ -283,8 +280,7 @@ M.normal_buffer_mappings = function()
         }
     end
     -- Rename
-    lvim.lsp.buffer_mappings.normal_mode["gR"] = { "<cmd>lua require('renamer').rename()<cr>", "Rename symbol" }
-    -- lvim.lsp.buffer_mappings.normal_mode["gR"] = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename symbol" }
+    lvim.lsp.buffer_mappings.normal_mode["gr"] = { "<cmd>lua require('renamer').rename()<cr>", "Rename symbol" }
     -- Diagnostics
     lvim.lsp.buffer_mappings.normal_mode["gn"] = {
         "<cmd>lua vim.diagnostic.goto_next({float = {border = 'rounded', focusable = false, source = 'always'}})<cr>",
@@ -313,8 +309,6 @@ M.normal_buffer_mappings = function()
     -- Format
     lvim.lsp.buffer_mappings.normal_mode["gF"] = { "<cmd>lua vim.lsp.buf.formatting_seq_sync()<cr>", "Format file" }
     -- Empty
-    lvim.lsp.buffer_mappings.normal_mode["gb"] = {}
-    lvim.lsp.buffer_mappings.normal_mode["gx"] = {}
 end
 
 M.config_prosemd = function()

@@ -446,6 +446,14 @@ M.config = function()
                 }
             end,
         },
+        -- Spectre
+        {
+            "windwp/nvim-spectre",
+            event = "BufRead",
+            config = function()
+                require("user.spectre").config()
+            end,
+        },
         -- Qbf
         {
             "kevinhwang91/nvim-bqf",

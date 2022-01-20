@@ -17,6 +17,8 @@ M.n_keys = function()
             p = { "<cmd>BufferLineCyclePrev<cr>", "Next buffer" },
             n = { "<cmd>BufferLineCycleNext<cr>", "Prev buffer" },
         },
+        ["gq"] = { "<cmd>SmartQ<cr>", "Close buffer" },
+        ["gQ"] = { "<cmd>SmartQ!<cr>", "Force close buffer" },
         -- Find
         ["gf"] = {
             name = "Find",
@@ -29,9 +31,6 @@ M.n_keys = function()
             r = { "<cmd>lua require('user.telescope').recent_files()<cr>", "Recent files" },
             z = { "<cmd>lua require('user.telescope').zoxide()<cr>", "Zoxide list" },
         },
-        -- Buffers
-        ["gq"] = { "<cmd>SmartQ<cr>", "Close buffer" },
-        ["gQ"] = { "<cmd>SmartQ!<cr>", "Force close buffer" },
         -- Session management
         ["gS"] = {
             name = "Session",
@@ -43,6 +42,7 @@ M.n_keys = function()
         },
         -- Git
         ["gv"] = { "<cmd>lua _lazygit_toggle()<cr>", "LazyGit" },
+        ["gi"] = { "<cmd>GitBlameToggle<cr>", "Toggle inline git blame" },
         ["gG"] = {
             name = "Git",
             b = { "<cmd>GitBlameToggle<cr>", "Toggle inline git blame" },
@@ -62,12 +62,20 @@ M.n_keys = function()
             s = { "<cmd>lua require('user.telescope').git_status()<cr>", "Repository status" },
             f = { "<cmd>lua require('user.telescope').git_files()<cr>", "Repository files" },
         },
+        -- Documentation
         ["gN"] = {
             name = "Neogen",
             c = { "<cmd>lua require('neogen').generate({ type = 'class'})<CR>", "Class Documentation" },
             f = { "<cmd>lua require('neogen').generate({ type = 'func'})<CR>", "Function Documentation" },
             t = { "<cmd>lua require('neogen').generate({ type = 'type'})<CR>", "Type Documentation" },
             F = { "<cmd>lua require('neogen').generate({ type = 'file'})<CR>", "File Documentation" },
+        },
+        -- Replace
+        ["gX"] = {
+            name = "Replace",
+            f = { "<cmd>lua require('spectre').open_file_search()<cr>", "Current Buffer" },
+            p = { "<cmd>lua require('spectre').open()<cr>", "Project" },
+            w = { "<cmd>lua require('spectre').open_visual({select_word=true})<cr>", "Replace Word" },
         },
     }
 end

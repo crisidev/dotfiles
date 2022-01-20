@@ -15,6 +15,7 @@ linters.setup {}
 -- Rust tools mappings
 lvim.lsp.buffer_mappings.normal_mode["gT"] = {
     name = "Rust Tools",
+    a = { "<cmd>RustCodeAction<cr>", "Code action" },
     i = { "<cmd>RustToggleInlayHints<cr>", "Toggle inlay hints" },
     r = { "<cmd>RustRunnables<cr>", "Run targes" },
     D = { "<cmd>RustDebuggables<cr>", "Debug targes" },
@@ -26,10 +27,6 @@ lvim.lsp.buffer_mappings.normal_mode["gT"] = {
     H = { "<cmd>RustHoverRange<cr>", "Hover range" },
     c = { "<cmd>RustOpenCargo<cr>", "Open Cargo.toml" },
 }
--- lvim.lsp.buffer_mappings.normal_mode["ga"] = {
---     "<cmd>RustCodeAction<cr>",
---     "Code action",
--- }
 lvim.lsp.buffer_mappings.normal_mode["gH"] = {
     "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd='cargo clippy;read',count=2,direction='float'})<cr>",
     "Run build help",
