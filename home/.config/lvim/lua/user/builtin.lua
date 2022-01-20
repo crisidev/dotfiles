@@ -10,6 +10,9 @@ M.config = function()
         lvim.builtin.cmp.mapping["<S-Tab>"] = cmp.mapping(M.shift_tab, { "i", "c" })
     end
 
+    -- Sidebar
+    lvim.builtin.sidebar = { active = true }
+
     -- Status line
     lvim.builtin.fancy_bufferline = { active = true }
     if lvim.builtin.fancy_bufferline.active then

@@ -499,6 +499,15 @@ M.config = function()
             end,
             event = "BufRead",
         },
+        -- Sidebar
+        {
+            "sidebar-nvim/sidebar.nvim",
+            config = function()
+                require("user.sidebar").config()
+            end,
+            -- event = "BufRead",
+            disable = not lvim.builtin.sidebar.active,
+        },
         -- Zoxide
         { "nanotee/zoxide.vim" },
         -- Faster filetype

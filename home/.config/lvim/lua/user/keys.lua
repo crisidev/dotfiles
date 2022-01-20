@@ -3,10 +3,14 @@ local M = {}
 M.config = function()
     -- NORMAL
     lvim.keys.normal_mode = {
+        -- Toggle tree
         ["<F3>"] = "<cmd>NvimTreeToggle<cr>",
-        ["<F4>"] = "<cmd>MouseToggle<cr>",
+        -- Toggle mouse
+        ["<F4>"] = "<cmd>SidebarNvimToggle<cr>",
+        -- Toggle sidebar
+        ["<F5>"] = "<cmd>MouseToggle<cr>",
         -- Yank current path
-        ["<F5>"] = '<cmd>let @+ = expand("%:p")<cr>',
+        ["<F6>"] = '<cmd>let @+ = expand("%:p")<cr>',
         -- Windows navigation
         ["<A-Up>"] = "<cmd>wincmd k<cr>",
         ["<A-Down>"] = "<cmd>wincmd j<cr>",
@@ -25,10 +29,14 @@ M.config = function()
     }
     -- INSERT
     lvim.keys.insert_mode = {
-        -- Buffer navigation
+        -- Toggle tree
         ["<F3>"] = "<Esc><cmd>NvimTreeToggle<cr>",
+        -- Toggle sidebar
+        ["<F4>"] = "<cmd>SidebarNvimToggle<cr>",
+        -- Toggle mouse
+        ["<F5>"] = "<cmd>MouseToggle<cr>",
         -- Yank current path
-        ["<F5>"] = '<Esc><cmd>let @+ = expand("%:p")<cr>',
+        ["<F6>"] = '<Esc><cmd>let @+ = expand("%:p")<cr>',
         -- Symbols
         ["<F10>"] = "<Esc><cmd>SymbolsOutline<cr>",
         -- Windows navigation
@@ -38,7 +46,7 @@ M.config = function()
         ["<A-Right>"] = "<Esc><Esc> <cmd>wincmd l<cr>",
         -- Paste with Ctrl-v
         ["<C-v>"] = "<C-r><C-o>+",
-        ["<A-s>"] = "<cmd>lua require('telescope').extensions.luasnip.luasnip(require('telescope.themes').get_cursor({}))<CR>",
+        ["<C-s>"] = "<cmd>lua require('telescope').extensions.luasnip.luasnip(require('telescope.themes').get_cursor({}))<cr>",
     }
     -- VISUAL
     lvim.keys.visual_mode = {

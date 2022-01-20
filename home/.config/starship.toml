@@ -60,10 +60,28 @@ style = "blue"
 format = "[$path]($style)[$read_only]($read_only_style) "
 
 [git_branch]
+style = "bold yellow"
+symbol = " "
 format = "[$symbol$branch]($style) "
 
 [git_commit]
+style = "normal"
+only_detached = true
 tag_disabled = false
+tag_symbol = " 🔖"
+format = "\\[[$hash](bold green)[$tag](bold red)\\] "
+
+[git_status]
+style = "normal"
+conflicted = "[ ](bold red)"
+ahead = "[↑×${count}](bold green)"
+diverged = "[↑×${ahead_count}](bold green) [↓×${behind_count}](bold red)"
+behind = "↓×${count}(bold red)"
+stashed = "[⊙](bold purple)"
+staged = "[](bold blue)"
+untracked = "[](normal)"
+deleted = "[](bold red)"
+modified = "[](#FF7F00)"
 
 [line_break]
 disabled = true
@@ -77,7 +95,56 @@ map_symbol = false
 format = "errno [$status]($style)"
 
 [rust]
+style = "bold blue"
 detect_folders = ["cargo-project"]
+
+[java]
+style = "bold blue"
+
+[python]
+style = "bold blue"
+
+[kotlin]
+style = "bold blue"
+
+[ruby]
+style = "bold blue"
+
+[golang]
+style = "bold blue"
+
+[lua]
+style = "bold blue"
+
+[php]
+style = "bold blue"
+
+[perl]
+style = "bold blue"
+
+[nim]
+style = "bold blue"
+
+[nodejs]
+style = "bold blue"
+
+[ocaml]
+style = "bold blue"
+
+[scala]
+style = "bold blue"
+
+[zig]
+style = "bold blue"
+
+[crystal]
+style = "bold blue"
+
+[elixir]
+style = "bold blue"
+
+[deno]
+style = "bold blue"
 
 [custom.path_type]
 description = "Brazil path type"
