@@ -64,3 +64,11 @@ if server_available then
 end
 
 require("lvim.lsp.manager").setup("tsserver", opts)
+
+-- Additional mappings
+lvim.lsp.buffer_mappings.normal_mode["gT"] = {
+    name = "TsTools",
+    a = { "<cmd>TSLspImportAll<cr>", "Import all" },
+    r = { "<cmd>TsLspRenameFile<cr>", "Rename file" },
+    o = { "<cmd>TsLspOrganize<cr>", "Organize" },
+}

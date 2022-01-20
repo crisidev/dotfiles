@@ -59,3 +59,9 @@ if server_available then
 end
 
 require("lvim.lsp.manager").setup("gopls", opts)
+
+-- Additional mappings
+lvim.lsp.buffer_mappings.normal_mode["gH"] = {
+    "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd='go vet .;read',count=2,direction='float'})<cr>",
+    "Run build help",
+}

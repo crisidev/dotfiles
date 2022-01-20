@@ -1,3 +1,6 @@
+" Indent
+setlocal tabstop=2 sw=2 sts=2 et
+
 " Shebang
 syn match shShebang "^#!.*$" containedin=shComment
 
