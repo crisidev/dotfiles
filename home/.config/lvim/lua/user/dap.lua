@@ -94,6 +94,105 @@ M.config = function()
     -- dap.configurations.rust[1].program = function()
     --     return sep_os_replacer(vim.fn.getcwd() .. "/target/debug/" .. "${workspaceFolderBasename}")
     -- end
+
+    dap.configurations.typescript = {
+        {
+            type = "node2",
+            name = "node attach",
+            request = "attach",
+            program = "${file}",
+            cwd = vim.fn.getcwd(),
+            sourceMaps = true,
+            protocol = "inspector",
+        },
+        {
+            type = "chrome",
+            name = "chrome",
+            request = "attach",
+            program = "${file}",
+            -- cwd = "${workspaceFolder}",
+            -- protocol = "inspector",
+            port = 9222,
+            webRoot = "${workspaceFolder}",
+            -- sourceMaps = true,
+            sourceMapPathOverrides = {
+                -- Sourcemap override for nextjs
+                ["webpack://_N_E/./*"] = "${webRoot}/*",
+                ["webpack:///./*"] = "${webRoot}/*",
+            },
+        },
+    }
+
+    dap.configurations.typescriptreact = {
+        {
+            type = "chrome",
+            request = "chrome attach",
+            name = "chrome",
+            program = "${file}",
+            -- cwd = "${workspaceFolder}",
+            -- protocol = "inspector",
+            port = 9222,
+            webRoot = "${workspaceFolder}",
+            -- sourceMaps = true,
+            sourceMapPathOverrides = {
+                -- Sourcemap override for nextjs
+                ["webpack://_N_E/./*"] = "${webRoot}/*",
+                ["webpack:///./*"] = "${webRoot}/*",
+            },
+        },
+    }
+
+    dap.configurations.javascript = {
+        {
+            type = "node2",
+            name = "node attach",
+            request = "attach",
+            program = "${file}",
+            cwd = vim.fn.getcwd(),
+            sourceMaps = true,
+            protocol = "inspector",
+        },
+        {
+            type = "node2",
+            name = "node launch",
+            request = "launch",
+            program = "${workspaceFolder}/${file}",
+            cwd = "${workspaceFolder}",
+            sourceMaps = true,
+            protocol = "inspector",
+        },
+        {
+            type = "chrome",
+            request = "attach",
+            name = "chrome",
+            program = "${file}",
+            port = 9222,
+            webRoot = "${workspaceFolder}",
+            sourceMapPathOverrides = {
+                -- Sourcemap override for nextjs
+                ["webpack://_N_E/./*"] = "${webRoot}/*",
+                ["webpack:///./*"] = "${webRoot}/*",
+            },
+        },
+    }
+
+    dap.configurations.javascriptreact = {
+        {
+            type = "chrome",
+            name = "chrome attach",
+            request = "attach",
+            program = "${file}",
+            -- cwd = vim.fn.getcwd(),
+            -- sourceMaps = true,
+            -- protocol = "inspector",
+            port = 9222,
+            sourceMapPathOverrides = {
+                -- Sourcemap override for nextjs
+                ["webpack://_N_E/./*"] = "${webRoot}/*",
+                ["webpack:///./*"] = "${webRoot}/*",
+            },
+        },
+    }
 end
 
 return M

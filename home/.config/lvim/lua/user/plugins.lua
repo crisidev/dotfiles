@@ -182,6 +182,21 @@ M.config = function()
                 require("user.rust-tools").config()
             end,
         },
+        -- Lsp Typescript
+        {
+            "jose-elias-alvarez/nvim-lsp-ts-utils",
+            ft = {
+                "javascript",
+                "javascriptreact",
+                "javascript.jsx",
+                "typescript",
+                "typescriptreact",
+                "typescript.tsx",
+            },
+            opt = true,
+            event = "BufReadPre",
+            before = "williamboman/nvim-lsp-installer",
+        },
         -- Copilot
         {
             "github/copilot.vim",

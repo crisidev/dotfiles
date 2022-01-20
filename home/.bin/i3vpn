@@ -16,6 +16,6 @@ else
   elif ifconfig |grep -q cscotun0 > /dev/null 2>&1; then
     echo '{"icon":"","state":"Good","text":""}'
   else
-    echo '{"text":""}'
+    echo '{"text":""}'
   fi
 fi
