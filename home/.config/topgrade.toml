@@ -25,7 +25,6 @@ repos = [
     "~/github/0updates/bandwhich",
     "~/github/0updates/default-opener",
     "~/github/0updates/dunst",
-    "~/github/0updates/fzf-marks",
     "~/github/0updates/i3-gnome",
     "~/github/0updates/i3status-rust",
     "~/github/0updates/keyd",

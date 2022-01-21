@@ -8,3 +8,6 @@ linters.setup {}
 
 -- Enable markdown fencing
 vim.g.markdown_fenced_languages = { "python", "rust", "ruby", "sh" }
+
+-- Lsp config
+require("user.lsp").config_prosemd()

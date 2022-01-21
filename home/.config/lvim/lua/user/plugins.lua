@@ -224,7 +224,7 @@ M.config = function()
             "brymer-meneses/grammar-guard.nvim",
             config = function()
                 require("lspconfig").grammar_guard.setup {
-                    cmd = { "/home/matbigoi/.local/share/nvim/lsp_servers/ltex/ltex-ls/bin/ltex-ls" }, -- add this if 
+                    cmd = { "/home/matbigoi/.local/share/nvim/lsp_servers/ltex/ltex-ls/bin/ltex-ls" }, -- add this if
                     settings = {
                         ltex = {
                             enabled = { "latex", "tex", "bib", "markdown", "rst", "text" },

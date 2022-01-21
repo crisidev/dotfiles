@@ -104,7 +104,7 @@ M.config = function()
     lvim.builtin.terminal.open_mapping = [[<c-\\>]]
     lvim.builtin.terminal.execs = {
         { "zsh", "<c-\\>", "zsh", "float" },
-        { "zsh", "<c-]>", "horizontal", "horizontal" },
+        { "zsh", "<c-]>", "zsh", "horizontal" },
         { "lazygit", "<c-g>", "LazyGit", "float" },
     }
 

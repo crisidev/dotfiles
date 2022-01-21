@@ -419,6 +419,152 @@ M.config_tsserver = function()
     require("lvim.lsp.manager").setup("tsserver", opts)
 end
 
+M.config_gopls = function()
+    -- Lsp server override
+    local opts = {
+        settings = {
+            gopls = {
+                gofumpt = true, -- A stricter gofmt
+                codelenses = {
+                    gc_details = true, -- Toggle the calculation of gc annotations
+                    generate = true, -- Runs go generate for a given directory
+                    regenerate_cgo = true, -- Regenerates cgo definitions
+                    tidy = true, -- Runs go mod tidy for a module
+                    upgrade_dependency = true, -- Upgrades a dependency in the go.mod file for a module
+                    vendor = true, -- Runs go mod vendor for a module
+                },
+                diagnosticsDelay = "500ms",
+                experimentalWatchedFileDelay = "100ms",
+                symbolMatcher = "fuzzy",
+                completeUnimported = true,
+                staticcheck = true,
+                matcher = "Fuzzy",
+                usePlaceholders = true, -- enables placeholders for function parameters or struct fields in completion responses
+                analyses = {
+                    fieldalignment = true, -- find structs that would use less memory if their fields were sorted
+                    nilness = true, -- check for redundant or impossible nil comparisons
+                    shadow = true, -- check for possible unintended shadowing of variables
+                    unusedparams = true, -- check for unused parameters of functions
+                    unusedwrite = true, -- checks for unused writes, an instances of writes to struct fields and arrays that are never read
+                },
+            },
+        },
+        on_attach = require("lvim.lsp").common_on_attach,
+        on_init = require("lvim.lsp").common_on_init,
+        capabilities = require("lvim.lsp").common_capabilities(),
+    }
+
+    local servers = require "nvim-lsp-installer.servers"
+    local server_available, requested_server = servers.get_server "gopls"
+    if server_available then
+        opts.cmd_env = requested_server:get_default_options().cmd_env
+    end
+
+    require("lvim.lsp.manager").setup("gopls", opts)
+end
+
+M.config_jsonls = function()
+    local full_schemas = vim.tbl_deep_extend(
+        "force",
+        require("schemastore").json.schemas(),
+        require("nlspsettings.jsonls").get_default_schemas()
+    )
+    local opts = {
+        settings = {
+            json = {
+                schemas = full_schemas,
+            },
+        },
+        setup = {
+            commands = {
+                Format = {
+                    function()
+                        vim.lsp.buf.range_formatting({}, { 0, 0 }, { vim.fn.line "$", 0 })
+                    end,
+                },
+            },
+        },
+        on_attach = require("lvim.lsp").common_on_attach,
+        on_init = require("lvim.lsp").common_on_init,
+        capabilities = require("lvim.lsp").common_capabilities(),
+    }
+
+    local servers = require "nvim-lsp-installer.servers"
+    local server_available, requested_server = servers.get_server "jsonls"
+    if server_available then
+        opts.cmd_env = requested_server:get_default_options().cmd_env
+    end
+
+    require("lvim.lsp.manager").setup("jsonls", opts)
+end
+
+M.config_sumneko = function()
+    local status_ok, lua_dev = pcall(require, "lua-dev")
+    if not status_ok then
+        vim.cmd [[ packadd lua-dev.nvim ]]
+        lua_dev = require "lua-dev"
+    end
+
+    local luadev = lua_dev.setup {
+        library = {
+            vimruntime = true, -- runtime path
+            types = true, -- full signature, docs and completion of vim.api, vim.treesitter, vim.lsp and others
+            plugins = false, -- installed opt or start plugins in packpath
+            -- you can also specify the list of plugins to make available as a workspace library
+            -- plugins = { "nvim-treesitter", "plenary.nvim", "telescope.nvim" },
+        },
+        lspconfig = {
+            on_attach = require("lvim.lsp").common_on_attach,
+            on_init = require("lvim.lsp").common_on_init,
+            capabilities = require("lvim.lsp").common_capabilities(),
+            settings = {
+                Lua = {
+                    diagnostics = {
+                        globals = { "vim", "lvim" },
+                    },
+                    workspace = {
+                        library = {
+                            [require("lvim.utils").join_paths(get_runtime_dir(), "lvim", "lua")] = true,
+                            [vim.fn.expand "$VIMRUNTIME/lua"] = true,
+                            [vim.fn.expand "$VIMRUNTIME/lua/vim/lsp"] = true,
+                        },
+                        maxPreload = 100000,
+                        preloadFileSize = 10000,
+                    },
+                },
+            },
+        },
+    }
+
+    local servers = require "nvim-lsp-installer.servers"
+    local server_available, requested_server = servers.get_server "sumneko_lua"
+
+    if server_available then
+        luadev.cmd_env = requested_server:get_default_options().cmd_env
+    end
+
+    require("lvim.lsp.manager").setup("sumneko_lua", luadev)
+end
+
+M.config_dockerls = function()
+    local opts = {
+        root_dir = function(fname)
+            return require("lspconfig").util.root_pattern ".git"(fname) or require("lspconfig").util.path.dirname(fname)
+        end,
+        on_attach = require("lvim.lsp").common_on_attach,
+        on_init = require("lvim.lsp").common_on_init,
+        capabilities = require("lvim.lsp").common_capabilities(),
+    }
+
+    local servers = require "nvim-lsp-installer.servers"
+    local server_available, requested_server = servers.get_server "dockerls"
+    if server_available then
+        opts.cmd_env = requested_server:get_default_options().cmd_env
+    end
+
+    require("lvim.lsp.manager").setup("dockerls", opts)
+end
+
 M.config = function()
     vim.lsp.set_log_level "warn"
     -- Use rust-tools.nvim
@@ -446,7 +592,7 @@ M.config = function()
         vim.diagnostic.config { virtual_text = false }
     end
 
-    M.config_prosemd()
+    -- Initialize grammar-guard
     require("grammar-guard").init()
 
     -- Mappings

@@ -30,7 +30,7 @@ M.config = function()
                 require("sidebar-nvim").close()
             end,
         },
-        disable_closing_prompt = true
+        disable_closing_prompt = true,
     }
 end
 
