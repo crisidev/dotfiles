@@ -3,8 +3,8 @@ local formatters = require "lvim.lsp.null-ls.formatters"
 formatters.setup {
     {
         exe = "shfmt",
-        args = { "-i", "2", "-ci" },
-        filetypes = { "sh" },
+        args = { "-i", "4", "-ci" },
+        filetypes = { "bash", "sh", "zsh" },
     },
 }
 
@@ -14,6 +14,9 @@ linters.setup {
     {
         exe = "shellcheck",
         -- args = {},
-        filetypes = { "sh" },
+        filetypes = { "bash", "sh", "zsh" },
     },
 }
+
+-- Lsp config
+require("user.lsp").config_bashls()

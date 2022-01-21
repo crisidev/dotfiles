@@ -7,7 +7,7 @@ M.config = function()
     end
 
     sidebar.setup {
-        open = true,
+        open = false,
         side = "right",
         initial_width = 40,
         enable_profile = false,

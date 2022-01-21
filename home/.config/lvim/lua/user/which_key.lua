@@ -1,9 +1,9 @@
 local M = {}
 
 M.n_keys = function()
-    local ok, lazygit = pcall(require, "toggleterm.terminal")
+    local ok, term = pcall(require, "toggleterm.terminal")
     if ok then
-        local t = lazygit.Terminal:new { cmd = "lazygit", hidden = true }
+        local t = term.Terminal:new { cmd = "lazygit", hidden = true }
         function _lazygit_toggle()
             t:toggle()
         end

@@ -219,7 +219,33 @@ M.config = function()
             end,
             disable = not lvim.builtin.copilot.active,
         },
-
+        -- Grammar
+        {
+            "brymer-meneses/grammar-guard.nvim",
+            config = function()
+                require("lspconfig").grammar_guard.setup {
+                    cmd = { "/home/matbigoi/.local/share/nvim/lsp_servers/ltex/ltex-ls/bin/ltex-ls" }, -- add this if 
+                    settings = {
+                        ltex = {
+                            enabled = { "latex", "tex", "bib", "markdown", "rst", "text" },
+                            language = "en",
+                            diagnosticSeverity = "information",
+                            setenceCacheSize = 2000,
+                            additionalRules = {
+                                enablePickyRules = true,
+                                motherTongue = "en",
+                            },
+                            trace = { server = "info" },
+                        },
+                    },
+                }
+            end,
+            filetype = { "latex", "tex", "bib", "markdown", "rst", "text" },
+            requires = {
+                "neovim/nvim-lspconfig",
+                "williamboman/nvim-lsp-installer",
+            },
+        },
         -- Renamer
         {
             "filipdutescu/renamer.nvim",

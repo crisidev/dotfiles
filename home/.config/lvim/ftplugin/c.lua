@@ -4,7 +4,7 @@ formatters.setup {
     {
         exe = "clang_format",
         -- args = {},
-        filetypes = { "c" },
+        filetypes = { "c", "cpp" },
     },
 }
 

@@ -20,7 +20,6 @@ M.file_ignore_patterns = {
     ".git/",
     "%.webp",
     ".dart_tool/",
-    ".github/",
     ".gradle/",
     ".idea/",
     ".settings/",
@@ -90,8 +89,6 @@ function M.file_browser()
         layout_config = {
             prompt_position = "bottom",
         },
-        file_ignore_patterns = M.file_ignore_patterns,
-
         attach_mappings = function(prompt_bufnr, map)
             local current_picker = action_state.get_current_picker(prompt_bufnr)
 
