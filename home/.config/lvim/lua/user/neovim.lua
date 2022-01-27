@@ -26,7 +26,7 @@ M.config = function()
         vim.g["loaded_" .. plugin] = 1
     end
     -- Vim basic configurations
-    vim.g.did_load_filetypes = 1
+    -- vim.g.did_load_filetypes = 1
     vim.g.ultest_summary_width = 30
     -- Set wrap
     vim.opt.wrap = true

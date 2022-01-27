@@ -4,7 +4,7 @@ formatters.setup {
     {
         exe = "prettierd",
         -- args = {},
-        filetypes = { "html" },
+        filetypes = { "toml" },
     },
 }
 

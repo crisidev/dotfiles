@@ -134,6 +134,9 @@ if which goenv > /dev/null; then
   export PATH=$PATH:$GOPATH/bin
 fi
 
+# sdkman
+source "$HOME/.sdkman/bin/sdkman-init.sh"
+
 # sshrc
 compdef sshrc=ssh
 

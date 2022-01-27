@@ -10,4 +10,21 @@ linters.setup {}
 vim.g.markdown_fenced_languages = { "python", "rust", "ruby", "sh" }
 
 -- Lsp config
-require("user.lsp").config_prosemd()
+require("lspconfig").grammar_guard.setup {
+    cmd = { "/home/matbigoi/.local/share/nvim/lsp_servers/ltex/ltex-ls/bin/ltex-ls" }, -- add this if
+    settings = {
+        ltex = {
+            enabled = { "latex", "tex", "bib", "markdown", "rst", "text" },
+            language = "en",
+            diagnosticSeverity = "information",
+            setenceCacheSize = 2000,
+            additionalRules = {
+                enablePickyRules = true,
+                motherTongue = "en",
+            },
+            trace = { server = "info" },
+        },
+    },
+}
+
+-- require("user.lsp").config_prosemd()

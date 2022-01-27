@@ -46,7 +46,7 @@ require("user.which_key").config()
 require("user.autocmd").config()
 
 -- Null ls
-require("user.null_ls").config()
+-- require("user.null_ls").config()
 
 -- Lsp
 require("user.lsp").config()

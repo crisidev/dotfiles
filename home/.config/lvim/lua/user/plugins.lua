@@ -165,7 +165,17 @@ M.config = function()
         --     end,
         -- },
         -- Lsp goto preview
-        { "arkav/lualine-lsp-progress" },
+        {
+            "arkav/lualine-lsp-progress",
+            disable = lvim.builtin.fidget.active,
+        },
+        {
+            "j-hui/fidget.nvim",
+            config = function()
+                require("user.fidget").config()
+            end,
+            disable = not lvim.builtin.fidget.active,
+        },
         {
             "rmagatti/goto-preview",
             config = function()
@@ -182,6 +192,7 @@ M.config = function()
                 require("user.rust-tools").config()
             end,
         },
+        { "rhysd/rust-doc.vim" },
         -- Lsp Typescript
         {
             "jose-elias-alvarez/nvim-lsp-ts-utils",
@@ -223,22 +234,7 @@ M.config = function()
         {
             "brymer-meneses/grammar-guard.nvim",
             config = function()
-                require("lspconfig").grammar_guard.setup {
-                    cmd = { "/home/matbigoi/.local/share/nvim/lsp_servers/ltex/ltex-ls/bin/ltex-ls" }, -- add this if
-                    settings = {
-                        ltex = {
-                            enabled = { "latex", "tex", "bib", "markdown", "rst", "text" },
-                            language = "en",
-                            diagnosticSeverity = "information",
-                            setenceCacheSize = 2000,
-                            additionalRules = {
-                                enablePickyRules = true,
-                                motherTongue = "en",
-                            },
-                            trace = { server = "info" },
-                        },
-                    },
-                }
+                require("grammar-guard").init()
             end,
             filetype = { "latex", "tex", "bib", "markdown", "rst", "text" },
             requires = {
@@ -570,6 +566,8 @@ M.config = function()
         },
         -- Telescope UI select
         { "nvim-telescope/telescope-ui-select.nvim" },
+        -- Telescope file browser
+        { "nvim-telescope/telescope-file-browser.nvim" },
         -- Stable window open
         {
             "luukvbaal/stabilize.nvim",

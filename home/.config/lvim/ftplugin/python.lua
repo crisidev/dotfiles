@@ -3,12 +3,12 @@ local formatters = require "lvim.lsp.null-ls.formatters"
 formatters.setup {
     {
         exe = "black",
-        args = { "--line-length=120" },
+        args = { "--fast", "--line-length=120" },
         filetypes = { "python" },
     },
     {
         exe = "isort",
-        args = { "-l 120 -m 3 -tc -sd THIRDPARTY" },
+        args = { "--profile", "black", "-l", "120",  "-m",  "3", "-tc" },
         filetypes = { "python" },
     },
 }

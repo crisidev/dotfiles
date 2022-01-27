@@ -249,30 +249,32 @@ M.config = function()
         color = {},
         cond = nil,
     }
-    ins_left {
-        "lsp_progress",
-        colors = {
-            percentage = colors.cyan,
-            title = colors.cyan,
-            message = colors.cyan,
-            spinner = colors.cyan,
-            lsp_client_name = colors.magenta,
-            use = true,
-        },
-        separators = {
-            component = " ",
-            progress = " | ",
-            percentage = { pre = "", post = "%% " },
-            title = { pre = "", post = ": " },
-            lsp_client_name = { pre = "[", post = "]" },
-            spinner = { pre = "", post = "" },
-            message = { commenced = "In Progress", completed = "Completed", pre = "(", post = ")" },
-        },
-        display_components = { "lsp_client_name", "spinner", { "title", "percentage", "message" } },
-        timer = { progress_enddelay = 500, spinner = 1000, lsp_client_name_enddelay = 1000 },
-        spinner_symbols = { "🌑 ", "🌒 ", "🌓 ", "🌔 ", "🌕 ", "🌖 ", "🌗 ", "🌘 " },
-        cond = conditions.hide_small,
-    }
+    if not lvim.builtin.fidget.active then
+        ins_left {
+            "lsp_progress",
+            colors = {
+                percentage = colors.cyan,
+                title = colors.cyan,
+                message = colors.cyan,
+                spinner = colors.cyan,
+                lsp_client_name = colors.magenta,
+                use = true,
+            },
+            separators = {
+                component = " ",
+                progress = " | ",
+                percentage = { pre = "", post = "%% " },
+                title = { pre = "", post = ": " },
+                lsp_client_name = { pre = "[", post = "]" },
+                spinner = { pre = "", post = "" },
+                message = { commenced = "In Progress", completed = "Completed", pre = "(", post = ")" },
+            },
+            display_components = { "lsp_client_name", "spinner", { "title", "percentage", "message" } },
+            timer = { progress_enddelay = 500, spinner = 1000, lsp_client_name_enddelay = 1000 },
+            spinner_symbols = { "🌑 ", "🌒 ", "🌓 ", "🌔 ", "🌕 ", "🌖 ", "🌗 ", "🌘 " },
+            cond = conditions.hide_small,
+        }
+    end
     -- Insert mid section. You can make any number of sections in neovim :)
     -- for lualine it's any number greater then 2
     ins_left {

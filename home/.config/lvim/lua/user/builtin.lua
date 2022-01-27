@@ -28,6 +28,12 @@ M.config = function()
     -- Debugging
     lvim.builtin.dap.active = true
 
+    -- File browser
+    lvim.builtin.file_browser = { active = true }
+
+    -- Fidget vs lualine lsp progress
+    lvim.builtin.fidget = { active = true }
+
     -- Dashboard
     lvim.builtin.dashboard.active = true
     lvim.builtin.dashboard.custom_section = {
@@ -56,10 +62,14 @@ M.config = function()
             command = "lua require('user.telescope').find_string()",
         },
         g = {
+            description = { "  File Browser       " },
+            command = "Telescope file_browser",
+        },
+        h = {
             description = { "Ƶ  Zoxide             " },
             command = "lua require('telescope').extensions.zoxide.list{}",
         },
-        h = {
+        i = {
             description = { "  Configuration      " },
             command = ":e ~/.config/lvim/config.lua",
         },

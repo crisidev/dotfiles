@@ -1,6 +1,12 @@
 -- Formatting
 local formatters = require "lvim.lsp.null-ls.formatters"
-formatters.setup {}
+formatters.setup {
+    {
+        exe = "prettierd",
+        -- args = {},
+        filetypes = { "javascript", "typescript" },
+    },
+}
 
 -- Linting
 local linters = require "lvim.lsp.null-ls.linters"

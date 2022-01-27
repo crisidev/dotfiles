@@ -79,71 +79,6 @@ function M.command_palette()
     require("telescope").extensions.command_palette.command_palette()
 end
 
--- fince file browser using telescope instead of lir
-function M.file_browser()
-    local opts
-
-    opts = {
-        sorting_strategy = "ascending",
-        scroll_strategy = "cycle",
-        layout_config = {
-            prompt_position = "bottom",
-        },
-        attach_mappings = function(prompt_bufnr, map)
-            local current_picker = action_state.get_current_picker(prompt_bufnr)
-
-            local modify_cwd = function(new_cwd)
-                current_picker.cwd = new_cwd
-                current_picker:refresh(opts.new_finder(new_cwd), { reset_prompt = true })
-            end
-
-            map("i", "-", function()
-                modify_cwd(current_picker.cwd .. "/..")
-            end)
-
-            map("i", "~", function()
-                modify_cwd(vim.fn.expand "~")
-            end)
-
-            local modify_depth = function(mod)
-                return function()
-                    opts.depth = opts.depth + mod
-
-                    local this_picker = action_state.get_current_picker(prompt_bufnr)
-                    this_picker:refresh(opts.new_finder(current_picker.cwd), { reset_prompt = true })
-                end
-            end
-
-            map("i", "<M-=>", modify_depth(1))
-            map("i", "<M-+>", modify_depth(-1))
-
-            map("n", "yy", function()
-                local entry = action_state.get_selected_entry()
-                vim.fn.setreg("+", entry.value)
-            end)
-
-            return true
-        end,
-    }
-
-    builtin.file_browser(opts)
-end
-
--- list available sessions
-function M.list_sessions()
-    local opts = {
-        winblend = 15,
-        layout_config = {
-            prompt_position = "bottom",
-            width = 80,
-            height = 12,
-        },
-        previewer = false,
-        shorten_path = false,
-    }
-    require("telescope").extensions.sessions.sessions(themes.get_dropdown(opts))
-end
-
 -- show code actions in a fancy floating window
 function M.code_actions()
     local opts = {
@@ -341,6 +276,9 @@ function M.config()
         telescope.load_extension "command_palette"
         telescope.load_extension "luasnip"
         telescope.load_extension "ui-select"
+        if lvim.builtin.file_browser.active then
+            telescope.load_extension "file_browser"
+        end
     end
 end
 

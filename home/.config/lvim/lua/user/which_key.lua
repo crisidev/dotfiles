@@ -24,7 +24,7 @@ M.n_keys = function()
             name = "Find",
             f = { "<cmd>lua require('user.telescope').find_files()<cr>", "Find files" },
             F = { "<cmd>lua require('user.telescope').search_only_certain_files()<cr>", "File certain filetype" },
-            b = { "<cmd>lua require('user.telescope').file_browser()<cr>", "File browser" },
+            b = { "<cmd>Telescope file_browser<cr>", "File browser" },
             l = { "<cmd>lua require('telescope.builtin').resume()<cr>", "Last Search" },
             p = { "<cmd>lua require('user.telescope').projects()<cr>", "Projects" },
             s = { "<cmd>lua require('user.telescope').find_string()<cr>", "Find string in file" },
@@ -70,6 +70,12 @@ M.n_keys = function()
             t = { "<cmd>lua require('neogen').generate({ type = 'type'})<CR>", "Type Documentation" },
             F = { "<cmd>lua require('neogen').generate({ type = 'file'})<CR>", "File Documentation" },
         },
+        -- Diagnostics
+        ["gl"] = {
+            "<cmd>lua require('lvim.lsp.handlers').show_line_diagnostics()<CR>",
+            "Show line diagnostics",
+        },
+        -- Peek
         -- Replace
         ["gX"] = {
             name = "Replace",
