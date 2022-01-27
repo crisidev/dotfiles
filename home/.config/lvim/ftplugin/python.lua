@@ -8,7 +8,7 @@ formatters.setup {
     },
     {
         exe = "isort",
-        args = { "--profile", "black", "-l", "120",  "-m",  "3", "-tc" },
+        args = { "--profile", "black", "-l", "120", "-m", "3", "-tc" },
         filetypes = { "python" },
     },
 }

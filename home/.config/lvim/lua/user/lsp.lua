@@ -238,7 +238,7 @@ M.normal_buffer_mappings = function()
     lvim.lsp.buffer_mappings.normal_mode["K"] = { "<cmd>lua vim.lsp.buf.hover()<CR>", "Show hover" }
     -- Code actions popup
     lvim.lsp.buffer_mappings.normal_mode["ga"] = {
-        "<cmd>lua require('user.telescope').code_actions()<cr>",
+        "<cmd>CodeActionMenu<cr>",
         "Code action",
     }
     lvim.lsp.buffer_mappings.normal_mode["gA"] = {

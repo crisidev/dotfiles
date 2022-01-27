@@ -192,7 +192,6 @@ M.config = function()
                 require("user.rust-tools").config()
             end,
         },
-        { "rhysd/rust-doc.vim" },
         -- Lsp Typescript
         {
             "jose-elias-alvarez/nvim-lsp-ts-utils",
@@ -207,6 +206,11 @@ M.config = function()
             opt = true,
             event = "BufReadPre",
             before = "williamboman/nvim-lsp-installer",
+        },
+        -- Code action with menu
+        {
+            "weilbith/nvim-code-action-menu",
+            cmd = "CodeActionMenu",
         },
         -- Copilot
         {
@@ -278,6 +282,8 @@ M.config = function()
             "ray-x/cmp-treesitter",
             requires = "nvim-treesitter/nvim-treesitter",
         },
+        -- Better comparison order
+        { "lukas-reineke/cmp-under-comparator" },
         -- Neogen
         {
             "danymat/neogen",
@@ -632,6 +638,8 @@ M.config = function()
             end,
             ft = { "scala", "sbt" },
         },
+        -- Web API
+        { "mattn/webapi-vim" },
     }
 end
 
