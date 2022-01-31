@@ -69,6 +69,8 @@ M.config = function()
     vim.opt.confirm = true
     -- Automatically :write before running commands and changing files
     vim.opt.autowriteall = true
+    -- Type of clipboard
+    vim.opt.clipboard = "unnamedplus"
 
     vim.opt.shortmess = {
         t = true, -- truncate file messages at start

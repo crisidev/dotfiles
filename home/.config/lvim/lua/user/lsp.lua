@@ -308,7 +308,6 @@ M.normal_buffer_mappings = function()
     }
     -- Format
     lvim.lsp.buffer_mappings.normal_mode["gF"] = { "<cmd>lua vim.lsp.buf.formatting()<cr>", "Format file" }
-    -- Empty
 end
 
 M.config_prosemd = function()

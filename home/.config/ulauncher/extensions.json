@@ -41,26 +41,12 @@
         "last_commit": "9f0749d6ab1fcb99545dae75934b698e5ff975b6",
         "last_commit_time": "2021-05-12T14:01:01"
     },
-    "com.github.episode6.ulauncher-system-management-direct": {
-        "id": "com.github.episode6.ulauncher-system-management-direct",
-        "url": "https://github.com/episode6/ulauncher-system-management-direct",
-        "updated_at": "2021-06-11T19:09:50.831104",
-        "last_commit": "c6c0febff9eae884e4a8bc97d057480436fb5c9b",
-        "last_commit_time": "2020-07-22T18:41:36"
-    },
     "com.github.nastuzzisamy.ulauncher-translate": {
         "id": "com.github.nastuzzisamy.ulauncher-translate",
         "url": "https://github.com/NastuzziSamy/ulauncher-translate",
         "updated_at": "2021-06-11T19:09:52.159962",
         "last_commit": "f16b6eed05923e604bacafefdc40b7b7290e21da",
         "last_commit_time": "2021-03-27T11:43:48"
-    },
-    "com.github.ulauncher.ulauncher-emoji": {
-        "id": "com.github.ulauncher.ulauncher-emoji",
-        "url": "https://github.com/Ulauncher/ulauncher-emoji",
-        "updated_at": "2021-09-10T13:24:34.388638",
-        "last_commit": "4c6af50d1c9a24d5aad2c597634ff0c634972a5c",
-        "last_commit_time": "2021-08-08T19:19:59"
     },
     "com.github.tchar.ulauncher-albert-calculate-anything": {
         "id": "com.github.tchar.ulauncher-albert-calculate-anything",
@@ -75,5 +61,40 @@
         "updated_at": "2021-10-29T18:21:49.582058",
         "last_commit": "25160ce85e731cf40e30ca1fe354b29c1fe6e494",
         "last_commit_time": "2019-05-28T05:27:22"
+    },
+    "com.github.brpaz.ulauncher-file-search": {
+        "id": "com.github.brpaz.ulauncher-file-search",
+        "url": "https://github.com/brpaz/ulauncher-file-search",
+        "updated_at": "2022-01-28T14:56:35.091354",
+        "last_commit": "0ea61c2049b27f1ddfa81d1844876f21dd9d6e7b",
+        "last_commit_time": "2020-07-03T13:30:16"
+    },
+    "com.github.iboyperson.ulauncher-system": {
+        "id": "com.github.iboyperson.ulauncher-system",
+        "url": "https://github.com/iboyperson/ulauncher-system",
+        "updated_at": "2022-01-28T14:57:12.191674",
+        "last_commit": "667613bf7bb6b4affa4f2121b58589477cd89829",
+        "last_commit_time": "2021-11-08T18:16:55"
+    },
+    "com.github.manahter.ulauncher-ip-analysis": {
+        "id": "com.github.manahter.ulauncher-ip-analysis",
+        "url": "https://github.com/manahter/ulauncher-IP-Analysis",
+        "updated_at": "2022-01-28T14:57:45.424302",
+        "last_commit": "ea408404cd5c860664e770bd49c03fcaa3681116",
+        "last_commit_time": "2021-12-29T16:25:34"
+    },
+    "com.github.brpaz.ulauncher-docker": {
+        "id": "com.github.brpaz.ulauncher-docker",
+        "url": "https://github.com/brpaz/ulauncher-docker",
+        "updated_at": "2022-01-28T14:57:56.433250",
+        "last_commit": "78a5872cd9804dbd8b562bf83e0f3e2a7ed44309",
+        "last_commit_time": "2021-12-12T15:49:36"
+    },
+    "com.github.hillaryychan.ulauncher-fzf": {
+        "id": "com.github.hillaryychan.ulauncher-fzf",
+        "url": "https://github.com/hillaryychan/ulauncher-fzf",
+        "updated_at": "2022-01-28T15:01:07.854885",
+        "last_commit": "9d2006ab374fe359e41b1c0b785d7b7c0119123b",
+        "last_commit_time": "2022-01-28T10:39:35"
     }
 }
