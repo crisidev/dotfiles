@@ -4,9 +4,9 @@ Take what you need, it also comes warrant free 😊
 
 * [Version](#version)
 * [Configurations](#configurations)
-      * [Terminal](#terminal)
-      * [Editor](#editor)
-      * [X11](#x11)
+  * [Terminal](#terminal)
+  * [Editor](#editor)
+  * [X11](#x11)
 * [Gnome i3 startup](#gnome-i3-startup)
 * [Installation](#installation)
 
