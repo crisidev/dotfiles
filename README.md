@@ -34,10 +34,10 @@ My personal dotfiles are compatible with [homesick](https://github.com/technical
 * I use [Neovim](https://neovim.io) 0.7 following HEAD
 * My config is heavily based on the great work of [abzcoding](https://github.com/abzcoding/lvim)
 * [LunarVim](https://lunarvim.org):
-      * [Lua config](/home/.config/lvim/config.lua)
-      * [Lua plugins](/home/.config/lvim/lua/user/plugins.lua)
-      * [Lua runtime](/home/.config/lvim/lua/user)
-      * [Lua ftplugin](/home/.config/lvim/ftplugin)
+  * [Lua config](/home/.config/lvim/config.lua)
+  * [Lua plugins](/home/.config/lvim/lua/user/plugins.lua)
+  * [Lua runtime](/home/.config/lvim/lua/user)
+  * [Lua ftplugin](/home/.config/lvim/ftplugin)
 * [Neovide](https://github.com/neovide/neovide)
 
 ### X11
