@@ -34,6 +34,9 @@ M.config = function()
     -- Fidget vs lualine lsp progress
     lvim.builtin.fidget = { active = true }
 
+    -- Spinrun testing
+    lvim.builtin.sniprun = { active = true }
+
     -- Dashboard
     lvim.builtin.dashboard.active = true
     lvim.builtin.dashboard.custom_section = {

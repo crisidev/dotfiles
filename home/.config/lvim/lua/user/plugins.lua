@@ -211,9 +211,9 @@ M.config = function()
         {
             "weilbith/nvim-code-action-menu",
             cmd = "CodeActionMenu",
-            config = function ()
+            config = function()
                 vim.g.code_action_menu_show_diff = false
-            end
+            end,
         },
         -- Copilot
         {
@@ -643,6 +643,12 @@ M.config = function()
         },
         -- Web API
         { "mattn/webapi-vim" },
+        -- Spinrun
+        {
+            "michaelb/sniprun",
+            run = "bash ./install.sh",
+            disable = not lvim.builtin.sniprun.active,
+        },
     }
 end
 
