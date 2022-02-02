@@ -317,9 +317,9 @@ M.config_prosemd = function()
         default_config = {
             -- Update the path to prosemd-lsp
             cmd = { "prosemd-lsp", "--stdio" },
+            filetypes = { "markdown" },
             root_dir = function(fname)
-                return require("lspconfig").util.root_pattern ".git"(fname)
-                    or require("lspconfig").util.path.dirname(fname)
+                return require("lspconfig").util.find_git_ancestor(fname) or vim.fn.getcwd()
             end,
         },
     }
@@ -348,9 +348,9 @@ M.config_bashls = function()
                 "/home/matbigoi/.local/share/nvim/lsp_servers/bash/node_modules/bash-language-server/bin/main.js",
                 "start",
             },
+            filetypes = { "bash", "sh", "zsh" },
             root_dir = function(fname)
-                return require("lspconfig").util.root_pattern ".git"(fname)
-                    or require("lspconfig").util.path.dirname(fname)
+                return require("lspconfig").util.find_git_ancestor(fname) or vim.fn.getcwd()
             end,
         },
     }
@@ -429,7 +429,7 @@ M.config = function()
         "tsserver",
         "sumneko_lua",
         "yamlls",
-        "bashls",
+        "prosemd",
         "r_language_server",
         "grammar_guard",
     })
@@ -453,6 +453,10 @@ M.config = function()
         vim.diagnostic.config { virtual_text = false }
     end
 
+    -- Configure bashls
+    M.config_bashls()
+    -- Configure prosemd
+    M.config_prosemd()
     -- Initialize grammar-guard
     require("grammar-guard").init()
 

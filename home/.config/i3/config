@@ -382,6 +382,7 @@ exec --no-startup-id "/usr/bin/cronopete"
 exec --no-startup-id "/usr/bin/nm-applet"
 exec --no-startup-id "/usr/local/bin/tailscale-ui"
 exec --no-startup-id "/usr/bin/systemctl --user start gotify-dunst"
+exec --no-startup-id "/usr/bin/touchpad-indicator"
 
 # i3 specific
 exec --no-startup-id "$HOME/.bin/i3alternate"

@@ -17,6 +17,3 @@ linters.setup {
         filetypes = { "bash", "sh", "zsh" },
     },
 }
-
--- Lsp config
-require("user.lsp").config_bashls()
