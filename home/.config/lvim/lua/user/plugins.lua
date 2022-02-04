@@ -266,7 +266,9 @@ M.config = function()
         },
         -- Renamer
         {
-            "filipdutescu/renamer.nvim",
+            -- "filipdutescu/renamer.nvim",
+            "abzcoding/renamer.nvim",
+            branch = "develop",
             config = function()
                 require("user.renamer").config()
             end,
@@ -570,6 +572,38 @@ M.config = function()
                 }
             end,
         },
+        {
+            "Nguyen-Hoang-Nam/nvim-mini-file-icons",
+            config = function()
+                require("nvim-web-devicons").set_icon {
+                    rs = {
+                        icon = "",
+                        color = "#d28445",
+                        name = "Rust",
+                    },
+                    tf = {
+                        icon = "ﲽ",
+                        color = "#3d59a1",
+                        name = "Terraform",
+                    },
+                    tfvars = {
+                        icon = "ﲽ",
+                        color = "#51afef",
+                        name = "Terraform",
+                    },
+                    mod = {
+                        icon = "ﳑ",
+                        color = "#6a9fb5",
+                        name = "Mod",
+                    },
+                    sum = {
+                        icon = "",
+                        color = "#6a9fb5",
+                        name = "Sum",
+                    },
+                }
+            end,
+        },
         -- Telescope zoxide
         {
             "jvgrootveld/telescope-zoxide",
@@ -645,8 +679,6 @@ M.config = function()
             end,
             disable = not lvim.builtin.copilot.active,
         },
-        -- Json
-        { "b0o/schemastore.nvim" },
         -- Scala metals
         {
             "scalameta/nvim-metals",

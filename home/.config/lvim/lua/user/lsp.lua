@@ -424,14 +424,12 @@ M.config = function()
     vim.list_extend(lvim.lsp.override, {
         "rust_analyzer",
         "gopls",
-        "jsonls",
         "dockerls",
         "tsserver",
         "sumneko_lua",
         "yamlls",
-        "prosemd",
         "r_language_server",
-        "grammar_guard",
+        "pyright",
     })
     lvim.lsp.automatic_servers_installation = true
     lvim.lsp.document_highlight = true
@@ -453,6 +451,8 @@ M.config = function()
         vim.diagnostic.config { virtual_text = false }
     end
 
+    -- Configure null-ls
+    require("user.null_ls").config()
     -- Configure bashls
     M.config_bashls()
     -- Configure prosemd
