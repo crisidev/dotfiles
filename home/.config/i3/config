@@ -222,6 +222,9 @@ bindsym Mod1+Shift+q exec --no-startup-id "$HOME/.bin/dunstctl close-all"
 bindsym Mod1+space exec --no-startup-id "$HOME/.bin/dunstctl history-pop"
 bindsym Mod1+` exec --no-startup-id "$HOME/.bin/dunstctl action"
 
+# Home lamp
+bindsym $mod+l exec --no-startup-id "$HOME/.bin/lamp"
+
 ###########################
 # accent keys
 ###########################

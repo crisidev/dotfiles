@@ -63,29 +63,16 @@ M.config = function()
         ["<C-v>"] = 'c<Esc>"+p',
     }
 
-    if lvim.builtin.fancy_bufferline.active then
-        -- Buffer navigation
-        lvim.keys.normal_mode["<F1>"] = "<cmd>BufferLineCyclePrev<cr>"
-        lvim.keys.normal_mode["<F2>"] = "<cmd>BufferLineCycleNext<cr>"
-        lvim.keys.insert_mode["<F1>"] = "<cmd>BufferLineCyclePrev<cr>"
-        lvim.keys.insert_mode["<F2>"] = "<cmd>BufferLineCycleNext<cr>"
-        -- Move buffers
-        lvim.keys.normal_mode["<A-S-Left>"] = "<cmd>BufferLineMovePrev<cr>"
-        lvim.keys.normal_mode["<A-S-Right>"] = "<cmd>BufferLineMoveNext<cr>"
-        lvim.keys.insert_mode["<A-S-Left>"] = "<cmd>BufferLineMovePrev<cr>"
-        lvim.keys.insert_mode["<A-S-Right>"] = "<cmd>BufferLineMoveNext<cr>"
-    else
-        -- Buffer navigation
-        lvim.keys.normal_mode["<F1>"] = "<cmd>BufferPrev<cr>"
-        lvim.keys.normal_mode["<F2>"] = "<cmd>BufferNext<cr>"
-        lvim.keys.insert_mode["<F1>"] = "<cmd>BufferPrev<cr>"
-        lvim.keys.insert_mode["<F2>"] = "<cmd>BufferNext<cr>"
-        -- Move buffers
-        lvim.keys.normal_mode["<A-S-Left>"] = "<cmd>BufferMovePrevious<cr>"
-        lvim.keys.normal_mode["<A-S-Right>"] = "<cmd>BufferMoveNext<cr>"
-        lvim.keys.insert_mode["<A-S-Left>"] = "<cmd>BufferMovePrevious<cr>"
-        lvim.keys.insert_mode["<A-S-Right>"] = "<cmd>BufferMoveNext<cr>"
-    end
+    -- Buffer navigation
+    lvim.keys.normal_mode["<F1>"] = "<cmd>BufferLineCyclePrev<cr>"
+    lvim.keys.normal_mode["<F2>"] = "<cmd>BufferLineCycleNext<cr>"
+    lvim.keys.insert_mode["<F1>"] = "<cmd>BufferLineCyclePrev<cr>"
+    lvim.keys.insert_mode["<F2>"] = "<cmd>BufferLineCycleNext<cr>"
+    -- Move buffers
+    lvim.keys.normal_mode["<A-S-Left>"] = "<cmd>BufferLineMovePrev<cr>"
+    lvim.keys.normal_mode["<A-S-Right>"] = "<cmd>BufferLineMoveNext<cr>"
+    lvim.keys.insert_mode["<A-S-Left>"] = "<cmd>BufferLineMovePrev<cr>"
+    lvim.keys.insert_mode["<A-S-Right>"] = "<cmd>BufferLineMoveNext<cr>"
 end
 
 return M

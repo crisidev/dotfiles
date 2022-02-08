@@ -31,7 +31,7 @@ require("user.telescope").config()
 require("user.cpmenu").config()
 
 -- Barbar
-require("user.barbar").config()
+require("user.bufferline").config()
 
 -- Status line
 require("user.lualine").config()

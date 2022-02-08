@@ -572,38 +572,6 @@ M.config = function()
                 }
             end,
         },
-        {
-            "Nguyen-Hoang-Nam/nvim-mini-file-icons",
-            config = function()
-                require("nvim-web-devicons").set_icon {
-                    rs = {
-                        icon = "",
-                        color = "#d28445",
-                        name = "Rust",
-                    },
-                    tf = {
-                        icon = "ﲽ",
-                        color = "#3d59a1",
-                        name = "Terraform",
-                    },
-                    tfvars = {
-                        icon = "ﲽ",
-                        color = "#51afef",
-                        name = "Terraform",
-                    },
-                    mod = {
-                        icon = "ﳑ",
-                        color = "#6a9fb5",
-                        name = "Mod",
-                    },
-                    sum = {
-                        icon = "",
-                        color = "#6a9fb5",
-                        name = "Sum",
-                    },
-                }
-            end,
-        },
         -- Telescope zoxide
         {
             "jvgrootveld/telescope-zoxide",
@@ -640,15 +608,6 @@ M.config = function()
         {
             "mtdl9/vim-log-highlighting",
             ft = { "text", "log" },
-        },
-        -- Fancy bufferline
-        {
-            "akinsho/bufferline.nvim",
-            config = function()
-                require("user.bufferline").config()
-            end,
-            requires = "nvim-web-devicons",
-            disable = not lvim.builtin.fancy_bufferline.active,
         },
         -- Smart quit
         {

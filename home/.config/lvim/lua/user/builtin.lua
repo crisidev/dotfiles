@@ -14,10 +14,6 @@ M.config = function()
     lvim.builtin.sidebar = { active = true }
 
     -- Status line
-    lvim.builtin.fancy_bufferline = { active = true }
-    if lvim.builtin.fancy_bufferline.active then
-        lvim.builtin.bufferline.active = false
-    end
     lvim.builtin.fancy_wild_menu = { active = false }
 
     -- Nvimtree
