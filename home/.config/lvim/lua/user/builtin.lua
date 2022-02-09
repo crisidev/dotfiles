@@ -18,8 +18,24 @@ M.config = function()
 
     -- Nvimtree
     lvim.builtin.nvimtree.side = "left"
+    local kind = require "user.lsp"
+    lvim.builtin.nvimtree.setup.diagnostics = {
+        enable = true,
+        icons = {
+            hint = kind.icons.hint,
+            info = kind.icons.info,
+            warning = kind.icons.warn,
+            error = kind.icons.error,
+        },
+    }
+    lvim.builtin.nvimtree.setup.view.auto_resize = true
+    lvim.builtin.nvimtree.setup.view.width = 60
+    lvim.builtin.nvimtree.icons = kind.nvim_tree_icons
     lvim.builtin.nvimtree.show_icons.git = 0
-    lvim.builtin.nvimtree.icons = require("user.lsp").nvim_tree_icons
+
+    -- Project
+    lvim.builtin.project.active = true
+    lvim.builtin.project.detection_methods = { "lsp", "pattern" }
 
     -- Debugging
     lvim.builtin.dap.active = true

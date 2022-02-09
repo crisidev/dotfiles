@@ -5,6 +5,7 @@ M.config = function()
     lvim.keys.normal_mode = {
         -- Toggle tree
         ["<F3>"] = "<cmd>NvimTreeToggle<cr>",
+        ["<S-F3>"] = "<cmd>NvimTreeRefresh<cr>",
         -- Toggle mouse
         ["<F4>"] = "<cmd>SidebarNvimToggle<cr>",
         -- Toggle sidebar
@@ -33,6 +34,7 @@ M.config = function()
     lvim.keys.insert_mode = {
         -- Toggle tree
         ["<F3>"] = "<cmd>NvimTreeToggle<cr>",
+        ["<S-F3>"] = "<cmd>NvimTreeRefresh<cr>",
         -- Toggle sidebar
         ["<F4>"] = "<cmd>SidebarNvimToggle<cr>",
         -- Toggle mouse
