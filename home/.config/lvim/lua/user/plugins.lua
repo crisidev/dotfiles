@@ -207,6 +207,14 @@ M.config = function()
             event = "BufReadPre",
             before = "williamboman/nvim-lsp-installer",
         },
+        -- Lsp Cland Extensions
+        {
+            "p00f/clangd_extensions.nvim",
+            config = function()
+                require("user.lsp").config_clangd_extensions()
+            end,
+            ft = { "c", "cpp", "objc", "objcpp" },
+        },
         -- Code action with menu
         {
             "weilbith/nvim-code-action-menu",
