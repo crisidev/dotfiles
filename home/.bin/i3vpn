@@ -4,11 +4,11 @@ if [ "$1" = "-h" ] || [ "$1" = "--help" ] || [ "$1" = "help" ]; then
   echo "Usage: $(basename $0) <cycle>"
 elif [ "$1" = "cycle" ]; then
   if nmcli dev status |grep vpn0 |grep -q connected > /dev/null 2>&1; then
-    $HOME/.bin/vpn-down
+    ~/.bin/vpn-down
   elif ifconfig |grep -q cscotun0 > /dev/null 2>&1; then
-    $HOME/.bin/cisco-vpn disconnect
+    ~/.bin/cisco-vpn disconnect
   else
-    $HOME/.bin/vpn-up
+    ~/.bin/vpn-up
   fi
 else
   if nmcli dev status |grep vpn0 |grep -q connected > /dev/null 2>&1; then

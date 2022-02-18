@@ -41,7 +41,7 @@ M.config = function()
             done = "✔", -- character shown when all tasks are complete
             -- commenced = "Started", -- message shown when task starts
             -- completed = "Completed", -- message shown when task completes
-            commenced = " ", -- message shown when task starts
+            commenced = "", -- message shown when task starts
             completed = " ", -- message shown when task completes
         },
         align = {
@@ -50,12 +50,12 @@ M.config = function()
         },
         timer = {
             spinner_rate = 100, -- frame rate of spinner animation, in ms
-            fidget_decay = 2000, -- how long to keep around empty fidget, in ms
-            task_decay = 1000, -- how long to keep around completed task, in ms
+            fidget_decay = 1500, -- how long to keep around empty fidget, in ms
+            task_decay = 500, -- how long to keep around completed task, in ms
         },
         window = {
             relative = "editor", -- where to anchor the window, either `"win"` or `"editor"`
-            blend = 100, -- `&winblend` for the window
+            blend = 0, -- `&winblend` for the window
             zindex = nil, -- the `zindex` value for the window
         },
         fmt = {

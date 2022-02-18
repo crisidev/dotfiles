@@ -82,12 +82,13 @@ end
 -- show code actions in a fancy floating window
 function M.code_actions()
     local opts = {
-        winblend = 15,
+        winblend = 0,
         layout_config = {
             prompt_position = "bottom",
             width = 80,
             height = 12,
         },
+        borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
         previewer = false,
         shorten_path = false,
     }
@@ -96,12 +97,13 @@ end
 
 function M.codelens_actions()
     local opts = {
-        winblend = 15,
+        winblend = 0,
         layout_config = {
             prompt_position = "bottom",
             width = 80,
             height = 12,
         },
+        borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
         previewer = false,
         shorten_path = false,
     }
@@ -228,10 +230,13 @@ end
 
 function M.config()
     -- Telescope
-    lvim.builtin.telescope.defaults.path_display = { shorten = 3 }
-    lvim.builtin.telescope.defaults.winblend = 6
+    lvim.builtin.telescope.defaults.path_display = { shorten = 10 }
+    lvim.builtin.telescope.defaults.winblend = 3
+    lvim.builtin.telescope.defaults.selection_caret = "  "
     lvim.builtin.telescope.defaults.cache_picker = { num_pickers = 3 }
     lvim.builtin.telescope.defaults.layout_strategy = "horizontal"
+    lvim.builtin.telescope.defaults.color_devicons = true
+    lvim.builtin.telescope.defaults.use_less = true
     local actions = require "telescope.actions"
     lvim.builtin.telescope.defaults.mappings = {
         i = {

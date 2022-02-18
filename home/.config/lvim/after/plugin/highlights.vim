@@ -30,3 +30,4 @@ hi HlSearchNear guibg=None guifg=#bb9af7 gui=underline
 hi HlSearchFloat guibg=None guifg=#bb9af7 gui=underline
 hi HlSearchLensNear guibg=None guifg=#bb9af7 gui=italic
 hi HlSearchLens guibg=None guifg=#bb9af7 gui=underline
+lua require('user.theme').telescope_theme()

@@ -48,7 +48,7 @@ M.colors = {
         bg_dark = "#1f2335",
         bg_alt = "#1f2335",
         bg = "#1a1b26",
-        bg_highlight = "#292e42",
+        bg_br = "#292e42",
         terminal_black = "#414868",
         fg = "#c0caf5",
         fg_dark = "#a9b1d6",
@@ -98,5 +98,28 @@ M.colors = {
         },
     },
 }
+
+function M.telescope_theme()
+    if lvim.builtin.fancy_telescope.active then
+        local colors = M.colors.tokyonight_colors
+        M.fg_bg("TelescopeBorder", colors.bg, colors.bg)
+        M.fg_bg("TelescopePromptBorder", colors.bg_br, colors.bg_br)
+        M.fg_bg("TelescopePromptNormal", colors.fg, colors.bg_br)
+        M.fg_bg("TelescopePromptPrefix", colors.red, colors.bg_br)
+        M.bg("TelescopeNormal", colors.bg)
+        M.fg_bg("TelescopePreviewTitle", colors.bg, colors.green)
+        M.fg_bg("TelescopePromptTitle", colors.bg_alt, colors.red)
+        M.fg_bg("TelescopeResultsTitle", colors.bg, colors.bg)
+        M.bg("TelescopeSelection", colors.bg_alt)
+    end
+end
+
+function M.bg(group, col)
+    vim.cmd("hi " .. group .. " guibg=" .. col)
+end
+
+function M.fg_bg(group, fgcol, bgcol)
+    vim.cmd("hi " .. group .. " guifg=" .. fgcol .. " guibg=" .. bgcol)
+end
 
 return M

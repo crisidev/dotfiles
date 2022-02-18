@@ -7,6 +7,7 @@ M.config = function()
             "folke/tokyonight.nvim",
             config = function()
                 require("user.theme").tokyonight()
+                vim.cmd [[colorscheme tokyonight]]
             end,
         },
         { "folke/lsp-colors.nvim" },
@@ -144,31 +145,19 @@ M.config = function()
         },
         -- Lsp
         -- Lsp signature
-        -- {
-        --     "ray-x/lsp_signature.nvim",
-        --     ft = { "python", "rust", "go" },
-        --     event = { "BufRead", "BufNew" },
-        --     config = function()
-        --         require("lsp_signature").on_attach {
-        --             bind = true,
-        --             handler_opts = {
-        --                 border = "single",
-        --             },
-        --             doc_lines = 0,
-        --             transpancy = 60,
-        --             shadow_blend = 30,
-        --             hint_enable = false,
-        --             toggle_key = "<C-L>",
-        --             padding = " ",
-        --             -- extra_trigger_chars = { "(", "," },
-        --         }
-        --     end,
-        -- },
-        -- Lsp goto preview
+        {
+            "ray-x/lsp_signature.nvim",
+            config = function()
+                require("user/lsp_signature").config()
+            end,
+            event = { "BufRead", "BufNew" },
+        },
+        -- Lsp progress lualine
         {
             "arkav/lualine-lsp-progress",
             disable = lvim.builtin.fidget.active,
         },
+        -- Lsp progreess in fidget
         {
             "j-hui/fidget.nvim",
             config = function()
@@ -176,6 +165,7 @@ M.config = function()
             end,
             disable = not lvim.builtin.fidget.active,
         },
+        -- Lsp goto preview
         {
             "rmagatti/goto-preview",
             config = function()

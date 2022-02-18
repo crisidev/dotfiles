@@ -16,6 +16,9 @@ M.config = function()
     -- Status line
     lvim.builtin.fancy_wild_menu = { active = false }
 
+    -- Fancy telescope
+    lvim.builtin.fancy_telescope = { active = false }
+
     -- Nvimtree
     lvim.builtin.nvimtree.side = "left"
     local kind = require "user.lsp"

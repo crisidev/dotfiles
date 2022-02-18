@@ -51,6 +51,7 @@ M.config = function()
                         or buf.filename:match "go.sum"
                         or buf.filename:match "Cargo.toml"
                         or buf.filename:match "manage.py"
+                        or buf.filename:match "config.toml"
                         or buf.filename:match "setup.py"
                         or buf.filename:match "Makefile"
                 end,
