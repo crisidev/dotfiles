@@ -22,6 +22,9 @@ M.tokyonight = function()
     vim.g.tokyonight_hide_inactive_statusline = true
     vim.g.tokyonight_dark_sidebar = true
     vim.g.tokyonight_dark_float = true
+    vim.g.tokyonight_colors = {
+        git = { change = "#6183bb", add = "#449dab", delete = "#f7768e", conflict = "#bb7a61" },
+    }
 end
 
 M.kanagwa = function()
@@ -101,15 +104,16 @@ M.colors = {
 
 function M.telescope_theme()
     if lvim.builtin.fancy_telescope.active then
-        local colors = M.colors.tokyonight_colors
-        M.fg_bg("TelescopeBorder", colors.bg, colors.bg)
-        M.fg_bg("TelescopePromptBorder", colors.bg_br, colors.bg_br)
-        M.fg_bg("TelescopePromptNormal", colors.fg, colors.bg_br)
-        M.fg_bg("TelescopePromptPrefix", colors.red, colors.bg_br)
+        local colors = M.current_colors()
+        M.fg_bg("TelescopeBorder", colors.bg_alt, colors.bg)
+        M.fg_bg("TelescopePromptBorder", colors.bg, colors.bg)
+        M.fg_bg("TelescopePromptNormal", colors.fg, colors.bg_alt)
+        M.fg_bg("TelescopePromptPrefix", colors.red, colors.bg)
         M.bg("TelescopeNormal", colors.bg)
         M.fg_bg("TelescopePreviewTitle", colors.bg, colors.green)
-        M.fg_bg("TelescopePromptTitle", colors.bg_alt, colors.red)
+        M.fg_bg("TelescopePromptTitle", colors.bg, colors.red)
         M.fg_bg("TelescopeResultsTitle", colors.bg, colors.bg)
+        M.fg_bg("TelescopeResultsBorder", colors.bg, colors.bg)
         M.bg("TelescopeSelection", colors.bg_alt)
     end
 end

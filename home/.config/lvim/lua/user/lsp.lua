@@ -230,12 +230,30 @@ M.echo_diagnostic = function()
     end, echo_timeout)
 end
 
+M.show_documentation = function()
+    local filetype = vim.bo.filetype
+    if vim.tbl_contains({ "vim", "help" }, filetype) then
+        vim.cmd("h " .. vim.fn.expand "<cword>")
+    elseif vim.fn.expand "%:t" == "Cargo.toml" then
+        require("crates").show_popup()
+    elseif vim.tbl_contains({ "man" }, filetype) then
+        vim.cmd("Man " .. vim.fn.expand "<cword>")
+    else
+        vim.lsp.buf.hover()
+    end
+end
+
 M.normal_buffer_mappings = function()
     -- Buffer mapping
     lvim.lsp.buffer_mappings.normal_mode = require("user.which_key").n_keys()
     -- Keybindings
     -- Hover
-    lvim.lsp.buffer_mappings.normal_mode["K"] = { "<cmd>lua vim.lsp.buf.hover()<CR>", "Show hover" }
+    -- lvim.lsp.buffer_mappings.normal_mode["K"] = { "<cmd>lua vim.lsp.buf.hover()<CR>", "Show hover" }
+    lvim.lsp.buffer_mappings.normal_mode["K"] = {
+        "<cmd>lua require('user.lsp').show_documentation()<CR>",
+        "Show Documentation",
+    }
+
     -- Code actions popup
     -- lvim.lsp.buffer_mappings.normal_mode["ga"] = {
     --     "<cmd>CodeActionMenu<cr>",
@@ -571,6 +589,7 @@ M.config = function()
         "sumneko_lua",
         "tsserver",
         "yamlls",
+        "taplo",
     })
     lvim.lsp.automatic_servers_installation = true
     lvim.lsp.document_highlight = true

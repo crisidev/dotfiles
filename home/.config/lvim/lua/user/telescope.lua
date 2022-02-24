@@ -231,7 +231,18 @@ end
 function M.config()
     -- Telescope
     lvim.builtin.telescope.defaults.path_display = { shorten = 10 }
-    lvim.builtin.telescope.defaults.winblend = 3
+    if lvim.builtin.fancy_telescope.active then
+        lvim.builtin.telescope.defaults.prompt_prefix = "  "
+        lvim.builtin.telescope.defaults.borderchars = {
+            prompt = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
+            results = { "─", "▐", "─", "│", "╭", "▐", "▐", "╰" },
+            -- results = {' ', '▐', '▄', '▌', '▌', '▐', '▟', '▙' };
+            preview = { " ", "│", " ", "▌", "▌", "╮", "╯", "▌" },
+        }
+        lvim.builtin.telescope.defaults.selection_caret = "  "
+    else
+        lvim.builtin.telescope.defaults.winblend = 15
+    end
     lvim.builtin.telescope.defaults.selection_caret = "  "
     lvim.builtin.telescope.defaults.cache_picker = { num_pickers = 3 }
     lvim.builtin.telescope.defaults.layout_strategy = "horizontal"

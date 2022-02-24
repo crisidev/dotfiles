@@ -292,7 +292,7 @@ M.config = function()
             event = { "BufRead Cargo.toml" },
             requires = { "nvim-lua/plenary.nvim" },
             config = function()
-                require("crates").setup()
+                require("user.crates").config()
             end,
         },
         -- Treesitter cmp
@@ -315,8 +315,7 @@ M.config = function()
         },
         -- Symbol outline
         {
-            "zeertzjq/symbols-outline.nvim",
-            branch = "patch-1",
+            "simrat39/symbols-outline.nvim",
             config = function()
                 local kind = require("user.lsp").symbols_outline
                 local opts = {
