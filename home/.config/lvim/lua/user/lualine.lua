@@ -168,12 +168,11 @@ M.config = function()
             lualine_c = {
                 {
                     function()
-                        vim.api.nvim_command(
-                            "hi! LualineModeInactive guifg=" .. mode_color[vim.fn.mode()] .. " guibg=" .. colors.bg_alt
-                        )
                         return ""
                     end,
-                    color = "LualineModeInactive",
+                    color = function()
+                        return { fg = mode_color[vim.fn.mode()], bg = colors.bg_alt }
+                    end,
                     padding = { left = 1, right = 0 },
                     -- left_padding = 1,
                 },
@@ -199,11 +198,11 @@ M.config = function()
 
     ins_left {
         function()
-            vim.api.nvim_command("hi! LualineMode guifg=" .. mode_color[vim.fn.mode()] .. " guibg=" .. colors.bg)
             return mode()
         end,
-
-        color = "LualineMode",
+        color = function()
+            return { fg = mode_color[vim.fn.mode()], bg = colors.bg }
+        end,
         padding = { left = 1, right = 0 },
     }
     ins_left {
@@ -242,9 +241,9 @@ M.config = function()
         source = diff_source,
         symbols = { added = kind.icons.added, modified = kind.icons.modified, removed = kind.icons.removed },
         diff_color = {
-            added = { fg = colors.git.add },
-            modified = { fg = colors.git.change },
-            removed = { fg = colors.git.delete },
+            added = { fg = colors.git.add, bg = colors.bg },
+            modified = { fg = colors.git.change, bg = colors.bg },
+            removed = { fg = colors.git.delete, bg = colors.bg },
         },
         color = {},
         cond = nil,

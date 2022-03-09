@@ -95,7 +95,7 @@ export PATH=~/.bin:~/.toolbox/bin:~/.pyenv/bin:~/.rbenv/bin:~/.nodenv/bin:~/.goe
 
 # terminal
 # export TERM="xterm-kitty"
-export TERMINAL=kitty
+export TERMINAL=xterm-256color
 export GREP_COLOR='1;31'
 export VISUAL=vim
 export EDITOR=vim

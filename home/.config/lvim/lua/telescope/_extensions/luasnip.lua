@@ -129,6 +129,13 @@ local luasnip_fn = function(opts)
                     preview_command = function(pvw_entry, bufnr)
                         local snippet = get_docstring(luasnip.snippets, entry.ft, entry.context)
                         vim.api.nvim_buf_set_option(bufnr, "filetype", entry.ft)
+                        if type(snippet) ~= "table" then
+                            local lines = {}
+                            for s in snippet:gmatch "[^\r\n]+" do
+                                table.insert(lines, s)
+                            end
+                            snippet = lines
+                        end
                         vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, snippet)
                     end,
                 }

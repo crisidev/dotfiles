@@ -16,6 +16,8 @@ M.config = function()
             "*Cargo.toml",
             "lua require('cmp').setup.buffer { sources = { { name = 'crates' } } }",
         },
+        -- Markdown texwidth
+        { "BufRead,BufNewFile", "*.md", "setlocal textwidth=80" },
     }
 end
 
