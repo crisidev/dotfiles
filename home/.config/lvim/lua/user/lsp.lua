@@ -66,6 +66,12 @@ M.icons = {
     added = "  ",
     modified = "柳",
     removed = " ",
+    screen = "冷",
+    dart = " ",
+    config = " ",
+    git = "",
+    magic = " ",
+    exit = " ",
 }
 
 M.nvim_tree_icons = {
@@ -285,7 +291,7 @@ M.normal_buffer_mappings = function()
     }
     -- Peek
     lvim.lsp.buffer_mappings.normal_mode["gP"] = {
-        name = "Peek",
+        name = " Peek",
         p = { "<cmd>lua require('lvim.lsp.peek').Peek('definition')<CR>", "Peek definition" },
         d = { "<cmd>lua require('goto-preview').goto_preview_definition()<cr>", "Preview definition" },
         r = { "<cmd>lua require('goto-preview').goto_preview_references()<cr>", "Preview references" },
@@ -313,7 +319,7 @@ M.normal_buffer_mappings = function()
         "Prev Diagnostic",
     }
     lvim.lsp.buffer_mappings.normal_mode["ge"] = {
-        name = "Diagnostics",
+        name = "飯Diagnostics",
         e = { "<cmd>Trouble document_diagnostics<cr>", "Document diagnostics" },
         l = { "<cmd>Trouble loclist<cr>", "Trouble loclist" },
         q = { "<cmd>Trouble quickfix<cr>", "Trouble quifix" },

@@ -34,6 +34,9 @@ M.config = function()
     lvim.builtin.nvimtree.setup.view.auto_resize = true
     lvim.builtin.nvimtree.setup.view.width = 60
     lvim.builtin.nvimtree.icons = kind.nvim_tree_icons
+    lvim.builtin.nvimtree.on_config_done = function(_)
+        lvim.builtin.which_key.mappings["e"] = { "<cmd>NvimTreeToggle<CR>", " Explorer" }
+    end
     lvim.builtin.nvimtree.show_icons.git = 0
 
     -- Project

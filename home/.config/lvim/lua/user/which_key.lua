@@ -11,7 +11,7 @@ M.n_keys = function()
     return {
         -- Buffers
         ["gb"] = {
-            name = "Buffers",
+            name = "﩯Buffer",
             b = { "<cmd>lua require('user.telescope').buffers()<cr>", "Show buffers" },
             l = { "<cmd>BufferLinePick<cr>", "Pick buffer" },
             p = { "<cmd>BufferLineCyclePrev<cr>", "Next buffer" },
@@ -21,13 +21,13 @@ M.n_keys = function()
         ["gQ"] = { "<cmd>SmartQ!<cr>", "Force close buffer" },
         -- Find
         ["gf"] = {
-            name = "Find",
+            name = " Find",
             f = { "<cmd>lua require('user.telescope').find_files()<cr>", "Find files" },
             F = { "<cmd>lua require('user.telescope').search_only_certain_files()<cr>", "File certain filetype" },
             b = { "<cmd>Telescope file_browser<cr>", "File browser" },
             l = { "<cmd>lua require('telescope.builtin').resume()<cr>", "Last Search" },
             p = { "<cmd>lua require('user.telescope').projects()<cr>", "Projects" },
-            s = { "<cmd>lua require('user.telescope').find_string()<cr>", "Find string in file" },
+            s = { "<cmd>lua require('user.telescope').find_string()<cr>", " Find string in file" },
             r = { "<cmd>lua require('user.telescope').recent_files()<cr>", "Recent files" },
             z = { "<cmd>lua require('user.telescope').zoxide()<cr>", "Zoxide list" },
         },
@@ -64,7 +64,7 @@ M.n_keys = function()
         },
         -- Documentation
         ["gN"] = {
-            name = "Neogen",
+            name = " Neogen",
             c = { "<cmd>lua require('neogen').generate({ type = 'class'})<CR>", "Class Documentation" },
             f = { "<cmd>lua require('neogen').generate({ type = 'func'})<CR>", "Function Documentation" },
             t = { "<cmd>lua require('neogen').generate({ type = 'type'})<CR>", "Type Documentation" },
@@ -78,7 +78,7 @@ M.n_keys = function()
         -- Peek
         -- Replace
         ["gX"] = {
-            name = "Replace",
+            name = " Replace",
             f = { "<cmd>lua require('spectre').open_file_search()<cr>", "Current Buffer" },
             p = { "<cmd>lua require('spectre').open()<cr>", "Project" },
             w = { "<cmd>lua require('spectre').open_visual({select_word=true})<cr>", "Replace Word" },
@@ -90,6 +90,11 @@ M.config = function()
     -- Settings
     lvim.builtin.which_key.setup.window.winblend = 10
     lvim.builtin.which_key.setup.window.border = "none"
+    lvim.builtin.which_key.setup.icons = {
+        breadcrumb = "/", -- symbol used in the command line area that shows your active key combo
+        separator = "·", -- symbol used between a key and it's label
+        group = "", -- symbol prepended to a group
+    }
 
     -- Telescope project
     lvim.builtin.which_key.mappings["P"] = {
@@ -101,19 +106,19 @@ M.config = function()
 
     -- Close buffer with Leader-q
     lvim.builtin.which_key.mappings["q"] = { "<cmd>SmartQ<cr>", "Close buffer" }
-    lvim.builtin.which_key.mappings["Q"] = { "<cmd>quit<cr>", "Quit" }
+    lvim.builtin.which_key.mappings["Q"] = { "<cmd>quit<cr>", " Quit" }
     -- Goyo
     lvim.builtin.which_key.mappings["G"] = { "<cmd>Goyo 90%x90%<cr>", "Start Goyo" }
     -- Command palette
     lvim.builtin.which_key.mappings["C"] = {
         "<cmd>lua require('user.telescope').command_palett()<cr>",
-        "Command Palette",
+        " Command Palette",
     }
     -- Mappings
     lvim.builtin.which_key.on_config_done = function(wk)
         local v_keys = {
             ["gG"] = {
-                name = "Git",
+                name = " Git",
                 l = {
                     "<cmd>lua require('gitlinker').get_buf_range_url('v', {action_callback = require('gitlinker.actions').copy_to_clipboard})<cr>",
                     "Copy line",

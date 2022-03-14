@@ -572,19 +572,16 @@ M.config = function()
         -- Telescope zoxide
         {
             "jvgrootveld/telescope-zoxide",
-            event = "BufWinEnter",
             requires = { "nvim-telescope/telescope.nvim" },
         },
         -- Telescope frecency
         {
             "nvim-telescope/telescope-frecency.nvim",
-            event = "BufWinEnter",
             requires = { "tami5/sqlite.lua", "nvim-telescope/telescope.nvim" },
         },
         -- Telescope repo
         {
             "cljoly/telescope-repo.nvim",
-            event = "BufWinEnter",
             requires = { "nvim-lua/plenary.nvim" },
         },
         -- Telescope UI select
