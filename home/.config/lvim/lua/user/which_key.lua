@@ -33,7 +33,7 @@ M.n_keys = function()
         },
         -- Session management
         ["gS"] = {
-            name = "Session",
+            name = " Session",
             l = { "<cmd>SessionManager load_session<cr>", "List available sessions" },
             d = { "<cmd>SessionManager delete_session<cr>", "Delete session" },
             L = { "<cmd>SessionManager load_last_session<cr>", "Restore last session" },
@@ -44,7 +44,7 @@ M.n_keys = function()
         ["gv"] = { "<cmd>lua _lazygit_toggle()<cr>", "LazyGit" },
         ["gi"] = { "<cmd>GitBlameToggle<cr>", "Toggle inline git blame" },
         ["gG"] = {
-            name = "Git",
+            name = " Git",
             b = { "<cmd>GitBlameToggle<cr>", "Toggle inline git blame" },
             B = { "<cmd>Git blame<cr>", "Open git blame" },
             d = { "<cmd>DiffviewOpen<cr>", "Git diff" },

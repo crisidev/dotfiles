@@ -276,7 +276,7 @@ M.normal_buffer_mappings = function()
     -- Goto
     lvim.lsp.buffer_mappings.normal_mode["gg"] = { "<cmd>lua vim.lsp.buf.definition()<CR>", "Goto Definition" }
     lvim.lsp.buffer_mappings.normal_mode["gt"] = {
-        name = "Goto",
+        name = " Goto",
         g = { "<cmd>lua vim.lsp.buf.definition()<CR>", "Definition" },
         d = { "<cmd>lua vim.lsp.buf.declaration()<CR>", "Declaration" },
         i = { "<cmd>lua require('user.telescope').lsp_implementations()<cr>", "Implementation" },
@@ -301,7 +301,7 @@ M.normal_buffer_mappings = function()
     -- Copilot
     if lvim.builtin.copilot.active then
         lvim.lsp.buffer_mappings.normal_mode["gC"] = {
-            name = "Copilot",
+            name = " Copilot",
             e = { "<cmd>Copilot enable<cr>", "Enable" },
             d = { "<cmd>Copilot disable<cr>", "Disable" },
             s = { "<cmd>Copilot status<cr>", "Status" },
