@@ -104,6 +104,7 @@ for_window [class="Gnome-tweaks"] floating enable  border pixel 1
 for_window [class="Software-properties-gtk"] floating enable border pixel 1
 for_window [class="Dconf-editor"] foggle" ]; thenloating enable border pixel 1
 for_window [class="python3.8"] floating enable border pixel 1
+for_window [class="Espanso"] floating enable border pixel 1
 for_window [class="Simple-scan"] floating enable border pixel 1
 for_window [class="Dconf-editor"] floating enable border pixel 1
 for_window [class="Evolution-alarm-notify"] floating enable border pixel 1
