@@ -74,7 +74,7 @@ M.config = function()
 
     vim.opt.shortmess = {
         t = true, -- truncate file messages at start
-        A = true, -- ignore annoying swap file messages
+        A = false, -- ignore annoying swap file messages
         o = true, -- file-read message overwrites previous
         O = true, -- file-read message overwrites previous
         T = true, -- truncate non-file messages in middle
@@ -106,10 +106,30 @@ M.config = function()
         precedes = "‹", -- Alternatives: … «
         trail = "•", -- BULLET (U+2022, UTF-8: E2 80 A2)
     }
+    -- Cursorline highlighting control
+    --  Only have it on in the active buffer
+    vim.opt.cursorline = true -- Highlight the current line
+    if vim.fn.has "nvim-0.7" then
+        local group = vim.api.nvim_create_augroup("CursorLineControl", { clear = true })
+        vim.api.nvim_create_autocmd("WinLeave", {
+            group = group,
+            callback = function()
+                vim.opt_local.cursorline = false
+            end,
+        })
+        vim.api.nvim_create_autocmd("WinEnter", {
+            group = group,
+            callback = function()
+                if vim.bo.filetype ~= "alpha" then
+                    vim.opt_local.cursorline = true
+                end
+            end,
+        })
+    end
 
     -- Better fillchars
     vim.opt.fillchars = {
-        vert = "▕", -- alternatives │
+        -- vert = "▕", -- alternatives │
         fold = " ",
         eob = " ", -- suppress ~ at EndOfBuffer
         diff = "╱", -- alternatives = ⣿ ░ ─
@@ -117,6 +137,13 @@ M.config = function()
         foldopen = "▾",
         foldsep = "│",
         foldclose = "▸",
+        horiz = "━",
+        horizup = "┻",
+        horizdown = "┳",
+        vert = "┃",
+        vertleft = "┫",
+        vertright = "┣",
+        verthoriz = "╋",
     }
 
     -- Pumblend

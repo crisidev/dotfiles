@@ -13,10 +13,10 @@ lvim.leader = "space"
 vim.cmd "source ~/.config/lvim/vimscript/user.pre.vim"
 
 -- Builtin
-require("user.neovim").config()
+require("user.builtin").config()
 
 -- Builtin
-require("user.builtin").config()
+require("user.neovim").config()
 
 -- Additional Plugins
 require("user.plugins").config()

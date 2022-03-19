@@ -146,7 +146,17 @@ M.config = function()
                 normal = { c = { fg = colors.fg, bg = colors.bg } },
                 inactive = { c = { fg = colors.fg, bg = colors.bg_alt } },
             },
-            disabled_filetypes = { "dashboard", "NvimTree", "Outline" },
+            disabled_filetypes = {
+                "dashboard",
+                "NvimTree",
+                "Outline",
+                "alpha",
+                "vista",
+                "vista_kind",
+                "TelescopePrompt",
+            },
+            always_divide_middle = true,
+            globalstatus = lvim.builtin.global_statusline.active,
         },
         sections = {
             -- these are to remove the defaults
@@ -312,7 +322,11 @@ M.config = function()
             end
             local buf_ft = vim.bo.filetype
             local buf_client_names = {}
-            local trim = vim.fn.winwidth(0) < 120
+            local trim_width = 120
+            if lvim.builtin.global_statusline then
+                trim_width = 100
+            end
+            local trim = vim.fn.winwidth(0) < trim_width
 
             -- add client
             -- local utils = require "lsp.utils"

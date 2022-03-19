@@ -72,6 +72,12 @@ M.icons = {
     git = "",
     magic = " ",
     exit = " ",
+    session = " ",
+    project = "⚝ ",
+    stuka = " ",
+    text = "",
+    files = " ",
+    zoxide = "Ƶ",
 }
 
 M.nvim_tree_icons = {

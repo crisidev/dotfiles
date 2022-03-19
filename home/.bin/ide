@@ -5,11 +5,7 @@ usage() {
 	exit 2
 }
 
-multigrid=""
-if [ "$1" = "-m" ]; then
-	multigrid=--multigrid
-	shift
-fi
+set -x
 
 # paths
 export GOPATH=~/.go
@@ -17,18 +13,13 @@ export PATH=~/.bin:~/.toolbox/bin:~/.pyenv/bin:~/.rbenv/bin:~/.nodenv/bin:~/.nod
 export LUNARVIM_CONFIG_DIR="${LUNARVIM_CONFIG_DIR:-$HOME/.config/lvim}"
 export LUNARVIM_RUNTIME_DIR="${LUNARVIM_RUNTIME_DIR:-$HOME/.local/share/lunarvim}"
 
-start_neovide() {
-	shift
-	NVIM_LISTEN_ADDRESS=/tmp/nvimsocket neovide $multigrid -- -u ~/.local/share/lunarvim/lvim/init.lua -c 'let g:guifont="FiraCode Nerd Font Mono:h10"' "$@"
-}
-
 start_glrnvim() {
 	shift
 	NVIM_LISTEN_ADDRESS=/tmp/nvimsocket glrnvim "$@"
 
 }
 
-start_ide_terminal() {
+start_lvim() {
 	shift
 	NVIM_LISTEN_ADDRESS=/tmp/nvimsocket lvim "$@"
 }
@@ -36,16 +27,14 @@ start_ide_terminal() {
 if [ "$1" = "--help" ]; then
 	usage
 elif [ "$1" = "toggle" ]; then
-	shift
-	if ! i3-msg '[class="^ide$"]' scratchpad show >/dev/null 2>&1; then
-		start_ide ide "$@"
-		sleep 1
-		i3-msg '[class="^ide$"]' "move position center move scratchpad scratchpad show" >/dev/null 2>&1
-	fi
+    if ! pgrep -f glrnvim; then
+        start_glrnvim "$@"
+    fi
+    i3-msg '[class="glrnvim"] focus'
 elif [ "$1" = "new" ]; then
 	start_glrnvim "$@"
 elif [ "$1" = "term" ]; then
-	start_ide_terminal "$@"
+	start_lvim "$@"
 else
 	nvr --remote "$@"
 fi

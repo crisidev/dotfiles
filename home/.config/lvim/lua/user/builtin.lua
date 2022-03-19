@@ -19,6 +19,9 @@ M.config = function()
     -- Fancy telescope
     lvim.builtin.fancy_telescope = { active = false }
 
+    -- Statusline
+    lvim.builtin.global_statusline = { active = true }
+
     -- Nvimtree
     lvim.builtin.nvimtree.side = "left"
     local kind = require "user.lsp"
@@ -56,45 +59,8 @@ M.config = function()
     lvim.builtin.sniprun = { active = true }
 
     -- Dashboard
-    lvim.builtin.dashboard.active = true
-    lvim.builtin.dashboard.custom_section = {
-        a = {
-            description = { "  New File           " },
-            command = "DashboardNewFile",
-        },
-        b = {
-            description = { "⚝  Projects           " },
-            command = "lua require('telescope').extensions.repo.list{}",
-        },
-        c = {
-            description = { "  List Sessions      " },
-            command = "SessionManager load_session",
-        },
-        d = {
-            description = { "  Recently Used Files" },
-            command = "lua require('user.telescope').recent_files()",
-        },
-        e = {
-            description = { "  Find File          " },
-            command = "lua require('user.telescope').find_files()",
-        },
-        f = {
-            description = { "  Find Word          " },
-            command = "lua require('user.telescope').find_string()",
-        },
-        g = {
-            description = { "  File Browser       " },
-            command = "Telescope file_browser",
-        },
-        h = {
-            description = { "Ƶ  Zoxide             " },
-            command = "lua require('telescope').extensions.zoxide.list{}",
-        },
-        i = {
-            description = { "  Configuration      " },
-            command = ":e ~/.config/lvim/config.lua",
-        },
-    }
+    lvim.builtin.alpha.mode = "custom"
+    lvim.builtin.alpha["custom"] = { config = require("user.dashboard").config() }
 
     -- Cmp
     lvim.builtin.cmp.sources = {

@@ -105,6 +105,7 @@ M.colors = {
 function M.telescope_theme()
     if lvim.builtin.fancy_telescope.active then
         local colors = M.current_colors()
+        M.fg_bg("WinSeparator", colors.bg, "None")
         M.fg_bg("TelescopeBorder", colors.bg_alt, colors.bg)
         M.fg_bg("TelescopePromptBorder", colors.bg, colors.bg)
         M.fg_bg("TelescopePromptNormal", colors.fg, colors.bg_alt)

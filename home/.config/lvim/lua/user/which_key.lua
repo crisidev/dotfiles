@@ -25,6 +25,7 @@ M.n_keys = function()
             f = { "<cmd>lua require('user.telescope').find_files()<cr>", "Find files" },
             F = { "<cmd>lua require('user.telescope').search_only_certain_files()<cr>", "File certain filetype" },
             b = { "<cmd>Telescope file_browser<cr>", "File browser" },
+            c = { "<cmd>Telescope file_create<cr>", "Create file" },
             l = { "<cmd>lua require('telescope.builtin').resume()<cr>", "Last Search" },
             p = { "<cmd>lua require('user.telescope').projects()<cr>", "Projects" },
             s = { "<cmd>lua require('user.telescope').find_string()<cr>", " Find string in file" },
@@ -114,6 +115,7 @@ M.config = function()
         "<cmd>lua require('user.telescope').command_palett()<cr>",
         " Command Palette",
     }
+    lvim.builtin.which_key.mappings[";"] = { "<cmd>Alpha<CR>", "舘Dashboard" }
     -- Mappings
     lvim.builtin.which_key.on_config_done = function(wk)
         local v_keys = {

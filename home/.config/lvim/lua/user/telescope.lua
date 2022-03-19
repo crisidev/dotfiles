@@ -293,6 +293,7 @@ function M.config()
         telescope.load_extension "luasnip"
         telescope.load_extension "ui-select"
         telescope.load_extension "frecency"
+        telescope.load_extension "file_create"
         if lvim.builtin.file_browser.active then
             telescope.load_extension "file_browser"
         end
