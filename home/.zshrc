@@ -91,7 +91,7 @@ HISTFILE="$HOME/.zsh_history"
 [ -f ~/.zsh_secrets ] && source ~/.zsh_secrets
 
 # paths
-export PATH=~/.bin:~/.toolbox/bin:~/.pyenv/bin:~/.rbenv/bin:~/.nodenv/bin:~/.goenv/bin:~/.bin:~/.cargo/bin:~/.android/Sdk/platform-tools:~/.toolchain/aarch64-linux-musl/bin:$PATH
+export PATH=~/.bin:~/.toolbox/bin:~/.pyenv/bin:~/.rbenv/bin:~/.nodenv/bin:~/.goenv/bin:~/.bin:~/.cargo/bin:~/.android/Sdk/platform-tools:~/.toolchain/aarch64-linux-musl/bin:~/.nodenv/shims:~/.pyenv/shims:~/.rbenv/shims:~/.goenv/shims:$PATH
 
 # terminal
 # export TERM="xterm-kitty"

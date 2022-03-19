@@ -20,19 +20,16 @@ M.config = function()
         },
         items = {
             { name = "ungrouped" },
+            M.language_files("rust", "#FF6965", "rs"),
+            M.language_files("python", "#006400", "py"),
+            M.language_files("kotlin", "#966fd6", "kts"),
+            M.language_files("ruby", "#FF6965", "rb"),
             {
                 highlight = { guisp = "#51AFEF" },
                 name = "tests",
                 icon = kind.icons.test,
                 matcher = function(buf)
                     return buf.filename:match "_spec" or buf.filename:match "test"
-                end,
-            },
-            {
-                name = "screens",
-                icon = kind.icons.screen,
-                matcher = function(buf)
-                    return buf.path:match "screen"
                 end,
             },
             {
@@ -54,10 +51,25 @@ M.config = function()
                         or buf.filename:match "config.toml"
                         or buf.filename:match "setup.py"
                         or buf.filename:match "Makefile"
+                        or buf.filename:match "Config"
+                        or buf.filename:match "gradle.properties"
+                        or buf.filename:match "build.gradle.kts"
+                        or buf.filename:match "setting.gradle.kts"
                 end,
             },
         },
     }
+end
+
+M.language_files = function(name, guisp, extension)
+    local opts = {
+        highlight = { guisp = guisp },
+        name = name,
+        matcher = function(buf)
+            return vim.fn.fnamemodify(buf.path, ":e") == extension
+        end,
+    }
+    return opts
 end
 
 return M

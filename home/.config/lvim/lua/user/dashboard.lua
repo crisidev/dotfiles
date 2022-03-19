@@ -115,6 +115,7 @@ M.config = function()
                 " " .. kind.icons.git .. "  Git Status",
                 ":lua require('lvim.core.terminal')._exec_toggle({cmd = 'lazygit', count = 1, direction = 'float'})<CR>"
             ),
+
             button("q", " " .. kind.icons.exit .. " Quit", ":SmartQ<cr>"),
         },
         opts = {

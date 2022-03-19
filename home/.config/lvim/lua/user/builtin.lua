@@ -59,6 +59,7 @@ M.config = function()
     lvim.builtin.sniprun = { active = true }
 
     -- Dashboard
+    lvim.builtin.alpha.active = true
     lvim.builtin.alpha.mode = "custom"
     lvim.builtin.alpha["custom"] = { config = require("user.dashboard").config() }
 
