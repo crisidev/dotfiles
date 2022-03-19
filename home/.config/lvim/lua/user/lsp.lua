@@ -275,12 +275,12 @@ M.normal_buffer_mappings = function()
         "<cmd>lua require('user.telescope').code_actions()<cr>",
         "Code action",
     }
-    lvim.lsp.buffer_mappings.normal_mode["gA"] = {
-        "<cmd>lua vim.lsp.codelens.run()<cr>",
-        "Codelens action",
-    }
     -- Goto
     lvim.lsp.buffer_mappings.normal_mode["gg"] = { "<cmd>lua vim.lsp.buf.definition()<CR>", "Goto Definition" }
+    lvim.lsp.buffer_mappings.normal_mode["gr"] = {
+        "<cmd>lua require('user.telescope').lsp_references()<cr>",
+        "Goto References",
+    }
     lvim.lsp.buffer_mappings.normal_mode["gt"] = {
         name = " Goto",
         g = { "<cmd>lua vim.lsp.buf.definition()<CR>", "Definition" },
@@ -298,8 +298,7 @@ M.normal_buffer_mappings = function()
     -- Peek
     lvim.lsp.buffer_mappings.normal_mode["gP"] = {
         name = " Peek",
-        p = { "<cmd>lua require('lvim.lsp.peek').Peek('definition')<CR>", "Peek definition" },
-        d = { "<cmd>lua require('goto-preview').goto_preview_definition()<cr>", "Preview definition" },
+        p = { "<cmd>lua require('goto-preview').goto_preview_definition()<cr>", "Preview definition" },
         r = { "<cmd>lua require('goto-preview').goto_preview_references()<cr>", "Preview references" },
         i = { "<cmd>lua require('goto-preview').goto_preview_implementation()<cr>", "Preview implementation" },
         q = { "<cmd>lua require('goto-preview').close_all_win()<cr>", "Close all preview windows" },
@@ -314,7 +313,7 @@ M.normal_buffer_mappings = function()
         }
     end
     -- Rename
-    lvim.lsp.buffer_mappings.normal_mode["gr"] = { "<cmd>lua require('renamer').rename()<cr>", "Rename symbol" }
+    lvim.lsp.buffer_mappings.normal_mode["gR"] = { "<cmd>lua require('renamer').rename()<cr>", "Rename symbol" }
     -- Diagnostics
     lvim.lsp.buffer_mappings.normal_mode["gn"] = {
         "<cmd>lua vim.diagnostic.goto_next({float = {border = 'rounded', focusable = false, source = 'always'}})<cr>",

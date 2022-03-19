@@ -574,11 +574,6 @@ M.config = function()
             "jvgrootveld/telescope-zoxide",
             requires = { "nvim-telescope/telescope.nvim" },
         },
-        -- Telescope frecency
-        {
-            "nvim-telescope/telescope-frecency.nvim",
-            requires = { "tami5/sqlite.lua", "nvim-telescope/telescope.nvim" },
-        },
         -- Telescope repo
         {
             "cljoly/telescope-repo.nvim",

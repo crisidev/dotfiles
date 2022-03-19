@@ -10,7 +10,8 @@ M.n_keys = function()
     end
     return {
         -- Buffers
-        ["gb"] = {
+        ["gb"] = { "<cmd>lua require('user.telescope').buffers()<cr>", "Show buffers" },
+        ["gB"] = {
             name = "﩯Buffer",
             b = { "<cmd>lua require('user.telescope').buffers()<cr>", "Show buffers" },
             l = { "<cmd>BufferLinePick<cr>", "Pick buffer" },
@@ -20,6 +21,7 @@ M.n_keys = function()
         ["gq"] = { "<cmd>SmartQ<cr>", "Close buffer" },
         ["gQ"] = { "<cmd>SmartQ!<cr>", "Force close buffer" },
         -- Find
+        ["gA"] = { "<cmd>lua require('user.telescope').find_files()<cr>", "Find files" },
         ["gf"] = {
             name = " Find",
             f = { "<cmd>lua require('user.telescope').find_files()<cr>", "Find files" },
@@ -42,8 +44,6 @@ M.n_keys = function()
             s = { "<cmd>SessionManager save_current_session<cr>", "Save current session" },
         },
         -- Git
-        ["gv"] = { "<cmd>lua _lazygit_toggle()<cr>", "LazyGit" },
-        ["gi"] = { "<cmd>GitBlameToggle<cr>", "Toggle inline git blame" },
         ["gG"] = {
             name = " Git",
             b = { "<cmd>GitBlameToggle<cr>", "Toggle inline git blame" },
@@ -98,6 +98,7 @@ M.config = function()
     }
 
     -- Telescope project
+    lvim.builtin.which_key.mappings["t"] = { "<cmd>Telescope<cr>", "Telescope" }
     lvim.builtin.which_key.mappings["P"] = {
         "<cmd>lua require('user.telescope').projects()<cr>",
         "Projects",
@@ -112,7 +113,7 @@ M.config = function()
     lvim.builtin.which_key.mappings["G"] = { "<cmd>Goyo 90%x90%<cr>", "Start Goyo" }
     -- Command palette
     lvim.builtin.which_key.mappings["C"] = {
-        "<cmd>lua require('user.telescope').command_palett()<cr>",
+        "<cmd>lua require('user.telescope').command_palette()<cr>",
         " Command Palette",
     }
     lvim.builtin.which_key.mappings[";"] = { "<cmd>Alpha<CR>", "舘Dashboard" }

@@ -63,7 +63,10 @@ end
 
 -- find only recent files
 function M.recent_files()
-    require("telescope").extensions.frecency.frecency()
+    local opts = {
+        hidden = true,
+    }
+    builtin.oldfiles(opts)
 end
 
 -- find only recent files
@@ -292,8 +295,9 @@ function M.config()
         telescope.load_extension "command_palette"
         telescope.load_extension "luasnip"
         telescope.load_extension "ui-select"
-        telescope.load_extension "frecency"
         telescope.load_extension "file_create"
+        telescope.load_extension "zoxide"
+        telescope.load_extension "repo"
         if lvim.builtin.file_browser.active then
             telescope.load_extension "file_browser"
         end
