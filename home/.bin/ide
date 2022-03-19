@@ -9,18 +9,16 @@ set -x
 
 # paths
 export GOPATH=~/.go
-export PATH=~/.bin:~/.toolbox/bin:~/.pyenv/bin:~/.rbenv/bin:~/.nodenv/bin:~/.nodenv/versions/15.5.1/bin:~/.bin:$GOPATH/bin:~/.cargo/bin:$PATH
+export PATH=~/.bin:~/.toolbox/bin:~/.pyenv/bin:~/.pyenv/shims:~/.rbenv/bin:~/.nodenv/bin:~/.nodenv/versions/15.5.1/bin:~/.nodenv/shims:~/.bin:$GOPATH/bin:~/.cargo/bin:~/.local/share/nvim/lsp_servers/rust:$PATH
 export LUNARVIM_CONFIG_DIR="${LUNARVIM_CONFIG_DIR:-$HOME/.config/lvim}"
 export LUNARVIM_RUNTIME_DIR="${LUNARVIM_RUNTIME_DIR:-$HOME/.local/share/lunarvim}"
 
 start_glrnvim() {
-	shift
 	NVIM_LISTEN_ADDRESS=/tmp/nvimsocket glrnvim "$@"
 
 }
 
 start_lvim() {
-	shift
 	NVIM_LISTEN_ADDRESS=/tmp/nvimsocket lvim "$@"
 }
 
@@ -28,13 +26,13 @@ if [ "$1" = "--help" ]; then
 	usage
 elif [ "$1" = "toggle" ]; then
     if ! pgrep -f glrnvim; then
-        start_glrnvim "$@"
+        start_glrnvim +Alpha
     fi
     i3-msg '[class="glrnvim"] focus'
 elif [ "$1" = "new" ]; then
-	start_glrnvim "$@"
+	start_glrnvim +Alpha
 elif [ "$1" = "term" ]; then
-	start_lvim "$@"
+	start_lvim
 else
 	nvr --remote "$@"
 fi
