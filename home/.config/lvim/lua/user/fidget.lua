@@ -65,6 +65,7 @@ M.config = function()
         fmt = {
             leftpad = true, -- right-justify text in fidget box
             stack_upwards = true, -- list of tasks grows upwards
+            max_width = 0,
             -- function to format fidget title
             fidget = function(fidget_name, spinner)
                 return string.format("%s %s", spinner, fidget_name)
@@ -81,6 +82,7 @@ M.config = function()
         },
         debug = {
             logging = false, -- whether to enable logging, for debugging
+            strict = false,
         },
     }
 end

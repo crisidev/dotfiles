@@ -22,7 +22,7 @@ M.config = function()
             { name = "ungrouped" },
             M.language_files("rust", "#FF6965", "rs"),
             M.language_files("python", "#006400", "py"),
-            M.language_files("kotlin", "#966fd6", "kts"),
+            M.language_files("kotlin", "#966fd6", "kt"),
             M.language_files("ruby", "#FF6965", "rb"),
             {
                 highlight = { guisp = "#51AFEF" },

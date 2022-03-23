@@ -10,8 +10,8 @@ M.n_keys = function()
     end
     return {
         -- Buffers
-        ["gb"] = { "<cmd>lua require('user.telescope').buffers()<cr>", "Show buffers" },
-        ["gB"] = {
+        ["gA"] = { "<cmd>lua require('user.telescope').buffers()<cr>", "Show buffers" },
+        ["gb"] = {
             name = "﩯Buffer",
             b = { "<cmd>lua require('user.telescope').buffers()<cr>", "Show buffers" },
             l = { "<cmd>BufferLinePick<cr>", "Pick buffer" },
@@ -21,7 +21,6 @@ M.n_keys = function()
         ["gq"] = { "<cmd>SmartQ<cr>", "Close buffer" },
         ["gQ"] = { "<cmd>SmartQ!<cr>", "Force close buffer" },
         -- Find
-        ["gA"] = { "<cmd>lua require('user.telescope').find_files()<cr>", "Find files" },
         ["gf"] = {
             name = " Find",
             f = { "<cmd>lua require('user.telescope').find_files()<cr>", "Find files" },

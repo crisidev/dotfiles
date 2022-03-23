@@ -617,6 +617,44 @@ M.config = function()
         { name = "DiagnosticSignHint", text = M.icons.hint },
     }
 
+    -- Borders
+    lvim.lsp.float.border = {
+        { "╔", "FloatBorder" },
+        { "═", "FloatBorder" },
+        { "╗", "FloatBorder" },
+        { "║", "FloatBorder" },
+        { "╝", "FloatBorder" },
+        { "═", "FloatBorder" },
+        { "╚", "FloatBorder" },
+        { "║", "FloatBorder" },
+    }
+    lvim.lsp.diagnostics.float.border = {
+        { " ", "FloatBorder" },
+        { " ", "FloatBorder" },
+        { " ", "FloatBorder" },
+        { " ", "FloatBorder" },
+        { " ", "FloatBorder" },
+        { " ", "FloatBorder" },
+        { " ", "FloatBorder" },
+        { " ", "FloatBorder" },
+    }
+    if os.getenv "KITTY_WINDOW_ID" then
+        lvim.lsp.float.border = {
+            { "🭽", "FloatBorder" },
+            { "▔", "FloatBorder" },
+            { "🭾", "FloatBorder" },
+            { "▕", "FloatBorder" },
+            { "🭿", "FloatBorder" },
+            { "▁", "FloatBorder" },
+            { "🭼", "FloatBorder" },
+            { "▏", "FloatBorder" },
+        }
+        lvim.lsp.diagnostics.float.border = lvim.lsp.float.border
+    end
+
+    -- Float
+    lvim.lsp.diagnostics.float.focusable = false
+    lvim.lsp.float.focusable = true
     lvim.lsp.diagnostics.float.source = "if_many"
     lvim.lsp.diagnostics.float.format = function(d)
         local t = vim.deepcopy(d)
