@@ -109,7 +109,7 @@ M.config = function()
     -- Cursorline highlighting control
     --  Only have it on in the active buffer
     vim.opt.cursorline = true -- Highlight the current line
-    if vim.fn.has "nvim-0.7" then
+    if vim.fn.has "nvim-0.7" ~= 0 then
         local group = vim.api.nvim_create_augroup("CursorLineControl", { clear = true })
         vim.api.nvim_create_autocmd("WinLeave", {
             group = group,
@@ -128,7 +128,7 @@ M.config = function()
     end
 
     -- Better fillchars
-    if vim.fn.has "nvim-0.7" then
+    if vim.fn.has "nvim-0.7" ~= 0 then
         vim.opt.fillchars = {
             fold = " ",
             eob = " ", -- suppress ~ at EndOfBuffer

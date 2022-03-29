@@ -293,14 +293,9 @@ M.normal_buffer_mappings = function()
     }
     -- Signature
     lvim.lsp.buffer_mappings.normal_mode["gs"] = { "<cmd>lua vim.lsp.buf.signature_help()<CR>", "Show signature help" }
-    -- Diagnostics
-    lvim.lsp.buffer_mappings.normal_mode["gl"] = {
-        "<cmd>lua require('lvim.lsp.handlers').show_line_diagnostics()<CR>",
-        "Show line diagnostics",
-    }
     -- Peek
     lvim.lsp.buffer_mappings.normal_mode["gP"] = {
-        name = " Peek",
+        name = " Peek",
         p = { "<cmd>lua require('goto-preview').goto_preview_definition()<cr>", "Preview definition" },
         r = { "<cmd>lua require('goto-preview').goto_preview_references()<cr>", "Preview references" },
         i = { "<cmd>lua require('goto-preview').goto_preview_implementation()<cr>", "Preview implementation" },
@@ -309,7 +304,7 @@ M.normal_buffer_mappings = function()
     -- Copilot
     if lvim.builtin.copilot.active then
         lvim.lsp.buffer_mappings.normal_mode["gC"] = {
-            name = " Copilot",
+            name = " Copilot",
             e = { "<cmd>Copilot enable<cr>", "Enable" },
             d = { "<cmd>Copilot disable<cr>", "Disable" },
             s = { "<cmd>Copilot status<cr>", "Status" },
@@ -318,6 +313,10 @@ M.normal_buffer_mappings = function()
     -- Rename
     lvim.lsp.buffer_mappings.normal_mode["gR"] = { "<cmd>lua require('renamer').rename()<cr>", "Rename symbol" }
     -- Diagnostics
+    lvim.lsp.buffer_mappings.normal_mode["gl"] = {
+        "<cmd>lua require('lvim.lsp.handlers').show_line_diagnostics()<CR>",
+        "Show line diagnostics",
+    }
     lvim.lsp.buffer_mappings.normal_mode["gn"] = {
         "<cmd>lua vim.diagnostic.goto_next({float = {border = 'rounded', focusable = false, source = 'always'}})<cr>",
         "Next Diagnostic",
@@ -327,7 +326,7 @@ M.normal_buffer_mappings = function()
         "Prev Diagnostic",
     }
     lvim.lsp.buffer_mappings.normal_mode["ge"] = {
-        name = "飯Diagnostics",
+        name = " Diagnostics",
         e = { "<cmd>Trouble document_diagnostics<cr>", "Document diagnostics" },
         l = { "<cmd>Trouble loclist<cr>", "Trouble loclist" },
         q = { "<cmd>Trouble quickfix<cr>", "Trouble quifix" },

@@ -23,8 +23,8 @@ require("user.lsp").config_tsserver()
 
 -- Additional mappings
 lvim.lsp.buffer_mappings.normal_mode["gT"] = {
-    name = "TsTools",
+    name = "☢ TS Tools",
     a = { "<cmd>TSLspImportAll<cr>", "Import all" },
-    r = { "<cmd>TsLspRenameFile<cr>", "Rename file" },
-    o = { "<cmd>TsLspOrganize<cr>", "Organize" },
+    r = { "<cmd>TSLspRenameFile<cr>", "Rename file" },
+    o = { "<cmd>TSLspOrganize<cr>", "Organize" },
 }

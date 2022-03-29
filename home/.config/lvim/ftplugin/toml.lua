@@ -24,7 +24,7 @@ require("lvim.lsp.manager").setup("taplo", opts)
 if vim.fn.expand "%:t" == "Cargo.toml" then
     -- Cargo tools mappings
     lvim.lsp.buffer_mappings.normal_mode["gT"] = {
-        name = "Cargo Tools",
+        name = "☢ Cargo Tools",
         t = { "<cmd>lua require('crates').toggle()<cr>", "Toggle crates info" },
         r = { "<cmd>lua require('crates').reload()<cr>", "Reload crates info" },
         v = { "<cmd>lua require('crates').show_versions_popup()<cr>", "Show versions popup" },
@@ -35,7 +35,7 @@ if vim.fn.expand "%:t" == "Cargo.toml" then
         A = { "<cmd>lua require('crates').upgrade_all_crates()<cr>", "Update all crates" },
     }
     lvim.lsp.buffer_mappings.visual_mode["gT"] = {
-        name = "Cargo Tools",
+        name = "☢ Cargo Tools",
         u = { "<cmd>lua require('crates').update_crates()<cr>", "Update selected crates" },
         U = { "<cmd>lua require('crates').upgrade_crates()<cr>", "Update selected crates" },
     }

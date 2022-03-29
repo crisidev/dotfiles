@@ -645,10 +645,6 @@ M.config = function()
             run = "bash ./install.sh",
             disable = not lvim.builtin.sniprun.active,
         },
-        -- Zeal
-        {
-            "KabbAmine/zeavim.vim",
-        },
     }
 end
 
