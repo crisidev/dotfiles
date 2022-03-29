@@ -273,6 +273,7 @@ M.normal_buffer_mappings = function()
     --     "<cmd>CodeActionMenu<cr>",
     --     "Code action",
     -- }
+    lvim.lsp.buffer_mappings.normal_mode["gA"] = { "<cmd>lua vim.lsp.codelens.run()<cr>", "Codelens Actions" }
     lvim.lsp.buffer_mappings.normal_mode["ga"] = {
         "<cmd>lua require('user.telescope').code_actions()<cr>",
         "Code action",

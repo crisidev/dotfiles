@@ -128,23 +128,35 @@ M.config = function()
     end
 
     -- Better fillchars
-    vim.opt.fillchars = {
-        -- vert = "▕", -- alternatives │
-        fold = " ",
-        eob = " ", -- suppress ~ at EndOfBuffer
-        diff = "╱", -- alternatives = ⣿ ░ ─
-        msgsep = "‾",
-        foldopen = "▾",
-        foldsep = "│",
-        foldclose = "▸",
-        horiz = "━",
-        horizup = "┻",
-        horizdown = "┳",
-        vert = "┃",
-        vertleft = "┫",
-        vertright = "┣",
-        verthoriz = "╋",
-    }
+    if vim.fn.has "nvim-0.7" then
+        vim.opt.fillchars = {
+            fold = " ",
+            eob = " ", -- suppress ~ at EndOfBuffer
+            diff = "╱", -- alternatives = ⣿ ░ ─
+            msgsep = "‾",
+            foldopen = "▾",
+            foldsep = "│",
+            foldclose = "▸",
+            horiz = "━",
+            horizup = "┻",
+            horizdown = "┳",
+            vert = "┃",
+            vertleft = "┫",
+            vertright = "┣",
+            verthoriz = "╋",
+        }
+    else
+        vim.opt.fillchars = {
+            vert = "▕", -- alternatives │
+            fold = " ",
+            eob = " ", -- suppress ~ at EndOfBuffer
+            diff = "╱", -- alternatives = ⣿ ░ ─
+            msgsep = "‾",
+            foldopen = "▾",
+            foldsep = "│",
+            foldclose = "▸",
+        }
+    end
 
     -- Pumblend
     vim.opt.pumblend = 10

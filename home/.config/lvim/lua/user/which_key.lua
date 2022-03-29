@@ -10,7 +10,7 @@ M.n_keys = function()
     end
     return {
         -- Buffers
-        ["gA"] = { "<cmd>lua vim.lsp.codelens.run()<cr>", "Codelens Actions" },
+        ["gx"] = { "<cmd>lua require('user.telescope').buffers()<cr>", "Show buffers" },
         ["gb"] = {
             name = "﩯Buffer",
             b = { "<cmd>lua require('user.telescope').buffers()<cr>", "Show buffers" },
@@ -75,7 +75,6 @@ M.n_keys = function()
             "<cmd>lua require('lvim.lsp.handlers').show_line_diagnostics()<CR>",
             "Show line diagnostics",
         },
-        -- Peek
         -- Replace
         ["gX"] = {
             name = " Replace",

@@ -96,8 +96,8 @@ M.config = function()
                 ":lua require('user.telescope').recent_files()<cr>"
             ),
             button("l", " " .. kind.icons.magic .. " Last session", ":SessionManager load_last_session<cr>"),
-            button("n", " " .. kind.icons.stuka .. " New file", ":ene <BAR> startinsert <cr>"),
             button("S", " " .. kind.icons.session .. " Sessions", ":SessionManager load_session<cr>"),
+            button("n", " " .. kind.icons.stuka .. " New file", ":ene <BAR> startinsert <cr>"),
             button("b", " " .. kind.icons.files .. " File browswer", ":Telescope file_browser<cr>"),
             button("f", " " .. kind.cmp_kind.File .. " Find file", ":lua require('user.telescope').find_files()<cr>"),
             button("s", " " .. kind.icons.text .. "  Find word", ":lua require('user.telescope').find_string()<cr>"),
