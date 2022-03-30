@@ -4,7 +4,9 @@ M.config = function()
     lvim.plugins = {
         -- Color schemes
         {
-            "folke/tokyonight.nvim",
+            -- "folke/tokyonight.nvim",
+            "abzcoding/tokyonight.nvim",
+            branch = "feat/local",
             config = function()
                 require("user.theme").tokyonight()
                 vim.cmd [[colorscheme tokyonight]]
@@ -179,7 +181,7 @@ M.config = function()
             "simrat39/rust-tools.nvim",
             ft = { "rust", "rs" },
             config = function()
-                require("user.rust-tools").config()
+                require("user.rust_tools").config()
             end,
         },
         -- Lsp Typescript
@@ -201,7 +203,7 @@ M.config = function()
         {
             "p00f/clangd_extensions.nvim",
             config = function()
-                require("user.lsp").config_clangd_extensions()
+                require("user.clangd_extensions").config()
             end,
             ft = { "c", "cpp", "objc", "objcpp" },
         },
@@ -317,58 +319,7 @@ M.config = function()
         {
             "simrat39/symbols-outline.nvim",
             config = function()
-                local kind = require("user.lsp").symbols_outline
-                local opts = {
-                    highlight_hovered_item = true,
-                    show_guides = true,
-                    auto_preview = false,
-                    position = "right",
-                    width = 25,
-                    show_numbers = false,
-                    show_relative_numbers = false,
-                    show_symbol_details = true,
-                    preview_bg_highlight = "Pmenu",
-                    keymaps = { -- These keymaps can be a string or a table for multiple keys
-                        close = { "<Esc>", "q" },
-                        goto_location = "<Cr>",
-                        focus_location = "o",
-                        hover_symbol = "<C-space>",
-                        toggle_preview = "K",
-                        rename_symbol = "r",
-                        code_actions = "a",
-                    },
-                    lsp_blacklist = {},
-                    symbol_blacklist = {},
-                    symbols = {
-                        File = { icon = kind.File, hl = "TSURI" },
-                        Module = { icon = kind.Module, hl = "TSNamespace" },
-                        Namespace = { icon = kind.Namespace, hl = "TSNamespace" },
-                        Package = { icon = kind.Package, hl = "TSNamespace" },
-                        Class = { icon = kind.Class, hl = "TSType" },
-                        Method = { icon = kind.Method, hl = "TSMethod" },
-                        Property = { icon = kind.Property, hl = "TSMethod" },
-                        Field = { icon = kind.Field, hl = "TSField" },
-                        Constructor = { icon = kind.Constructor, hl = "TSConstructor" },
-                        Enum = { icon = kind.Enum, hl = "TSType" },
-                        Interface = { icon = kind.Interface, hl = "TSType" },
-                        Function = { icon = kind.Function, hl = "TSFunction" },
-                        Variable = { icon = kind.Variable, hl = "TSConstant" },
-                        Constant = { icon = kind.Constant, hl = "TSConstant" },
-                        String = { icon = kind.String, hl = "TSString" },
-                        Number = { icon = kind.Number, hl = "TSNumber" },
-                        Boolean = { icon = kind.Boolean, hl = "TSBoolean" },
-                        Array = { icon = kind.Array, hl = "TSConstant" },
-                        Object = { icon = kind.Object, hl = "TSType" },
-                        Key = { icon = kind.Key, hl = "TSType" },
-                        Null = { icon = kind.Null, hl = "TSType" },
-                        EnumMember = { icon = kind.EnumMember, hl = "TSField" },
-                        Struct = { icon = kind.Struct, hl = "TSType" },
-                        Event = { icon = kind.Event, hl = "TSType" },
-                        Operator = { icon = kind.Operator, hl = "TSOperator" },
-                        TypeParameter = { icon = kind.TypeParameter, hl = "TSParameter" },
-                    },
-                }
-                require("symbols-outline").setup(opts)
+                require("user.symbols_outline").config()
             end,
             -- cmd = "SymbolsOutline",
             event = "BufReadPost",
@@ -383,7 +334,7 @@ M.config = function()
                 )
             end,
             event = "BufRead",
-            ft = { "rust", "go" },
+            ft = { "rust", "go", "typescript", "typescriptreact" },
         },
         -- Diagnostics
         {
@@ -397,7 +348,7 @@ M.config = function()
                     use_diagnostic_signs = true,
                 }
             end,
-            cmd = "TroubleToggle",
+            cmd = "Trouble",
         },
         -- Python coverage highlight
         { "mgedmin/coverage-highlight.vim" },
@@ -419,8 +370,6 @@ M.config = function()
         },
         -- Smithy
         { "jasdel/vim-smithy" },
-        -- Multi-edit support
-        { "mg979/vim-visual-multi" },
         -- Colorizer
         {
             "norcalli/nvim-colorizer.lua",
@@ -438,18 +387,6 @@ M.config = function()
             requires = { "mfussenegger/nvim-dap" },
             disable = not lvim.builtin.dap.active,
         },
-        -- Peek line number
-        -- {
-        --     "nacro90/numb.nvim",
-        --     event = "BufRead",
-        --     config = function()
-        --         require("numb").setup {
-        --             show_numbers = true,
-        --             show_cursorline = true,
-        --         }
-        --     end,
-        -- },
-        -- -- Spelling
         {
             "lewis6991/spellsitter.nvim",
             config = function()
@@ -466,29 +403,7 @@ M.config = function()
             "folke/todo-comments.nvim",
             requires = "nvim-lua/plenary.nvim",
             config = function()
-                local icons = require("user.lsp").todo_comments
-                require("todo-comments").setup {
-                    keywords = {
-                        FIX = { icon = icons.FIX },
-                        TODO = { icon = icons.TODO, alt = { "WIP" } },
-                        HACK = { icon = icons.HACK, color = "hack" },
-                        WARN = { icon = icons.WARN },
-                        PERF = { icon = icons.PERF },
-                        NOTE = { icon = icons.NOTE, alt = { "INFO", "NB" } },
-                        ERROR = { icon = icons.ERROR, color = "error", alt = { "ERR" } },
-                        REFS = { icon = icons.REFS },
-                    },
-                    highlight = { max_line_len = 120 },
-                    colors = {
-                        error = { "DiagnosticError" },
-                        warning = { "DiagnosticWarn" },
-                        info = { "DiagnosticInfo" },
-                        hint = { "DiagnosticHint" },
-                        hack = { "Function" },
-                        ref = { "FloatBorder" },
-                        default = { "Identifier" },
-                    },
-                }
+                require("user.todo_comments").config()
             end,
         },
         -- Spectre
@@ -503,44 +418,7 @@ M.config = function()
         {
             "kevinhwang91/nvim-bqf",
             config = function()
-                require("bqf").setup {
-                    auto_resize_height = true,
-                    func_map = {
-                        tab = "st",
-                        split = "sv",
-                        vsplit = "sg",
-
-                        stoggleup = "K",
-                        stoggledown = "J",
-                        stogglevm = "<Space>",
-
-                        ptoggleitem = "p",
-                        ptoggleauto = "P",
-                        ptogglemode = "zp",
-
-                        pscrollup = "<C-b>",
-                        pscrolldown = "<C-f>",
-
-                        prevfile = "gk",
-                        nextfile = "gj",
-
-                        prevhist = "<S-Tab>",
-                        nexthist = "<Tab>",
-                    },
-                    preview = {
-                        auto_preview = true,
-                        should_preview_cb = function(bufnr)
-                            local ret = true
-                            local filename = vim.api.nvim_buf_get_name(bufnr)
-                            local fsize = vim.fn.getfsize(filename)
-                            -- file size greater than 10k can't be previewed automatically
-                            if fsize > 100 * 1024 then
-                                ret = false
-                            end
-                            return ret
-                        end,
-                    },
-                }
+                require("user.bqf").config()
             end,
             event = "BufRead",
         },
@@ -560,14 +438,7 @@ M.config = function()
             "abzcoding/filetype.nvim",
             branch = "fix/qf-syntax",
             config = function()
-                require("filetype").setup {
-                    overrides = {
-                        literal = {
-                            ["kitty.conf"] = "kitty",
-                            [".gitignore"] = "conf",
-                        },
-                    },
-                }
+                require("user.filetype").config()
             end,
         },
         -- Telescope zoxide
@@ -644,6 +515,11 @@ M.config = function()
             "michaelb/sniprun",
             run = "bash ./install.sh",
             disable = not lvim.builtin.sniprun.active,
+        },
+        {
+            "editorconfig/editorconfig-vim",
+            event = "BufRead",
+            disable = not lvim.builtin.editorconfig.active,
         },
     }
 end
