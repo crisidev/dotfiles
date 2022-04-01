@@ -343,22 +343,24 @@ M.codes = {
         "lowercase-global",
     },
 }
-
 M.register_prosemd = function()
     vim.list_extend(lvim.lsp.override, { "prosemd" })
 
-    local lsp_configs = require "lspconfig.configs"
+    local configs = require "lspconfig.configs"
 
-    lsp_configs.prosemd = {
-        default_config = {
-            -- Update the path to prosemd-lsp
-            cmd = { "prosemd-lsp", "--stdio" },
-            filetypes = { "markdown" },
-            root_dir = function(fname)
-                return require("lspconfig").util.find_git_ancestor(fname) or vim.fn.getcwd()
-            end,
-        },
-    }
+    -- Check if the config is already defined (useful when reloading this file)
+    if not configs.prosemd then
+        configs.prosemd = {
+            default_config = {
+                -- Update the path to prosemd-lsp
+                cmd = { "prosemd-lsp", "--stdio" },
+                filetypes = { "latex", "tex", "bib", "markdown", "rst", "text" },
+                root_dir = function(fname)
+                    return require("lspconfig").util.find_git_ancestor(fname) or vim.fn.getcwd()
+                end,
+            },
+        }
+    end
 
     -- Use your attach function here
     local status_ok, lsp = pcall(require, "lspconfig")
@@ -367,6 +369,51 @@ M.register_prosemd = function()
     end
 
     lsp.prosemd.setup {
+        on_attach = require("lvim.lsp").common_on_attach,
+        on_init = require("lvim.lsp").common_on_init,
+        capabilities = require("lvim.lsp").common_capabilities(),
+    }
+end
+
+M.register_grammar_guard = function()
+    vim.list_extend(lvim.lsp.override, { "grammar_guard" })
+    require("grammar-guard").init()
+
+    local configs = require "lspconfig.configs"
+
+    if not configs.grammar_guard then
+        configs.grammar_guard = {
+            default_config = {
+                -- Update the path to prosemd-lsp
+                cmd = { "/home/matbigoi/.local/share/nvim/lsp_servers/ltex/ltex-ls/bin/ltex-ls" },
+                filetypes = { "latex", "tex", "bib", "markdown", "rst", "text" },
+                root_dir = function(fname)
+                    return require("lspconfig").util.find_git_ancestor(fname) or vim.fn.getcwd()
+                end,
+                settings = {
+                    ltex = {
+                        checkFrequency = "edit",
+                        enabled = { "latex", "tex", "bib", "markdown", "rst", "text" },
+                        language = "en",
+                        diagnosticSeverity = "information",
+                        setenceCacheSize = 2000,
+                        additionalRules = {
+                            enablePickyRules = true,
+                            motherTongue = "en",
+                        },
+                        trace = { server = "warning" },
+                    },
+                },
+            },
+        }
+    end
+    -- Use your attach function here
+    local status_ok, lsp = pcall(require, "lspconfig")
+    if not status_ok then
+        return
+    end
+
+    lsp.grammar_guard.setup {
         on_attach = require("lvim.lsp").common_on_attach,
         on_init = require("lvim.lsp").common_on_init,
         capabilities = require("lvim.lsp").common_capabilities(),
@@ -442,10 +489,10 @@ M.config = function()
 
     -- Configure null-ls
     require("user.null_ls").config()
-    -- Configure additional servers
+
+    -- Configure Lsp providers
+    M.register_grammar_guard()
     M.register_prosemd()
-    -- Initialize grammar-guard
-    require("grammar-guard").init()
 
     -- Mappings
     M.normal_buffer_mappings()
