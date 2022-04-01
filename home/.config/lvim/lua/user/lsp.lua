@@ -178,6 +178,71 @@ M.file_icons = {
     White = { "", "", "", "", "", "" },
 }
 
+M.codes = {
+    no_matching_function = {
+        message = " Can't find a matching function",
+        "redundant-parameter",
+        "ovl_no_viable_function_in_call",
+    },
+    different_requires = {
+        message = " Buddy you've imported this before, with the same name",
+        "different-requires",
+    },
+    empty_block = {
+        message = " That shouldn't be empty here",
+        "empty-block",
+    },
+    missing_symbol = {
+        message = " Here should be a symbol",
+        "miss-symbol",
+    },
+    expected_semi_colon = {
+        message = " Remember the `;` or `,`",
+        "expected_semi_declaration",
+        "miss-sep-in-table",
+        "invalid_token_after_toplevel_declarator",
+    },
+    redefinition = {
+        message = " That variable was defined before",
+        "redefinition",
+        "redefined-local",
+    },
+    no_matching_variable = {
+        message = " Can't find that variable",
+        "undefined-global",
+        "reportUndefinedVariable",
+    },
+    trailing_whitespace = {
+        message = " Remove trailing whitespace",
+        "trailing-whitespace",
+        "trailing-space",
+    },
+    unused_variable = {
+        message = " Don't define variables you don't use",
+        "unused-local",
+    },
+    unused_function = {
+        message = " Don't define functions you don't use",
+        "unused-function",
+    },
+    useless_symbols = {
+        message = " Remove that useless symbols",
+        "unknown-symbol",
+    },
+    wrong_type = {
+        message = " Try to use the correct types",
+        "init_conversion_failed",
+    },
+    undeclared_variable = {
+        message = " Have you delcared that variable somewhere?",
+        "undeclared_var_use",
+    },
+    lowercase_global = {
+        message = " Should that be a global? (if so make it uppercase)",
+        "lowercase-global",
+    },
+}
+
 M.show_documentation = function()
     local filetype = vim.bo.filetype
     if vim.tbl_contains({ "vim", "help" }, filetype) then
@@ -279,70 +344,6 @@ M.normal_buffer_mappings = function()
     lvim.lsp.buffer_mappings.normal_mode["gF"] = { "<cmd>lua vim.lsp.buf.formatting()<cr>", "Format file" }
 end
 
-M.codes = {
-    no_matching_function = {
-        message = " Can't find a matching function",
-        "redundant-parameter",
-        "ovl_no_viable_function_in_call",
-    },
-    different_requires = {
-        message = " Buddy you've imported this before, with the same name",
-        "different-requires",
-    },
-    empty_block = {
-        message = " That shouldn't be empty here",
-        "empty-block",
-    },
-    missing_symbol = {
-        message = " Here should be a symbol",
-        "miss-symbol",
-    },
-    expected_semi_colon = {
-        message = " Remember the `;` or `,`",
-        "expected_semi_declaration",
-        "miss-sep-in-table",
-        "invalid_token_after_toplevel_declarator",
-    },
-    redefinition = {
-        message = " That variable was defined before",
-        "redefinition",
-        "redefined-local",
-    },
-    no_matching_variable = {
-        message = " Can't find that variable",
-        "undefined-global",
-        "reportUndefinedVariable",
-    },
-    trailing_whitespace = {
-        message = " Remove trailing whitespace",
-        "trailing-whitespace",
-        "trailing-space",
-    },
-    unused_variable = {
-        message = " Don't define variables you don't use",
-        "unused-local",
-    },
-    unused_function = {
-        message = " Don't define functions you don't use",
-        "unused-function",
-    },
-    useless_symbols = {
-        message = " Remove that useless symbols",
-        "unknown-symbol",
-    },
-    wrong_type = {
-        message = " Try to use the correct types",
-        "init_conversion_failed",
-    },
-    undeclared_variable = {
-        message = " Have you delcared that variable somewhere?",
-        "undeclared_var_use",
-    },
-    lowercase_global = {
-        message = " Should that be a global? (if so make it uppercase)",
-        "lowercase-global",
-    },
-}
 M.register_prosemd = function()
     vim.list_extend(lvim.lsp.override, { "prosemd" })
 
@@ -352,7 +353,6 @@ M.register_prosemd = function()
     if not configs.prosemd then
         configs.prosemd = {
             default_config = {
-                -- Update the path to prosemd-lsp
                 cmd = { "prosemd-lsp", "--stdio" },
                 filetypes = { "latex", "tex", "bib", "markdown", "rst", "text" },
                 root_dir = function(fname)
@@ -379,45 +379,36 @@ M.register_grammar_guard = function()
     vim.list_extend(lvim.lsp.override, { "grammar_guard" })
     require("grammar-guard").init()
 
-    local configs = require "lspconfig.configs"
-
-    if not configs.grammar_guard then
-        configs.grammar_guard = {
-            default_config = {
-                -- Update the path to prosemd-lsp
-                cmd = { "/home/matbigoi/.local/share/nvim/lsp_servers/ltex/ltex-ls/bin/ltex-ls" },
-                filetypes = { "latex", "tex", "bib", "markdown", "rst", "text" },
-                root_dir = function(fname)
-                    return require("lspconfig").util.find_git_ancestor(fname) or vim.fn.getcwd()
-                end,
-                settings = {
-                    ltex = {
-                        checkFrequency = "edit",
-                        enabled = { "latex", "tex", "bib", "markdown", "rst", "text" },
-                        language = "en",
-                        diagnosticSeverity = "information",
-                        setenceCacheSize = 2000,
-                        additionalRules = {
-                            enablePickyRules = true,
-                            motherTongue = "en",
-                        },
-                        trace = { server = "warning" },
-                    },
+    local opts = {
+        cmd = { "ltex-ls" },
+        root_dir = function(fname)
+            return require("lspconfig").util.find_git_ancestor(fname) or vim.fn.getcwd()
+        end,
+        settings = {
+            ltex = {
+                checkFrequency = "edit",
+                enabled = { "latex", "tex", "bib", "markdown", "rst", "text" },
+                language = "en",
+                diagnosticSeverity = "information",
+                setenceCacheSize = 2000,
+                additionalRules = {
+                    enablePickyRules = true,
+                    motherTongue = "en",
                 },
+                trace = { server = "warning" },
             },
-        }
-    end
+        },
+        on_attach = require("lvim.lsp").common_on_attach,
+        on_init = require("lvim.lsp").common_on_init,
+        capabilities = require("lvim.lsp").common_capabilities(),
+    }
     -- Use your attach function here
     local status_ok, lsp = pcall(require, "lspconfig")
     if not status_ok then
         return
     end
 
-    lsp.grammar_guard.setup {
-        on_attach = require("lvim.lsp").common_on_attach,
-        on_init = require("lvim.lsp").common_on_init,
-        capabilities = require("lvim.lsp").common_capabilities(),
-    }
+    lsp.grammar_guard.setup(opts)
 end
 
 M.config = function()

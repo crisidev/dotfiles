@@ -237,6 +237,10 @@ M.config = function()
                 "williamboman/nvim-lsp-installer",
             },
         },
+        {
+            "rhysd/vim-grammarous",
+            cmd = "GrammarousCheck",
+        },
         -- Renamer
         {
             -- "filipdutescu/renamer.nvim",

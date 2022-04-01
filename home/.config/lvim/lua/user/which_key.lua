@@ -82,6 +82,18 @@ M.n_keys = function()
             p = { "<cmd>lua require('spectre').open()<cr>", "Project" },
             w = { "<cmd>lua require('spectre').open_visual({select_word=true})<cr>", "Replace Word" },
         },
+        -- Grammarous
+        ["gH"] = {
+            name = " Grammarous",
+            c = { "<cmd>GrammarousCheck<cr>", "Run grammar check" },
+            p = { "<Plug>(grammarous-move-to-previous-error)", "Goto previous error" },
+            n = { "<Plug>(grammarous-move-to-next-error)", "Goto next error" },
+            f = { "<Plug>(grammarous-fixit)", "Fix the error under the cursor" },
+            F = { "<Plug>(grammarous-fixall)", "Fix all errors int the document" },
+            o = { "<Plug>(grammarous-open-info-window)", "Open info window" },
+            q = { "<Plug>(grammarous-close-info-window)", "Close info window" },
+            d = { "<Plug>(grammarous-disable-rule)", "Disable rule under cursor" },
+        },
     }
 end
 
