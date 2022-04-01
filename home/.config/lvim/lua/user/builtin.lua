@@ -43,6 +43,8 @@ M.config = function()
     lvim.builtin.fidget = { active = true }
     -- Editor config
     lvim.builtin.editorconfig = { active = true }
+    -- Grammar guard
+    lvim.builtin.grammar_guard = {active = true }
 
     -- Dashboard
     lvim.builtin.alpha.active = true
@@ -87,8 +89,8 @@ M.config = function()
     lvim.builtin.terminal.active = true
     lvim.builtin.terminal.open_mapping = [[<c-\\>]]
     lvim.builtin.terminal.execs = {
-        { "zsh", "<c-\\>", "zsh", "float" },
-        { "zsh", "<c-]>", "zsh", "horizontal" },
+        { "zsh", "<c-\\>", "Terminal", "float" },
+        { "zsh", "<c-]>", "Terminal", "horizontal" },
         { "lazygit", "<c-g>", "LazyGit", "float" },
     }
 

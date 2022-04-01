@@ -1,0 +1,5 @@
+filter_class: "glrnvim"
+# paste_shortcut: "SHIFT+INSERT"
+# apply_patch: true
+enable: false
+# backspace_delay: 30000

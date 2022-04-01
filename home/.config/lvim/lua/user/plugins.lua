@@ -179,9 +179,6 @@ M.config = function()
         {
             "simrat39/rust-tools.nvim",
             ft = { "rust", "rs" },
-            config = function()
-                require("user.rust_tools").config()
-            end,
         },
         -- Lsp Typescript
         {
@@ -201,9 +198,6 @@ M.config = function()
         -- Lsp Cland Extensions
         {
             "p00f/clangd_extensions.nvim",
-            config = function()
-                require("user.clangd_extensions").config()
-            end,
             ft = { "c", "cpp", "objc", "objcpp" },
         },
         -- Copilot

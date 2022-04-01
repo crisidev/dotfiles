@@ -133,30 +133,30 @@ M.hi_colors = function()
 end
 
 M.telescope_theme = function()
-    local colors = M.hi_colors()
-    -- M.fg_bg("WinSeparator", colors.bg, "None")
-    M.fg_bg("NormalFloat", colors.fg, colors.bg)
-    M.fg_bg("FloatBorder", colors.fg, colors.bg)
-    M.fg_bg("TelescopeBorder", colors.bg_alt, colors.bg)
-    M.fg_bg("TelescopePromptBorder", colors.bg, colors.bg)
-    M.fg_bg("TelescopePromptNormal", colors.fg, colors.bg_alt)
-    M.fg_bg("TelescopePromptPrefix", colors.red, colors.bg)
-    M.bg("TelescopeNormal", colors.bg)
-    M.fg_bg("TelescopePreviewTitle", colors.bg, colors.green)
-    M.fg_bg("LvimInfoHeader", colors.bg, colors.green)
-    M.fg_bg("LvimInfoIdentifier", colors.red, colors.bg_alt)
-    M.fg_bg("TelescopePromptTitle", colors.bg, colors.red)
-    M.fg_bg("TelescopeResultsTitle", colors.bg, colors.bg)
-    M.fg_bg("TelescopeResultsBorder", colors.bg, colors.bg)
-    M.bg("TelescopeSelection", colors.bg_alt)
-end
+  local function set_bg(group, bg)
+    vim.cmd("hi " .. group .. " guibg=" .. bg)
+  end
 
-M.bg = function(group, col)
-    vim.cmd("hi " .. group .. " guibg=" .. col)
-end
+  local function set_fg_bg(group, fg, bg)
+    vim.cmd("hi " .. group .. " guifg=" .. fg .. " guibg=" .. bg)
+  end
 
-M.fg_bg = function(group, fgcol, bgcol)
-    vim.cmd("hi " .. group .. " guifg=" .. fgcol .. " guibg=" .. bgcol)
+  local colors = M.hi_colors()
+  -- set_fg_bg("WinSeparator", colors.bg, "None")
+  set_fg_bg("NormalFloat", colors.fg, colors.bg)
+  set_fg_bg("FloatBorder", colors.fg, colors.bg)
+  set_fg_bg("TelescopeBorder", colors.bg_alt, colors.bg)
+  set_fg_bg("TelescopePromptBorder", colors.bg, colors.bg)
+  set_fg_bg("TelescopePromptNormal", colors.fg, colors.bg_alt)
+  set_fg_bg("TelescopePromptPrefix", colors.red, colors.bg)
+  set_bg("TelescopeNormal", colors.bg)
+  set_fg_bg("TelescopePreviewTitle", colors.bg, colors.green)
+  set_fg_bg("LvimInfoHeader", colors.bg, colors.green)
+  set_fg_bg("LvimInfoIdentifier", colors.red, colors.bg_alt)
+  set_fg_bg("TelescopePromptTitle", colors.bg, colors.red)
+  set_fg_bg("TelescopeResultsTitle", colors.bg, colors.bg)
+  set_fg_bg("TelescopeResultsBorder", colors.bg, colors.bg)
+  set_bg("TelescopeSelection", colors.bg_alt)
 end
 
 return M

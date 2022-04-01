@@ -293,7 +293,10 @@ M.config = function()
                 local git_branch_cmd = io.popen 'git branch --show-current | tr -d "\n"'
                 local git_branch = git_branch_cmd:read "*a"
                 git_branch_cmd:close()
-                return git_repo .. "~" .. git_branch
+                return kind.icons.term .. " " .. git_repo .. "~" .. git_branch
+            end
+            if string.find(fname, "term") ~= nil then
+                return kind.icons.term .. " terminal " .. cwd
             end
             local show_name = vim.fn.expand "%:t"
             if #cwd > 0 and #ftype > 0 then

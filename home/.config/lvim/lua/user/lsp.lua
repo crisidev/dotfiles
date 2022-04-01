@@ -482,7 +482,9 @@ M.config = function()
     require("user.null_ls").config()
 
     -- Configure Lsp providers
-    M.register_grammar_guard()
+    if lvim.builtin.grammar_guard.active then
+        M.register_grammar_guard()
+    end
     M.register_prosemd()
 
     -- Mappings
