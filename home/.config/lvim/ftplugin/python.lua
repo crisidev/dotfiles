@@ -30,6 +30,8 @@ if lvim.builtin.dap.active then
 end
 
 -- Lsp config
+vim.list_extend(lvim.lsp.override, { "pyright" })
+
 local opts = {
     root_dir = function(fname)
         local util = require "lspconfig.util"

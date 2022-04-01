@@ -10,15 +10,6 @@ M.config = function()
         lvim.builtin.cmp.mapping["<S-Tab>"] = cmp.mapping(M.shift_tab, { "i", "c" })
     end
 
-    -- Sidebar
-    lvim.builtin.sidebar = { active = true }
-
-    -- Status line
-    lvim.builtin.fancy_wild_menu = { active = false }
-
-    -- Statusline
-    lvim.builtin.global_statusline = { active = true }
-
     -- Nvimtree
     lvim.builtin.nvimtree.side = "left"
     local kind = require "user.lsp"
@@ -35,28 +26,22 @@ M.config = function()
     lvim.builtin.nvimtree.setup.view.auto_resize = true
     lvim.builtin.nvimtree.setup.actions.open_file.resize_window = true
     lvim.builtin.nvimtree.icons = kind.nvim_tree_icons
-    lvim.builtin.nvimtree.on_config_done = function(_)
-        lvim.builtin.which_key.mappings["e"] = { "<cmd>NvimTreeToggle<CR>", " Explorer" }
-    end
     lvim.builtin.nvimtree.show_icons.git = 0
 
+    -- Sidebar
+    lvim.builtin.sidebar = { active = true }
+    -- Statusline
+    lvim.builtin.global_statusline = { active = true }
     -- Project
     lvim.builtin.project.active = true
     lvim.builtin.project.detection_methods = { "lsp", "pattern" }
-
     -- Debugging
     lvim.builtin.dap.active = true
-
     -- File browser
     lvim.builtin.file_browser = { active = true }
-
     -- Fidget vs lualine lsp progress
     lvim.builtin.fidget = { active = true }
-
-    -- Spinrun testing
-    lvim.builtin.sniprun = { active = true }
-
-    -- Spinrun testing
+    -- Editor config
     lvim.builtin.editorconfig = { active = true }
 
     -- Dashboard

@@ -13,6 +13,8 @@ linters.setup {
 }
 
 -- Lsp config
+vim.list_extend(lvim.lsp.override, { "dockerls" })
+
 local opts = {
     root_dir = function(fname)
         return require("lspconfig").util.root_pattern ".git"(fname) or require("lspconfig").util.path.dirname(fname)

@@ -12,6 +12,9 @@ formatters.setup {
 local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {}
 
+-- Lsp config
+vim.list_extend(lvim.lsp.override, { "taplo" })
+
 local opts = {}
 local servers = require "nvim-lsp-installer.servers"
 local server_available, requested_server = servers.get_server "taplo"

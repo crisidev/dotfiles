@@ -127,7 +127,6 @@ M.config = function()
             end,
             requires = "nvim-lua/plenary.nvim",
         },
-
         -- Session manager
         {
             "Shatur/neovim-session-manager",
@@ -206,14 +205,6 @@ M.config = function()
                 require("user.clangd_extensions").config()
             end,
             ft = { "c", "cpp", "objc", "objcpp" },
-        },
-        -- Code action with menu
-        {
-            "weilbith/nvim-code-action-menu",
-            cmd = "CodeActionMenu",
-            config = function()
-                vim.g.code_action_menu_show_diff = false
-            end,
         },
         -- Copilot
         {
@@ -298,12 +289,11 @@ M.config = function()
             end,
         },
         -- Treesitter cmp
-        {
-            "ray-x/cmp-treesitter",
-            requires = "nvim-treesitter/nvim-treesitter",
-        },
+        -- {
+        --     "ray-x/cmp-treesitter",
+        --     requires = "nvim-treesitter/nvim-treesitter",
+        -- },
         -- Better comparison order
-        { "lukas-reineke/cmp-under-comparator" },
         -- Neogen
         {
             "danymat/neogen",
@@ -465,29 +455,12 @@ M.config = function()
                 }
             end,
         },
-        -- Log highlight
-        {
-            "mtdl9/vim-log-highlighting",
-            ft = { "text", "log" },
-        },
         -- Smart quit
         {
             "marklcrns/vim-smartq",
             config = function()
                 vim.g.smartq_default_mappings = 0
             end,
-        },
-        -- Wilder
-        {
-            "gelguy/wilder.nvim",
-            -- event = { "CursorHold", "CmdlineEnter" },
-            rocks = { "luarocks-fetch-gitrec", "pcre2" },
-            requires = { "romgrk/fzy-lua-native" },
-            config = function()
-                vim.cmd(string.format("source %s", "~/.config/lvim/vimscript/wilder.vim"))
-            end,
-            run = ":UpdateRemotePlugins",
-            disable = not lvim.builtin.fancy_wild_menu.active,
         },
         -- Tabout
         {
@@ -510,12 +483,6 @@ M.config = function()
         },
         -- Web API
         { "mattn/webapi-vim" },
-        -- Spinrun
-        {
-            "michaelb/sniprun",
-            run = "bash ./install.sh",
-            disable = not lvim.builtin.sniprun.active,
-        },
         {
             "editorconfig/editorconfig-vim",
             event = "BufRead",

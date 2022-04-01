@@ -178,72 +178,6 @@ M.file_icons = {
     White = { "", "", "", "", "", "" },
 }
 
--- Prints the first diagnostic for the current line.
-M.echo_diagnostic = function()
-    if echo_timer then
-        echo_timer:stop()
-    end
-
-    echo_timer = vim.defer_fn(function()
-        local line = vim.fn.line "." - 1
-        local bufnr = vim.api.nvim_win_get_buf(0)
-
-        if last_echo[1] and last_echo[2] == bufnr and last_echo[3] == line then
-            return
-        end
-
-        local diags = vim.lsp.diagnostic.get_line_diagnostics(bufnr, line, { severity_limit = "Hint" })
-
-        if #diags == 0 then
-            -- If we previously echo'd a message, clear it out by echoing an empty
-            -- message.
-            if last_echo[1] then
-                last_echo = { false, -1, -1 }
-
-                vim.api.nvim_command 'echo ""'
-            end
-
-            return
-        end
-
-        last_echo = { true, bufnr, line }
-
-        local diag = diags[1]
-        local width = vim.api.nvim_get_option "columns" - 15
-        local lines = vim.split(diag.message, "\n")
-        local message = lines[1]
-
-        if #lines > 1 and #message <= short_line_limit then
-            message = message .. " " .. lines[2]
-        end
-
-        if width > 0 and #message >= width then
-            message = message:sub(1, width) .. "..."
-        end
-
-        local kind = "hint"
-        local hlgroup = hint_hlgroup
-
-        if diag.severity == vim.lsp.protocol.DiagnosticSeverity.Error then
-            kind = "error"
-            hlgroup = error_hlgroup
-        elseif diag.severity == vim.lsp.protocol.DiagnosticSeverity.Warning then
-            kind = "warning"
-            hlgroup = warning_hlgroup
-        elseif diag.severity == vim.lsp.protocol.DiagnosticSeverity.Info then
-            kind = "info"
-            hlgroup = info_hlgroup
-        end
-
-        local chunks = {
-            { kind .. ": ", hlgroup },
-            { message },
-        }
-
-        vim.api.nvim_echo(chunks, false, {})
-    end, echo_timeout)
-end
-
 M.show_documentation = function()
     local filetype = vim.bo.filetype
     if vim.tbl_contains({ "vim", "help" }, filetype) then
@@ -345,114 +279,6 @@ M.normal_buffer_mappings = function()
     lvim.lsp.buffer_mappings.normal_mode["gF"] = { "<cmd>lua vim.lsp.buf.formatting()<cr>", "Format file" }
 end
 
-M.config_prosemd = function()
-    local lsp_configs = require "lspconfig.configs"
-
-    lsp_configs.prosemd = {
-        default_config = {
-            -- Update the path to prosemd-lsp
-            cmd = { "prosemd-lsp", "--stdio" },
-            filetypes = { "markdown" },
-            root_dir = function(fname)
-                return require("lspconfig").util.find_git_ancestor(fname) or vim.fn.getcwd()
-            end,
-        },
-    }
-
-    -- Use your attach function here
-    local status_ok, lsp = pcall(require, "lspconfig")
-    if not status_ok then
-        return
-    end
-
-    lsp.prosemd.setup {
-        on_attach = require("lvim.lsp").common_on_attach,
-        on_init = require("lvim.lsp").common_on_init,
-        capabilities = require("lvim.lsp").common_capabilities(),
-    }
-end
-
-M.config_bashls = function()
-    -- Lsp config
-    local lsp_configs = require "lspconfig.configs"
-    lsp_configs.bashls = {
-        default_config = {
-            -- Update the path to prosemd-lsp
-            cmd = {
-                "node",
-                "/home/matbigoi/.local/share/nvim/lsp_servers/bash/node_modules/bash-language-server/bin/main.js",
-                "start",
-            },
-            filetypes = { "bash", "sh", "zsh" },
-            root_dir = function(fname)
-                return require("lspconfig").util.find_git_ancestor(fname) or vim.fn.getcwd()
-            end,
-        },
-    }
-
-    -- Use your attach function here
-    local status_ok, lsp = pcall(require, "lspconfig")
-    lsp.bashls.setup {
-        on_attach = require("lvim.lsp").common_on_attach,
-        on_init = require("lvim.lsp").common_on_init,
-        capabilities = require("lvim.lsp").common_capabilities(),
-    }
-end
-
-M.config_tsserver = function()
-    local status_ok, ts_utils = pcall(require, "nvim-lsp-ts-utils")
-    if not status_ok then
-        vim.cmd [[ packadd nvim-lsp-ts-utils ]]
-        ts_utils = require "nvim-lsp-ts-utils"
-    end
-
-    local opts = {
-        on_attach = function(client, bufnr)
-            -- defaults
-            ts_utils.setup {
-                debug = false,
-                disable_commands = false,
-                enable_import_on_completion = false,
-                import_all_timeout = 5000, -- ms
-
-                -- eslint
-                eslint_enable_code_actions = true,
-                eslint_enable_disable_comments = true,
-                eslint_bin = "eslint_d",
-                eslint_config_fallback = nil,
-                eslint_enable_diagnostics = false,
-
-                -- formatting
-                enable_formatting = false,
-                formatter = "prettierd",
-                formatter_config_fallback = nil,
-
-                -- parentheses completion
-                complete_parens = false,
-                signature_help_in_parens = false,
-
-                -- update imports on file move
-                update_imports_on_move = false,
-                require_confirmation_on_move = false,
-                watch_dir = nil,
-            }
-            ts_utils.setup_client(client)
-            require("lvim.lsp").common_on_attach(client, bufnr)
-        end,
-        init_options = require("nvim-lsp-ts-utils").init_options,
-        on_init = require("lvim.lsp").common_on_init,
-        capabilities = require("lvim.lsp").common_capabilities(),
-    }
-
-    local servers = require "nvim-lsp-installer.servers"
-    local server_available, requested_server = servers.get_server "tsserver"
-    if server_available then
-        opts.cmd_env = requested_server:get_default_options().cmd_env
-    end
-
-    require("lvim.lsp.manager").setup("tsserver", opts)
-end
-
 M.codes = {
     no_matching_function = {
         message = " Can't find a matching function",
@@ -518,21 +344,37 @@ M.codes = {
     },
 }
 
+M.register_prosemd = function()
+    vim.list_extend(lvim.lsp.override, { "prosemd" })
+
+    local lsp_configs = require "lspconfig.configs"
+
+    lsp_configs.prosemd = {
+        default_config = {
+            -- Update the path to prosemd-lsp
+            cmd = { "prosemd-lsp", "--stdio" },
+            filetypes = { "markdown" },
+            root_dir = function(fname)
+                return require("lspconfig").util.find_git_ancestor(fname) or vim.fn.getcwd()
+            end,
+        },
+    }
+
+    -- Use your attach function here
+    local status_ok, lsp = pcall(require, "lspconfig")
+    if not status_ok then
+        return
+    end
+
+    lsp.prosemd.setup {
+        on_attach = require("lvim.lsp").common_on_attach,
+        on_init = require("lvim.lsp").common_on_init,
+        capabilities = require("lvim.lsp").common_capabilities(),
+    }
+end
+
 M.config = function()
     vim.lsp.set_log_level "warn"
-    -- Use rust-tools.nvim
-    vim.list_extend(lvim.lsp.override, {
-        "clangd",
-        "dockerls",
-        "gopls",
-        "pyright",
-        "r_language_server",
-        "rust_analyzer",
-        "sumneko_lua",
-        "tsserver",
-        "yamlls",
-        "taplo",
-    })
     lvim.lsp.automatic_servers_installation = true
     lvim.lsp.document_highlight = true
     lvim.lsp.code_lens_refresh = true
@@ -600,10 +442,8 @@ M.config = function()
 
     -- Configure null-ls
     require("user.null_ls").config()
-    -- Configure bashls
-    M.config_bashls()
-    -- Configure prosemd
-    M.config_prosemd()
+    -- Configure additional servers
+    M.register_prosemd()
     -- Initialize grammar-guard
     require("grammar-guard").init()
 

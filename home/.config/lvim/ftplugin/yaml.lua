@@ -13,6 +13,8 @@ local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {}
 
 -- Lsp server override
+vim.list_extend(lvim.lsp.override, { "yamlls" })
+
 local opts = {
     settings = {
         yaml = {

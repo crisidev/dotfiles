@@ -25,8 +25,8 @@ interval = 5
 
 [[block]]
 block = "custom"
-cycle = ["~/.bin/mute-toggle get"]
-on_click = "~/.bin/mute-toggle set"
+cycle = ["~/.bin/i3mute get"]
+on_click = "~/.bin/i3mute set"
 json = true
 interval = 2
 

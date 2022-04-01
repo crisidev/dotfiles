@@ -6,6 +6,9 @@ formatters.setup {}
 local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {}
 
+-- Lsp config
+vim.list_extend(lvim.lsp.override, { "rust_analyzer" })
+
 -- Rust tools mappings
 lvim.lsp.buffer_mappings.normal_mode["gT"] = {
     name = "☢ Rust Tools",

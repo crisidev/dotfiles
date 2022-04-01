@@ -19,6 +19,8 @@ linters.setup {
 }
 
 -- Lsp config
+vim.list_extend(lvim.lsp.override, { "sumneko_lua" })
+
 local status_ok, lua_dev = pcall(require, "lua-dev")
 if not status_ok then
     vim.cmd [[ packadd lua-dev.nvim ]]

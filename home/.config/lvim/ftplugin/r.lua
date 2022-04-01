@@ -8,6 +8,8 @@ local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {}
 
 -- Start lsp
+vim.list_extend(lvim.lsp.override, { "r_language_server" })
+
 local lspconfig = require "lspconfig"
 local configs = require "lspconfig/configs"
 local servers = require "nvim-lsp-installer.servers"
