@@ -25,8 +25,6 @@ M.config = function()
 		[">"] = ">>",
 		-- Yank to the end of line
 		["Y"] = "y$",
-		-- Open horizontal terminal
-		["<C-]>"] = "<cmd>ToggleTerm size=12 direction=horizontal<cr>",
 	}
 
 	if lvim.builtin.tag_provider == "symbols-outline" then
@@ -56,8 +54,6 @@ M.config = function()
 		["<C-v>"] = "<C-r><C-o>+",
 		-- Snippets
 		["<C-s>"] = "<cmd>lua require('telescope').extensions.luasnip.luasnip(require('telescope.themes').get_cursor({}))<cr>",
-		-- Open horizontal terminal
-		["<C-]>"] = "<cmd>ToggleTerm size=12 direction=horizontal<cr>",
 	}
 	-- VISUAL
 	lvim.keys.visual_mode = {

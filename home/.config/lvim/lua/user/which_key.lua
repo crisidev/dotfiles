@@ -31,6 +31,7 @@ M.n_keys = function()
 			p = { "<cmd>lua require('user.telescope').projects()<cr>", "Projects" },
 			s = { "<cmd>lua require('user.telescope').find_string()<cr>", " Find string in file" },
 			r = { "<cmd>lua require('user.telescope').recent_files()<cr>", "Recent files" },
+			R = { "<cmd>lua require('user.telescope').raw_grep()<cr>", "Raw grep" },
 			z = { "<cmd>lua require('user.telescope').zoxide()<cr>", "Zoxide list" },
 		},
 		-- Session management
@@ -61,14 +62,6 @@ M.n_keys = function()
 			},
 			s = { "<cmd>lua require('user.telescope').git_status()<cr>", "Repository status" },
 			f = { "<cmd>lua require('user.telescope').git_files()<cr>", "Repository files" },
-		},
-		-- Documentation
-		["gN"] = {
-			name = " Neogen",
-			c = { "<cmd>lua require('neogen').generate({ type = 'class'})<CR>", "Class Documentation" },
-			f = { "<cmd>lua require('neogen').generate({ type = 'func'})<CR>", "Function Documentation" },
-			t = { "<cmd>lua require('neogen').generate({ type = 'type'})<CR>", "Type Documentation" },
-			F = { "<cmd>lua require('neogen').generate({ type = 'file'})<CR>", "File Documentation" },
 		},
 		-- Diagnostics
 		["gl"] = {

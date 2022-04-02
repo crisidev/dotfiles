@@ -53,6 +53,10 @@ function M.find_string()
 	builtin.live_grep(opts)
 end
 
+function M.raw_grep()
+    require("telescope").extensions.live_grep_raw.live_grep_raw()
+end
+
 -- find files
 function M.find_files()
 	local opts = {
