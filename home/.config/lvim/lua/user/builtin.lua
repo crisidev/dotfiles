@@ -22,12 +22,13 @@ M.config = function()
             error = kind.icons.error,
         },
     }
-    lvim.builtin.nvimtree.setup.view.width = 60
     lvim.builtin.nvimtree.setup.view.auto_resize = true
     lvim.builtin.nvimtree.setup.actions.open_file.resize_window = true
     lvim.builtin.nvimtree.icons = kind.nvim_tree_icons
     lvim.builtin.nvimtree.show_icons.git = 0
 
+    -- Tag provider
+    lvim.builtin.tag_provider = "vista"
     -- Sidebar
     lvim.builtin.sidebar = { active = true }
     -- Statusline
@@ -44,7 +45,9 @@ M.config = function()
     -- Editor config
     lvim.builtin.editorconfig = { active = true }
     -- Grammar guard
-    lvim.builtin.grammar_guard = {active = true }
+    lvim.builtin.grammar_guard = { active = true }
+    -- Hlslens
+    lvim.builtin.hlslens = { active = true }
 
     -- Dashboard
     lvim.builtin.alpha.active = true

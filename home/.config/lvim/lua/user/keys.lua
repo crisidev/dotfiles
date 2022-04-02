@@ -17,8 +17,6 @@ M.config = function()
         ["<A-Down>"] = "<cmd>wincmd j<cr>",
         ["<A-Left>"] = "<cmd>wincmd h<cr>",
         ["<A-Right>"] = "<cmd>wincmd l<cr>",
-        -- Symbols
-        ["<F10>"] = "<cmd>SymbolsOutline<cr>",
         -- Toggle numbers
         ["<F11>"] = "<cmd>NoNuMode<cr>",
         ["<F12>"] = "<cmd>NuModeToggle<cr>",
@@ -30,6 +28,14 @@ M.config = function()
         -- Open horizontal terminal
         ["<C-s-\\>"] = "<cmd>ToggleTerm direction=horizontal<cr>",
     }
+
+    if lvim.builtin.tag_provider == "symbols-outline" then
+        lvim.keys.normal_mode["<F10>"] = "<cmd>SymbolsOutline<cr>"
+        lvim.keys.insert_mode["<F10>"] = "<cmd>SymbolsOutline<cr>"
+    elseif lvim.builtin.tag_provider == "vista" then
+        lvim.keys.normal_mode["<F10>"] = "<cmd>Vista!!<cr>"
+        lvim.keys.insert_mode["<F10>"] = "<cmd>Vista!!<cr>"
+    end
     -- INSERT
     lvim.keys.insert_mode = {
         -- Toggle tree
@@ -41,8 +47,6 @@ M.config = function()
         ["<F5>"] = "<cmd>MouseToggle<cr>",
         -- Yank current path
         ["<F6>"] = '<cmd>let @+ = expand("%:p")<cr>',
-        -- Symbols
-        ["<F10>"] = "<cmd>SymbolsOutline<cr>",
         -- Windows navigation
         ["<A-Up>"] = "<cmd>wincmd k<cr>",
         ["<A-Down>"] = "<cmd>wincmd j<cr>",
@@ -75,6 +79,35 @@ M.config = function()
     lvim.keys.normal_mode["<A-S-Right>"] = "<cmd>BufferLineMoveNext<cr>"
     lvim.keys.insert_mode["<A-S-Left>"] = "<cmd>BufferLineMovePrev<cr>"
     lvim.keys.insert_mode["<A-S-Right>"] = "<cmd>BufferLineMoveNext<cr>"
+end
+
+M.set_hlslens_keymaps = function()
+    local opts = { noremap = true, silent = true }
+    vim.api.nvim_set_keymap(
+        "n",
+        "n",
+        "<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>",
+        opts
+    )
+    vim.api.nvim_set_keymap(
+        "n",
+        "N",
+        "<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>",
+        opts
+    )
+    vim.api.nvim_set_keymap("n", "*", "*<Cmd>lua require('hlslens').start()<CR>", opts)
+    vim.api.nvim_set_keymap("n", "#", "#<Cmd>lua require('hlslens').start()<CR>", opts)
+    vim.api.nvim_set_keymap("n", "g*", "g*<Cmd>lua require('hlslens').start()<CR>", opts)
+    vim.api.nvim_set_keymap("n", "g#", "g#<Cmd>lua require('hlslens').start()<CR>", opts)
+end
+
+M.set_terminal_keymaps = function()
+    local opts = { noremap = true }
+    vim.api.nvim_buf_set_keymap(0, "t", "<esc>", [[<C-\><C-n>]], opts)
+    vim.api.nvim_buf_set_keymap(0, "t", "<C-h>", [[<C-\><C-n><C-W>h]], opts)
+    vim.api.nvim_buf_set_keymap(0, "t", "<C-j>", [[<C-\><C-n><C-W>j]], opts)
+    vim.api.nvim_buf_set_keymap(0, "t", "<C-k>", [[<C-\><C-n><C-W>k]], opts)
+    vim.api.nvim_buf_set_keymap(0, "t", "<C-l>", [[<C-\><C-n><C-W>l]], opts)
 end
 
 return M

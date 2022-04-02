@@ -20,7 +20,7 @@ local _, requested_server = lsp_installer_servers.get_server "rust_analyzer"
 local opts = {
     tools = {
         autoSetHints = true,
-        hover_with_actions = true,
+        hover_with_actions = false,
         executor = require("rust-tools/executors").termopen, -- can be quickfix or termopen
         runnables = {
             use_telescope = true,
@@ -63,7 +63,7 @@ local opts = {
                 { "╰", "FloatBorder" },
                 { "│", "FloatBorder" },
             },
-            auto_focus = true,
+            auto_focus = false,
         },
     },
     server = {

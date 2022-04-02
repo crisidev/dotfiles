@@ -18,6 +18,8 @@ M.config = function()
         },
         -- Markdown texwidth
         { "BufRead,BufNewFile", "*.md", "setlocal textwidth=80" },
+        -- Terminal
+        { "TermOpen", "term://*", "lua require('user.keys').set_terminal_keymaps()" },
     }
 end
 
