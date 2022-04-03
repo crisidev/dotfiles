@@ -11,7 +11,6 @@ M.themes = function()
                 vim.cmd [[colorscheme tokyonight]]
             end,
         },
-        { "folke/lsp-colors.nvim" },
         -- Colorizer
         {
             "norcalli/nvim-colorizer.lua",
@@ -24,6 +23,12 @@ end
 
 M.git = function()
     return {
+        -- Fugitive
+        {
+            "tpope/vim-fugitive",
+            cmd = { "Git", "Gdiffsplit" },
+            ft = { "fugitive" },
+        },
         -- Git blame
         {
             "f-person/git-blame.nvim",
@@ -497,6 +502,8 @@ M.config = function()
         },
         -- Web API
         { "mattn/webapi-vim" },
+        -- Startup time
+        { "dstein64/vim-startuptime" },
     }
     table.insert(lvim.plugins, M.themes())
     table.insert(lvim.plugins, M.git())

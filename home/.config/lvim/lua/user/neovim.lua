@@ -185,9 +185,8 @@ M.config = function()
 
 	-- Python2 provider
 	vim.g.python_host_prog = "$HOME/.pyenv/versions/2.7.17/bin/python"
-	-- Disable statusline in dashboard
-	vim.g.dashboard_disable_statusline = 1
-	vim.g.dashboard_enable_session = 0
+    -- Disable perl provider.
+    vim.g.loaded_perl_provider = 0
 
 	-- Folding
 	vim.wo.foldmethod = "expr"

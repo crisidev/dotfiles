@@ -113,6 +113,8 @@ for_window [class="Blueman-services"] floating enable border pixel 1
 for_window [class="tuxedo-control-center"] floating enable border pixel 1
 for_window [class="cemu.exe"] floating enable border pixel 1
 for_window [title="BOTW Cross-Platform Mod Loader"] floating enable border pixel 1
+for_window [class="steam_app_0"] floating enable border pixel 1
+for_window [class="steam_proton"] floating enable border pixel 1
 
 # Special borders and floats
 for_window [class="^ide$"] floating enable border pixel 2
