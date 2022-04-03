@@ -1,24 +1,5 @@
 local M = {}
 
--- Location information about the last message printed. The format is
--- `(did print, buffer number, line number)`.
-local last_echo = { false, -1, -1 }
--- The timer used for displaying a diagnostic in the commandline.
-local echo_timer = nil
--- The timer after which to display a diagnostic in the commandline.
-local echo_timeout = 250
--- The highlight group to use for hint messages.
-local hint_hlgroup = "markdownCode"
--- The highlight group to use for info messages.
-local info_hlgroup = "HopNextKey2"
--- The highlight group to use for warning messages.
-local warning_hlgroup = "WarningMsg"
--- The highlight group to use for error messages.
-local error_hlgroup = "ErrorMsg"
--- If the first diagnostic line has fewer than this many characters, also add
--- the second line to it.
-local short_line_limit = 20
-
 M.cmp_kind = {
     Class = " ",
     Color = " ",
@@ -62,7 +43,7 @@ M.icons = {
     settings = " ",
     ls_inactive_old = "轢",
     ls_active_old = "歷",
-    ls_active = "⚝ ",
+    ls_active = " ",
     ls_inactive = "",
     question = " ",
     added = "  ",
@@ -82,6 +63,19 @@ M.icons = {
     zoxide = "Z",
     repo = "",
     term = " ",
+    palette = " ",
+    buffers = "﩯",
+    telescope = "",
+    dashboard = "舘",
+    quit = "",
+    replace = "",
+    find = "",
+    grammar = "",
+    comment = "",
+    ok = "",
+    no = "",
+    moon = "",
+    go = "",
 }
 
 M.nvim_tree_icons = {
@@ -259,9 +253,6 @@ M.show_documentation = function()
 end
 
 M.normal_buffer_mappings = function()
-    -- Buffer mapping
-    lvim.lsp.buffer_mappings.normal_mode = require("user.which_key").n_keys()
-    -- Keybindings
     -- Hover
     -- lvim.lsp.buffer_mappings.normal_mode["K"] = { "<cmd>lua vim.lsp.buf.hover()<CR>", "Show hover" }
     lvim.lsp.buffer_mappings.normal_mode["K"] = {
@@ -270,45 +261,34 @@ M.normal_buffer_mappings = function()
     }
 
     -- Code actions popup
-    -- lvim.lsp.buffer_mappings.normal_mode["ga"] = {
-    --     "<cmd>CodeActionMenu<cr>",
-    --     "Code action",
-    -- }
     lvim.lsp.buffer_mappings.normal_mode["gA"] = { "<cmd>lua vim.lsp.codelens.run()<cr>", "Codelens Actions" }
     lvim.lsp.buffer_mappings.normal_mode["ga"] = {
+        --     "<cmd>CodeActionMenu<cr>",
         "<cmd>lua require('user.telescope').code_actions()<cr>",
         "Code action",
     }
     -- Goto
-    lvim.lsp.buffer_mappings.normal_mode["gg"] = { "<cmd>lua vim.lsp.buf.definition()<CR>", "Goto Definition" }
+    lvim.lsp.buffer_mappings.normal_mode["gg"] = { "<cmd>lua vim.lsp.buf.definition()<CR>", "Goto definition" }
+    lvim.lsp.buffer_mappings.normal_mode["gd"] = { "<cmd>lua vim.lsp.buf.declaration()<CR>", "Goto declaration" }
+    lvim.lsp.buffer_mappings.normal_mode["gt"] = { "<cmd>lua vim.lsp.buf.definition()<CR>", "Goto type definition" }
     lvim.lsp.buffer_mappings.normal_mode["gr"] = {
         "<cmd>lua require('user.telescope').lsp_references()<cr>",
-        "Goto References",
+        "Goto references",
     }
-    lvim.lsp.buffer_mappings.normal_mode["gt"] = {
-        name = " Goto",
-        g = { "<cmd>lua vim.lsp.buf.definition()<CR>", "Definition" },
-        d = { "<cmd>lua vim.lsp.buf.declaration()<CR>", "Declaration" },
-        i = { "<cmd>lua require('user.telescope').lsp_implementations()<cr>", "Implementation" },
-        r = { "<cmd>lua require('user.telescope').lsp_references()<cr>", "References" },
-    }
-    -- Signature
-    lvim.lsp.buffer_mappings.normal_mode["gs"] = { "<cmd>lua vim.lsp.buf.signature_help()<CR>", "Show signature help" }
-    -- Peek
-    lvim.lsp.buffer_mappings.normal_mode["gP"] = {
-        name = " Peek",
-        p = { "<cmd>lua require('goto-preview').goto_preview_definition()<cr>", "Preview definition" },
-        r = { "<cmd>lua require('goto-preview').goto_preview_references()<cr>", "Preview references" },
-        i = { "<cmd>lua require('goto-preview').goto_preview_implementation()<cr>", "Preview implementation" },
-        q = { "<cmd>lua require('goto-preview').close_all_win()<cr>", "Close all preview windows" },
+    lvim.lsp.buffer_mappings.normal_mode["gi"] = {
+        "<cmd>lua require('user.telescope').lsp_implementations()<cr>",
+        "Goto implementation",
     }
     -- Copilot
     if lvim.builtin.copilot.active then
         lvim.lsp.buffer_mappings.normal_mode["gC"] = {
-            name = " Copilot",
-            e = { "<cmd>Copilot enable<cr>", "Enable" },
+            name = "Copilot",
+            e = { "<cmd>Copilot enable<cr><cmd>Copilot split<cr>", "Enable" },
             d = { "<cmd>Copilot disable<cr>", "Disable" },
             s = { "<cmd>Copilot status<cr>", "Status" },
+            h = { "<cmd>Copilot help<cr>", "Help" },
+            r = { "<cmd>Copilot restart<cr>", "Restart" },
+            l = { "<cmd>Copilot logs<cr>", "Logs" },
         }
     end
     -- Rename
@@ -327,23 +307,21 @@ M.normal_buffer_mappings = function()
         "Prev Diagnostic",
     }
     lvim.lsp.buffer_mappings.normal_mode["ge"] = {
-        name = " Diagnostics",
+        name = "Diagnostics",
         e = { "<cmd>Trouble document_diagnostics<cr>", "Document diagnostics" },
         l = { "<cmd>Trouble loclist<cr>", "Trouble loclist" },
         q = { "<cmd>Trouble quickfix<cr>", "Trouble quifix" },
         r = { "<cmd>Trouble lsp_references<cr>", "Trouble references" },
         w = { "<cmd>Trouble workspace_diagnostics<cr>", "Workspace diagnostics" },
-        n = {
-            "<cmd>lua vim.diagnostic.goto_next({float = {border = 'rounded', focusable = false, source = 'always'}})<cr>",
-            "Next Diagnostic",
-        },
-        p = {
-            "<cmd>lua vim.diagnostic.goto_prev({float = {border = 'rounded', focusable = false, source = 'always'}})<cr>",
-            "Prev Diagnostic",
-        },
     }
     -- Format
     lvim.lsp.buffer_mappings.normal_mode["gF"] = { "<cmd>lua vim.lsp.buf.formatting()<cr>", "Format file" }
+    -- Quit
+    lvim.lsp.buffer_mappings.normal_mode["gq"] = { "<cmd>SmartQ<cr>", "Close buffer" }
+    lvim.lsp.buffer_mappings.normal_mode["gQ"] = { "<cmd>SmartQ!<cr>", "Force close buffer" }
+    -- Buffers and files
+    lvim.lsp.buffer_mappings.normal_mode["gx"] = { "<cmd>lua require('user.telescope').buffers()<cr>", "Show buffers" }
+    lvim.lsp.buffer_mappings.normal_mode["gf"] = { "<cmd>lua require('user.telescope').find_files()<cr>", "Find files" }
 end
 
 M.register_prosemd = function()

@@ -85,6 +85,6 @@ clangd_extensions.setup {
 
 -- Additional mappings
 lvim.lsp.buffer_mappings.normal_mode["gB"] = {
-    name = " Build helpers",
+    name = "Build helpers",
     h = { "<cmd>ClangdSwitchSourceHeader<cr>", "Run build help" },
 }

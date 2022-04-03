@@ -7,7 +7,7 @@ lvim.line_wrap_cursor_movement = false
 lvim.termguicolors = true
 lvim.transparent_window = false
 lvim.debug = false
-lvim.leader = "space"
+lvim.leader = ","
 vim.o.conceallevel = 2
 
 -- Vimscript if needed
@@ -39,9 +39,6 @@ require("user.lualine").config()
 
 -- Keys
 require("user.keys").config()
-
--- Which key
-require("user.which_key").config()
 
 -- Autocommands
 require("user.autocmd").config()

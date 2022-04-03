@@ -84,7 +84,7 @@ rust_tools.setup(opts)
 
 -- Rust tools mappings
 lvim.lsp.buffer_mappings.normal_mode["gT"] = {
-    name = "☢ Rust Tools",
+    name = "Rust Tools",
     a = { "<cmd>RustCodeAction<cr>", "Code action" },
     i = { "<cmd>RustToggleInlayHints<cr>", "Toggle inlay hints" },
     r = { "<cmd>RustRunnables<cr>", "Run targes" },
@@ -100,29 +100,29 @@ lvim.lsp.buffer_mappings.normal_mode["gT"] = {
 }
 
 lvim.lsp.buffer_mappings.normal_mode["gB"] = {
-    name = " Build helpers",
+    name = "Build helpers",
     b = {
-        "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd='cargo build;read',count=2,direction='float'})<cr>",
+        "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd='cargo build;read',count=2,direction='horizontal'})<cr>",
         "Run cargo build",
     },
     r = {
-        "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd='cargo run;read',count=2,direction='float'})<cr>",
+        "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd='cargo run;read',count=2,direction='horizontal'})<cr>",
         "Run cargo run",
     },
     C = {
-        "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd='cargo check;read',count=2,direction='float'})<cr>",
+        "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd='cargo check;read',count=2,direction='horizontal'})<cr>",
         "Run cargo check",
     },
     t = {
-        "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd='cargo test;read',count=2,direction='float'})<cr>",
+        "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd='cargo test;read',count=2,direction='horizontal'})<cr>",
         "Run cargo test",
     },
     c = {
-        "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd='cargo clippy;read',count=2,direction='float'})<cr>",
+        "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd='cargo clippy;read',count=2,direction='horizontal'})<cr>",
         "Run cargo clippy",
     },
     B = {
-        "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd='cargo bench;read',count=2,direction='float'})<cr>",
+        "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd='cargo bench;read',count=2,direction='horizontal'})<cr>",
         "Run cargo bench",
     },
 }

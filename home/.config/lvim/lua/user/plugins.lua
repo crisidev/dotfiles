@@ -118,15 +118,6 @@ M.lsp = function()
             end,
             disable = not lvim.builtin.fidget.active,
         },
-        -- Lsp goto preview
-        {
-            "rmagatti/goto-preview",
-            config = function()
-                require("goto-preview").setup {
-                    default_mappings = false,
-                }
-            end,
-        },
         -- Lsp Rust
         {
             "simrat39/rust-tools.nvim",

@@ -157,21 +157,6 @@ function M.curbuf()
 end
 
 function M.git_status()
-    local opts = themes.get_dropdown {
-        winblend = 10,
-        previewer = false,
-        shorten_path = false,
-        layout_config = {
-            width = 0.45,
-            prompt_position = "bottom",
-        },
-    }
-
-    -- Can change the git icons using this.
-    -- opts.git_icons = {
-    --   changed = "M"
-    -- }
-
     builtin.git_status(opts)
 end
 
@@ -196,25 +181,13 @@ function M.git_files()
         path = nil
     end
 
-    local width = 0.45
-    if path and string.find(path, "sourcegraph.*sourcegraph", 1, false) then
-        width = 0.6
-    end
-
-    local opts = themes.get_dropdown {
-        winblend = 5,
-        previewer = false,
-        shorten_path = false,
+    local opts = {
         cwd = path,
-        layout_config = {
-            width = width,
-            prompt_position = "bottom",
+        file_ignore_patterns = {
+            "^[.]vale/",
         },
     }
 
-    opts.file_ignore_patterns = {
-        "^[.]vale/",
-    }
     builtin.git_files(opts)
 end
 
