@@ -11,7 +11,7 @@ lvim.leader = "space"
 vim.o.conceallevel = 2
 
 -- Vimscript if needed
-vim.cmd("source ~/.config/lvim/vimscript/user.pre.vim")
+vim.cmd "source ~/.config/lvim/vimscript/user.pre.vim"
 
 -- Builtin
 require("user.builtin").config()
@@ -51,7 +51,7 @@ require("user.lsp").config()
 
 -- Neovide
 if vim.g.neovide then
-	require("user.neovide").config()
+    require("user.neovide").config()
 end
 
 -- Debugging
@@ -60,11 +60,11 @@ require("user.dap").config()
 -- Custom work stuff
 local ok, amzn = pcall(require, "user.amzn")
 if ok then
-	amzn.config()
+    amzn.config()
 end
 
 -- Copilot
 require("user.copilot").config()
 
 -- Vimscript if needed
-vim.cmd("source ~/.config/lvim/vimscript/user.post.vim")
+vim.cmd "source ~/.config/lvim/vimscript/user.post.vim"

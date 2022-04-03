@@ -16,30 +16,30 @@ end
 -- Determine OS
 local home = os.getenv "HOME"
 local launcher_path = vim.fn.glob(
-  home .. "/.local/share/nvim/lsp_servers/jdtls/plugins/org.eclipse.equinox.launcher_*.jar"
+    home .. "/.local/share/nvim/lsp_servers/jdtls/plugins/org.eclipse.equinox.launcher_*.jar"
 )
 if #launcher_path == 0 then
-  launcher_path = vim.fn.glob(
-    home .. "/.local/share/nvim/lsp_servers/jdtls/plugins/org.eclipse.equinox.launcher_*.jar",
-    1,
-    1
-  )[1]
+    launcher_path = vim.fn.glob(
+        home .. "/.local/share/nvim/lsp_servers/jdtls/plugins/org.eclipse.equinox.launcher_*.jar",
+        1,
+        1
+    )[1]
 end
 if vim.fn.has "mac" == 1 then
-  WORKSPACE_PATH = home .. "/workplace/"
-  CONFIG = "mac"
+    WORKSPACE_PATH = home .. "/workplace/"
+    CONFIG = "mac"
 elseif vim.fn.has "unix" == 1 then
-  WORKSPACE_PATH = home .. "/workplace/"
-  CONFIG = "linux"
+    WORKSPACE_PATH = home .. "/workplace/"
+    CONFIG = "linux"
 else
-  print "Unsupported system"
+    print "Unsupported system"
 end
 
 -- Find root of project
 local root_markers = { ".git", "mvnw", "gradlew", "pom.xml", "build.gradle" }
 local root_dir = require("jdtls.setup").find_root(root_markers)
 if root_dir == "" then
-  return
+    return
 end
 
 local extendedClientCapabilities = jdtls.extendedClientCapabilities
@@ -54,14 +54,14 @@ local workspace_dir = WORKSPACE_PATH .. project_name
 -- cd ~/.config/lvim/.java-debug/
 -- ./mvnw clean install
 local bundles = vim.fn.glob(
-  home .. "/.config/lvim/.java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar"
+    home .. "/.config/lvim/.java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar"
 )
 if #bundles == 0 then
-  bundles = vim.fn.glob(
-    home .. "/.config/lvim/.java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar",
-    1,
-    1
-  )
+    bundles = vim.fn.glob(
+        home .. "/.config/lvim/.java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar",
+        1,
+        1
+    )
 end
 
 -- NOTE: for testing
@@ -71,105 +71,105 @@ end
 -- npm run build-plugin
 local extra_bundles = vim.split(vim.fn.glob(home .. "/.config/lvim/.vscode-java-test/server/*.jar"), "\n")
 if #extra_bundles == 0 then
-  extra_bundles = vim.fn.glob(home .. "/.config/lvim/.vscode-java-test/server/*.jar", 1, 1)
+    extra_bundles = vim.fn.glob(home .. "/.config/lvim/.vscode-java-test/server/*.jar", 1, 1)
 end
 vim.list_extend(bundles, extra_bundles)
 
 local config = {
-  cmd = {
-    "java",
-    "-Declipse.application=org.eclipse.jdt.ls.core.id1",
-    "-Dosgi.bundles.defaultStartLevel=4",
-    "-Declipse.product=org.eclipse.jdt.ls.core.product",
-    "-Dlog.protocol=true",
-    "-Dlog.level=ALL",
-    "-javaagent:" .. home .. "/.local/share/nvim/lsp_servers/jdtls/lombok.jar",
-    "-Xms1g",
-    "--add-modules=ALL-SYSTEM",
-    "--add-opens",
-    "java.base/java.util=ALL-UNNAMED",
-    "--add-opens",
-    "java.base/java.lang=ALL-UNNAMED",
-    "-jar",
-    launcher_path,
-    "-configuration",
-    home .. "/.local/share/nvim/lsp_servers/jdtls/config_" .. CONFIG,
-    "-data",
-    workspace_dir,
-  },
+    cmd = {
+        "java",
+        "-Declipse.application=org.eclipse.jdt.ls.core.id1",
+        "-Dosgi.bundles.defaultStartLevel=4",
+        "-Declipse.product=org.eclipse.jdt.ls.core.product",
+        "-Dlog.protocol=true",
+        "-Dlog.level=ALL",
+        "-javaagent:" .. home .. "/.local/share/nvim/lsp_servers/jdtls/lombok.jar",
+        "-Xms1g",
+        "--add-modules=ALL-SYSTEM",
+        "--add-opens",
+        "java.base/java.util=ALL-UNNAMED",
+        "--add-opens",
+        "java.base/java.lang=ALL-UNNAMED",
+        "-jar",
+        launcher_path,
+        "-configuration",
+        home .. "/.local/share/nvim/lsp_servers/jdtls/config_" .. CONFIG,
+        "-data",
+        workspace_dir,
+    },
 
-  on_attach = require("lvim.lsp").common_on_attach,
-  on_init = require("lvim.lsp").common_on_init,
-  on_exit = require("lvim.lsp").common_on_exit,
-  capabilities = require("lvim.lsp").common_capabilities(),
-  root_dir = root_dir,
-  settings = {
-    java = {
-      -- jdt = {
-      --   ls = {
-      --     vmargs = "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx1G -Xms100m"
-      --   }
-      -- },
-      eclipse = {
-        downloadSources = true,
-      },
-      configuration = {
-        updateBuildConfiguration = "interactive",
-      },
-      maven = {
-        downloadSources = true,
-      },
-      implementationsCodeLens = {
-        enabled = true,
-      },
-      referencesCodeLens = {
-        enabled = true,
-      },
-      references = {
-        includeDecompiledSources = true,
-      },
-      format = {
-        enabled = true,
-        settings = {
-          profile = "GoogleStyle",
-          url = home .. "/.config/lvim/.java-google-formatter.xml",
+    on_attach = require("lvim.lsp").common_on_attach,
+    on_init = require("lvim.lsp").common_on_init,
+    on_exit = require("lvim.lsp").common_on_exit,
+    capabilities = require("lvim.lsp").common_capabilities(),
+    root_dir = root_dir,
+    settings = {
+        java = {
+            -- jdt = {
+            --   ls = {
+            --     vmargs = "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx1G -Xms100m"
+            --   }
+            -- },
+            eclipse = {
+                downloadSources = true,
+            },
+            configuration = {
+                updateBuildConfiguration = "interactive",
+            },
+            maven = {
+                downloadSources = true,
+            },
+            implementationsCodeLens = {
+                enabled = true,
+            },
+            referencesCodeLens = {
+                enabled = true,
+            },
+            references = {
+                includeDecompiledSources = true,
+            },
+            format = {
+                enabled = true,
+                settings = {
+                    profile = "GoogleStyle",
+                    url = home .. "/.config/lvim/.java-google-formatter.xml",
+                },
+            },
         },
-      },
+        signatureHelp = { enabled = true },
+        completion = {
+            favoriteStaticMembers = {
+                "org.hamcrest.MatcherAssert.assertThat",
+                "org.hamcrest.Matchers.*",
+                "org.hamcrest.CoreMatchers.*",
+                "org.junit.jupiter.api.Assertions.*",
+                "java.util.Objects.requireNonNull",
+                "java.util.Objects.requireNonNullElse",
+                "org.mockito.Mockito.*",
+            },
+        },
+        contentProvider = { preferred = "fernflower" },
+        extendedClientCapabilities = extendedClientCapabilities,
+        sources = {
+            organizeImports = {
+                starThreshold = 9999,
+                staticStarThreshold = 9999,
+            },
+        },
+        codeGeneration = {
+            toString = {
+                template = "${object.className}{${member.name()}=${member.value}, ${otherMembers}}",
+            },
+            useBlocks = true,
+        },
     },
-    signatureHelp = { enabled = true },
-    completion = {
-      favoriteStaticMembers = {
-        "org.hamcrest.MatcherAssert.assertThat",
-        "org.hamcrest.Matchers.*",
-        "org.hamcrest.CoreMatchers.*",
-        "org.junit.jupiter.api.Assertions.*",
-        "java.util.Objects.requireNonNull",
-        "java.util.Objects.requireNonNullElse",
-        "org.mockito.Mockito.*",
-      },
+    flags = {
+        allow_incremental_sync = true,
+        server_side_fuzzy_completion = true,
     },
-    contentProvider = { preferred = "fernflower" },
-    extendedClientCapabilities = extendedClientCapabilities,
-    sources = {
-      organizeImports = {
-        starThreshold = 9999,
-        staticStarThreshold = 9999,
-      },
+    init_options = {
+        bundles = bundles,
     },
-    codeGeneration = {
-      toString = {
-        template = "${object.className}{${member.name()}=${member.value}, ${otherMembers}}",
-      },
-      useBlocks = true,
-    },
-  },
-  flags = {
-    allow_incremental_sync = true,
-    server_side_fuzzy_completion = true,
-  },
-  init_options = {
-    bundles = bundles,
-  },
 }
 
 jdtls.start_or_attach(config)
@@ -184,29 +184,29 @@ vim.cmd "command! -buffer JdtBytecode lua require('jdtls').javap()"
 
 local wkstatus_ok, which_key = pcall(require, "which-key")
 if not wkstatus_ok then
-  return
+    return
 end
 
 local opts = {
-  mode = "n",
-  prefix = "<leader>",
-  buffer = nil,
-  silent = true,
-  noremap = true,
-  nowait = true,
+    mode = "n",
+    prefix = "<leader>",
+    buffer = nil,
+    silent = true,
+    noremap = true,
+    nowait = true,
 }
 
 local vopts = {
-  mode = "v",
-  prefix = "<leader>",
-  buffer = nil,
-  silent = true,
-  noremap = true,
-  nowait = true,
+    mode = "v",
+    prefix = "<leader>",
+    buffer = nil,
+    silent = true,
+    noremap = true,
+    nowait = true,
 }
 
 lvim.lsp.buffer_mappings.normal_mode["gB"] = {
-	name = " Build helpers",
+    name = " Build helpers",
     o = { "<Cmd>lua require'jdtls'.organize_imports()<CR>", "Organize Imports" },
     v = { "<Cmd>lua require('jdtls').extract_variable()<CR>", "Extract Variable" },
     c = { "<Cmd>lua require('jdtls').extract_constant()<CR>", "Extract Constant" },
@@ -216,7 +216,7 @@ lvim.lsp.buffer_mappings.normal_mode["gB"] = {
 }
 
 lvim.lsp.buffer_mappings.visual_mode["gB"] = {
-	name = " Build helpers",
+    name = " Build helpers",
     v = { "<Esc><Cmd>lua require('jdtls').extract_variable(true)<CR>", "Extract Variable" },
     c = { "<Esc><Cmd>lua require('jdtls').extract_constant(true)<CR>", "Extract Constant" },
     m = { "<Esc><Cmd>lua require('jdtls').extract_method(true)<CR>", "Extract Method" },
