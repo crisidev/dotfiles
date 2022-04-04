@@ -8,6 +8,7 @@ usage() {
 set -x
 
 # paths
+source ~/.zsh_secrets
 export GOPATH=~/.go
 export PATH=~/.bin:~/.toolbox/bin:~/.pyenv/bin:~/.rbenv/bin:~/.nodenv/bin:~/.goenv/bin:~/.bin:~/.cargo/bin:~/.android/Sdk/platform-tools:~/.toolchain/aarch64-linux-musl/bin:~/.nodenv/shims:~/.pyenv/shims:~/.rbenv/shims:~/.goenv/shims:$PATH
 export LUNARVIM_CONFIG_DIR="${LUNARVIM_CONFIG_DIR:-$HOME/.config/lvim}"

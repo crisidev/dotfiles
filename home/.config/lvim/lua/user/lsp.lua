@@ -34,7 +34,6 @@ M.icons = {
     warn = " ",
     info = " ",
     hint = " ",
-    code_action = " ",
     test = " ",
     docs = " ",
     clock = " ",
@@ -76,6 +75,14 @@ M.icons = {
     no = "",
     moon = "",
     go = "",
+    resume = "◌",
+    codelens = " ",
+    folder = "",
+    package = "",
+    spelling = " ",
+    copilot = "",
+    attention = "",
+    Function = "",
 }
 
 M.nvim_tree_icons = {
@@ -253,36 +260,50 @@ M.show_documentation = function()
 end
 
 M.normal_buffer_mappings = function()
+    local icons = require("user.lsp").icons
+
     -- Hover
     -- lvim.lsp.buffer_mappings.normal_mode["K"] = { "<cmd>lua vim.lsp.buf.hover()<CR>", "Show hover" }
     lvim.lsp.buffer_mappings.normal_mode["K"] = {
         "<cmd>lua require('user.lsp').show_documentation()<CR>",
-        "Show Documentation",
+        icons.docs .. "Show Documentation",
     }
 
     -- Code actions popup
-    lvim.lsp.buffer_mappings.normal_mode["gA"] = { "<cmd>lua vim.lsp.codelens.run()<cr>", "Codelens Actions" }
+    lvim.lsp.buffer_mappings.normal_mode["gA"] = {
+        "<cmd>lua vim.lsp.codelens.run()<cr>",
+        icons.codelens .. "Codelens actions",
+    }
     lvim.lsp.buffer_mappings.normal_mode["ga"] = {
         --     "<cmd>CodeActionMenu<cr>",
         "<cmd>lua require('user.telescope').code_actions()<cr>",
-        "Code action",
+        icons.codelens .. "Code actions",
     }
     -- Goto
-    lvim.lsp.buffer_mappings.normal_mode["gg"] = { "<cmd>lua vim.lsp.buf.definition()<CR>", "Goto definition" }
-    lvim.lsp.buffer_mappings.normal_mode["gd"] = { "<cmd>lua vim.lsp.buf.declaration()<CR>", "Goto declaration" }
-    lvim.lsp.buffer_mappings.normal_mode["gt"] = { "<cmd>lua vim.lsp.buf.definition()<CR>", "Goto type definition" }
+    lvim.lsp.buffer_mappings.normal_mode["gg"] = {
+        "<cmd>lua vim.lsp.buf.definition()<CR>",
+        icons.go .. " Goto definition",
+    }
+    lvim.lsp.buffer_mappings.normal_mode["gD"] = {
+        "<cmd>lua vim.lsp.buf.declaration()<CR>",
+        icons.go .. " Goto declaration",
+    }
+    lvim.lsp.buffer_mappings.normal_mode["gt"] = {
+        "<cmd>lua vim.lsp.buf.definition()<CR>",
+        icons.go .. " Goto type definition",
+    }
     lvim.lsp.buffer_mappings.normal_mode["gr"] = {
         "<cmd>lua require('user.telescope').lsp_references()<cr>",
-        "Goto references",
+        icons.go .. " Goto references",
     }
     lvim.lsp.buffer_mappings.normal_mode["gi"] = {
         "<cmd>lua require('user.telescope').lsp_implementations()<cr>",
-        "Goto implementation",
+        icons.go .. " Goto implementations",
     }
     -- Copilot
     if lvim.builtin.copilot.active then
         lvim.lsp.buffer_mappings.normal_mode["gC"] = {
-            name = "Copilot",
+            name = icons.copilot .. " Copilot",
             e = { "<cmd>Copilot enable<cr><cmd>Copilot split<cr>", "Enable" },
             d = { "<cmd>Copilot disable<cr>", "Disable" },
             s = { "<cmd>Copilot status<cr>", "Status" },
@@ -291,37 +312,74 @@ M.normal_buffer_mappings = function()
             l = { "<cmd>Copilot logs<cr>", "Logs" },
         }
     end
+
     -- Rename
-    lvim.lsp.buffer_mappings.normal_mode["gR"] = { "<cmd>lua require('renamer').rename()<cr>", "Rename symbol" }
+    lvim.lsp.buffer_mappings.normal_mode["gR"] = {
+        "<cmd>lua require('renamer').rename()<cr>",
+        icons.palette .. "Rename symbol",
+    }
+
+    -- Signature
+    lvim.lsp.buffer_mappings.normal_mode["gs"] = {
+        "<cmd>lua vim.lsp.buf.signature_help()<CR>",
+        icons.Function .. " Show signature help",
+    }
+
     -- Diagnostics
     lvim.lsp.buffer_mappings.normal_mode["gl"] = {
         "<cmd>lua require('lvim.lsp.handlers').show_line_diagnostics()<CR>",
-        "Show line diagnostics",
+        icons.hint .. "Show line diagnostics",
+    }
+    lvim.lsp.buffer_mappings.normal_mode["gd"] = {
+        "<cmd>Telescope diagnostics<cr>",
+        icons.hint .. "Show diagnostics",
     }
     lvim.lsp.buffer_mappings.normal_mode["gn"] = {
         "<cmd>lua vim.diagnostic.goto_next({float = {border = 'rounded', focusable = false, source = 'always'}})<cr>",
-        "Next Diagnostic",
+        icons.hint .. "Next diagnostic",
     }
+
     lvim.lsp.buffer_mappings.normal_mode["gp"] = {
         "<cmd>lua vim.diagnostic.goto_prev({float = {border = 'rounded', focusable = false, source = 'always'}})<cr>",
-        "Prev Diagnostic",
+        icons.hint .. "Previous diagnostic",
     }
+
+    -- Trouble
     lvim.lsp.buffer_mappings.normal_mode["ge"] = {
-        name = "Diagnostics",
+        name = icons.hint .. "Trouble",
         e = { "<cmd>Trouble document_diagnostics<cr>", "Document diagnostics" },
+        w = { "<cmd>Trouble workspace_diagnostics<cr>", "Workspace diagnostics" },
         l = { "<cmd>Trouble loclist<cr>", "Trouble loclist" },
         q = { "<cmd>Trouble quickfix<cr>", "Trouble quifix" },
         r = { "<cmd>Trouble lsp_references<cr>", "Trouble references" },
-        w = { "<cmd>Trouble workspace_diagnostics<cr>", "Workspace diagnostics" },
     }
+
     -- Format
-    lvim.lsp.buffer_mappings.normal_mode["gF"] = { "<cmd>lua vim.lsp.buf.formatting()<cr>", "Format file" }
+    lvim.lsp.buffer_mappings.normal_mode["gF"] = {
+        "<cmd>lua vim.lsp.buf.formatting()<cr>",
+        icons.magic .. "Format file",
+    }
+
     -- Quit
-    lvim.lsp.buffer_mappings.normal_mode["gq"] = { "<cmd>SmartQ<cr>", "Close buffer" }
-    lvim.lsp.buffer_mappings.normal_mode["gQ"] = { "<cmd>SmartQ!<cr>", "Force close buffer" }
-    -- Buffers and files
-    lvim.lsp.buffer_mappings.normal_mode["gx"] = { "<cmd>lua require('user.telescope').buffers()<cr>", "Show buffers" }
-    lvim.lsp.buffer_mappings.normal_mode["gf"] = { "<cmd>lua require('user.telescope').find_files()<cr>", "Find files" }
+    lvim.lsp.buffer_mappings.normal_mode["gq"] = { "<cmd>SmartQ<cr>", icons.no .. " Close buffer" }
+    lvim.lsp.buffer_mappings.normal_mode["gQ"] = { "<cmd>SmartQ!<cr>", icons.no .. " Force close buffer" }
+
+    -- Comment
+    lvim.lsp.buffer_mappings.normal_mode["g/"] = {
+        "<cmd>lua require('Comment.api').toggle_current_linewise()<cr>",
+        icons.comment .. " Comment line",
+    }
+
+    lvim.lsp.buffer_mappings.normal_mode["gf"] = {
+        "<cmd>lua require('user.telescope').recent_files()<cr>",
+        icons.calendar .. "Recent files",
+    }
+    lvim.lsp.buffer_mappings.normal_mode["gB"] = {
+        "<cmd>lua require('user.telescope').buffers()<cr>",
+        icons.buffers .. "Show buffers",
+    }
+
+    lvim.lsp.buffer_mappings.normal_mode["gI"] = nil
 end
 
 M.register_prosemd = function()

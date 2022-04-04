@@ -82,10 +82,6 @@ function M.zoxide()
     require("telescope").extensions.zoxide.list {}
 end
 
-function M.command_palette()
-    require("telescope").extensions.command_palette.command_palette()
-end
-
 -- show code actions in a fancy floating window
 function M.code_actions()
     local opts = {
@@ -264,7 +260,6 @@ function M.config()
     }
 
     lvim.builtin.telescope.on_config_done = function(telescope)
-        telescope.load_extension "command_palette"
         telescope.load_extension "luasnip"
         telescope.load_extension "ui-select"
         telescope.load_extension "file_create"

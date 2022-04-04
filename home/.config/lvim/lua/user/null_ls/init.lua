@@ -60,6 +60,7 @@ M.config = function()
             nls.builtins.diagnostics.vint,
             nls.builtins.diagnostics.chktex,
             nls.builtins.diagnostics.markdownlint.with {
+                args = { "-c", "/home/matbigoi/.config/markdownlint.json" },
                 filetypes = { "markdown" },
             },
             nls.builtins.diagnostics.vale.with {

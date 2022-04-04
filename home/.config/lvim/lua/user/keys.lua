@@ -9,7 +9,6 @@ M.which_keys = function()
         end
     end
 
-    local symbols = require("user.lsp").symbols_outline
     local icons = require("user.lsp").icons
 
     -- Find
@@ -19,7 +18,7 @@ M.which_keys = function()
         F = { "<cmd>lua require('user.telescope').search_only_certain_files()<cr>", "File certain filetype" },
         b = { "<cmd>Telescope file_browser<cr>", "File browser" },
         c = { "<cmd>Telescope file_create<cr>", "Create file" },
-        l = { "<cmd>lua require('telescope.builtin').resume()<cr>", "Last Search" },
+        t = { "<cmd>Telescope resume<cr>", "Last Search" },
         p = { "<cmd>lua require('user.telescope').projects()<cr>", "Projects" },
         s = { "<cmd>lua require('user.telescope').find_string()<cr>", " Find string in file" },
         r = { "<cmd>lua require('user.telescope').recent_files()<cr>", "Recent files" },
@@ -30,13 +29,13 @@ M.which_keys = function()
     -- File browser
     lvim.builtin.which_key.mappings["o"] = {
         "<cmd>Telescope file_browser<cr>",
-        symbols.File .. " File browser",
+        icons.folder .. " File browser",
     }
 
     -- File search
     lvim.builtin.which_key.mappings["f"] = {
         "<cmd>lua require('user.telescope').find_files()<cr>",
-        icons.files .. " Find files",
+        icons.files .. "Find files",
     }
 
     -- String search
@@ -49,6 +48,12 @@ M.which_keys = function()
     lvim.builtin.which_key.mappings["r"] = {
         "<cmd>lua require('user.telescope').recent_files()<cr>",
         icons.calendar .. "Recent files",
+    }
+
+    -- Zoxide
+    lvim.builtin.which_key.mappings["z"] = {
+        "<cmd>lua require('user.telescope').zoxide()<cr>",
+        "Z Zoxide list",
     }
 
     -- Buffers
@@ -75,7 +80,7 @@ M.which_keys = function()
     }
 
     -- Goyo
-    lvim.builtin.which_key.mappings["G"] = { "<cmd>Goyo 90%x90%<cr>", icons.screen .. "Start Goyo" }
+    lvim.builtin.which_key.mappings["\\"] = { "<cmd>Goyo 90%x90%<cr>", icons.screen .. "Start Goyo" }
 
     -- Git
     lvim.builtin.which_key.mappings["g"] = {
@@ -106,12 +111,6 @@ M.which_keys = function()
         w = { "<cmd>lua require('spectre').open_visual({select_word=true})<cr>", "Replace Word" },
     }
 
-    -- Command palette
-    lvim.builtin.which_key.mappings["c"] = {
-        "<cmd>lua require('user.telescope').command_palette()<cr>",
-        icons.palette .. " Command Palette",
-    }
-
     -- Grammarous
     lvim.builtin.which_key.mappings["H"] = {
         name = icons.grammar .. " Grammarous",
@@ -131,25 +130,24 @@ M.which_keys = function()
     -- Save
     lvim.builtin.which_key.mappings["w"] = { "<cmd>w!<cr>", icons.ok .. " Save buffer" }
 
-    -- Comment
-    lvim.builtin.which_key.mappings["/"] = {
-        "<cmd>lua require('Comment.api').toggle_current_linewise()<cr>",
-        icons.comment .. " Comment",
-    }
-
     -- Close buffer with Leader-q
     lvim.builtin.which_key.mappings["q"] = { "<cmd>SmartQ<cr>", icons.no .. " Close buffer" }
-    lvim.builtin.which_key.mappings["Q"] = { "<cmd>SmartQ!<cr>", icons.quit .. " Quit" }
+    lvim.builtin.which_key.mappings["Q"] = { "<cmd>SmartQ!<cr>", icons.no .. " Force close buffer" }
 
     -- Dashboard
     lvim.builtin.which_key.mappings[";"] = { "<cmd>Alpha<CR>", icons.dashboard .. "Dashboard" }
 
+    -- Telescope resume
+    lvim.builtin.which_key.mappings["t"] = { "<cmd>Telescope resume<CR>", icons.resume .. " Telescope resume" }
+
+    -- Telescope suggest spell
+    lvim.builtin.which_key.mappings["G"] = { "<cmd>Telescope spell_suggest<cr>", icons.spelling .. "Spelling" }
+
     -- Names
     lvim.builtin.which_key.mappings["L"]["name"] = icons.moon .. " Lunarvim"
-    lvim.builtin.which_key.mappings["p"]["name"] = symbols.Package .. " Packer"
+    lvim.builtin.which_key.mappings["p"]["name"] = icons.package .. " Packer"
 
     -- Disable
-    lvim.builtin.which_key.mappings["c"] = nil
     lvim.builtin.which_key.mappings["h"] = nil
     lvim.builtin.which_key.mappings["T"] = nil
     lvim.builtin.which_key.mappings["l"] = nil

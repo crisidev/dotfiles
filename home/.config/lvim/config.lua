@@ -28,9 +28,6 @@ require("user.treesitter").config()
 -- Telescope
 require("user.telescope").config()
 
--- Command palette
-require("user.cpmenu").config()
-
 -- Barbar
 require("user.bufferline").config()
 
