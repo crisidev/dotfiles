@@ -30,7 +30,6 @@ M.file_ignore_patterns = {
     "gradle/",
     "node_modules/",
     "target/",
-    ".cargo/",
     "%.pdb",
     "%.dll",
     "%.class",
@@ -45,133 +44,140 @@ M.file_ignore_patterns = {
     "smalljre_*/*",
 }
 
--- another file string search
-function M.find_string()
-    local opts = {
-        hidden = true,
+M.get_theme = function(opts)
+    if not opts then
+        opts = {
+            layout_config = {
+                prompt_position = "bottom",
+            },
+        }
+    end
+    if opts["layout_config"] ~= nil then
+        opts["layout_config"]["prompt_position"] = "bottom"
+    else
+        opts["layout_config"] = {
+            prompt_position = "bottom",
+        }
+    end
+    opts["sorting_strategy"] = "descending"
+    opts["borderchars"] = {
+        prompt = { "─", "│", " ", "│", "╭", "╮", "│", "│" },
+        results = { "─", "│", "─", "│", "├", "┤", "╯", "╰" },
+        preview = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
     }
-    builtin.live_grep(opts)
+    return themes.get_ivy(opts)
 end
 
-function M.raw_grep()
-    require("telescope").extensions.live_grep_raw.live_grep_raw()
+-- another file string search
+M.find_string = function()
+    local opts = {
+        hidden = true,
+        shorten_path = false,
+    }
+    builtin.live_grep(M.get_theme(opts))
 end
 
 -- find files
-function M.find_files()
+M.find_files = function()
     local opts = {
         hidden = true,
     }
-    builtin.find_files(opts)
+    builtin.find_files(M.get_theme(opts))
 end
 
 -- find only recent files
-function M.recent_files()
+M.recent_files = function()
     local opts = {
         hidden = true,
     }
-    builtin.oldfiles(opts)
+    builtin.oldfiles(M.get_theme(opts))
 end
 
--- find only recent files
-function M.projects()
-    require("telescope").extensions.repo.list {}
+M.diagnostics = function()
+    builtin.diagnostics(M.get_theme())
 end
 
-function M.zoxide()
-    require("telescope").extensions.zoxide.list {}
+-- Extensions
+M.raw_grep = function()
+    require("telescope").extensions.live_grep_raw.live_grep_raw(M.get_theme())
+end
+
+M.file_browser = function()
+    require("telescope").extensions.file_browser.file_browser(M.get_theme())
+end
+
+M.projects = function()
+    require("telescope").extensions.repo.list(M.get_theme())
+end
+
+M.zoxide = function()
+    require("telescope").extensions.zoxide.list(M.get_theme())
+end
+
+M.file_create = function()
+    require("telescope").extensions.file_create.file_create(M.get_theme())
 end
 
 -- show code actions in a fancy floating window
-function M.code_actions()
-    local opts = {
-        winblend = 0,
+M.code_actions = function()
+    builtin.lsp_code_actions(M.get_theme {
         layout_config = {
-            prompt_position = "bottom",
-            width = 80,
             height = 12,
         },
-        borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
-        previewer = false,
-        shorten_path = false,
-    }
-    builtin.lsp_code_actions(themes.get_dropdown(opts))
-end
-
-function M.codelens_actions()
-    local opts = {
-        winblend = 0,
-        layout_config = {
-            prompt_position = "bottom",
-            width = 80,
-            height = 12,
-        },
-        borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
-        previewer = false,
-        shorten_path = false,
-    }
-    builtin.lsp_codelens_actions(themes.get_dropdown(opts))
+    })
 end
 
 -- show refrences to this using language server
-function M.lsp_references()
-    builtin.lsp_references()
+M.codelens_actions = function()
+    builtin.lsp_codelens_actions(M.get_theme {
+        layout_config = {
+            height = 12,
+        },
+    })
+end
+
+-- show refrences to this using language server
+M.lsp_references = function()
+    builtin.lsp_references(M.get_theme())
 end
 
 -- show implementations of the current thingy using language server
-function M.lsp_implementations()
-    builtin.lsp_implementations()
+M.lsp_implementations = function()
+    builtin.lsp_implementations(M.get_theme())
 end
 
 -- find files in the upper directory
-function M.find_updir()
+M.find_updir = function()
     local up_dir = vim.fn.getcwd():gsub("(.*)/.*$", "%1")
     local opts = {
         cwd = up_dir,
     }
 
-    builtin.find_files(opts)
+    builtin.find_files(M.get_theme(opts))
 end
 
-function M.installed_plugins()
+M.git_status = function()
+    builtin.git_status(M.get_theme(opts))
+end
+
+M.search_only_certain_files = function()
     builtin.find_files {
-        cwd = join_paths(os.getenv "LUNARVIM_RUNTIME_DIR", "site", "pack", "packer"),
-    }
-end
-
-function M.curbuf()
-    local opts = themes.get_dropdown {
-        winblend = 10,
-        previewer = false,
-        shorten_path = false,
-        layout_config = {
-            width = 0.45,
-            prompt_position = "bottom",
-        },
-    }
-    builtin.current_buffer_fuzzy_find(opts)
-end
-
-function M.git_status()
-    builtin.git_status(opts)
-end
-
-function M.search_only_certain_files()
-    builtin.find_files {
-        find_command = {
-            "rg",
-            "--files",
-            "--type",
-            vim.fn.input "Type: ",
+        M.get_theme {
+            find_command = {
+                "rg",
+                "--files",
+                "--type",
+                vim.fn.input "Type: ",
+            },
         },
     }
 end
 
-function M.builtin()
+M.builtin = function()
     builtin.builtin()
 end
 
-function M.git_files()
+M.git_files = function()
     local path = vim.fn.expand "%:h"
     if path == "" then
         path = nil
@@ -184,10 +190,10 @@ function M.git_files()
         },
     }
 
-    builtin.git_files(opts)
+    builtin.git_files(M.get_theme(opts))
 end
 
-function M.grep_string_visual()
+M.grep_string_visual = function()
     local visual_selection = function()
         local save_previous = vim.fn.getreg "a"
         vim.api.nvim_command 'silent! normal! "ay'
@@ -196,18 +202,29 @@ function M.grep_string_visual()
         return vim.fn.substitute(selection, [[\n]], [[\\n]], "g")
     end
     builtin.live_grep {
-        default_text = visual_selection(),
+        M.get_theme {
+            default_text = visual_selection(),
+        },
     }
 end
 
-function M.buffers()
-    builtin.buffers()
+M.buffers = function()
+    builtin.buffers(M.get_theme())
 end
 
-function M.config()
+M.resume = function()
+    builtin.resume(M.get_theme())
+end
+
+M.spell_suggest = function()
+    builtin.spell_suggest(M.get_theme())
+end
+
+M.config = function()
     -- Telescope
+    local icons = require('user.lsp').icons
     lvim.builtin.telescope.defaults.path_display = { shorten = 10 }
-    lvim.builtin.telescope.defaults.prompt_prefix = "  "
+    lvim.builtin.telescope.defaults.prompt_prefix = icons.codelens .. " "
     lvim.builtin.telescope.defaults.borderchars = {
         prompt = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
         results = { "─", "▐", "─", "│", "╭", "▐", "▐", "╰" },
@@ -218,7 +235,6 @@ function M.config()
     lvim.builtin.telescope.defaults.cache_picker = { num_pickers = 3 }
     lvim.builtin.telescope.defaults.layout_strategy = "horizontal"
     lvim.builtin.telescope.defaults.color_devicons = true
-    lvim.builtin.telescope.defaults.use_less = true
     local actions = require "telescope.actions"
     lvim.builtin.telescope.defaults.mappings = {
         i = {
@@ -227,18 +243,6 @@ function M.config()
             ["<c-y>"] = actions.which_key,
             ["<tab>"] = actions.toggle_selection + actions.move_selection_next,
             ["<s-tab>"] = actions.toggle_selection + actions.move_selection_previous,
-            ["<c-j>"] = actions.move_selection_next,
-            ["<c-k>"] = actions.move_selection_previous,
-            ["<c-n>"] = actions.cycle_history_next,
-            ["<c-p>"] = actions.cycle_history_prev,
-        },
-        n = {
-            ["<esc>"] = actions.close,
-            ["<c-c>"] = actions.close,
-            ["<tab>"] = actions.toggle_selection + actions.move_selection_next,
-            ["<s-tab>"] = actions.toggle_selection + actions.move_selection_previous,
-            ["<c-j>"] = actions.move_selection_next,
-            ["<c-k>"] = actions.move_selection_previous,
             ["<c-n>"] = actions.cycle_history_next,
             ["<c-p>"] = actions.cycle_history_prev,
             ["<c-q>"] = actions.smart_send_to_qflist + actions.open_qflist,

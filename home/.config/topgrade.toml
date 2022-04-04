@@ -21,12 +21,9 @@ repos = [
     "~/.homesick/repos/dotfiles",
     "~/.homesick/repos/MatbigoiDotFiles",
     # Updates
-    "~/github/0updates/autorandr",
-    "~/github/0updates/bandwhich",
     "~/github/0updates/default-opener",
     "~/github/0updates/dunst",
     "~/github/0updates/i3-gnome",
-    "~/github/0updates/i3status-rust",
     "~/github/0updates/keyd",
     "~/github/0updates/neovide",
     "~/github/0updates/unclutter-xfixes",

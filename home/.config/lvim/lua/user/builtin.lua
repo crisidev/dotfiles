@@ -48,6 +48,8 @@ M.config = function()
     lvim.builtin.grammar_guard = { active = true }
     -- Hlslens
     lvim.builtin.hlslens = { active = true }
+    -- Twilight
+    lvim.builtin.twilight = { active = false }
 
     -- Dashboard
     lvim.builtin.alpha.active = true
@@ -154,6 +156,7 @@ function M.shift_tab(fallback)
     end
 end
 
+-- Utility
 function M.dump(o)
     if type(o) == "table" then
         local s = "{ "
@@ -167,20 +170,6 @@ function M.dump(o)
     else
         return tostring(o)
     end
-end
-
--- Utility
-function M.dump(o)
-   if type(o) == 'table' then
-      local s = '{ '
-      for k,v in pairs(o) do
-         if type(k) ~= 'number' then k = '"'..k..'"' end
-         s = s .. '['..k..'] = ' .. M.dump(v) .. ','
-      end
-      return s .. '} '
-   else
-      return tostring(o)
-   end
 end
 
 return M

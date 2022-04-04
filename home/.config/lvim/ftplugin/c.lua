@@ -13,7 +13,7 @@ local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {}
 
 -- Lsp info
--- vim.list_extend(lvim.lsp.override, { "clangd" })
+vim.list_extend(lvim.lsp.override, { "clangd" })
 
 local status_ok, clangd_extensions = pcall(require, "clangd_extensions")
 if not status_ok then
@@ -39,7 +39,7 @@ clangd_extensions.setup {
     server = {
         -- options to pass to nvim-lspconfig
         -- i.e. the arguments to require("lspconfig").clangd.setup({})
-        cmd = { "clangd-12", unpack(clangd_flags) },
+        cmd = { "/home/matbigoi/.local/share/nvim/lsp_servers/clangd/clangd/bin/clangd", unpack(clangd_flags) },
         on_attach = require("lvim.lsp").common_on_attach,
         on_init = require("lvim.lsp").common_on_init,
         capabilities = require("lvim.lsp").common_capabilities(),

@@ -83,6 +83,7 @@ M.icons = {
     copilot = "",
     attention = "",
     Function = "",
+    zen = "",
 }
 
 M.nvim_tree_icons = {
@@ -284,13 +285,13 @@ M.normal_buffer_mappings = function()
         "<cmd>lua vim.lsp.buf.definition()<CR>",
         icons.go .. " Goto definition",
     }
-    lvim.lsp.buffer_mappings.normal_mode["gD"] = {
-        "<cmd>lua vim.lsp.buf.declaration()<CR>",
-        icons.go .. " Goto declaration",
-    }
     lvim.lsp.buffer_mappings.normal_mode["gt"] = {
         "<cmd>lua vim.lsp.buf.definition()<CR>",
         icons.go .. " Goto type definition",
+    }
+    lvim.lsp.buffer_mappings.normal_mode["gd"] = {
+        "<cmd>lua vim.lsp.buf.declaration()<CR>",
+        icons.go .. " Goto declaration",
     }
     lvim.lsp.buffer_mappings.normal_mode["gr"] = {
         "<cmd>lua require('user.telescope').lsp_references()<cr>",
@@ -330,8 +331,8 @@ M.normal_buffer_mappings = function()
         "<cmd>lua require('lvim.lsp.handlers').show_line_diagnostics()<CR>",
         icons.hint .. "Show line diagnostics",
     }
-    lvim.lsp.buffer_mappings.normal_mode["gd"] = {
-        "<cmd>Telescope diagnostics<cr>",
+    lvim.lsp.buffer_mappings.normal_mode["gD"] = {
+        "<cmd>lua require('user.telescope').diagnostics()<cr>",
         icons.hint .. "Show diagnostics",
     }
     lvim.lsp.buffer_mappings.normal_mode["gn"] = {
@@ -342,16 +343,6 @@ M.normal_buffer_mappings = function()
     lvim.lsp.buffer_mappings.normal_mode["gp"] = {
         "<cmd>lua vim.diagnostic.goto_prev({float = {border = 'rounded', focusable = false, source = 'always'}})<cr>",
         icons.hint .. "Previous diagnostic",
-    }
-
-    -- Trouble
-    lvim.lsp.buffer_mappings.normal_mode["ge"] = {
-        name = icons.hint .. "Trouble",
-        e = { "<cmd>Trouble document_diagnostics<cr>", "Document diagnostics" },
-        w = { "<cmd>Trouble workspace_diagnostics<cr>", "Workspace diagnostics" },
-        l = { "<cmd>Trouble loclist<cr>", "Trouble loclist" },
-        q = { "<cmd>Trouble quickfix<cr>", "Trouble quifix" },
-        r = { "<cmd>Trouble lsp_references<cr>", "Trouble references" },
     }
 
     -- Format

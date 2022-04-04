@@ -16,9 +16,9 @@ M.which_keys = function()
         name = icons.telescope .. " Find",
         f = { "<cmd>lua require('user.telescope').find_files()<cr>", "Find files" },
         F = { "<cmd>lua require('user.telescope').search_only_certain_files()<cr>", "File certain filetype" },
-        b = { "<cmd>Telescope file_browser<cr>", "File browser" },
-        c = { "<cmd>Telescope file_create<cr>", "Create file" },
-        t = { "<cmd>Telescope resume<cr>", "Last Search" },
+        b = { "<cmd>lua require('user.telescope').file_browser()<cr>", "File browser" },
+        c = { "<cmd>lua require('user.telescope').file_create()<cr>", "Create file" },
+        t = { "<cmd>lua require('user.telescope').resume()<cr>", "Last Search" },
         p = { "<cmd>lua require('user.telescope').projects()<cr>", "Projects" },
         s = { "<cmd>lua require('user.telescope').find_string()<cr>", " Find string in file" },
         r = { "<cmd>lua require('user.telescope').recent_files()<cr>", "Recent files" },
@@ -28,7 +28,7 @@ M.which_keys = function()
 
     -- File browser
     lvim.builtin.which_key.mappings["o"] = {
-        "<cmd>Telescope file_browser<cr>",
+        "<cmd>lua require('user.telescope').file_browser()<cr>",
         icons.folder .. " File browser",
     }
 
@@ -56,6 +56,12 @@ M.which_keys = function()
         "Z Zoxide list",
     }
 
+    -- Zen mode
+    lvim.builtin.which_key.mappings["Z"] = {
+        "<cmd>ZenMode<cr>",
+        icons.screen .. " Zen mode",
+    }
+
     -- Buffers
     lvim.builtin.which_key.mappings["B"] = {
         name = icons.buffers .. "Buffers",
@@ -78,9 +84,6 @@ M.which_keys = function()
         c = { "<cmd>SessionManager load_current_dir_session<cr>", "Restore current dir session" },
         s = { "<cmd>SessionManager save_current_session<cr>", "Save current session" },
     }
-
-    -- Goyo
-    lvim.builtin.which_key.mappings["\\"] = { "<cmd>Goyo 90%x90%<cr>", icons.screen .. "Start Goyo" }
 
     -- Git
     lvim.builtin.which_key.mappings["g"] = {
@@ -138,10 +141,16 @@ M.which_keys = function()
     lvim.builtin.which_key.mappings[";"] = { "<cmd>Alpha<CR>", icons.dashboard .. "Dashboard" }
 
     -- Telescope resume
-    lvim.builtin.which_key.mappings["t"] = { "<cmd>Telescope resume<CR>", icons.resume .. " Telescope resume" }
+    lvim.builtin.which_key.mappings["t"] = {
+        "<cmd>lua require('user.telescope').resume()<CR>",
+        icons.resume .. " Telescope resume",
+    }
 
     -- Telescope suggest spell
-    lvim.builtin.which_key.mappings["G"] = { "<cmd>Telescope spell_suggest<cr>", icons.spelling .. "Spelling" }
+    lvim.builtin.which_key.mappings["G"] = {
+        "<cmd>lua require('user.telescope').spell_suggest()<cr>",
+        icons.spelling .. "Spelling",
+    }
 
     -- Names
     lvim.builtin.which_key.mappings["L"]["name"] = icons.moon .. " Lunarvim"

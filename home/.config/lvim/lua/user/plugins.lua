@@ -388,10 +388,24 @@ M.session = function()
     }
 end
 
-M.goyo = function()
+M.zen_mode = function()
     return {
-        { "junegunn/goyo.vim" },
-        { "junegunn/limelight.vim" },
+        -- Zen mode
+        {
+            "folke/zen-mode.nvim",
+            config = function()
+                require("user.zen").config()
+            end,
+            event = "BufRead",
+        },
+        {
+            "folke/twilight.nvim",
+            config = function()
+                require("user.twilight").config()
+            end,
+            event = "BufRead",
+            disable = not lvim.builtin.twilight.enable,
+        },
     }
 end
 
@@ -405,19 +419,6 @@ M.config = function()
             end,
             event = "BufReadPost",
             disable = not lvim.builtin.hlslens.active,
-        },
-        {
-            "folke/trouble.nvim",
-            config = function()
-                require("trouble").setup {
-                    auto_open = true,
-                    auto_close = true,
-                    padding = false,
-                    height = 10,
-                    use_diagnostic_signs = true,
-                }
-            end,
-            cmd = "Trouble",
         },
         -- Python coverage highlight
         { "mgedmin/coverage-highlight.vim" },
@@ -505,7 +506,7 @@ M.config = function()
     table.insert(lvim.plugins, M.filetype())
     table.insert(lvim.plugins, M.grammar())
     table.insert(lvim.plugins, M.session())
-    table.insert(lvim.plugins, M.goyo())
+    table.insert(lvim.plugins, M.zen_mode())
 end
 
 return M

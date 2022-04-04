@@ -117,7 +117,6 @@ for_window [class="steam_app_0"] floating enable border pixel 1
 for_window [class="steam_proton"] floating enable border pixel 1
 
 # Special borders and floats
-for_window [class="^ide$"] floating enable border pixel 2
 for_window [class="Ulauncher"] floating enable border pixel 0
 
 assign [class="Google-chrome" instance="google-chrome.*\(/home/.*/.local/share/chrome-chime\)"] $w4

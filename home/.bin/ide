@@ -48,9 +48,8 @@ fi
 # sdkman
 source "$HOME/.sdkman/bin/sdkman-init.sh"
 
-start_glrnvim() {
-	NVIM_LISTEN_ADDRESS=/tmp/nvimsocket glrnvim "$@"
-
+start_ide() {
+	NVIM_LISTEN_ADDRESS=/tmp/nvimsocket kitty --detach --config ~/.config/kitty/glrnvim.conf --class ide ~/.local/bin/lvim
 }
 
 start_lvim() {
@@ -60,14 +59,14 @@ start_lvim() {
 if [ "$1" = "--help" ]; then
 	usage
 elif [ "$1" = "toggle" ]; then
-    if ! pgrep -f glrnvim; then
-        start_glrnvim +Alpha
+    if ! pgrep -f "\-\-class ide"; then
+        start_ide
     fi
-    i3-msg '[class="glrnvim"] focus'
+    i3-msg '[class="ide"] focus'
 elif [ "$1" = "new" ]; then
-	start_glrnvim +Alpha
+	start_ide
 elif [ "$1" = "term" ]; then
-	start_lvim
+	start_lvim "$@"
 else
 	nvr --remote "$@"
 fi
