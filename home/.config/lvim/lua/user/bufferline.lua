@@ -59,7 +59,7 @@ M.config = function()
             },
         },
     }
-    lvim.builtin.bufferline.options.separator_style = os.getenv "KITTY_WINDOW_ID" and "slant" or "thin"
+    lvim.builtin.bufferline.options.separator_style = "slant"
     lvim.builtin.bufferline.options.mode = "buffers"
     lvim.builtin.bufferline.options.sort_by = "insert_after_current"
 end
