@@ -382,37 +382,6 @@ M.normal_buffer_mappings = function()
     lvim.lsp.buffer_mappings.normal_mode["gI"] = nil
 end
 
-M.register_prosemd = function()
-    vim.list_extend(lvim.lsp.override, { "prosemd" })
-
-    local configs = require "lspconfig.configs"
-
-    -- Check if the config is already defined (useful when reloading this file)
-    if not configs.prosemd then
-        configs.prosemd = {
-            default_config = {
-                cmd = { "prosemd-lsp", "--stdio" },
-                filetypes = { "latex", "tex", "bib", "markdown", "rst", "text" },
-                root_dir = function(fname)
-                    return require("lspconfig").util.find_git_ancestor(fname) or vim.fn.getcwd()
-                end,
-            },
-        }
-    end
-
-    -- Use your attach function here
-    local status_ok, lsp = pcall(require, "lspconfig")
-    if not status_ok then
-        return
-    end
-
-    lsp.prosemd.setup {
-        on_attach = require("lvim.lsp").common_on_attach,
-        on_init = require("lvim.lsp").common_on_init,
-        capabilities = require("lvim.lsp").common_capabilities(),
-    }
-end
-
 M.register_grammar_guard = function()
     vim.list_extend(lvim.lsp.override, { "grammar_guard" })
     require("grammar-guard").init()
@@ -523,7 +492,6 @@ M.config = function()
     if lvim.builtin.grammar_guard.active then
         M.register_grammar_guard()
     end
-    M.register_prosemd()
 
     -- Mappings
     M.normal_buffer_mappings()
