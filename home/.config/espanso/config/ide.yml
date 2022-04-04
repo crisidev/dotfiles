@@ -1,4 +1,4 @@
-filter_class: "glrnvim"
+filter_class: "ide"
 # paste_shortcut: "SHIFT+INSERT"
 # apply_patch: true
 enable: false
