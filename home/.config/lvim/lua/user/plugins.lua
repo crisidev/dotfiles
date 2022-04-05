@@ -15,7 +15,7 @@ M.themes = function()
         {
             "norcalli/nvim-colorizer.lua",
             config = function()
-                require("colorizer").setup()
+                require("user.colorizer").config()
             end,
         },
     }
@@ -164,14 +164,14 @@ M.lsp = function()
             end,
             ft = { "scala", "sbt" },
         },
-        -- Renamer
+        -- Dressing
         {
-            -- "filipdutescu/renamer.nvim",
-            "abzcoding/renamer.nvim",
-            branch = "develop",
+            "stevearc/dressing.nvim",
             config = function()
-                require("user.renamer").config()
+                require("user.dress").config()
             end,
+            disable = not lvim.builtin.dressing.active,
+            event = "BufWinEnter",
         },
         -- Symbol outline
         {
@@ -252,21 +252,7 @@ M.copilot = function()
         {
             "github/copilot.vim",
             config = function()
-                vim.g.copilot_no_tab_map = true
-                vim.g.copilot_assume_mapped = true
-                vim.g.copilot_tab_fallback = ""
-                vim.g.copilot_filetypes = {
-                    ["*"] = false,
-                    python = true,
-                    lua = true,
-                    go = true,
-                    rust = true,
-                    html = true,
-                    c = true,
-                    cpp = true,
-                    javascript = true,
-                    typescript = true,
-                }
+                require("user.copilot").config()
             end,
             disable = not lvim.builtin.copilot.active,
         },
@@ -331,6 +317,7 @@ M.grammar = function()
                 "neovim/nvim-lspconfig",
                 "williamboman/nvim-lsp-installer",
             },
+            disable = not lvim.builtin.grammar_guard.active,
         },
         -- Dictionary cmp
         {
@@ -496,6 +483,15 @@ M.config = function()
         { "mattn/webapi-vim" },
         -- Startup time
         { "dstein64/vim-startuptime" },
+        {
+            "hrsh7th/cmp-cmdline",
+            disable = not lvim.builtin.fancy_wild_menu.active,
+        },
+        {
+            "kdheepak/cmp-latex-symbols",
+            requires = "hrsh7th/nvim-cmp",
+            ft = "tex",
+        },
     }
     table.insert(lvim.plugins, M.themes())
     table.insert(lvim.plugins, M.git())

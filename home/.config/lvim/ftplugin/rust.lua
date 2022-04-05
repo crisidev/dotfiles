@@ -83,8 +83,9 @@ opts.dap = {
 rust_tools.setup(opts)
 
 -- Rust tools mappings
+local icons = require("user.lsp").icons
 lvim.lsp.buffer_mappings.normal_mode["gT"] = {
-    name = "Rust Tools",
+    name = icons.nuclear .. " Rust Tools",
     a = { "<cmd>RustCodeAction<cr>", "Code action" },
     i = { "<cmd>RustToggleInlayHints<cr>", "Toggle inlay hints" },
     r = { "<cmd>RustRunnables<cr>", "Run targes" },
@@ -100,7 +101,7 @@ lvim.lsp.buffer_mappings.normal_mode["gT"] = {
 }
 
 lvim.lsp.buffer_mappings.normal_mode["gB"] = {
-    name = "Build helpers",
+    name = icons.settings .. "Build helpers",
     b = {
         "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd='cargo build;read',count=2,direction='horizontal'})<cr>",
         "Run cargo build",

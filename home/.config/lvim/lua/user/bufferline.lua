@@ -2,6 +2,11 @@ local M = {}
 M.config = function()
     local kind = require "user.lsp"
     local List = require "plenary.collections.py_list"
+    local g_ok, bufferline_groups = pcall(require, "bufferline.groups")
+    if not g_ok then
+        bufferline_groups = { builtin = { ungrouped = { name = "ungrouped" } } }
+    end
+    lvim.builtin.bufferline.options.diagnostics = false -- do not show diagnostics in bufferline
     lvim.builtin.bufferline.options.diagnostics_indicator = function(_, _, diagnostics)
         local result = {}
         local symbols = { error = kind.icons.error, warning = kind.icons.warn, info = kind.icons.info }
@@ -19,10 +24,11 @@ M.config = function()
             toggle_hidden_on_enter = true,
         },
         items = {
-            { name = "ungrouped" },
+            { name = bufferline_groups.builtin.ungrouped.name },
             M.language_files("rust", "#FF6965", "rs"),
             M.language_files("python", "#006400", "py"),
             M.language_files("kotlin", "#966fd6", "kt"),
+            M.language_files("lua", "#ffaa1d", "lua"),
             M.language_files("ruby", "#FF6965", "rb"),
             {
                 highlight = { guisp = "#51AFEF" },
@@ -36,13 +42,13 @@ M.config = function()
                 highlight = { guisp = "#C678DD" },
                 name = "docs",
                 matcher = function(buf)
-                    local list = List { "md", "org", "norg", "wiki" }
+                    local list = List { "md", "org", "norg", "wiki", "rst", "smithy", "txt" }
                     return list:contains(vim.fn.fnamemodify(buf.path, ":e"))
                 end,
             },
             {
                 highlight = { guisp = "#F6A878" },
-                name = "config",
+                name = "conf",
                 matcher = function(buf)
                     return buf.filename:match "go.mod"
                         or buf.filename:match "go.sum"

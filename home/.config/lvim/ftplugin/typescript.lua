@@ -74,8 +74,9 @@ end
 require("lvim.lsp.manager").setup("tsserver", opts)
 
 -- Additional mappings
+local icons = require("user.lsp").icons
 lvim.lsp.buffer_mappings.normal_mode["gT"] = {
-    name = "TS Tools",
+    name = icons.nuclear .. " TypeScript Tools",
     a = { "<cmd>TSLspImportAll<cr>", "Import all" },
     r = { "<cmd>TSLspRenameFile<cr>", "Rename file" },
     o = { "<cmd>TSLspOrganize<cr>", "Organize" },

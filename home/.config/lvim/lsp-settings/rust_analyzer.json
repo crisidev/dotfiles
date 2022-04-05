@@ -13,7 +13,6 @@
   "rust-analyzer.cargo.autoreload": true,
   "rust-analyzer.hoverActions.enable": true,
   "rust-analyzer.hoverActions.references": true,
-  "rust-analyzer.diagnostics.disabled": ["macro-error"],
   "rust-analyzer.rustfmt.overrideCommand": [
         "rustfmt",
         "--edition",

@@ -1,21 +1,26 @@
 local M = {}
 
 M.config = function()
-    if lvim.builtin.copilot.active then
-        vim.g.copilot_no_tab_map = true
-        vim.g.copilot_assume_mapped = true
-        vim.g.copilot_tab_fallback = ""
-        local cmp = require "cmp"
-        lvim.builtin.cmp.mapping["<C-e>"] = function(fallback)
-            cmp.mapping.abort()
-            local copilot_keys = vim.fn["copilot#Accept"]()
-            if copilot_keys ~= "" then
-                vim.api.nvim_feedkeys(copilot_keys, "i", true)
-            else
-                fallback()
-            end
-        end
-    end
+    vim.g.copilot_no_tab_map = true
+    vim.g.copilot_assume_mapped = true
+    vim.g.copilot_tab_fallback = ""
+    vim.g.copilot_filetypes = {
+        ["*"] = false,
+        python = true,
+        ruby = true,
+        lua = true,
+        go = true,
+        rust = true,
+        html = true,
+        c = true,
+        cpp = true,
+        java = true,
+        javascript = true,
+        typescript = true,
+        javascriptreact = true,
+        typescriptreact = true,
+        terraform = true,
+    }
 end
 
 return M

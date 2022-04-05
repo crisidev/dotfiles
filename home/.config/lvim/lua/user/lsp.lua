@@ -84,6 +84,9 @@ M.icons = {
     attention = "",
     Function = "",
     zen = "",
+    music = "",
+    nuclear = "☢",
+    grammar = "暈"
 }
 
 M.nvim_tree_icons = {
@@ -260,7 +263,7 @@ M.show_documentation = function()
     end
 end
 
-M.normal_buffer_mappings = function()
+M.key_mappings = function()
     local icons = require("user.lsp").icons
 
     -- Hover
@@ -269,38 +272,46 @@ M.normal_buffer_mappings = function()
         "<cmd>lua require('user.lsp').show_documentation()<CR>",
         icons.docs .. "Show Documentation",
     }
+    lvim.lsp.buffer_mappings.visual_mode["K"] = lvim.lsp.buffer_mappings.normal_mode["K"]
 
     -- Code actions popup
     lvim.lsp.buffer_mappings.normal_mode["gA"] = {
         "<cmd>lua vim.lsp.codelens.run()<cr>",
         icons.codelens .. "Codelens actions",
     }
+    lvim.lsp.buffer_mappings.visual_mode["gA"] = lvim.lsp.buffer_mappings.normal_mode["gA"]
     lvim.lsp.buffer_mappings.normal_mode["ga"] = {
         --     "<cmd>CodeActionMenu<cr>",
         "<cmd>lua require('user.telescope').code_actions()<cr>",
         icons.codelens .. "Code actions",
     }
+    lvim.lsp.buffer_mappings.visual_mode["ga"] = lvim.lsp.buffer_mappings.normal_mode["ga"]
     -- Goto
     lvim.lsp.buffer_mappings.normal_mode["gg"] = {
         "<cmd>lua vim.lsp.buf.definition()<CR>",
         icons.go .. " Goto definition",
     }
+    lvim.lsp.buffer_mappings.visual_mode["gg"] = lvim.lsp.buffer_mappings.normal_mode["gg"]
     lvim.lsp.buffer_mappings.normal_mode["gt"] = {
         "<cmd>lua vim.lsp.buf.definition()<CR>",
         icons.go .. " Goto type definition",
     }
+    lvim.lsp.buffer_mappings.visual_mode["gt"] = lvim.lsp.buffer_mappings.normal_mode["gt"]
     lvim.lsp.buffer_mappings.normal_mode["gd"] = {
         "<cmd>lua vim.lsp.buf.declaration()<CR>",
         icons.go .. " Goto declaration",
     }
+    lvim.lsp.buffer_mappings.visual_mode["gd"] = lvim.lsp.buffer_mappings.normal_mode["gd"]
     lvim.lsp.buffer_mappings.normal_mode["gr"] = {
         "<cmd>lua require('user.telescope').lsp_references()<cr>",
         icons.go .. " Goto references",
     }
+    lvim.lsp.buffer_mappings.visual_mode["gr"] = lvim.lsp.buffer_mappings.normal_mode["gr"]
     lvim.lsp.buffer_mappings.normal_mode["gi"] = {
         "<cmd>lua require('user.telescope').lsp_implementations()<cr>",
         icons.go .. " Goto implementations",
     }
+    lvim.lsp.buffer_mappings.visual_mode["gi"] = lvim.lsp.buffer_mappings.normal_mode["gi"]
     -- Copilot
     if lvim.builtin.copilot.active then
         lvim.lsp.buffer_mappings.normal_mode["gC"] = {
@@ -312,63 +323,71 @@ M.normal_buffer_mappings = function()
             r = { "<cmd>Copilot restart<cr>", "Restart" },
             l = { "<cmd>Copilot logs<cr>", "Logs" },
         }
+        lvim.lsp.buffer_mappings.visual_mode["gC"] = lvim.lsp.buffer_mappings.normal_mode["gC"]
     end
 
     -- Rename
     lvim.lsp.buffer_mappings.normal_mode["gR"] = {
-        "<cmd>lua require('renamer').rename()<cr>",
+        "<esc><cmd>lua vim.lsp.buf.rename()<cr>",
         icons.palette .. "Rename symbol",
     }
+    lvim.lsp.buffer_mappings.visual_mode["gR"] = lvim.lsp.buffer_mappings.normal_mode["gR"]
 
     -- Signature
     lvim.lsp.buffer_mappings.normal_mode["gs"] = {
         "<cmd>lua vim.lsp.buf.signature_help()<CR>",
         icons.Function .. " Show signature help",
     }
+    lvim.lsp.buffer_mappings.visual_mode["gs"] = lvim.lsp.buffer_mappings.normal_mode["gs"]
 
     -- Diagnostics
     lvim.lsp.buffer_mappings.normal_mode["gl"] = {
         "<cmd>lua require('lvim.lsp.handlers').show_line_diagnostics()<CR>",
         icons.hint .. "Show line diagnostics",
     }
+    lvim.lsp.buffer_mappings.visual_mode["gl"] = lvim.lsp.buffer_mappings.normal_mode["gl"]
     lvim.lsp.buffer_mappings.normal_mode["gD"] = {
         "<cmd>lua require('user.telescope').diagnostics()<cr>",
         icons.hint .. "Show diagnostics",
     }
+    lvim.lsp.buffer_mappings.visual_mode["gD"] = lvim.lsp.buffer_mappings.normal_mode["gD"]
     lvim.lsp.buffer_mappings.normal_mode["gn"] = {
         "<cmd>lua vim.diagnostic.goto_next({float = {border = 'rounded', focusable = false, source = 'always'}})<cr>",
         icons.hint .. "Next diagnostic",
     }
+    lvim.lsp.buffer_mappings.visual_mode["gn"] = lvim.lsp.buffer_mappings.normal_mode["gn"]
 
     lvim.lsp.buffer_mappings.normal_mode["gp"] = {
         "<cmd>lua vim.diagnostic.goto_prev({float = {border = 'rounded', focusable = false, source = 'always'}})<cr>",
         icons.hint .. "Previous diagnostic",
     }
+    lvim.lsp.buffer_mappings.visual_mode["gp"] = lvim.lsp.buffer_mappings.normal_mode["gp"]
 
     -- Format
     lvim.lsp.buffer_mappings.normal_mode["gF"] = {
         "<cmd>lua vim.lsp.buf.formatting()<cr>",
         icons.magic .. "Format file",
     }
+    lvim.lsp.buffer_mappings.visual_mode["gF"] = lvim.lsp.buffer_mappings.normal_mode["gF"]
 
     -- Quit
     lvim.lsp.buffer_mappings.normal_mode["gq"] = { "<cmd>SmartQ<cr>", icons.no .. " Close buffer" }
+    lvim.lsp.buffer_mappings.visual_mode["gq"] = lvim.lsp.buffer_mappings.normal_mode["gq"]
     lvim.lsp.buffer_mappings.normal_mode["gQ"] = { "<cmd>SmartQ!<cr>", icons.no .. " Force close buffer" }
+    lvim.lsp.buffer_mappings.visual_mode["gQ"] = lvim.lsp.buffer_mappings.normal_mode["gQ"]
 
     -- Comment
     lvim.lsp.buffer_mappings.normal_mode["g/"] = {
         "<cmd>lua require('Comment.api').toggle_current_linewise()<cr>",
         icons.comment .. " Comment line",
     }
+    lvim.lsp.buffer_mappings.visual_mode["g/"] = lvim.lsp.buffer_mappings.normal_mode["g/"]
 
     lvim.lsp.buffer_mappings.normal_mode["gf"] = {
         "<cmd>lua require('user.telescope').recent_files()<cr>",
         icons.calendar .. "Recent files",
     }
-    lvim.lsp.buffer_mappings.normal_mode["gB"] = {
-        "<cmd>lua require('user.telescope').buffers()<cr>",
-        icons.buffers .. "Show buffers",
-    }
+    lvim.lsp.buffer_mappings.visual_mode["gf"] = lvim.lsp.buffer_mappings.normal_mode["gf"]
 
     lvim.lsp.buffer_mappings.normal_mode["gI"] = nil
 end
@@ -406,7 +425,10 @@ M.register_grammar_guard = function()
         return
     end
 
-    lsp.grammar_guard.setup(opts)
+    local status_ok, result = pcall(lsp.grammar_guard.setup, opts)
+    if not status_ok then
+        return
+    end
 end
 
 M.config = function()
@@ -485,7 +507,7 @@ M.config = function()
     end
 
     -- Mappings
-    M.normal_buffer_mappings()
+    M.key_mappings()
 end
 
 return M

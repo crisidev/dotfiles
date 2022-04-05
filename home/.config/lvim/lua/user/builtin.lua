@@ -1,15 +1,6 @@
 local M = {}
 
 M.config = function()
-    -- Evil stuff
-    lvim.builtin.copilot = { active = true }
-    if lvim.builtin.copilot.active then
-        lvim.keys.insert_mode["<c-h>"] = { [[copilot#Accept("\<CR>")]], { expr = true, script = true } }
-        local cmp = require "cmp"
-        lvim.builtin.cmp.mapping["<Tab>"] = cmp.mapping(M.tab, { "i", "c" })
-        lvim.builtin.cmp.mapping["<S-Tab>"] = cmp.mapping(M.shift_tab, { "i", "c" })
-    end
-
     -- Nvimtree
     lvim.builtin.nvimtree.side = "left"
     local kind = require "user.lsp"
@@ -50,6 +41,12 @@ M.config = function()
     lvim.builtin.hlslens = { active = true }
     -- Twilight
     lvim.builtin.twilight = { active = false }
+    -- Async tasks
+    lvim.builtin.async_tasks = { active = true }
+    -- Dressing
+    lvim.builtin.dressing = { active = true }
+    -- Fancy menu
+    lvim.builtin.fancy_wild_menu = { active = true }
 
     -- Dashboard
     lvim.builtin.alpha.active = true
@@ -77,8 +74,21 @@ M.config = function()
         { name = "treesitter" },
         { name = "crates" },
         { name = "dictionary", keyword_length = 2 },
+        { name = "latex_symbols" },
     }
-    lvim.builtin.cmp.documentation.border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" }
+    local border = {
+        { "╭", "CmpBorder" },
+        { "─", "CmpBorder" },
+        { "╮", "CmpBorder" },
+        { "│", "CmpBorder" },
+        { "╯", "CmpBorder" },
+        { "─", "CmpBorder" },
+        { "╰", "CmpBorder" },
+        { "│", "CmpBorder" },
+    }
+    lvim.builtin.cmp.documentation.border = border
+    lvim.builtin.cmp.documentation.scrollbar = "║"
+    lvim.builtin.cmp.window = { border = border, scrollbar = "║" }
     lvim.builtin.cmp.experimental = {
         ghost_text = false,
         native_menu = false,
@@ -97,7 +107,43 @@ M.config = function()
         path = "",
         calc = "",
         crates = "(crates)",
+        latex_symbols = "(latex)",
+        nvim_lsp_signature_help = "(signature)",
     }
+    local cmp_ok, cmp = pcall(require, "cmp")
+    if not cmp_ok or cmp == nil then
+        cmp = {
+            mapping = function(...) end,
+            setup = { filetype = function(...) end, cmdline = function(...) end },
+            config = { sources = function(...) end },
+        }
+    end
+    if lvim.builtin.fancy_wild_menu.active then
+        cmp.setup.cmdline(":", {
+            sources = {
+                { name = "cmdline" },
+                { name = "path" },
+            },
+        })
+    end
+    cmp.setup.filetype("toml", {
+        sources = cmp.config.sources({
+            { name = "nvim_lsp", max_item_count = 8 },
+            { name = "crates" },
+            { name = "luasnip", max_item_count = 5 },
+        }, {
+            { name = "buffer", max_item_count = 5, keyword_length = 5 },
+        }),
+    })
+    cmp.setup.filetype("tex", {
+        sources = cmp.config.sources({
+            { name = "latex_symbols", max_item_count = 3, keyword_length = 3 },
+            { name = "nvim_lsp", max_item_count = 8 },
+            { name = "luasnip", max_item_count = 5 },
+        }, {
+            { name = "buffer", max_item_count = 5, keyword_length = 5 },
+        }),
+    })
 
     -- Terminal
     lvim.builtin.terminal.active = true
@@ -106,7 +152,20 @@ M.config = function()
         { "zsh", "<c-\\>", "Terminal", "float" },
         { "zsh", "<c-]>", "Terminal", "horizontal" },
         { "lazygit", "<c-g>", "LazyGit", "float" },
+        
     }
+
+    -- Evil stuff
+    lvim.builtin.copilot = { active = true }
+    if lvim.builtin.copilot.active then
+        lvim.keys.insert_mode["<c-h>"] = { [[copilot#Accept("\<CR>")]], { expr = true, script = true } }
+        lvim.keys.insert_mode["<M-]>"] = { "<Plug>(copilot-next)", { silent = true } }
+        lvim.keys.insert_mode["<M-[>"] = { "<Plug>(copilot-previous)", { silent = true } }
+        lvim.keys.insert_mode["<M-S-]>"] = { "<Cmd>vertical Copilot panel<CR>", { silent = true } }
+        local cmp = require "cmp"
+        lvim.builtin.cmp.mapping["<Tab>"] = cmp.mapping(M.tab, { "i", "c" })
+        lvim.builtin.cmp.mapping["<S-Tab>"] = cmp.mapping(M.shift_tab, { "i", "c" })
+    end
 
     -- Notify popup
     lvim.builtin.notify.active = true

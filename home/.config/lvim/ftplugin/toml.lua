@@ -15,7 +15,12 @@ linters.setup {}
 -- Lsp config
 vim.list_extend(lvim.lsp.override, { "taplo" })
 
-local opts = {}
+local opts = {
+    cmd = { "/home/matbigoi/.local/share/nvim/lsp_servers/taplo/taplo-lsp", "run" },
+    on_attach = require("lvim.lsp").common_on_attach,
+    on_init = require("lvim.lsp").common_on_init,
+    capabilities = require("lvim.lsp").common_capabilities(),
+}
 local servers = require "nvim-lsp-installer.servers"
 local server_available, requested_server = servers.get_server "taplo"
 if server_available then

@@ -1,15 +1,14 @@
 local M = {}
 
 M.which_keys = function()
+    local icons = require("user.lsp").icons
     local ok, term = pcall(require, "toggleterm.terminal")
     if ok then
         local t = term.Terminal:new { cmd = "lazygit", hidden = true }
-        function lazygit_toggle()
+        function _lazygit_toggle()
             t:toggle()
         end
     end
-
-    local icons = require("user.lsp").icons
 
     -- Find
     lvim.builtin.which_key.mappings["F"] = {
@@ -59,7 +58,7 @@ M.which_keys = function()
     -- Zen mode
     lvim.builtin.which_key.mappings["Z"] = {
         "<cmd>ZenMode<cr>",
-        icons.screen .. " Zen mode",
+        icons.screen .. "Zen mode",
     }
 
     -- Buffers
@@ -91,7 +90,7 @@ M.which_keys = function()
         b = { "<cmd>GitBlameToggle<cr>", "Toggle inline git blame" },
         B = { "<cmd>Git blame<cr>", "Open git blame" },
         d = { "<cmd>DiffviewOpen<cr>", "Git diff" },
-        g = { "<cmd>lua lazygit_toggle()<cr>", "LazyGit" },
+        g = { "<cmd>lua _lazygit_toggle()<cr>", "LazyGit" },
         l = {
             "<cmd>lua require('gitlinker').get_buf_range_url('n', {action_callback = require('gitlinker.actions').copy_to_clipboard})<cr>",
             "Copy line",
@@ -149,7 +148,7 @@ M.which_keys = function()
     -- Telescope suggest spell
     lvim.builtin.which_key.mappings["G"] = {
         "<cmd>lua require('user.telescope').spell_suggest()<cr>",
-        icons.spelling .. "Spelling",
+        icons.grammar .. "Spelling",
     }
 
     -- Names
@@ -167,6 +166,13 @@ M.which_keys = function()
 end
 
 M.normal_insert_keys = function()
+    local ok, term = pcall(require, "toggleterm.terminal")
+    if ok then
+        local t = term.Terminal:new { cmd = "bemol --watch", size = 10, hidden = true, direction = "horizontal" }
+        function _bemol_toggle()
+            t:toggle()
+        end
+    end
     -- NORMAL
     lvim.keys.normal_mode = {
         -- Toggle tree
@@ -191,6 +197,8 @@ M.normal_insert_keys = function()
         [">"] = ">>",
         -- Yank to the end of line
         ["Y"] = "y$",
+        -- Toggle
+        ["<C-B>"] = "<cmd>lua _bemol_toggle()<cr>",
     }
 
     if lvim.builtin.tag_provider == "symbols-outline" then
@@ -220,6 +228,8 @@ M.normal_insert_keys = function()
         ["<C-v>"] = "<C-r><C-o>+",
         -- Snippets
         ["<C-s>"] = "<cmd>lua require('telescope').extensions.luasnip.luasnip(require('telescope.themes').get_cursor({}))<cr>",
+        -- Toggle
+        ["<C-B>"] = "<cmd>lua _bemol_toggle()<cr>",
     }
     -- VISUAL
     lvim.keys.visual_mode = {
@@ -229,6 +239,10 @@ M.normal_insert_keys = function()
         ["<C-x>"] = '"+c',
         -- Paste with Ctrl-v
         ["<C-v>"] = 'c<Esc>"+p',
+        -- Gitlinker
+        ["<leader>gl"] = "<cmd>lua require('gitlinker').get_buf_range_url('v', {action_callback = require('gitlinker.actions').copy_to_clipboard})<cr>",
+        ["<leader>gL"] = "<cmd>lua require('gitlinker').get_buf_range_url('v', {action_callback = require('gitlinker.actions').open_in_browser})<cr>",
+        ["<leader>gd"] = nil
     }
 
     -- Buffer navigation
