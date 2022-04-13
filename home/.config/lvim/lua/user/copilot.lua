@@ -6,6 +6,7 @@ M.config = function()
     vim.g.copilot_tab_fallback = ""
     vim.g.copilot_filetypes = {
         ["*"] = false,
+        sh = true,
         python = true,
         ruby = true,
         lua = true,

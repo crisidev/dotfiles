@@ -14,13 +14,13 @@ end
 
 local function testing()
     if vim.g.testing_status == "running" then
-        return " "
+        return kind.icons.resume
     end
     if vim.g.testing_status == "fail" then
-        return ""
+        return kind.icons.attention
     end
     if vim.g.testing_status == "pass" then
-        return " "
+        return kind.icons.ok
     end
     return nil
 end
@@ -389,9 +389,9 @@ M.config = function()
     ins_left {
         provider = function()
             if vim.g.using_persistence then
-                return "  |"
+                return kind.icons.presence_on .. " |"
             elseif vim.g.using_persistence == false then
-                return "  |"
+                return kind.icons.presence_off .. " |"
             end
         end,
         enabled = function()
@@ -415,7 +415,7 @@ M.config = function()
             if not vim.bo.readonly or not vim.bo.modifiable then
                 return ""
             end
-            return "" -- """
+            return kind.icons.lock -- """
         end,
         color = { fg = colors.red },
     }
@@ -430,13 +430,25 @@ M.config = function()
     ins_right {
         function()
             if next(vim.treesitter.highlighter.active) then
-                return "  "
+                return " " .. kind.icons.treesitter .. " "
             end
             return ""
         end,
         padding = 0,
         color = { fg = colors.green },
         cond = conditions.hide_in_width,
+    }
+
+    ins_right {
+        function()
+            if vim.g.copilot_enabled == 1 then
+                return " " .. kind.icons.copilot .. " "
+            else
+                return ""
+            end
+        end,
+        padding = 0,
+        color = { fg = colors.yellow },
     }
 
     ins_right {
