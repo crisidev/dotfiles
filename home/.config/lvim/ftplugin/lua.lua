@@ -19,7 +19,7 @@ linters.setup {
 }
 
 -- Lsp config
-vim.list_extend(lvim.lsp.override, { "sumneko_lua" })
+vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "sumneko_lua" })
 
 local status_ok, lua_dev = pcall(require, "lua-dev")
 if not status_ok then

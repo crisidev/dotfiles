@@ -141,7 +141,6 @@ local luasnip_fn = function(opts)
                 }
             end,
         },
-        
 
         previewer = previewers.display_content.new(opts),
         sorter = conf.generic_sorter(opts),

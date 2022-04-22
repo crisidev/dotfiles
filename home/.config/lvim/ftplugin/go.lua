@@ -19,7 +19,7 @@ if lvim.builtin.dap.active then
 end
 
 -- Lsp config
-vim.list_extend(lvim.lsp.override, { "gopls" })
+vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "gopls" })
 
 local opts = {
     settings = {

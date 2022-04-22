@@ -89,7 +89,7 @@ M.icons = {
     treesitter = "",
     lock = "",
     presence_on = " ",
-    presence_off = " "
+    presence_off = " ",
 }
 
 M.nvim_tree_icons = {
@@ -288,7 +288,12 @@ M.key_mappings = function()
         "<cmd>lua require('user.telescope').code_actions()<cr>",
         icons.codelens .. "Code actions",
     }
-    lvim.lsp.buffer_mappings.visual_mode["ga"] = lvim.lsp.buffer_mappings.normal_mode["ga"]
+    if lvim.builtin.refactoring.active then
+        lvim.lsp.buffer_mappings.visual_mode["ga"] =
+            "<Esc><cmd>lua local ok, _ = require('refactoring') if ok then require('telescope').extensions.refactoring.refactors() else require('user.telescope').code_actions() end<CR>"
+    else
+        lvim.lsp.buffer_mappings.visual_mode["ga"] = lvim.lsp.buffer_mappings.normal_mode["ga"]
+    end
     -- Goto
     lvim.lsp.buffer_mappings.normal_mode["gg"] = {
         "<cmd>lua vim.lsp.buf.definition()<CR>",
@@ -396,7 +401,7 @@ M.key_mappings = function()
 end
 
 M.register_grammar_guard = function()
-    vim.list_extend(lvim.lsp.override, { "grammar_guard" })
+    vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "grammar_guard" })
     require("grammar-guard").init()
 
     local opts = {

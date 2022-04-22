@@ -28,6 +28,14 @@ M.config = function()
     -- Vim basic configurations
     -- vim.g.did_load_filetypes = 1
     vim.g.ultest_summary_width = 30
+    vim.opt.completeopt = { "menu", "menuone", "noselect" }
+    vim.opt.diffopt = {
+        "internal",
+        "filler",
+        "closeoff",
+        "hiddenoff",
+        "algorithm:minimal",
+    }
     -- Set wrap
     vim.opt.wrap = true
     -- Enable term GUI

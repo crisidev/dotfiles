@@ -47,6 +47,8 @@ M.config = function()
     lvim.builtin.dressing = { active = true }
     -- Fancy menu
     lvim.builtin.fancy_wild_menu = { active = true }
+    -- Refactoring
+    lvim.builtin.refactoring = { active = true }
 
     -- Dashboard
     lvim.builtin.alpha.active = true
@@ -76,19 +78,6 @@ M.config = function()
         { name = "dictionary", keyword_length = 2 },
         { name = "latex_symbols" },
     }
-    local border = {
-        { "╭", "CmpBorder" },
-        { "─", "CmpBorder" },
-        { "╮", "CmpBorder" },
-        { "│", "CmpBorder" },
-        { "╯", "CmpBorder" },
-        { "─", "CmpBorder" },
-        { "╰", "CmpBorder" },
-        { "│", "CmpBorder" },
-    }
-    lvim.builtin.cmp.documentation.border = border
-    lvim.builtin.cmp.documentation.scrollbar = "║"
-    lvim.builtin.cmp.window = { border = border, scrollbar = "║" }
     lvim.builtin.cmp.experimental = {
         ghost_text = false,
         native_menu = false,
@@ -120,6 +109,7 @@ M.config = function()
     end
     if lvim.builtin.fancy_wild_menu.active then
         cmp.setup.cmdline(":", {
+            mapping = cmp.mapping.preset.cmdline {},
             sources = {
                 { name = "cmdline" },
                 { name = "path" },
@@ -152,11 +142,10 @@ M.config = function()
         { "zsh", "<c-\\>", "Terminal", "float" },
         { "zsh", "<c-]>", "Terminal", "horizontal" },
         { "lazygit", "<c-g>", "LazyGit", "float" },
-        
     }
 
     -- Evil stuff
-    lvim.builtin.copilot = { active = true }
+    lvim.builtin.copilot = { active = true, cmp = false }
     if lvim.builtin.copilot.active then
         lvim.keys.insert_mode["<c-h>"] = { [[copilot#Accept("\<CR>")]], { expr = true, script = true } }
         lvim.keys.insert_mode["<M-]>"] = { "<Plug>(copilot-next)", { silent = true } }

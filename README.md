@@ -31,7 +31,7 @@ My personal dotfiles are compatible with [homesick](https://github.com/technical
 
 ### Editor
 
-* I use [Neovim](https://neovim.io) 0.7 following HEAD
+* I use [Neovim](https://neovim.io) 0.8 following HEAD
 * My config is heavily based on the great work of [abzcoding](https://github.com/abzcoding/lvim)
 * [LunarVim](https://lunarvim.org):
   * [Lua config](/home/.config/lvim/config.lua)

@@ -13,7 +13,7 @@ linters.setup {
 }
 
 -- Lsp config
-vim.list_extend(lvim.lsp.override, { "dockerls" })
+vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "dockerls" })
 
 local opts = {
     root_dir = function(fname)

@@ -30,7 +30,7 @@ if lvim.builtin.dap.active then
 end
 
 -- Lsp config
-vim.list_extend(lvim.lsp.override, { "pyright" })
+vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "pyright" })
 
 local opts = {
     root_dir = function(fname)

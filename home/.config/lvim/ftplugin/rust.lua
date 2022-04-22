@@ -7,7 +7,7 @@ local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {}
 
 -- Lsp config
-vim.list_extend(lvim.lsp.override, { "rust_analyzer" })
+vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "rust_analyzer" })
 
 local status_ok, rust_tools = pcall(require, "rust-tools")
 if not status_ok then

@@ -222,7 +222,8 @@ end
 
 M.config = function()
     -- Telescope
-    local icons = require('user.lsp').icons
+    local icons = require("user.lsp").icons
+    lvim.builtin.telescope.defaults.dynamic_preview_title = true
     lvim.builtin.telescope.defaults.path_display = { shorten = 10 }
     lvim.builtin.telescope.defaults.prompt_prefix = icons.codelens .. " "
     lvim.builtin.telescope.defaults.borderchars = {

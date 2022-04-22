@@ -19,7 +19,7 @@ linters.setup {
 }
 
 -- Lsp config
-vim.list_extend(lvim.lsp.override, { "tsserver" })
+vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "tsserver" })
 
 local status_ok, ts_utils = pcall(require, "nvim-lsp-ts-utils")
 if not status_ok then

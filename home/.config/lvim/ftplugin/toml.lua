@@ -13,7 +13,7 @@ local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {}
 
 -- Lsp config
-vim.list_extend(lvim.lsp.override, { "taplo" })
+vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "taplo" })
 
 local opts = {
     cmd = { "/home/matbigoi/.local/share/nvim/lsp_servers/taplo/taplo-lsp", "run" },

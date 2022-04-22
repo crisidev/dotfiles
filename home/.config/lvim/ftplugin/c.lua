@@ -13,7 +13,7 @@ local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {}
 
 -- Lsp info
-vim.list_extend(lvim.lsp.override, { "clangd" })
+vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "clangd" })
 
 local status_ok, clangd_extensions = pcall(require, "clangd_extensions")
 if not status_ok then

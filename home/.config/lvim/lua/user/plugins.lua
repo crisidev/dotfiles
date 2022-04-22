@@ -191,6 +191,16 @@ M.lsp = function()
             event = "BufReadPost",
             disable = lvim.builtin.tag_provider ~= "vista",
         },
+        -- Refactoring
+        {
+            "ThePrimeagen/refactoring.nvim",
+            ft = { "typescript", "javascript", "lua", "c", "cpp", "go", "python", "java", "php" },
+            event = "BufRead",
+            config = function()
+                require("refactoring").setup {}
+            end,
+            disable = not lvim.builtin.refactoring.active,
+        },
     }
 end
 
@@ -254,7 +264,21 @@ M.copilot = function()
             config = function()
                 require("user.copilot").config()
             end,
-            disable = not lvim.builtin.copilot.active,
+            disable = not lvim.builtin.copilot.active or lvim.builtin.copilot.cmp,
+        },
+        -- Copilot cmp
+        {
+            "zbirenbaum/copilot.lua",
+            after = "nvim-cmp",
+            requires = { "zbirenbaum/copilot-cmp" },
+            config = function()
+                local cmp_source = { name = "copilot", group_index = 2 }
+                table.insert(lvim.builtin.cmp.sources, cmp_source)
+                vim.defer_fn(function()
+                    require("copilot").setup()
+                end, 100)
+            end,
+            disable = not lvim.builtin.copilot.cmp,
         },
         -- Tabout
         {
@@ -283,8 +307,7 @@ M.filetype = function()
         },
         -- Faster filetype
         {
-            "abzcoding/filetype.nvim",
-            branch = "fix/qf-syntax",
+            "nathom/filetype.nvim",
             config = function()
                 require("user.filetype").config()
             end,

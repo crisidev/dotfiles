@@ -242,7 +242,7 @@ M.normal_insert_keys = function()
         -- Gitlinker
         ["<leader>gl"] = "<cmd>lua require('gitlinker').get_buf_range_url('v', {action_callback = require('gitlinker.actions').copy_to_clipboard})<cr>",
         ["<leader>gL"] = "<cmd>lua require('gitlinker').get_buf_range_url('v', {action_callback = require('gitlinker.actions').open_in_browser})<cr>",
-        ["<leader>gd"] = nil
+        ["<leader>gd"] = nil,
     }
 
     -- Buffer navigation
