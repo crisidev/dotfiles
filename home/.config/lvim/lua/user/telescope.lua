@@ -118,24 +118,6 @@ M.file_create = function()
     require("telescope").extensions.file_create.file_create(M.get_theme())
 end
 
--- show code actions in a fancy floating window
-M.code_actions = function()
-    builtin.lsp_code_actions(M.get_theme {
-        layout_config = {
-            height = 12,
-        },
-    })
-end
-
--- show refrences to this using language server
-M.codelens_actions = function()
-    builtin.lsp_codelens_actions(M.get_theme {
-        layout_config = {
-            height = 12,
-        },
-    })
-end
-
 -- show refrences to this using language server
 M.lsp_references = function()
     builtin.lsp_references(M.get_theme())

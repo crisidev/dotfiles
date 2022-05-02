@@ -121,6 +121,7 @@ M.lsp = function()
         -- Lsp Rust
         {
             "simrat39/rust-tools.nvim",
+            branch = "modularize_and_inlay_rewrite",
             ft = { "rust", "rs" },
         },
         -- Lsp Typescript
@@ -245,7 +246,7 @@ M.markdown = function()
             event = { "BufRead Cargo.toml" },
             requires = { "nvim-lua/plenary.nvim" },
             config = function()
-                require("user.crates").config()
+                require("crates").setup {}
             end,
         },
         -- Markdown TOC
@@ -363,20 +364,11 @@ M.session = function()
     return {
         -- Pick up where you left
         {
-            "ethanholz/nvim-lastplace",
-            event = "BufRead",
+            "vladdoster/remember.nvim",
             config = function()
-                require("nvim-lastplace").setup {
-                    lastplace_ignore_buftype = { "quickfix", "nofile", "help" },
-                    lastplace_ignore_filetype = {
-                        "gitcommit",
-                        "gitrebase",
-                        "svn",
-                        "hgcommit",
-                    },
-                    lastplace_open_folds = true,
-                }
+                require("remember").setup {}
             end,
+            event = "BufWinEnter",
         },
         -- Session manager
         {

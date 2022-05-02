@@ -8,6 +8,8 @@ formatters.setup {
     },
 }
 
+local M = {}
+
 -- Linting
 local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {
@@ -21,63 +23,159 @@ linters.setup {
 -- Lsp config
 vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "tsserver" })
 
-local status_ok, ts_utils = pcall(require, "nvim-lsp-ts-utils")
+local api = vim.api
+
+local get_map_options = function(custom_options)
+    local options = { silent = true }
+    if custom_options then
+        options = vim.tbl_extend("force", options, custom_options)
+    end
+    return options
+end
+
+M.buf_map = function(bufnr, mode, target, source, opts)
+    opts = opts or {}
+    opts.buffer = bufnr
+
+    M.map(mode, target, source, get_map_options(opts))
+end
+
+M.input = function(keys, mode)
+    api.nvim_feedkeys(M.t(keys), mode or "m", true)
+end
+
+M.warn = function(msg)
+    api.nvim_echo({ { msg, "WarningMsg" } }, true, {})
+end
+
+M.gfind = function(str, substr, cb, init)
+    init = init or 1
+    local start_pos, end_pos = str:find(substr, init)
+    if start_pos then
+        cb(start_pos, end_pos)
+        return M.gfind(str, substr, cb, end_pos + 1)
+    end
+end
+
+-- const myString = "hello ${}" ->
+-- const myString = `hello ${}`
+local change_template_string_quotes = function()
+    local row, col = unpack(api.nvim_win_get_cursor(0))
+    row = row - 1
+
+    local quote_start, quote_end
+    M.gfind(api.nvim_get_current_line(), "[\"']", function(pos)
+        if not quote_start then
+            -- start at first quote
+            quote_start = pos
+        elseif pos < col then
+            -- move start if quote is closer to col
+            if (pos - col) > (quote_start - col) then
+                quote_start = pos
+            end
+        elseif not quote_end then
+            -- first quote after col is end
+            quote_end = pos
+        end
+    end)
+
+    -- if found, replace quotes with backticks
+    if quote_start and quote_start <= col and quote_end then
+        api.nvim_buf_set_text(0, row, quote_start - 1, row, quote_start, { "`" })
+        api.nvim_buf_set_text(0, row, quote_end - 1, row, quote_end, { "`" })
+    end
+
+    -- input and move cursor into pair
+    M.input("${}", "n")
+    M.input("<Left>")
+end
+
+-- padding: 40px; ->
+-- padding: "40px",
+local css_to_js = function(opts)
+    local start_line, end_line
+    if type(opts) == "table" then
+        -- called via command
+        start_line, end_line = opts.line1 - 1, opts.line2
+    else
+        -- called as operator
+        start_line = api.nvim_buf_get_mark(0, "[")[1] - 1
+        end_line = api.nvim_buf_get_mark(0, "]")[1] + 1
+    end
+
+    local did_convert = false
+    for i, line in ipairs(api.nvim_buf_get_lines(0, start_line, end_line, false)) do
+        -- if the line ends in a comma, it's probably already js
+        if line:sub(#line) == "," then
+            goto continue
+        end
+        -- ignore comments
+        if line:find("%/%*") then
+            goto continue
+        end
+
+        local indentation, name, val = line:match("(%s+)(.+):%s(.+)")
+        -- skip non-matching lines
+        if not (name and val) then
+            goto continue
+        end
+
+        local parsed_name = ""
+        for j, component in ipairs(vim.split(name, "-")) do
+            parsed_name = parsed_name .. (j == 1 and component or (component:sub(1, 1):upper() .. component:sub(2)))
+        end
+
+        local parsed_val = val:gsub(";", "")
+        -- keep numbers, wrap others in quotes
+        parsed_val = tonumber(parsed_val) or string.format('"%s"', parsed_val)
+        local parsed_line = table.concat({ indentation, parsed_name, ": ", parsed_val, "," })
+
+        did_convert = true
+        local row = start_line + i
+        api.nvim_buf_set_lines(0, row - 1, row, false, { parsed_line })
+
+        ::continue::
+    end
+
+    if not did_convert then
+        M.warn("css-to-js: nothing to convert")
+    end
+end
+
+_G.css_to_js = css_to_js
+
+local function on_attach(client, bufnr)
+    require("lvim.lsp").common_on_attach(client, bufnr)
+    api.nvim_buf_create_user_command(bufnr, "CssToJs", css_to_js, { range = true })
+end
+
+local status_ok, ts = pcall(require, "typescript")
 if not status_ok then
-    vim.cmd [[ packadd nvim-lsp-ts-utils ]]
-    ts_utils = require "nvim-lsp-ts-utils"
+    return
 end
 
-local opts = {
-    on_attach = function(client, bufnr)
-        -- defaults
-        ts_utils.setup {
-            debug = false,
-            disable_commands = false,
-            enable_import_on_completion = false,
-            import_all_timeout = 5000, -- ms
+local ok, lvim_lsp = pcall(require, "lvim.lsp")
+if not ok then
+    return
+end
 
-            -- eslint
-            eslint_enable_code_actions = true,
-            eslint_enable_disable_comments = true,
-            eslint_bin = "eslint_d",
-            eslint_config_fallback = nil,
-            eslint_enable_diagnostics = false,
-
-            -- formatting
-            enable_formatting = false,
-            formatter = "prettierd",
-            formatter_config_fallback = nil,
-
-            -- parentheses completion
-            complete_parens = false,
-            signature_help_in_parens = false,
-
-            -- update imports on file move
-            update_imports_on_move = false,
-            require_confirmation_on_move = false,
-            watch_dir = nil,
-        }
-        ts_utils.setup_client(client)
-        require("lvim.lsp").common_on_attach(client, bufnr)
-    end,
-    init_options = require("nvim-lsp-ts-utils").init_options,
-    on_init = require("lvim.lsp").common_on_init,
-    capabilities = require("lvim.lsp").common_capabilities(),
+ts.setup {
+    disable_commands = false, -- prevent the plugin from creating Vim commands
+    disable_formatting = false, -- disable tsserver's formatting capabilities
+    debug = false, -- enable debug logging for commands
+    server = { -- pass options to lspconfig's setup method
+        on_attach = on_attach,
+        capabilities = lvim_lsp.common_capabilities(),
+    },
 }
-
-local servers = require "nvim-lsp-installer.servers"
-local server_available, requested_server = servers.get_server "tsserver"
-if server_available then
-    opts.cmd_env = requested_server:get_default_options().cmd_env
-end
-
-require("lvim.lsp.manager").setup("tsserver", opts)
 
 -- Additional mappings
 local icons = require("user.lsp").icons
 lvim.lsp.buffer_mappings.normal_mode["gT"] = {
     name = icons.nuclear .. " TypeScript Tools",
-    a = { "<cmd>TSLspImportAll<cr>", "Import all" },
-    r = { "<cmd>TSLspRenameFile<cr>", "Rename file" },
-    o = { "<cmd>TSLspOrganize<cr>", "Organize" },
+    a = { "<cmd>TypescriptAddMissingImports<cr>", "Add missing imports" },
+    o = { "<cmd>TypescriptOrganizeImports<cr>", "Organize imports" },
+    f = { "<cmd>TypescriptFixAll<cr>", "Fix all" },
+    r = { "<cmd>TypescriptRenameFile<cr>", "Rename file" },
+    u = { "<cmd>TypescriptRemoveUnused<cr>", "Remove unused"},
 }

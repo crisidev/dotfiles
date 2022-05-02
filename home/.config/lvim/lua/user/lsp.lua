@@ -285,15 +285,11 @@ M.key_mappings = function()
     lvim.lsp.buffer_mappings.visual_mode["gA"] = lvim.lsp.buffer_mappings.normal_mode["gA"]
     lvim.lsp.buffer_mappings.normal_mode["ga"] = {
         --     "<cmd>CodeActionMenu<cr>",
-        "<cmd>lua require('user.telescope').code_actions()<cr>",
+        "<cmd>lua vim.lsp.buf.code_action()<cr>",
         icons.codelens .. "Code actions",
     }
-    if lvim.builtin.refactoring.active then
-        lvim.lsp.buffer_mappings.visual_mode["ga"] =
-            "<Esc><cmd>lua local ok, _ = require('refactoring') if ok then require('telescope').extensions.refactoring.refactors() else require('user.telescope').code_actions() end<CR>"
-    else
-        lvim.lsp.buffer_mappings.visual_mode["ga"] = lvim.lsp.buffer_mappings.normal_mode["ga"]
-    end
+    lvim.lsp.buffer_mappings.visual_mode["ga"] = lvim.lsp.buffer_mappings.normal_mode["ga"]
+
     -- Goto
     lvim.lsp.buffer_mappings.normal_mode["gg"] = {
         "<cmd>lua vim.lsp.buf.definition()<CR>",
@@ -301,7 +297,7 @@ M.key_mappings = function()
     }
     lvim.lsp.buffer_mappings.visual_mode["gg"] = lvim.lsp.buffer_mappings.normal_mode["gg"]
     lvim.lsp.buffer_mappings.normal_mode["gt"] = {
-        "<cmd>lua vim.lsp.buf.definition()<CR>",
+        "<cmd>lua vim.lsp.buf.type_definition()<CR>",
         icons.go .. " Goto type definition",
     }
     lvim.lsp.buffer_mappings.visual_mode["gt"] = lvim.lsp.buffer_mappings.normal_mode["gt"]
@@ -373,7 +369,7 @@ M.key_mappings = function()
 
     -- Format
     lvim.lsp.buffer_mappings.normal_mode["gF"] = {
-        "<cmd>lua vim.lsp.buf.formatting()<cr>",
+        "<cmd>lua vim.lsp.buf.format { async = true }<cr>",
         icons.magic .. "Format file",
     }
     lvim.lsp.buffer_mappings.visual_mode["gF"] = lvim.lsp.buffer_mappings.normal_mode["gF"]

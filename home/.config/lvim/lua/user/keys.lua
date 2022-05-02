@@ -244,6 +244,7 @@ M.normal_insert_keys = function()
         ["<leader>gL"] = "<cmd>lua require('gitlinker').get_buf_range_url('v', {action_callback = require('gitlinker.actions').open_in_browser})<cr>",
         ["<leader>gd"] = nil,
     }
+    lvim.keys.visual_mode["ga"] = "<esc><cmd>lua vim.lsp.buf.range_code_action()<cr>"
 
     -- Buffer navigation
     lvim.keys.normal_mode["<F1>"] = "<cmd>BufferLineCyclePrev<cr>"

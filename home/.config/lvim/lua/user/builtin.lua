@@ -13,7 +13,6 @@ M.config = function()
             error = kind.icons.error,
         },
     }
-    lvim.builtin.nvimtree.setup.view.auto_resize = true
     lvim.builtin.nvimtree.setup.actions.open_file.resize_window = true
     lvim.builtin.nvimtree.icons = kind.nvim_tree_icons
     lvim.builtin.nvimtree.show_icons.git = 0
@@ -147,7 +146,13 @@ M.config = function()
     -- Evil stuff
     lvim.builtin.copilot = { active = true, cmp = false }
     if lvim.builtin.copilot.active then
-        lvim.keys.insert_mode["<c-h>"] = { [[copilot#Accept("\<CR>")]], { expr = true, script = true } }
+        local function t(str)
+            return vim.api.nvim_replace_termcodes(str, true, true, true)
+        end
+
+        lvim.builtin.cmp.mapping["<c-h>"] = cmp.mapping(function()
+            vim.api.nvim_feedkeys(vim.fn["copilot#Accept"](t "<Tab>"), "n", true)
+        end)
         lvim.keys.insert_mode["<M-]>"] = { "<Plug>(copilot-next)", { silent = true } }
         lvim.keys.insert_mode["<M-[>"] = { "<Plug>(copilot-previous)", { silent = true } }
         lvim.keys.insert_mode["<M-S-]>"] = { "<Cmd>vertical Copilot panel<CR>", { silent = true } }
