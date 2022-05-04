@@ -101,7 +101,7 @@ export VISUAL=vim
 export EDITOR=vim
 export PAGER=less
 export P4CONFIG=.p4config
-export RUSTC_WRAPPER=~/.cargo/bin/sccache
+# export RUSTC_WRAPPER=~/.cargo/bin/sccache
 export LANG="en_US.UTF-8"
 
 # rbenv

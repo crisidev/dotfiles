@@ -346,7 +346,7 @@ M.key_mappings = function()
 
     -- Diagnostics
     lvim.lsp.buffer_mappings.normal_mode["gl"] = {
-        "<cmd>lua require('lvim.lsp.handlers').show_line_diagnostics()<CR>",
+        "<cmd>lua vim.diagnostic.open_float()<CR>",
         icons.hint .. "Show line diagnostics",
     }
     lvim.lsp.buffer_mappings.visual_mode["gl"] = lvim.lsp.buffer_mappings.normal_mode["gl"]
@@ -411,7 +411,7 @@ M.register_grammar_guard = function()
                 enabled = { "latex", "tex", "bib", "markdown", "rst", "text" },
                 language = "en",
                 diagnosticSeverity = "information",
-                setenceCacheSize = 2000,
+                sentenceCacheSize = 2000,
                 additionalRules = {
                     enablePickyRules = true,
                     motherTongue = "en",
@@ -504,6 +504,9 @@ M.config = function()
 
     -- Configure null-ls
     require("user.null_ls").config()
+
+    -- Configure prosemd
+    require("lvim.lsp.manager").setup("prosemd_lsp", {})
 
     -- Configure Lsp providers
     if lvim.builtin.grammar_guard.active then
