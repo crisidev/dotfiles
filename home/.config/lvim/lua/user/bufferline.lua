@@ -28,6 +28,7 @@ M.config = function()
             M.language_files("rust", "#FF6965", "rs"),
             M.language_files("python", "#006400", "py"),
             M.language_files("kotlin", "#966fd6", "kt"),
+            M.language_files("java", "#966fd6", "java"),
             M.language_files("lua", "#ffaa1d", "lua"),
             M.language_files("ruby", "#FF6965", "rb"),
             {

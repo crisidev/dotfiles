@@ -114,10 +114,6 @@ M.zoxide = function()
     require("telescope").extensions.zoxide.list(M.get_theme())
 end
 
-M.file_create = function()
-    require("telescope").extensions.file_create.file_create(M.get_theme())
-end
-
 -- show refrences to this using language server
 M.lsp_references = function()
     builtin.lsp_references(M.get_theme())
@@ -246,10 +242,10 @@ M.config = function()
         find_command = { "fd", "--type=file", "--hidden", "--smart-case" },
     }
 
+
     lvim.builtin.telescope.on_config_done = function(telescope)
         telescope.load_extension "luasnip"
         telescope.load_extension "ui-select"
-        telescope.load_extension "file_create"
         telescope.load_extension "zoxide"
         telescope.load_extension "repo"
         if lvim.builtin.file_browser.active then

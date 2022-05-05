@@ -92,6 +92,11 @@ M.telescope = function()
         { "nvim-telescope/telescope-file-browser.nvim" },
         -- Telescope live grep
         { "nvim-telescope/telescope-live-grep-raw.nvim" },
+        -- Telescope lua snippets
+        {
+            "benfowler/telescope-luasnip.nvim",
+            module = "telescope._extensions.luasnip", -- if you wish to lazy-load
+        },
     }
 end
 
@@ -124,6 +129,8 @@ M.lsp = function()
             branch = "modularize_and_inlay_rewrite",
             ft = { "rust", "rs" },
         },
+        -- Lsp java
+        { "mfussenegger/nvim-jdtls", ft = "java" },
         -- Lsp Typescript
         {
             "jose-elias-alvarez/nvim-lsp-ts-utils",

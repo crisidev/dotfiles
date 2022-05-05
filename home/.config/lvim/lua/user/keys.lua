@@ -16,7 +16,6 @@ M.which_keys = function()
         f = { "<cmd>lua require('user.telescope').find_files()<cr>", "Find files" },
         F = { "<cmd>lua require('user.telescope').search_only_certain_files()<cr>", "File certain filetype" },
         b = { "<cmd>lua require('user.telescope').file_browser()<cr>", "File browser" },
-        c = { "<cmd>lua require('user.telescope').file_create()<cr>", "Create file" },
         t = { "<cmd>lua require('user.telescope').resume()<cr>", "Last Search" },
         p = { "<cmd>lua require('user.telescope').projects()<cr>", "Projects" },
         s = { "<cmd>lua require('user.telescope').find_string()<cr>", " Find string in file" },
@@ -227,7 +226,7 @@ M.normal_insert_keys = function()
         -- Paste with Ctrl-v
         ["<C-v>"] = "<C-r><C-o>+",
         -- Snippets
-        ["<C-s>"] = "<cmd>lua require('telescope').extensions.luasnip.luasnip(require('telescope.themes').get_cursor({}))<cr>",
+        ["<C-s>"] = "<cmd>lua require('telescope').extensions.luasnip.luasnip{}<cr>",
         -- Toggle
         ["<C-B>"] = "<cmd>lua _bemol_toggle()<cr>",
     }

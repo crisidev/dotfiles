@@ -16,6 +16,20 @@
           "typescriptreact"
         ],
         "path": "./typescript.json"
+      },
+      {
+        "language": "rust",
+        "path": "./rust.json"
+      },
+      {
+        "language": [
+            "sh",
+            "python",
+            "kotlin",
+            "java",
+            "rust"
+        ],
+        "path": "./license.json"
       }
     ]
   }
