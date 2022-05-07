@@ -17,7 +17,7 @@ M.config = function()
         { name = "git" },
     }
     lvim.builtin.cmp.experimental = {
-        ghost_text = false,
+        ghost_text = true,
         native_menu = false,
         custom_menu = true,
     }
@@ -82,6 +82,18 @@ M.config = function()
             { name = "nvim_lsp", max_item_count = 8 },
             { name = "luasnip", max_item_count = 5 },
             { name = "emoji" },
+        }, {
+            { name = "buffer", max_item_count = 5, keyword_length = 5 },
+        }),
+    })
+    cmp.setup.filetype("markdown", {
+        sources = cmp.config.sources({
+            { name = "path" },
+            { name = "dictionary" },
+            { name = "spell", keyword_length = 4 },
+            { name = "luasnip", max_item_count = 5 },
+            { name = "emoji" },
+            { name = "calc" },
         }, {
             { name = "buffer", max_item_count = 5, keyword_length = 5 },
         }),
