@@ -287,6 +287,16 @@ M.set_terminal_keymaps = function()
 end
 
 M.config = function()
+    lvim.builtin.which_key.setup.window.winblend = 10
+    lvim.builtin.which_key.setup.window.border = "none"
+    lvim.builtin.which_key.setup.icons = {
+        breadcrumb = "/", -- symbol used in the command line area that shows your active key combo
+        separator = "·", -- symbol used between a key and it's label
+        group = "", -- symbol prepended to a group
+    }
+    lvim.builtin.which_key.setup.triggers = { "<leader>", "g", "z", "]", "[" }
+    lvim.builtin.which_key.setup.ignore_missing = true
+
     M.normal_insert_keys()
     M.which_keys()
 end

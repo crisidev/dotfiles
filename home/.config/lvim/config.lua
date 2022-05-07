@@ -16,8 +16,11 @@ vim.cmd "source ~/.config/lvim/vimscript/user.pre.vim"
 -- Builtin
 require("user.builtin").config()
 
--- Builtin
+-- Neovim
 require("user.neovim").config()
+
+-- Cmp
+require("user.cmp").config()
 
 -- Additional Plugins
 require("user.plugins").config()
