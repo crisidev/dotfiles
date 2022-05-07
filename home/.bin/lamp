@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+IS_ON=$(curl --fail --silent --show-error http://10.0.1.220/relay/0 |jq .ison)
+if [ "$IS_ON"  == "true" ]; then
+    curl --fail --silent --show-error http://10.0.1.220/relay/0?turn=off > /dev/null
+else
+    curl --fail --silent --show-error http://10.0.1.220/relay/0?turn=on > /dev/null
+fi
