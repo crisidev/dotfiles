@@ -78,6 +78,7 @@ M.config = function()
         { name = "crates" },
         { name = "dictionary", keyword_length = 2 },
         { name = "latex_symbols" },
+        { name = "git" },
     }
     lvim.builtin.cmp.experimental = {
         ghost_text = false,
@@ -99,6 +100,7 @@ M.config = function()
         crates = "(crates)",
         latex_symbols = "(latex)",
         nvim_lsp_signature_help = "(signature)",
+        git = "(git)",
     }
     local cmp_ok, cmp = pcall(require, "cmp")
     if not cmp_ok or cmp == nil then
@@ -119,6 +121,7 @@ M.config = function()
     end
     cmp.setup.filetype("toml", {
         sources = cmp.config.sources({
+            { name = "path" },
             { name = "nvim_lsp", max_item_count = 8 },
             { name = "crates" },
             { name = "luasnip", max_item_count = 5 },
@@ -129,6 +132,17 @@ M.config = function()
     cmp.setup.filetype("tex", {
         sources = cmp.config.sources({
             { name = "latex_symbols", max_item_count = 3, keyword_length = 3 },
+            { name = "nvim_lsp", max_item_count = 8 },
+            { name = "luasnip", max_item_count = 5 },
+        }, {
+            { name = "buffer", max_item_count = 5, keyword_length = 5 },
+        }),
+    })
+    cmp.setup.filetype("gitcommit", {
+        sources = cmp.config.sources({
+            { name = "git" },
+            { name = "path" },
+            { name = "dictionary" },
             { name = "nvim_lsp", max_item_count = 8 },
             { name = "luasnip", max_item_count = 5 },
         }, {
@@ -146,7 +160,7 @@ M.config = function()
     }
 
     -- Evil stuff
-    lvim.builtin.copilot = { active = true, cmp = false }
+    lvim.builtin.copilot = { active = true }
     if lvim.builtin.copilot.active then
         local function t(str)
             return vim.api.nvim_replace_termcodes(str, true, true, true)

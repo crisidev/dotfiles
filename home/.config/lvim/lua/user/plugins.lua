@@ -31,12 +31,15 @@ M.git = function()
         },
         -- Git blame
         {
-            "f-person/git-blame.nvim",
-            config = function()
-                vim.cmd "highlight default link gitblame Question"
-                vim.g.gitblame_enabled = 0
-                vim.g.gitblame_message_template = "<date> • <author> • <summary>"
-                vim.g.gitblame_date_format = "%r"
+            "APZelos/blamer.nvim",
+            setup = function()
+                local icons = require("user.lsp").icons
+                vim.g.blamer_enabled = 0
+                vim.g.blamer_prefix = " " .. icons.magic .. " "
+                vim.g.blamer_template = "<committer-time> • <author> • <summary>"
+                vim.g.blamer_relative_time = 1
+                vim.g.blamer_delay = 200
+                vim.cmd "highlight Blamer guifg=#d3d3d3"
             end,
         },
         -- Github management
@@ -70,6 +73,13 @@ M.git = function()
                 }
             end,
             requires = "nvim-lua/plenary.nvim",
+        },
+        {
+            "petertriho/cmp-git",
+            requires = "nvim-lua/plenary.nvim",
+            config = function ()
+                require("cmp_git").setup()
+            end
         },
     }
 end
@@ -272,21 +282,7 @@ M.copilot = function()
             config = function()
                 require("user.copilot").config()
             end,
-            disable = not lvim.builtin.copilot.active or lvim.builtin.copilot.cmp,
-        },
-        -- Copilot cmp
-        {
-            "zbirenbaum/copilot.lua",
-            after = "nvim-cmp",
-            requires = { "zbirenbaum/copilot-cmp" },
-            config = function()
-                local cmp_source = { name = "copilot", group_index = 2 }
-                table.insert(lvim.builtin.cmp.sources, cmp_source)
-                vim.defer_fn(function()
-                    require("copilot").setup()
-                end, 100)
-            end,
-            disable = not lvim.builtin.copilot.cmp,
+            disable = not lvim.builtin.copilot.active,
         },
         -- Tabout
         {

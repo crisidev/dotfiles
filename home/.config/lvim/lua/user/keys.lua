@@ -86,7 +86,7 @@ M.which_keys = function()
     -- Git
     lvim.builtin.which_key.mappings["g"] = {
         name = " Git",
-        b = { "<cmd>GitBlameToggle<cr>", "Toggle inline git blame" },
+        b = { "<cmd>BlamerToggle<cr>", "Toggle inline git blame" },
         B = { "<cmd>Git blame<cr>", "Open git blame" },
         d = { "<cmd>DiffviewOpen<cr>", "Git diff" },
         g = { "<cmd>lua _lazygit_toggle()<cr>", "LazyGit" },
