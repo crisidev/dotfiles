@@ -34,12 +34,24 @@ if vim.fn.expand "%:t" == "Cargo.toml" then
         f = { "<cmd>lua require('crates').show_features_popup()<cr>", "Show features popup" },
         u = { "<cmd>lua require('crates').update_crate()<cr>", "Update crate" },
         a = { "<cmd>lua require('crates').update_all_crates()<cr>", "Update all crates" },
-        U = { "<cmd>lua require('crates').upgrade_crate()<cr>", "Update crate" },
-        A = { "<cmd>lua require('crates').upgrade_all_crates()<cr>", "Update all crates" },
+        U = { "<cmd>lua require('crates').upgrade_crate()<cr>", "Upgrade crate" },
+        A = { "<cmd>lua require('crates').upgrade_all_crates()<cr>", "Upgrade all crates" },
+        h = { "<cmd>lua require('crates').open_homepage()<cr>", "Open crate homepage" },
+        R = { "<cmd>lua require('crates').open_repository()<cr>", "Open crate repository" },
+        d = { "<cmd>lua require('crates').open_documentation()<cr>", "Open crate documentation" },
+        c = { "<cmd>lua require('crates').open_crates_io()<cr>", "Open crates.io" },
     }
     lvim.lsp.buffer_mappings.visual_mode["gT"] = {
         name = "☢ Cargo Tools",
-        u = { "<cmd>lua require('crates').update_crates()<cr>", "Update selected crates" },
-        U = { "<cmd>lua require('crates').upgrade_crates()<cr>", "Update selected crates" },
+        v = { "<cmd>lua require('crates').show_versions_popup()<cr>", "Show versions popup" },
+        f = { "<cmd>lua require('crates').show_features_popup()<cr>", "Show features popup" },
+        u = { "<cmd>lua require('crates').update_crate()<cr>", "Update crate" },
+        a = { "<cmd>lua require('crates').update_all_crates()<cr>", "Update all crates" },
+        U = { "<cmd>lua require('crates').upgrade_crate()<cr>", "Upgrade crate" },
+        A = { "<cmd>lua require('crates').upgrade_all_crates()<cr>", "Upgrade all crates" },
+        h = { "<cmd>lua require('crates').open_homepage()<cr>", "Open crate homepage" },
+        R = { "<cmd>lua require('crates').open_repository()<cr>", "Open crate repository" },
+        d = { "<cmd>lua require('crates').open_documentation()<cr>", "Open crate documentation" },
+        c = { "<cmd>lua require('crates').open_crates_io()<cr>", "Open crates.io" },
     }
 end

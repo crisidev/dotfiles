@@ -81,5 +81,10 @@
     "prefix": "trace",
     "body": ["tracing::trace!(\"${1}\");"],
     "description": "Tracing trace! statement"
+  },
+  "instrument": {
+    "prefix": "instrument",
+    "body": ["#[tracing::instrument(name = \"${1}\", skip(state))]"],
+    "description": "Add tracing::instrument macro"
   }
 }

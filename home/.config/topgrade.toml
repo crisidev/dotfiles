@@ -7,8 +7,6 @@ max_concurrency = 5
 repos = [
     # Zsh
     "~/.zprezto",
-    # Vim
-    "~/.local/share/lunarvim/lvim",
     # Password store
     "~/.password-store",
     # Envs
