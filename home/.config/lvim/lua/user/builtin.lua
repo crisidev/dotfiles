@@ -68,6 +68,7 @@ M.config = function()
     -- Cmp
     lvim.builtin.cmp.sources = {
         { name = "nvim_lsp" },
+        { name = "nvim_lsp_signature_help" },
         { name = "buffer", max_item_count = 5, keyword_length = 5 },
         { name = "path", max_item_count = 5 },
         { name = "luasnip", max_item_count = 3 },
@@ -99,7 +100,7 @@ M.config = function()
         calc = "",
         crates = "(crates)",
         latex_symbols = "(latex)",
-        nvim_lsp_signature_help = "(signature)",
+        nvim_lsp_signature_help = "(sig)",
         git = "(git)",
     }
     local cmp_ok, cmp = pcall(require, "cmp")
@@ -145,6 +146,7 @@ M.config = function()
             { name = "dictionary" },
             { name = "nvim_lsp", max_item_count = 8 },
             { name = "luasnip", max_item_count = 5 },
+            { name = "emoji" },
         }, {
             { name = "buffer", max_item_count = 5, keyword_length = 5 },
         }),

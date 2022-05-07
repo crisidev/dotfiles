@@ -77,9 +77,9 @@ M.git = function()
         {
             "petertriho/cmp-git",
             requires = "nvim-lua/plenary.nvim",
-            config = function ()
+            config = function()
                 require("cmp_git").setup()
-            end
+            end,
         },
     }
 end
@@ -120,6 +120,7 @@ M.lsp = function()
             end,
             event = { "BufRead", "BufNew" },
         },
+        { "hrsh7th/cmp-nvim-lsp-signature-help" },
         -- Lsp progress lualine
         {
             "arkav/lualine-lsp-progress",
@@ -510,6 +511,9 @@ M.config = function()
             requires = "hrsh7th/nvim-cmp",
             ft = "tex",
         },
+        { "hrsh7th/cmp-emoji" },
+        { "f3fora/cmp-spell" },
+        { "hrsh7th/cmp-calc" },
     }
     table.insert(lvim.plugins, M.themes())
     table.insert(lvim.plugins, M.git())
