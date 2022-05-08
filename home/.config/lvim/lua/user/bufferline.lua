@@ -6,6 +6,8 @@ M.config = function()
     if not g_ok then
         bufferline_groups = { builtin = { ungrouped = { name = "ungrouped" } } }
     end
+    lvim.builtin.bufferline.options.show_buffer_icons = true
+    lvim.builtin.bufferline.options.show_buffer_close_icons = true
     lvim.builtin.bufferline.options.diagnostics = false -- do not show diagnostics in bufferline
     lvim.builtin.bufferline.options.diagnostics_indicator = function(_, _, diagnostics)
         local result = {}

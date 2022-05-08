@@ -15,7 +15,14 @@ M.config = function()
     }
     lvim.builtin.nvimtree.setup.actions.open_file.resize_window = true
     lvim.builtin.nvimtree.icons = kind.nvim_tree_icons
-    lvim.builtin.nvimtree.show_icons.git = 0
+    lvim.builtin.nvimtree.setup.diagnostics.enable = true
+    lvim.builtin.nvimtree.setup.renderer.icons.webdev_colors = true
+    lvim.builtin.nvimtree.show_icons = {
+        git = 0,
+        folders = 1,
+        files = 1,
+        folder_arrows = 1,
+    }
 
     -- Tag provider
     lvim.builtin.tag_provider = "vista"
@@ -65,6 +72,13 @@ M.config = function()
 
     -- Notify popup
     lvim.builtin.notify.active = true
+    lvim.builtin.notify.opts.icons = {
+        ERROR = kind.icons.error,
+        WARN = kind.icons.warn,
+        INFO = kind.icons.info,
+        DEBUG = kind.icons.debug,
+        TRACE = kind.icons.trace,
+    }
     lvim.log.level = "info"
 end
 

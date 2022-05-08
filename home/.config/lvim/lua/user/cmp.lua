@@ -17,26 +17,32 @@ M.config = function()
         { name = "git" },
     }
     lvim.builtin.cmp.experimental = {
-        ghost_text = true,
+        ghost_text = false,
         native_menu = false,
         custom_menu = true,
     }
-    lvim.builtin.cmp.formatting.kind_icons = require("user.lsp").cmp_kind
-    lvim.builtin.cmp.formatting.source_names = {
-        buffer = "(buf)",
-        nvim_lsp = "(lsp)",
-        luasnip = "(snip)",
-        treesitter = "",
-        nvim_lua = "(lua)",
-        spell = "暈",
-        dictionary = "暈",
-        emoji = "",
-        path = "",
-        calc = "",
-        crates = "(crates)",
-        latex_symbols = "(latex)",
-        nvim_lsp_signature_help = "(sig)",
-        git = "(git)",
+    local kind = require("user.lsp")
+    local cmp_sources = {
+        ["vim-dadbod-completion"] = "(DadBod)",
+        buffer = "(Buffer)",
+        cmp_tabnine = "(TabNine)",
+        crates = "(Crates)",
+        latex_symbols = "(LaTeX)",
+        nvim_lua = "(NvLua)",
+    }
+    lvim.builtin.cmp.formatting = {
+        fields = { "kind", "abbr", "menu" },
+        format = function(entry, vim_item)
+            if entry.source.name == "cmdline" then
+                vim_item.kind = "⌘"
+                vim_item.menu = ""
+                return vim_item
+            end
+            vim_item.menu = cmp_sources[entry.source.name] or vim_item.kind
+            vim_item.kind = kind.cmp_kind[vim_item.kind] or vim_item.kind
+
+            return vim_item
+        end,
     }
     local cmp_ok, cmp = pcall(require, "cmp")
     if not cmp_ok or cmp == nil then
