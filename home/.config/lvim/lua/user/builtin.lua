@@ -79,7 +79,10 @@ M.config = function()
         DEBUG = kind.icons.debug,
         TRACE = kind.icons.trace,
     }
-    lvim.log.level = "info"
+
+    -- Log level
+    vim.lsp.set_log_level "warn"
+    lvim.log.level = "warn"
 end
 
 -- Utility

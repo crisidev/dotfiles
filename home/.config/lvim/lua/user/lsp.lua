@@ -505,6 +505,17 @@ M.config = function()
         end
         return t.message
     end
+    lvim.lsp.document_highlight = true
+    lvim.lsp.code_lens_refresh = true
+
+    local default_exe_handler = vim.lsp.handlers["workspace/executeCommand"]
+    vim.lsp.handlers["workspace/executeCommand"] = function(err, result, ctx, config)
+        -- supress NULL_LS error msg
+        if err and vim.startswith(err.message, "NULL_LS") then
+            return
+        end
+        return default_exe_handler(err, result, ctx, config)
+    end
 
     -- Configure null-ls
     require("user.null_ls").config()

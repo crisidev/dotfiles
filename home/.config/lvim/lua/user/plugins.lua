@@ -502,6 +502,7 @@ M.config = function()
         { "mattn/webapi-vim" },
         -- Startup time
         { "dstein64/vim-startuptime" },
+        -- Cmp stuff
         {
             "hrsh7th/cmp-cmdline",
             disable = not lvim.builtin.fancy_wild_menu.active,
