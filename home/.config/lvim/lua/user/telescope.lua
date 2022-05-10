@@ -91,6 +91,7 @@ M.recent_files = function()
         hidden = true,
     }
     builtin.oldfiles(M.get_theme(opts))
+    -- require("telescope").extensions.frecency.frecency(M.get_theme())
 end
 
 M.diagnostics = function()
@@ -248,6 +249,7 @@ M.config = function()
         telescope.load_extension "ui-select"
         telescope.load_extension "zoxide"
         telescope.load_extension "repo"
+        telescope.load_extension "frecency"
         if lvim.builtin.file_browser.active then
             telescope.load_extension "file_browser"
         end

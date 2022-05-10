@@ -107,6 +107,11 @@ M.telescope = function()
             "benfowler/telescope-luasnip.nvim",
             module = "telescope._extensions.luasnip", -- if you wish to lazy-load
         },
+        -- Telescope frecency
+        {
+            "nvim-telescope/telescope-frecency.nvim",
+            requires = { "tami5/sqlite.lua" },
+        },
     }
 end
 
