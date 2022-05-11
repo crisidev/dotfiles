@@ -1,7 +1,7 @@
 local M = {}
 
-M.themes = function()
-    return {
+M.config = function()
+    lvim.plugins = {
         {
             -- "folke/tokyonight.nvim",
             "abzcoding/tokyonight.nvim",
@@ -18,11 +18,6 @@ M.themes = function()
                 require("user.colorizer").config()
             end,
         },
-    }
-end
-
-M.git = function()
-    return {
         -- Fugitive
         {
             "tpope/vim-fugitive",
@@ -74,18 +69,6 @@ M.git = function()
             end,
             requires = "nvim-lua/plenary.nvim",
         },
-        {
-            "petertriho/cmp-git",
-            requires = "nvim-lua/plenary.nvim",
-            config = function()
-                require("cmp_git").setup()
-            end,
-        },
-    }
-end
-
-M.telescope = function()
-    return {
         -- Telescope zoxide
         {
             "jvgrootveld/telescope-zoxide",
@@ -112,11 +95,6 @@ M.telescope = function()
             "nvim-telescope/telescope-frecency.nvim",
             requires = { "tami5/sqlite.lua" },
         },
-    }
-end
-
-M.lsp = function()
-    return {
         -- Lsp signature
         {
             "ray-x/lsp_signature.nvim",
@@ -188,6 +166,39 @@ M.lsp = function()
             end,
             ft = { "scala", "sbt" },
         },
+        -- Cmp stuff
+        {
+            "hrsh7th/cmp-cmdline",
+            disable = not lvim.builtin.fancy_wild_menu.active,
+        },
+        {
+            "kdheepak/cmp-latex-symbols",
+            requires = "hrsh7th/nvim-cmp",
+            ft = "tex",
+        },
+        { "hrsh7th/cmp-emoji" },
+        { "f3fora/cmp-spell" },
+        { "hrsh7th/cmp-calc" },
+        {
+            "uga-rosa/cmp-dictionary",
+            config = function()
+                require("cmp_dictionary").setup {
+                    dic = {
+                        ["markdown"] = { "/usr/share/dict/words", "/usr/share/dict/british-english" },
+                        ["rst"] = { "/usr/share/dict/words", "/usr/share/dict/british-english" },
+                        ["*"] = {},
+                    },
+                }
+            end,
+            rocks = { "mpack" },
+        },
+        {
+            "petertriho/cmp-git",
+            requires = "nvim-lua/plenary.nvim",
+            config = function()
+                require("cmp_git").setup()
+            end,
+        },
         -- Dressing
         {
             "stevearc/dressing.nvim",
@@ -225,11 +236,6 @@ M.lsp = function()
             end,
             disable = not lvim.builtin.refactoring.active,
         },
-    }
-end
-
-M.markdown = function()
-    return {
         {
             "iamcco/markdown-preview.nvim",
             run = "cd app && npm install",
@@ -277,11 +283,6 @@ M.markdown = function()
             "mzlogin/vim-markdown-toc",
             ft = "markdown",
         },
-    }
-end
-
-M.copilot = function()
-    return {
         -- Copilot
         {
             "github/copilot.vim",
@@ -300,11 +301,6 @@ M.copilot = function()
             end,
             disable = not lvim.builtin.copilot.active,
         },
-    }
-end
-
-M.filetype = function()
-    return {
         -- i3 syntax
         { "mboughaba/i3config.vim" },
         -- Smithy
@@ -322,11 +318,6 @@ M.filetype = function()
                 require("user.filetype").config()
             end,
         },
-    }
-end
-
-M.grammar = function()
-    return {
         -- Spelling
         {
             "lewis6991/spellsitter.nvim",
@@ -352,25 +343,6 @@ M.grammar = function()
             },
             disable = not lvim.builtin.grammar_guard.active,
         },
-        -- Dictionary cmp
-        {
-            "uga-rosa/cmp-dictionary",
-            config = function()
-                require("cmp_dictionary").setup {
-                    dic = {
-                        ["markdown"] = { "/usr/share/dict/words", "/usr/share/dict/british-english" },
-                        ["rst"] = { "/usr/share/dict/words", "/usr/share/dict/british-english" },
-                        ["*"] = {},
-                    },
-                }
-            end,
-            rocks = { "mpack" },
-        },
-    }
-end
-
-M.session = function()
-    return {
         -- Pick up where you left
         {
             "vladdoster/remember.nvim",
@@ -396,11 +368,6 @@ M.session = function()
             end,
             requires = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope.nvim" },
         },
-    }
-end
-
-M.zen_mode = function()
-    return {
         -- Zen mode
         {
             "folke/zen-mode.nvim",
@@ -417,11 +384,6 @@ M.zen_mode = function()
             event = "BufRead",
             disable = not lvim.builtin.twilight.enable,
         },
-    }
-end
-
-M.config = function()
-    lvim.plugins = {
         -- Hlslens
         {
             "kevinhwang91/nvim-hlslens",
@@ -507,30 +469,7 @@ M.config = function()
         { "mattn/webapi-vim" },
         -- Startup time
         { "dstein64/vim-startuptime" },
-        -- Cmp stuff
-        {
-            "hrsh7th/cmp-cmdline",
-            disable = not lvim.builtin.fancy_wild_menu.active,
-        },
-        {
-            "kdheepak/cmp-latex-symbols",
-            requires = "hrsh7th/nvim-cmp",
-            ft = "tex",
-        },
-        { "hrsh7th/cmp-emoji" },
-        { "f3fora/cmp-spell" },
-        { "hrsh7th/cmp-calc" },
     }
-    table.insert(lvim.plugins, M.themes())
-    table.insert(lvim.plugins, M.git())
-    table.insert(lvim.plugins, M.telescope())
-    table.insert(lvim.plugins, M.lsp())
-    table.insert(lvim.plugins, M.markdown())
-    table.insert(lvim.plugins, M.copilot())
-    table.insert(lvim.plugins, M.filetype())
-    table.insert(lvim.plugins, M.grammar())
-    table.insert(lvim.plugins, M.session())
-    table.insert(lvim.plugins, M.zen_mode())
 end
 
 return M
