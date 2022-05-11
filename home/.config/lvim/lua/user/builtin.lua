@@ -24,8 +24,6 @@ M.config = function()
         folder_arrows = 1,
     }
 
-    -- Tag provider
-    lvim.builtin.tag_provider = "vista"
     -- Sidebar
     lvim.builtin.sidebar = { active = true }
     -- Statusline

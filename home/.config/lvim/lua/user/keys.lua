@@ -172,7 +172,7 @@ M.normal_insert_keys = function()
             t:toggle()
         end
     end
-    -- NORMAL
+    -- NORMAL MODE
     lvim.keys.normal_mode = {
         -- Toggle tree
         ["<F3>"] = "<cmd>NvimTreeToggle<cr>",
@@ -183,14 +183,16 @@ M.normal_insert_keys = function()
         ["<F5>"] = "<cmd>MouseToggle<cr>",
         -- Yank current path
         ["<F6>"] = '<cmd>let @+ = expand("%:p")<cr>',
+        -- Symbols vista
+        ["<F10>"] = "<cmd>Vista!!<cr>",
+        -- Toggle numbers
+        ["<F11>"] = "<cmd>NoNuMode<cr>",
+        ["<F12>"] = "<cmd>NuModeToggle<cr>",
         -- Windows navigation
         ["<A-Up>"] = "<cmd>wincmd k<cr>",
         ["<A-Down>"] = "<cmd>wincmd j<cr>",
         ["<A-Left>"] = "<cmd>wincmd h<cr>",
         ["<A-Right>"] = "<cmd>wincmd l<cr>",
-        -- Toggle numbers
-        ["<F11>"] = "<cmd>NoNuMode<cr>",
-        ["<F12>"] = "<cmd>NuModeToggle<cr>",
         -- Align text
         ["<"] = "<<",
         [">"] = ">>",
@@ -200,14 +202,7 @@ M.normal_insert_keys = function()
         ["<C-B>"] = "<cmd>lua _bemol_toggle()<cr>",
     }
 
-    if lvim.builtin.tag_provider == "symbols-outline" then
-        lvim.keys.normal_mode["<F10>"] = "<cmd>SymbolsOutline<cr>"
-        lvim.keys.insert_mode["<F10>"] = "<cmd>SymbolsOutline<cr>"
-    elseif lvim.builtin.tag_provider == "vista" then
-        lvim.keys.normal_mode["<F10>"] = "<cmd>Vista!!<cr>"
-        lvim.keys.insert_mode["<F10>"] = "<cmd>Vista!!<cr>"
-    end
-    -- INSERT
+    -- INSERT MODE
     lvim.keys.insert_mode = {
         -- Toggle tree
         ["<F3>"] = "<cmd>NvimTreeToggle<cr>",
@@ -218,6 +213,8 @@ M.normal_insert_keys = function()
         ["<F5>"] = "<cmd>MouseToggle<cr>",
         -- Yank current path
         ["<F6>"] = '<cmd>let @+ = expand("%:p")<cr>',
+        -- Symbols vista
+        ["<F10>"] = "<cmd>Vista!!<cr>",
         -- Windows navigation
         ["<A-Up>"] = "<cmd>wincmd k<cr>",
         ["<A-Down>"] = "<cmd>wincmd j<cr>",
@@ -230,7 +227,8 @@ M.normal_insert_keys = function()
         -- Toggle
         ["<C-B>"] = "<cmd>lua _bemol_toggle()<cr>",
     }
-    -- VISUAL
+
+    -- VISUAL MODE
     lvim.keys.visual_mode = {
         -- Yank with Ctrl-c
         ["<C-c>"] = '"+yi',
