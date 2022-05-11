@@ -80,6 +80,9 @@ M.config = function()
                 )
             end,
         },
+        sources = {
+            ["null-ls"] = { ignore = true },
+        },
         debug = {
             logging = false, -- whether to enable logging, for debugging
             strict = false,

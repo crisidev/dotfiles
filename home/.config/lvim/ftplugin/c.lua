@@ -21,6 +21,7 @@ if not status_ok then
 end
 
 local clangd_flags = {
+    "--fallback-style=google",
     "--background-index",
     "-j=12",
     "--all-scopes-completion",

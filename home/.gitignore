@@ -29,3 +29,4 @@ Temporary Items
 .__mypy_cache__
 .idea
 .envrc
+.sdkmanrc
