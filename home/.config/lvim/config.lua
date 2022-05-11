@@ -31,7 +31,7 @@ require("user.treesitter").config()
 -- Telescope
 require("user.telescope").config()
 
--- Barbar
+-- Bufferline
 require("user.bufferline").config()
 
 -- Status line

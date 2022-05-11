@@ -164,7 +164,7 @@ M.which_keys = function()
     -- end
 end
 
-M.normal_insert_keys = function()
+M.normal_insert_visual_keys = function()
     local ok, term = pcall(require, "toggleterm.terminal")
     if ok then
         local t = term.Terminal:new { cmd = "bemol --watch", size = 10, hidden = true, direction = "horizontal" }
@@ -172,8 +172,14 @@ M.normal_insert_keys = function()
             t:toggle()
         end
     end
+
     -- NORMAL MODE
     lvim.keys.normal_mode = {
+        -- Buffers
+        ["<F1>"] = "<cmd>BufferLineCyclePrev<cr>",
+        ["<F2>"] = "<cmd>BufferLineCycleNext<cr>",
+        ["<A-S-Left>"] = "<cmd>BufferLineMovePrev<cr>",
+        ["<A-S-Right>"] = "<cmd>BufferLineMoveNext<cr>",
         -- Toggle tree
         ["<F3>"] = "<cmd>NvimTreeToggle<cr>",
         ["<S-F3>"] = "<cmd>NvimTreeRefresh<cr>",
@@ -204,6 +210,11 @@ M.normal_insert_keys = function()
 
     -- INSERT MODE
     lvim.keys.insert_mode = {
+        -- Buffers
+        ["<F1>"] = "<cmd>BufferLineCyclePrev<cr>",
+        ["<F2>"] = "<cmd>BufferLineCycleNext<cr>",
+        ["<A-S-Left>"] = "<cmd>BufferLineMovePrev<cr>",
+        ["<A-S-Right>"] = "<cmd>BufferLineMoveNext<cr>",
         -- Toggle tree
         ["<F3>"] = "<cmd>NvimTreeToggle<cr>",
         ["<S-F3>"] = "<cmd>NvimTreeRefresh<cr>",
@@ -240,19 +251,9 @@ M.normal_insert_keys = function()
         ["<leader>gl"] = "<cmd>lua require('gitlinker').get_buf_range_url('v', {action_callback = require('gitlinker.actions').copy_to_clipboard})<cr>",
         ["<leader>gL"] = "<cmd>lua require('gitlinker').get_buf_range_url('v', {action_callback = require('gitlinker.actions').open_in_browser})<cr>",
         ["<leader>gd"] = nil,
+        -- Range code actions
+        ["ga"] = "<esc><cmd>lua vim.lsp.buf.range_code_action()<cr>",
     }
-    lvim.keys.visual_mode["ga"] = "<esc><cmd>lua vim.lsp.buf.range_code_action()<cr>"
-
-    -- Buffer navigation
-    lvim.keys.normal_mode["<F1>"] = "<cmd>BufferLineCyclePrev<cr>"
-    lvim.keys.normal_mode["<F2>"] = "<cmd>BufferLineCycleNext<cr>"
-    lvim.keys.insert_mode["<F1>"] = "<cmd>BufferLineCyclePrev<cr>"
-    lvim.keys.insert_mode["<F2>"] = "<cmd>BufferLineCycleNext<cr>"
-    -- Move buffers
-    lvim.keys.normal_mode["<A-S-Left>"] = "<cmd>BufferLineMovePrev<cr>"
-    lvim.keys.normal_mode["<A-S-Right>"] = "<cmd>BufferLineMoveNext<cr>"
-    lvim.keys.insert_mode["<A-S-Left>"] = "<cmd>BufferLineMovePrev<cr>"
-    lvim.keys.insert_mode["<A-S-Right>"] = "<cmd>BufferLineMoveNext<cr>"
 end
 
 M.set_hlslens_keymaps = function()
@@ -293,9 +294,9 @@ M.config = function()
         group = "", -- symbol prepended to a group
     }
     lvim.builtin.which_key.setup.triggers = { "<leader>", "g", "z", "]", "[" }
-    lvim.builtin.which_key.setup.ignore_missing = true
+    lvim.builtin.which_key.setup.ignore_missing = false
 
-    M.normal_insert_keys()
+    M.normal_insert_visual_keys()
     M.which_keys()
 end
 

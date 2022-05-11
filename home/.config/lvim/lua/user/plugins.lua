@@ -65,7 +65,7 @@ M.config = function()
                         -- print the url after performing the action
                         print_url = false,
                         -- mapping to call url generation
-                        mappings = "gy",
+                        mappings = nil,
                     },
                     callbacks = {
                         ["code.crisidev.org"] = require("gitlinker.hosts").get_gitea_type_url,
@@ -94,11 +94,6 @@ M.config = function()
         { "nvim-telescope/telescope-file-browser.nvim" },
         -- Telescope live grep
         { "nvim-telescope/telescope-live-grep-raw.nvim" },
-        -- Telescope lua snippets
-        {
-            "benfowler/telescope-luasnip.nvim",
-            module = "telescope._extensions.luasnip", -- if you wish to lazy-load
-        },
         -- Telescope frecency
         {
             "nvim-telescope/telescope-frecency.nvim",

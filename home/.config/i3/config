@@ -14,7 +14,7 @@ set $mod Mod4
 set $editor vim
 
 # font
-font pango:Inter Regular, Font Awesome 5 Free 10
+font pango:MonoLisa Nerd Font, Font Awesome 5 Free 10
 
 # Gaps configuration
 gaps inner 5
@@ -329,7 +329,7 @@ mode " [a]uto [l]aptop [h]ome [w]ork [m]irror" {
 ###########################
 bar {
     tray_output none
-    font pango:Inter Regular, DejaVu Sans Mono for Powerline, Font Awesome 5 Free 10
+    font pango:MonoLisa Nerd Font, Font Awesome 5 Free 9.5
     position top
     status_command bash -c "source $HOME/.zsh_secrets && $HOME/.cargo/bin/i3status-rs $HOME/.config/i3/top.toml"
     strip_workspace_numbers yes
@@ -349,7 +349,7 @@ bar {
 bar {
     output primary
     tray_output primary
-    font pango:Inter Regular, DejaVu Sans Mono for Powerline, Font Awesome 5 Free 10
+    font pango:MonoLisa Nerd Font, Font Awesome 5 Free 9.5
     status_command bash -c "source $HOME/.zsh_secrets && $HOME/.cargo/bin/i3status-rs $HOME/.config/i3/bottom.toml"
     position bottom
     workspace_buttons no
