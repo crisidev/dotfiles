@@ -20,6 +20,8 @@ M.config = function()
         { "BufRead,BufNewFile", "*.md", "setlocal textwidth=80" },
         -- Terminal
         { "TermOpen", "term://*", "lua require('user.keys').set_terminal_keymaps()" },
+        -- Smithy filetype
+        { "BufRead,BufNewFile", "*.smithy", "setfiletype smithy" },
     }
 end
 

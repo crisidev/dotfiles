@@ -275,13 +275,6 @@ M.config = function()
             ft = "markdown",
         },
         ------------------------------------------------------------------------------
-        -- Additional syntaxes.
-        ------------------------------------------------------------------------------
-        -- i3 syntax
-        { "mboughaba/i3config.vim" },
-        -- Smithy
-        { "jasdel/vim-smithy" },
-        ------------------------------------------------------------------------------
         -- Spelling and grammar
         ------------------------------------------------------------------------------
         -- Spelling
@@ -474,13 +467,15 @@ M.config = function()
         -- Refactoring
         {
             "ThePrimeagen/refactoring.nvim",
-            ft = { "typescript", "javascript", "lua", "c", "cpp", "go", "python", "java", "php", "rust" },
+            ft = { "typescript", "javascript", "lua", "c", "cpp", "go", "python", "java", "rust" },
             event = "BufRead",
             config = function()
                 require("refactoring").setup {}
             end,
             disable = not lvim.builtin.refactoring.active,
         },
+        -- i3 syntax
+        { "mboughaba/i3config.vim" },
     }
 end
 
