@@ -161,18 +161,6 @@ M.config = function()
                 require("crates").setup {}
             end,
         },
-        -- Lightbulb
-        {
-            "kosayoda/nvim-lightbulb",
-            config = function()
-                vim.fn.sign_define(
-                    "LightBulbSign",
-                    { text = require("user.lsp").icons.code_action, texthl = "DiagnosticInfo" }
-                )
-            end,
-            event = "BufRead",
-            ft = { "rust", "go", "c", "cpp", "typescript", "typescriptreact" },
-        },
         -- Scala metals
         {
             "scalameta/nvim-metals",

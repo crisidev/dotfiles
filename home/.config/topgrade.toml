@@ -19,6 +19,7 @@ repos = [
     "~/.homesick/repos/dotfiles",
     "~/.homesick/repos/MatbigoiDotFiles",
     # Updates
+    "~/github/smithy-language-server",
     "~/github/0updates/dunst",
     "~/github/0updates/i3-gnome",
     "~/github/0updates/keyd",
