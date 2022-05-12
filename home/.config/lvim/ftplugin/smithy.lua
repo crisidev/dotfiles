@@ -33,17 +33,10 @@ if not configs.smithy_language_server then
             filetypes = { "smithy" },
             root_dir = function(fname)
                 return util.root_pattern "smithy-build.json"(fname)
-                    or require("lspconfig").util.find_git_ancestor(fname)
+                    or util.find_git_ancestor(fname)
                     or vim.fn.getcwd()
             end,
             message_level = vim.lsp.protocol.MessageType.Log,
-            init_options = {
-                statusBarProvider = "show-message",
-                isHttpEnabled = true,
-                compilerOptions = {
-                    snippetAutoIndent = false,
-                },
-            },
         },
         docs = {
             description = [[

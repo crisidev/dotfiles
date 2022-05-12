@@ -439,6 +439,34 @@ M.register_grammar_guard = function()
     end
 end
 
+M.register_gradle_ls = function()
+    vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "gradle_ls" })
+
+    local status_ok, lsp = pcall(require, "lspconfig")
+    if not status_ok then
+        return
+    end
+
+    local home = os.getenv "HOME"
+    local util = require "lspconfig.util"
+    lsp.gradle_ls.setup {
+        cmd = {
+            home
+                .. "/.local/share/nvim/lsp_servers/gradle_language_server/gradle-language-server/build/install/gradle-language-server/bin/gradle-language-server",
+        },
+        filetypes = { "groovy", "kotlin" },
+        root_dir = function(fname)
+            return lsp.util.root_pattern("build.gradle", "build.gradle.kts", "settings.gradle", "settings.gradle.kts")(fname)
+                or util.find_git_ancestor(fname)
+                or vim.fn.getcwd()
+        end,
+        on_attach = require("lvim.lsp").common_on_attach,
+        on_init = require("lvim.lsp").common_on_init,
+        capabilities = require("lvim.lsp").common_capabilities(),
+        autostart = false
+    }
+end
+
 M.config = function()
     vim.lsp.set_log_level "warn"
     lvim.lsp.automatic_servers_installation = true
@@ -520,10 +548,9 @@ M.config = function()
     -- Configure null-ls
     require("user.null_ls").config()
 
-    -- Configure prosemd
-    require("lvim.lsp.manager").setup("prosemd_lsp", {})
-
     -- Configure Lsp providers
+    M.register_gradle_ls()
+    require("lvim.lsp.manager").setup("prosemd_lsp", {})
     if lvim.builtin.grammar_guard.active then
         M.register_grammar_guard()
     end
