@@ -26,7 +26,7 @@ local opts = {
             only_current_line = true,
             only_current_line_autocmd = "CursorHold",
             show_variable_name = false,
-            show_parameter_hints = false,
+            show_parameter_hints = true,
             parameter_hints_prefix = "in: ",
             other_hints_prefix = " out: ",
             max_len_align = false,
@@ -72,7 +72,7 @@ lvim.lsp.buffer_mappings.normal_mode["gT"] = {
     a = { "<cmd>RustCodeAction<cr>", "Code action" },
     i = { "<cmd>RustToggleInlayHints<cr>", "Toggle inlay hints" },
     r = { "<cmd>RustRunnables<cr>", "Run targes" },
-    D = { "<cmd>RustDebuggables<cr>", "Debug targes" },
+    R = { "<cmd>RustDebuggables<cr>", "Debug targes" },
     e = { "<cmd>RustExpandMacro<cr>", "Expand macro" },
     m = { "<cmd>RustParentModule<cr>", "Parent module" },
     u = { "<cmd>RustMoveItemUp<cr>", "Move item up" },
@@ -80,7 +80,8 @@ lvim.lsp.buffer_mappings.normal_mode["gT"] = {
     h = { "<cmd>RustHoverActions<cr>", "Hover actions" },
     H = { "<cmd>RustHoverRange<cr>", "Hover range" },
     c = { "<cmd>RustOpenCargo<cr>", "Open Cargo.toml" },
-    R = { "<cmd>RustReloadWorkspace<cr>", "Reload workspace" },
+    w = { "<cmd>RustReloadWorkspace<cr>", "Reload workspace" },
+    D = { "<cmd>RustOpenExternalDocs<cr>", "Open documentation for identifier" },
 }
 
 lvim.lsp.buffer_mappings.normal_mode["gB"] = {

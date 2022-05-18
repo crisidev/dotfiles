@@ -27,12 +27,13 @@ M.config = function()
         },
         items = {
             { name = bufferline_groups.builtin.ungrouped.name },
-            M.language_files("rust", "#FF6965", "rs"),
+            M.language_files("rust", "#ff6965", "rs"),
             M.language_files("python", "#006400", "py"),
             M.language_files("kotlin", "#966fd6", "kt"),
             M.language_files("java", "#966fd6", "java"),
             M.language_files("lua", "#ffaa1d", "lua"),
-            M.language_files("ruby", "#FF6965", "rb"),
+            M.language_files("ruby", "#ff6965", "rb"),
+            M.language_files("smithy", "#ffff66", "smithy"),
             {
                 highlight = { guisp = "#51AFEF" },
                 name = "tests",
@@ -45,7 +46,7 @@ M.config = function()
                 highlight = { guisp = "#C678DD" },
                 name = "docs",
                 matcher = function(buf)
-                    local list = List { "md", "org", "norg", "wiki", "rst", "smithy", "txt" }
+                    local list = List { "md", "org", "norg", "wiki", "rst", "txt" }
                     return list:contains(vim.fn.fnamemodify(buf.path, ":e"))
                 end,
             },

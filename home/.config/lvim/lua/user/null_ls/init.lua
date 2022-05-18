@@ -58,9 +58,6 @@ M.config = function()
             args = { "-c", "/home/matbigoi/.config/markdownlint.json" },
             filetypes = { "markdown" },
         },
-        nls.builtins.diagnostics.vale.with {
-            filetypes = { "markdown" },
-        },
         nls.builtins.diagnostics.revive.with {
             condition = function(utils)
                 return utils.root_has_file "revive.toml"
