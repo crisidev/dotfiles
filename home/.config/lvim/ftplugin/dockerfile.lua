@@ -11,14 +11,3 @@ linters.setup {
         filetypes = { "dockerfile" },
     },
 }
-
--- Lsp config
-vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "dockerls" })
-
-local opts = {
-    root_dir = function(fname)
-        return require("lspconfig").util.root_pattern ".git"(fname) or require("lspconfig").util.path.dirname(fname)
-    end,
-}
-
-require("lvim.lsp.manager").setup("dockerls", opts)

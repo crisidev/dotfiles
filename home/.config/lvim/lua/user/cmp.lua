@@ -1,20 +1,26 @@
 local M = {}
 
+-- I am the king of the worl
+
 M.config = function()
     lvim.builtin.cmp.sources = {
-        { name = "nvim_lsp" },
-        { name = "nvim_lsp_signature_help" },
-        { name = "buffer", max_item_count = 5, keyword_length = 5 },
-        { name = "path", max_item_count = 5 },
-        { name = "luasnip", max_item_count = 3 },
-        { name = "nvim_lua" },
-        { name = "calc" },
-        { name = "emoji" },
-        { name = "treesitter" },
-        { name = "crates" },
-        { name = "dictionary", keyword_length = 2 },
-        { name = "latex_symbols" },
-        { name = "git" },
+        -- Index 1
+        { name = "nvim_lsp", group_index = 1 },
+        { name = "nvim_lua", group_index = 1 },
+        { name = "luasnip", group_index = 1, max_item_count = 5, keyword_length = 3 },
+        { name = "buffer", group_index = 1, max_item_count = 5, keyword_length = 3 },
+        { name = "path", group_index = 1, max_item_count = 5 },
+        { name = "git", group_index = 1 },
+        { name = "crates", group_index = 1 },
+        { name = "dictionary", group_index = 1 },
+        -- Index 2
+        { name = "spell", group_index = 2 },
+        { name = "cmdline", group_index = 2 },
+        { name = "copilot", group_index = 2 },
+        { name = "calc", group_index = 2 },
+        { name = "emoji", group_index = 2 },
+        { name = "treesitter", group_index = 2 },
+        { name = "latex_symbols", group_index = 2 },
     }
     lvim.builtin.cmp.experimental = {
         ghost_text = false,
@@ -25,10 +31,12 @@ M.config = function()
     local cmp_sources = {
         ["vim-dadbod-completion"] = "(DadBod)",
         buffer = "(Buffer)",
-        cmp_tabnine = "(TabNine)",
         crates = "(Crates)",
         latex_symbols = "(LaTeX)",
         nvim_lua = "(NvLua)",
+        copilot = "(Copilot)",
+        dictionary = "(Dict)",
+        spell = "(Spell)",
     }
     lvim.builtin.cmp.formatting = {
         fields = { "kind", "abbr", "menu" },
@@ -52,61 +60,60 @@ M.config = function()
             config = { sources = function(...) end },
         }
     end
-    if lvim.builtin.fancy_wild_menu.active then
-        cmp.setup.cmdline(":", {
-            mapping = cmp.mapping.preset.cmdline {},
-            sources = {
-                { name = "cmdline" },
-                { name = "path" },
-            },
-        })
-    end
+    cmp.setup.cmdline(":", {
+        mapping = cmp.mapping.preset.cmdline {},
+        sources = {
+            { name = "cmdline", group_index = 1 },
+            { name = "path", group_index = 1 },
+        },
+    })
     cmp.setup.filetype("toml", {
         sources = cmp.config.sources({
-            { name = "path" },
-            { name = "nvim_lsp", max_item_count = 8 },
-            { name = "crates" },
-            { name = "luasnip", max_item_count = 5 },
+            { name = "nvim_lsp", group_index = 1 },
+            { name = "path", group_index = 1, max_item_count = 5 },
+            { name = "crates", group_index = 1 },
+            { name = "luasnip", group_index = 1, max_item_count = 5, keyword_length = 3 },
         }, {
-            { name = "buffer", max_item_count = 5, keyword_length = 5 },
+            { name = "buffer", group_index = 1, max_item_count = 5, keyword_length = 3 },
         }),
     })
     cmp.setup.filetype("tex", {
         sources = cmp.config.sources({
-            { name = "latex_symbols", max_item_count = 3, keyword_length = 3 },
-            { name = "nvim_lsp", max_item_count = 8 },
-            { name = "luasnip", max_item_count = 5 },
+            { name = "nvim_lsp", group_index = 1 },
+            { name = "latex_symbols", group_index = 1, max_item_count = 3, keyword_length = 3 },
+            { name = "luasnip", group_index = 1, max_item_count = 5, keyword_length = 3 },
         }, {
-            { name = "buffer", max_item_count = 5, keyword_length = 5 },
+            { name = "buffer", group_index = 1, max_item_count = 5, keyword_length = 3 },
         }),
     })
     cmp.setup.filetype("gitcommit", {
         sources = cmp.config.sources({
-            { name = "git" },
-            { name = "path" },
-            { name = "dictionary" },
-            { name = "nvim_lsp", max_item_count = 8 },
-            { name = "luasnip", max_item_count = 5 },
-            { name = "emoji" },
+            { name = "nvim_lsp", group_index = 1 },
+            { name = "git", group_index = 1 },
+            { name = "path", group_index = 1, max_item_count = 5 },
+            { name = "dictionary", group_index = 1 },
+            { name = "luasnip", group_index = 1, max_item_count = 5, keyword_length = 3 },
+            { name = "emoji", group_index = 2 },
         }, {
-            { name = "buffer", max_item_count = 5, keyword_length = 5 },
+            { name = "buffer", group_index = 1, max_item_count = 5, keyword_length = 3 },
         }),
     })
     cmp.setup.filetype("markdown", {
         sources = cmp.config.sources({
-            { name = "path" },
-            { name = "dictionary" },
-            { name = "spell", keyword_length = 4 },
-            { name = "luasnip", max_item_count = 5 },
-            { name = "emoji" },
-            { name = "calc" },
+            { name = "nvim_lsp", group_index = 1 },
+            { name = "path", group_index = 1, max_item_count = 5 },
+            { name = "dictionary", group_index = 1 },
+            { name = "spell", group_index = 1 },
+            { name = "luasnip", group_index = 1, max_item_count = 5, keyword_length = 3 },
+            { name = "calc", group_index = 2 },
+            { name = "emoji", group_index = 2 },
         }, {
-            { name = "buffer", max_item_count = 5, keyword_length = 5 },
+            { name = "buffer", group_index = 1, max_item_count = 5, keyword_length = 3 },
         }),
     })
 
     -- Evil stuff
-    if lvim.builtin.copilot.active then
+    if lvim.builtin.copilot.active and not lvim.builtin.copilot.cmp_source then
         local function t(str)
             return vim.api.nvim_replace_termcodes(str, true, true, true)
         end

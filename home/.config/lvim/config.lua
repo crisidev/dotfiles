@@ -46,11 +46,6 @@ require("user.autocmd").config()
 -- Lsp
 require("user.lsp").config()
 
--- Neovide
-if vim.g.neovide then
-    require("user.neovide").config()
-end
-
 -- Debugging
 require("user.dap").config()
 

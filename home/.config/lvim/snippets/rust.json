@@ -86,5 +86,10 @@
     "prefix": "instrument",
     "body": ["#[tracing::instrument(name = \"${1}\", skip(state))]"],
     "description": "Add tracing::instrument macro"
+  },
+  "pyo3-prelude": {
+    "prefix": "pyo3-prelude",
+    "body": ["use pyo3::prelude::*;"],
+    "description": "Add pyo3 prelude"
   }
 }

@@ -11,10 +11,6 @@ M.file_ignore_patterns = {
     "%.sqlite3",
     "%.ipynb",
     "node_modules/*",
-    "%.jpg",
-    "%.jpeg",
-    "%.png",
-    "%.svg",
     "%.otf",
     "%.ttf",
     ".git/",
@@ -27,15 +23,12 @@ M.file_ignore_patterns = {
     "__pycache__/",
     "build/",
     "env/",
-    "gradle/",
-    "node_modules/",
     "target/",
     "%.pdb",
     "%.dll",
     "%.class",
     "%.exe",
     "%.cache",
-    "%.ico",
     "%.pdf",
     "%.dylib",
     "%.jar",
@@ -72,26 +65,49 @@ end
 M.find_string = function()
     local opts = {
         hidden = true,
-        shorten_path = false,
     }
-    builtin.live_grep(M.get_theme(opts))
+    -- builtin.live_grep(M.get_theme(opts))
+    require("telescope").extensions.live_grep_raw.live_grep_raw(M.get_theme(opts))
 end
 
+-- another file string search
+M.find_identifier = function()
+    local opts = {
+        hidden = true,
+    }
+    builtin.grep_string(M.get_theme(opts))
+end
 -- find files
 M.find_files = function()
     local opts = {
         hidden = true,
+        layout_config = {
+            preview_width = 0.0,
+        },
     }
     builtin.find_files(M.get_theme(opts))
+end
+
+-- find only recent files
+M.frecency = function()
+    local opts = {
+        hidden = true,
+        layout_config = {
+            preview_width = 0.0,
+        },
+    }
+    require("telescope").extensions.frecency.frecency(M.get_theme(opts))
 end
 
 -- find only recent files
 M.recent_files = function()
     local opts = {
         hidden = true,
+        layout_config = {
+            preview_width = 0.0,
+        },
     }
-    -- builtin.oldfiles(M.get_theme(opts))
-    require("telescope").extensions.frecency.frecency(M.get_theme())
+    builtin.oldfiles(M.get_theme(opts))
 end
 
 M.diagnostics = function()
@@ -115,6 +131,10 @@ M.zoxide = function()
     require("telescope").extensions.zoxide.list(M.get_theme())
 end
 
+M.tele_tabby = function()
+    require("telescope").extensions.tele_tabby.list(M.get_theme())
+end
+
 -- show refrences to this using language server
 M.lsp_references = function()
     builtin.lsp_references(M.get_theme())
@@ -136,20 +156,19 @@ M.find_updir = function()
 end
 
 M.git_status = function()
-    builtin.git_status(M.get_theme(opts))
+    builtin.git_status(M.get_theme())
 end
 
 M.search_only_certain_files = function()
-    builtin.find_files {
-        M.get_theme {
-            find_command = {
-                "rg",
-                "--files",
-                "--type",
-                vim.fn.input "Type: ",
-            },
+    local opts = {
+        find_command = {
+            "rg",
+            "--files",
+            "--type",
+            vim.fn.input "Type: ",
         },
     }
+    builtin.find_files(M.get_theme(opts))
 end
 
 M.builtin = function()
@@ -188,7 +207,12 @@ M.grep_string_visual = function()
 end
 
 M.buffers = function()
-    builtin.buffers(M.get_theme())
+    local opts = {
+        layout_config = {
+            preview_width = 0.0,
+        },
+    }
+    builtin.buffers(M.get_theme(opts))
 end
 
 M.resume = function()
@@ -203,8 +227,8 @@ M.config = function()
     -- Telescope
     local icons = require("user.lsp").icons
     lvim.builtin.telescope.defaults.dynamic_preview_title = true
-    lvim.builtin.telescope.defaults.path_display = { shorten = 10 }
-    lvim.builtin.telescope.defaults.prompt_prefix = icons.codelens .. " "
+    lvim.builtin.telescope.defaults.path_display = { shorten = 8 }
+    lvim.builtin.telescope.defaults.prompt_prefix = icons.term .. " "
     lvim.builtin.telescope.defaults.borderchars = {
         prompt = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
         results = { "─", "▐", "─", "│", "╭", "▐", "▐", "╰" },
@@ -244,14 +268,25 @@ M.config = function()
     }
 
     lvim.builtin.telescope.on_config_done = function(telescope)
+        lvim.builtin.telescope.extensions.frecency = {
+            show_scores = true,
+            show_unindexed = true,
+            ignore_patterns = M.file_ignore_patterns,
+            disable_devicons = false,
+            auto_validate = false,
+            workspaces = {
+                ["github"] = "/home/matbigoi/github/",
+                ["amzn"] = "/home/matbigoi/workplace/",
+            },
+        }
+        telescope.load_extension "frecency"
         telescope.load_extension "luasnip"
         telescope.load_extension "ui-select"
         telescope.load_extension "zoxide"
         telescope.load_extension "repo"
-        telescope.load_extension "frecency"
-        if lvim.builtin.file_browser.active then
-            telescope.load_extension "file_browser"
-        end
+        telescope.load_extension "file_browser"
+        telescope.load_extension "tele_tabby"
+        telescope.load_extension "gradle"
     end
 end
 

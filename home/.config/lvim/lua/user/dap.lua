@@ -108,7 +108,7 @@ M.config = function()
         local stdout = vim.loop.new_pipe(false)
         local stderr = vim.loop.new_pipe(false)
 
-        local cmd = vim.fn.expand "~/" .. ".vscode/extensions/vadimcn.vscode-lldb-1.6.10/adapter/codelldb"
+        local cmd = vim.fn.expand "~/" .. ".vscode/extensions/vadimcn.vscode-lldb-1.7.0/adapter/codelldb"
 
         local handle, pid_or_err
         local opts = {

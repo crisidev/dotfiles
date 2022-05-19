@@ -6,6 +6,7 @@
 #
 # Resize the focused window depending on its position in the layout
 # Example: bindsym Left exec i3-smart-resize "Left"
+# vim: set ft=python
 
 import sys
 import i3ipc

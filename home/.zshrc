@@ -85,13 +85,13 @@ setopt HIST_BEEP                 # Beep when accessing nonexistent history.
 HISTFILE="$HOME/.zsh_history"
 
 # source files
-[ -f ~/.zsh_aliases ] && source ~/.zsh_aliases
-[ -f ~/.zsh_amzn ] && source ~/.zsh_amzn
-[ -f ~/.zsh_functions ] && source ~/.zsh_functions
-[ -f ~/.zsh_secrets ] && source ~/.zsh_secrets
+[ -f $HOME/.zsh_aliases ] && source $HOME/.zsh_aliases
+[ -f $HOME/.zsh_amzn ] && source $HOME/.zsh_amzn
+[ -f $HOME/.zsh_functions ] && source $HOME/.zsh_functions
+[ -f $HOME/.zsh_secrets ] && source $HOME/.zsh_secrets
 
 # paths
-export PATH=~/.bin:~/.toolbox/bin:~/.pyenv/bin:~/.rbenv/bin:~/.nodenv/bin:~/.goenv/bin:~/.bin:~/.cargo/bin:~/.android/Sdk/platform-tools:~/.toolchain/aarch64-linux-musl/bin:~/.nodenv/shims:~/.pyenv/shims:~/.rbenv/shims:~/.goenv/shims:$PATH
+export PATH=$HOME/.bin:$HOME/.toolbox/bin:$HOME/.pyenv/bin:$HOME/.rbenv/bin:$HOME/.nodenv/bin:$HOME/.goenv/bin:$HOME/.bin:$HOME/.cargo/bin:$HOME/.android/Sdk/platform-tools:$HOME/.toolchain/aarch64-linux-musl/bin:$HOME/.nodenv/shims:$HOME/.pyenv/shims:$HOME/.rbenv/shims:$HOME/.goenv/shims:$PATH
 
 # terminal
 # export TERM="xterm-kitty"

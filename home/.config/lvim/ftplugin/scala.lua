@@ -10,6 +10,3 @@ linters.setup {
         filetypes = { "scala", "sbt" },
     },
 }
-
--- Start metals
-require("user.metals").config()

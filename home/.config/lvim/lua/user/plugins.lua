@@ -94,7 +94,11 @@ M.config = function()
         { "nvim-telescope/telescope-file-browser.nvim" },
         -- Telescope live grep
         { "nvim-telescope/telescope-live-grep-raw.nvim" },
-        -- Telescope frecency
+        -- Tele tabby
+        { "TC72/telescope-tele-tabby.nvim" },
+        -- Telescope gradle
+        { "aloussase/telescope-gradle.nvim" },
+        -- Frecency
         {
             "nvim-telescope/telescope-frecency.nvim",
             requires = { "tami5/sqlite.lua" },
@@ -111,27 +115,26 @@ M.config = function()
             event = { "BufRead", "BufNew" },
         },
         { "hrsh7th/cmp-nvim-lsp-signature-help" },
-        -- Lsp progress lualine
-        {
-            "arkav/lualine-lsp-progress",
-            disable = lvim.builtin.fidget.active,
-        },
         -- Lsp progreess in fidget
         {
             "j-hui/fidget.nvim",
             config = function()
                 require("user.fidget").config()
             end,
-            disable = not lvim.builtin.fidget.active,
         },
         -- Lsp Rust
         {
             "simrat39/rust-tools.nvim",
-            branch = "modularize_and_inlay_rewrite",
             ft = { "rust", "rs" },
+            config = function()
+                require("user.lsp.rust").config()
+            end,
         },
         -- Lsp java
-        { "mfussenegger/nvim-jdtls", ft = "java" },
+        {
+            "mfussenegger/nvim-jdtls",
+            ft = "java",
+        },
         -- Lsp Typescript
         {
             "jose-elias-alvarez/nvim-lsp-ts-utils",
@@ -146,11 +149,17 @@ M.config = function()
             opt = true,
             event = "BufReadPre",
             before = "williamboman/nvim-lsp-installer",
+            config = function()
+                require("user.lsp.typescript").config()
+            end,
         },
         -- Lsp Cland Extensions
         {
             "p00f/clangd_extensions.nvim",
             ft = { "c", "cpp", "objc", "objcpp" },
+            config = function()
+                require("user.lsp.c").config()
+            end,
         },
         -- Crates cmp
         {
@@ -166,7 +175,7 @@ M.config = function()
             "scalameta/nvim-metals",
             requires = { "nvim-lua/plenary.nvim" },
             config = function()
-                require("user.metals").config()
+                require("user.lsp.scala").config()
             end,
             ft = { "scala", "sbt" },
         },
@@ -179,20 +188,7 @@ M.config = function()
             config = function()
                 require("user.copilot").config()
             end,
-            disable = not lvim.builtin.copilot.active,
-        },
-        {
-            "zbirenbaum/copilot.lua",
-            after = "nvim-cmp",
-            requires = { "zbirenbaum/copilot-cmp" },
-            config = function()
-                local cmp_source = { name = "copilot", group_index = 2 }
-                table.insert(lvim.builtin.cmp.sources, cmp_source)
-                vim.defer_fn(function()
-                    require("copilot").setup()
-                end, 100)
-            end,
-            disable = not lvim.builtin.copilot.cmp_source,
+            disable = not lvim.builtin.copilot.active or lvim.builtin.copilot.cmp_source,
         },
         -- Tabout
         {
@@ -202,16 +198,24 @@ M.config = function()
             config = function()
                 require("user.tabout").config()
             end,
-            disable = not lvim.builtin.copilot.active,
+            disable = not lvim.builtin.copilot.active or lvim.builtin.copilot.cmp_source,
+        },
+        -- Copilot Lua
+        {
+            "zbirenbaum/copilot.lua",
+            event = "VimEnter",
+            disable = not lvim.builtin.copilot.active or not lvim.builtin.copilot.cmp_source,
+        },
+        {
+            "zbirenbaum/copilot-cmp",
+            after = { "copilot.lua", "nvim-cmp" },
+            disable = not lvim.builtin.copilot.active or not lvim.builtin.copilot.cmp_source,
         },
         ------------------------------------------------------------------------------
         -- Cmp all the things.
         ------------------------------------------------------------------------------
         -- Cmp for command line
-        {
-            "hrsh7th/cmp-cmdline",
-            disable = not lvim.builtin.fancy_wild_menu.active,
-        },
+        { "hrsh7th/cmp-cmdline" },
         -- Cmp for LateX symbols.
         {
             "kdheepak/cmp-latex-symbols",
@@ -313,7 +317,6 @@ M.config = function()
                 "neovim/nvim-lspconfig",
                 "williamboman/nvim-lsp-installer",
             },
-            disable = not lvim.builtin.grammar_guard.active,
         },
         -- Pick up where you left
         {
@@ -368,7 +371,6 @@ M.config = function()
                 require("user.hlslens").config()
             end,
             event = "BufReadPost",
-            disable = not lvim.builtin.hlslens.active,
         },
         -- Spectre
         {
@@ -452,7 +454,6 @@ M.config = function()
         {
             "editorconfig/editorconfig-vim",
             event = "BufRead",
-            disable = not lvim.builtin.editorconfig.active,
         },
         -- Faster filetype
         {
@@ -467,7 +468,6 @@ M.config = function()
             config = function()
                 require("user.dress").config()
             end,
-            disable = not lvim.builtin.dressing.active,
             event = "BufWinEnter",
         },
         -- Vista
@@ -486,10 +486,27 @@ M.config = function()
             config = function()
                 require("user.refactoring").config()
             end,
-            disable = not lvim.builtin.refactoring.active,
         },
         -- i3 syntax
         { "mboughaba/i3config.vim" },
+        -- Visual multi
+        {
+            "mg979/vim-visual-multi",
+            config = function()
+                vim.cmd [[
+                    let g:VM_maps = {}
+                    let g:VM_maps['Find Under'] = '<C-l>'
+                ]]
+            end,
+            branch = "master",
+        },
+        -- Incline
+        {
+            "b0o/incline.nvim",
+            config = function()
+                require("user.incline").config()
+            end,
+        },
     }
 end
 

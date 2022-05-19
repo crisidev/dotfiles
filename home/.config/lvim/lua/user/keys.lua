@@ -16,12 +16,21 @@ M.which_keys = function()
         f = { "<cmd>lua require('user.telescope').find_files()<cr>", "Find files" },
         F = { "<cmd>lua require('user.telescope').search_only_certain_files()<cr>", "File certain filetype" },
         b = { "<cmd>lua require('user.telescope').file_browser()<cr>", "File browser" },
-        t = { "<cmd>lua require('user.telescope').resume()<cr>", "Last Search" },
+        t = { "<cmd>lua require('user.telescope').tele_tabby()<cr>", "Tab Search" },
         p = { "<cmd>lua require('user.telescope').projects()<cr>", "Projects" },
-        s = { "<cmd>lua require('user.telescope').find_string()<cr>", " Find string in file" },
+        s = { "<cmd>lua require('user.telescope').find_string()<cr>", "Find string" },
+        S = { "<cmd>lua require('user.telescope').find_identifier()<cr>", "Find identifier under cursor" },
         r = { "<cmd>lua require('user.telescope').recent_files()<cr>", "Recent files" },
         R = { "<cmd>lua require('user.telescope').raw_grep()<cr>", "Raw grep" },
         z = { "<cmd>lua require('user.telescope').zoxide()<cr>", "Zoxide list" },
+    }
+    lvim.builtin.which_key.mappings["T"] = {
+        "<cmd>lua require('user.telescope').resume()<cr>",
+        icons.clock .. "Last Search",
+    }
+    lvim.builtin.which_key.mappings["i"] = {
+        "<cmd>lua require('user.telescope').find_identifier()<cr>",
+        icons.find .. " Find identifier",
     }
 
     -- File browser
@@ -51,7 +60,7 @@ M.which_keys = function()
     -- Zoxide
     lvim.builtin.which_key.mappings["z"] = {
         "<cmd>lua require('user.telescope').zoxide()<cr>",
-        "Z Zoxide list",
+        "Z Zoxide",
     }
 
     -- Zen mode
@@ -114,7 +123,7 @@ M.which_keys = function()
 
     -- Grammarous
     lvim.builtin.which_key.mappings["H"] = {
-        name = icons.grammar .. " Grammarous",
+        name = icons.grammar .. "Grammarous",
         c = { "<cmd>GrammarousCheck<cr>", "Run grammar check" },
         p = { "<Plug>(grammarous-move-to-previous-error)", "Goto previous error" },
         n = { "<Plug>(grammarous-move-to-next-error)", "Goto next error" },
@@ -141,7 +150,7 @@ M.which_keys = function()
     -- Telescope resume
     lvim.builtin.which_key.mappings["t"] = {
         "<cmd>lua require('user.telescope').resume()<CR>",
-        icons.resume .. " Telescope resume",
+        icons.resume .. "Resume query",
     }
 
     -- Telescope suggest spell
@@ -150,14 +159,18 @@ M.which_keys = function()
         icons.grammar .. "Spelling",
     }
 
+    -- Comment
+    lvim.builtin.which_key.mappings["/"][2] = icons.comment .. " Comment"
+
     -- Names
     lvim.builtin.which_key.mappings["L"]["name"] = icons.moon .. " Lunarvim"
     lvim.builtin.which_key.mappings["p"]["name"] = icons.package .. " Packer"
 
     -- Disable
     lvim.builtin.which_key.mappings["h"] = nil
-    lvim.builtin.which_key.mappings["T"] = nil
     lvim.builtin.which_key.mappings["l"] = nil
+    lvim.builtin.which_key.mappings["n"] = nil
+    lvim.builtin.which_key.mappings["c"] = nil
 
     -- lvim.builtin.which_key.on_config_done = function(wk)
     --     wk.register(M.n_keys(), { mode = "n" })
@@ -272,8 +285,6 @@ M.set_hlslens_keymaps = function()
     )
     vim.api.nvim_set_keymap("n", "*", "*<Cmd>lua require('hlslens').start()<CR>", opts)
     vim.api.nvim_set_keymap("n", "#", "#<Cmd>lua require('hlslens').start()<CR>", opts)
-    vim.api.nvim_set_keymap("n", "g*", "g*<Cmd>lua require('hlslens').start()<CR>", opts)
-    vim.api.nvim_set_keymap("n", "g#", "g#<Cmd>lua require('hlslens').start()<CR>", opts)
 end
 
 M.set_terminal_keymaps = function()

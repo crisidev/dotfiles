@@ -1,3 +1,4 @@
+
 local M = {}
 
 M.config = function()
@@ -25,38 +26,20 @@ M.config = function()
         files = 1,
         folder_arrows = 1,
     }
+    lvim.builtin.nvimtree.setup.view.width= 60
+    lvim.builtin.nvimtree.setup.view.preserve_window_proportions = true
 
     -- Sidebar
     lvim.builtin.sidebar = { active = true }
-    -- Statusline
-    lvim.builtin.global_statusline = { active = true }
     -- Project
     lvim.builtin.project.active = true
     lvim.builtin.project.detection_methods = { "lsp", "pattern" }
     -- Debugging
     lvim.builtin.dap.active = true
-    -- File browser
-    lvim.builtin.file_browser = { active = true }
-    -- Fidget vs lualine lsp progress
-    lvim.builtin.fidget = { active = true }
-    -- Editor config
-    lvim.builtin.editorconfig = { active = true }
-    -- Grammar guard
-    lvim.builtin.grammar_guard = { active = true }
-    -- Hlslens
-    lvim.builtin.hlslens = { active = true }
     -- Twilight
     lvim.builtin.twilight = { active = false }
-    -- Async tasks
-    lvim.builtin.async_tasks = { active = true }
-    -- Dressing
-    lvim.builtin.dressing = { active = true }
-    -- Fancy menu
-    lvim.builtin.fancy_wild_menu = { active = true }
-    -- Refactoring
-    lvim.builtin.refactoring = { active = true }
     -- Copilot
-    lvim.builtin.copilot = { active = true, cmp_source = false }
+    lvim.builtin.copilot = { active = true, cmp_source = true }
 
     -- Dashboard
     lvim.builtin.alpha.active = true
@@ -81,6 +64,13 @@ M.config = function()
         DEBUG = kind.icons.debug,
         TRACE = kind.icons.trace,
     }
+
+    -- Disable q/wq when running inside the IDE.
+    if vim.g.crisidev_ide then
+        vim.cmd[[ 
+            cnoremap <expr> <cr> getcmdtype() == ":" && index(["q", "wq"], getcmdline()) >= 0 ? "<C-u>" : "<cr>"
+        ]]
+    end
 
     -- Log level
     lvim.log.level = "warn"

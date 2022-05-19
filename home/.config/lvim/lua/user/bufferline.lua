@@ -26,7 +26,6 @@ M.config = function()
             toggle_hidden_on_enter = true,
         },
         items = {
-            { name = bufferline_groups.builtin.ungrouped.name },
             M.language_files("rust", "#ff6965", "rs"),
             M.language_files("python", "#006400", "py"),
             M.language_files("kotlin", "#966fd6", "kt"),
@@ -39,7 +38,7 @@ M.config = function()
                 name = "tests",
                 icon = kind.icons.test,
                 matcher = function(buf)
-                    return buf.filename:match "_spec" or buf.filename:match "test"
+                    return buf.filename:match "_spec" or buf.filename:match "test_"
                 end,
             },
             {
@@ -52,7 +51,7 @@ M.config = function()
             },
             {
                 highlight = { guisp = "#F6A878" },
-                name = "conf",
+                name = "cfg",
                 matcher = function(buf)
                     return buf.filename:match "go.mod"
                         or buf.filename:match "go.sum"
@@ -67,6 +66,7 @@ M.config = function()
                         or buf.filename:match "setting.gradle.kts"
                 end,
             },
+            { name = bufferline_groups.builtin.ungrouped.name },
         },
     }
     lvim.builtin.bufferline.options.separator_style = "slant"

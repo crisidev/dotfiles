@@ -19,7 +19,6 @@ repos = [
     "~/.homesick/repos/dotfiles",
     "~/.homesick/repos/MatbigoiDotFiles",
     # Updates
-    "~/github/smithy-language-server",
     "~/github/0updates/dunst",
     "~/github/0updates/i3-gnome",
     "~/github/0updates/keyd",
@@ -29,6 +28,7 @@ repos = [
     "~/github/0updates/dog",
     "~/github/0updates/joycond",
     "~/github/0updates/joycond-cemuhook",
+    "~/.local/share/nvim/lsp_servers/smithy_language_server",
 ]
 arguments = "--ff-only --rebase --autostash"
 

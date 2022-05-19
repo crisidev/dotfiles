@@ -5,10 +5,7 @@ M.config = function()
     if not status_ok then
         return
     end
-    local relative = "editor"
-    if lvim.builtin.global_statusline.active then
-        relative = "win"
-    end
+    local relative = "win" -- editor
 
     fidget.setup {
         text = {

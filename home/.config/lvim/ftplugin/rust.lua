@@ -6,65 +6,6 @@ formatters.setup {}
 local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {}
 
--- Lsp config
-vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "rust_analyzer" })
-
-local status_ok, rust_tools = pcall(require, "rust-tools")
-if not status_ok then
-    return
-end
-
-local lsp_installer_servers = require "nvim-lsp-installer.servers"
-local _, requested_server = lsp_installer_servers.get_server "rust_analyzer"
-
-local opts = {
-    tools = {
-        autoSetHints = true,
-        hover_with_actions = false,
-        executor = require("rust-tools/executors").termopen, -- can be quickfix or termopen
-        inlay_hints = {
-            only_current_line = true,
-            only_current_line_autocmd = "CursorHold",
-            show_variable_name = false,
-            show_parameter_hints = true,
-            parameter_hints_prefix = "in: ",
-            other_hints_prefix = " out: ",
-            max_len_align = false,
-            max_len_align_padding = 1,
-            right_align = false,
-            right_align_padding = 7,
-            highlight = "SpecialComment",
-        },
-        hover_actions = {
-            border = {
-                { "╭", "FloatBorder" },
-                { "─", "FloatBorder" },
-                { "╮", "FloatBorder" },
-                { "│", "FloatBorder" },
-                { "╯", "FloatBorder" },
-                { "─", "FloatBorder" },
-                { "╰", "FloatBorder" },
-                { "│", "FloatBorder" },
-            },
-            auto_focus = false,
-        },
-    },
-    server = {
-        cmd_env = requested_server._default_options.cmd_env,
-        on_attach = require("lvim.lsp").common_on_attach,
-        on_init = require("lvim.lsp").common_on_init,
-    },
-}
-local extension_path = vim.fn.expand "~/" .. ".vscode/extensions/vadimcn.vscode-lldb-1.7.0"
-
-local codelldb_path = extension_path .. "adapter/codelldb"
-local liblldb_path = extension_path .. "lldb/lib/liblldb.dylib"
-
-opts.dap = {
-    adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
-}
-rust_tools.setup(opts)
-
 -- Rust tools mappings
 local icons = require("user.lsp").icons
 lvim.lsp.buffer_mappings.normal_mode["gT"] = {
@@ -83,6 +24,7 @@ lvim.lsp.buffer_mappings.normal_mode["gT"] = {
     w = { "<cmd>RustReloadWorkspace<cr>", "Reload workspace" },
     D = { "<cmd>RustOpenExternalDocs<cr>", "Open documentation for identifier" },
 }
+lvim.lsp.buffer_mappings.normal_mode["gk"] = { "<cmd>RustOpenExternalDocs<cr>", icons.docs .. "Open docs.rs" }
 
 lvim.lsp.buffer_mappings.normal_mode["gB"] = {
     name = icons.settings .. "Build helpers",

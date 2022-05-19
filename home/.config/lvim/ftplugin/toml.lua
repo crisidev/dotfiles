@@ -12,18 +12,6 @@ formatters.setup {
 local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {}
 
--- Lsp config
-vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "taplo" })
-
-local opts = {
-    cmd = { "/home/matbigoi/.local/share/nvim/lsp_servers/taplo/taplo-lsp", "run" },
-    on_attach = require("lvim.lsp").common_on_attach,
-    on_init = require("lvim.lsp").common_on_init,
-    capabilities = require("lvim.lsp").common_capabilities(),
-}
-
-require("lvim.lsp.manager").setup("taplo", opts)
-
 if vim.fn.expand "%:t" == "Cargo.toml" then
     -- Cargo tools mappings
     lvim.lsp.buffer_mappings.normal_mode["gT"] = {
