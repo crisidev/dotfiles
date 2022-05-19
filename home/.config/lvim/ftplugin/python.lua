@@ -15,18 +15,13 @@ formatters.setup {
 
 -- Linting
 local linters = require "lvim.lsp.null-ls.linters"
-linters.setup {
-    {
-        exe = "flake8",
-        args = { "--max-line-length=120" },
-        filetypes = { "python" },
-    },
-}
+linters.setup {}
 
 -- Lsp config
 vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "pyright" })
+vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "jedi_language_server" })
 
-local opts = {
+local pyright_opts = {
     root_dir = function(fname)
         local util = require "lspconfig.util"
         local root_files = {
@@ -58,4 +53,24 @@ local opts = {
     single_file_support = true,
 }
 
-require("lvim.lsp.manager").setup("pyright", opts)
+local jedi_opts = {
+    root_dir = function(fname)
+        local util = require "lspconfig.util"
+        local root_files = {
+            "pyproject.toml",
+            "setup.py",
+            "setup.cfg",
+            "requirements.txt",
+            "Pipfile",
+            "manage.py",
+            "pyrightconfig.json",
+        }
+        return util.root_pattern(unpack(root_files))(fname)
+            or util.root_pattern ".git"(fname)
+            or util.path.dirname(fname)
+    end,
+    single_file_support = true,
+}
+
+require("lvim.lsp.manager").setup("jedi_language_server", jedi_opts)
+require("lvim.lsp.manager").setup("pyright", pyright_opts)

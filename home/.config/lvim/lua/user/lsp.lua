@@ -456,18 +456,19 @@ M.register_gradle_ls = function()
         },
         filetypes = { "groovy", "kotlin" },
         root_dir = function(fname)
-            return lsp.util.root_pattern("build.gradle", "build.gradle.kts", "settings.gradle", "settings.gradle.kts")(fname)
-                or util.find_git_ancestor(fname)
-                or vim.fn.getcwd()
+            return lsp.util.root_pattern("build.gradle", "build.gradle.kts", "settings.gradle", "settings.gradle.kts")(
+                fname
+            ) or util.find_git_ancestor(fname) or vim.fn.getcwd()
         end,
         on_attach = require("lvim.lsp").common_on_attach,
         on_init = require("lvim.lsp").common_on_init,
         capabilities = require("lvim.lsp").common_capabilities(),
-        autostart = false
+        autostart = false,
     }
 end
 
 M.config = function()
+    -- Log level
     vim.lsp.set_log_level "warn"
     lvim.lsp.automatic_servers_installation = true
     lvim.lsp.document_highlight = true

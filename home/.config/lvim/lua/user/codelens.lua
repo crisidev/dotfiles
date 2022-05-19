@@ -122,6 +122,8 @@ M.mk_handler = function(fn)
     end
 end
 
+--- Write a function to requests                            
+
 --- Update sign position from `old_line` to `new_line`.
 ---
 --- Either line can be optional, and will result in just adding/removing

@@ -55,6 +55,8 @@ M.config = function()
     lvim.builtin.fancy_wild_menu = { active = true }
     -- Refactoring
     lvim.builtin.refactoring = { active = true }
+    -- Copilot
+    lvim.builtin.copilot = { active = true, cmp_source = false }
 
     -- Dashboard
     lvim.builtin.alpha.active = true
@@ -81,7 +83,6 @@ M.config = function()
     }
 
     -- Log level
-    vim.lsp.set_log_level "warn"
     lvim.log.level = "warn"
 end
 

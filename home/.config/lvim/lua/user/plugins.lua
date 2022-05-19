@@ -181,6 +181,19 @@ M.config = function()
             end,
             disable = not lvim.builtin.copilot.active,
         },
+        {
+            "zbirenbaum/copilot.lua",
+            after = "nvim-cmp",
+            requires = { "zbirenbaum/copilot-cmp" },
+            config = function()
+                local cmp_source = { name = "copilot", group_index = 2 }
+                table.insert(lvim.builtin.cmp.sources, cmp_source)
+                vim.defer_fn(function()
+                    require("copilot").setup()
+                end, 100)
+            end,
+            disable = not lvim.builtin.copilot.cmp_source,
+        },
         -- Tabout
         {
             "abecodes/tabout.nvim",
@@ -395,6 +408,7 @@ M.config = function()
             config = function()
                 require("user.todo_comments").config()
             end,
+            event = "BufRead",
         },
         -- Qbf
         {

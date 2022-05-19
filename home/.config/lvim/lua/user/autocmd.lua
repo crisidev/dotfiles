@@ -1,5 +1,7 @@
 local M = {}
 
+-- Function to replace local autocmds with global ones.
+
 M.config = function()
     -- Autocommands
     lvim.autocommands.custom_groups = {
@@ -9,7 +11,11 @@ M.config = function()
         -- Disable Copilot
         { "BufRead", "*", "Copilot disable" },
         -- Codelense viewer
-        { "CursorHold", "*.rs,*.go,*.ts,*.tsx", "lua require('user.codelens').show_line_sign()" },
+        {
+            "CursorHold",
+            "*.rs,*.go,*.ts,*.tsx,*.kt,*.py,*.pyi,*.java,*.c,*.cpp",
+            "lua require('user.codelens').show_line_sign()",
+        },
         -- Configure crates on Cargo.toml
         {
             "BufRead,BufNewFile",

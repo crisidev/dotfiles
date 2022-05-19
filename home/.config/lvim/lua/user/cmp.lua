@@ -21,7 +21,7 @@ M.config = function()
         native_menu = false,
         custom_menu = true,
     }
-    local kind = require("user.lsp")
+    local kind = require "user.lsp"
     local cmp_sources = {
         ["vim-dadbod-completion"] = "(DadBod)",
         buffer = "(Buffer)",
@@ -106,7 +106,6 @@ M.config = function()
     })
 
     -- Evil stuff
-    lvim.builtin.copilot = { active = true }
     if lvim.builtin.copilot.active then
         local function t(str)
             return vim.api.nvim_replace_termcodes(str, true, true, true)

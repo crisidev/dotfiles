@@ -91,7 +91,18 @@ M.config = function()
         table.insert(
             sources,
             nls.builtins.code_actions.refactoring.with {
-                filetypes = { "typescript", "javascript", "lua", "c", "cpp", "go", "python", "java", "php" },
+                filetypes = {
+                    "typescript",
+                    "javascript",
+                    "lua",
+                    "c",
+                    "cpp",
+                    "go",
+                    "python",
+                    "java",
+                    "rust",
+                    "kotlin",
+                },
             }
         )
     end

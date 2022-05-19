@@ -243,7 +243,6 @@ M.config = function()
         find_command = { "fd", "--type=file", "--hidden", "--smart-case" },
     }
 
-
     lvim.builtin.telescope.on_config_done = function(telescope)
         telescope.load_extension "luasnip"
         telescope.load_extension "ui-select"

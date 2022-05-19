@@ -172,8 +172,6 @@ M.config = function()
         ".git,.svn",
     }
 
-    -- Python2 provider
-    vim.g.python_host_prog = "$HOME/.pyenv/versions/2.7.17/bin/python"
     -- Disable perl provider.
     vim.g.loaded_perl_provider = 0
 
