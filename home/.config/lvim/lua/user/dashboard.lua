@@ -97,26 +97,20 @@ M.config = function()
             ),
             button("l", " " .. kind.icons.magic .. " Last session", ":SessionManager load_last_session<cr>"),
             button("S", " " .. kind.icons.session .. " Sessions", ":SessionManager load_session<cr>"),
-            button("n", " " .. kind.icons.stuka .. " New file", ":ene <BAR> startinsert <cr>"),
-            button("b", " " .. kind.icons.files .. " File browswer", ":Telescope file_browser<cr>"),
+            button(
+                "z",
+                " " .. kind.icons.folder .. "  Zoxide",
+                ":lua require('telescope').extensions.zoxide.list{}<cr>"
+            ),
             button("f", " " .. kind.cmp_kind.File .. " Find file", ":lua require('user.telescope').find_files()<cr>"),
             button("s", " " .. kind.icons.text .. "  Find word", ":lua require('user.telescope').find_string()<cr>"),
+            button("n", " " .. kind.icons.stuka .. " New file", ":ene <BAR> startinsert <cr>"),
+            button("b", " " .. kind.icons.files .. " File browswer", ":Telescope file_browser<cr>"),
             button(
                 "p",
                 " " .. kind.icons.project .. " Projects",
                 ":lua require('telescope').extensions.repo.list{}<cr>"
             ),
-            button(
-                "z",
-                " " .. kind.icons.zoxide .. "  Zoxide",
-                ":lua require('telescope').extensions.zoxide.list{}<cr>"
-            ),
-            button(
-                "g",
-                " " .. kind.icons.git .. "  Git Status",
-                ":lua require('lvim.core.terminal')._exec_toggle({cmd = 'lazygit', count = 1, direction = 'float'})<CR>"
-            ),
-
             button("q", " " .. kind.icons.exit .. " Quit", ":SmartQ<cr>"),
         },
         opts = {

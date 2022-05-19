@@ -90,8 +90,8 @@ M.recent_files = function()
     local opts = {
         hidden = true,
     }
-    builtin.oldfiles(M.get_theme(opts))
-    -- require("telescope").extensions.frecency.frecency(M.get_theme())
+    -- builtin.oldfiles(M.get_theme(opts))
+    require("telescope").extensions.frecency.frecency(M.get_theme())
 end
 
 M.diagnostics = function()

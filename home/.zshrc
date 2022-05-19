@@ -127,7 +127,7 @@ if which nodenv > /dev/null; then
   export PATH=$PATH:~/.nodenv/versions/17.0.1/bin
 fi
 
-# nodenv
+# godenv
 export GOENV_ROOT="$HOME/.goenv"
 if which goenv > /dev/null; then 
   export GOENV_GOPATH_PREFIX=$HOME/.go

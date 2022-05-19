@@ -334,13 +334,6 @@ M.key_mappings = function()
         lvim.lsp.buffer_mappings.visual_mode["gC"] = lvim.lsp.buffer_mappings.normal_mode["gC"]
     end
 
-    -- Rename
-    lvim.lsp.buffer_mappings.normal_mode["gR"] = {
-        "<esc><cmd>lua vim.lsp.buf.rename()<cr>",
-        icons.palette .. "Rename symbol",
-    }
-    lvim.lsp.buffer_mappings.visual_mode["gR"] = lvim.lsp.buffer_mappings.normal_mode["gR"]
-
     -- Signature
     lvim.lsp.buffer_mappings.normal_mode["gs"] = {
         "<cmd>lua vim.lsp.buf.signature_help()<CR>",
@@ -377,6 +370,31 @@ M.key_mappings = function()
         icons.magic .. "Format file",
     }
     lvim.lsp.buffer_mappings.visual_mode["gF"] = lvim.lsp.buffer_mappings.normal_mode["gF"]
+
+    -- Refactoring
+    if lvim.builtin.refactoring.active then
+        lvim.lsp.buffer_mappings.normal_mode["gR"] = {
+            name = icons.palette .. "Refactoring",
+            r = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename symbol" },
+            f = { "<cmd>lua require('refactoring').refactor('Extract Function')<cr>", "Extract function" },
+            F = {
+                "<cmd>lua require('refactoring').refactor('Extract Function To File')<cr>",
+                "Extract function to file",
+            },
+            v = { "<cmd>lua require('refactoring').refactor('Extract Variable')<cr>", "Extract variable" },
+            i = { "<cmd>lua require('refactoring').refactor('Inline Variable')<cr>", "Inline variable" },
+            b = { "<cmd>lua require('refactoring').refactor('Extract Block')<cr>", "Extract block" },
+            B = { "<cmd>lua require('refactoring').refactor('Extract Block To File')<cr>", "Extract block" },
+        }
+        lvim.lsp.buffer_mappings.visual_mode["gR"] = lvim.lsp.buffer_mappings.normal_mode["gR"]
+        -- Rename
+    else
+        lvim.lsp.buffer_mappings.normal_mode["gR"] = {
+            "<esc><cmd>lua vim.lsp.buf.rename()<cr>",
+            icons.palette .. "Rename symbol",
+        }
+        lvim.lsp.buffer_mappings.visual_mode["gR"] = lvim.lsp.buffer_mappings.normal_mode["gR"]
+    end
 
     -- Quit
     lvim.lsp.buffer_mappings.normal_mode["gq"] = { "<cmd>SmartQ<cr>", icons.no .. " Close buffer" }

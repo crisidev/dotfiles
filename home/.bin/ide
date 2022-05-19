@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env bash
 
 usage() {
 	echo "usage: $0 [toggle]"
@@ -8,9 +8,50 @@ usage() {
 # set -x
 
 # paths
-source ~/.zshrc
+export PATH=~/.bin:~/.toolbox/bin:~/.pyenv/bin:~/.rbenv/bin:~/.nodenv/bin:~/.goenv/bin:~/.bin:~/.cargo/bin:~/.android/Sdk/platform-tools:~/.toolchain/aarch64-linux-musl/bin:~/.nodenv/shims:~/.pyenv/shims:~/.rbenv/shims:~/.goenv/shims:$PATH
 export LUNARVIM_CONFIG_DIR="${LUNARVIM_CONFIG_DIR:-$HOME/.config/lvim}"
 export LUNARVIM_RUNTIME_DIR="${LUNARVIM_RUNTIME_DIR:-$HOME/.local/share/lunarvim}"
+
+# exports
+export TERM="xterm-kitty"
+export GREP_COLOR='1;31'
+export VISUAL=vim
+export EDITOR=vim
+export LANG="en_US.UTF-8"
+
+# rbenv
+export RBENV_ROOT="$HOME/.rbenv"
+if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+
+# direnv
+if which direnv > /dev/null; then eval "$(direnv hook bash)"; fi
+
+# pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+if which pyenv > /dev/null; then 
+  eval "$(pyenv init --path)"
+  eval "$(pyenv virtualenv-init -)"
+  source $HOME/.pyenv/completions/pyenv.zsh
+  export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+fi
+
+# nodenv
+export NODENV_ROOT="$HOME/.nodenv"
+if which nodenv > /dev/null; then 
+  eval "$(nodenv init -)"
+  export PATH=$PATH:~/.nodenv/versions/17.0.1/bin
+fi
+
+# godenv
+export GOENV_ROOT="$HOME/.goenv"
+if which goenv > /dev/null; then 
+  export GOENV_GOPATH_PREFIX=$HOME/.go
+  eval "$(goenv init -)" 
+  export PATH=$PATH:$GOPATH/bin
+fi
+
+# sdkman
+source "$HOME/.sdkman/bin/sdkman-init.sh"
 
 start_ide() {
 	NVIM_LISTEN_ADDRESS=/tmp/nvimsocket kitty --detach --config ~/.config/kitty/ide.conf --class ide ~/.local/bin/lvim

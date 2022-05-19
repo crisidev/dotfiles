@@ -481,10 +481,10 @@ M.config = function()
         -- Refactoring
         {
             "ThePrimeagen/refactoring.nvim",
-            ft = { "typescript", "javascript", "lua", "c", "cpp", "go", "python", "java", "rust" },
+            ft = { "typescript", "javascript", "lua", "c", "cpp", "go", "python", "java" },
             event = "BufRead",
             config = function()
-                require("refactoring").setup {}
+                require("user.refactoring").config()
             end,
             disable = not lvim.builtin.refactoring.active,
         },
