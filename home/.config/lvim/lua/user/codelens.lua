@@ -5,7 +5,7 @@ local SIGN_NAME = "LightBulbSign"
 
 -- Set default sign
 if vim.tbl_isempty(vim.fn.sign_getdefined(SIGN_NAME)) then
-    vim.fn.sign_define(SIGN_NAME, { text = require("user.lsp").icons.code_action, texthl = "MoreMsg" })
+    vim.fn.sign_define(SIGN_NAME, { text = require("user.icons").icons.code_action, texthl = "MoreMsg" })
 end
 
 
@@ -151,9 +151,9 @@ M.update_sign = function(priority, old_line, new_line, bufnr, text)
         -- Update current lightbulb line
         vim.b.lightbulb_line = new_line
     end
-    local icon = require("user.lsp").icons.code_action
+    local icon = require("user.icons").icons.code_action
     if text == "code_lens_action" then
-        icon = require("user.lsp").icons.code_lens_action
+        icon = require("user.icons").icons.code_lens_action
     end
     vim.fn.sign_define(SIGN_NAME, { text = icon, texthl = "MoreMsg" })
 end

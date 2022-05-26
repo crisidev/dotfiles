@@ -225,7 +225,7 @@ end
 
 M.config = function()
     -- Telescope
-    local icons = require("user.lsp").icons
+    local icons = require("user.icons").icons
     lvim.builtin.telescope.defaults.dynamic_preview_title = true
     lvim.builtin.telescope.defaults.path_display = { shorten = 8 }
     lvim.builtin.telescope.defaults.prompt_prefix = icons.term .. " "
@@ -268,18 +268,18 @@ M.config = function()
     }
 
     lvim.builtin.telescope.on_config_done = function(telescope)
-        lvim.builtin.telescope.extensions.frecency = {
-            show_scores = true,
-            show_unindexed = true,
-            ignore_patterns = M.file_ignore_patterns,
-            disable_devicons = false,
-            auto_validate = false,
-            workspaces = {
-                ["github"] = "/home/matbigoi/github/",
-                ["amzn"] = "/home/matbigoi/workplace/",
-            },
-        }
-        telescope.load_extension "frecency"
+        -- lvim.builtin.telescope.extensions.frecency = {
+        --     show_scores = true,
+        --     show_unindexed = true,
+        --     ignore_patterns = M.file_ignore_patterns,
+        --     disable_devicons = false,
+        --     auto_validate = false,
+        --     workspaces = {
+        --         ["github"] = "/home/matbigoi/github/",
+        --         ["amzn"] = "/home/matbigoi/workplace/",
+        --     },
+        -- }
+        -- telescope.load_extension "frecency"
         telescope.load_extension "luasnip"
         telescope.load_extension "ui-select"
         telescope.load_extension "zoxide"

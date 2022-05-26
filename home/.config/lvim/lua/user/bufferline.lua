@@ -1,6 +1,6 @@
 local M = {}
 M.config = function()
-    local kind = require "user.lsp"
+    local icons = require "user.icons"
     local List = require "plenary.collections.py_list"
     local g_ok, bufferline_groups = pcall(require, "bufferline.groups")
     if not g_ok then
@@ -11,7 +11,7 @@ M.config = function()
     lvim.builtin.bufferline.options.diagnostics = false -- do not show diagnostics in bufferline
     lvim.builtin.bufferline.options.diagnostics_indicator = function(_, _, diagnostics)
         local result = {}
-        local symbols = { error = kind.icons.error, warning = kind.icons.warn, info = kind.icons.info }
+        local symbols = { error = icons.error, warning = icons.warn, info = icons.info }
         for name, count in pairs(diagnostics) do
             if symbols[name] and count > 0 then
                 table.insert(result, symbols[name] .. count)
@@ -36,7 +36,7 @@ M.config = function()
             {
                 highlight = { guisp = "#51AFEF" },
                 name = "tests",
-                icon = kind.icons.test,
+                icon = icons.test,
                 matcher = function(buf)
                     return buf.filename:match "_spec" or buf.filename:match "test_"
                 end,

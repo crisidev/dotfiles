@@ -34,7 +34,7 @@ M.config = function()
         {
             "APZelos/blamer.nvim",
             setup = function()
-                local icons = require("user.lsp").icons
+                local icons = require("user.icons").icons
                 vim.g.blamer_enabled = 0
                 vim.g.blamer_prefix = " " .. icons.magic .. " "
                 vim.g.blamer_template = "<committer-time> • <author> • <summary>"
@@ -98,11 +98,6 @@ M.config = function()
         { "TC72/telescope-tele-tabby.nvim" },
         -- Telescope gradle
         { "aloussase/telescope-gradle.nvim" },
-        -- Frecency
-        {
-            "nvim-telescope/telescope-frecency.nvim",
-            requires = { "tami5/sqlite.lua" },
-        },
         ------------------------------------------------------------------------------
         -- LSP extensions.
         ------------------------------------------------------------------------------

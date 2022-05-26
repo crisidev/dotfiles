@@ -1,21 +1,21 @@
-
 local M = {}
 
 M.config = function()
+    local icons = require("user.icons").icons
+    local nvimtree_icons = require("user.icons").nvimtree_icons
     -- Nvimtree
     lvim.builtin.nvimtree.side = "left"
-    local kind = require "user.lsp"
     lvim.builtin.nvimtree.setup.diagnostics = {
         enable = true,
         icons = {
-            hint = kind.icons.hint,
-            info = kind.icons.info,
-            warning = kind.icons.warn,
-            error = kind.icons.error,
+            hint = icons.hint,
+            info = icons.info,
+            warning = icons.warn,
+            error = icons.error,
         },
     }
     lvim.builtin.nvimtree.setup.actions.open_file.resize_window = true
-    lvim.builtin.nvimtree.icons = kind.nvim_tree_icons
+    lvim.builtin.nvimtree.icons = nvimtree_icons
     lvim.builtin.nvimtree.setup.diagnostics.enable = true
     lvim.builtin.nvimtree.setup.hijack_netrw = false
     lvim.builtin.nvimtree.setup.disable_netrw = false
@@ -26,7 +26,7 @@ M.config = function()
         files = 1,
         folder_arrows = 1,
     }
-    lvim.builtin.nvimtree.setup.view.width= 60
+    lvim.builtin.nvimtree.setup.view.width = 60
     lvim.builtin.nvimtree.setup.view.preserve_window_proportions = true
 
     -- Sidebar
@@ -57,17 +57,18 @@ M.config = function()
 
     -- Notify popup
     lvim.builtin.notify.active = true
+    local icons = require("user.icons").icons
     lvim.builtin.notify.opts.icons = {
-        ERROR = kind.icons.error,
-        WARN = kind.icons.warn,
-        INFO = kind.icons.info,
-        DEBUG = kind.icons.debug,
-        TRACE = kind.icons.trace,
+        ERROR = icons.error,
+        WARN = icons.warn,
+        INFO = icons.info,
+        DEBUG = icons.debug,
+        TRACE = icons.trace,
     }
 
     -- Disable q/wq when running inside the IDE.
     if vim.g.crisidev_ide then
-        vim.cmd[[ 
+        vim.cmd [[ 
             cnoremap <expr> <cr> getcmdtype() == ":" && index(["q", "wq"], getcmdline()) >= 0 ? "<C-u>" : "<cr>"
         ]]
     end

@@ -1,6 +1,33 @@
 local M = {}
 
--- I am the king of the worl
+M.kind = {
+    Class = " ",
+    Color = " ",
+    Constant = "",
+    Constructor = " ",
+    Default = " ",
+    Enum = "練",
+    EnumMember = " ",
+    Event = " ",
+    Field = "ﰠ ",
+    File = " ",
+    Folder = " ",
+    Function = " ",
+    Interface = " ",
+    Keyword = " ",
+    Method = "",
+    Module = "",
+    Operator = " ",
+    Property = " ",
+    Reference = "",
+    Snippet = " ", -- ""," "," "
+    Struct = "פּ",
+    Text = " ",
+    TypeParameter = "  ",
+    Unit = "塞",
+    Value = " ",
+    Variable = "",
+}
 
 M.config = function()
     lvim.builtin.cmp.sources = {
@@ -27,7 +54,6 @@ M.config = function()
         native_menu = false,
         custom_menu = true,
     }
-    local kind = require "user.lsp"
     local cmp_sources = {
         ["vim-dadbod-completion"] = "(DadBod)",
         buffer = "(Buffer)",
@@ -47,7 +73,7 @@ M.config = function()
                 return vim_item
             end
             vim_item.menu = cmp_sources[entry.source.name] or vim_item.kind
-            vim_item.kind = kind.cmp_kind[vim_item.kind] or vim_item.kind
+            vim_item.kind = M.kind[vim_item.kind] or vim_item.kind
 
             return vim_item
         end,

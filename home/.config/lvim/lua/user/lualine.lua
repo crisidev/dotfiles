@@ -1,5 +1,6 @@
 local M = {}
-local kind = require "user.lsp"
+local icons = require("user.icons").icons
+local file_icons = require("user.icons").file_icons
 
 local mode = function()
     local mod = vim.fn.mode()
@@ -53,7 +54,7 @@ local function get_file_icon()
     local f_name, f_extension = get_file_info()
     icon = devicons.get_icon(f_name, f_extension)
     if icon == nil then
-        icon = kind.icons.question
+        icon = icons.question
     end
     return icon
 end
@@ -69,12 +70,25 @@ local function get_file_icon_color()
     end
 
     local icon = get_file_icon():match "%S+"
-    for k, _ in pairs(kind.file_icons) do
-        if vim.fn.index(kind.file_icons[k], icon) ~= -1 then
+    for k, _ in pairs(file_icons) do
+        if vim.fn.index(file_icons[k], icon) ~= -1 then
             return file_icon_colors[k]
         end
     end
 end
+
+M.numbers = {
+    " ",
+    " ",
+    " ",
+    " ",
+    " ",
+    " ",
+    " ",
+    " ",
+    " ",
+    " ",
+}
 
 M.config = function()
     local theme = require "user.theme"
@@ -224,17 +238,19 @@ M.config = function()
             vim.api.nvim_command("hi! LualineFileIconColor guifg=" .. get_file_icon_color() .. " guibg=" .. colors.bg)
             local fname = vim.fn.expand "%:p"
             if string.find(fname, "term://") ~= nil then
-                return kind.icons.term
+                return icons.term
             end
             local winnr = vim.api.nvim_win_get_number(vim.api.nvim_get_current_win())
             if winnr > 10 then
                 winnr = 10
             end
-            local win = kind.numbers[winnr]
+            local win = M.numbers[winnr]
             return win .. " " .. get_file_icon()
         end,
         padding = { left = 2, right = 0 },
-        cond = conditions.buffer_not_empty,
+        cond = function()
+            return conditions.buffer_not_empty() and conditions.hide_small()
+        end,
         color = "LualineFileIconColor",
         gui = "bold",
     }
@@ -245,7 +261,8 @@ M.config = function()
             local fname = vim.fn.expand "%:p"
             local ftype = vim.fn.expand "%:e"
             local cwd = vim.api.nvim_call_function("getcwd", {})
-            if string.find(fname, "term") ~= nil
+            if
+                string.find(fname, "term") ~= nil
                 and string.find(fname, "lazygit;#toggleterm") ~= nil
                 and (vim.fn.has "linux" == 1 or vim.fn.has "mac" == 1)
             then
@@ -255,10 +272,10 @@ M.config = function()
                 local git_branch_cmd = io.popen 'git branch --show-current | tr -d "\n"'
                 local git_branch = git_branch_cmd:read "*a"
                 git_branch_cmd:close()
-                return kind.icons.term .. " " .. git_repo .. "~" .. git_branch
+                return icons.term .. " " .. git_repo .. "~" .. git_branch
             end
             if string.find(fname, "term") ~= nil then
-                return kind.icons.term
+                return icons.term
             end
             local show_name = vim.fn.expand "%:t"
             -- if #cwd > 0 and #ftype > 0 then
@@ -266,7 +283,9 @@ M.config = function()
             -- end
             return show_name .. "%{&readonly?'  ':''}" .. "%{&modified?'  ':''}"
         end,
-        cond = conditions.buffer_not_empty,
+        cond = function()
+            return conditions.buffer_not_empty() and conditions.hide_small()
+        end,
         padding = { left = 1, right = 1 },
         color = { fg = colors.fg, gui = "bold" },
     }
@@ -284,7 +303,7 @@ M.config = function()
                 }
             end
         end,
-        symbols = { added = kind.icons.added, modified = kind.icons.modified, removed = kind.icons.removed },
+        symbols = { added = icons.added, modified = icons.modified, removed = icons.removed },
         diff_color = {
             added = { fg = colors.git.add, bg = colors.bg },
             modified = { fg = colors.git.change, bg = colors.bg },
@@ -318,12 +337,13 @@ M.config = function()
     --- Session availability
     ins_left {
         function()
-            return kind.icons.presence_on
+            return icons.presence_on
         end,
         enabled = function()
             return require("session_manager.utils").is_restorable_buffer_present()
         end,
         color = { fg = colors.green },
+        cond = conditions.hide_small,
     }
 
     -- Insert mid section. You can make any number of sections in neovim :)
@@ -354,7 +374,7 @@ M.config = function()
             if not vim.bo.readonly or not vim.bo.modifiable then
                 return ""
             end
-            return kind.icons.lock -- """
+            return icons.lock -- """
         end,
         color = { fg = colors.red },
     }
@@ -363,7 +383,7 @@ M.config = function()
     ins_right {
         "diagnostics",
         sources = { "nvim_diagnostic" },
-        symbols = { error = kind.icons.error, warn = kind.icons.warn, info = kind.icons.info, hint = kind.icons.hint },
+        symbols = { error = icons.error, warn = icons.warn, info = icons.info, hint = icons.hint },
         cond = conditions.hide_in_width,
     }
 
@@ -371,7 +391,7 @@ M.config = function()
     ins_right {
         function()
             if require("user.copilot").enabled() then
-                return " " .. kind.icons.copilot .. " "
+                return " " .. icons.copilot .. " "
             else
                 return ""
             end
@@ -389,20 +409,21 @@ M.config = function()
             end
             for _, client in pairs(buf_clients) do
                 if client.name == "null-ls" then
-                    return " " .. kind.icons.code_lens_action .. " "
+                    return " " .. icons.code_lens_action .. " "
                 end
             end
             return ""
         end,
         padding = 0,
         color = { fg = colors.blue },
+        cond = conditions.hide_in_width,
     }
 
     -- Treesitter icon
     ins_right {
         function()
             if next(vim.treesitter.highlighter.active) then
-                return " " .. kind.icons.treesitter .. " "
+                return " " .. icons.treesitter .. " "
             end
             return ""
         end,
@@ -414,11 +435,11 @@ M.config = function()
     -- Lsp providers
     ins_right {
         function(msg)
-            msg = msg or kind.icons.ls_inactive
+            msg = msg or icons.ls_inactive
             local buf_clients = vim.lsp.buf_get_clients()
             if next(buf_clients) == nil then
                 if type(msg) == "boolean" or #msg == 0 then
-                    return kind.icons.ls_inactive
+                    return icons.ls_inactive
                 end
                 return msg
             end
@@ -461,7 +482,7 @@ M.config = function()
             end
             vim.list_extend(buf_client_names, supported_linters)
 
-            return kind.icons.ls_active .. table.concat(buf_client_names, ", ")
+            return icons.ls_active .. table.concat(buf_client_names, ", ")
         end,
         color = { fg = colors.fg },
         cond = conditions.hide_in_width,

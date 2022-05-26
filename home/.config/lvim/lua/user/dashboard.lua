@@ -1,7 +1,8 @@
 local M = {}
 
 M.config = function()
-    local kind = require "user.lsp"
+    local kind = require("user.cmp").kind
+    local icons = require("user.icons").icons
 
     local header = {
         type = "text",
@@ -31,7 +32,7 @@ M.config = function()
 
     local plugin_count = {
         type = "text",
-        val = "└─ " .. kind.cmp_kind.Module .. " " .. plugins .. " plugins in total ─┘",
+        val = "└─ " .. kind.Module .. " " .. plugins .. " plugins in total ─┘",
         opts = {
             position = "center",
             hl = "String",
@@ -40,7 +41,7 @@ M.config = function()
 
     local heading = {
         type = "text",
-        val = "┌─ " .. kind.icons.calendar .. " Today is " .. date .. " ─┐",
+        val = "┌─ " .. icons.calendar .. " Today is " .. date .. " ─┐",
         opts = {
             position = "center",
             hl = "String",
@@ -90,28 +91,16 @@ M.config = function()
     local buttons = {
         type = "group",
         val = {
-            button(
-                "r",
-                " " .. kind.icons.clock .. " Recent files",
-                ":lua require('user.telescope').recent_files()<cr>"
-            ),
-            button("l", " " .. kind.icons.magic .. " Last session", ":SessionManager load_last_session<cr>"),
-            button("S", " " .. kind.icons.session .. " Sessions", ":SessionManager load_session<cr>"),
-            button(
-                "z",
-                " " .. kind.icons.folder .. "  Zoxide",
-                ":lua require('telescope').extensions.zoxide.list{}<cr>"
-            ),
-            button("f", " " .. kind.cmp_kind.File .. " Find file", ":lua require('user.telescope').find_files()<cr>"),
-            button("s", " " .. kind.icons.text .. "  Find word", ":lua require('user.telescope').find_string()<cr>"),
-            button("n", " " .. kind.icons.stuka .. " New file", ":ene <BAR> startinsert <cr>"),
-            button("b", " " .. kind.icons.files .. " File browswer", ":Telescope file_browser<cr>"),
-            button(
-                "p",
-                " " .. kind.icons.project .. " Projects",
-                ":lua require('telescope').extensions.repo.list{}<cr>"
-            ),
-            button("q", " " .. kind.icons.exit .. " Quit", ":SmartQ<cr>"),
+            button("r", " " .. icons.clock .. " Recent files", ":lua require('user.telescope').recent_files()<cr>"),
+            button("l", " " .. icons.magic .. " Last session", ":SessionManager load_last_session<cr>"),
+            button("S", " " .. icons.session .. " Sessions", ":SessionManager load_session<cr>"),
+            button("z", " " .. icons.folder .. "  Zoxide", ":lua require('telescope').extensions.zoxide.list{}<cr>"),
+            button("f", " " .. kind.File .. " Find file", ":lua require('user.telescope').find_files()<cr>"),
+            button("s", " " .. icons.text .. "  Find word", ":lua require('user.telescope').find_string()<cr>"),
+            button("n", " " .. icons.stuka .. " New file", ":ene <BAR> startinsert <cr>"),
+            button("b", " " .. icons.files .. " File browswer", ":Telescope file_browser<cr>"),
+            button("p", " " .. icons.project .. " Projects", ":lua require('telescope').extensions.repo.list{}<cr>"),
+            button("q", " " .. icons.exit .. " Quit", ":SmartQ<cr>"),
         },
         opts = {
             spacing = 1,

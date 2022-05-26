@@ -21,7 +21,7 @@ linters.setup {
 }
 
 -- Additional mappings
-local icons = require("user.lsp").icons
+local icons = require("user.icons").icons
 lvim.lsp.buffer_mappings.normal_mode["gT"] = {
     name = icons.nuclear .. " TypeScript Tools",
     a = { "<cmd>TypescriptAddMissingImports<cr>", "Add missing imports" },

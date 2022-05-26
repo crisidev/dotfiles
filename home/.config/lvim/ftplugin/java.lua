@@ -16,7 +16,7 @@ linters.setup {}
 require("user.lsp.java").config()
 
 -- Additional mappings
-local icons = require("user.lsp").icons
+local icons = require("user.icons").icons
 lvim.lsp.buffer_mappings.normal_mode["gT"] = {
     name = icons.nuclear .. " JdtLs Tools",
     o = { "<Cmd>lua require('jdtls').organize_imports()<CR>", "Organize Imports" },

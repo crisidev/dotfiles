@@ -7,7 +7,7 @@ local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {}
 
 -- Rust tools mappings
-local icons = require("user.lsp").icons
+local icons = require("user.icons").icons
 lvim.lsp.buffer_mappings.normal_mode["gT"] = {
     name = icons.nuclear .. " Rust Tools",
     a = { "<cmd>RustCodeAction<cr>", "Code action" },

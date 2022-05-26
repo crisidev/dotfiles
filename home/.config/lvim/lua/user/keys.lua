@@ -1,7 +1,7 @@
 local M = {}
 
 M.which_keys = function()
-    local icons = require("user.lsp").icons
+    local icons = require("user.icons").icons
     local ok, term = pcall(require, "toggleterm.terminal")
     if ok then
         local t = term.Terminal:new { cmd = "lazygit", hidden = true }

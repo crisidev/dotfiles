@@ -1,6 +1,6 @@
 local M = {}
 
-local icons = require("user.lsp").icons
+local icons = require("user.icons").icons
 
 M.config = function()
     vim.g.copilot_no_tab_map = true

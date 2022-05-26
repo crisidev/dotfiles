@@ -1,7 +1,7 @@
 local M = {}
 
 M.config = function()
-    local icons = require("user.lsp").icons
+    local icons = require("user.icons").icons
 
     -- Hover
     -- lvim.lsp.buffer_mappings.normal_mode["K"] = { "<cmd>lua vim.lsp.buf.hover()<CR>", "Show hover" }
@@ -125,12 +125,12 @@ M.config = function()
     -- Hlslens
     lvim.lsp.buffer_mappings.normal_mode["g*"] = {
         "<cmd>lua vim.lsp.buf.signature_help()<CR>",
-        icons.find .. " Start hlslens"
+        icons.find .. " Start hlslens",
     }
     lvim.lsp.buffer_mappings.visual_mode["g*"] = lvim.lsp.buffer_mappings.normal_mode["g*"]
     lvim.lsp.buffer_mappings.normal_mode["g#"] = {
         "<cmd>lua vim.lsp.buf.signature_help()<CR>",
-        icons.find .. " Start hlslens"
+        icons.find .. " Start hlslens",
     }
     lvim.lsp.buffer_mappings.visual_mode["g#"] = lvim.lsp.buffer_mappings.normal_mode["g*"]
 
