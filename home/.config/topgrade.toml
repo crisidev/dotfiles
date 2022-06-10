@@ -1,5 +1,5 @@
 set_title = false
-disable = ["system", "flatpak", "snap", "gnome_shell_extensions", "pnpm", "containers"]
+disable = ["system", "flatpak", "snap", "gnome_shell_extensions", "containers"]
 ignore_failures = ["git_repos"]
 
 [git]

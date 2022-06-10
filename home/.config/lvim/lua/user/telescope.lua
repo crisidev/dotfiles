@@ -67,7 +67,7 @@ M.find_string = function()
         hidden = true,
     }
     -- builtin.live_grep(M.get_theme(opts))
-    require("telescope").extensions.live_grep_raw.live_grep_raw(M.get_theme(opts))
+    require("telescope").extensions.live_grep_args.live_grep_args(M.get_theme(opts))
 end
 
 -- another file string search
@@ -116,7 +116,7 @@ end
 
 -- Extensions
 M.raw_grep = function()
-    require("telescope").extensions.live_grep_raw.live_grep_raw(M.get_theme())
+    require("telescope").extensions.live_grep_args.live_grep_args(M.get_theme())
 end
 
 M.file_browser = function()
@@ -287,6 +287,7 @@ M.config = function()
         telescope.load_extension "file_browser"
         telescope.load_extension "tele_tabby"
         telescope.load_extension "gradle"
+        telescope.load_extension "live_grep_args"
     end
 end
 

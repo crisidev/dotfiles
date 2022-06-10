@@ -32,7 +32,7 @@ set_audio() {
 
 finish_autorandr_switch() {
   notify-send -i display "Autorandr" "Switch to profile $1 finished"
-  feh --bg-fill "${HOME}/Pictures/wallpapers/fishing.jpeg"
+  # feh --bg-fill "${HOME}/Pictures/wallpapers/rickstone.png"
 }
 
 autorandr_safe() {

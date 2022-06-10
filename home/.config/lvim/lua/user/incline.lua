@@ -59,17 +59,14 @@ M.config = function()
             zindex = 49,
             winhighlight = {
                 inactive = {
-                    Normal = "Pmenu",
+                    Normal = "Directory",
                 },
             },
-            width = "fill",
+            width = "fit",
             padding = { left = 2, right = 1 },
+            placement = { vertical = "top", horizontal = "right" },
             margin = {
                 horizontal = 0,
-            },
-            placement = {
-                horizontal = "right",
-                vertical = "top",
             },
         },
         hide = {

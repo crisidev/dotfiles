@@ -36,7 +36,7 @@ M.config = function()
         nls.builtins.formatting.sqlformat,
         nls.builtins.formatting.terraform_fmt,
         nls.builtins.formatting.rustfmt,
-        nls.builtins.formatting.ktlint,
+        -- nls.builtins.formatting.ktlint,
         nls.builtins.formatting.alejandra,
         nls.builtins.formatting.shfmt,
         nls.builtins.formatting.black,

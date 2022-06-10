@@ -15,17 +15,18 @@ M.config = function()
         },
     }
     lvim.builtin.nvimtree.setup.actions.open_file.resize_window = true
-    lvim.builtin.nvimtree.icons = nvimtree_icons
     lvim.builtin.nvimtree.setup.diagnostics.enable = true
     lvim.builtin.nvimtree.setup.hijack_netrw = false
     lvim.builtin.nvimtree.setup.disable_netrw = false
-    lvim.builtin.nvimtree.setup.renderer.icons.webdev_colors = true
-    lvim.builtin.nvimtree.show_icons = {
-        git = 0,
-        folders = 1,
-        files = 1,
-        folder_arrows = 1,
+    lvim.builtin.nvimtree.setup.renderer.icons.show = {
+        git = false,
+        folder = true,
+        file = true,
+        folder_arrow = true,
     }
+    -- lvim.builtin.nvimtree.setup.renderer.icons.glyphs = nvimtree_icons
+    lvim.builtin.nvimtree.setup.renderer.icons.glyphs = nvimtree_icons
+    lvim.builtin.nvimtree.setup.renderer.icons.webdev_colors = true
     lvim.builtin.nvimtree.setup.view.width = 60
     lvim.builtin.nvimtree.setup.view.preserve_window_proportions = true
 
@@ -57,7 +58,6 @@ M.config = function()
 
     -- Notify popup
     lvim.builtin.notify.active = true
-    local icons = require("user.icons").icons
     lvim.builtin.notify.opts.icons = {
         ERROR = icons.error,
         WARN = icons.warn,

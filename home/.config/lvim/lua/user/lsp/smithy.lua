@@ -7,7 +7,7 @@ M.config = function()
     if not configs.smithy_language_server then
         local home = os.getenv "HOME"
         local folder = home .. "/.local/share/nvim/lsp_servers/smithy_language_server/build/libs"
-        local jar = folder .. "/smithy-language-server-0.0.0-SNAPSHOT.jar"
+        local jar = folder .. "/smithy-language-server-0.1.0.jar"
         configs.smithy_language_server = {
             default_config = {
                 -- NOTE: to install and run the smithy_language_server you need to do this:
