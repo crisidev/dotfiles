@@ -11,7 +11,7 @@ M.config = function()
         { "json", "jsonc", "julia", "kotlin", "latex", "ledger", "lua", "make" },
         { "markdown", "nix", "ocaml", "perl", "php", "python", "query", "r" },
         { "regex", "rego", "ruby", "rust", "scala", "scss", "solidity", "swift" },
-        { "teal", "toml", "tsx", "typescript", "vim", "vue", "yaml", "zig" },
+        { "teal", "toml", "tsx", "typescript", "vim", "vue", "yaml", "zig", "smithy" },
     }
     lvim.builtin.treesitter.ensure_installed = languages
     lvim.builtin.treesitter.ignore_install = { "haskell" }

@@ -24,6 +24,7 @@ M.config = function()
     -- Vim basic configurations
     -- vim.g.did_load_filetypes = 1
     vim.g.ultest_summary_width = 30
+    vim.opt.cmdheight = 0
     vim.opt.completeopt = { "menu", "menuone", "noselect" }
     vim.opt.diffopt = {
         "internal",

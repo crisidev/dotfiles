@@ -40,10 +40,10 @@ M.config = function()
         { name = "git", group_index = 1 },
         { name = "crates", group_index = 1 },
         { name = "dictionary", group_index = 1 },
+        { name = "copilot", group_index = 1 },
         -- Index 2
         { name = "spell", group_index = 2 },
         { name = "cmdline", group_index = 2 },
-        { name = "copilot", group_index = 2 },
         { name = "calc", group_index = 2 },
         { name = "emoji", group_index = 2 },
         { name = "treesitter", group_index = 2 },

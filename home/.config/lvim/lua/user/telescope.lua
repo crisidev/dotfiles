@@ -61,6 +61,16 @@ M.get_theme = function(opts)
     return themes.get_ivy(opts)
 end
 
+M.preview_layout_config = function()
+    if not lvim.builtin.telescope_preview then
+        return {
+            preview_width = 0.0,
+        }
+    else
+        return {}
+    end
+end
+
 -- another file string search
 M.find_string = function()
     local opts = {
@@ -81,9 +91,7 @@ end
 M.find_files = function()
     local opts = {
         hidden = true,
-        layout_config = {
-            preview_width = 0.0,
-        },
+        layout_config = M.preview_layout_config(),
     }
     builtin.find_files(M.get_theme(opts))
 end
@@ -92,9 +100,7 @@ end
 M.frecency = function()
     local opts = {
         hidden = true,
-        layout_config = {
-            preview_width = 0.0,
-        },
+        layout_config = M.preview_layout_config(),
     }
     require("telescope").extensions.frecency.frecency(M.get_theme(opts))
 end
@@ -103,9 +109,7 @@ end
 M.recent_files = function()
     local opts = {
         hidden = true,
-        layout_config = {
-            preview_width = 0.0,
-        },
+        layout_config = M.preview_layout_config(),
     }
     builtin.oldfiles(M.get_theme(opts))
 end
@@ -208,9 +212,7 @@ end
 
 M.buffers = function()
     local opts = {
-        layout_config = {
-            preview_width = 0.0,
-        },
+        layout_config = M.preview_layout_config(),
     }
     builtin.buffers(M.get_theme(opts))
 end

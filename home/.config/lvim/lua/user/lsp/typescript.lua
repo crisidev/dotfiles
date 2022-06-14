@@ -23,6 +23,10 @@ M.config = function()
         api.nvim_feedkeys(M.t(keys), mode or "m", true)
     end
 
+    M.t = function(str)
+        return vim.api.nvim_replace_termcodes(str, true, true, true)
+    end
+
     M.warn = function(msg)
         api.nvim_echo({ { msg, "WarningMsg" } }, true, {})
     end

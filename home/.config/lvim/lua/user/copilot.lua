@@ -75,6 +75,7 @@ M.enable = function()
             vim.defer_fn(function()
                 local home = os.getenv "HOME"
                 require("copilot").setup {
+                    cmp_method = "getPanelCompletions",
                     plugin_manager_path = home .. "/.local/share/lunarvim" .. "/site/pack/packer",
                 }
             end, 100)

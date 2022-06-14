@@ -41,6 +41,7 @@ M.config = function()
     lvim.builtin.twilight = { active = false }
     -- Copilot
     lvim.builtin.copilot = { active = true, cmp_source = true }
+    lvim.builtin.telescope_preview = true
 
     -- Dashboard
     lvim.builtin.alpha.active = true

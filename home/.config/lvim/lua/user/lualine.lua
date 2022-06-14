@@ -1,6 +1,7 @@
 local M = {}
 local icons = require("user.icons").icons
 local file_icons = require("user.icons").file_icons
+local gps = require "nvim-gps"
 
 local mode = function()
     local mod = vim.fn.mode()
@@ -334,7 +335,7 @@ M.config = function()
         cond = conditions.hide_in_width,
     }
 
-    --- Session availability
+    -- Session availability
     ins_left {
         function()
             return icons.presence_on
@@ -345,6 +346,12 @@ M.config = function()
         color = { fg = colors.green },
         cond = conditions.hide_small,
     }
+
+    -- Gps
+    -- ins_left {
+    --     gps.get_location,
+    --     cond = gps.is_available
+    -- }
 
     -- Insert mid section. You can make any number of sections in neovim :)
     -- for lualine it's any number greater then 2
@@ -521,7 +528,7 @@ M.config = function()
         cond = conditions.buffer_not_empty,
     }
 
-    -- File size
+    -- File format
     ins_right {
         "fileformat",
         fmt = string.upper,

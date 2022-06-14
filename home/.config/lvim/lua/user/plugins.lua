@@ -93,7 +93,7 @@ M.config = function()
         -- Telescope file browser
         { "nvim-telescope/telescope-file-browser.nvim" },
         -- Telescope live grep
-        { "nvim-telescope/telescope-live-grep-args.nvim"},
+        { "nvim-telescope/telescope-live-grep-args.nvim" },
         -- Tele tabby
         { "TC72/telescope-tele-tabby.nvim" },
         -- Telescope gradle
@@ -501,6 +501,16 @@ M.config = function()
             config = function()
                 require("user.incline").config()
             end,
+        },
+        -- Gps
+        {
+            "SmiteshP/nvim-gps",
+            module_pattern = { "gps", "nvim-gps" },
+            config = function()
+                require("user.gps").config()
+            end,
+            requires = "nvim-treesitter/nvim-treesitter",
+            event = { "InsertEnter", "CursorMoved" },
         },
     }
 end
