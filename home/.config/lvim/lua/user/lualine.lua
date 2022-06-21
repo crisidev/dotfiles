@@ -1,7 +1,6 @@
 local M = {}
 local icons = require("user.icons").icons
 local file_icons = require("user.icons").file_icons
-local gps = require "nvim-gps"
 
 local mode = function()
     local mod = vim.fn.mode()
@@ -282,7 +281,15 @@ M.config = function()
             -- if #cwd > 0 and #ftype > 0 then
             --     show_name = fname:sub(#cwd + 2)
             -- end
-            return show_name .. "%{&readonly?'  ':''}" .. "%{&modified?'  ':''}"
+            local readonly = ""
+            local modified = ""
+            if vim.bo.readonly then
+                readonly = "  "
+            end
+            if vim.bo.modified then
+                modified = "  "
+            end
+            return show_name .. readonly .. modified
         end,
         cond = function()
             return conditions.buffer_not_empty() and conditions.hide_small()
@@ -348,9 +355,12 @@ M.config = function()
     }
 
     -- Gps
+    -- local gps = require "nvim-gps"
     -- ins_left {
-    --     gps.get_location,
-    --     cond = gps.is_available
+    --     function()
+    --         return gps.get_location()
+    --     end,
+    --     cond = gps.is_available,
     -- }
 
     -- Insert mid section. You can make any number of sections in neovim :)
@@ -359,6 +369,7 @@ M.config = function()
         function()
             return "%="
         end,
+        enabled = false,
     }
 
     ins_left {

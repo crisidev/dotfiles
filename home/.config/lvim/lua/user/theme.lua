@@ -29,6 +29,49 @@ M.tokyonight = function()
     }
 end
 
+M.catppuccin = function()
+    local catppuccin = require "catppuccin"
+    catppuccin.setup {
+        transparent_background = lvim.transparent_window,
+        term_colors = false,
+        styles = {
+            comments = "NONE",
+            keywords = "italic",
+        },
+        integrations = {
+            lsp_trouble = true,
+            nvimtree = {
+                transparent_panel = lvim.transparent_window,
+            },
+            which_key = true,
+            lightspeed = lvim.builtin.motion_provider == "lightspeed",
+            hop = lvim.builtin.motion_provider == "hop",
+        },
+    }
+end
+
+M.kanagawa = function()
+    local kanagawa = require "kanagawa"
+    kanagawa.setup {
+        undercurl = true, -- enable undercurls
+        commentStyle = {},
+        functionStyle = {},
+        keywordStyle = { italic = true },
+        statementStyle = { italic = true },
+        typeStyle = {},
+        variablebuiltinStyle = { italic = true },
+        specialReturn = true, -- special highlight for the return keyword
+        specialException = true, -- special highlight for exception handling keywords
+        dimInactive = lvim.builtin.global_statusline, -- dim inactive window `:h hl-NormalNC`
+        globalStatus = lvim.builtin.global_statusline, -- adjust window separators highlight for laststatus=3
+        transparent = lvim.transparent_window,
+        colors = { sumiInk1b = "#1b1b23" },
+        overrides = {
+            diffRemoved = { fg = "#E46876" },
+        },
+    }
+end
+
 M.colors = {
     tokyonight_colors = {
         none = "NONE",
@@ -66,6 +109,59 @@ M.colors = {
         git = { change = "#6183bb", add = "#449dab", delete = "#f7768e", conflict = "#bb7a61" },
         gitSigns = { add = "#164846", change = "#394b70", delete = "#823c41" },
     },
+
+    catppuccin_colors = {
+        rosewater = "#F5E0DC",
+        flamingo = "#F2CDCD",
+        violet = "#DDB6F2",
+        pink = "#F5C2E7",
+        red = "#F28FAD",
+        maroon = "#E8A2AF",
+        orange = "#F8BD96",
+        yellow = "#FAE3B0",
+        green = "#ABE9B3",
+        blue = "#96CDFB",
+        cyan = "#89DCEB",
+        teal = "#B5E8E0",
+        lavender = "#C9CBFF",
+        white = "#D9E0EE",
+        gray2 = "#C3BAC6",
+        gray1 = "#988BA2",
+        gray0 = "#6E6C7E",
+        black4 = "#575268",
+        bg_br = "#302D41",
+        bg = "#1A1826",
+        bg_alt = "#1E1E2E",
+        fg = "#D9E0EE",
+        black = "#1A1826",
+        git = {
+            add = "#ABE9B3",
+            change = "#96CDFB",
+            delete = "#F28FAD",
+            conflict = "#FAE3B0",
+        },
+    },
+
+    kanagawa_colors = {
+        bg = "#16161D",
+        bg_alt = "#1F1F28",
+        bg_br = "#363646",
+        fg = "#DCD7BA",
+        red = "#E46876",
+        orange = "#FFA066",
+        yellow = "#DCA561",
+        blue = "#7FB4CA",
+        cyan = "#658594",
+        violet = "#957FB8",
+        magenta = "#938AA9",
+        green = "#76946A",
+        git = {
+            add = "#76946A",
+            conflict = "#252535",
+            delete = "#C34043",
+            change = "#DCA561",
+        },
+    },
 }
 
 M.hi_colors = function()
@@ -87,6 +183,7 @@ M.hi_colors = function()
         local ret = vim.api.nvim_get_hl_by_name(name.group, true)
         return string.format("#%06x", ret[name.property])
     end
+
     for k, v in pairs(color_binds) do
         local found, color = pcall(get_hl_by_name, v)
         if found then

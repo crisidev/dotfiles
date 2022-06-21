@@ -74,6 +74,7 @@ M.which_keys = function()
         name = icons.buffers .. "Buffers",
         b = { "<cmd>lua require('user.telescope').buffers()<cr>", "Show buffers" },
         l = { "<cmd>BufferLinePick<cr>", "Pick buffer" },
+        P = { "<cmd>BufferLineTogglePin<cr>", "Pin/Unpin buffer" },
         p = { "<cmd>BufferLineCyclePrev<cr>", "Next buffer" },
         n = { "<cmd>BufferLineCycleNext<cr>", "Prev buffer" },
     }

@@ -10,8 +10,23 @@ M.config = function()
             "abzcoding/tokyonight.nvim",
             branch = "feat/local",
             config = function()
-                require("user.theme").tokyonight()
-                vim.cmd [[colorscheme tokyonight]]
+                -- require("user.theme").tokyonight()
+                -- vim.cmd [[colorscheme tokyonight]]
+            end,
+        },
+        {
+            "catppuccin/nvim",
+            as = "catppuccin",
+            config = function()
+                -- require("user.theme").catppuccin()
+                -- vim.cmd [[colorscheme catppuccin]]
+            end,
+        },
+        {
+            "rebelot/kanagawa.nvim",
+            config = function()
+                require("user.theme").kanagawa()
+                vim.cmd [[colorscheme kanagawa]]
             end,
         },
         -- Colorizer
@@ -511,6 +526,24 @@ M.config = function()
             end,
             requires = "nvim-treesitter/nvim-treesitter",
             event = { "InsertEnter", "CursorMoved" },
+        },
+        {
+            "vimpostor/vim-tpipeline",
+            config = function()
+                vim.g.tpipeline_cursormoved = 1
+            end,
+            disable = not lvim.builtin.tmux_lualine.active,
+        },
+        {
+            "kevinhwang91/nvim-ufo",
+            requires = "kevinhwang91/promise-async",
+            config = function()
+                local capabilities = vim.lsp.protocol.make_client_capabilities()
+                capabilities.textDocument.foldingRange = {
+                    dynamicRegistration = false,
+                    lineFoldingOnly = true,
+                }
+            end,
         },
     }
 end

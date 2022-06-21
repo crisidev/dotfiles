@@ -62,12 +62,14 @@ M.get_theme = function(opts)
 end
 
 M.preview_layout_config = function()
-    if not lvim.builtin.telescope_preview then
+    if not lvim.builtin.telescope_preview.active then
         return {
             preview_width = 0.0,
         }
     else
-        return {}
+        return {
+            preview_width = lvim.builtin.telescope_preview.width,
+        }
     end
 end
 

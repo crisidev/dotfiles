@@ -6,6 +6,7 @@ M.config = function()
     if not g_ok then
         bufferline_groups = { builtin = { ungrouped = { name = "ungrouped" } } }
     end
+    lvim.builtin.bufferline.options.navigation = { mode = "uncentered" }
     lvim.builtin.bufferline.options.show_buffer_icons = true
     lvim.builtin.bufferline.options.show_buffer_close_icons = true
     lvim.builtin.bufferline.options.diagnostics = false -- do not show diagnostics in bufferline
@@ -26,6 +27,7 @@ M.config = function()
             toggle_hidden_on_enter = true,
         },
         items = {
+            bufferline_groups.builtin.pinned:with { icon = "" },
             M.language_files("rust", "#ff6965", "rs"),
             M.language_files("python", "#006400", "py"),
             M.language_files("kotlin", "#966fd6", "kt"),
