@@ -41,8 +41,6 @@ M.config = function()
     lvim.builtin.twilight = { active = false }
     -- Copilot
     lvim.builtin.copilot = { active = true, cmp_source = true }
-    -- Allow file preview in telescope
-    lvim.builtin.telescope_preview = { active = true, width = 90 }
     -- Tmux integration
     lvim.builtin.tmux_lualine = { active = false }
 

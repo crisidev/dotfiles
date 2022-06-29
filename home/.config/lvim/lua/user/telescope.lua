@@ -3,6 +3,7 @@ local M = {}
 local action_state = require "telescope.actions.state"
 local themes = require "telescope.themes"
 local builtin = require "telescope.builtin"
+local actions = require "telescope.actions"
 
 M.file_ignore_patterns = {
     "vendor/*",
@@ -37,21 +38,54 @@ M.file_ignore_patterns = {
     "smalljre_*/*",
 }
 
+function M._multiopen(prompt_bufnr, open_cmd)
+    local picker = action_state.get_current_picker(prompt_bufnr)
+    local num_selections = table.getn(picker:get_multi_selection())
+    local border_contents = picker.prompt_border.contents[1]
+    if not (string.find(border_contents, "Find Files") or string.find(border_contents, "Git Files")) then
+        actions.select_default(prompt_bufnr)
+        return
+    end
+    if num_selections > 1 then
+        vim.cmd "bw!"
+        for _, entry in ipairs(picker:get_multi_selection()) do
+            vim.cmd(string.format("%s %s", open_cmd, entry.value))
+        end
+        vim.cmd "stopinsert"
+    else
+        if open_cmd == "vsplit" then
+            actions.file_vsplit(prompt_bufnr)
+        elseif open_cmd == "split" then
+            actions.file_split(prompt_bufnr)
+        elseif open_cmd == "tabe" then
+            actions.file_tab(prompt_bufnr)
+        else
+            actions.file_edit(prompt_bufnr)
+        end
+    end
+end
+
+function M.multi_selection_open_vsplit(prompt_bufnr)
+    M._multiopen(prompt_bufnr, "vsplit")
+end
+
+function M.multi_selection_open_split(prompt_bufnr)
+    M._multiopen(prompt_bufnr, "split")
+end
+
+function M.multi_selection_open_tab(prompt_bufnr)
+    M._multiopen(prompt_bufnr, "tabe")
+end
+
+function M.multi_selection_open(prompt_bufnr)
+    M._multiopen(prompt_bufnr, "edit")
+end
+
 M.get_theme = function(opts)
     if not opts then
-        opts = {
-            layout_config = {
-                prompt_position = "bottom",
-            },
-        }
+        opts = {}
     end
-    if opts["layout_config"] ~= nil then
-        opts["layout_config"]["prompt_position"] = "bottom"
-    else
-        opts["layout_config"] = {
-            prompt_position = "bottom",
-        }
-    end
+    opts["layout_config"] = M.layout_config()
     opts["sorting_strategy"] = "descending"
     opts["borderchars"] = {
         prompt = { "─", "│", " ", "│", "╭", "╮", "│", "│" },
@@ -61,16 +95,29 @@ M.get_theme = function(opts)
     return themes.get_ivy(opts)
 end
 
-M.preview_layout_config = function()
-    if not lvim.builtin.telescope_preview.active then
-        return {
-            preview_width = 0.0,
-        }
-    else
-        return {
-            preview_width = lvim.builtin.telescope_preview.width,
-        }
-    end
+function M.layout_config()
+    return {
+        width = 0.90,
+        height = 0.6,
+        preview_cutoff = 120,
+        prompt_position = "bottom",
+        horizontal = {
+            preview_width = function(_, cols, _)
+                return math.floor(cols * 0.6)
+            end,
+        },
+        vertical = {
+            width = 0.9,
+            height = 0.95,
+            preview_height = 0.5,
+        },
+
+        flex = {
+            horizontal = {
+                preview_width = 0.9,
+            },
+        },
+    }
 end
 
 -- another file string search
@@ -93,25 +140,14 @@ end
 M.find_files = function()
     local opts = {
         hidden = true,
-        layout_config = M.preview_layout_config(),
     }
     builtin.find_files(M.get_theme(opts))
-end
-
--- find only recent files
-M.frecency = function()
-    local opts = {
-        hidden = true,
-        layout_config = M.preview_layout_config(),
-    }
-    require("telescope").extensions.frecency.frecency(M.get_theme(opts))
 end
 
 -- find only recent files
 M.recent_files = function()
     local opts = {
         hidden = true,
-        layout_config = M.preview_layout_config(),
     }
     builtin.oldfiles(M.get_theme(opts))
 end
@@ -121,10 +157,6 @@ M.diagnostics = function()
 end
 
 -- Extensions
-M.raw_grep = function()
-    require("telescope").extensions.live_grep_args.live_grep_args(M.get_theme())
-end
-
 M.file_browser = function()
     require("telescope").extensions.file_browser.file_browser(M.get_theme())
 end
@@ -213,10 +245,7 @@ M.grep_string_visual = function()
 end
 
 M.buffers = function()
-    local opts = {
-        layout_config = M.preview_layout_config(),
-    }
-    builtin.buffers(M.get_theme(opts))
+    builtin.buffers(M.get_theme())
 end
 
 M.resume = function()
@@ -236,14 +265,13 @@ M.config = function()
     lvim.builtin.telescope.defaults.borderchars = {
         prompt = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
         results = { "─", "▐", "─", "│", "╭", "▐", "▐", "╰" },
-        -- results = {' ', '▐', '▄', '▌', '▌', '▐', '▟', '▙' };
         preview = { " ", "│", " ", "▌", "▌", "╮", "╯", "▌" },
     }
     lvim.builtin.telescope.defaults.selection_caret = "  "
     lvim.builtin.telescope.defaults.cache_picker = { num_pickers = 3 }
     lvim.builtin.telescope.defaults.layout_strategy = "horizontal"
     lvim.builtin.telescope.defaults.color_devicons = true
-    local actions = require "telescope.actions"
+    local user_telescope = require "user.telescope"
     lvim.builtin.telescope.defaults.mappings = {
         i = {
             ["<esc><esc>"] = actions.close,
@@ -254,42 +282,34 @@ M.config = function()
             ["<c-n>"] = actions.cycle_history_next,
             ["<c-p>"] = actions.cycle_history_prev,
             ["<c-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
+            ["<cr>"] = user_telescope.multi_selection_open,
+            ["<c-v>"] = user_telescope.multi_selection_open_vsplit,
+            ["<c-s>"] = user_telescope.multi_selection_open_split,
+            ["<c-t>"] = user_telescope.multi_selection_open_tab,
+        },
+        n = {
+            ["<esc>"] = actions.close,
+            ["<c-c>"] = actions.close,
+            ["<c-y>"] = actions.which_key,
+            ["<tab>"] = actions.toggle_selection + actions.move_selection_next,
+            ["<s-tab>"] = actions.toggle_selection + actions.move_selection_previous,
+            ["<c-n>"] = actions.cycle_history_next,
+            ["<c-p>"] = actions.cycle_history_prev,
+            ["<c-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
+            ["<cr>"] = user_telescope.multi_selection_open,
+            ["<c-v>"] = user_telescope.multi_selection_open_vsplit,
+            ["<c-s>"] = user_telescope.multi_selection_open_split,
+            ["<c-t>"] = user_telescope.multi_selection_open_tab,
         },
     }
 
     lvim.builtin.telescope.defaults.file_ignore_patterns = M.file_ignore_patterns
-    local telescope_actions = require "telescope.actions.set"
-    lvim.builtin.telescope.defaults.pickers.find_files = {
-        attach_mappings = function(_)
-            telescope_actions.select:enhance {
-                post = function()
-                    vim.cmd ":normal! zx"
-                end,
-            }
-            return true
-        end,
-        find_command = { "fd", "--type=file", "--hidden", "--smart-case" },
-    }
 
     lvim.builtin.telescope.on_config_done = function(telescope)
-        -- lvim.builtin.telescope.extensions.frecency = {
-        --     show_scores = true,
-        --     show_unindexed = true,
-        --     ignore_patterns = M.file_ignore_patterns,
-        --     disable_devicons = false,
-        --     auto_validate = false,
-        --     workspaces = {
-        --         ["github"] = "/home/matbigoi/github/",
-        --         ["amzn"] = "/home/matbigoi/workplace/",
-        --     },
-        -- }
-        -- telescope.load_extension "frecency"
         telescope.load_extension "luasnip"
-        telescope.load_extension "ui-select"
         telescope.load_extension "zoxide"
         telescope.load_extension "repo"
         telescope.load_extension "file_browser"
-        telescope.load_extension "tele_tabby"
         telescope.load_extension "gradle"
         telescope.load_extension "live_grep_args"
     end

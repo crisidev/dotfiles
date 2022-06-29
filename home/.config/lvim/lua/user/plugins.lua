@@ -10,8 +10,8 @@ M.config = function()
             "abzcoding/tokyonight.nvim",
             branch = "feat/local",
             config = function()
-                -- require("user.theme").tokyonight()
-                -- vim.cmd [[colorscheme tokyonight]]
+                require("user.theme").tokyonight()
+                vim.cmd [[colorscheme tokyonight]]
             end,
         },
         {
@@ -25,8 +25,8 @@ M.config = function()
         {
             "rebelot/kanagawa.nvim",
             config = function()
-                require("user.theme").kanagawa()
-                vim.cmd [[colorscheme kanagawa]]
+                -- require("user.theme").kanagawa()
+                -- vim.cmd [[colorscheme kanagawa]]
             end,
         },
         -- Colorizer
@@ -103,8 +103,6 @@ M.config = function()
             "cljoly/telescope-repo.nvim",
             requires = { "nvim-lua/plenary.nvim" },
         },
-        -- Telescope UI select
-        { "nvim-telescope/telescope-ui-select.nvim" },
         -- Telescope file browser
         { "nvim-telescope/telescope-file-browser.nvim" },
         -- Telescope live grep
@@ -349,6 +347,7 @@ M.config = function()
                     autosave_last_session = true,
                     autosave_ignore_not_normal = true,
                     autosave_only_in_session = false,
+                    max_path_length = 0,
                 }
             end,
             requires = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope.nvim" },
@@ -407,9 +406,10 @@ M.config = function()
         {
             "rcarriga/nvim-dap-ui",
             config = function()
-                require("dapui").setup()
+                require("user.dapui").config()
             end,
-            ft = { "python", "rust", "rs", "go", "c" },
+            ft = { "python", "rust", "go", "c" },
+            event = "BufReadPost",
             requires = { "mfussenegger/nvim-dap" },
             disable = not lvim.builtin.dap.active,
         },
@@ -518,32 +518,21 @@ M.config = function()
             end,
         },
         -- Gps
-        {
-            "SmiteshP/nvim-gps",
-            module_pattern = { "gps", "nvim-gps" },
-            config = function()
-                require("user.gps").config()
-            end,
-            requires = "nvim-treesitter/nvim-treesitter",
-            event = { "InsertEnter", "CursorMoved" },
-        },
+        -- {
+        --     "SmiteshP/nvim-gps",
+        --     module_pattern = { "gps", "nvim-gps" },
+        --     config = function()
+        --         require("user.gps").config()
+        --     end,
+        --     requires = "nvim-treesitter/nvim-treesitter",
+        --     event = { "InsertEnter", "CursorMoved" },
+        -- },
         {
             "vimpostor/vim-tpipeline",
             config = function()
                 vim.g.tpipeline_cursormoved = 1
             end,
             disable = not lvim.builtin.tmux_lualine.active,
-        },
-        {
-            "kevinhwang91/nvim-ufo",
-            requires = "kevinhwang91/promise-async",
-            config = function()
-                local capabilities = vim.lsp.protocol.make_client_capabilities()
-                capabilities.textDocument.foldingRange = {
-                    dynamicRegistration = false,
-                    lineFoldingOnly = true,
-                }
-            end,
         },
     }
 end

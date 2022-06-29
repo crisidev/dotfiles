@@ -22,6 +22,7 @@ M.config = function()
                     return string.format("%s\t[%s]", title:gsub("\n", "\\n"), client.name)
                 end,
             },
+            telescope = require('user.telescope').get_theme(),
         },
     }
 end

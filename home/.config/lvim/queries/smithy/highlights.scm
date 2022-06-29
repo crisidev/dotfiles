@@ -10,6 +10,7 @@
   "list"
   "map"
   "union"
+  "set"
   "resource"
 ] @keyword
 
