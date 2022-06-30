@@ -43,6 +43,8 @@ M.config = function()
     lvim.builtin.copilot = { active = true, cmp_source = true }
     -- Tmux integration
     lvim.builtin.tmux_lualine = { active = false }
+    -- Telescope max path length
+    lvim.builtin.telescope.max_path_length = 5
 
     -- Dashboard
     lvim.builtin.alpha.active = true

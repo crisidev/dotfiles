@@ -1,9 +1,9 @@
 local M = {}
--- local actions = require "telescope.actions"
 local action_state = require "telescope.actions.state"
 local themes = require "telescope.themes"
 local builtin = require "telescope.builtin"
 local actions = require "telescope.actions"
+local utils = require "telescope.utils"
 
 M.file_ignore_patterns = {
     "vendor/*",
@@ -98,8 +98,8 @@ end
 function M.layout_config()
     return {
         width = 0.90,
-        height = 0.6,
-        preview_cutoff = 120,
+        height = 0.4,
+        preview_cutoff = 100,
         prompt_position = "bottom",
         horizontal = {
             preview_width = function(_, cols, _)
@@ -108,7 +108,7 @@ function M.layout_config()
         },
         vertical = {
             width = 0.9,
-            height = 0.95,
+            height = 0.4,
             preview_height = 0.5,
         },
 
@@ -260,7 +260,38 @@ M.config = function()
     -- Telescope
     local icons = require("user.icons").icons
     lvim.builtin.telescope.defaults.dynamic_preview_title = true
-    lvim.builtin.telescope.defaults.path_display = { shorten = 8 }
+    lvim.builtin.telescope.defaults.layout_config = M.layout_config()
+    lvim.builtin.telescope.defaults.path_display = function(opts, path)
+        local function table_lenght(table)
+            local count = 0
+            for _ in pairs(table) do
+                count = count + 1
+            end
+            return count
+        end
+
+        local function subrange(t, first, last)
+            local sub = {}
+            for i = first, last do
+                sub[#sub + 1] = t[i]
+            end
+            return sub
+        end
+
+        local os_sep = utils.get_separator()
+        local split_path = vim.split(path, os_sep)
+        local path_count = table_lenght(split_path)
+        if path_count == nil then
+            return path
+        end
+        local start = path_count - lvim.builtin.telescope.max_path_length
+        if start > 0 then
+            local short_path = subrange(split_path, start, path_count)
+            return string.format("%s", table.concat(short_path, os_sep))
+        else
+            return string.format("%s", path)
+        end
+    end
     lvim.builtin.telescope.defaults.prompt_prefix = icons.term .. " "
     lvim.builtin.telescope.defaults.borderchars = {
         prompt = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
