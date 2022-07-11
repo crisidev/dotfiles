@@ -33,6 +33,14 @@ M.config = function()
         pattern = "*",
         command = "lua require('user.copilot').disable()",
     })
+
+    create_aucmd("BufWritePre", {
+        group = "_lvim_user",
+        pattern = { "/tmp/*", "COMMIT_EDITMSG", "MERGE_MSG", "*.tmp", "*.bak" },
+        callback = function()
+            vim.opt_local.undofile = false
+        end,
+    })
 end
 
 return M
