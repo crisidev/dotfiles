@@ -22,11 +22,16 @@ linters.setup {
 
 -- Additional mappings
 local icons = require("user.icons").icons
-lvim.lsp.buffer_mappings.normal_mode["gT"] = {
-    name = icons.nuclear .. " TypeScript Tools",
-    a = { "<cmd>TypescriptAddMissingImports<cr>", "Add missing imports" },
-    o = { "<cmd>TypescriptOrganizeImports<cr>", "Organize imports" },
-    f = { "<cmd>TypescriptFixAll<cr>", "Fix all" },
-    r = { "<cmd>TypescriptRenameFile<cr>", "Rename file" },
-    u = { "<cmd>TypescriptRemoveUnused<cr>", "Remove unused" },
+local which_key = require "which-key"
+which_key.register {
+    ["f"] = {
+        T = {
+            name = icons.nuclear .. " TypeScript Tools",
+            a = { "<cmd>TypescriptAddMissingImports<cr>", "Add missing imports" },
+            o = { "<cmd>TypescriptOrganizeImports<cr>", "Organize imports" },
+            f = { "<cmd>TypescriptFixAll<cr>", "Fix all" },
+            r = { "<cmd>TypescriptRenameFile<cr>", "Rename file" },
+            u = { "<cmd>TypescriptRemoveUnused<cr>", "Remove unused" },
+        },
+    },
 }

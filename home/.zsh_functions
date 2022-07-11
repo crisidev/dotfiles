@@ -141,3 +141,5 @@ function joycond-cemuhook {
   cd ~/github/0updates/joycond-cemuhook && python joycond-cemuhook.py
   cd -
 }
+
+

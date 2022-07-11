@@ -14,7 +14,12 @@ linters.setup {}
 
 -- Additional mappings
 local icons = require("user.icons").icons
-lvim.lsp.buffer_mappings.normal_mode["gB"] = {
-    name = icons.settings .. "Build helpers",
-    h = { "<cmd>ClangdSwitchSourceHeader<cr>", "Run build help" },
+local which_key = require "which-key"
+which_key.register {
+    ["f"] = {
+        B = {
+            name = icons.settings .. "Build helpers",
+            h = { "<cmd>ClangdSwitchSourceHeader<cr>", "Run build help" },
+        },
+    },
 }

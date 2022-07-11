@@ -169,8 +169,8 @@ M.zoxide = function()
     require("telescope").extensions.zoxide.list(M.get_theme())
 end
 
-M.tele_tabby = function()
-    require("telescope").extensions.tele_tabby.list(M.get_theme())
+M.persisted = function()
+    require("telescope").extensions.persisted.persisted(M.get_theme())
 end
 
 -- show refrences to this using language server
@@ -343,6 +343,7 @@ M.config = function()
         telescope.load_extension "file_browser"
         telescope.load_extension "gradle"
         telescope.load_extension "live_grep_args"
+        telescope.load_extension "persisted"
     end
 end
 

@@ -188,6 +188,9 @@ M.config = function()
     vim.opt.clipboard = { "unnamedplus" }
 
     vim.o.qftf = "{info -> v:lua._G.qftf(info)}"
+
+    -- Session
+    vim.o.sessionoptions = "buffers,curdir,folds,winpos,winsize"
 end
 
 function _G.qftf(info)

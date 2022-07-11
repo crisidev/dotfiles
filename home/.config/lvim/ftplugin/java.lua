@@ -17,19 +17,24 @@ require("user.lsp.java").config()
 
 -- Additional mappings
 local icons = require("user.icons").icons
-lvim.lsp.buffer_mappings.normal_mode["gT"] = {
-    name = icons.nuclear .. " JdtLs Tools",
-    o = { "<Cmd>lua require('jdtls').organize_imports()<CR>", "Organize Imports" },
-    v = { "<Cmd>lua require('jdtls').extract_variable()<CR>", "Extract Variable" },
-    c = { "<Cmd>lua require('jdtls').extract_constant()<CR>", "Extract Constant" },
-    m = { "<Cmd>lua require('jdtls').extract_method(true)<CR>", "Extract Method" },
-    t = { "<Cmd>lua require('jdtls').test_nearest_method()<CR>", "Test Method" },
-    T = { "<Cmd>lua require('jdtls').test_class()<CR>", "Test Class" },
-    u = { "<Cmd>JdtUpdateConfig<CR>", "Update Config" },
-}
-lvim.lsp.buffer_mappings.normal_mode["gB"] = {
-    name = icons.debug .. "Gradle Tools",
-    t = { "<Cmd>Telescope gradle tasks<CR>", "Gradle tasks" },
-    p = { "<Cmd>Telescope gradle projects<CR>", "Gradle projects" },
-    h = { "<Cmd>Telescope gradle history<CR>", "Gradle history" },
+local which_key = require "which-key"
+which_key.register {
+    ["f"] = {
+        T = {
+            name = icons.nuclear .. " JdtLs Tools",
+            o = { "<Cmd>lua require('jdtls').organize_imports()<CR>", "Organize Imports" },
+            v = { "<Cmd>lua require('jdtls').extract_variable()<CR>", "Extract Variable" },
+            c = { "<Cmd>lua require('jdtls').extract_constant()<CR>", "Extract Constant" },
+            m = { "<Cmd>lua require('jdtls').extract_method(true)<CR>", "Extract Method" },
+            t = { "<Cmd>lua require('jdtls').test_nearest_method()<CR>", "Test Method" },
+            T = { "<Cmd>lua require('jdtls').test_class()<CR>", "Test Class" },
+            u = { "<Cmd>JdtUpdateConfig<CR>", "Update Config" },
+        },
+        B = {
+            name = icons.debug .. "Gradle Tools",
+            t = { "<Cmd>Telescope gradle tasks<CR>", "Gradle tasks" },
+            p = { "<Cmd>Telescope gradle projects<CR>", "Gradle projects" },
+            h = { "<Cmd>Telescope gradle history<CR>", "Gradle history" },
+        },
+    },
 }

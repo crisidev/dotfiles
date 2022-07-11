@@ -336,21 +336,25 @@ M.config = function()
         },
         -- Session manager
         {
-            "Shatur/neovim-session-manager",
+            "olimorris/persisted.nvim",
+            module = "persisted",
             config = function()
-                local Path = require "plenary.path"
-                require("session_manager").setup {
-                    sessions_dir = Path:new(vim.fn.stdpath "config", "/sessions/"),
-                    path_replacer = "__",
-                    colon_replacer = "++",
-                    autoload_mode = require("session_manager.config").AutoloadMode.Disabled,
-                    autosave_last_session = true,
-                    autosave_ignore_not_normal = true,
-                    autosave_only_in_session = false,
-                    max_path_length = 0,
+                require("persisted").setup {
+                    use_git_branch = true,
+                    autosave = true,
+                    autoload = false,
+                    telescope = {
+                        before_source = function()
+                            -- Close all open buffers
+                            -- Thanks to https://github.com/avently
+                            vim.api.nvim_input "<ESC>:%bd<CR>"
+                        end,
+                        after_source = function(session)
+                            print("Loaded session " .. session.name)
+                        end,
+                    },
                 }
             end,
-            requires = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope.nvim" },
         },
         ------------------------------------------------------------------------------
         -- Zen mode
@@ -517,16 +521,7 @@ M.config = function()
                 require("user.incline").config()
             end,
         },
-        -- Gps
-        -- {
-        --     "SmiteshP/nvim-gps",
-        --     module_pattern = { "gps", "nvim-gps" },
-        --     config = function()
-        --         require("user.gps").config()
-        --     end,
-        --     requires = "nvim-treesitter/nvim-treesitter",
-        --     event = { "InsertEnter", "CursorMoved" },
-        -- },
+        -- Tmux integration
         {
             "vimpostor/vim-tpipeline",
             config = function()

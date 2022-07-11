@@ -86,11 +86,11 @@ M.which_keys = function()
     -- Sessions
     lvim.builtin.which_key.mappings["S"] = {
         name = icons.session .. "Session",
-        l = { "<cmd>SessionManager load_session<cr>", "List available sessions" },
-        d = { "<cmd>SessionManager delete_session<cr>", "Delete session" },
-        L = { "<cmd>SessionManager load_last_session<cr>", "Restore last session" },
-        c = { "<cmd>SessionManager load_current_dir_session<cr>", "Restore current dir session" },
-        s = { "<cmd>SessionManager save_current_session<cr>", "Save current session" },
+        l = { "<cmd>lua require('user.telescope').persisted()<cr>", "List available sessions" },
+        d = { "<cmd>SessionDelete<cr>", "Delete session" },
+        L = { "<cmd>SessionLoadLast<cr>", "Restore last session" },
+        c = { "<cmd>SessionLoad<cr>", "Restore current dir session" },
+        s = { "<cmd>SessionSave<cr>", "Save current session" },
     }
 
     -- Git
@@ -305,7 +305,7 @@ M.config = function()
         separator = "·", -- symbol used between a key and it's label
         group = "", -- symbol prepended to a group
     }
-    lvim.builtin.which_key.setup.triggers = { "<leader>", "g", "z", "]", "[" }
+    lvim.builtin.which_key.setup.triggers = { "<leader>", "f", "g", "z", "]", "[" }
     lvim.builtin.which_key.setup.ignore_missing = false
 
     M.normal_insert_visual_keys()
