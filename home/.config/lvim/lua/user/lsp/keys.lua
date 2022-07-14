@@ -4,19 +4,12 @@ M.config = function()
     local icons = require("user.icons").icons
     local wk = require "which-key"
 
-    -- Comment
-    lvim.lsp.buffer_mappings.normal_mode["gc"] = { icons.comment .. " Comment linewise" }
-    lvim.lsp.buffer_mappings.normal_mode["gb"] = { icons.comment .. " Comment blockwise" }
-
     wk.register {
         -- Hover
         -- ["K"] = { "<cmd>lua vim.lsp.buf.hover()<cr>", "Show hover" }
         ["K"] = "<cmd>lua require('user.lsp').show_documentation()<cr>",
         -- Lsp
         ["f"] = {
-            -- Comment
-            c = lvim.lsp.buffer_mappings.normal_mode["gc"],
-            b = lvim.lsp.buffer_mappings.normal_mode["gb"],
             -- Code actions popup
             A = {
                 "<cmd>lua vim.lsp.codelens.run()<cr>",
@@ -28,7 +21,7 @@ M.config = function()
                 icons.codelens .. "Code actions",
             },
             -- Goto
-            g = {
+            f = {
                 "<cmd>lua vim.lsp.buf.definition()<cr>",
                 icons.go .. " Goto definition",
             },
@@ -83,7 +76,7 @@ M.config = function()
             -- Peek
             P = {
                 "<cmd>lua require('lvim.lsp.peek').Peek('definition')<cr>",
-                icons.find .. " Peek definition"
+                icons.find .. " Peek definition",
             },
             -- Refactoring
             X = {
@@ -100,6 +93,16 @@ M.config = function()
                     "<cmd>lua require('refactoring').refactor('Extract Block To File')<cr>",
                     "Extract block to file",
                 },
+            },
+            -- Trouble
+            T = {
+                name = icons.error .. "Trouble",
+                r = { "<cmd>Trouble lsp_references<cr>", "References" },
+                f = { "<cmd>Trouble lsp_definitions<cr>", "Definitions" },
+                d = { "<cmd>Trouble document_diagnostics<cr>", "Diagnostics" },
+                q = { "<cmd>Trouble quickfix<cr>", "QuickFix" },
+                l = { "<cmd>Trouble loclist<cr>", "LocationList" },
+                w = { "<cmd>Trouble workspace_diagnostics<cr>", "Wordspace Diagnostics" },
             },
         },
     }

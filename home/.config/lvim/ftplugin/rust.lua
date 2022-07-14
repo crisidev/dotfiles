@@ -11,6 +11,7 @@ local icons = require("user.icons").icons
 local which_key = require "which-key"
 which_key.register {
     ["f"] = {
+        K = { "<cmd>RustOpenExternalDocs<cr>", icons.docs .. " Open docs.rs" },
         T = {
             name = icons.nuclear .. " Rust Tools",
             a = { "<cmd>RustCodeAction<cr>", "Code action" },

@@ -15,6 +15,7 @@ linters.setup {}
 if vim.fn.expand "%:t" == "Cargo.toml" then
     -- Cargo tools mappings
     local which_key = require "which-key"
+    local icons = require("user.icons").icons
     which_key.register {
         ["f"] = {
             T = {

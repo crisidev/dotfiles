@@ -6,27 +6,10 @@ M.config = function()
         -- Themes and visual stuff.
         ------------------------------------------------------------------------------
         {
-            -- "folke/tokyonight.nvim",
-            "abzcoding/tokyonight.nvim",
-            branch = "feat/local",
+            "folke/tokyonight.nvim",
             config = function()
                 require("user.theme").tokyonight()
                 vim.cmd [[colorscheme tokyonight]]
-            end,
-        },
-        {
-            "catppuccin/nvim",
-            as = "catppuccin",
-            config = function()
-                -- require("user.theme").catppuccin()
-                -- vim.cmd [[colorscheme catppuccin]]
-            end,
-        },
-        {
-            "rebelot/kanagawa.nvim",
-            config = function()
-                -- require("user.theme").kanagawa()
-                -- vim.cmd [[colorscheme kanagawa]]
             end,
         },
         -- Colorizer
@@ -107,8 +90,6 @@ M.config = function()
         { "nvim-telescope/telescope-file-browser.nvim" },
         -- Telescope live grep
         { "nvim-telescope/telescope-live-grep-args.nvim" },
-        -- Tele tabby
-        { "TC72/telescope-tele-tabby.nvim" },
         -- Telescope gradle
         { "aloussase/telescope-gradle.nvim" },
         ------------------------------------------------------------------------------
@@ -121,8 +102,8 @@ M.config = function()
                 require("user/lsp_signature").config()
             end,
             event = { "BufRead", "BufNew" },
+            disable = true,
         },
-        { "hrsh7th/cmp-nvim-lsp-signature-help" },
         -- Lsp progreess in fidget
         {
             "j-hui/fidget.nvim",
@@ -224,12 +205,6 @@ M.config = function()
         ------------------------------------------------------------------------------
         -- Cmp for command line
         { "hrsh7th/cmp-cmdline" },
-        -- Cmp for LateX symbols.
-        {
-            "kdheepak/cmp-latex-symbols",
-            requires = "hrsh7th/nvim-cmp",
-            ft = "tex",
-        },
         -- Cmp for emojis..
         { "hrsh7th/cmp-emoji" },
         -- Cmp for to calculate maths expressions.
@@ -257,6 +232,7 @@ M.config = function()
                 require("cmp_git").setup()
             end,
         },
+        { "hrsh7th/cmp-nvim-lsp-signature-help" },
         ------------------------------------------------------------------------------
         -- Markdown support
         ------------------------------------------------------------------------------
@@ -275,25 +251,6 @@ M.config = function()
             "ellisonleao/glow.nvim",
             ft = { "markdown" },
         },
-        -- Better diff view
-        {
-            "sindrets/diffview.nvim",
-            cmd = { "DiffviewOpen", "DiffviewFileHistory" },
-            module = "diffview",
-            keys = "<leader>gd",
-            setup = function()
-                -- require("which-key").register { ["Gd"] = "diffview: diff HEAD" }
-            end,
-            config = function()
-                require("diffview").setup {
-                    enhanced_diff_hl = true,
-                    key_bindings = {
-                        file_panel = { q = "<Cmd>DiffviewClose<CR>" },
-                        view = { q = "<Cmd>DiffviewClose<CR>" },
-                    },
-                }
-            end,
-        },
         -- Markdown TOC
         {
             "mzlogin/vim-markdown-toc",
@@ -311,6 +268,7 @@ M.config = function()
                     captures = { "comment" },
                 }
             end,
+            fd = { "markdown", "text", "rst" },
         },
         -- Grammarous
         {
@@ -337,7 +295,6 @@ M.config = function()
         -- Session manager
         {
             "olimorris/persisted.nvim",
-            module = "persisted",
             config = function()
                 require("persisted").setup {
                     use_git_branch = true,
@@ -455,6 +412,8 @@ M.config = function()
                 }
             end,
         },
+        -- Trouble
+        { "folke/trouble.nvim" },
         -- Smart quit
         {
             "marklcrns/vim-smartq",
@@ -462,8 +421,6 @@ M.config = function()
                 vim.g.smartq_default_mappings = 0
             end,
         },
-        -- Startup time
-        { "dstein64/vim-startuptime" },
         -- Editor config
         {
             "editorconfig/editorconfig-vim",
@@ -495,7 +452,7 @@ M.config = function()
         -- Refactoring
         {
             "ThePrimeagen/refactoring.nvim",
-            ft = { "typescript", "javascript", "lua", "c", "cpp", "go", "python", "java" },
+            ft = { "typescript", "javascript", "lua", "c", "cpp", "go", "python", "java", "rust", "kotlin" },
             event = "BufRead",
             config = function()
                 require("user.refactoring").config()
@@ -520,14 +477,6 @@ M.config = function()
             config = function()
                 require("user.incline").config()
             end,
-        },
-        -- Tmux integration
-        {
-            "vimpostor/vim-tpipeline",
-            config = function()
-                vim.g.tpipeline_cursormoved = 1
-            end,
-            disable = not lvim.builtin.tmux_lualine.active,
         },
     }
 end

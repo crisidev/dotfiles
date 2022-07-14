@@ -177,16 +177,17 @@ M.config = function()
     vim.g.loaded_perl_provider = 0
 
     -- Folding
-    vim.wo.foldmethod = "expr"
-    vim.wo.foldexpr = "nvim_treesitter#foldexpr()"
-    vim.wo.foldlevel = 4
-    vim.wo.foldtext = [[substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g').'...'.trim(getline(v:foldend)) . ' (' . (v:foldend - v:foldstart + 1) . ' lines)']]
-    vim.wo.foldnestmax = 3
-    vim.wo.foldminlines = 1
+    -- vim.wo.foldmethod = "expr"
+    -- vim.wo.foldexpr = "nvim_treesitter#foldexpr()"
+    -- vim.wo.foldlevel = 4
+    -- vim.wo.foldtext = [[substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g').'...'.trim(getline(v:foldend)) . ' (' . (v:foldend - v:foldstart + 1) . ' lines)']]
+    -- vim.wo.foldnestmax = 3
+    -- vim.wo.foldminlines = 1
 
     -- Setup clipboard
     vim.opt.clipboard = { "unnamedplus" }
 
+    -- QFTF
     vim.o.qftf = "{info -> v:lua._G.qftf(info)}"
 
     -- Session

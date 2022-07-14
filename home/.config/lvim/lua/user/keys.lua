@@ -98,7 +98,6 @@ M.which_keys = function()
         name = " Git",
         b = { "<cmd>BlamerToggle<cr>", "Toggle inline git blame" },
         B = { "<cmd>Git blame<cr>", "Open git blame" },
-        d = { "<cmd>DiffviewOpen<cr>", "Git diff" },
         g = { "<cmd>lua _lazygit_toggle()<cr>", "LazyGit" },
         l = {
             "<cmd>lua require('gitlinker').get_buf_range_url('n', {action_callback = require('gitlinker.actions').copy_to_clipboard})<cr>",
@@ -151,7 +150,7 @@ M.which_keys = function()
     -- Telescope resume
     lvim.builtin.which_key.mappings["t"] = {
         "<cmd>lua require('user.telescope').resume()<CR>",
-        icons.resume .. "Resume query",
+        icons.resume .. "Last action",
     }
 
     -- Telescope suggest spell
@@ -225,8 +224,8 @@ M.normal_insert_visual_keys = function()
     -- INSERT MODE
     lvim.keys.insert_mode = {
         -- Buffers
-        ["<F1>"] = "<cmd>BufferLineCyclePrev<cr>",
-        ["<F2>"] = "<cmd>BufferLineCycleNext<cr>",
+        ["<F1>"] = "<esc><cmd>BufferLineCyclePrev<cr>",
+        ["<F2>"] = "<esc><cmd>BufferLineCycleNext<cr>",
         ["<A-S-Left>"] = "<cmd>BufferLineMovePrev<cr>",
         ["<A-S-Right>"] = "<cmd>BufferLineMoveNext<cr>",
         -- Toggle tree

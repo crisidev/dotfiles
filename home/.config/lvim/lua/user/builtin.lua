@@ -24,14 +24,13 @@ M.config = function()
         file = true,
         folder_arrow = true,
     }
-    -- lvim.builtin.nvimtree.setup.renderer.icons.glyphs = nvimtree_icons
     lvim.builtin.nvimtree.setup.renderer.icons.glyphs = nvimtree_icons
     lvim.builtin.nvimtree.setup.renderer.icons.webdev_colors = true
     lvim.builtin.nvimtree.setup.view.width = 60
     lvim.builtin.nvimtree.setup.view.preserve_window_proportions = true
 
     -- Sidebar
-    lvim.builtin.sidebar = { active = true }
+    lvim.builtin.sidebar = { active = false }
     -- Project
     lvim.builtin.project.active = true
     lvim.builtin.project.detection_methods = { "lsp", "pattern" }
@@ -41,8 +40,6 @@ M.config = function()
     lvim.builtin.twilight = { active = false }
     -- Copilot
     lvim.builtin.copilot = { active = true, cmp_source = true }
-    -- Tmux integration
-    lvim.builtin.tmux_lualine = { active = false }
     -- Telescope max path length
     lvim.builtin.telescope.max_path_length = 5
 

@@ -39,15 +39,15 @@ M.config = function()
         { name = "path", group_index = 1, max_item_count = 5 },
         { name = "git", group_index = 1 },
         { name = "crates", group_index = 1 },
-        { name = "dictionary", group_index = 1 },
+        { name = "nvim_lsp_signature_help", group_index = 1 },
         { name = "copilot", group_index = 1 },
         -- Index 2
+        { name = "dictionary", group_index = 2 },
         { name = "spell", group_index = 2 },
         { name = "cmdline", group_index = 2 },
         { name = "calc", group_index = 2 },
         { name = "emoji", group_index = 2 },
         { name = "treesitter", group_index = 2 },
-        { name = "latex_symbols", group_index = 2 },
     }
     lvim.builtin.cmp.experimental = {
         ghost_text = false,
@@ -98,15 +98,6 @@ M.config = function()
             { name = "nvim_lsp", group_index = 1 },
             { name = "path", group_index = 1, max_item_count = 5 },
             { name = "crates", group_index = 1 },
-            { name = "luasnip", group_index = 1, max_item_count = 5, keyword_length = 3 },
-        }, {
-            { name = "buffer", group_index = 1, max_item_count = 5, keyword_length = 3 },
-        }),
-    })
-    cmp.setup.filetype("tex", {
-        sources = cmp.config.sources({
-            { name = "nvim_lsp", group_index = 1 },
-            { name = "latex_symbols", group_index = 1, max_item_count = 3, keyword_length = 3 },
             { name = "luasnip", group_index = 1, max_item_count = 5, keyword_length = 3 },
         }, {
             { name = "buffer", group_index = 1, max_item_count = 5, keyword_length = 3 },

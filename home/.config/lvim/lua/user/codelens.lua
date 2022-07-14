@@ -151,7 +151,7 @@ M.update_sign = function(priority, old_line, new_line, bufnr, text)
         -- Update current lightbulb line
         vim.b.lightbulb_line = new_line
     end
-    local icon = require("user.icons").icons.code_action
+    local icon = require("user.icons").icons.hint
     if text == "code_lens_action" then
         icon = require("user.icons").icons.code_lens_action
     end
