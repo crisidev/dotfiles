@@ -96,7 +96,6 @@ format = "errno [$status]($style)"
 
 [rust]
 style = "bold blue"
-detect_folders = ["cargo-project"]
 
 [java]
 style = "bold blue"

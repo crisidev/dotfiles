@@ -8,7 +8,7 @@ M.config = function()
         {
             "folke/tokyonight.nvim",
             config = function()
-                require("user.theme").tokyonight()
+                -- require("user.theme").tokyonight()
                 vim.cmd [[colorscheme tokyonight]]
             end,
         },
@@ -90,8 +90,6 @@ M.config = function()
         { "nvim-telescope/telescope-file-browser.nvim" },
         -- Telescope live grep
         { "nvim-telescope/telescope-live-grep-args.nvim" },
-        -- Telescope gradle
-        { "aloussase/telescope-gradle.nvim" },
         ------------------------------------------------------------------------------
         -- LSP extensions.
         ------------------------------------------------------------------------------
@@ -149,6 +147,15 @@ M.config = function()
             config = function()
                 require("user.lsp.c").config()
             end,
+        },
+        -- Lsp lines
+        {
+            "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+            config = function()
+                require("lsp_lines").setup()
+            end,
+            event = "BufRead",
+            disable = not lvim.builtin.lsp_lines.active,
         },
         -- Crates cmp
         {
@@ -476,6 +483,13 @@ M.config = function()
             "b0o/incline.nvim",
             config = function()
                 require("user.incline").config()
+            end,
+        },
+        -- Legendary
+        {
+            "mrjones2014/legendary.nvim",
+            config = function()
+                require("user.legendary").config()
             end,
         },
     }

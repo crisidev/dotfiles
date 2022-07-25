@@ -94,6 +94,7 @@ HISTFILE="$HOME/.zsh_history"
 export PATH=$HOME/.bin:$HOME/.toolbox/bin:$HOME/.pyenv/bin:$HOME/.rbenv/bin:$HOME/.nodenv/bin:$HOME/.goenv/bin:$HOME/.bin:$HOME/.cargo/bin:$HOME/.android/Sdk/platform-tools:$HOME/.toolchain/aarch64-linux-musl/bin:$HOME/.nodenv/shims:$HOME/.pyenv/shims:$HOME/.rbenv/shims:$HOME/.goenv/shims:$PATH
 
 # terminal
+export TERMINFO=/usr/share/terminfo
 # export TERM="xterm-kitty"
 export TERMINAL=xterm-256color
 export GREP_COLOR='1;31'
@@ -147,6 +148,7 @@ export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclu
 
 # docktor
 export DOCKTOR_API_URL=https://docktor.crisidev.org
+export DRONE_SERVER=https://build.crisidev.org
 
 # rip
 export GRAVEYARD=~/.local/share/Trash
@@ -159,3 +161,9 @@ eval "$(zoxide init zsh)"
 
 # spaceship
 eval "$(starship init zsh)"
+
+# mcfly
+export MCFLY_RESULTS=50  
+export MCFLY_INTERFACE_VIEW=BOTTOM       
+export MCFLY_RESULTS_SORT=LAST_RUN
+eval "$(mcfly init zsh)"

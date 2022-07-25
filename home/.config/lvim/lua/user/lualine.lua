@@ -261,8 +261,7 @@ M.config = function()
             local fname = vim.fn.expand "%:p"
             local ftype = vim.fn.expand "%:e"
             local cwd = vim.api.nvim_call_function("getcwd", {})
-            if
-                string.find(fname, "term") ~= nil
+            if string.find(fname, "term") ~= nil
                 and string.find(fname, "lazygit;#toggleterm") ~= nil
                 and (vim.fn.has "linux" == 1 or vim.fn.has "mac" == 1)
             then
@@ -345,10 +344,14 @@ M.config = function()
     -- Session availability
     ins_left {
         function()
-            return icons.presence_on
+            if vim.g.persisting then
+                return icons.presence_on
+            elseif vim.g.persisting == false then
+                return icons.presence_off
+            end
         end,
-        enabled = function()
-            return require("session_manager.utils").is_restorable_buffer_present()
+        cond = function ()
+            return vim.g.persisting ~= nil
         end,
         color = { fg = colors.green },
         cond = conditions.hide_small,

@@ -32,7 +32,6 @@ M.config = function()
         "yamlls",
         "smithy_language_server",
         "grammar_guard",
-        "gradle_ls",
         "taplo",
     })
     lvim.lsp.automatic_servers_installation = true

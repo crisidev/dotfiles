@@ -341,7 +341,6 @@ M.config = function()
         telescope.load_extension "zoxide"
         telescope.load_extension "repo"
         telescope.load_extension "file_browser"
-        telescope.load_extension "gradle"
         telescope.load_extension "live_grep_args"
         telescope.load_extension "persisted"
     end

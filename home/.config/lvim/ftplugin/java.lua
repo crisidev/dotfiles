@@ -30,11 +30,5 @@ which_key.register {
             T = { "<Cmd>lua require('jdtls').test_class()<CR>", "Test Class" },
             u = { "<Cmd>JdtUpdateConfig<CR>", "Update Config" },
         },
-        B = {
-            name = icons.debug .. "Gradle Tools",
-            t = { "<Cmd>Telescope gradle tasks<CR>", "Gradle tasks" },
-            p = { "<Cmd>Telescope gradle projects<CR>", "Gradle projects" },
-            h = { "<Cmd>Telescope gradle history<CR>", "Gradle history" },
-        },
     },
 }

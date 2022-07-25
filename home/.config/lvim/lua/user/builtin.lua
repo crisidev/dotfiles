@@ -42,6 +42,8 @@ M.config = function()
     lvim.builtin.copilot = { active = true, cmp_source = true }
     -- Telescope max path length
     lvim.builtin.telescope.max_path_length = 5
+    -- LSP lines
+    lvim.builtin.lsp_lines = { active = true }
 
     -- Dashboard
     lvim.builtin.alpha.active = true

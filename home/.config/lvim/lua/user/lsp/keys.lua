@@ -51,7 +51,7 @@ M.config = function()
                 "<cmd>lua vim.diagnostic.open_float()<cr>",
                 icons.hint .. "Show line diagnostics",
             },
-            D = {
+            e = {
                 "<cmd>lua require('user.telescope').diagnostics()<cr>",
                 icons.hint .. "All diagnostics",
             },
@@ -95,7 +95,7 @@ M.config = function()
                 },
             },
             -- Trouble
-            T = {
+            D = {
                 name = icons.error .. "Trouble",
                 r = { "<cmd>Trouble lsp_references<cr>", "References" },
                 f = { "<cmd>Trouble lsp_definitions<cr>", "Definitions" },

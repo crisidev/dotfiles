@@ -13,6 +13,7 @@ local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {}
 
 -- Additional mappings
+local icons = require("user.icons").icons
 local which_key = require "which-key"
 which_key.register {
     ["f"] = {
