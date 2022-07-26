@@ -173,7 +173,8 @@ M.which_keys = function()
     lvim.builtin.which_key.mappings["c"] = nil
 
     -- Legendary
-    lvim.builtin.which_key.mappings["C"] = { "<cmd>lua require('legendary').find('commands')<cr>", " Command Palette" }
+    lvim.builtin.which_key.mappings["C"] =
+        { "<cmd>lua require('legendary').find('commands')<cr>", " Command Palette" }
 
     -- lvim.builtin.which_key.on_config_done = function(wk)
     --     wk.register(M.n_keys(), { mode = "n" })
@@ -223,7 +224,7 @@ M.normal_insert_visual_keys = function()
         -- Toggle
         ["<C-B>"] = "<cmd>lua _bemol_toggle()<cr>",
         -- Legendary
-        ["<C-P>"] = "<cmd>lua require('legendary').find()<cr>"
+        ["<C-P>"] = "<cmd>lua require('legendary').find()<cr>",
     }
 
     -- INSERT MODE

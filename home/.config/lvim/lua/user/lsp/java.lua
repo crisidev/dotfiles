@@ -9,9 +9,8 @@ M.config = function()
 
     -- Determine OS
     local home = os.getenv "HOME"
-    local launcher_path = vim.fn.glob(
-        home .. "/.local/share/nvim/lsp_servers/jdtls/plugins/org.eclipse.equinox.launcher_*.jar"
-    )
+    local launcher_path =
+        vim.fn.glob(home .. "/.local/share/nvim/lsp_servers/jdtls/plugins/org.eclipse.equinox.launcher_*.jar")
     if #launcher_path == 0 then
         launcher_path = vim.fn.glob(
             home .. "/.local/share/nvim/lsp_servers/jdtls/plugins/org.eclipse.equinox.launcher_*.jar",

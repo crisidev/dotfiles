@@ -13,8 +13,6 @@ M.show_documentation = function()
     end
 end
 
-M.register_grammar_guard = function() end
-
 M.config = function()
     local icons = require("user.icons").icons
     -- Log level

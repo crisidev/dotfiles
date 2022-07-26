@@ -124,7 +124,7 @@ M.config = function()
         },
         -- Lsp Typescript
         {
-            "jose-elias-alvarez/nvim-lsp-ts-utils",
+            "jose-elias-alvarez/typescript.nvim",
             ft = {
                 "javascript",
                 "javascriptreact",
@@ -134,11 +134,11 @@ M.config = function()
                 "typescript.tsx",
             },
             opt = true,
-            event = "BufReadPre",
-            before = "williamboman/nvim-lsp-installer",
+            event = { "BufReadPre", "BufNew" },
             config = function()
                 require("user.lsp.typescript").config()
             end,
+            before = "williamboman/nvim-lsp-installer",
         },
         -- Lsp Cland Extensions
         {
