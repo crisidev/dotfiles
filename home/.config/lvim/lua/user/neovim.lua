@@ -191,7 +191,7 @@ M.config = function()
     vim.o.qftf = "{info -> v:lua._G.qftf(info)}"
 
     -- Session
-    vim.o.sessionoptions = "buffers,curdir,folds,winpos,winsize"
+    vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal"
 end
 
 function _G.qftf(info)

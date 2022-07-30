@@ -65,6 +65,8 @@ M.icons = {
     lock = "",
     presence_on = " ",
     presence_off = " ",
+    right = " ",
+    caret = "-"
 }
 
 M.todo_comments = {

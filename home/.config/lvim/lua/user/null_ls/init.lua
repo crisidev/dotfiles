@@ -56,7 +56,7 @@ M.config = function()
             prefer_local = "node_modules/.bin",
         },
         nls.builtins.diagnostics.shellcheck,
-        nls.builtins.diagnostics.luacheck,
+        -- nls.builtins.diagnostics.luacheck,
         nls.builtins.diagnostics.vint,
         nls.builtins.diagnostics.chktex,
         nls.builtins.diagnostics.markdownlint,

@@ -1,5 +1,6 @@
 local M = {}
 local action_state = require "telescope.actions.state"
+local action_set = require("telescope.actions.set")
 local themes = require "telescope.themes"
 local builtin = require "telescope.builtin"
 local actions = require "telescope.actions"
@@ -42,7 +43,12 @@ function M._multiopen(prompt_bufnr, open_cmd)
     local picker = action_state.get_current_picker(prompt_bufnr)
     local num_selections = table.getn(picker:get_multi_selection())
     local border_contents = picker.prompt_border.contents[1]
-    if not (string.find(border_contents, "Find Files") or string.find(border_contents, "Git Files")) then
+    if not (
+        string.find(border_contents, "Find Files")
+            or string.find(border_contents, "Git Files")
+            or string.find(border_contents, "Sessions")
+        )
+    then
         actions.select_default(prompt_bufnr)
         return
     end
@@ -99,7 +105,7 @@ function M.layout_config()
     return {
         width = 0.90,
         height = 0.4,
-        preview_cutoff = 100,
+        preview_cutoff = 120,
         prompt_position = "bottom",
         horizontal = {
             preview_width = function(_, cols, _)
@@ -261,6 +267,7 @@ M.config = function()
     local icons = require("user.icons").icons
     lvim.builtin.telescope.defaults.dynamic_preview_title = true
     lvim.builtin.telescope.defaults.layout_config = M.layout_config()
+
     lvim.builtin.telescope.defaults.path_display = function(opts, path)
         local function table_lenght(table)
             local count = 0
@@ -298,14 +305,13 @@ M.config = function()
         results = { "─", "▐", "─", "│", "╭", "▐", "▐", "╰" },
         preview = { " ", "│", " ", "▌", "▌", "╮", "╯", "▌" },
     }
-    lvim.builtin.telescope.defaults.selection_caret = "  "
-    lvim.builtin.telescope.defaults.cache_picker = { num_pickers = 3 }
+    lvim.builtin.telescope.defaults.selection_caret = icons.right
+    lvim.builtin.telescope.defaults.cache_picker = { num_pickers = 5 }
     lvim.builtin.telescope.defaults.layout_strategy = "horizontal"
     lvim.builtin.telescope.defaults.color_devicons = true
-    local user_telescope = require "user.telescope"
     lvim.builtin.telescope.defaults.mappings = {
         i = {
-            ["<esc><esc>"] = actions.close,
+            ["<esc>"] = actions.close,
             ["<c-c>"] = actions.close,
             ["<c-y>"] = actions.which_key,
             ["<tab>"] = actions.toggle_selection + actions.move_selection_next,
@@ -313,10 +319,10 @@ M.config = function()
             ["<c-n>"] = actions.cycle_history_next,
             ["<c-p>"] = actions.cycle_history_prev,
             ["<c-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
-            ["<cr>"] = user_telescope.multi_selection_open,
-            ["<c-v>"] = user_telescope.multi_selection_open_vsplit,
-            ["<c-s>"] = user_telescope.multi_selection_open_split,
-            ["<c-t>"] = user_telescope.multi_selection_open_tab,
+            ["<cr>"] = M.multi_selection_open,
+            ["<c-v>"] = M.multi_selection_open_vsplit,
+            ["<c-s>"] = M.multi_selection_open_split,
+            ["<c-t>"] = M.multi_selection_open_tab,
         },
         n = {
             ["<esc>"] = actions.close,
@@ -327,10 +333,10 @@ M.config = function()
             ["<c-n>"] = actions.cycle_history_next,
             ["<c-p>"] = actions.cycle_history_prev,
             ["<c-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
-            ["<cr>"] = user_telescope.multi_selection_open,
-            ["<c-v>"] = user_telescope.multi_selection_open_vsplit,
-            ["<c-s>"] = user_telescope.multi_selection_open_split,
-            ["<c-t>"] = user_telescope.multi_selection_open_tab,
+            ["<cr>"] = M.multi_selection_open,
+            ["<c-v>"] = M.multi_selection_open_vsplit,
+            ["<c-s>"] = M.multi_selection_open_split,
+            ["<c-t>"] = M.multi_selection_open_tab,
         },
     }
 

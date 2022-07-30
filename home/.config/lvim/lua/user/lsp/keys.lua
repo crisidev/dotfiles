@@ -4,10 +4,14 @@ M.config = function()
     local icons = require("user.icons").icons
     local wk = require "which-key"
 
+    -- Hover
+    lvim.lsp.buffer_mappings.normal_mode["K"] = {
+        "<cmd>lua require('user.lsp').show_documentation()<CR>",
+        icons.docs .. "Show Documentation",
+    }
+    lvim.lsp.buffer_mappings.visual_mode["K"] = lvim.lsp.buffer_mappings.normal_mode["K"]
+
     wk.register {
-        -- Hover
-        -- ["K"] = { "<cmd>lua vim.lsp.buf.hover()<cr>", "Show hover" }
-        ["K"] = "<cmd>lua require('user.lsp').show_documentation()<cr>",
         -- Lsp
         ["f"] = {
             -- Code actions popup

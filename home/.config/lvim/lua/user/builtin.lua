@@ -43,7 +43,7 @@ M.config = function()
     -- Telescope max path length
     lvim.builtin.telescope.max_path_length = 5
     -- LSP lines
-    lvim.builtin.lsp_lines = { active = true }
+    lvim.builtin.lsp_lines = { active = false }
 
     -- Dashboard
     lvim.builtin.alpha.active = true

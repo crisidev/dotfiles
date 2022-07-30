@@ -32,9 +32,7 @@
   },
   "derive-serde": {
     "prefix": "derive-serde",
-    "body": [
-      "#[derive(Debug, Clone, Serialize, Deserialize)]"
-    ],
+    "body": ["#[derive(Debug, Clone, Serialize, Deserialize)]"],
     "description": "#[derive(Debug, Clone, Serialize, Deserialize)]"
   },
   "tokio-test": {
@@ -91,5 +89,24 @@
     "prefix": "pyo3-prelude",
     "body": ["use pyo3::prelude::*;"],
     "description": "Add pyo3 prelude"
+  },
+  "fn-self": {
+    "prefix": "fn-self",
+    "body": ["fn ${1}(&self) {", "}"],
+    "description": "Function with &self returning Result"
+  },
+  "fn-self-return": {
+    "prefix": "fn-self-return",
+    "body": [
+        "fn ${1}(&self) -> Result<${2}> {", 
+        "    Ok(${2})",
+        "}"
+    ],
+    "description": "Function with &self"
+  },
+  "fn-mut-self": {
+    "prefix": "fn-mut-self",
+    "body": ["fn ${1}(&mut self) {", "}"],
+    "description": "Function with &mut self"
   }
 }

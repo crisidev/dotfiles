@@ -6,9 +6,11 @@ M.config = function()
         -- Themes and visual stuff.
         ------------------------------------------------------------------------------
         {
-            "folke/tokyonight.nvim",
+            -- "folke/tokyonight.nvim",
+            "abzcoding/tokyonight.nvim",
+            branch = "feat/local",
             config = function()
-                -- require("user.theme").tokyonight()
+                require("user.theme").tokyonight()
                 vim.cmd [[colorscheme tokyonight]]
             end,
         },
@@ -163,7 +165,12 @@ M.config = function()
             event = { "BufRead Cargo.toml" },
             requires = { "nvim-lua/plenary.nvim" },
             config = function()
-                require("crates").setup {}
+                require("crates").setup {
+                    null_ls = {
+                        enabled = true,
+                        name = "crates",
+                    },
+                }
             end,
         },
         -- Scala metals
@@ -301,12 +308,17 @@ M.config = function()
         },
         -- Session manager
         {
-            "olimorris/persisted.nvim",
+            "crisidev/persisted.nvim",
             config = function()
+                local home = os.getenv "HOME"
                 require("persisted").setup {
                     use_git_branch = true,
                     autosave = true,
                     autoload = false,
+                    after_source = function()
+                        -- Reload the LSP servers
+                        vim.lsp.stop_client(vim.lsp.get_active_clients())
+                    end,
                     telescope = {
                         before_source = function()
                             -- Close all open buffers
