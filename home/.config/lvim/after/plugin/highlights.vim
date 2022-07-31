@@ -36,4 +36,5 @@ highlight! link IndentBlanklineIndent3  TSComment
 highlight! link IndentBlanklineIndent4  TSComment
 highlight! link IndentBlanklineIndent5  TSComment
 highlight! link IndentBlanklineIndent6  TSComment
+lua require('user.theme').dashboard_theme()
 lua require('user.theme').telescope_theme()

@@ -1,139 +1,189 @@
 local M = {}
 
 M.config = function()
-    local kind = require("user.cmp").kind
-    local icons = require("user.icons").icons
+	local kind = require("user.cmp").kind
+	local icons = require("user.icons").icons
 
-    local header = {
-        type = "text",
-        val = require("user.banners").dashboard(),
-        opts = {
-            position = "center",
-            hl = "Comment",
-        },
-    }
+	local banner = {
+		[[                                                                   ]],
+		[[      ████ ██████           █████      ██                    ]],
+		[[     ███████████             █████                            ]],
+		[[     █████████ ███████████████████ ███   ███████████  ]],
+		[[    █████████  ███    █████████████ █████ ██████████████  ]],
+		[[   █████████ ██████████ █████████ █████ █████ ████ █████  ]],
+		[[ ███████████ ███    ███ █████████ █████ █████ ████ █████ ]],
+		[[██████  █████████████████████ ████ █████ █████ ████ ██████]],
+	}
 
-    local plugins = ""
-    local date = ""
-    if vim.fn.has "linux" == 1 or vim.fn.has "mac" == 1 then
-        local handle =
-            io.popen 'fd -d 2 . $HOME"/.local/share/lunarvim/site/pack/packer" | grep pack | wc -l | tr -d "\n" '
-        plugins = handle:read "*a"
-        handle:close()
+	-- Make the header a bit more fun with some color!
+	local function colorize_header()
+		local lines = {}
 
-        local thingy = io.popen 'echo "$(date +%a) $(date +%d) $(date +%b)" | tr -d "\n"'
-        date = thingy:read "*a"
-        thingy:close()
-        plugins = plugins:gsub("^%s*(.-)%s*$", "%1")
-    else
-        plugins = "N/A"
-        date = "  whatever "
-    end
+		for i, chars in pairs(banner) do
+			local line = {
+				type = "text",
+				val = chars,
+				opts = {
+					hl = "StartLogo" .. i,
+					shrink_margin = false,
+					position = "center",
+				},
+			}
 
-    local plugin_count = {
-        type = "text",
-        val = "└─ " .. kind.Module .. " " .. plugins .. " plugins in total ─┘",
-        opts = {
-            position = "center",
-            hl = "String",
-        },
-    }
+			table.insert(lines, line)
+		end
 
-    local heading = {
-        type = "text",
-        val = "┌─ " .. icons.calendar .. " Today is " .. date .. " ─┐",
-        opts = {
-            position = "center",
-            hl = "String",
-        },
-    }
+		return lines
+	end
 
-    local fortune = require "alpha.fortune"()
-    -- fortune = fortune:gsub("^%s+", ""):gsub("%s+$", "")
-    local footer = {
-        type = "text",
-        val = fortune,
-        opts = {
-            position = "center",
-            hl = "Comment",
-            hl_shortcut = "Comment",
-        },
-    }
+	local function text(message, hl, pos)
+		if not hl then
+			hl = "String"
+		end
+		if not pos then
+			pos = "center"
+		end
+		return {
+			type = "text",
+			val = message,
+			opts = {
+				position = pos,
+				hl = hl,
+			},
+		}
+	end
 
-    local function button(sc, txt, keybind)
-        local sc_ = sc:gsub("%s", ""):gsub("SPC", "<leader>")
+	local header = {
+		type = "group",
+		val = colorize_header(),
+	}
 
-        local opts = {
-            position = "center",
-            text = txt,
-            shortcut = sc,
-            cursor = 5,
-            width = 30,
-            align_shortcut = "right",
-            hl_shortcut = "Number",
-            hl = "Function",
-        }
-        if keybind then
-            opts.keymap = { "n", sc_, keybind, { noremap = true, silent = true } }
-        end
+	local plugins = ""
+	local sessions = ""
+	local date = ""
+	local version = ""
+	local handle =
+		io.popen('fd -d 2 . $HOME"/.local/share/lunarvim/site/pack/packer" | grep pack | wc -l | tr -d "\n" ')
+	if handle then
+		plugins = handle:read("*a")
+		handle:close()
+		plugins = plugins:gsub("^%s*(.-)%s*$", "%1")
+	end
 
-        return {
-            type = "button",
-            val = txt,
-            on_press = function()
-                local key = vim.api.nvim_replace_termcodes(sc_, true, false, true)
-                vim.api.nvim_feedkeys(key, "normal", false)
-            end,
-            opts = opts,
-        }
-    end
+	local handle = io.popen('echo "$(date +%a) $(date +%d) $(date +%b)" | tr -d "\n"')
+	if handle then
+		date = handle:read("*a")
+		handle:close()
+	end
 
-    local buttons = {
-        type = "group",
-        val = {
-            button("r", " " .. icons.clock .. " Recent files", ":lua require('user.telescope').recent_files()<cr>"),
-            button("l", " " .. icons.magic .. " Last session", ":SessionLoadLast<cr>"),
-            button("S", " " .. icons.session .. " Sessions", ":lua require('user.telescope').persisted()<cr>"),
-            button("z", " " .. icons.folder .. "  Zoxide", ":lua require('user.telescope').zoxide()<cr>"),
-            button("f", " " .. kind.File .. " Find file", ":lua require('user.telescope').find_files()<cr>"),
-            button("s", " " .. icons.text .. "  Find word", ":lua require('user.telescope').find_string()<cr>"),
-            button("n", " " .. icons.stuka .. " New file", ":ene <BAR> startinsert <cr>"),
-            button("b", " " .. icons.files .. " File browswer", ":lua require('user.telescope').file_browser()<cr>"),
-            button("p", " " .. icons.project .. " Projects", ":lua require('user.telescope').projects()<cr>"),
-            button("q", " " .. icons.exit .. " Quit", ":SmartQ<cr>"),
-        },
-        opts = {
-            spacing = 1,
-        },
-    }
+	local handle = io.popen('fd -d 1 . $HOME"/.local/share/nvim/sessions" | wc -l | tr -d "\n" ')
+	if handle then
+		sessions = handle:read("*a")
+		handle:close()
+	end
 
-    local section = {
-        header = header,
-        buttons = buttons,
-        plugin_count = plugin_count,
-        heading = heading,
-        footer = footer,
-    }
+	local handle = io.popen('vim --version | head -n 1 | tr -d "\n"')
+	if handle then
+		version = handle:read("*a")
+		handle:close()
+	end
 
-    local opts = {
-        layout = {
-            { type = "padding", val = 1 },
-            section.header,
-            { type = "padding", val = 2 },
-            section.heading,
-            section.plugin_count,
-            { type = "padding", val = 1 },
-            -- section.top_bar,
-            section.buttons,
-            -- section.bot_bar,
-            -- { type = "padding", val = 1 },
-            section.footer,
-        },
-        opts = {
-            margin = 5,
-        },
-    }
-    return opts
+	local version = text(version, "Function")
+	local date = text("┌─ " .. icons.calendar .. "Today is " .. date .. " ─┐")
+	local plugin_count = text("❙  " .. kind.Module .. " " .. plugins .. " plugins in total  ❙")
+	local session_count = text("└─ " .. icons.session .. " " .. sessions .. " neovim sessions  ─┘")
+
+	local fortune = require("alpha.fortune")()
+	-- fortune = fortune:gsub("^%s+", ""):gsub("%s+$", "")
+	local footer = {
+		type = "text",
+		val = fortune,
+		opts = {
+			position = "center",
+			hl = "Comment",
+			hl_shortcut = "Comment",
+		},
+	}
+
+	local function button(sc, txt, keybind)
+		local sc_ = sc:gsub("%s", ""):gsub("SPC", "<leader>")
+
+		local opts = {
+			position = "center",
+			text = txt,
+			shortcut = sc,
+			cursor = 5,
+			width = 50,
+			align_shortcut = "right",
+			hl_shortcut = "Number",
+			hl = "Function",
+		}
+		if keybind then
+			opts.keymap = { "n", sc_, keybind, { noremap = true, silent = true } }
+		end
+
+		return {
+			type = "button",
+			val = txt,
+			on_press = function()
+				local key = vim.api.nvim_replace_termcodes(sc_, true, false, true)
+				vim.api.nvim_feedkeys(key, "normal", false)
+			end,
+			opts = opts,
+		}
+	end
+
+	local buttons = {
+		type = "group",
+		val = {
+			button("r", " " .. icons.clock .. " Recent files", ":lua require('user.telescope').recent_files()<cr>"),
+			button("l", " " .. icons.magic .. " Last session", ":SessionLoadLast<cr>"),
+			button("S", " " .. icons.session .. " Sessions", ":lua require('user.telescope').persisted()<cr>"),
+			button("z", " " .. icons.folder .. "  Zoxide", ":lua require('user.telescope').zoxide()<cr>"),
+			button("f", " " .. kind.File .. " Find file", ":lua require('user.telescope').find_files()<cr>"),
+			button("s", " " .. icons.text .. "  Find word", ":lua require('user.telescope').find_string()<cr>"),
+			button("n", " " .. icons.stuka .. " New file", ":ene <BAR> startinsert <cr>"),
+			button("b", " " .. icons.files .. " File browswer", ":lua require('user.telescope').file_browser()<cr>"),
+			button("p", " " .. icons.project .. " Projects", ":lua require('user.telescope').projects()<cr>"),
+			button("q", " " .. icons.exit .. " Quit", ":SmartQ<cr>"),
+		},
+		opts = {
+			spacing = 1,
+		},
+	}
+
+	local section = {
+		header = header,
+		version = version,
+		date = date,
+		plugin_count = plugin_count,
+		session_count = session_count,
+		buttons = buttons,
+		footer = footer,
+	}
+
+	local opts = {
+		layout = {
+			{ type = "padding", val = 1 },
+			section.header,
+			{ type = "padding", val = 2 },
+			section.version,
+			{ type = "padding", val = 1 },
+			section.date,
+			section.plugin_count,
+			section.session_count,
+			-- section.top_bar,
+			{ type = "padding", val = 2 },
+			section.buttons,
+			-- section.bot_bar,
+			{ type = "padding", val = 1 },
+			section.footer,
+		},
+		opts = {
+			margin = 5,
+		},
+	}
+	return opts
 end
 
 return M
