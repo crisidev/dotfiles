@@ -10,7 +10,7 @@ M.config = function()
         end,
         settings = {
             ltex = {
-                checkFrequency = "edit",
+                checkFrequency = "save",
                 enabled = { "latex", "tex", "bib", "markdown", "rst", "text" },
                 language = "en",
                 diagnosticSeverity = "information",
