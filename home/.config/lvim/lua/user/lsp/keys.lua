@@ -1,8 +1,37 @@
 local M = {}
 
-M.config = function()
-    local icons = require("user.icons").icons
-    local wk = require "which-key"
+local icons = require("user.icons").icons
+local wk = require "which-key"
+
+M.comments_keys = function()
+    -- NORMAL mode mappings
+    vim.keymap.set("n", "fc", "<Plug>(comment_toggle_linewise)")
+    vim.keymap.set(
+        "n",
+        "fcc",
+        "v:count == 0 ? '<Plug>(comment_toggle_current_linewise)' : '<Plug>(comment_toggle_linewise_count)'",
+        { expr = true, remap = true }
+    )
+    vim.keymap.set("n", "fb", "<Plug>(comment_toggle_blockwise)")
+    vim.keymap.set(
+        "n",
+        "fbc",
+        "v:count == 0 ? '<Plug>(comment_toggle_current_blockwise)' : '<Plug>(comment_toggle_blockwise_count)'",
+        { expr = true, remap = true }
+    )
+
+    -- Above, below, eol
+    vim.keymap.set("n", "fco", '<cmd>lua require("Comment.api").locked.insert_linewise_below()<cr>')
+    vim.keymap.set("n", "fcO", '<cmd>lua require("Comment.api").locked.insert_linewise_above()<cr>')
+    vim.keymap.set("n", "fcA", '<cmd>lua require("Comment.api").locked.insert_linewise_eol()<cr>')
+
+    -- VISUAL mode mappings
+    vim.keymap.set("x", "fc", "<Plug>(comment_toggle_linewise_visual)")
+    vim.keymap.set("x", "fb", "<Plug>(comment_toggle_blockwise_visual)")
+end
+
+M.lsp_normal_keys = function ()
+    
 
     -- Hover
     lvim.lsp.buffer_mappings.normal_mode["K"] = {
@@ -14,6 +43,7 @@ M.config = function()
     wk.register {
         -- Lsp
         ["f"] = {
+            name = icons.codelens .. "Lsp actions",
             -- Code actions popup
             A = {
                 "<cmd>lua vim.lsp.codelens.run()<cr>",
@@ -75,7 +105,7 @@ M.config = function()
             -- Rename
             R = {
                 "<cmd>lua vim.lsp.buf.rename()<cr>",
-                icons.palette .. "Rename symbol",
+                icons.magic .. "Rename symbol",
             },
             -- Peek
             P = {
@@ -83,10 +113,6 @@ M.config = function()
                 icons.find .. " Peek definition",
             },
             -- Refactoring
-            x = {
-                "<cmd>lua require('refactoring').select_refactor()<cr>",
-                icons.palette .. "Open refactoring",
-            },
             X = {
                 name = icons.palette .. "Refactoring",
                 f = { "<cmd>lua require('refactoring').refactor('Extract Function')<cr>", "Extract function" },
@@ -130,6 +156,49 @@ M.config = function()
             },
         }
     end
+end
+
+M.lsp_visual_keys = function ()
+    
+
+    -- Visual
+    wk.register({
+        ["f"] = {
+            name = icons.codelens .. "Lsp actions",
+            -- Refactoring
+            X = {
+                name = icons.palette .. "Refactoring",
+                f = { "<cmd>lua require('refactoring').refactor('Extract Function')<cr>", "Extract function" },
+                F = {
+                    "<cmd>lua require('refactoring').refactor('Extract Function To File')<cr>",
+                    "Extract function to file",
+                },
+                v = { "<cmd>lua require('refactoring').refactor('Extract Variable')<cr>", "Extract variable" },
+                i = { "<cmd>lua require('refactoring').refactor('Inline Variable')<cr>", "Inline variable" },
+                b = { "<cmd>lua require('refactoring').refactor('Extract Block')<cr>", "Extract block" },
+                B = {
+                    "<cmd>lua require('refactoring').refactor('Extract Block To File')<cr>",
+                    "Extract block to file",
+                },
+            },
+            -- Rename
+            R = {
+                "<cmd>lua vim.lsp.buf.rename()<cr>",
+                icons.magic .. "Rename symbol",
+            },
+            -- Range code actions
+            a = {
+                "<cmd>lua vim.lsp.buf.range_code_action()<cr>",
+                icons.code_lens_action .. " Code actions",
+            },
+        },
+    }, { mode = "v" })
+end
+
+M.config = function ()
+    M.comments_keys()
+    M.lsp_normal_keys()
+    M.lsp_visual_keys()
 end
 
 return M

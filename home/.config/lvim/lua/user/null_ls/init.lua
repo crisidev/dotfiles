@@ -56,7 +56,6 @@ M.config = function()
             prefer_local = "node_modules/.bin",
         },
         nls.builtins.diagnostics.shellcheck,
-        -- nls.builtins.diagnostics.luacheck,
         nls.builtins.diagnostics.vint,
         nls.builtins.diagnostics.chktex,
         nls.builtins.diagnostics.markdownlint,
@@ -72,6 +71,8 @@ M.config = function()
                 return utils.root_has_file ".golangci.yml"
             end,
         },
+        -- nls.builtins.diagnostics.luacheck,
+        -- nls.builtins.diagnostics.flake8,
         -- Code actions
         nls.builtins.code_actions.shellcheck,
         nls.builtins.code_actions.eslint_d.with {

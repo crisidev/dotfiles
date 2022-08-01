@@ -92,6 +92,14 @@ M.config = function()
         { "nvim-telescope/telescope-file-browser.nvim" },
         -- Telescope live grep
         { "nvim-telescope/telescope-live-grep-args.nvim" },
+        {
+            "sudormrfbin/cheatsheet.nvim",
+            requires = {
+                { "nvim-telescope/telescope.nvim" },
+                { "nvim-lua/popup.nvim" },
+                { "nvim-lua/plenary.nvim" },
+            },
+        },
         ------------------------------------------------------------------------------
         -- LSP extensions.
         ------------------------------------------------------------------------------

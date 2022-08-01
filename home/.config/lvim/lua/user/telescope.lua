@@ -94,11 +94,6 @@ M.get_theme = function(opts)
     end
     opts["layout_config"] = M.layout_config()
     opts["sorting_strategy"] = "descending"
-    opts["borderchars"] = {
-        prompt = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
-        results = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
-        preview = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
-    }
     return themes.get_ivy(opts)
 end
 
@@ -131,8 +126,7 @@ M.find_string = function()
     local opts = {
         hidden = true,
     }
-    -- builtin.live_grep(M.get_theme(opts))
-    require("telescope").extensions.live_grep_args.live_grep_args(M.get_theme(opts))
+    builtin.live_grep(M.get_theme(opts))
 end
 
 -- another file string search
@@ -235,19 +229,18 @@ M.git_files = function()
     builtin.git_files(M.get_theme(opts))
 end
 
-M.grep_string_visual = function()
+M.find_string_visual = function()
     local visual_selection = function()
         local save_previous = vim.fn.getreg "a"
         vim.api.nvim_command 'silent! normal! "ay'
         local selection = vim.fn.trim(vim.fn.getreg "a")
         vim.fn.setreg("a", save_previous)
-        return vim.fn.substitute(selection, [[\n]], [[\\n]], "g")
+        local ret = vim.fn.substitute(selection, [[\n]], [[\\n]], "g")
+        return ret
     end
-    builtin.live_grep {
-        M.get_theme {
-            default_text = visual_selection(),
-        },
-    }
+    local opts = M.get_theme()
+    opts["default_text"] = visual_selection()
+    builtin.live_grep(opts)
 end
 
 M.buffers = function()
@@ -304,15 +297,10 @@ M.config = function()
     lvim.builtin.telescope.defaults.path_display = M.path_display()
     lvim.builtin.telescope.defaults.prompt_prefix = icons.term .. " "
     lvim.builtin.telescope.defaults.borderchars = {
-        prompt = { "─", "", "─", "", "", "", "", "" },
-        results = { "─", "", "─", "", "", "", "", "" },
-        preview = { "─", "", "─", "", "", "", "", "" },
+        prompt = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
+        results = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
+        preview = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
     }
-    -- lvim.builtin.telescope.defaults.borderchars = {
-    --     prompt = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
-    --     results = { "─", "▐", "─", "│", "╭", "▐", "▐", "╰" },
-    --     preview = { " ", "│", " ", "▌", "▌", "╮", "╯", "▌" },
-    -- }
     lvim.builtin.telescope.defaults.selection_caret = icons.right
     lvim.builtin.telescope.defaults.cache_picker = { num_pickers = 5 }
     lvim.builtin.telescope.defaults.layout_strategy = "horizontal"
@@ -355,7 +343,6 @@ M.config = function()
         telescope.load_extension "zoxide"
         telescope.load_extension "repo"
         telescope.load_extension "file_browser"
-        telescope.load_extension "live_grep_args"
         telescope.load_extension "persisted"
     end
 end

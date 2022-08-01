@@ -68,6 +68,7 @@ M.icons = {
     right = " ",
     caret = "-",
     flash = " ",
+    world = " "
 }
 
 M.todo_comments = {

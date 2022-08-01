@@ -40,7 +40,7 @@ M.config = function()
     }
 
     hlslens.setup(opts)
-    require("user.keys").set_hlslens_keymaps()
+    require("user.keys").hlslens_keys()
 end
 
 return M

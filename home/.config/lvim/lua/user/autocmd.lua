@@ -17,7 +17,7 @@ M.config = function()
     vim.api.nvim_create_autocmd("TermOpen", {
         group = "_lvim_user",
         pattern = "term://*",
-        command = "lua require('user.keys').set_terminal_keymaps()",
+        command = "lua require('user.keys').terminal_keys()",
     })
 
     -- Smithy filetype

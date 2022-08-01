@@ -1,6 +1,14 @@
 local M = {}
 
-M.which_keys = function()
+local ok, term = pcall(require, "toggleterm.terminal")
+if ok then
+    local t = term.Terminal:new { cmd = "bemol --watch", size = 10, hidden = true, direction = "horizontal" }
+    function _bemol_toggle()
+        t:toggle()
+    end
+end
+
+M.which_keys_normal = function()
     local icons = require("user.icons").icons
     local ok, term = pcall(require, "toggleterm.terminal")
     if ok then
@@ -134,7 +142,7 @@ M.which_keys = function()
     }
 
     -- Nvimtree
-    lvim.builtin.which_key.mappings["e"] = { "<cmd>NvimTreeToggle<cr>", icons.docs .. "Explorer" }
+    lvim.builtin.which_key.mappings["e"] = { "<cmd>NvimTreeToggle<cr>", icons.world .. "Explorer" }
 
     -- Save
     lvim.builtin.which_key.mappings["w"] = { "<cmd>w!<cr>", icons.ok .. " Save buffer" }
@@ -165,29 +173,44 @@ M.which_keys = function()
     lvim.builtin.which_key.mappings["L"]["name"] = icons.moon .. " Lunarvim"
     lvim.builtin.which_key.mappings["p"]["name"] = icons.package .. " Packer"
 
-    -- Disable
-    lvim.builtin.which_key.mappings["h"] = nil
-    lvim.builtin.which_key.mappings["l"] = nil
-    lvim.builtin.which_key.mappings["n"] = nil
-    lvim.builtin.which_key.mappings["c"] = nil
-
     -- Legendary
     lvim.builtin.which_key.mappings["C"] = {
         "<cmd>lua require('legendary').find('commands')<cr>",
         icons.palette .. "Legendary",
     }
+
+    -- Disable
+    lvim.builtin.which_key.mappings["h"] = nil
+    lvim.builtin.which_key.mappings["l"] = nil
+    lvim.builtin.which_key.mappings["n"] = nil
+    lvim.builtin.which_key.mappings["c"] = nil
 end
 
-M.normal_insert_visual_keys = function()
-    local ok, term = pcall(require, "toggleterm.terminal")
-    if ok then
-        local t = term.Terminal:new { cmd = "bemol --watch", size = 10, hidden = true, direction = "horizontal" }
-        function _bemol_toggle()
-            t:toggle()
-        end
-    end
+M.which_keys_visual = function()
+    local icons = require("user.icons").icons
 
-    -- NORMAL MODE
+    lvim.builtin.which_key.vmappings["g"] = {
+        name = " Git",
+        l = {
+            "<cmd>lua require('gitlinker').get_buf_range_url('n', {action_callback = require('gitlinker.actions').copy_to_clipboard})<cr>",
+            "Copy line",
+            silent = false,
+        },
+        L = {
+            "<cmd>lua require('gitlinker').get_buf_range_url('n', {action_callback = require('gitlinker.actions').open_in_browser})<cr>",
+            "Open line in browser",
+            silent = true,
+        },
+    }
+    -- String search
+    lvim.builtin.which_key.vmappings["s"] = {
+        "<cmd>lua require('user.telescope').find_string_visual()<cr>",
+        icons.find .. " Find string",
+    }
+end
+
+-- NORMAL MODE
+M.normal_keys = function()
     lvim.keys.normal_mode = {
         -- Buffers
         ["<F1>"] = "<cmd>BufferLineCyclePrev<cr>",
@@ -223,8 +246,10 @@ M.normal_insert_visual_keys = function()
         -- Legendary
         ["<C-P>"] = "<cmd>lua require('legendary').find()<cr>",
     }
+end
 
-    -- INSERT MODE
+-- INSERT MODE
+M.insert_keys = function()
     lvim.keys.insert_mode = {
         -- Buffers
         ["<F1>"] = "<esc><cmd>BufferLineCyclePrev<cr>",
@@ -232,16 +257,16 @@ M.normal_insert_visual_keys = function()
         ["<A-S-Left>"] = "<cmd>BufferLineMovePrev<cr>",
         ["<A-S-Right>"] = "<cmd>BufferLineMoveNext<cr>",
         -- Toggle tree
-        ["<F3>"] = "<cmd>NvimTreeToggle<cr>",
-        ["<S-F3>"] = "<cmd>NvimTreeRefresh<cr>",
+        ["<F3>"] = "<esc><cmd>NvimTreeToggle<cr>",
+        ["<S-F3>"] = "<esc><cmd>NvimTreeRefresh<cr>",
         -- Toggle sidebar
-        ["<F4>"] = "<cmd>SidebarNvimToggle<cr>",
+        ["<F4>"] = "<esc><cmd>SidebarNvimToggle<cr>",
         -- Toggle mouse
-        ["<F5>"] = "<cmd>MouseToggle<cr>",
+        ["<F5>"] = "<esc><cmd>MouseToggle<cr>",
         -- Yank current path
-        ["<F6>"] = '<cmd>let @+ = expand("%:p")<cr>',
+        ["<F6>"] = '<esc><cmd>let @+ = expand("%:p")<cr>',
         -- Symbols vista
-        ["<F10>"] = "<cmd>Vista!!<cr>",
+        ["<F10>"] = "<esc><cmd>Vista!!<cr>",
         -- Windows navigation
         ["<A-Up>"] = "<cmd>wincmd k<cr>",
         ["<A-Down>"] = "<cmd>wincmd j<cr>",
@@ -254,8 +279,10 @@ M.normal_insert_visual_keys = function()
         -- Toggle
         ["<C-B>"] = "<cmd>lua _bemol_toggle()<cr>",
     }
+end
 
-    -- VISUAL MODE
+-- VISUAL MODE
+M.visual_keys = function()
     lvim.keys.visual_mode = {
         -- Yank with Ctrl-c
         ["<C-c>"] = '"+yi',
@@ -263,16 +290,10 @@ M.normal_insert_visual_keys = function()
         ["<C-x>"] = '"+c',
         -- Paste with Ctrl-v
         ["<C-v>"] = 'c<Esc>"+p',
-        -- Gitlinker
-        ["<leader>gl"] = "<cmd>lua require('gitlinker').get_buf_range_url('v', {action_callback = require('gitlinker.actions').copy_to_clipboard})<cr>",
-        ["<leader>gL"] = "<cmd>lua require('gitlinker').get_buf_range_url('v', {action_callback = require('gitlinker.actions').open_in_browser})<cr>",
-        ["<leader>gd"] = nil,
-        -- Range code actions
-        ["ga"] = "<esc><cmd>lua vim.lsp.buf.range_code_action()<cr>",
     }
 end
 
-M.set_hlslens_keymaps = function()
+M.hlslens_keys = function()
     local opts = { noremap = true, silent = true }
     vim.api.nvim_set_keymap(
         "n",
@@ -290,7 +311,7 @@ M.set_hlslens_keymaps = function()
     vim.api.nvim_set_keymap("n", "#", "#<Cmd>lua require('hlslens').start()<CR>", opts)
 end
 
-M.set_terminal_keymaps = function()
+M.terminal_keys = function()
     local opts = { noremap = true }
     vim.api.nvim_buf_set_keymap(0, "t", "<esc>", [[<C-\><C-n>]], opts)
     vim.api.nvim_buf_set_keymap(0, "t", "<C-h>", [[<C-\><C-n><C-W>h]], opts)
@@ -307,11 +328,14 @@ M.config = function()
         separator = "·", -- symbol used between a key and it's label
         group = "", -- symbol prepended to a group
     }
-    lvim.builtin.which_key.setup.triggers = { "<leader>", "f", "g", "z", "]", "[" }
+    lvim.builtin.which_key.setup.triggers = { "<leader>", "f", "z", "]", "[" }
     lvim.builtin.which_key.setup.ignore_missing = false
 
-    M.normal_insert_visual_keys()
-    M.which_keys()
+    M.normal_keys()
+    M.insert_keys()
+    M.visual_keys()
+    M.which_keys_normal()
+    M.which_keys_visual()
 end
 
 return M
