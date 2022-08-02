@@ -68,7 +68,9 @@ M.icons = {
     right = " ",
     caret = "-",
     flash = " ",
-    world = " "
+    world = " ",
+    label = " ",
+    person = "",
 }
 
 M.todo_comments = {

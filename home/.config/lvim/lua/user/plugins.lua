@@ -47,7 +47,7 @@ M.config = function()
         {
             "pwntester/octo.nvim",
             config = function()
-                require("octo").setup()
+                require("user.octo").config()
             end,
             event = "BufRead",
         },

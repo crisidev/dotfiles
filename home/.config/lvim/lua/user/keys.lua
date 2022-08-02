@@ -328,7 +328,7 @@ M.config = function()
         separator = "·", -- symbol used between a key and it's label
         group = "", -- symbol prepended to a group
     }
-    lvim.builtin.which_key.setup.triggers = { "<leader>", "f", "z", "]", "[" }
+    lvim.builtin.which_key.setup.triggers = { "<leader>", "<space>", "f", "z", "]", "[" }
     lvim.builtin.which_key.setup.ignore_missing = false
 
     M.normal_keys()
