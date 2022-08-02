@@ -113,7 +113,7 @@ function light {
 }
 
 function lsfunc {
-    exa $* || /bin/ls -G $*
+    lsd --icon never $*
 }
 
 function G {
