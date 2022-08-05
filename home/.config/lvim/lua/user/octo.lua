@@ -203,31 +203,31 @@ M.config = function()
             e = {
                 name = icons.magic .. "Reactions",
                 u = {
-                    "<cmd>Octo reaction thumbs_up",
+                    "<cmd>Octo reaction thumbs_up<cr>",
                     "Add +1 reaction",
                 },
                 d = {
-                    "<cmd>Octo reaction thumbs_down",
+                    "<cmd>Octo reaction thumbs_down<cr>",
                     "Add -1 reaction",
                 },
                 l = {
-                    "<cmd>Octo reaction laugh",
+                    "<cmd>Octo reaction laugh<cr>",
                     "Add laugh reaction",
                 },
                 c = {
-                    "<cmd>Octo reaction confused",
+                    "<cmd>Octo reaction confused<cr>",
                     "Add confused reaction",
                 },
                 r = {
-                    "<cmd>Octo reaction rocket",
+                    "<cmd>Octo reaction rocket<cr>",
                     "Add rocket reaction",
                 },
                 h = {
-                    "<cmd>Octo reaction heart",
+                    "<cmd>Octo reaction heart<cr>",
                     "Add heart reaction",
                 },
                 t = {
-                    "<cmd>Octo reaction tada",
+                    "<cmd>Octo reaction tada<cr>",
                     "Add party reaction",
                 },
             },

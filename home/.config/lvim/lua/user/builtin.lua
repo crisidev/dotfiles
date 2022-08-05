@@ -42,8 +42,6 @@ M.config = function()
     lvim.builtin.copilot = { active = true }
     -- Telescope max path length
     lvim.builtin.telescope.max_path_length = 5
-    -- LSP lines
-    lvim.builtin.lsp_lines = { active = false }
     -- LSP Signature help
     lvim.builtin.lsp_signature_help = { active = false }
     -- Twilight
@@ -80,24 +78,11 @@ M.config = function()
         ]]
     end
 
+    -- Register current position handler.
+    require("user.scrollbar").register_current_position_handler()
+
     -- Log level
     lvim.log.level = "warn"
-end
-
--- Utility
-function M.dump(o)
-    if type(o) == "table" then
-        local s = "{ "
-        for k, v in pairs(o) do
-            if type(k) ~= "number" then
-                k = '"' .. k .. '"'
-            end
-            s = s .. "[" .. k .. "] = " .. M.dump(v) .. ","
-        end
-        return s .. "} "
-    else
-        return tostring(o)
-    end
 end
 
 return M

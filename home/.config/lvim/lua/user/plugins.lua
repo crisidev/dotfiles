@@ -165,7 +165,6 @@ M.config = function()
                 require("lsp_lines").setup()
             end,
             event = "BufRead",
-            disable = not lvim.builtin.lsp_lines.active,
         },
         -- Crates cmp
         {
@@ -500,6 +499,13 @@ M.config = function()
             "mrjones2014/legendary.nvim",
             config = function()
                 require("user.legendary").config()
+            end,
+        },
+        -- Scrollbar
+        {
+            "petertriho/nvim-scrollbar",
+            config = function()
+                require("user.scrollbar").config()
             end,
         },
     }

@@ -4,20 +4,21 @@ local icons = require("user.icons").icons
 local wk = require "which-key"
 
 M.comments_keys = function()
+    local opts = { expr = true, remap = true, replace_keycodes = false }
     -- NORMAL mode mappings
     vim.keymap.set("n", "fc", "<Plug>(comment_toggle_linewise)")
     vim.keymap.set(
         "n",
         "fcc",
         "v:count == 0 ? '<Plug>(comment_toggle_current_linewise)' : '<Plug>(comment_toggle_linewise_count)'",
-        { expr = true, remap = true }
+        opts
     )
     vim.keymap.set("n", "fb", "<Plug>(comment_toggle_blockwise)")
     vim.keymap.set(
         "n",
         "fbc",
         "v:count == 0 ? '<Plug>(comment_toggle_current_blockwise)' : '<Plug>(comment_toggle_blockwise_count)'",
-        { expr = true, remap = true }
+        opts
     )
 
     -- Above, below, eol
@@ -30,9 +31,7 @@ M.comments_keys = function()
     vim.keymap.set("x", "fb", "<Plug>(comment_toggle_blockwise_visual)")
 end
 
-M.lsp_normal_keys = function ()
-    
-
+M.lsp_normal_keys = function()
     -- Hover
     lvim.lsp.buffer_mappings.normal_mode["K"] = {
         "<cmd>lua require('user.lsp').show_documentation()<CR>",
@@ -84,6 +83,10 @@ M.lsp_normal_keys = function ()
             l = {
                 "<cmd>lua vim.diagnostic.open_float()<cr>",
                 icons.hint .. "Show line diagnostics",
+            },
+            L = {
+                "<cmd>lua require('lsp_lines').toggle()<cr>",
+                icons.hint .. "Toggle LSP lines",
             },
             e = {
                 "<cmd>lua require('user.telescope').diagnostics()<cr>",
@@ -158,9 +161,7 @@ M.lsp_normal_keys = function ()
     end
 end
 
-M.lsp_visual_keys = function ()
-    
-
+M.lsp_visual_keys = function()
     -- Visual
     wk.register({
         ["f"] = {
@@ -195,7 +196,7 @@ M.lsp_visual_keys = function ()
     }, { mode = "v" })
 end
 
-M.config = function ()
+M.config = function()
     M.comments_keys()
     M.lsp_normal_keys()
     M.lsp_visual_keys()

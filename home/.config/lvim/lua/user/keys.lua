@@ -220,8 +220,6 @@ M.normal_keys = function()
         -- Toggle tree
         ["<F3>"] = "<cmd>NvimTreeToggle<cr>",
         ["<S-F3>"] = "<cmd>NvimTreeRefresh<cr>",
-        -- Toggle mouse
-        ["<F4>"] = "<cmd>SidebarNvimToggle<cr>",
         -- Toggle sidebar
         ["<F5>"] = "<cmd>MouseToggle<cr>",
         -- Yank current path
@@ -246,6 +244,11 @@ M.normal_keys = function()
         -- Legendary
         ["<C-P>"] = "<cmd>lua require('legendary').find()<cr>",
     }
+
+    -- Toggle sidebar
+    if lvim.builtin.sidebar.active then
+        lvim.keys.normal_mode["<F4>"] = "<cmd>SidebarNvimToggle<cr>"
+    end
 end
 
 -- INSERT MODE
@@ -259,8 +262,6 @@ M.insert_keys = function()
         -- Toggle tree
         ["<F3>"] = "<esc><cmd>NvimTreeToggle<cr>",
         ["<S-F3>"] = "<esc><cmd>NvimTreeRefresh<cr>",
-        -- Toggle sidebar
-        ["<F4>"] = "<esc><cmd>SidebarNvimToggle<cr>",
         -- Toggle mouse
         ["<F5>"] = "<esc><cmd>MouseToggle<cr>",
         -- Yank current path
@@ -279,6 +280,11 @@ M.insert_keys = function()
         -- Toggle
         ["<C-B>"] = "<cmd>lua _bemol_toggle()<cr>",
     }
+
+    -- Toggle sidebar
+    if lvim.builtin.sidebar.active then
+        lvim.keys.insert_mode["<F4>"] = "<esc><cmd>SidebarNvimToggle<cr>"
+    end
 end
 
 -- VISUAL MODE

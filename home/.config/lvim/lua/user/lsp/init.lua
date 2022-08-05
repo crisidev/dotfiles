@@ -16,7 +16,7 @@ end
 M.config = function()
     local icons = require("user.icons").icons
     -- Log level
-    vim.lsp.set_log_level "info"
+    vim.lsp.set_log_level "warn"
 
     --
     vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, {
@@ -38,6 +38,8 @@ M.config = function()
 
     -- Disable inline diagnostics
     lvim.lsp.diagnostics.virtual_text = false
+    -- LSP lines
+    vim.diagnostic.config({ virtual_lines = false })
 
     -- Setup diagnostics icons
     lvim.lsp.diagnostics.signs.values = {

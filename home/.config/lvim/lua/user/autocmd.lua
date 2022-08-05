@@ -47,6 +47,12 @@ M.config = function()
         pattern = "*",
         command = "set nofoldenable foldmethod=manual foldlevelstart=99",
     })
+
+    vim.api.nvim_create_autocmd("CmdlineLeave", {
+        group = "_lvim_user",
+        pattern = "*",
+        command = "lua require('scrollbar.handlers.search').handler.hide()",
+    })
 end
 
 return M

@@ -37,6 +37,9 @@ M.config = function()
             end
             render.set_virt(0, lnum - 1, col - 1, chunks, nearest)
         end,
+        build_position_cb = function(plist, _, _, _)
+            require("scrollbar.handlers.search").handler.show(plist.start_pos)
+        end,
     }
 
     hlslens.setup(opts)
