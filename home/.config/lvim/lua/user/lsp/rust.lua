@@ -16,7 +16,7 @@ M.config = function()
             hover_with_actions = false,
             executor = require("rust-tools/executors").termopen, -- can be quickfix or termopen
             inlay_hints = {
-                only_current_line = false,
+                only_current_line = true,
                 only_current_line_autocmd = "CursorHold",
                 show_variable_name = true,
                 show_parameter_hints = false,
@@ -49,9 +49,9 @@ M.config = function()
             standalone = true,
         },
     }
-    local extension_path = vim.env.HOME .. "/.vscode/extensions/vadimcn.vscode-lldb-1.6.7/"
+    local extension_path = vim.env.HOME .. "/.vscode/extensions/vadimcn.vscode-lldb-1.7.3/"
     local codelldb_path = extension_path .. "adapter/codelldb"
-    local liblldb_path = extension_path .. "lldb/lib/liblldb.dylib"
+    local liblldb_path = extension_path .. "lldb/lib/liblldb.so"
 
     opts.dap = {
         adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),

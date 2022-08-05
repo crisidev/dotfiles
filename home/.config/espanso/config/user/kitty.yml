@@ -2,4 +2,5 @@ filter_class: "kitty"
 # paste_shortcut: "SHIFT+INSERT"
 # apply_patch: true
 enable: false
+# fast_inject: false
 # backspace_delay: 30000

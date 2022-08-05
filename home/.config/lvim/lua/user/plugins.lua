@@ -122,6 +122,7 @@ M.config = function()
         -- Lsp Rust
         {
             "simrat39/rust-tools.nvim",
+            branch = "modularize_and_inlay_rewrite",
             ft = { "rust", "rs" },
             config = function()
                 require("user.lsp.rust").config()
@@ -507,6 +508,7 @@ M.config = function()
             config = function()
                 require("user.scrollbar").config()
             end,
+            after = { "nvim-hlslens" },
         },
     }
 end

@@ -34,6 +34,7 @@ M.config = function()
         command = "lua require('user.copilot').disable()",
     })
 
+    -- Disable undo for certain files
     vim.api.nvim_create_autocmd("BufWritePre", {
         group = "_lvim_user",
         pattern = { "/tmp/*", "COMMIT_EDITMSG", "MERGE_MSG", "*.tmp", "*.bak" },
@@ -42,12 +43,14 @@ M.config = function()
         end,
     })
 
+    -- Disable folding
     vim.api.nvim_create_autocmd("BufWritePost,BufEnter", {
         group = "_lvim_user",
         pattern = "*",
         command = "set nofoldenable foldmethod=manual foldlevelstart=99",
     })
 
+    -- Allow hlslense in scrollbar
     vim.api.nvim_create_autocmd("CmdlineLeave", {
         group = "_lvim_user",
         pattern = "*",
