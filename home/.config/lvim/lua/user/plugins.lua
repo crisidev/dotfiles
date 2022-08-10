@@ -122,7 +122,6 @@ M.config = function()
         -- Lsp Rust
         {
             "simrat39/rust-tools.nvim",
-            branch = "modularize_and_inlay_rewrite",
             ft = { "rust", "rs" },
             config = function()
                 require("user.lsp.rust").config()
@@ -149,7 +148,6 @@ M.config = function()
             config = function()
                 require("user.lsp.typescript").config()
             end,
-            before = "williamboman/nvim-lsp-installer",
         },
         -- Lsp Cland Extensions
         {
@@ -291,10 +289,7 @@ M.config = function()
         {
             "brymer-meneses/grammar-guard.nvim",
             filetype = { "latex", "tex", "bib", "markdown", "rst", "text" },
-            requires = {
-                "neovim/nvim-lspconfig",
-                "williamboman/nvim-lsp-installer",
-            },
+            requires = { "neovim/nvim-lspconfig" },
         },
         -- Pick up where you left
         {
@@ -308,7 +303,6 @@ M.config = function()
         {
             "crisidev/persisted.nvim",
             config = function()
-                local home = os.getenv "HOME"
                 require("persisted").setup {
                     use_git_branch = true,
                     autosave = true,
@@ -507,8 +501,17 @@ M.config = function()
             "petertriho/nvim-scrollbar",
             config = function()
                 require("user.scrollbar").config()
+                -- Register current position handler.
+                require("user.scrollbar").register_current_position_handler()
             end,
             after = { "nvim-hlslens" },
+        },
+        {
+            "nvim-treesitter/nvim-treesitter-context",
+            config = function()
+                require("user.treesitter").context_config()
+            end,
+            after = { "nvim-treesitter" },
         },
     }
 end

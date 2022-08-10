@@ -78,9 +78,6 @@ M.config = function()
         ]]
     end
 
-    -- Register current position handler.
-    require("user.scrollbar").register_current_position_handler()
-
     -- Log level
     lvim.log.level = "warn"
 end

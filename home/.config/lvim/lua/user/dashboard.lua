@@ -88,7 +88,7 @@ M.config = function()
     end
 
     local version = text(version, "Function")
-    local date = text("┌─ " .. icons.calendar .. "Today is " .. date .. " ─┐")
+    local date = text("┌─ " .. icons.calendar .. "Today is " .. date .. "  ─┐")
     local plugin_count = text("❙  " .. kind.Module .. " " .. plugins .. " plugins in total  ❙")
     local session_count = text("└─ " .. icons.session .. " " .. sessions .. " neovim sessions  ─┘")
 

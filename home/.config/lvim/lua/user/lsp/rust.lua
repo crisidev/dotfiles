@@ -7,19 +7,13 @@ M.config = function()
         return
     end
 
-    local lsp_installer_servers = require "nvim-lsp-installer.servers"
-    local _, requested_server = lsp_installer_servers.get_server "rust_analyzer"
-
     local opts = {
         tools = {
-            autoSetHints = true,
-            hover_with_actions = false,
             executor = require("rust-tools/executors").termopen, -- can be quickfix or termopen
             inlay_hints = {
+                auto = true,
                 only_current_line = true,
-                only_current_line_autocmd = "CursorHold",
-                show_variable_name = true,
-                show_parameter_hints = false,
+                show_parameter_hints = true,
                 parameter_hints_prefix = "in: ",
                 other_hints_prefix = " out: ",
                 max_len_align = false,
@@ -43,10 +37,9 @@ M.config = function()
             },
         },
         server = {
-            cmd_env = requested_server._default_options.cmd_env,
             on_attach = require("lvim.lsp").common_on_attach,
             on_init = require("lvim.lsp").common_on_init,
-            standalone = true,
+            standalone = false,
         },
     }
     local extension_path = vim.env.HOME .. "/.vscode/extensions/vadimcn.vscode-lldb-1.7.3/"

@@ -192,6 +192,9 @@ M.config = function()
 
     -- Session
     vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal"
+
+    -- Colorcolumn
+    vim.cmd [[set colorcolumn=]]
 end
 
 function _G.qftf(info)

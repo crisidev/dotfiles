@@ -29,7 +29,7 @@ M.register_current_position_handler = function()
         local pos = vim.api.nvim_win_get_cursor(0)
 
         return {
-            { line = pos[1], text = icons.code_lens_action, type = "Misc" },
+            { line = pos[1], text = icons.code_lens_action, type = "Info" },
         }
     end)
 end

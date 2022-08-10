@@ -166,6 +166,14 @@ M.which_keys_normal = function()
         icons.grammar .. "Spelling",
     }
 
+    -- Treesitter context
+    lvim.builtin.which_key.mappings["C"] = {
+        "<cmd>TsContextToggle<cr>",
+        icons.treesitter .. "TS Context",
+    }
+
+
+
     -- Comment
     lvim.builtin.which_key.mappings["/"][2] = icons.comment .. " Comment"
 
@@ -174,7 +182,7 @@ M.which_keys_normal = function()
     lvim.builtin.which_key.mappings["p"]["name"] = icons.package .. " Packer"
 
     -- Legendary
-    lvim.builtin.which_key.mappings["C"] = {
+    lvim.builtin.which_key.mappings["c"] = {
         "<cmd>lua require('legendary').find('commands')<cr>",
         icons.palette .. "Legendary",
     }
