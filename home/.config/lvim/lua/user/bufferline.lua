@@ -2,6 +2,10 @@ local M = {}
 M.config = function()
     local icons = require "user.icons"
     local List = require "plenary.collections.py_list"
+    lvim.builtin.bufferline.highlights = {
+        background = { italic = true },
+        buffer_selected = { bold = true },
+    }
     local g_ok, bufferline_groups = pcall(require, "bufferline.groups")
     if not g_ok then
         bufferline_groups = { builtin = { ungrouped = { name = "ungrouped" } } }
@@ -36,7 +40,7 @@ M.config = function()
             M.language_files("ruby", "#ff6965", "rb"),
             M.language_files("smithy", "#ffff66", "smithy"),
             {
-                highlight = { guisp = "#51AFEF" },
+                highlight = { sp = "#51AFEF" },
                 name = "tests",
                 icon = icons.test,
                 matcher = function(buf)
@@ -44,7 +48,7 @@ M.config = function()
                 end,
             },
             {
-                highlight = { guisp = "#C678DD" },
+                highlight = { sp = "#C678DD" },
                 name = "docs",
                 matcher = function(buf)
                     local list = List { "md", "org", "norg", "wiki", "rst", "txt" }
@@ -52,7 +56,7 @@ M.config = function()
                 end,
             },
             {
-                highlight = { guisp = "#F6A878" },
+                highlight = { sp = "#F6A878" },
                 name = "cfg",
                 matcher = function(buf)
                     return buf.filename:match "go.mod"
@@ -76,9 +80,9 @@ M.config = function()
     lvim.builtin.bufferline.options.sort_by = "insert_after_current"
 end
 
-M.language_files = function(name, guisp, extension)
+M.language_files = function(name, sp, extension)
     local opts = {
-        highlight = { guisp = guisp },
+        highlight = { sp = sp },
         name = name,
         matcher = function(buf)
             return vim.fn.fnamemodify(buf.path, ":e") == extension

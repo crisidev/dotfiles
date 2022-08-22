@@ -18,7 +18,8 @@ M.config = function()
     -- Log level
     vim.lsp.set_log_level "warn"
 
-    --
+    -- Installer
+    lvim.lsp.installer.setup.automatic_installation = true
     vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, {
         "clangd",
         "gopls",

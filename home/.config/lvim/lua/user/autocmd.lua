@@ -34,6 +34,13 @@ M.config = function()
         command = "lua require('user.copilot').disable()",
     })
 
+    -- Disable colorcolumn
+    vim.api.nvim_create_autocmd("BufEnter", {
+        group = "_lvim_user",
+        pattern = "*",
+        command = "set colorcolumn=",
+    })
+
     -- Disable undo for certain files
     vim.api.nvim_create_autocmd("BufWritePre", {
         group = "_lvim_user",

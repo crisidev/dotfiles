@@ -82,6 +82,7 @@ M.todo_comments = {
     NOTE = " ",
     ERROR = " ",
     REFS = "",
+    SHIELD = "",
 }
 
 M.file_icons = {

@@ -18,6 +18,15 @@ M.which_keys_normal = function()
         end
     end
 
+    local picker = require "window-picker"
+
+    function _pick_window()
+        local picked_window_id = picker.pick_window {
+            include_current_win = true,
+        } or vim.api.nvim_get_current_win()
+        vim.api.nvim_set_current_win(picked_window_id)
+    end
+
     -- Find
     lvim.builtin.which_key.mappings["F"] = {
         name = icons.telescope .. " Find",
@@ -147,6 +156,9 @@ M.which_keys_normal = function()
     -- Save
     lvim.builtin.which_key.mappings["w"] = { "<cmd>w!<cr>", icons.ok .. " Save buffer" }
 
+    -- Window picket
+    lvim.builtin.which_key.mappings["W"] = { "<cmd>lua _pick_window()", icons.world .. "Pick window" }
+
     -- Close buffer with Leader-q
     lvim.builtin.which_key.mappings["q"] = { "<cmd>SmartQ<cr>", icons.no .. " Close buffer" }
     lvim.builtin.which_key.mappings["Q"] = { "<cmd>SmartQ!<cr>", icons.no .. " Force close buffer" }
@@ -168,21 +180,22 @@ M.which_keys_normal = function()
 
     -- Treesitter context
     lvim.builtin.which_key.mappings["C"] = {
-        "<cmd>TsContextToggle<cr>",
+        "<cmd>TSContextToggle<cr>",
         icons.treesitter .. "TS Context",
     }
 
-
-
     -- Comment
-    lvim.builtin.which_key.mappings["/"][2] = icons.comment .. " Comment"
+    lvim.builtin.which_key.mappings["/"] = {
+        "<cmd>lua require('Comment.api').toggle.linewise.current()<CR>",
+        icons.comment .. " Comment",
+    }
 
     -- Names
     lvim.builtin.which_key.mappings["L"]["name"] = icons.moon .. " Lunarvim"
     lvim.builtin.which_key.mappings["p"]["name"] = icons.package .. " Packer"
 
     -- Legendary
-    lvim.builtin.which_key.mappings["c"] = {
+    lvim.builtin.which_key.mappings["\\"] = {
         "<cmd>lua require('legendary').find('commands')<cr>",
         icons.palette .. "Legendary",
     }

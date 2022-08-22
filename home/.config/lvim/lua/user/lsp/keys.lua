@@ -4,31 +4,41 @@ local icons = require("user.icons").icons
 local wk = require "which-key"
 
 M.comments_keys = function()
-    local opts = { expr = true, remap = true, replace_keycodes = false }
     -- NORMAL mode mappings
-    vim.keymap.set("n", "fc", "<Plug>(comment_toggle_linewise)")
-    vim.keymap.set(
-        "n",
-        "fcc",
-        "v:count == 0 ? '<Plug>(comment_toggle_current_linewise)' : '<Plug>(comment_toggle_linewise_count)'",
-        opts
-    )
-    vim.keymap.set("n", "fb", "<Plug>(comment_toggle_blockwise)")
-    vim.keymap.set(
-        "n",
-        "fbc",
-        "v:count == 0 ? '<Plug>(comment_toggle_current_blockwise)' : '<Plug>(comment_toggle_blockwise_count)'",
-        opts
-    )
+    vim.keymap.set("n", "fc", "<Plug>(comment_toggle_linewise)", { desc = icons.comment .. " Comment linewise" })
+    vim.keymap.set("n", "fcc", function()
+        return vim.v.count == 0 and "<Plug>(comment_toggle_linewise_current)" or "<Plug>(comment_toggle_linewise_count)"
+    end, { expr = true, desc = "Comment toggle current line" })
+
+    vim.keymap.set("n", "fb", "<Plug>(comment_toggle_blockwise)", { desc = icons.comment .. " Comment blockwise" })
+    vim.keymap.set("n", "fbc", function()
+        return vim.v.count == 0 and "<Plug>(comment_toggle_blockwise_current)"
+            or "<Plug>(comment_toggle_blockwise_count)"
+    end, { expr = true, desc = "Comment toggle current block" })
 
     -- Above, below, eol
-    vim.keymap.set("n", "fco", '<cmd>lua require("Comment.api").locked.insert_linewise_below()<cr>')
-    vim.keymap.set("n", "fcO", '<cmd>lua require("Comment.api").locked.insert_linewise_above()<cr>')
-    vim.keymap.set("n", "fcA", '<cmd>lua require("Comment.api").locked.insert_linewise_eol()<cr>')
+    vim.keymap.set(
+        "n",
+        "fco",
+        '<cmd>lua require("Comment.api").locked.insert_linewise_below()<cr>',
+        { desc = "Comment insert below" }
+    )
+    vim.keymap.set(
+        "n",
+        "fcO",
+        '<cmd>lua require("Comment.api").locked.insert_linewise_above()<cr>',
+        { desc = "Comment insert above" }
+    )
+    vim.keymap.set(
+        "n",
+        "fcA",
+        '<cmd>lua require("Comment.api").locked.insert_linewise_eol()<cr>',
+        { desc = "Comment insert end of line" }
+    )
 
     -- VISUAL mode mappings
-    vim.keymap.set("x", "fc", "<Plug>(comment_toggle_linewise_visual)")
-    vim.keymap.set("x", "fb", "<Plug>(comment_toggle_blockwise_visual)")
+    vim.keymap.set("x", "fc", "<Plug>(comment_toggle_linewise_visual)", { desc = "Comment toggle linewise (visual)" })
+    vim.keymap.set("x", "fb", "<Plug>(comment_toggle_blockwise_visual)", { desc = "Comment toggle blockwise (visual)" })
 end
 
 M.lsp_normal_keys = function()
@@ -93,11 +103,11 @@ M.lsp_normal_keys = function()
                 icons.hint .. "All diagnostics",
             },
             n = {
-                "<cmd>lua vim.diagnostic.goto_next({float = {border = 'rounded', focusable = false, source = 'always'}})<cr>",
+                "<cmd>lua vim.diagnostic.goto_next({float = {border = 'rounded', focusable = false, source = 'always'}, severity = {min = vim.diagnostic.severity.WARN}})<cr>",
                 icons.hint .. "Next diagnostic",
             },
             p = {
-                "<cmd>lua vim.diagnostic.goto_prev({float = {border = 'rounded', focusable = false, source = 'always'}})<cr>",
+                "<cmd>lua vim.diagnostic.goto_prev({float = {border = 'rounded', focusable = false, source = 'always'}, severity = {min = vim.diagnostic.severity.WARN}})<cr>",
                 icons.hint .. "Previous diagnostic",
             },
             -- Format

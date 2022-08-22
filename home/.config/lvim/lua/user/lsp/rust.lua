@@ -10,6 +10,7 @@ M.config = function()
     local opts = {
         tools = {
             executor = require("rust-tools/executors").termopen, -- can be quickfix or termopen
+            reload_workspace_from_cargo_toml = true,
             inlay_hints = {
                 auto = true,
                 only_current_line = true,
@@ -40,6 +41,13 @@ M.config = function()
             on_attach = require("lvim.lsp").common_on_attach,
             on_init = require("lvim.lsp").common_on_init,
             standalone = false,
+            settings = {
+                ["rust-analyzer"] = {
+                    cargo = {
+                        features = "all",
+                    },
+                },
+            },
         },
     }
     local extension_path = vim.env.HOME .. "/.vscode/extensions/vadimcn.vscode-lldb-1.7.3/"
