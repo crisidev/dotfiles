@@ -8,7 +8,17 @@ M.config = function()
     }
     local g_ok, bufferline_groups = pcall(require, "bufferline.groups")
     if not g_ok then
-        bufferline_groups = { builtin = { ungrouped = { name = "ungrouped" } } }
+        bufferline_groups = {
+            builtin = {
+                pinned = {
+                    name = "pinned",
+                    with = function(ico)
+                        print(ico)
+                    end,
+                },
+                ungroupued = { name = "ungrouped" },
+            },
+        }
     end
     lvim.builtin.bufferline.options.navigation = { mode = "uncentered" }
     lvim.builtin.bufferline.options.show_buffer_icons = true
@@ -25,6 +35,9 @@ M.config = function()
         result = table.concat(result, " ")
         return #result > 0 and result or ""
     end
+    lvim.builtin.bufferline.options.separator_style = "slant"
+    lvim.builtin.bufferline.options.mode = "buffers"
+    lvim.builtin.bufferline.options.sort_by = "insert_after_current"
 
     lvim.builtin.bufferline.options.groups = {
         options = {
@@ -69,15 +82,12 @@ M.config = function()
                         or buf.filename:match "Config"
                         or buf.filename:match "gradle.properties"
                         or buf.filename:match "build.gradle.kts"
-                        or buf.filename:match "setting.gradle.kts"
+                        or buf.filename:match "settings.gradle.kts"
                 end,
             },
             { name = bufferline_groups.builtin.ungrouped.name },
         },
     }
-    lvim.builtin.bufferline.options.separator_style = "slant"
-    lvim.builtin.bufferline.options.mode = "buffers"
-    lvim.builtin.bufferline.options.sort_by = "insert_after_current"
 end
 
 M.language_files = function(name, sp, extension)
