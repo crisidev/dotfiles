@@ -334,6 +334,23 @@ M.config = function()
         console = "integratedTerminal",
     })
 
+    --Java debugger adapter settings
+    dap.configurations.java = {
+        {
+            name = "Debug (Attach) - Remote",
+            type = "java",
+            request = "attach",
+            hostName = "127.0.0.1",
+            port = 5005,
+        },
+        {
+            name = "Debug Non-Project class",
+            type = "java",
+            request = "launch",
+            program = "${file}",
+        },
+    }
+
     lvim.builtin.dap.on_config_done = function(_)
         lvim.builtin.which_key.mappings["d"].name = " Debug"
     end

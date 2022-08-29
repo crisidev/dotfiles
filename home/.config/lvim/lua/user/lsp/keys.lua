@@ -1,7 +1,10 @@
 local M = {}
 
 local icons = require("user.icons").icons
-local wk = require "which-key"
+local ok, wk = pcall(require,  "which-key")
+if not ok then
+    return
+end
 
 M.comments_keys = function()
     -- NORMAL mode mappings
@@ -103,12 +106,20 @@ M.lsp_normal_keys = function()
                 icons.hint .. "All diagnostics",
             },
             n = {
-                "<cmd>lua vim.diagnostic.goto_next({float = {border = 'rounded', focusable = false, source = 'always'}, severity = {min = vim.diagnostic.severity.WARN}})<cr>",
-                icons.hint .. "Next diagnostic",
+                "<cmd>lua vim.diagnostic.goto_next({float = {border = 'rounded', focusable = false, source = 'always'}, severity = {min = vim.diagnostic.severity.ERROR}})<cr>",
+                icons.hint .. "Next ERROR diagnostic",
             },
             p = {
+                "<cmd>lua vim.diagnostic.goto_prev({float = {border = 'rounded', focusable = false, source = 'always'}, severity = {min = vim.diagnostic.severity.ERROR}})<cr>",
+                icons.hint .. "Previous ERROR diagnostic",
+            },
+            N = {
+                "<cmd>lua vim.diagnostic.goto_next({float = {border = 'rounded', focusable = false, source = 'always'}, severity = {min = vim.diagnostic.severity.WARN}})<cr>",
+                icons.hint .. "Next WARN diagnostic",
+            },
+            P = {
                 "<cmd>lua vim.diagnostic.goto_prev({float = {border = 'rounded', focusable = false, source = 'always'}, severity = {min = vim.diagnostic.severity.WARN}})<cr>",
-                icons.hint .. "Previous diagnostic",
+                icons.hint .. "Previous WARN diagnostic",
             },
             -- Format
             F = {
@@ -121,7 +132,7 @@ M.lsp_normal_keys = function()
                 icons.magic .. "Rename symbol",
             },
             -- Peek
-            P = {
+            S = {
                 "<cmd>lua require('lvim.lsp.peek').Peek('definition')<cr>",
                 icons.find .. " Peek definition",
             },

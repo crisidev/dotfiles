@@ -157,7 +157,7 @@ M.which_keys_normal = function()
     lvim.builtin.which_key.mappings["w"] = { "<cmd>w!<cr>", icons.ok .. " Save buffer" }
 
     -- Window picket
-    lvim.builtin.which_key.mappings["W"] = { "<cmd>lua _pick_window()", icons.world .. "Pick window" }
+    lvim.builtin.which_key.mappings["W"] = { "<cmd>lua _pick_window()<cr>", icons.world .. "Pick window" }
 
     -- Close buffer with Leader-q
     lvim.builtin.which_key.mappings["q"] = { "<cmd>SmartQ<cr>", icons.no .. " Close buffer" }
@@ -181,7 +181,7 @@ M.which_keys_normal = function()
     -- Treesitter context
     lvim.builtin.which_key.mappings["C"] = {
         "<cmd>TSContextToggle<cr>",
-        icons.treesitter .. "TS Context",
+        icons.treesitter .. " TS Context",
     }
 
     -- Comment

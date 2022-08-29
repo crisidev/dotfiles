@@ -49,6 +49,7 @@ M.config = function()
             config = function()
                 require("user.octo").config()
             end,
+            after = { "which-key.nvim" },
             event = "BufRead",
         },
         -- Git linker
@@ -545,6 +546,20 @@ M.config = function()
                 }
             end,
         },
+        -- {
+        --     "declancm/cinnamon.nvim",
+        --     config = function()
+        --         require("cinnamon").setup {
+        --             default_keymaps = true,
+        --             default_delay = 4,
+        --             extra_keymaps = true,
+        --             extended_keymaps = false,
+        --             centered = false,
+        --             scroll_limit = 100,
+        --         }
+        --     end,
+        --     event = "BufRead",
+        -- },
     }
 end
 
