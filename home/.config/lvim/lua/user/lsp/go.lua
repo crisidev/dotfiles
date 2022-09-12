@@ -15,6 +15,14 @@ M.config = function()
                     upgrade_dependency = true, -- Upgrades a dependency in the go.mod file for a module
                     vendor = true, -- Runs go mod vendor for a module
                 },
+                hints = {
+                    assignVariableTypes = true,
+                    compositeLiteralFields = true,
+                    constantValues = true,
+                    functionTypeParameters = true,
+                    parameterNames = true,
+                    rangeVariableTypes = true,
+                },
                 diagnosticsDelay = "500ms",
                 experimentalWatchedFileDelay = "100ms",
                 symbolMatcher = "fuzzy",

@@ -27,13 +27,6 @@ M.config = function()
         command = "setfiletype smithy",
     })
 
-    -- Disable Copilot globally
-    vim.api.nvim_create_autocmd("BufRead", {
-        group = "_lvim_user",
-        pattern = "*",
-        command = "lua require('user.copilot').disable()",
-    })
-
     -- Disable colorcolumn
     vim.api.nvim_create_autocmd("BufEnter", {
         group = "_lvim_user",
@@ -50,18 +43,28 @@ M.config = function()
         end,
     })
 
-    -- Disable folding
-    vim.api.nvim_create_autocmd("BufWritePost,BufEnter", {
-        group = "_lvim_user",
-        pattern = "*",
-        command = "set nofoldenable foldmethod=manual foldlevelstart=99",
-    })
-
     -- Allow hlslense in scrollbar
     vim.api.nvim_create_autocmd("CmdlineLeave", {
         group = "_lvim_user",
         pattern = "*",
         command = "lua require('scrollbar.handlers.search').handler.hide()",
+    })
+
+    -- Start metals
+    vim.api.nvim_create_autocmd("Filetype", {
+        group = "_lvim_user",
+        pattern = { "scala", "sbt" },
+        callback = require("user.lsp.scala").start,
+    })
+
+    -- Faster yank
+    vim.api.nvim_create_autocmd("TextYankPost", {
+        group = "_general_settings",
+        pattern = "*",
+        desc = "Highlight text on yank",
+        callback = function()
+            require("vim.highlight").on_yank { higroup = "Search", timeout = 200 }
+        end,
     })
 end
 

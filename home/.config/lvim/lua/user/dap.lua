@@ -33,6 +33,31 @@ M.config = function()
         },
     }
 
+    -- NOTE: if you want to use `dap` instead of `RustDebuggables` you can use the following configuration
+    if vim.fn.executable "lldb-vscode" == 1 then
+        dap.adapters.lldbrust = {
+            type = "executable",
+            attach = { pidProperty = "pid", pidSelect = "ask" },
+            command = "lldb-vscode",
+            env = { LLDB_LAUNCH_FLAG_LAUNCH_IN_TTY = "YES" },
+        }
+        dap.adapters.rust = dap.adapters.lldbrust
+        dap.configurations.rust = {
+            {
+                type = "rust",
+                request = "launch",
+                name = "lldbrust",
+                program = function()
+                    local metadata_json = vim.fn.system "cargo metadata --format-version 1 --no-deps"
+                    local metadata = vim.fn.json_decode(metadata_json)
+                    local target_name = metadata.packages[1].targets[1].name
+                    local target_dir = metadata.target_directory
+                    return target_dir .. "/debug/" .. target_name
+                end,
+            },
+        }
+    end
+
     dap.adapters.go = function(callback, _)
         local stdout = vim.loop.new_pipe(false)
         local handle
@@ -104,54 +129,21 @@ M.config = function()
         },
     }
 
-    dap.adapters.codelldb = function(on_adapter)
-        local stdout = vim.loop.new_pipe(false)
-        local stderr = vim.loop.new_pipe(false)
+    local path = vim.fn.glob(vim.fn.stdpath "data" .. "/mason/packages/codelldb/extension/")
+    local lldb_cmd = path .. "adapter/codelldb"
 
-        local cmd = vim.fn.expand "~/" .. ".vscode/extensions/vadimcn.vscode-lldb-1.7.3/adapter/codelldb"
+    dap.adapters.codelldb = {
+        type = "server",
+        port = "${port}",
+        executable = {
+            -- CHANGE THIS to your path!
+            command = lldb_cmd,
+            args = { "--port", "${port}" },
 
-        local handle, pid_or_err
-        local opts = {
-            stdio = { nil, stdout, stderr },
-            detached = true,
-        }
-        handle, pid_or_err = vim.loop.spawn(cmd, opts, function(code)
-            stdout:close()
-            stderr:close()
-            handle:close()
-            if code ~= 0 then
-                print("codelldb exited with code", code)
-            end
-        end)
-        assert(handle, "Error running codelldb: " .. tostring(pid_or_err))
-        stdout:read_start(function(err, chunk)
-            assert(not err, err)
-            if chunk then
-                local port = chunk:match "Listening on port (%d+)"
-                if port then
-                    vim.schedule(function()
-                        on_adapter {
-                            type = "server",
-                            host = "127.0.0.1",
-                            port = port,
-                        }
-                    end)
-                else
-                    vim.schedule(function()
-                        require("dap.repl").append(chunk)
-                    end)
-                end
-            end
-        end)
-        stderr:read_start(function(err, chunk)
-            assert(not err, err)
-            if chunk then
-                vim.schedule(function()
-                    require("dap.repl").append(chunk)
-                end)
-            end
-        end)
-    end
+            -- On windows you may have to uncomment this:
+            -- detached = false,
+        },
+    }
 
     dap.configurations.cpp = {
         {
@@ -351,8 +343,16 @@ M.config = function()
         },
     }
 
+    local icons = require("user.icons").icons
+
     lvim.builtin.dap.on_config_done = function(_)
-        lvim.builtin.which_key.mappings["d"].name = " Debug"
+    lvim.builtin.which_key.mappings["d"]["name"] = icons.debug .. "Debug"
+    lvim.builtin.which_key.mappings["de"] = { "<cmd>lua require('dapui').eval()<cr>", "Eval" }
+    lvim.builtin.which_key.mappings["dU"] = { "<cmd>lua require('dapui').toggle()<cr>", "Toggle UI" }
+    lvim.builtin.which_key.mappings["ds"] = {
+        "<cmd>lua if vim.bo.filetype == 'rust' then vim.cmd[[RustDebuggables]] else require'dap'.continue() end<CR>",
+        "Start",
+    }
     end
 end
 

@@ -60,19 +60,13 @@ M.config = function()
 
     local plugins = ""
     local sessions = ""
-    local date = ""
-    local version = ""
+    local date = os.date "%a %d %b"
+    local version = " " .. vim.version().major .. "." .. vim.version().minor .. "." .. vim.version().patch
     local handle = io.popen 'fd -d 2 . $HOME"/.local/share/lunarvim/site/pack/packer" | grep pack | wc -l | tr -d "\n" '
     if handle then
         plugins = handle:read "*a"
         handle:close()
         plugins = plugins:gsub("^%s*(.-)%s*$", "%1")
-    end
-
-    local handle = io.popen 'echo "$(date +%a) $(date +%d) $(date +%b)" | tr -d "\n"'
-    if handle then
-        date = handle:read "*a"
-        handle:close()
     end
 
     local handle = io.popen 'fd -d 1 . $HOME"/.local/share/nvim/sessions" | wc -l | tr -d "\n" '
@@ -81,18 +75,12 @@ M.config = function()
         handle:close()
     end
 
-    local handle = io.popen 'vim --version | head -n 1 | tr -d "\n"'
-    if handle then
-        version = handle:read "*a"
-        handle:close()
-    end
-
     local version = text(version, "Function")
-    local date = text("┌─ " .. icons.calendar .. "Today is " .. date .. "  ─┐")
+    date = text("┌─ " .. icons.calendar .. "Today is " .. date .. "  ─┐")
     local plugin_count = text("❙  " .. kind.Module .. " " .. plugins .. " plugins in total  ❙")
     local session_count = text("└─ " .. icons.session .. " " .. sessions .. " neovim sessions  ─┘")
 
-    local fortune = require "alpha.fortune"()
+    local fortune = require "alpha.fortune" ()
     -- fortune = fortune:gsub("^%s+", ""):gsub("%s+$", "")
     local footer = {
         type = "text",

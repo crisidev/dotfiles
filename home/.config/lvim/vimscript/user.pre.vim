@@ -76,3 +76,20 @@ let g:grammarous#default_comments_only_filetypes = {
 "     \        'CURRENCY', 'POSSESSIVE_APOSTROPHE', 'ENGLISH_WORD_REPEAT_RULE',
 "     \        'NON_STANDARD_WORD'],
 " \ }
+
+" Open cargo errors in buffers
+function! g:CargoLimitOpen(editor_data)
+  let l:initial_file = resolve(expand('%:p'))
+  if l:initial_file != '' && !filereadable(l:initial_file)
+    return
+  endif
+  for source_file in reverse(a:editor_data.files)
+    let l:path = fnameescape(source_file.path)
+    if mode() == 'n' && &l:modified == 0
+      execute 'edit ' . l:path
+      call cursor((source_file.line), (source_file.column))
+    else
+      break
+    endif
+  endfor
+endfunction

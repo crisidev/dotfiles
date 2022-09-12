@@ -28,7 +28,7 @@ repos = [
     "~/github/0updates/dog",
     "~/github/0updates/joycond",
     "~/github/0updates/joycond-cemuhook",
-    "~/.local/share/nvim/lsp_servers/smithy_language_server",
+    "~/.local/share/nvim/mason/packages/smithy_language_server",
 ]
 arguments = "--ff-only --rebase --autostash"
 

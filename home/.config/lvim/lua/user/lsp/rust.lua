@@ -40,7 +40,6 @@ M.config = function()
         server = {
             on_attach = require("lvim.lsp").common_on_attach,
             on_init = require("lvim.lsp").common_on_init,
-            standalone = false,
             settings = {
                 ["rust-analyzer"] = {
                     cargo = {
@@ -50,14 +49,26 @@ M.config = function()
             },
         },
     }
-    local extension_path = vim.env.HOME .. "/.vscode/extensions/vadimcn.vscode-lldb-1.7.3/"
-    local codelldb_path = extension_path .. "adapter/codelldb"
-    local liblldb_path = extension_path .. "lldb/lib/liblldb.so"
+    local path = vim.fn.glob(vim.fn.stdpath "data" .. "/mason/packages/codelldb/extension/")
+    local codelldb_path = path .. "adapter/codelldb"
+    local liblldb_path = path .. "lldb/lib/liblldb.so"
 
-    opts.dap = {
-        adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
-    }
+    if vim.fn.has "mac" == 1 then
+        liblldb_path = path .. "lldb/lib/liblldb.dylib"
+    end
+
+    if vim.fn.filereadable(codelldb_path) and vim.fn.filereadable(liblldb_path) then
+        opts.dap = {
+            adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
+        }
+    end
     rust_tools.setup(opts)
+
+    lvim.format_on_save = {
+        pattern = "*.rs",
+        timeout = 2000,
+        filter = require("lvim.lsp.utils").format_filter,
+    }
 end
 
 return M

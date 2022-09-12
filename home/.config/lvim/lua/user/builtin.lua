@@ -53,6 +53,7 @@ M.config = function()
     lvim.builtin.alpha["custom"] = { config = require("user.dashboard").config() }
 
     -- Terminal
+    lvim.builtin.terminal.autochdir = true
     lvim.builtin.terminal.active = true
     lvim.builtin.terminal.open_mapping = [[<c-\\>]]
     lvim.builtin.terminal.execs = {
@@ -70,6 +71,11 @@ M.config = function()
         DEBUG = icons.debug,
         TRACE = icons.trace,
     }
+
+    -- Git signs
+    lvim.builtin.gitsigns.opts._threaded_diff = true
+    lvim.builtin.gitsigns.opts._extmark_signs = true
+    lvim.builtin.gitsigns.opts.current_line_blame_formatter = " <author>, <author_time> · <summary>"
 
     -- Disable q/wq when running inside the IDE.
     if vim.g.crisidev_ide then

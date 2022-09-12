@@ -8,14 +8,15 @@ M.config = function()
     local icons = require("user.icons").todo_comments
     todo.setup {
         keywords = {
-            FIX = { icon = icons.FIX },
+            FIX = { icon = icons.FIX, "FIXME", "BUG", "FIXIT", "ISSUE" },
             TODO = { icon = icons.TODO, alt = { "WIP" } },
             HACK = { icon = icons.HACK, color = "hack" },
-            WARN = { icon = icons.WARN },
-            PERF = { icon = icons.PERF },
+            WARN = { icon = icons.WARN, alt = { "WARNING", "XXX" } },
+            PERF = { icon = icons.PERF, alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" } },
             NOTE = { icon = icons.NOTE, alt = { "INFO", "NB" } },
             ERROR = { icon = icons.ERROR, color = "error", alt = { "ERR" } },
             REFS = { icon = icons.REFS },
+            TEST = { icon = icons.TEST, color = "test", alt = { "TESTING", "PASSED", "FAILED" } },
         },
         highlight = { max_line_len = 120 },
         colors = {
@@ -28,6 +29,7 @@ M.config = function()
             default = { "Identifier" },
         },
     }
+    -- TODO: some
 end
 
 return M

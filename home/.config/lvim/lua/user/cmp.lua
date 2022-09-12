@@ -27,6 +27,7 @@ M.kind = {
     Unit = "塞",
     Value = " ",
     Variable = "",
+    Copilot = "",
 }
 
 M.config = function()

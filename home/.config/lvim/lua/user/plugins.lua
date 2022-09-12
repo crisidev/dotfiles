@@ -6,9 +6,7 @@ M.config = function()
         -- Themes and visual stuff.
         ------------------------------------------------------------------------------
         {
-            -- "folke/tokyonight.nvim",
-            "abzcoding/tokyonight.nvim",
-            branch = "feat/local",
+            "folke/tokyonight.nvim",
             config = function()
                 require("user.theme").tokyonight()
                 vim.cmd [[colorscheme tokyonight]]
@@ -166,6 +164,18 @@ M.config = function()
             end,
             event = "BufRead",
         },
+        -- Diagnostics on right corner.
+        {
+            "santigo-zero/right-corner-diagnostics.nvim",
+            event = "LspAttach",
+            config = function()
+                require("rcd").setup {
+                    position = "bottom",
+                    auto_cmds = true,
+                }
+            end,
+            disable = true,
+        },
         -- Crates cmp
         {
             "Saecki/crates.nvim",
@@ -184,9 +194,6 @@ M.config = function()
         {
             "scalameta/nvim-metals",
             requires = { "nvim-lua/plenary.nvim" },
-            config = function()
-                require("user.lsp.scala").config()
-            end,
             ft = { "scala", "sbt" },
         },
         ------------------------------------------------------------------------------
@@ -209,6 +216,9 @@ M.config = function()
         {
             "zbirenbaum/copilot-cmp",
             after = { "copilot.lua", "nvim-cmp" },
+            config = function()
+                require("copilot_cmp").setup()
+            end,
             disable = not lvim.builtin.copilot.active,
         },
         ------------------------------------------------------------------------------
@@ -368,13 +378,8 @@ M.config = function()
         -- Python coverage highlight
         { "mgedmin/coverage-highlight.vim" },
         -- Screenshots
-        {
-            "JMcKiern/vim-shoot",
-            run = "./install.py geckodriver",
-            config = function()
-                vim.api.nvim_set_var("shoot_zoom_factor", 1)
-            end,
-        },
+        { "superevilmegaco/Screenshot.nvim" },
+        { "segeljakt/vim-silicon" },
         -- Debugging UI
         {
             "rcarriga/nvim-dap-ui",
@@ -507,6 +512,7 @@ M.config = function()
             end,
             after = { "nvim-hlslens" },
         },
+        -- Treesitter context
         {
             "nvim-treesitter/nvim-treesitter-context",
             config = function()
@@ -514,6 +520,7 @@ M.config = function()
             end,
             after = { "nvim-treesitter" },
         },
+        -- Preview jumps
         {
             "nacro90/numb.nvim",
             event = "BufRead",
@@ -524,7 +531,7 @@ M.config = function()
                 }
             end,
         },
-
+        -- Window picker
         {
             "s1n7ax/nvim-window-picker",
             tag = "1.*",
@@ -546,20 +553,12 @@ M.config = function()
                 }
             end,
         },
-        -- {
-        --     "declancm/cinnamon.nvim",
-        --     config = function()
-        --         require("cinnamon").setup {
-        --             default_keymaps = true,
-        --             default_delay = 4,
-        --             extra_keymaps = true,
-        --             extended_keymaps = false,
-        --             centered = false,
-        --             scroll_limit = 100,
-        --         }
-        --     end,
-        --     event = "BufRead",
-        -- },
+        {
+            "lewis6991/spaceless.nvim",
+            config = function()
+                require("spaceless").setup()
+            end,
+        },
     }
 end
 
