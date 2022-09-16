@@ -1,7 +1,7 @@
 local M = {}
 
 local icons = require("user.icons").icons
-local ok, wk = pcall(require,  "which-key")
+local ok, wk = pcall(require, "which-key")
 if not ok then
     return
 end
@@ -132,9 +132,15 @@ M.lsp_normal_keys = function()
                 icons.magic .. "Rename symbol",
             },
             -- Peek
-            S = {
-                "<cmd>lua require('lvim.lsp.peek').Peek('definition')<cr>",
+            z = {
+                "<cmd>lua require('user.peek').Peek('definition')<cr>",
                 icons.find .. " Peek definition",
+            },
+            Z = {
+                name = icons.find .. " Peek",
+                d = { "<cmd>lua require('user.peek').Peek('definition')<cr>", "Definition" },
+                t = { "<cmd>lua require('user.peek').Peek('typeDefinition')<cr>", "Type Definition" },
+                i = { "<cmd>lua require('user.peek').Peek('implementation')<cr>", "Implementation" },
             },
             -- Refactoring
             X = {

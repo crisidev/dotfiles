@@ -378,8 +378,12 @@ M.config = function()
         -- Python coverage highlight
         { "mgedmin/coverage-highlight.vim" },
         -- Screenshots
-        { "superevilmegaco/Screenshot.nvim" },
-        { "segeljakt/vim-silicon" },
+        {
+            "segeljakt/vim-silicon",
+            config = function()
+                require("user.silicon").config()
+            end,
+        },
         -- Debugging UI
         {
             "rcarriga/nvim-dap-ui",
