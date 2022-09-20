@@ -151,6 +151,7 @@ M.config = function()
             disabled_filetypes = {
                 "dashboard",
                 "NvimTree",
+                "neo-tree",
                 "Outline",
                 "alpha",
                 "vista",

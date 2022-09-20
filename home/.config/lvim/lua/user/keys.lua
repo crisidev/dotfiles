@@ -151,7 +151,11 @@ M.which_keys_normal = function()
     }
 
     -- Nvimtree
-    lvim.builtin.which_key.mappings["e"] = { "<cmd>NvimTreeToggle<cr>", icons.world .. "Explorer" }
+    if lvim.builtin.tree_provider == "neo-tree" then
+        lvim.builtin.which_key.mappings["e"] = { "<cmd>NeoTreeRevealToggle<CR>", icons.world .. "Explorer" }
+    else
+        lvim.builtin.which_key.mappings["e"] = { "<cmd>NvimTreeToggle<cr>", icons.world .. "Explorer" }
+    end
 
     -- Save
     lvim.builtin.which_key.mappings["w"] = { "<cmd>w!<cr>", icons.ok .. " Save buffer" }
@@ -239,8 +243,8 @@ M.normal_keys = function()
         ["<A-S-Left>"] = "<cmd>BufferLineMovePrev<cr>",
         ["<A-S-Right>"] = "<cmd>BufferLineMoveNext<cr>",
         -- Toggle tree
-        ["<F3>"] = "<cmd>NvimTreeToggle<cr>",
-        ["<S-F3>"] = "<cmd>NvimTreeRefresh<cr>",
+        ["<F3>"] = "<cmd>NeoTreeRevealToggle<cr>",
+        -- ["<S-F3>"] = "<cmd>NvimTreeRefresh<cr>",
         -- Toggle sidebar
         ["<F5>"] = "<cmd>MouseToggle<cr>",
         -- Yank current path
@@ -266,6 +270,14 @@ M.normal_keys = function()
         ["<C-P>"] = "<cmd>lua require('legendary').find()<cr>",
     }
 
+    -- File explorer
+    if lvim.builtin.tree_provider == "neo-tree" then
+        lvim.keys.normal_mode["<F3>"] = { "<cmd>NeoTreeRevealToggle<cr>" }
+    else
+        lvim.keys.normal_mode["<F3>"] = { "<cmd>NvimTreeToggle<cr>" }
+        lvim.keys.normal_mode["<S-F3>"] = { "<cmd>NvimTreeRefresh<cr>" }
+    end
+
     -- Toggle sidebar
     if lvim.builtin.sidebar.active then
         lvim.keys.normal_mode["<F4>"] = "<cmd>SidebarNvimToggle<cr>"
@@ -280,9 +292,6 @@ M.insert_keys = function()
         ["<F2>"] = "<esc><cmd>BufferLineCycleNext<cr>",
         ["<A-S-Left>"] = "<cmd>BufferLineMovePrev<cr>",
         ["<A-S-Right>"] = "<cmd>BufferLineMoveNext<cr>",
-        -- Toggle tree
-        ["<F3>"] = "<esc><cmd>NvimTreeToggle<cr>",
-        ["<S-F3>"] = "<esc><cmd>NvimTreeRefresh<cr>",
         -- Toggle mouse
         ["<F5>"] = "<esc><cmd>MouseToggle<cr>",
         -- Yank current path
@@ -301,6 +310,14 @@ M.insert_keys = function()
         -- Toggle
         ["<C-B>"] = "<cmd>lua _bemol_toggle()<cr>",
     }
+
+    -- File explorer
+    if lvim.builtin.tree_provider == "neo-tree" then
+        lvim.keys.insert_mode["<F3>"] = { "<esc><cmd>NeoTreeRevealToggle<cr>" }
+    else
+        lvim.keys.insert_mode["<F3>"] = { "<esc><cmd>NvimTreeToggle<cr>" }
+        lvim.keys.insert_mode["<S-F3>"] = { "<esc><cmd>NvimTreeRefresh<cr>" }
+    end
 
     -- Toggle sidebar
     if lvim.builtin.sidebar.active then

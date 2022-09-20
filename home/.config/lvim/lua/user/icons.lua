@@ -131,6 +131,21 @@ M.nvimtree_icons = {
     },
 }
 
+if lvim.builtin.tree_provider == "neo-tree" then
+    M.nvintree_icons["git"] = {
+        unmerged = "",
+        added = "",
+        deleted = "",
+        modified = "",
+        renamed = "",
+        untracked = "",
+        ignored = "",
+        unstaged = "",
+        staged = "",
+        conflict = "",
+    }
+end
+
 M.define_dap_signs = function()
     vim.fn.sign_define("DapBreakpoint", lvim.builtin.dap.breakpoint)
     vim.fn.sign_define("DapStopped", lvim.builtin.dap.stopped)

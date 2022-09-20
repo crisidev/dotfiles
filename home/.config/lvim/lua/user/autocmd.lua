@@ -47,7 +47,7 @@ M.config = function()
     vim.api.nvim_create_autocmd("CmdlineLeave", {
         group = "_lvim_user",
         pattern = "*",
-        command = "lua require('scrollbar.handlers.search').handler.hide()",
+        command = "lua ok, sb = pcall(require, 'scrollbar.handlers.search'); if ok then sb.handler.hide() end",
     })
 
     -- Start metals

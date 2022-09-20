@@ -223,6 +223,33 @@ M.telescope_theme = function()
         vim.cmd("hi " .. group .. " guifg=" .. fg .. " guibg=" .. bg)
     end
 
+    local bg = "#24283b"
+    local bg_dark = "#1a1e30"
+    local bg_dim = "#1f2335"
+    local bg_float = "#1a1e30"
+    local fg = "#c0caf5"
+    local fg_gutter = "#3b4261"
+    local fg_dark = "#a9b1d6"
+    local border_highlight = "#3d59a1"
+    local yellow = "#e0af68"
+    local git_added = "#449dab"
+    local git_removed = "#f7768e"
+    local git_changed = "#6183bb"
+    -- local git_changed = "#bb7a61"
+    set_fg_bg("NormalFloat", fg, bg_float)
+    set_fg_bg("Cursor", bg, fg)
+    set_fg_bg("VertSplit", bg_dark, bg_dark)
+    set_fg_bg("WinSeparator", bg_dark, bg_dark)
+    set_fg_bg("SignColumn", fg_gutter, "NONE")
+    set_fg_bg("SignColumnSB", fg_gutter, "NONE")
+    set_fg_bg("NormalNC", fg_dark, bg_dim)
+    set_fg_bg("TelescopeBorder", border_highlight, lvim.transparent_window and bg_float or "NONE")
+    set_fg_bg("TelescopeNormal", fg, lvim.transparent_window and bg_float or "NONE")
+    set_fg_bg("NvimTreeFolderIcon", yellow, "NONE")
+    set_fg_bg("diffAdded", git_added, "NONE")
+    set_fg_bg("diffRemoved", git_removed, "NONE")
+    set_fg_bg("diffChanged", git_changed, "NONE")
+
     local colors = M.hi_colors()
     -- set_fg_bg("WinSeparator", colors.bg, "None")
     set_fg_bg("NormalFloat", colors.fg, colors.bg)

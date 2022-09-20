@@ -8,7 +8,7 @@ lvim.termguicolors = true
 lvim.transparent_window = false
 lvim.debug = false
 lvim.leader = ","
-vim.o.conceallevel = 2
+lvim.transparent_window = false
 
 -- Vimscript if needed
 vim.cmd "source ~/.config/lvim/vimscript/user.pre.vim"

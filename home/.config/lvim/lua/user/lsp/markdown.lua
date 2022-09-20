@@ -5,6 +5,7 @@ M.config = function()
 
     local opts = {
         cmd = { "ltex-ls" },
+        filetypes = { "bib", "gitcommit", "markdown", "org", "plaintex", "rst", "rnoweb", "tex" },
         root_dir = function(fname)
             return require("lspconfig").util.find_git_ancestor(fname) or vim.fn.getcwd()
         end,
@@ -25,8 +26,8 @@ M.config = function()
         on_attach = require("lvim.lsp").common_on_attach,
         on_init = require("lvim.lsp").common_on_init,
         capabilities = require("lvim.lsp").common_capabilities(),
+        single_file_support = true,
     }
-    -- Use your attach function here
     local status_ok, lsp = pcall(require, "lspconfig")
     if not status_ok then
         return
@@ -37,7 +38,10 @@ M.config = function()
         return
     end
 
-    require("lvim.lsp.manager").setup("prosemd_lsp", {})
+    require("lvim.lsp.manager").setup("prosemd_lsp", {
+        filetypes = { "markdown" },
+        single_file_support = true,
+    })
 end
 
 return M

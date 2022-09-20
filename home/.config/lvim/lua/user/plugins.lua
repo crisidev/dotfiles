@@ -5,13 +5,6 @@ M.config = function()
         ------------------------------------------------------------------------------
         -- Themes and visual stuff.
         ------------------------------------------------------------------------------
-        {
-            "folke/tokyonight.nvim",
-            config = function()
-                require("user.theme").tokyonight()
-                vim.cmd [[colorscheme tokyonight]]
-            end,
-        },
         -- Colorizer
         {
             "norcalli/nvim-colorizer.lua",
@@ -562,6 +555,15 @@ M.config = function()
             config = function()
                 require("spaceless").setup()
             end,
+        },
+        {
+            "nvim-neo-tree/neo-tree.nvim",
+            branch = "v2.x",
+            requires = { "MunifTanjim/nui.nvim" },
+            config = function()
+                require("user.neotree").config()
+            end,
+            disable = lvim.builtin.tree_provider ~= "neo-tree",
         },
     }
 end

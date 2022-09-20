@@ -31,7 +31,6 @@ M.config = function()
         "yamlls",
         "smithy_language_server",
         "grammar_guard",
-        "taplo",
     })
     lvim.lsp.document_highlight = true
     lvim.lsp.code_lens_refresh = true
@@ -106,7 +105,6 @@ M.config = function()
     -- Configure Lsp providers
     require("user.lsp.python").config()
     require("user.lsp.go").config()
-    require("user.lsp.lua").config()
     require("user.lsp.yaml").config()
     require("user.lsp.toml").config()
     require("user.lsp.smithy").config()
