@@ -2,7 +2,6 @@ local M = {}
 
 M.config = function()
     local icons = require("user.icons").icons
-    local nvimtree_icons = require("user.icons").nvimtree_icons
 
     -- Tree support
     lvim.builtin.tree_provider = "nvimtree"
@@ -14,7 +13,7 @@ M.config = function()
     -- Debugging
     lvim.builtin.dap.active = true
     -- Twilight
-    lvim.builtin.twilight = { active = false }
+    lvim.builtin.twilight = { active = true }
     -- Copilot
     lvim.builtin.copilot = { active = true }
     -- Telescope max path length
@@ -23,10 +22,18 @@ M.config = function()
     lvim.builtin.lsp_signature_help = { active = false }
     -- Twilight
     lvim.builtin.twilight.enable = true
-    -- Other stuff
+    -- Lir
     lvim.builtin.lir.active = false
-    lvim.builtin.breadcrumbs.active = true
+    -- Breadcrumbs
+    lvim.builtin.breadcrumbs.active = false
+    -- Illuminate
     lvim.builtin.illuminate.active = true
+    -- Indent lines
+    lvim.builtin.indentlines.active = false
+    -- Global status line
+    lvim.builtin.global_statusline = true
+    -- Winbar provider
+    lvim.builtin.winbar_provider = "navic"
 
     -- Theme
     lvim.builtin.theme.options.style = "storm"
@@ -55,7 +62,6 @@ M.config = function()
         file = true,
         folder_arrow = true,
     }
-    lvim.builtin.nvimtree.setup.renderer.icons.glyphs = nvimtree_icons
     lvim.builtin.nvimtree.setup.renderer.icons.webdev_colors = true
     lvim.builtin.nvimtree.setup.view.width = 60
     lvim.builtin.nvimtree.setup.view.preserve_window_proportions = true

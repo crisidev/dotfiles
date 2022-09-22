@@ -1,103 +1,11 @@
 local M = {}
 
-M.tokyonight = function()
-    require("tokyonight").setup {
-        style = "storm",
-        transparent = lvim.transparent_window,
-        terminal_colors = true,
-        styles = {
-            comments = {},
-            keywords = { italic = true },
-            functions = {},
-            variables = {},
-            sidebars = "dark",
-            floats = "dark",
-        },
-        sidebars = {
-            "qf",
-            "vista_kind",
-            "terminal",
-            "packer",
-            "spectre_panel",
-            "NeogitStatus",
-            "help",
-        },
-        day_brightness = 0.3,
-        hide_inactive_statusline = true,
-        dim_inactive = true,
-        lualine_bold = false, -- When `true`, section headers in the lualine theme will be bold
-
-        on_colors = function(colors)
-            colors.git = { change = "#6183bb", add = "#449dab", delete = "#f7768e", conflict = "#bb7a61" }
-            colors.bg_dark = "#1a1e30"
-            colors.bg_dim = "#1f2335"
-            colors.bg_float = "#1a1e30"
-        end,
-        on_highlights = function(hl, c)
-            c.bg_dark = "#1a1e30"
-            c.bg_dim = "#1f2335"
-            c.bg_float = "#1a1e30"
-            hl.VertSplit = { fg = c.bg_statusline, bg = c.bg_statusline, style = "NONE" }
-            hl.WinSeparator = { fg = c.bg_dark, bg = c.bg_dark }
-            hl.SignColumn = { fg = c.fg_gutter, bg = "NONE" }
-            hl.SignColumnSB = { link = "SignColumn" }
-            hl.NormalNC = { fg = c.fg_dark, bg = c.bg_dim }
-            hl.TelescopeBorder = { fg = c.border_highlight, bg = lvim.transparent_window and c.bg_float or c.none }
-            hl.TelescopeNormal = { fg = c.fg, bg = lvim.transparent_window and c.bg_float or c.none }
-            hl.NvimTreeFolderIcon = { bg = c.none, fg = c.yellow }
-        end,
-    }
-end
-
-M.catppuccin = function()
-    local catppuccin = require "catppuccin"
-    catppuccin.setup {
-        transparent_background = lvim.transparent_window,
-        term_colors = false,
-        styles = {
-            comments = "NONE",
-            keywords = "italic",
-        },
-        integrations = {
-            lsp_trouble = true,
-            nvimtree = {
-                transparent_panel = lvim.transparent_window,
-            },
-            which_key = true,
-            lightspeed = lvim.builtin.motion_provider == "lightspeed",
-            hop = lvim.builtin.motion_provider == "hop",
-        },
-    }
-end
-
-M.kanagawa = function()
-    local kanagawa = require "kanagawa"
-    kanagawa.setup {
-        undercurl = true, -- enable undercurls
-        commentStyle = {},
-        functionStyle = {},
-        keywordStyle = { italic = true },
-        statementStyle = { italic = true },
-        typeStyle = {},
-        variablebuiltinStyle = { italic = true },
-        specialReturn = true, -- special highlight for the return keyword
-        specialException = true, -- special highlight for exception handling keywords
-        dimInactive = lvim.builtin.global_statusline, -- dim inactive window `:h hl-NormalNC`
-        globalStatus = lvim.builtin.global_statusline, -- adjust window separators highlight for laststatus=3
-        transparent = lvim.transparent_window,
-        colors = { sumiInk1b = "#1b1b23" },
-        overrides = {
-            diffRemoved = { fg = "#E46876" },
-        },
-    }
-end
-
 M.colors = {
     tokyonight_colors = {
         none = "NONE",
         bg_dark = "#1f2335",
-        bg_alt = "#1f2335",
-        bg = "#1a1b26",
+        bg_alt = "#1a1b26",
+        bg = "#24283b",
         bg_br = "#292e42",
         terminal_black = "#414868",
         fg = "#c0caf5",
@@ -128,59 +36,6 @@ M.colors = {
         -- git = { change = "#6183bb", add = "#449dab", delete = "#914c54", conflict = "#bb7a61" },
         git = { change = "#6183bb", add = "#449dab", delete = "#f7768e", conflict = "#bb7a61" },
         gitSigns = { add = "#164846", change = "#394b70", delete = "#823c41" },
-    },
-
-    catppuccin_colors = {
-        rosewater = "#F5E0DC",
-        flamingo = "#F2CDCD",
-        violet = "#DDB6F2",
-        pink = "#F5C2E7",
-        red = "#F28FAD",
-        maroon = "#E8A2AF",
-        orange = "#F8BD96",
-        yellow = "#FAE3B0",
-        green = "#ABE9B3",
-        blue = "#96CDFB",
-        cyan = "#89DCEB",
-        teal = "#B5E8E0",
-        lavender = "#C9CBFF",
-        white = "#D9E0EE",
-        gray2 = "#C3BAC6",
-        gray1 = "#988BA2",
-        gray0 = "#6E6C7E",
-        black4 = "#575268",
-        bg_br = "#302D41",
-        bg = "#1A1826",
-        bg_alt = "#1E1E2E",
-        fg = "#D9E0EE",
-        black = "#1A1826",
-        git = {
-            add = "#ABE9B3",
-            change = "#96CDFB",
-            delete = "#F28FAD",
-            conflict = "#FAE3B0",
-        },
-    },
-
-    kanagawa_colors = {
-        bg = "#16161D",
-        bg_alt = "#1F1F28",
-        bg_br = "#363646",
-        fg = "#DCD7BA",
-        red = "#E46876",
-        orange = "#FFA066",
-        yellow = "#DCA561",
-        blue = "#7FB4CA",
-        cyan = "#658594",
-        violet = "#957FB8",
-        magenta = "#938AA9",
-        green = "#76946A",
-        git = {
-            add = "#76946A",
-            conflict = "#252535",
-            delete = "#C34043",
-            change = "#DCA561",
-        },
     },
 }
 
@@ -223,33 +78,18 @@ M.telescope_theme = function()
         vim.cmd("hi " .. group .. " guifg=" .. fg .. " guibg=" .. bg)
     end
 
-    local bg = "#24283b"
-    local bg_dark = "#1a1e30"
-    local bg_dim = "#1f2335"
-    local bg_float = "#1a1e30"
-    local fg = "#c0caf5"
-    local fg_gutter = "#3b4261"
-    local fg_dark = "#a9b1d6"
-    local border_highlight = "#3d59a1"
-    local yellow = "#e0af68"
-    local git_added = "#449dab"
-    local git_removed = "#f7768e"
-    local git_changed = "#6183bb"
-    -- local git_changed = "#bb7a61"
-    set_fg_bg("NormalFloat", fg, bg_float)
-    set_fg_bg("Cursor", bg, fg)
-    set_fg_bg("VertSplit", bg_dark, bg_dark)
-    set_fg_bg("WinSeparator", bg_dark, bg_dark)
-    set_fg_bg("SignColumn", fg_gutter, "NONE")
-    set_fg_bg("SignColumnSB", fg_gutter, "NONE")
-    set_fg_bg("NormalNC", fg_dark, bg_dim)
-    set_fg_bg("TelescopeBorder", border_highlight, lvim.transparent_window and bg_float or "NONE")
-    set_fg_bg("TelescopeNormal", fg, lvim.transparent_window and bg_float or "NONE")
-    set_fg_bg("NvimTreeFolderIcon", yellow, "NONE")
-    set_fg_bg("diffAdded", git_added, "NONE")
-    set_fg_bg("diffRemoved", git_removed, "NONE")
-    set_fg_bg("diffChanged", git_changed, "NONE")
-
+    local current_colors = M.colors.tokyonight_colors
+    set_fg_bg("diffAdded", current_colors.git.add, "NONE")
+    set_fg_bg("diffRemoved", current_colors.git.delete, "NONE")
+    set_fg_bg("diffChanged", current_colors.git.change, "NONE")
+    set_fg_bg("WinSeparator", current_colors.bg_alt, current_colors.bg_alt)
+    set_fg_bg("SignColumn", current_colors.bg, "NONE")
+    set_fg_bg("SignColumnSB", current_colors.bg, "NONE")
+    set_fg_bg("NormalFloat", current_colors.fg, "#181924")
+    set_fg_bg("Cursor", current_colors.bg, current_colors.fg)
+    set_fg_bg("NormalNC", current_colors.fg_dark, "#1c1d28")
+    set_fg_bg("Normal", current_colors.fg, "#1f2335")
+    set_fg_bg("CursorLineNr",current_colors.orange, "bold")
     local colors = M.hi_colors()
     -- set_fg_bg("WinSeparator", colors.bg, "None")
     set_fg_bg("NormalFloat", colors.fg, colors.bg)

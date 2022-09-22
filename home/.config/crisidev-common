@@ -34,7 +34,7 @@ finish_autorandr_switch() {
   notify-send -i display "Autorandr" "Switch to profile $1 finished"
   # feh --bg-fill "${HOME}/Pictures/wallpapers/rickstone.png"
 }
-
+xrandr --output HDMI-A-0 --gamma 0:0:0
 autorandr_safe() {
   loaded=$(autorandr "$@" 2>&1)
   if echo "$loaded" |grep -q "Config already loaded"; then

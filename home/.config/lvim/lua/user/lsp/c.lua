@@ -7,6 +7,9 @@ M.config = function()
         return
     end
 
+    local capabilities = require("lvim.lsp").common_capabilities()
+    capabilities.offsetEncoding = { "utf-16" }
+
     local clangd_flags = {
         "--fallback-style=google",
         "--background-index",
@@ -23,14 +26,15 @@ M.config = function()
         "--ranking-model=heuristics",
         "--folding-ranges",
     }
+    local home = os.getenv "HOME"
     clangd_extensions.setup {
         server = {
             -- options to pass to nvim-lspconfig
             -- i.e. the arguments to require("lspconfig").clangd.setup({})
-            cmd = { "/home/matbigoi/.local/share/nvim/lsp_servers/clangd/clangd/bin/clangd", unpack(clangd_flags) },
+            cmd = { home .. "/.local/share/nvim/mason/packages/clangd/clangd/bin/clangd", unpack(clangd_flags) },
             on_attach = require("lvim.lsp").common_on_attach,
             on_init = require("lvim.lsp").common_on_init,
-            capabilities = require("lvim.lsp").common_capabilities(),
+            capabilities = capabilities,
         },
         extensions = {
             -- defaults:

@@ -43,8 +43,9 @@ function M._multiopen(prompt_bufnr, open_cmd)
     local picker = action_state.get_current_picker(prompt_bufnr)
     local num_selections = table.getn(picker:get_multi_selection())
     local border_contents = picker.prompt_border.contents[1]
-    if not (
-        string.find(border_contents, "Find Files")
+    if
+        not (
+            string.find(border_contents, "Find Files")
             or string.find(border_contents, "Git Files")
             or string.find(border_contents, "Sessions")
         )
@@ -338,7 +339,17 @@ M.config = function()
     lvim.builtin.telescope.defaults.file_ignore_patterns = M.file_ignore_patterns
 
     local telescope_actions = require "telescope.actions.set"
+    lvim.builtin.telescope.pickers.git_files = {
+        hidden = true,
+        show_untracked = true,
+        layout_strategy = "horizontal",
+    }
+    lvim.builtin.telescope.pickers.live_grep = {
+        only_sort_text = true,
+        layout_strategy = "horizontal",
+    }
     lvim.builtin.telescope.pickers.find_files = {
+        layout_strategy = "horizontal",
         attach_mappings = function(_)
             telescope_actions.select:enhance {
                 post = function()

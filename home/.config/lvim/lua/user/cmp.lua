@@ -32,11 +32,9 @@ M.kind = {
 
 M.config = function()
     lvim.builtin.cmp.sources = {
-        -- Index 1
         { name = "nvim_lsp", group_index = 1 },
         { name = "nvim_lua", group_index = 1 },
         { name = "luasnip", group_index = 1, max_item_count = 5, keyword_length = 3 },
-        { name = "buffer", group_index = 1, max_item_count = 5, keyword_length = 3 },
         { name = "path", group_index = 1, max_item_count = 5 },
         { name = "git", group_index = 1 },
         { name = "crates", group_index = 1 },
@@ -44,11 +42,11 @@ M.config = function()
         { name = "copilot", group_index = 1 },
         { name = "dictionary", group_index = 1 },
         { name = "spell", group_index = 1 },
-        { name = "cmdline", group_index = 1 },
         { name = "calc", group_index = 1 },
         { name = "emoji", group_index = 1 },
-        { name = "treesitter", group_index = 1 },
+        { name = "buffer", group_index = 1, max_item_count = 5, keyword_length = 3 },
     }
+
     lvim.builtin.cmp.experimental = {
         ghost_text = false,
         native_menu = false,
@@ -86,13 +84,16 @@ M.config = function()
             config = { sources = function(...) end },
         }
     end
-    cmp.setup.cmdline(":", {
-        mapping = cmp.mapping.preset.cmdline {},
-        sources = {
-            { name = "cmdline", group_index = 1 },
-            { name = "path", group_index = 1 },
-        },
-    })
+    for _, cmd_type in ipairs { ":", "/", "?", "@" } do
+        cmp.setup.cmdline(cmd_type, {
+            mapping = cmp.mapping.preset.cmdline {},
+            sources = {
+                { name = "cmdline", group_index = 1 },
+                { name = "path", group_index = 1 },
+                { name = "cmdline_history", group_index = 2 },
+            },
+        })
+    end
     cmp.setup.filetype("toml", {
         sources = cmp.config.sources({
             { name = "nvim_lsp", group_index = 1 },

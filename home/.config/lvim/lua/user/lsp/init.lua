@@ -26,7 +26,6 @@ M.config = function()
         "jdtls",
         "pyright",
         "rust_analyzer",
-        "sumneko_lua",
         "tsserver",
         "yamlls",
         "smithy_language_server",

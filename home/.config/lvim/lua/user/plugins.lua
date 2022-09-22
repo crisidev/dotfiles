@@ -219,6 +219,7 @@ M.config = function()
         ------------------------------------------------------------------------------
         -- Cmp for command line
         { "hrsh7th/cmp-cmdline" },
+        { "dmitmel/cmp-cmdline-history" },
         -- Cmp for emojis..
         { "hrsh7th/cmp-emoji" },
         -- Cmp for to calculate maths expressions.
@@ -505,17 +506,9 @@ M.config = function()
             config = function()
                 require("user.scrollbar").config()
                 -- Register current position handler.
-                require("user.scrollbar").register_current_position_handler()
+                -- require("user.scrollbar").register_current_position_handler()
             end,
             after = { "nvim-hlslens" },
-        },
-        -- Treesitter context
-        {
-            "nvim-treesitter/nvim-treesitter-context",
-            config = function()
-                require("user.treesitter").context_config()
-            end,
-            after = { "nvim-treesitter" },
         },
         -- Preview jumps
         {
@@ -564,6 +557,13 @@ M.config = function()
                 require("user.neotree").config()
             end,
             disable = lvim.builtin.tree_provider ~= "neo-tree",
+        },
+        {
+            "kristijanhusak/orgmode.nvim",
+            ft = { "org" },
+            config = function()
+                require("user.orgmode").setup()
+            end,
         },
     }
 end

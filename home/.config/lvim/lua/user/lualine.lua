@@ -141,13 +141,7 @@ M.config = function()
             -- Disable sections and component separators
             component_separators = { left = "", right = "" },
             section_separators = { left = "", right = "" },
-            theme = {
-                -- We are going to use lualine_c an lualine_x as left and
-                -- right section. Both are highlighted by c theme .  So we
-                -- are just setting default looks o statusline
-                normal = { c = { fg = colors.fg, bg = colors.bg } },
-                inactive = { c = { fg = colors.fg, bg = colors.bg_alt } },
-            },
+            theme = "auto",
             disabled_filetypes = {
                 "dashboard",
                 "NvimTree",
@@ -196,12 +190,16 @@ M.config = function()
                 {
                     "filename",
                     cond = conditions.buffer_not_empty,
-                    color = { fg = colors.blue, gui = "bold" },
+                    color = { fg = colors.blue, gui = "bold", bg = colors.bg },
                 },
             },
             lualine_x = {},
         },
     }
+
+    if lvim.builtin.global_statusline then
+        config.options.disabled_filetypes = { "alpha" }
+    end
 
     -- Inserts a component in lualine_c at left section
     local function ins_left(component)
@@ -229,7 +227,7 @@ M.config = function()
         "b:gitsigns_head",
         icon = " ",
         cond = conditions.check_git_workspace,
-        color = { fg = colors.blue },
+        color = { fg = colors.blue, bg = colors.bg },
         padding = 0,
     }
 
@@ -260,10 +258,9 @@ M.config = function()
     ins_left {
         function()
             local fname = vim.fn.expand "%:p"
-            local ftype = vim.fn.expand "%:e"
+            local ftype = vim.bo.filetype
             local cwd = vim.api.nvim_call_function("getcwd", {})
-            if
-                string.find(fname, "term") ~= nil
+            if string.find(fname, "term") ~= nil
                 and string.find(fname, "lazygit;#toggleterm") ~= nil
                 and (vim.fn.has "linux" == 1 or vim.fn.has "mac" == 1)
             then
@@ -282,21 +279,17 @@ M.config = function()
             -- if #cwd > 0 and #ftype > 0 then
             --     show_name = fname:sub(#cwd + 2)
             -- end
-            local readonly = ""
             local modified = ""
-            if vim.bo.readonly then
-                readonly = "  "
-            end
             if vim.bo.modified then
                 modified = "  "
             end
-            return show_name .. readonly .. modified
+            return show_name .. modified
         end,
         cond = function()
             return conditions.buffer_not_empty() and conditions.hide_small()
         end,
         padding = { left = 1, right = 1 },
-        color = { fg = colors.fg, gui = "bold" },
+        color = { fg = colors.fg, gui = "bold", bg = colors.bg },
     }
 
     -- Diff icons
@@ -343,42 +336,24 @@ M.config = function()
         cond = conditions.hide_in_width,
     }
 
-    -- Session availability
-    ins_left {
-        function()
-            if vim.g.persisting then
-                return icons.presence_on
-            elseif vim.g.persisting == false then
-                return icons.presence_off
-            end
-        end,
-        cond = function()
-            return vim.g.persisting ~= nil
-        end,
-        color = { fg = colors.green },
-    }
-
     -- Insert mid section. You can make any number of sections in neovim :)
     -- for lualine it's any number greater then 2
     ins_left {
         function()
-            return "%="
+            return icons.circle_right
         end,
-        enabled = false,
+        padding = { left = 0, right = 0 },
+        color = { fg = colors.bg },
+        cond = nil,
     }
 
-    ins_left {
+    ins_right {
         function()
-            return ""
+            return icons.circle_left
         end,
-        enabled = false,
-    }
-
-    ins_left {
-        function()
-            return ""
-        end,
-        enabled = false,
+        padding = { left = 0, right = 0 },
+        color = { fg = colors.bg },
+        cond = nil,
     }
 
     -- Right section.
@@ -398,6 +373,7 @@ M.config = function()
         sources = { "nvim_diagnostic" },
         symbols = { error = icons.error, warn = icons.warn, info = icons.info, hint = icons.hint },
         cond = conditions.hide_in_width,
+        color = { fg = colors.fg, bg = colors.bg },
     }
 
     -- Copilot icon
@@ -410,13 +386,13 @@ M.config = function()
             end
         end,
         padding = 0,
-        color = { fg = colors.red },
+        color = { fg = colors.red, bg = colors.bg },
     }
 
     -- Null-ls icon
     ins_right {
         function()
-            local buf_clients = vim.lsp.buf_get_clients()
+            local buf_clients = vim.lsp.get_active_clients()
             if next(buf_clients) == nil then
                 return ""
             end
@@ -428,20 +404,35 @@ M.config = function()
             return ""
         end,
         padding = 0,
-        color = { fg = colors.blue },
+        color = { fg = colors.blue, bg = colors.bg },
         cond = conditions.hide_in_width,
+    }
+
+    -- Session availability
+    ins_right {
+        function()
+            if vim.g.persisting then
+                return icons.presence_on
+            elseif vim.g.persisting == false then
+                return icons.presence_off
+            end
+        end,
+        cond = function()
+            return vim.g.persisting ~= nil
+        end,
+        color = { fg = colors.green, bg = colors.bg },
     }
 
     -- Treesitter icon
     ins_right {
         function()
             if next(vim.treesitter.highlighter.active) then
-                return " " .. icons.treesitter .. " "
+                return icons.treesitter .. " "
             end
             return ""
         end,
         padding = 0,
-        color = { fg = colors.green },
+        color = { fg = colors.green, bg = colors.bg },
         cond = conditions.hide_in_width,
     }
 
@@ -449,7 +440,7 @@ M.config = function()
     ins_right {
         function(msg)
             msg = msg or icons.ls_inactive
-            local buf_clients = vim.lsp.buf_get_clients()
+            local buf_clients = vim.lsp.buf_get_client()
             if next(buf_clients) == nil then
                 if type(msg) == "boolean" or #msg == 0 then
                     return icons.ls_inactive
@@ -497,7 +488,7 @@ M.config = function()
 
             return icons.ls_active .. table.concat(buf_client_names, ", ")
         end,
-        color = { fg = colors.fg },
+        color = { fg = colors.fg, bg = colors.bg },
         cond = conditions.hide_in_width,
     }
 
@@ -505,7 +496,7 @@ M.config = function()
     ins_right {
         "location",
         padding = 0,
-        color = { fg = colors.orange },
+        color = { fg = colors.orange, bg = colors.bg },
     }
 
     -- File size
@@ -532,6 +523,7 @@ M.config = function()
             return format_file_size(file)
         end,
         cond = conditions.buffer_not_empty,
+        color = { fg = colors.fg, bg = colors.bg },
     }
 
     -- File format
@@ -539,7 +531,7 @@ M.config = function()
         "fileformat",
         fmt = string.upper,
         icons_enabled = true,
-        color = { fg = colors.green, gui = "bold" },
+        color = { fg = colors.green, gui = "bold", bg = colors.bg },
         cond = conditions.hide_in_width,
     }
 

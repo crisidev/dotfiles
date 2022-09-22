@@ -74,6 +74,8 @@ M.icons = {
     expanded = "",
     collapsed = "",
     circular = "",
+    circle_left = "",
+    circle_right = ""
 }
 
 M.todo_comments = {

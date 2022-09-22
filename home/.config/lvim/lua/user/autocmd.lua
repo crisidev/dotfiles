@@ -66,6 +66,15 @@ M.config = function()
             require("vim.highlight").on_yank { higroup = "Search", timeout = 200 }
         end,
     })
+
+    -- Orgmode triggers
+    vim.api.nvim_create_autocmd("Filetype", {
+        group = "_lvim_user",
+        pattern = { "org" },
+        callback = function()
+            lvim.builtin.which_key.setup.triggers = { "<leader>", "<space>", "g", "f", "z", "]", "[" }
+        end,
+    })
 end
 
 return M

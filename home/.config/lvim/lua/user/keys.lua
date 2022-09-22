@@ -50,7 +50,7 @@ M.which_keys_normal = function()
     }
 
     -- File browser
-    lvim.builtin.which_key.mappings["o"] = {
+    lvim.builtin.which_key.mappings["C"] = {
         "<cmd>lua require('user.telescope').file_browser()<cr>",
         icons.folder .. " File browser",
     }
@@ -180,12 +180,6 @@ M.which_keys_normal = function()
     lvim.builtin.which_key.mappings["G"] = {
         "<cmd>lua require('user.telescope').spell_suggest()<cr>",
         icons.grammar .. "Spelling",
-    }
-
-    -- Treesitter context
-    lvim.builtin.which_key.mappings["C"] = {
-        "<cmd>TSContextToggle<cr>",
-        icons.treesitter .. " TS Context",
     }
 
     -- Comment
@@ -365,13 +359,19 @@ M.terminal_keys = function()
 end
 
 M.config = function()
-    lvim.builtin.which_key.setup.window.winblend = 10
-    lvim.builtin.which_key.setup.window.border = "none"
     lvim.builtin.which_key.setup.icons = {
         breadcrumb = "/", -- symbol used in the command line area that shows your active key combo
         separator = "·", -- symbol used between a key and it's label
         group = "", -- symbol prepended to a group
     }
+    lvim.builtin.which_key.setup.window.winblend = 10
+    lvim.builtin.which_key.setup.window.border = "none"
+    lvim.builtin.which_key.setup.plugins.presets.z = true
+    lvim.builtin.which_key.setup.plugins.presets.f = true
+    lvim.builtin.which_key.setup.plugins.presets.windows = true
+    lvim.builtin.which_key.setup.plugins.presets.nav = true
+    lvim.builtin.which_key.setup.plugins.marks = true
+    lvim.builtin.which_key.setup.plugins.registers = true
     lvim.builtin.which_key.setup.triggers = { "<leader>", "<space>", "f", "z", "]", "[" }
     lvim.builtin.which_key.setup.ignore_missing = false
 
