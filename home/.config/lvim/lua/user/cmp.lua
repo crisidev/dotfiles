@@ -90,7 +90,7 @@ M.config = function()
             sources = {
                 { name = "cmdline", group_index = 1 },
                 { name = "path", group_index = 1 },
-                { name = "cmdline_history", group_index = 2 },
+                { name = "cmdline_history", group_index = 2, keyword_length = 5 },
             },
         })
     end
