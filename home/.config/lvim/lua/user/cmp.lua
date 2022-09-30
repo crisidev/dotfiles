@@ -86,7 +86,10 @@ M.config = function()
     end
     for _, cmd_type in ipairs { ":", "/", "?", "@" } do
         cmp.setup.cmdline(cmd_type, {
-            mapping = cmp.mapping.preset.cmdline {},
+            mapping = cmp.mapping.preset.cmdline {
+                ["<Up>"] = cmp.mapping(cmp.mapping.select_prev_item(), { "i", "c" }),
+                ["<Down>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i", "c" }),
+            },
             sources = {
                 { name = "cmdline", group_index = 1 },
                 { name = "path", group_index = 1 },
