@@ -74,12 +74,8 @@ M.config = function()
     -- Terminal
     lvim.builtin.terminal.autochdir = true
     lvim.builtin.terminal.active = true
-    lvim.builtin.terminal.open_mapping = [[<c-\\>]]
-    lvim.builtin.terminal.execs = {
-        { "zsh", "<c-\\>", "Terminal", "float" },
-        { "zsh", "<c-]>", "Terminal", "horizontal" },
-        { "lazygit", "<c-g>", "LazyGit", "float" },
-    }
+    lvim.builtin.terminal.open_mapping = nil
+    lvim.builtin.terminal.execs = {}
 
     -- Notify popup
     lvim.builtin.notify.active = true

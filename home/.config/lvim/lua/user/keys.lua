@@ -1,23 +1,7 @@
 local M = {}
 
-local ok, term = pcall(require, "toggleterm.terminal")
-if ok then
-    local t = term.Terminal:new { cmd = "bemol --watch", size = 10, hidden = true, direction = "horizontal" }
-    function _bemol_toggle()
-        t:toggle()
-    end
-end
-
 M.which_keys_normal = function()
     local icons = require("user.icons").icons
-    local ok, term = pcall(require, "toggleterm.terminal")
-    if ok then
-        local t = term.Terminal:new { cmd = "lazygit", hidden = true }
-        function _lazygit_toggle()
-            t:toggle()
-        end
-    end
-
     local picker = require "window-picker"
 
     function _pick_window()
@@ -114,7 +98,7 @@ M.which_keys_normal = function()
         name = " Git",
         b = { "<cmd>BlamerToggle<cr>", "Toggle inline git blame" },
         B = { "<cmd>Git blame<cr>", "Open git blame" },
-        g = { "<cmd>lua _lazygit_toggle()<cr>", "LazyGit" },
+        g = { "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd='lazygit'})<cr>", "LazyGit" },
         l = {
             "<cmd>lua require('gitlinker').get_buf_range_url('n', {action_callback = require('gitlinker.actions').copy_to_clipboard})<cr>",
             "Copy line",
@@ -258,8 +242,11 @@ M.normal_keys = function()
         [">"] = ">>",
         -- Yank to the end of line
         ["Y"] = "y$",
-        -- Toggle
-        ["<C-B>"] = "<cmd>lua _bemol_toggle()<cr>",
+        -- Toggle terminals
+        ["<C-\\>"] = "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd = 'zsh', hidden = true, direction = 'float'})<cr>",
+        ["<C-]>"] = "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd = 'zsh', size = 10, hidden = true, direction = 'horizontal'})<cr>",
+        ["<C-g>"] = "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd = 'lazygit', hidden = true, direction = 'float'})<cr>",
+        ["<C-B>"] = "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd = 'bemol --watch', size = 10, hidden = true, direction = 'horizontal'})<cr>",
         -- Legendary
         ["<C-P>"] = "<cmd>lua require('legendary').find()<cr>",
     }
@@ -301,8 +288,11 @@ M.insert_keys = function()
         ["<C-v>"] = "<C-r><C-o>+",
         -- Snippets
         ["<C-s>"] = "<cmd>lua require('telescope').extensions.luasnip.luasnip{}<cr>",
-        -- Toggle
-        ["<C-B>"] = "<cmd>lua _bemol_toggle()<cr>",
+        -- Toggle terminals
+        ["<C-\\>"] = "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd = 'zsh', hidden = true, direction = 'float'})<cr>",
+        ["<C-]>"] = "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd = 'zsh', size = 10, hidden = true, direction = 'horizontal'})<cr>",
+        ["<C-g>"] = "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd = 'lazygit', hidden = true, direction = 'float'})<cr>",
+        ["<C-B>"] = "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd = 'bemol --watch', size = 10, hidden = true, direction = 'horizontal'})<cr>",
     }
 
     -- File explorer
