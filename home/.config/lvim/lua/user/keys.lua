@@ -148,7 +148,8 @@ M.which_keys_normal = function()
     lvim.builtin.which_key.mappings["W"] = { "<cmd>lua _pick_window()<cr>", icons.world .. "Pick window" }
 
     -- Close buffer with Leader-q
-    lvim.builtin.which_key.mappings["q"] = { "<cmd>lua require('user.bufferline').delete_buffer()<cr>", icons.no .. " Close buffer" }
+    lvim.builtin.which_key.mappings["q"] =
+    { "<cmd>lua require('user.bufferline').delete_buffer()<cr>", icons.no .. " Close buffer" }
     lvim.builtin.which_key.mappings["Q"] = { "<cmd>config qall<cr>", icons.no .. " Close all" }
 
     -- Dashboard
@@ -243,10 +244,10 @@ M.normal_keys = function()
         -- Yank to the end of line
         ["Y"] = "y$",
         -- Toggle terminals
-        ["<C-\\>"] = "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd = 'zsh', hidden = true, direction = 'float'})<cr>",
-        ["<C-]>"] = "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd = 'zsh', size = 10, hidden = true, direction = 'horizontal'})<cr>",
-        ["<C-g>"] = "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd = 'lazygit', hidden = true, direction = 'float'})<cr>",
-        ["<C-B>"] = "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd = 'bemol --watch', size = 10, hidden = true, direction = 'horizontal'})<cr>",
+        ["<C-\\>"] = "<cmd>lua require('user.terminal').float_terminal_toggle('zsh', 100)<cr>",
+        ["<C-]>"] = "<cmd>lua require('user.terminal').horizontal_terminal_toggle('zsh', 101, 20)<cr>",
+        ["<C-g>"] = "<cmd>lua require('user.terminal').float_terminal_toggle('lazygit', 102)<cr>",
+        ["<C-B>"] = "<cmd>lua require('user.terminal').horizontal_terminal_toggle('bemol --watch', 103, 10)<cr>",
         -- Legendary
         ["<C-P>"] = "<cmd>lua require('legendary').find()<cr>",
     }
@@ -263,6 +264,22 @@ M.normal_keys = function()
     if lvim.builtin.sidebar.active then
         lvim.keys.normal_mode["<F4>"] = "<cmd>SidebarNvimToggle<cr>"
     end
+end
+
+local Terminal = require("toggleterm.terminal").Terminal
+
+M.float_terminal_toggle = function(cmd)
+    local term = Terminal:new {
+        cmd = cmd,
+        hidden = true,
+        direction = "float",
+        on_open = function(_)
+            vim.cmd "startinsert!"
+        end,
+        on_close = function(_) end,
+        count = 99,
+    }
+    term:toggle()
 end
 
 -- INSERT MODE
@@ -289,10 +306,10 @@ M.insert_keys = function()
         -- Snippets
         ["<C-s>"] = "<cmd>lua require('telescope').extensions.luasnip.luasnip{}<cr>",
         -- Toggle terminals
-        ["<C-\\>"] = "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd = 'zsh', hidden = true, direction = 'float'})<cr>",
-        ["<C-]>"] = "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd = 'zsh', size = 10, hidden = true, direction = 'horizontal'})<cr>",
-        ["<C-g>"] = "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd = 'lazygit', hidden = true, direction = 'float'})<cr>",
-        ["<C-B>"] = "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd = 'bemol --watch', size = 10, hidden = true, direction = 'horizontal'})<cr>",
+        ["<C-\\>"] = "<cmd>lua require('user.terminal').float_terminal_toggle('zsh', 100)<cr>",
+        ["<C-]>"] = "<cmd>lua require('user.terminal').horizontal_terminal_toggle('zsh', 101, 20)<cr>",
+        ["<C-g>"] = "<cmd>lua require('user.terminal').float_terminal_toggle('lazygit', 102)<cr>",
+        ["<C-B>"] = "<cmd>lua require('user.terminal').horizontal_terminal_toggle('bemol --watch', 103, 10)<cr>",
     }
 
     -- File explorer

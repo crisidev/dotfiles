@@ -37,6 +37,9 @@ require("user.bufferline").config()
 -- Status line
 require("user.lualine").config()
 
+-- Terminal
+require("user.terminal").config()
+
 -- Keys
 require("user.keys").config()
 

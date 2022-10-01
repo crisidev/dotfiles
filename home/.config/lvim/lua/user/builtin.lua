@@ -71,12 +71,6 @@ M.config = function()
     lvim.builtin.alpha.mode = "custom"
     lvim.builtin.alpha["custom"] = { config = require("user.dashboard").config() }
 
-    -- Terminal
-    lvim.builtin.terminal.autochdir = true
-    lvim.builtin.terminal.active = true
-    lvim.builtin.terminal.open_mapping = nil
-    lvim.builtin.terminal.execs = {}
-
     -- Notify popup
     lvim.builtin.notify.active = true
     lvim.builtin.notify.opts.icons = {
