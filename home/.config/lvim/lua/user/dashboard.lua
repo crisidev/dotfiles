@@ -132,7 +132,7 @@ M.config = function()
             button("n", " " .. icons.stuka .. " New file", ":ene <BAR> startinsert <cr>"),
             button("b", " " .. icons.files .. " File browswer", ":lua require('user.telescope').file_browser()<cr>"),
             button("p", " " .. icons.project .. " Projects", ":lua require('user.telescope').projects()<cr>"),
-            button("q", " " .. icons.exit .. " Quit", ":SmartQ<cr>"),
+            button("q", " " .. icons.exit .. " Quit", ":confirm qall<cr>"),
         },
         opts = {
             spacing = 1,

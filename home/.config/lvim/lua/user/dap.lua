@@ -54,6 +54,15 @@ M.config = function()
                     local target_dir = metadata.target_directory
                     return target_dir .. "/debug/" .. target_name
                 end,
+                args = function()
+                    local inputstr = vim.fn.input("Params: ", "")
+                    local params = {}
+                    local sep = "%s"
+                    for str in string.gmatch(inputstr, "([^" .. sep .. "]+)") do
+                        table.insert(params, str)
+                    end
+                    return params
+                end,
             },
         }
     end
@@ -346,13 +355,9 @@ M.config = function()
     local icons = require("user.icons").icons
 
     lvim.builtin.dap.on_config_done = function(_)
-    lvim.builtin.which_key.mappings["d"]["name"] = icons.debug .. "Debug"
-    lvim.builtin.which_key.mappings["de"] = { "<cmd>lua require('dapui').eval()<cr>", "Eval" }
-    lvim.builtin.which_key.mappings["dU"] = { "<cmd>lua require('dapui').toggle()<cr>", "Toggle UI" }
-    lvim.builtin.which_key.mappings["ds"] = {
-        "<cmd>lua if vim.bo.filetype == 'rust' then vim.cmd[[RustDebuggables]] else require'dap'.continue() end<CR>",
-        "Start",
-    }
+        lvim.builtin.which_key.mappings["d"]["name"] = icons.debug .. "Debug"
+        lvim.builtin.which_key.mappings["de"] = { "<cmd>lua require('dapui').eval()<cr>", "Eval" }
+        lvim.builtin.which_key.mappings["dU"] = { "<cmd>lua require('dapui').toggle()<cr>", "Toggle UI" }
     end
 end
 

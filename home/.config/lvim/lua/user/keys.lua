@@ -148,8 +148,8 @@ M.which_keys_normal = function()
     lvim.builtin.which_key.mappings["W"] = { "<cmd>lua _pick_window()<cr>", icons.world .. "Pick window" }
 
     -- Close buffer with Leader-q
-    lvim.builtin.which_key.mappings["q"] = { "<cmd>SmartQ<cr>", icons.no .. " Close buffer" }
-    lvim.builtin.which_key.mappings["Q"] = { "<cmd>SmartQ!<cr>", icons.no .. " Force close buffer" }
+    lvim.builtin.which_key.mappings["q"] = { "<cmd>lua require('user.bufferline').delete_buffer()<cr>", icons.no .. " Close buffer" }
+    lvim.builtin.which_key.mappings["Q"] = { "<cmd>config qall<cr>", icons.no .. " Close all" }
 
     -- Dashboard
     lvim.builtin.which_key.mappings[";"] = { "<cmd>Alpha<CR>", icons.dashboard .. "Dashboard" }

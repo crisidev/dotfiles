@@ -429,13 +429,6 @@ M.config = function()
         },
         -- Trouble
         { "folke/trouble.nvim" },
-        -- Smart quit
-        {
-            "marklcrns/vim-smartq",
-            config = function()
-                vim.g.smartq_default_mappings = 0
-            end,
-        },
         -- Editor config
         {
             "editorconfig/editorconfig-vim",
