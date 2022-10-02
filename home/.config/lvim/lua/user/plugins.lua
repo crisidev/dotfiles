@@ -434,13 +434,6 @@ M.config = function()
             "editorconfig/editorconfig-vim",
             event = "BufRead",
         },
-        -- Faster filetype
-        {
-            "nathom/filetype.nvim",
-            config = function()
-                require("user.filetype").config()
-            end,
-        },
         -- Dressing
         {
             "stevearc/dressing.nvim",

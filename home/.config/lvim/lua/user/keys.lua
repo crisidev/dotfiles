@@ -15,6 +15,7 @@ M.which_keys_normal = function()
     lvim.builtin.which_key.mappings["F"] = {
         name = icons.telescope .. " Find",
         f = { "<cmd>lua require('user.telescope').find_files()<cr>", "Find files" },
+        p = { "<cmd>lua require('user.telescope').find_project_files()<cr>", "Find files" },
         F = { "<cmd>lua require('user.telescope').search_only_certain_files()<cr>", "File certain filetype" },
         b = { "<cmd>lua require('user.telescope').file_browser()<cr>", "File browser" },
         p = { "<cmd>lua require('user.telescope').projects()<cr>", "Projects" },
@@ -41,7 +42,7 @@ M.which_keys_normal = function()
 
     -- File search
     lvim.builtin.which_key.mappings["f"] = {
-        "<cmd>lua require('user.telescope').find_files()<cr>",
+        "<cmd>lua require('user.telescope').find_project_files()<cr>",
         icons.files .. "Find files",
     }
 

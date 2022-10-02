@@ -127,7 +127,7 @@ M.config = function()
             button("l", " " .. icons.magic .. " Last session", ":SessionLoadLast<cr>"),
             button("S", " " .. icons.session .. " Sessions", ":lua require('user.telescope').persisted()<cr>"),
             button("z", " " .. icons.folder .. "  Zoxide", ":lua require('user.telescope').zoxide()<cr>"),
-            button("f", " " .. kind.File .. " Find file", ":lua require('user.telescope').find_files()<cr>"),
+            button("f", " " .. kind.File .. " Find file", ":lua require('user.telescope').find_project_files()<cr>"),
             button("s", " " .. icons.text .. "  Find word", ":lua require('user.telescope').find_string()<cr>"),
             button("n", " " .. icons.stuka .. " New file", ":ene <BAR> startinsert <cr>"),
             button("b", " " .. icons.files .. " File browswer", ":lua require('user.telescope').file_browser()<cr>"),

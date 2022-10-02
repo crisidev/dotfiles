@@ -1,13 +1,9 @@
 -- Formatting
 local formatters = require "lvim.lsp.null-ls.formatters"
-formatters.setup {
-    {
-        exe = "prettierd",
-        -- args = {},
-        filetypes = { "yaml" },
-    },
-}
+formatters.setup {}
 
 -- Linting
 local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {}
+
+require'lspconfig'.ansiblels.setup{}
