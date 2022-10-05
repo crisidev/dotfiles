@@ -165,4 +165,10 @@ M.define_dap_signs = function()
     )
 end
 
+M.mason = {
+  package_pending = " ",
+  package_installed = " ",
+  package_uninstalled = " ",
+}
+
 return M

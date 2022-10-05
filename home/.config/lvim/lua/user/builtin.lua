@@ -42,6 +42,9 @@ M.config = function()
     lvim.builtin.theme.options.styles.comments = {}
     lvim.builtin.theme.options.dim_inactive = true
 
+    -- Mason
+    lvim.builtin.mason.ui.icons = require("user.icons").mason
+
     -- Nvimtree
     lvim.builtin.nvimtree.active = lvim.builtin.tree_provider == "nvimtree"
     lvim.builtin.nvimtree.side = "left"
