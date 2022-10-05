@@ -1,6 +1,9 @@
 local M = {}
 
-local Terminal = require("toggleterm.terminal").Terminal
+local ok, terminal = pcall(require, "toggleterm.terminal")
+if not ok then
+    return
+end
 
 M.config = function()
     lvim.builtin.terminal.autochdir = true
@@ -10,7 +13,7 @@ M.config = function()
 end
 
 M.float_terminal_toggle = function(cmd, id)
-    local term = Terminal:new {
+    local term = terminal.Terminal:new {
         cmd = cmd,
         hidden = true,
         direction = "float",
@@ -27,7 +30,7 @@ M.float_terminal_toggle = function(cmd, id)
 end
 
 M.horizontal_terminal_toggle = function(cmd, id, size)
-    local term = Terminal:new {
+    local term = terminal.Terminal:new {
         cmd = cmd,
         hidden = true,
         direction = "horizontal",
