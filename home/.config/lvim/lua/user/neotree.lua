@@ -37,7 +37,7 @@ M.config = function()
             group_empty_dirs = true,
             filtered_items = {
                 visible = false,
-                hide_dotfiles = true,
+                hide_dotfiles = false,
                 hide_gitignored = false,
                 hide_by_name = {
                     ".DS_Store",
@@ -47,6 +47,12 @@ M.config = function()
                 },
                 never_show = {
                     ".DS_Store",
+                },
+            },
+            window = {
+                mappings = {
+                    ["h"] = "navigate_up",
+                    ["l"] = "open",
                 },
             },
             follow_current_file = true,

@@ -24,7 +24,6 @@ M.config = function()
     -- Vim basic configurations
     -- vim.g.did_load_filetypes = 1
     vim.g.ultest_summary_width = 30
-    vim.opt.cmdheight = 1 -- WARN: =0 is broken on neovim head (https://github.com/neovim/neovim/issues/20243)
     vim.opt.completeopt = { "menu", "menuone", "noselect" }
     vim.opt.diffopt = {
         "internal",

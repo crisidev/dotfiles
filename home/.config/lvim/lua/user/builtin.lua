@@ -4,7 +4,7 @@ M.config = function()
     local icons = require("user.icons").icons
 
     -- Tree support
-    lvim.builtin.tree_provider = "nvimtree"
+    lvim.builtin.tree_provider = "neo-tree"
     -- Sidebar
     lvim.builtin.sidebar = { active = false }
     -- Project
@@ -34,6 +34,8 @@ M.config = function()
     lvim.builtin.global_statusline = true
     -- Winbar provider
     lvim.builtin.winbar_provider = "navic"
+    -- Noice
+    lvim.builtin.noice = { active = true }
 
     -- Theme
     lvim.builtin.theme.options.style = "storm"

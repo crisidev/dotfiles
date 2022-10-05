@@ -27,6 +27,12 @@ M.config = function()
         command = "setfiletype smithy",
     })
 
+    vim.api.nvim_create_autocmd("BufReadPost", {
+        group = "_lvim_user",
+        pattern = "*.md",
+        command = "set syntax=markdown",
+    })
+
     -- Disable colorcolumn
     vim.api.nvim_create_autocmd("BufEnter", {
         group = "_lvim_user",

@@ -11,6 +11,7 @@ M.config = function()
             config = function()
                 require("user.colorizer").config()
             end,
+            event = "BufReadPre",
         },
         ------------------------------------------------------------------------------
         -- Git and VCS.
@@ -378,17 +379,6 @@ M.config = function()
                 require("user.silicon").config()
             end,
         },
-        -- Debugging UI
-        {
-            "rcarriga/nvim-dap-ui",
-            config = function()
-                require("user.dapui").config()
-            end,
-            ft = { "python", "rust", "go", "c" },
-            event = "BufReadPost",
-            requires = { "mfussenegger/nvim-dap" },
-            disable = not lvim.builtin.dap.active,
-        },
         -- TODO comments
         {
             "folke/todo-comments.nvim",
@@ -550,6 +540,20 @@ M.config = function()
             config = function()
                 require("user.orgmode").setup()
             end,
+        },
+        -- Noice
+        { "MunifTanjim/nui.nvim" },
+        {
+            "folke/noice.nvim",
+            event = "VimEnter",
+            config = function()
+                require("user.noice").config()
+            end,
+            requires = {
+                "MunifTanjim/nui.nvim",
+                "rcarriga/nvim-notify",
+            },
+            disable = not lvim.builtin.noice.active,
         },
     }
 end

@@ -37,11 +37,6 @@ M.config = function()
     if not status_ok then
         return
     end
-
-    require("lvim.lsp.manager").setup("prosemd_lsp", {
-        filetypes = { "markdown" },
-        single_file_support = true,
-    })
 end
 
 return M
