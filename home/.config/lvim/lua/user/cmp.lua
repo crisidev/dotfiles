@@ -101,36 +101,33 @@ M.config = function()
         sources = cmp.config.sources({
             { name = "nvim_lsp", group_index = 1 },
             { name = "path", group_index = 1, max_item_count = 5 },
+            { name = "buffer", group_index = 1 },
             { name = "crates", group_index = 1 },
             { name = "luasnip", group_index = 1, max_item_count = 5, keyword_length = 3 },
-        }, {
-            { name = "buffer", group_index = 1, max_item_count = 5, keyword_length = 3 },
-        }),
+        }, {}),
     })
     cmp.setup.filetype("gitcommit", {
-        sources = cmp.config.sources({
+        sources = cmp.config.sources {
             { name = "nvim_lsp", group_index = 1 },
             { name = "git", group_index = 1 },
             { name = "path", group_index = 1, max_item_count = 5 },
+            { name = "buffer", group_index = 1 },
             { name = "dictionary", group_index = 1 },
             { name = "luasnip", group_index = 1, max_item_count = 5, keyword_length = 3 },
             { name = "emoji", group_index = 2 },
-        }, {
-            { name = "buffer", group_index = 1, max_item_count = 5, keyword_length = 3 },
-        }),
+        },
     })
     cmp.setup.filetype("markdown", {
-        sources = cmp.config.sources({
+        sources = cmp.config.sources {
             { name = "nvim_lsp", group_index = 1 },
             { name = "path", group_index = 1, max_item_count = 5 },
             { name = "dictionary", group_index = 1 },
-            { name = "spell", group_index = 1 },
+            { name = "buffer", group_index = 1 },
+            { name = "spell", group_index = 1, max_item_count = 5, keyword_length = 3 },
             { name = "luasnip", group_index = 1, max_item_count = 5, keyword_length = 3 },
             { name = "calc", group_index = 2 },
             { name = "emoji", group_index = 2 },
-        }, {
-            { name = "buffer", group_index = 1, max_item_count = 5, keyword_length = 3 },
-        }),
+        },
     })
 end
 

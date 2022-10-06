@@ -46,6 +46,12 @@ M.which_keys_normal = function()
         icons.files .. "Find files",
     }
 
+    -- Noice
+    lvim.builtin.which_key.mappings["N"] = {
+        "<cmd>lua require('user.telescope').noice()<cr>",
+        icons.package .. " Noice",
+    }
+
     -- String search
     lvim.builtin.which_key.mappings["s"] = {
         "<cmd>lua require('user.telescope').find_string()<cr>",

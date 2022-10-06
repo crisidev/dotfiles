@@ -8,6 +8,13 @@ M.show_documentation = function()
         require("crates").show_popup()
     elseif vim.tbl_contains({ "man" }, filetype) then
         vim.cmd("Man " .. vim.fn.expand "<cword>")
+    elseif filetype == "rust" then
+        local found, rt = pcall(require, "rust-tools")
+        if found then
+            rt.hover_actions.hover_actions()
+        else
+            vim.lsp.buf.hover()
+        end
     else
         vim.lsp.buf.hover()
     end
@@ -37,7 +44,7 @@ M.config = function()
     -- Disable inline diagnostics
     lvim.lsp.diagnostics.virtual_text = false
     -- LSP lines
-    vim.diagnostic.config({ virtual_lines = false })
+    vim.diagnostic.config { virtual_lines = false }
 
     -- Setup diagnostics icons
     lvim.lsp.diagnostics.signs.values = {

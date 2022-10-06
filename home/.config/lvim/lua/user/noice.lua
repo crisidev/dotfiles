@@ -10,7 +10,11 @@ M.config = function()
             view = "cmdline",
         },
         popupmenu = {
-            enabled = false
+            enabled = true,
+            backend = "cmp",
+        },
+        notify = {
+            enabled = lvim.builtin.notify.active,
         },
         routes = {
             {
@@ -24,7 +28,28 @@ M.config = function()
             {
                 filter = {
                     event = "msg_show",
-                    find = " lines,",
+                    find = "E486:",
+                },
+                opts = { skip = true },
+            },
+            {
+                filter = {
+                    event = "msg_show",
+                    find = "; before #",
+                },
+                opts = { skip = true },
+            },
+            {
+                filter = {
+                    event = "msg_show",
+                    find = "; after #",
+                },
+                opts = { skip = true },
+            },
+            {
+                filter = {
+                    event = "msg_show",
+                    find = " lines, ",
                 },
                 opts = { skip = true },
             },
