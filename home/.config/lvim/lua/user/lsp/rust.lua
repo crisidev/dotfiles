@@ -34,7 +34,7 @@ M.config = function()
                     { "╰", "FloatBorder" },
                     { "│", "FloatBorder" },
                 },
-                auto_focus = false,
+                auto_focus = true,
             },
         },
         server = {

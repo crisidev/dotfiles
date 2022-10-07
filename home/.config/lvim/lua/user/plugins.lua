@@ -219,8 +219,10 @@ M.config = function()
         -- Cmp all the things.
         ------------------------------------------------------------------------------
         -- Cmp for command line
-        { "hrsh7th/cmp-cmdline" },
-        { "dmitmel/cmp-cmdline-history" },
+        {
+            "hrsh7th/cmp-cmdline",
+            disable = not lvim.builtin.cmdline.active,
+        },
         -- Cmp for emojis..
         { "hrsh7th/cmp-emoji" },
         -- Cmp for to calculate maths expressions.
@@ -551,6 +553,45 @@ M.config = function()
                 "rcarriga/nvim-notify",
             },
             disable = not lvim.builtin.noice.active,
+        },
+        {
+            "olexsmir/gopher.nvim",
+            config = function()
+                require("gopher").setup {
+                    commands = {
+                        go = "go",
+                        gomodifytags = "gomodifytags",
+                        gotests = "gotests",
+                        impl = "impl",
+                        iferr = "iferr",
+                    },
+                }
+            end,
+            ft = { "go", "gomod" },
+            event = "BufRead",
+        },
+        {
+            "leoluz/nvim-dap-go",
+            config = function()
+                require("dap-go").setup()
+            end,
+            ft = { "go", "gomod" },
+            event = "BufRead",
+        },
+        {
+            "AckslD/swenv.nvim",
+            ft = "python",
+            event = "BufRead",
+        },
+        {
+            "mfussenegger/nvim-dap-python",
+            config = function()
+                local mason_path = vim.fn.glob(vim.fn.stdpath "data" .. "/mason/")
+                require("dap-python").setup(mason_path .. "packages/debugpy/venv/bin/python")
+                require("dap-python").test_runner = "pytest"
+            end,
+            ft = "python",
+            event = "BufRead",
         },
     }
 end

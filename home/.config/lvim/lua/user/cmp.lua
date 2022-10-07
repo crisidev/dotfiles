@@ -84,19 +84,6 @@ M.config = function()
             config = { sources = function(...) end },
         }
     end
-    for _, cmd_type in ipairs { ":", "/", "?", "@" } do
-        cmp.setup.cmdline(cmd_type, {
-            mapping = cmp.mapping.preset.cmdline {
-                ["<Up>"] = cmp.mapping(cmp.mapping.select_prev_item(), { "i", "c" }),
-                ["<Down>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i", "c" }),
-            },
-            sources = {
-                { name = "cmdline", group_index = 1 },
-                { name = "path", group_index = 1 },
-                { name = "cmdline_history", group_index = 2, keyword_length = 5 },
-            },
-        })
-    end
     cmp.setup.filetype("toml", {
         sources = cmp.config.sources({
             { name = "nvim_lsp", group_index = 1 },
@@ -129,6 +116,24 @@ M.config = function()
             { name = "emoji", group_index = 2 },
         },
     })
+end
+
+M.setup_cmdline = function()
+    local found, cmp = pcall(require, "cmp")
+    if found then
+        for _, cmd_type in ipairs { ":", "/", "?", "@" } do
+            cmp.setup.cmdline(cmd_type, {
+                mapping = cmp.mapping.preset.cmdline {
+                    ["<Up>"] = cmp.mapping(cmp.mapping.select_prev_item(), { "i", "c" }),
+                    ["<Down>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i", "c" }),
+                },
+                sources = {
+                    { name = "cmdline", group_index = 1 },
+                    { name = "path", group_index = 1 },
+                },
+            })
+        end
+    end
 end
 
 return M

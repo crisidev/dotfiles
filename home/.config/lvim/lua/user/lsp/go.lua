@@ -2,6 +2,11 @@ local M = {}
 
 M.config = function()
     -- Lsp config
+    require("lvim.lsp.manager").setup("golangci_lint_ls", {
+        on_init = require("lvim.lsp").common_on_init,
+        capabilities = require("lvim.lsp").common_capabilities(),
+    })
+
     local opts = {
         settings = {
             gopls = {
@@ -39,6 +44,10 @@ M.config = function()
                 },
             },
         },
+        on_attach = function(client, bufnr)
+            require("lvim.lsp").common_on_attach(client, bufnr)
+            local _, _ = pcall(vim.lsp.codelens.refresh)
+        end,
     }
 
     require("lvim.lsp.manager").setup("gopls", opts)

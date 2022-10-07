@@ -30,6 +30,7 @@ M.config = function()
     vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, {
         "clangd",
         "gopls",
+        "golangci_lint_ls",
         "jdtls",
         "pyright",
         "rust_analyzer",

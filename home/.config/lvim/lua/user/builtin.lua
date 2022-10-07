@@ -36,6 +36,8 @@ M.config = function()
     lvim.builtin.winbar_provider = "navic"
     -- Noice
     lvim.builtin.noice = { active = true }
+    -- Cmpline
+    lvim.builtin.cmdline = { active = true }
 
     -- Theme
     lvim.builtin.theme.options.style = "storm"

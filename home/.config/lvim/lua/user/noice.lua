@@ -10,8 +10,8 @@ M.config = function()
             view = "cmdline",
         },
         popupmenu = {
-            enabled = true,
-            backend = "cmp",
+            enabled = not lvim.builtin.cmdline.active,
+            backend = "nui",
         },
         notify = {
             enabled = lvim.builtin.notify.active,
@@ -36,6 +36,13 @@ M.config = function()
                 filter = {
                     event = "msg_show",
                     find = "; before #",
+                },
+                opts = { skip = true },
+            },
+            {
+                filter = {
+                    event = "msg_show",
+                    find = "<",
                 },
                 opts = { skip = true },
             },
