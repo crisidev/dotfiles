@@ -227,8 +227,6 @@ M.config = function()
         { "hrsh7th/cmp-emoji" },
         -- Cmp for to calculate maths expressions.
         { "hrsh7th/cmp-calc" },
-        -- Cmp for spelling and dictionary.
-        { "f3fora/cmp-spell" },
         {
             "uga-rosa/cmp-dictionary",
             config = function()
@@ -591,6 +589,13 @@ M.config = function()
             opt = true,
             event = { "BufReadPre", "BufNew" },
         },
+        -- {
+        --     "lvimuser/lsp-inlayhints.nvim",
+        --     branch = "anticonceal",
+        --     config = function()
+        --         require("lsp-inlayhints").setup()
+        --     end,
+        -- },
     }
 end
 

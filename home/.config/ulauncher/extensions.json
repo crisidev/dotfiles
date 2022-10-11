@@ -6,13 +6,6 @@
         "last_commit": "1ec03f0e5a483cbbd53ece4c001d10739d232c39",
         "last_commit_time": "2021-05-14T10:51:50"
     },
-    "com.github.ulauncher.ulauncher-timer": {
-        "id": "com.github.ulauncher.ulauncher-timer",
-        "url": "https://github.com/ulauncher/ulauncher-timer",
-        "updated_at": "2021-06-11T19:09:42.753023",
-        "last_commit": "4262fc24db08610d01ea311d2e12f22588c98886",
-        "last_commit_time": "2020-11-03T07:21:30"
-    },
     "com.github.epholys.ultz": {
         "id": "com.github.epholys.ultz",
         "url": "https://github.com/Epholys/ultz",

@@ -26,7 +26,7 @@ M.config = function()
         "--ranking-model=heuristics",
         "--folding-ranges",
     }
-    local home = os.getenv "HOME"
+    local home = vim.env.HOME
     clangd_extensions.setup {
         server = {
             -- options to pass to nvim-lspconfig

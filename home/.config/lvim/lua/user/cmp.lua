@@ -41,7 +41,6 @@ M.config = function()
         { name = "nvim_lsp_signature_help", group_index = 1 },
         { name = "copilot", group_index = 1 },
         { name = "dictionary", group_index = 1 },
-        { name = "spell", group_index = 1 },
         { name = "calc", group_index = 1 },
         { name = "emoji", group_index = 1 },
         { name = "buffer", group_index = 1, max_item_count = 5, keyword_length = 3 },
@@ -60,7 +59,6 @@ M.config = function()
         nvim_lua = "(NvLua)",
         copilot = "(Copilot)",
         dictionary = "(Dict)",
-        spell = "(Spell)",
     }
     lvim.builtin.cmp.formatting = {
         fields = { "kind", "abbr", "menu" },
@@ -122,7 +120,6 @@ M.config = function()
             { name = "path", group_index = 1, max_item_count = 5 },
             { name = "dictionary", group_index = 1 },
             { name = "buffer", group_index = 1 },
-            { name = "spell", group_index = 1, max_item_count = 5, keyword_length = 3 },
             { name = "luasnip", group_index = 1, max_item_count = 5, keyword_length = 3 },
             { name = "calc", group_index = 2 },
             { name = "emoji", group_index = 2 },

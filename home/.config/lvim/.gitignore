@@ -43,3 +43,4 @@ luac.out
 
 # LunarVim
 .luacheckcache
+plugin/packer_compiled.lua

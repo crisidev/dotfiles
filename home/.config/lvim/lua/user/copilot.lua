@@ -64,7 +64,7 @@ end
 M.enable = function()
     if lvim.builtin.copilot.active then
         vim.defer_fn(function()
-            local home = os.getenv "HOME"
+            local home = vim.env.HOME
             require("copilot").setup {
                 cmp_method = "getCompletionsCycling",
                 plugin_manager_path = home .. "/.local/share/lunarvim" .. "/site/pack/packer",
