@@ -409,16 +409,6 @@ M.config = function()
         },
         -- Zoxide
         { "nanotee/zoxide.vim" },
-        -- Stable window open
-        {
-            "luukvbaal/stabilize.nvim",
-            config = function()
-                require("stabilize").setup {
-                    forcemark = "f",
-                    nested = "QuickFixCmdPost,User LspDiagnosticsChanged",
-                }
-            end,
-        },
         -- Trouble
         { "folke/trouble.nvim" },
         -- Editor config
@@ -568,7 +558,7 @@ M.config = function()
                 }
             end,
             ft = { "go", "gomod" },
-            event = "BufRead",
+            event = { "BufRead", "BufNew" },
         },
         {
             "leoluz/nvim-dap-go",
@@ -576,12 +566,12 @@ M.config = function()
                 require("dap-go").setup()
             end,
             ft = { "go", "gomod" },
-            event = "BufRead",
+            event = { "BufRead", "BufNew" },
         },
         {
             "AckslD/swenv.nvim",
             ft = "python",
-            event = "BufRead",
+            event = { "BufRead", "BufNew" },
         },
         {
             "mfussenegger/nvim-dap-python",
@@ -591,7 +581,15 @@ M.config = function()
                 require("dap-python").test_runner = "pytest"
             end,
             ft = "python",
-            event = "BufRead",
+            event = { "BufRead", "BufNew" },
+        },
+        {
+            "vuki656/package-info.nvim",
+            config = function()
+                require("package-info").setup()
+            end,
+            opt = true,
+            event = { "BufReadPre", "BufNew" },
         },
     }
 end

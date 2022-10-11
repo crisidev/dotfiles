@@ -25,11 +25,13 @@ block = "net"
 device = "wlp1s0"
 format = "{ssid} {speed_up} {speed_down}"
 interval = 5
+hide_inactive = true
 
 [[block]]
 block = "net"
 device = "eno1"
 interval = 5
+hide_inactive = true
 
 [[block]]
 block = "memory"

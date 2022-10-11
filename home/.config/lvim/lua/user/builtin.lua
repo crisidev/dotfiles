@@ -38,6 +38,7 @@ M.config = function()
     lvim.builtin.noice = { active = true }
     -- Cmpline
     lvim.builtin.cmdline = { active = true }
+    lvim.builtin.cmp.cmdline.enable = false
 
     -- Theme
     lvim.builtin.theme.options.style = "storm"

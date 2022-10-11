@@ -42,6 +42,3 @@ vim.cmd [[
 require("user.theme").dashboard_theme()
 require("user.theme").telescope_theme()
 require("user.icons").define_dap_signs()
-if lvim.builtin.cmdline.active then
-    require("user.cmp").setup_cmdline()
-end

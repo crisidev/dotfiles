@@ -283,7 +283,7 @@ M.config = function()
             return show_name .. modified
         end,
         cond = function()
-            return conditions.buffer_not_empty() and conditions.hide_small()
+            return conditions.buffer_not_empty()
         end,
         padding = { left = 1, right = 1 },
         color = { fg = colors.fg, gui = "bold", bg = colors.bg },

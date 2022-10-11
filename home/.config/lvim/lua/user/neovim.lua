@@ -200,6 +200,9 @@ M.config = function()
     -- Session
     vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal"
 
+    -- Splitkeep
+    vim.o.splitkeep = "screen"
+
     -- Colorcolumn
     vim.cmd [[set colorcolumn=]]
 end
