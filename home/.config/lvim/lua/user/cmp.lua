@@ -92,6 +92,21 @@ M.config = function()
                 { name = "cmdline", group_index = 1 },
                 { name = "path", group_index = 1 },
             },
+            window = {
+                completion = {
+                    border = {
+                        { "╭", "CmpBorder" },
+                        { "─", "CmpBorder" },
+                        { "╮", "CmpBorder" },
+                        { "│", "CmpBorder" },
+                        { "╯", "CmpBorder" },
+                        { "─", "CmpBorder" },
+                        { "╰", "CmpBorder" },
+                        { "│", "CmpBorder" },
+                    },
+                    winhighlight = "Search:None",
+                },
+            },
         })
     end
     cmp.setup.filetype("toml", {

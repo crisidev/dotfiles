@@ -193,15 +193,6 @@ M.config = function()
         ------------------------------------------------------------------------------
         -- Copilot baby..
         ------------------------------------------------------------------------------
-        -- Copilot
-        {
-            "github/copilot.vim",
-            config = function()
-                require("user.copilot").config()
-            end,
-            disable = true,
-        },
-        -- Copilot Lua
         {
             "zbirenbaum/copilot.lua",
             event = "VimEnter",
@@ -211,7 +202,9 @@ M.config = function()
             "zbirenbaum/copilot-cmp",
             after = { "copilot.lua", "nvim-cmp" },
             config = function()
-                require("copilot_cmp").setup()
+                require("copilot_cmp").setup {
+                    method = "getCompletionsCycling",
+                }
             end,
             disable = not lvim.builtin.copilot.active,
         },

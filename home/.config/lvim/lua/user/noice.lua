@@ -6,17 +6,46 @@ M.config = function()
         return
     end
     noice.setup {
-        cmdline = {
-            view = "cmdline",
+        views = {
+            cmdline_popup = {
+                border = {
+                    style = "none",
+                    padding = { 1, 1 },
+                },
+                size = {
+                    width = "auto",
+                    height = "auto",
+                },
+                position = {
+                    row = "93%",
+                    col = "50%",
+                },
+                filter_options = {},
+                win_options = {
+                    winhighlight = {
+                        NormalFloat = "NormalFloat",
+                        FloatBorder = "FloatBorder",
+                        Normal = "NormalFloat",
+                        Search = "None",
+                        Pmenu = "NormalFloat",
+                    },
+                },
+            },
         },
+        -- cmdline = {
+        --     view = "cmdline",
+        -- },
         popupmenu = {
-            enabled = not lvim.builtin.cmdline.active,
-            backend = "nui",
+            enabled = false,
         },
         notify = {
-            enabled = false
+            enabled = lvim.builtin.notify.active,
         },
         routes = {
+            -- {
+            --     view = "notify",
+            --     filter = { event = "msg_showmode" },
+            -- },
             {
                 filter = { event = "msg_show", kind = "search_count" },
                 opts = { skip = true },
@@ -29,13 +58,6 @@ M.config = function()
                 filter = {
                     event = "msg_show",
                     find = "; before #",
-                },
-                opts = { skip = true },
-            },
-            {
-                filter = {
-                    event = "msg_show",
-                    find = "<",
                 },
                 opts = { skip = true },
             },
@@ -64,6 +86,13 @@ M.config = function()
                 filter = {
                     event = "msg_show",
                     find = "yanked",
+                },
+                opts = { skip = true },
+            },
+            {
+                filter = {
+                    event = "msg_show",
+                    find = "E486:",
                 },
                 opts = { skip = true },
             },

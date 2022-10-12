@@ -79,6 +79,7 @@ M.telescope_theme = function()
     end
 
     local current_colors = M.colors.tokyonight_colors
+    set_fg_bg("CmpBorder", current_colors.bg_alt, current_colors.bg_alt)
     set_fg_bg("diffAdded", current_colors.git.add, "NONE")
     set_fg_bg("diffRemoved", current_colors.git.delete, "NONE")
     set_fg_bg("diffChanged", current_colors.git.change, "NONE")

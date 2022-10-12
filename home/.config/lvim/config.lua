@@ -58,8 +58,5 @@ if ok then
     amzn.config()
 end
 
--- Copilot
-require("user.copilot").config()
-
 -- Vimscript if needed
 vim.cmd "source ~/.config/lvim/vimscript/user.post.vim"
