@@ -100,11 +100,10 @@ function M.layout_config()
         width = 0.9,
         height = 0.4,
         preview_cutoff = 150,
+        preview_width = 0.4,
         prompt_position = "bottom",
         horizontal = {
-            preview_width = function(_, cols, _)
-                return math.floor(cols * 0.6)
-            end,
+            preview_width = 0.4
         },
         vertical = {
             width = 0.9,
@@ -113,7 +112,7 @@ function M.layout_config()
         },
         flex = {
             horizontal = {
-                preview_width = 0.1,
+                preview_width = 0.4,
             },
         },
     }
@@ -291,7 +290,7 @@ M.path_display = function()
     end
 end
 
-function M.find_project_files(opts)
+M.find_project_files = function(opts)
     opts = opts or {}
     if opts.cwd then
         opts.cwd = vim.fn.expand(opts.cwd)
