@@ -23,7 +23,7 @@ end
 M.config = function()
     local icons = require("user.icons").icons
     -- Log level
-    vim.lsp.set_log_level "warn"
+    vim.lsp.set_log_level "error"
 
     -- Installer
     lvim.lsp.installer.setup.automatic_installation = true

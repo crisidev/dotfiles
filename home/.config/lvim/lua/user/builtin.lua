@@ -3,6 +3,14 @@ local M = {}
 M.config = function()
     local icons = require("user.icons").icons
 
+    lvim.colorscheme = "tokyonight"
+    lvim.builtin.theme.options.style = "storm"
+    lvim.leader = ","
+    lvim.format_on_save = false
+    lvim.line_wrap_cursor_movement = false
+    lvim.termguicolors = true
+    lvim.transparent_window = true
+    lvim.debug = false
     -- Tree support
     lvim.builtin.tree_provider = "neo-tree"
     -- Sidebar
@@ -49,30 +57,7 @@ M.config = function()
     lvim.builtin.mason.ui.icons = require("user.icons").mason
 
     -- Nvimtree
-    lvim.builtin.nvimtree.active = lvim.builtin.tree_provider == "nvimtree"
-    lvim.builtin.nvimtree.side = "left"
-    lvim.builtin.nvimtree.setup.diagnostics = {
-        enable = true,
-        icons = {
-            hint = icons.hint,
-            info = icons.info,
-            warning = icons.warn,
-            error = icons.error,
-        },
-    }
-    lvim.builtin.nvimtree.setup.actions.open_file.resize_window = true
-    lvim.builtin.nvimtree.setup.diagnostics.enable = true
-    lvim.builtin.nvimtree.setup.hijack_netrw = false
-    lvim.builtin.nvimtree.setup.disable_netrw = false
-    lvim.builtin.nvimtree.setup.renderer.icons.show = {
-        git = false,
-        folder = true,
-        file = true,
-        folder_arrow = true,
-    }
-    lvim.builtin.nvimtree.setup.renderer.icons.webdev_colors = true
-    lvim.builtin.nvimtree.setup.view.width = 60
-    lvim.builtin.nvimtree.setup.view.preserve_window_proportions = true
+    lvim.builtin.nvimtree.active = false
 
     -- Dashboard
     lvim.builtin.alpha.active = true

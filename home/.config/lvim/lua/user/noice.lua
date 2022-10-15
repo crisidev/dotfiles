@@ -8,26 +8,38 @@ M.config = function()
     noice.setup {
         views = {
             cmdline_popup = {
-                border = {
-                    style = "none",
-                    padding = { 1, 1 },
-                },
-                size = {
-                    width = "auto",
-                    height = "auto",
-                },
                 position = {
                     row = "93%",
                     col = "50%",
                 },
-                filter_options = {},
                 win_options = {
+                    winblend = 5,
                     winhighlight = {
-                        NormalFloat = "NormalFloat",
-                        FloatBorder = "FloatBorder",
                         Normal = "NormalFloat",
-                        Search = "None",
-                        Pmenu = "NormalFloat",
+                        FloatBorder = "NoiceCmdlinePopupBorder",
+                        IncSearch = "",
+                        Search = "",
+                    },
+                    cursorline = false,
+                },
+                filter_options = {
+                    {
+                        filter = { event = "cmdline", find = "^%s*[/?]" },
+                        opts = {
+                            border = {
+                                text = {
+                                    top = " Search ",
+                                },
+                            },
+                            win_options = {
+                                winhighlight = {
+                                    Normal = "NormalFloat",
+                                    FloatBorder = "NoiceCmdlinePopupBorder",
+                                    IncSearch = "",
+                                    Search = "",
+                                },
+                            },
+                        },
                     },
                 },
             },
@@ -98,6 +110,14 @@ M.config = function()
             },
             {
                 filter = { find = "No active Snippet" },
+                opts = { skip = true },
+            },
+            {
+                filter = { find = "more lines" },
+                opts = { skip = true },
+            },
+            {
+                filter = { find = "fewer lines" },
                 opts = { skip = true },
             },
         },

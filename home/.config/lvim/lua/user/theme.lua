@@ -2,6 +2,7 @@ local M = {}
 
 M.colors = {
     tokyonight_colors = {
+        cmp_border = "#181924",
         none = "NONE",
         bg_dark = "#1f2335",
         bg_alt = "#1a1b26",
@@ -22,6 +23,7 @@ M.colors = {
         blue5 = "#89ddff",
         blue6 = "#B4F9F8",
         blue7 = "#394b70",
+        violet = "#bb9af7",
         magenta = "#bb9af7",
         magenta2 = "#ff007c",
         purple = "#9d7cd8",
@@ -33,7 +35,6 @@ M.colors = {
         teal = "#1abc9c",
         red = "#f7768e",
         red1 = "#db4b4b",
-        -- git = { change = "#6183bb", add = "#449dab", delete = "#914c54", conflict = "#bb7a61" },
         git = { change = "#6183bb", add = "#449dab", delete = "#f7768e", conflict = "#bb7a61" },
         gitSigns = { add = "#164846", change = "#394b70", delete = "#823c41" },
     },
@@ -78,35 +79,37 @@ M.telescope_theme = function()
         vim.cmd("hi " .. group .. " guifg=" .. fg .. " guibg=" .. bg)
     end
 
-    local current_colors = M.colors.tokyonight_colors
-    set_fg_bg("CmpBorder", current_colors.bg_alt, current_colors.bg_alt)
-    set_fg_bg("diffAdded", current_colors.git.add, "NONE")
-    set_fg_bg("diffRemoved", current_colors.git.delete, "NONE")
-    set_fg_bg("diffChanged", current_colors.git.change, "NONE")
-    set_fg_bg("WinSeparator", current_colors.bg_alt, current_colors.bg_alt)
-    set_fg_bg("SignColumn", current_colors.bg, "NONE")
-    set_fg_bg("SignColumnSB", current_colors.bg, "NONE")
-    set_fg_bg("NormalFloat", current_colors.fg, "#181924")
-    set_fg_bg("Cursor", current_colors.bg, current_colors.fg)
-    set_fg_bg("NormalNC", current_colors.fg_dark, "#1c1d28")
-    set_fg_bg("Normal", current_colors.fg, "#1f2335")
-    set_fg_bg("CursorLineNr",current_colors.orange, "bold")
-    local colors = M.hi_colors()
-    -- set_fg_bg("WinSeparator", colors.bg, "None")
-    set_fg_bg("NormalFloat", colors.fg, colors.bg)
-    set_fg_bg("FloatBorder", colors.fg, colors.bg)
-    set_fg_bg("TelescopeBorder", colors.bg_alt, colors.bg)
-    set_fg_bg("TelescopePromptBorder", colors.bg, colors.bg)
-    set_fg_bg("TelescopePromptNormal", colors.fg, colors.bg_alt)
-    set_fg_bg("TelescopePromptPrefix", colors.blue, colors.bg)
-    set_bg("TelescopeNormal", colors.bg)
-    set_fg_bg("TelescopePreviewTitle", colors.blue, colors.bg)
-    set_fg_bg("LvimInfoHeader", colors.bg, colors.blue)
-    set_fg_bg("LvimInfoIdentifier", colors.blue, colors.bg_alt)
-    set_fg_bg("TelescopePromptTitle", colors.bg, colors.blue)
-    set_fg_bg("TelescopeResultsTitle", colors.blue, colors.bg)
-    set_fg_bg("TelescopeResultsBorder", colors.bg, colors.bg)
-    set_bg("TelescopeSelection", colors.bg_alt)
+    local tokyonight_colors = M.colors.tokyonight_colors
+    set_fg_bg("CmpBorder", tokyonight_colors.cmp_border, tokyonight_colors.cmp_border)
+    set_fg_bg("NoiceCmdlinePopupBorder", tokyonight_colors.cmp_border, tokyonight_colors.cmp_border)
+    set_fg_bg("NoiceCmdlinePopupSearchBorder", tokyonight_colors.cmp_border, tokyonight_colors.cmp_border)
+    set_fg_bg("diffAdded", tokyonight_colors.git.add, "NONE")
+    set_fg_bg("diffRemoved", tokyonight_colors.git.delete, "NONE")
+    set_fg_bg("diffChanged", tokyonight_colors.git.change, "NONE")
+    set_fg_bg("WinSeparator", tokyonight_colors.bg_alt, tokyonight_colors.bg_alt)
+    set_fg_bg("SignColumn", tokyonight_colors.bg, "NONE")
+    set_fg_bg("SignColumnSB", tokyonight_colors.bg, "NONE")
+    set_fg_bg("NormalFloat", tokyonight_colors.fg, "#181924")
+    set_fg_bg("Cursor", tokyonight_colors.bg, tokyonight_colors.fg)
+    set_fg_bg("NormalNC", tokyonight_colors.fg_dark, "#1c1d28")
+    set_fg_bg("Normal", tokyonight_colors.fg, "#1f2335")
+    set_fg_bg("CursorLineNr", tokyonight_colors.orange, "bold")
+
+    local hi_colors = M.hi_colors()
+    set_fg_bg("NormalFloat", hi_colors.fg, hi_colors.bg)
+    set_fg_bg("FloatBorder", hi_colors.fg, hi_colors.bg)
+    set_fg_bg("TelescopeBorder", hi_colors.bg_alt, hi_colors.bg)
+    set_fg_bg("TelescopePromptBorder", hi_colors.bg, hi_colors.bg)
+    set_fg_bg("TelescopePromptNormal", hi_colors.fg, hi_colors.bg_alt)
+    set_fg_bg("TelescopePromptPrefix", hi_colors.blue, hi_colors.bg)
+    set_bg("TelescopeNormal", hi_colors.bg)
+    set_fg_bg("TelescopePreviewTitle", hi_colors.blue, hi_colors.bg)
+    set_fg_bg("LvimInfoHeader", hi_colors.bg, hi_colors.blue)
+    set_fg_bg("LvimInfoIdentifier", hi_colors.blue, hi_colors.bg_alt)
+    set_fg_bg("TelescopePromptTitle", hi_colors.bg, hi_colors.blue)
+    set_fg_bg("TelescopeResultsTitle", hi_colors.blue, hi_colors.bg)
+    set_fg_bg("TelescopeResultsBorder", hi_colors.bg, hi_colors.bg)
+    set_bg("TelescopeSelection", hi_colors.bg_alt)
 end
 
 M.dashboard_theme = function()
