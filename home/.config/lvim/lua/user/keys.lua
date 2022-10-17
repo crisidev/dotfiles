@@ -35,7 +35,7 @@ M.which_keys_normal = function()
     }
 
     -- File browser
-    lvim.builtin.which_key.mappings["C"] = {
+    lvim.builtin.which_key.mappings["E"] = {
         "<cmd>lua require('user.telescope').file_browser()<cr>",
         icons.folder .. " File browser",
     }
@@ -44,6 +44,12 @@ M.which_keys_normal = function()
     lvim.builtin.which_key.mappings["f"] = {
         "<cmd>lua require('user.telescope').find_project_files()<cr>",
         icons.files .. "Find files",
+    }
+
+    -- File browser
+    lvim.builtin.which_key.mappings["C"] = {
+        "<cmd>lua require('user.telescope').neoclip()<cr>",
+        icons.docs .. "Clipboard",
     }
 
     -- Noice

@@ -174,6 +174,10 @@ M.persisted = function()
     require("telescope").extensions.persisted.persisted(M.get_theme())
 end
 
+M.neoclip = function()
+    require("telescope").extensions.neoclip.neoclip(M.get_theme())
+end
+
 -- show refrences to this using language server
 M.lsp_references = function()
     builtin.lsp_references(M.get_theme())
@@ -390,6 +394,7 @@ M.config = function()
         telescope.load_extension "repo"
         telescope.load_extension "file_browser"
         telescope.load_extension "persisted"
+        telescope.load_extension "neoclip"
     end
 end
 

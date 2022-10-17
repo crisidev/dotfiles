@@ -582,6 +582,15 @@ M.config = function()
             opt = true,
             event = { "BufReadPre", "BufNew" },
         },
+        {
+            "AckslD/nvim-neoclip.lua",
+            requires = {
+                { "nvim-telescope/telescope.nvim" },
+            },
+            config = function()
+                require("neoclip").setup()
+            end,
+        },
         -- {
         --     "lvimuser/lsp-inlayhints.nvim",
         --     branch = "anticonceal",
