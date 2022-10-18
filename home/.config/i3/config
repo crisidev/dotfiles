@@ -398,7 +398,4 @@ exec --no-startup-id "$HOME/.bin/i3chime"
 exec --no-startup-id "$HOME/.bin/i3monitor startup"
 
 # uLauncher
-exec --no-startup-id "/usr/bin/ulauncher"
-
-# Exec always
-# exec_always --no-startup-id "feh --bg-fill $HOME/Pictures/wallpapers/rickstone.jpg"
+exec --no-startup-id "zsh -l -c /usr/bin/ulauncher"

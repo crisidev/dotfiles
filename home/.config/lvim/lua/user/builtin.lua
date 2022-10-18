@@ -10,6 +10,7 @@ M.config = function()
     lvim.line_wrap_cursor_movement = false
     lvim.termguicolors = true
     lvim.transparent_window = true
+    lvim.reload_config_on_save = true
     lvim.debug = false
     -- Tree support
     lvim.builtin.tree_provider = "neo-tree"
@@ -43,7 +44,7 @@ M.config = function()
     -- Winbar provider
     lvim.builtin.winbar_provider = "navic"
     -- Noice
-    lvim.builtin.noice = { active = true }
+    lvim.builtin.noice = { active = false }
     -- Cmpline
     lvim.builtin.cmdline = { active = true }
     lvim.builtin.cmp.cmdline.enable = false
