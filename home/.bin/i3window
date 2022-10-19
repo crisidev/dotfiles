@@ -1,7 +1,8 @@
 #!/usr/bin/env /home/bigo/.pyenv/shims/python
 
-import i3ipc
 import sys
+
+import i3ipc
 
 conn = i3ipc.Connection()
 

@@ -4,5 +4,5 @@
 count=$(docker ps -q | wc -l | sed -r 's/^0$//g')
 
 if [ ! -z ${count} ]; then
-  echo " $count"
+	echo " $count"
 fi

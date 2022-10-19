@@ -1,11 +1,12 @@
 #!/usr/bin/env /home/bigo/.pyenv/shims/python
 
 import getopt
-import sys
 import os
-from i3ipc import Connection, Event
-import time
 import signal
+import sys
+import time
+
+from i3ipc import Connection, Event
 
 
 def find_parent(i3, window_id):
@@ -45,7 +46,9 @@ def print_help():
     print("Usage: " + sys.argv[0] + " [-p path/to/pid.file]")
     print("")
     print("Options:")
-    print("    -p path/to/pid.file   Saves the PID for this program in the filename specified")
+    print(
+        "    -p path/to/pid.file   Saves the PID for this program in the filename specified"
+    )
     print("")
 
 

@@ -77,7 +77,7 @@ M.config = function()
 
     local version = text(version, "Function")
     date = text("┌─ " .. icons.calendar .. "Today is " .. date .. "  ─┐")
-    local plugin_count = text("❙  " .. kind.Module .. " " .. plugins .. " plugins in total  ❙")
+    local plugin_count = text("❙  " .. kind.Module .. " " .. plugins .. " plugins in total ❙")
     local session_count = text("└─ " .. icons.session .. " " .. sessions .. " neovim sessions  ─┘")
 
     local fortune = require "alpha.fortune" ()

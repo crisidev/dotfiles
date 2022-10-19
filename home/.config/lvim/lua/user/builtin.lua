@@ -14,8 +14,6 @@ M.config = function()
     lvim.debug = false
     -- Tree support
     lvim.builtin.tree_provider = "neo-tree"
-    -- Sidebar
-    lvim.builtin.sidebar = { active = false }
     -- Project
     lvim.builtin.project.active = true
     lvim.builtin.project.detection_methods = { "lsp", "pattern" }
@@ -44,10 +42,12 @@ M.config = function()
     -- Winbar provider
     lvim.builtin.winbar_provider = "navic"
     -- Noice
-    lvim.builtin.noice = { active = false }
+    lvim.builtin.noice = { active = true }
     -- Cmpline
     lvim.builtin.cmdline = { active = true }
     lvim.builtin.cmp.cmdline.enable = false
+    -- Orgmode
+    lvim.builtin.orgmode = { active = false }
 
     -- Theme
     lvim.builtin.theme.options.style = "storm"

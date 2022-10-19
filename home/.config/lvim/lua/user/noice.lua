@@ -44,9 +44,10 @@ M.config = function()
                 },
             },
         },
-        -- cmdline = {
-        --     view = "cmdline",
-        -- },
+        cmdline = {
+            view = "cmdline",
+            view_search = "cmdline",
+        },
         popupmenu = {
             enabled = false,
         },
@@ -54,10 +55,6 @@ M.config = function()
             enabled = lvim.builtin.notify.active,
         },
         routes = {
-            -- {
-            --     view = "notify",
-            --     filter = { event = "msg_showmode" },
-            -- },
             {
                 filter = { event = "msg_show", kind = "search_count" },
                 opts = { skip = true },
@@ -102,24 +99,29 @@ M.config = function()
                 opts = { skip = true },
             },
             {
-                filter = {
-                    event = "msg_show",
-                    find = "E486:",
-                },
-                opts = { skip = true },
-            },
-            {
                 filter = { find = "No active Snippet" },
                 opts = { skip = true },
             },
-            {
-                filter = { find = "more lines" },
-                opts = { skip = true },
-            },
-            {
-                filter = { find = "fewer lines" },
-                opts = { skip = true },
-            },
+            -- Disabled filters.
+            -- {
+            --     view = "notify",
+            --     filter = { event = "msg_showmode" },
+            -- },
+            -- {
+            --     filter = { find = "more lines" },
+            --     opts = { skip = true },
+            -- },
+            -- {
+            --     filter = { find = "fewer lines" },
+            --     opts = { skip = true },
+            -- },
+            -- {
+            --     filter = {
+            --         event = "msg_show",
+            --         find = "E486:",
+            --     },
+            --     opts = { skip = true },
+            -- },
         },
     }
 end

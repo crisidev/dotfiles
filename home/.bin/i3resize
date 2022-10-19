@@ -9,6 +9,7 @@
 # vim: set ft=python
 
 import sys
+
 import i3ipc
 
 DEFAULT_INCREMENT = "10 px or 10 ppt"

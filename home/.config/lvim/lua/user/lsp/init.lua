@@ -8,13 +8,6 @@ M.show_documentation = function()
         require("crates").show_popup()
     elseif vim.tbl_contains({ "man" }, filetype) then
         vim.cmd("Man " .. vim.fn.expand "<cword>")
-    elseif filetype == "rust" then
-        local found, rt = pcall(require, "rust-tools")
-        if found then
-            rt.hover_actions.hover_actions()
-        else
-            vim.lsp.buf.hover()
-        end
     else
         vim.lsp.buf.hover()
     end
@@ -26,7 +19,6 @@ M.config = function()
     vim.lsp.set_log_level "error"
 
     -- Installer
-    lvim.lsp.installer.setup.automatic_installation = true
     vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, {
         "clangd",
         "gopls",

@@ -1,27 +1,27 @@
 #!/bin/bash
 
 ask_for_password() {
-  # When using KDE, you might want to use kdedialog instead of zenity
-  password="`zenity --password --title "Kerberos Authentication"`"
+	# When using KDE, you might want to use kdedialog instead of zenity
+	password="$(zenity --password --title "Kerberos Authentication")"
 }
 
 request_ticket() {
-  # Request a renewable ticket that is valid for one day
-  kinit -f -l 36000 -r 604800 <<EOF
+	# Request a renewable ticket that is valid for one day
+	kinit -f -l 36000 -r 604800 <<EOF
 $password
 EOF
 }
 
 rc=1
 while [ $rc -ne 0 ] && ask_for_password; do
-  request_ticket
-  rc=$?
+	request_ticket
+	rc=$?
 done
 
 if [ $rc -ne 0 ]; then
-  # The user cancelled the operation before a Kerberos ticket could be
-  # successfully received.
-  exit 1
+	# The user cancelled the operation before a Kerberos ticket could be
+	# successfully received.
+	exit 1
 fi
 
 # Optional: Perform actions that depend on a Kerberos ticket being available
@@ -33,9 +33,9 @@ xprop_pid=$!
 
 # Function for killing processes and cleaning up the Kerberos tickets
 clean_up() {
-  kill $xprop_pid
-  kdestroy
-  exit 0
+	kill $xprop_pid
+	kdestroy
+	exit 0
 }
 
 # If this script receives a HUP, INT or TERM signal, we want to kill the
@@ -46,42 +46,42 @@ trap clean_up HUP INT TERM
 # ticket, if it is going to expire within the next 15 minutes.
 
 run_with_default_locale() {
-  LANG=C LC_ALL=C LC_CTYPE=C LC_MESSAGES=C "$@"
+	LANG=C LC_ALL=C LC_CTYPE=C LC_MESSAGES=C "$@"
 }
 
 get_expiration_time_string() {
-run_with_default_locale klist | \
-  grep -E "^[0-9]+/[0-9]+/[0-9]+[[:space:]]+[0-9]+:[0-9]+:[0-9]+[[:space:]]+[0-9]+/[0-9]+/[0-9]+[[:space:]]+[0-9]+:[0-9]+:[0-9]+[[:space:]]+krbtgt/" | \
-  grep -o -E "[0-9]+/[0-9]+/[0-9]+[[:space:]]+[0-9]+:[0-9]+:[0-9]+" | \
-  tail -n 1
+	run_with_default_locale klist |
+		grep -E "^[0-9]+/[0-9]+/[0-9]+[[:space:]]+[0-9]+:[0-9]+:[0-9]+[[:space:]]+[0-9]+/[0-9]+/[0-9]+[[:space:]]+[0-9]+:[0-9]+:[0-9]+[[:space:]]+krbtgt/" |
+		grep -o -E "[0-9]+/[0-9]+/[0-9]+[[:space:]]+[0-9]+:[0-9]+:[0-9]+" |
+		tail -n 1
 }
 
 get_expiration_time() {
-  local expiration_time
-  expiration_time="`get_expiration_time_string`"
-  if [ -n "${expiration_time}" ]; then
-    run_with_default_locale date --date="${expiration_time}" +%s
-  else
-    echo 0
-  fi
+	local expiration_time
+	expiration_time="$(get_expiration_time_string)"
+	if [ -n "${expiration_time}" ]; then
+		run_with_default_locale date --date="${expiration_time}" +%s
+	else
+		echo 0
+	fi
 }
 
 get_remaining_time() {
-  local expiration_time now remaining_time
-  expiration_time="`get_expiration_time`"
-  now="`run_with_default_locale date +%s`"
-  echo "$(( ${expiration_time} - ${now} ))"
+	local expiration_time now remaining_time
+	expiration_time="$(get_expiration_time)"
+	now="$(run_with_default_locale date +%s)"
+	echo "$((${expiration_time} - ${now}))"
 }
 
-last_renew="`date "+%s"`"
+last_renew="$(date "+%s")"
 while kill -0 $xprop_pid; do
-  now="`date "+%s"`"
-  if [ $(( $now - $last_renew)) -ge 60 ]; then
-    if [ "`get_remaining_time`" -lt 900 ]; then
-      request_ticket
-    fi
-  fi
-  sleep 1
+	now="$(date "+%s")"
+	if [ $(($now - $last_renew)) -ge 60 ]; then
+		if [ "$(get_remaining_time)" -lt 900 ]; then
+			request_ticket
+		fi
+	fi
+	sleep 1
 done
 
 # Clean up after X session has ended

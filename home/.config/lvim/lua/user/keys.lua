@@ -190,12 +190,6 @@ M.which_keys_normal = function()
     lvim.builtin.which_key.mappings["L"]["name"] = icons.moon .. " Lunarvim"
     lvim.builtin.which_key.mappings["p"]["name"] = icons.package .. " Packer"
 
-    -- Legendary
-    lvim.builtin.which_key.mappings["\\"] = {
-        "<cmd>lua require('legendary').find('commands')<cr>",
-        icons.palette .. "Legendary",
-    }
-
     -- Disable
     lvim.builtin.which_key.mappings["h"] = nil
     lvim.builtin.which_key.mappings["l"] = nil
@@ -272,11 +266,6 @@ M.normal_keys = function()
         lvim.keys.normal_mode["<F3>"] = { "<cmd>NvimTreeToggle<cr>" }
         lvim.keys.normal_mode["<S-F3>"] = { "<cmd>NvimTreeRefresh<cr>" }
     end
-
-    -- Toggle sidebar
-    if lvim.builtin.sidebar.active then
-        lvim.keys.normal_mode["<F4>"] = "<cmd>SidebarNvimToggle<cr>"
-    end
 end
 
 local Terminal = require("toggleterm.terminal").Terminal
@@ -331,11 +320,6 @@ M.insert_keys = function()
     else
         lvim.keys.insert_mode["<F3>"] = { "<esc><cmd>NvimTreeToggle<cr>" }
         lvim.keys.insert_mode["<S-F3>"] = { "<esc><cmd>NvimTreeRefresh<cr>" }
-    end
-
-    -- Toggle sidebar
-    if lvim.builtin.sidebar.active then
-        lvim.keys.insert_mode["<F4>"] = "<esc><cmd>SidebarNvimToggle<cr>"
     end
 end
 

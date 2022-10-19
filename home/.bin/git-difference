@@ -1,28 +1,28 @@
 #!/bin/bash
 
 while getopts hfrin: flag; do
-    case $flag in
-        f)
-            OUT="files"
-            ;;
-        n)
-            COLUMNS=$OPTARG
-            ;;
-        r)
-            MODE="relative"
-            ;;
-        i)
-            INVERTED="1"
-            ;;
-        h)
-            HELP="1"
-            ;;
-    esac
+	case $flag in
+	f)
+		OUT="files"
+		;;
+	n)
+		COLUMNS=$OPTARG
+		;;
+	r)
+		MODE="relative"
+		;;
+	i)
+		INVERTED="1"
+		;;
+	h)
+		HELP="1"
+		;;
+	esac
 done
 
 if [ "$HELP" == "1" ]; then
-    dif=$(basename $0)
-    cat <<EOF
+	dif=$(basename $0)
+	cat <<EOF
 
         USAGE:
         $dif [-h] [-f] [-r] [-i] [-n number]
@@ -36,35 +36,36 @@ if [ "$HELP" == "1" ]; then
             -i: will invert left to right on the output, so the newest is going to be on the left
 
 EOF
-    exit 0
+	exit 0
 fi
 
 if [[ $COLUMNS == "" ]]; then
-    COLUMNS=80
+	COLUMNS=80
 fi
 
 result=()
 origin=$(git rev-list -1 HEAD)
-for rev in $(git rev-list -n$COLUMNS --skip 1 HEAD)
-do
-    data=$(git diff --shortstat $origin $rev)
-    origin=$rev
-    if [[ $OUT == "files" ]]; then
-        value=$(echo $data | cut -d ' ' -f 1)
-        value=$(printf "%.0f" $value)
-    else
-        insertions=$(echo $data | grep -oe "[0-9]\+ insertions" | grep -oe "[0-9]\+"); insertions=$(printf "%.0f" $insertions)
-        deletions=$(echo $data | grep -oe "[0-9]\+ deletions" | grep -oe "[0-9]\+"); deletions=$(printf "%.0f" $deletions)
-        if [[ $MODE == "relative" ]]; then
-            let value=$insertions-$deletions
-        else
-            let value=$insertions+$deletions
-        fi
-    fi
-    if [ "$INVERTED" == "1" ]; then
-        result=("${result[@]}" "${value}")
-    else
-        result=("${value}" "${result[@]}")
-    fi
+for rev in $(git rev-list -n$COLUMNS --skip 1 HEAD); do
+	data=$(git diff --shortstat $origin $rev)
+	origin=$rev
+	if [[ $OUT == "files" ]]; then
+		value=$(echo $data | cut -d ' ' -f 1)
+		value=$(printf "%.0f" $value)
+	else
+		insertions=$(echo $data | grep -oe "[0-9]\+ insertions" | grep -oe "[0-9]\+")
+		insertions=$(printf "%.0f" $insertions)
+		deletions=$(echo $data | grep -oe "[0-9]\+ deletions" | grep -oe "[0-9]\+")
+		deletions=$(printf "%.0f" $deletions)
+		if [[ $MODE == "relative" ]]; then
+			let value=$insertions-$deletions
+		else
+			let value=$insertions+$deletions
+		fi
+	fi
+	if [ "$INVERTED" == "1" ]; then
+		result=("${result[@]}" "${value}")
+	else
+		result=("${value}" "${result[@]}")
+	fi
 done
 echo ${result[@]}

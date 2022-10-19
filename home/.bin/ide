@@ -80,9 +80,9 @@ function start_ide() {
 # Open a file inside the running IDE.
 function open_in_ide() {
 	if ! pgrep -f "\-\-class ide"; then
-        export_env
+		export_env
 		start_ide
-        sleep 0.5
+		sleep 0.5
 	fi
 	exec nvr --remote "$@"
 }
@@ -90,9 +90,9 @@ function open_in_ide() {
 # Toggle the IDE window.
 function toggle_ide() {
 	if ! pgrep -f "\-\-class ide"; then
-        export_env
+		export_env
 		start_ide
-        sleep 0.5
+		sleep 0.5
 	fi
 	i3-msg '[class="ide"] focus'
 }

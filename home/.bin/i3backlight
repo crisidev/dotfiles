@@ -3,19 +3,19 @@
 CURRENT=$(cat /sys/class/backlight/amdgpu_bl0/brightness)
 SET=${CURRENT}
 if [ "$1" == "down" ]; then
-  SET=$((CURRENT - 10))
-  if [ "${SET}" -le 0 ]; then
-    SET=0
-  fi
+	SET=$((CURRENT - 10))
+	if [ "${SET}" -le 0 ]; then
+		SET=0
+	fi
 elif [ "$1" == "up" ]; then
-  SET=$((CURRENT + 10))
-  if [ "${SET}" -ge 255 ]; then
-    SET=255
-  fi
+	SET=$((CURRENT + 10))
+	if [ "${SET}" -ge 255 ]; then
+		SET=255
+	fi
 elif [ "$1" == "ac" ]; then
-  SET=255
+	SET=255
 elif [ "$1" == "battery" ]; then
-  SET=110
+	SET=110
 fi
 
-echo "${SET}" | tee /sys/class/backlight/amdgpu_bl0/brightness > /dev/null
+echo "${SET}" | tee /sys/class/backlight/amdgpu_bl0/brightness >/dev/null

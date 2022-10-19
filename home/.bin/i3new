@@ -7,14 +7,14 @@
 # Jump to the next numbered workspace available on the current screen.
 # Example: bindsym $mod+n exec i3-new-workspace
 
-map_num () {
-  tr , '\n' | grep '"num":' | cut -d: -f2
-  # same as jshon -a -e num
-  echo 11
+map_num() {
+	tr , '\n' | grep '"num":' | cut -d: -f2
+	# same as jshon -a -e num
+	echo 11
 }
 
-next_min () {
-  sort -n | cat -n | awk '{ if ($1 != $2) { print $1; exit } }'
+next_min() {
+	sort -n | cat -n | awk '{ if ($1 != $2) { print $1; exit } }'
 }
 
 i3-msg -t get_workspaces | map_num | next_min | xargs i3-msg -q workspace number

@@ -91,6 +91,7 @@ M.get_theme = function(opts)
         opts = {}
     end
     opts["layout_config"] = M.layout_config()
+    opts["layout_config"]["preview_width"] = 0.4
     opts["sorting_strategy"] = "descending"
     return themes.get_ivy(opts)
 end
@@ -100,7 +101,6 @@ function M.layout_config()
         width = 0.9,
         height = 0.4,
         preview_cutoff = 150,
-        preview_width = 0.4,
         prompt_position = "bottom",
         horizontal = {
             preview_width = 0.4
