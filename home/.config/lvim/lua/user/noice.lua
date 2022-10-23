@@ -10,8 +10,50 @@ M.config = function()
             enabled = false,
         },
         cmdline = {
-            view = "cmdline",
-            view_search = "cmdline",
+            -- view = "cmdline",
+            -- view_search = "cmdline",
+            format = {
+                filter = { pattern = "^:%s*!", icon = "", ft = "sh" },
+                IncRename = {
+                    pattern = "^:%s*IncRename%s+",
+                    icon = " ",
+                    conceal = true,
+                    opts = {
+                        relative = "cursor",
+                        size = { min_width = 20 },
+                        position = { row = -3, col = 0 },
+                        buf_options = { filetype = "text" },
+                        win_options = {
+                            winblend = 5,
+                            winhighlight = {
+                                Normal = "NormalFloat",
+                                FloatBorder = "NoiceCmdlinePopupBorder",
+                                IncSearch = "",
+                                Search = "",
+                            },
+                            cursorline = false,
+                        },
+                    },
+                },
+            },
+        },
+        views = {
+            cmdline_popup = {
+                win_options = {
+                    winblend = 5,
+                    winhighlight = {
+                        Normal = "NormalFloat",
+                        FloatBorder = "NoiceCmdlinePopupBorder",
+                        IncSearch = "",
+                        Search = "",
+                    },
+                    cursorline = false,
+                },
+                position = {
+                    row = "93%",
+                    col = "50%",
+                },
+            },
         },
         popupmenu = {
             enabled = false,

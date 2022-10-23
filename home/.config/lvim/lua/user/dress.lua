@@ -9,6 +9,9 @@ M.config = function()
     dressing.setup {
         input = {
             get_config = function()
+                if lvim.builtin.noice.active then
+                    return { enabled = false }
+                end
                 if vim.api.nvim_buf_get_option(0, "filetype") == "neo-tree" then
                     return { enabled = false }
                 end
@@ -22,8 +25,8 @@ M.config = function()
                     return string.format("%s\t[%s]", title:gsub("\n", "\\n"), client.name)
                 end,
             },
-            -- telescope = require('user.telescope').get_theme(),
         },
+        -- telescope = require('user.telescope').get_theme(),
     }
 end
 

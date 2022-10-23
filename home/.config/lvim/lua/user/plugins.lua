@@ -231,6 +231,13 @@ M.config = function()
                 require("user.refactoring").config()
             end,
         },
+        {
+            "smjonas/inc-rename.nvim",
+            config = function()
+                require("inc_rename").setup()
+            end,
+            disable = not lvim.builtin.noice.active,
+        },
         ------------------------------------------------------------------------------
         -- Copilot baby..
         ------------------------------------------------------------------------------

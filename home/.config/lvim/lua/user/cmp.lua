@@ -32,18 +32,18 @@ M.kind = {
 
 M.config = function()
     lvim.builtin.cmp.sources = {
-        { name = "nvim_lsp", group_index = 1 },
-        { name = "nvim_lua", group_index = 1 },
+        { name = "copilot", group_index = 1 },
         { name = "luasnip", group_index = 1, max_item_count = 5, keyword_length = 3 },
-        { name = "path", group_index = 1, max_item_count = 5 },
+        { name = "nvim_lsp", group_index = 1 },
+        { name = "nvim_lsp_signature_help", group_index = 1 },
+        { name = "nvim_lua", group_index = 1 },
+        { name = "buffer", group_index = 1, max_item_count = 5, keyword_length = 3 },
+        { name = "path", group_index = 1 },
+        { name = "dictionary", group_index = 1 },
         { name = "git", group_index = 1 },
         { name = "crates", group_index = 1 },
-        { name = "nvim_lsp_signature_help", group_index = 1 },
-        { name = "copilot", group_index = 1 },
-        { name = "dictionary", group_index = 1 },
         { name = "calc", group_index = 1 },
         { name = "emoji", group_index = 1 },
-        { name = "buffer", group_index = 1, max_item_count = 5, keyword_length = 3 },
     }
 
     lvim.builtin.cmp.experimental = {
@@ -148,7 +148,7 @@ M.config = function()
         sources = cmp.config.sources {
             { name = "nvim_lsp", group_index = 1 },
             { name = "git", group_index = 1 },
-            { name = "path", group_index = 1, max_item_count = 5 },
+            { name = "path", group_index = 1 },
             { name = "buffer", group_index = 1 },
             { name = "dictionary", group_index = 1 },
             { name = "luasnip", group_index = 1, max_item_count = 5, keyword_length = 3 },
@@ -158,7 +158,7 @@ M.config = function()
     cmp.setup.filetype("markdown", {
         sources = cmp.config.sources {
             { name = "nvim_lsp", group_index = 1 },
-            { name = "path", group_index = 1, max_item_count = 5 },
+            { name = "path", group_index = 1 },
             { name = "dictionary", group_index = 1 },
             { name = "buffer", group_index = 1 },
             { name = "luasnip", group_index = 1, max_item_count = 5, keyword_length = 3 },

@@ -126,11 +126,6 @@ M.lsp_normal_keys = function()
                 "<cmd>lua vim.lsp.buf.format { async = true }<cr>",
                 icons.magic .. "Format file",
             },
-            -- Rename
-            R = {
-                "<cmd>lua vim.lsp.buf.rename()<cr>",
-                icons.magic .. "Rename symbol",
-            },
             -- Peek
             z = {
                 "<cmd>lua require('user.peek').Peek('definition')<cr>",
@@ -170,6 +165,31 @@ M.lsp_normal_keys = function()
             },
         },
     }
+
+    -- Rename
+    if lvim.builtin.noice.active then
+        wk.register {
+            ["f"] = {
+                R = {
+                    function()
+                        return ":IncRename " .. vim.fn.expand "<cword>"
+                    end,
+                    icons.magic .. "Rename symbol",
+                    expr = true,
+                },
+            },
+        }
+    else
+        wk.register {
+            ["f"] = {
+                R = {
+                    "<cmd>lua vim.lsp.buf.rename()<cr>",
+                    icons.magic .. "Rename symbol",
+                },
+            },
+        }
+    end
+
     -- Copilot
     if lvim.builtin.copilot.active then
         wk.register {
@@ -178,7 +198,8 @@ M.lsp_normal_keys = function()
                     name = icons.copilot .. " Copilot",
                     e = { "<cmd>lua require('user.copilot').enable()<cr>", "Enable" },
                     d = { "<cmd>lua require('user.copilot').disable()<cr>", "Disable" },
-                    h = { "<cmd>Copilot status<cr>", "Status" },
+                    v = { "<cmd>Copilot status<cr>", "Status" },
+                    h = { "<cmd>lua require('user.copilot').help()<cr>", "Help" },
                     r = { "<cmd>lua require('user.copilot').restart()<cr>", "Restart" },
                     t = { "<cmd>Copilot toggle<cr>", "Toggle" },
                     P = { "<cmd>Copilot panel<cr>", "Panel" },
