@@ -550,12 +550,14 @@ M.config = function()
                 require("user.incline").config()
             end,
         },
+        -- Cleanup whitespaces
         {
             "lewis6991/spaceless.nvim",
             config = function()
                 require("spaceless").setup()
             end,
         },
+        -- Orgmode
         {
             "kristijanhusak/orgmode.nvim",
             ft = { "org" },
@@ -564,14 +566,27 @@ M.config = function()
             end,
             disable = not lvim.builtin.orgmode.active,
         },
+        -- Clipboard management
         {
             "AckslD/nvim-neoclip.lua",
             requires = {
                 { "nvim-telescope/telescope.nvim" },
             },
             config = function()
-                require("neoclip").setup()
+                require("neoclip").setup {
+                    on_paste = {
+                        set_reg = true,
+                    },
+                }
             end,
+        },
+        -- Legendary
+        {
+            "mrjones2014/legendary.nvim",
+            config = function()
+                require("user.legendary").config()
+            end,
+            disable = not lvim.builtin.legendary.active,
         },
         -- {
         --     "lvimuser/lsp-inlayhints.nvim",

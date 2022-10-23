@@ -60,6 +60,8 @@ M.enable = function()
     end
 end
 
+
+
 M.disable = function()
     if lvim.builtin.copilot.active then
         for idx, source in pairs(vim.lsp.buf_get_clients()) do

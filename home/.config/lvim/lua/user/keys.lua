@@ -54,8 +54,9 @@ M.which_keys_normal = function()
 
     -- Noice
     lvim.builtin.which_key.mappings["N"] = {
-        "<cmd>:Noice<cr>",
-        icons.package .. " Noice",
+        name = icons.package .. " Noice",
+        N = { "<cmd>:Noice<cr>", "Noice" },
+        t = { "<cmd>lua require('user.telescope').noice()<cr>", "Telescope" },
     }
 
     -- String search

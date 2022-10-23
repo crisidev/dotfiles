@@ -51,6 +51,8 @@ M.config = function()
     lvim.builtin.cmp.cmdline.enable = false
     -- Orgmode
     lvim.builtin.orgmode = { active = false }
+    -- Legendary
+    lvim.builtin.legendary = { active = false }
 
     -- Theme
     lvim.builtin.theme.options.style = "storm"
