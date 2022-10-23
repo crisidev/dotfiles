@@ -71,6 +71,10 @@ M.hi_colors = function()
 end
 
 M.telescope_theme = function()
+    local function link(group, other)
+        vim.cmd("highlight! link " .. group .. " " .. other)
+    end
+
     local function set_bg(group, bg)
         vim.cmd("hi " .. group .. " guibg=" .. bg)
     end
@@ -79,10 +83,22 @@ M.telescope_theme = function()
         vim.cmd("hi " .. group .. " guifg=" .. fg .. " guibg=" .. bg)
     end
 
+    set_fg_bg("SpecialComment", "#9ca0a4", "bold")
+    link("FocusedSymbol", "LspHighlight")
+    link("LspCodeLens", "SpecialComment")
+    link("LspDiagnosticsSignError", "DiagnosticError")
+    link("LspDiagnosticsSignHint", "DiagnosticHint")
+    link("LspDiagnosticsSignInfo", "DiagnosticInfo")
+    link("NeoTreeDirectoryIcon", "NvimTreeFolderIcon")
+    link("IndentBlanklineIndent1 ", "@comment")
+
     local tokyonight_colors = M.colors.tokyonight_colors
     set_fg_bg("CmpBorder", tokyonight_colors.cmp_border, tokyonight_colors.cmp_border)
     set_fg_bg("NoiceCmdlinePopupBorder", tokyonight_colors.cmp_border, tokyonight_colors.cmp_border)
-    set_fg_bg("NoiceCmdlinePopupSearchBorder", tokyonight_colors.cmp_border, tokyonight_colors.cmp_border)
+    set_fg_bg("NoiceCmdlinePopupBorderCmdline", tokyonight_colors.cmp_border, tokyonight_colors.cmp_border)
+    set_fg_bg("NoiceCmdlinePopupBorderFilter", tokyonight_colors.cmp_border, tokyonight_colors.cmp_border)
+    set_fg_bg("NoiceCmdlinePopupBorderLua", tokyonight_colors.cmp_border, tokyonight_colors.cmp_border)
+    set_fg_bg("NoiceCmdlinePopupBorderSearch", tokyonight_colors.cmp_border, tokyonight_colors.cmp_border)
     set_fg_bg("diffAdded", tokyonight_colors.git.add, "NONE")
     set_fg_bg("diffRemoved", tokyonight_colors.git.delete, "NONE")
     set_fg_bg("diffChanged", tokyonight_colors.git.change, "NONE")

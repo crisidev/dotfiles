@@ -103,7 +103,7 @@ function M.layout_config()
         preview_cutoff = 150,
         prompt_position = "bottom",
         horizontal = {
-            preview_width = 0.4
+            preview_width = 0.32
         },
         vertical = {
             width = 0.9,
@@ -159,7 +159,9 @@ M.file_browser = function()
 end
 
 M.noice = function()
-    require("telescope").extensions.noice.noice(M.get_theme())
+    local opts = M.get_theme()
+    opts["previewer"] = false
+    require("telescope").extensions.noice.noice(opts)
 end
 
 M.projects = function()
@@ -344,7 +346,8 @@ M.config = function()
             ["<c-v>"] = M.multi_selection_open_vsplit,
             ["<c-s>"] = M.multi_selection_open_split,
             ["<c-t>"] = M.multi_selection_open_tab,
-            ["<C-d>"] = require("telescope.actions").delete_buffer,
+            ["<C-d>"] = actions.delete_buffer,
+            ["<C-x>"] = require('telescope.actions.layout').toggle_preview,
         },
         n = {
             ["<esc>"] = actions.close,
@@ -359,6 +362,7 @@ M.config = function()
             ["<c-v>"] = M.multi_selection_open_vsplit,
             ["<c-s>"] = M.multi_selection_open_split,
             ["<c-t>"] = M.multi_selection_open_tab,
+            ["<C-x>"] = require('telescope.actions.layout').toggle_preview,
             ["dd"] = require("telescope.actions").delete_buffer,
         },
     }

@@ -6,43 +6,8 @@ M.config = function()
         return
     end
     noice.setup {
-        views = {
-            cmdline_popup = {
-                position = {
-                    row = "93%",
-                    col = "50%",
-                },
-                win_options = {
-                    winblend = 5,
-                    winhighlight = {
-                        Normal = "NormalFloat",
-                        FloatBorder = "NoiceCmdlinePopupBorder",
-                        IncSearch = "",
-                        Search = "",
-                    },
-                    cursorline = false,
-                },
-                filter_options = {
-                    {
-                        filter = { event = "cmdline", find = "^%s*[/?]" },
-                        opts = {
-                            border = {
-                                text = {
-                                    top = " Search ",
-                                },
-                            },
-                            win_options = {
-                                winhighlight = {
-                                    Normal = "NormalFloat",
-                                    FloatBorder = "NoiceCmdlinePopupBorder",
-                                    IncSearch = "",
-                                    Search = "",
-                                },
-                            },
-                        },
-                    },
-                },
-            },
+        lsp_progress = {
+            enabled = false,
         },
         cmdline = {
             view = "cmdline",
@@ -51,9 +16,6 @@ M.config = function()
         popupmenu = {
             enabled = false,
         },
-        notify = {
-            enabled = lvim.builtin.notify.active,
-        },
         routes = {
             {
                 filter = { event = "msg_show", kind = "search_count" },
@@ -61,7 +23,7 @@ M.config = function()
             },
             {
                 view = "split",
-                filter = { event = "msg_show", min_height = 20 },
+                filter = { event = "msg_show", min_height = 30 },
             },
             {
                 filter = {

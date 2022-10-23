@@ -1,15 +1,15 @@
 local M = {}
 
-local ok, terminal = pcall(require, "toggleterm.terminal")
-if not ok then
-    return
-end
-
 M.config = function()
     lvim.builtin.terminal.autochdir = true
     lvim.builtin.terminal.active = true
     lvim.builtin.terminal.open_mapping = nil
     lvim.builtin.terminal.execs = {}
+end
+
+local ok, terminal = pcall(require, "toggleterm.terminal")
+if not ok then
+    return M
 end
 
 M.float_terminal_toggle = function(cmd, id)
@@ -18,7 +18,7 @@ M.float_terminal_toggle = function(cmd, id)
         hidden = true,
         direction = "float",
         float_opts = {
-            border = "curved"
+            border = "curved",
         },
         on_open = function(_)
             vim.cmd "startinsert!"

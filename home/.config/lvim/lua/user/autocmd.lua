@@ -5,7 +5,6 @@ local M = {}
 M.config = function()
     -- Autocommands
     vim.api.nvim_clear_autocmds { pattern = "lir", group = "_filetype_settings" }
-    vim.api.nvim_clear_autocmds { pattern = "*", group = "_format_options" }
     vim.api.nvim_create_augroup("_lvim_user", {})
 
     -- Codelense viewer
@@ -32,7 +31,7 @@ M.config = function()
     vim.api.nvim_create_autocmd("BufReadPost", {
         group = "_lvim_user",
         pattern = "*.md",
-        command = "set syntax=markdown",
+        command = "set syntax=markdown textwidth=80",
     })
 
     -- Disable colorcolumn

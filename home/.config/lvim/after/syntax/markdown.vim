@@ -128,7 +128,7 @@ syn match mdCheckbox "- \[ \]" contained containedin=mdTask conceal cchar=☐
 syn match mdCompleteTask "^ *- \[x\].*$" contains=mdCompleteMark
 syn match mdCompleteTask "\(^ *[\*-] \)\@!.*@done.*$"
 syn match mdCompleteMark "- \[x\]" contained containedin=mdCompleteTask conceal cchar=
- 
+
 syn match mdCancelledTask "^ *- X.*$" contains=mdCancelMark
 syn match mdCancelMark "- X" contained containedin=mdCancelledTask conceal cchar=✗
 

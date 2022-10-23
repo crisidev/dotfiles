@@ -25,6 +25,8 @@ M.config = function()
             },
         }
     end
+    lvim.builtin.bufferline.options.show_buffer_icons = true
+    lvim.builtin.bufferline.options.show_buffer_close_icons = true
     lvim.builtin.bufferline.options = {
         navigation = { mode = "uncentered" },
         diagnostics = false, -- do not show diagnostics in bufferline

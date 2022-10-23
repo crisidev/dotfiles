@@ -255,8 +255,6 @@ M.normal_keys = function()
         ["<C-]>"] = "<cmd>lua require('user.terminal').horizontal_terminal_toggle('zsh', 101, 20)<cr>",
         ["<C-g>"] = "<cmd>lua require('user.terminal').float_terminal_toggle('lazygit', 102)<cr>",
         ["<C-B>"] = "<cmd>lua require('user.terminal').horizontal_terminal_toggle('bemol --watch', 103, 10)<cr>",
-        -- Legendary
-        ["<C-P>"] = "<cmd>lua require('legendary').find()<cr>",
     }
 
     -- File explorer

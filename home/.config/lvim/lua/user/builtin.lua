@@ -12,6 +12,9 @@ M.config = function()
     lvim.transparent_window = true
     lvim.reload_config_on_save = true
     lvim.debug = false
+
+    -- Cmp borders
+    lvim.builtin.borderless_cmp = true
     -- Tree support
     lvim.builtin.tree_provider = "neo-tree"
     -- Project
@@ -64,33 +67,6 @@ M.config = function()
     lvim.builtin.alpha.active = true
     lvim.builtin.alpha.mode = "custom"
     lvim.builtin.alpha["custom"] = { config = require("user.dashboard").config() }
-
-    -- Notify popup
-    lvim.builtin.notify.active = true
-    lvim.builtin.notify.opts.icons = {
-        ERROR = icons.error,
-        WARN = icons.warn,
-        INFO = icons.info,
-        DEBUG = icons.debug,
-        TRACE = icons.trace,
-    }
-    lvim.builtin.notify.opts.min_width = function()
-        return math.floor(vim.o.columns * 0.4)
-    end
-    lvim.builtin.notify.opts.max_width = function()
-        return math.floor(vim.o.columns * 0.4)
-    end
-    lvim.builtin.notify.opts.max_height = function()
-        return math.floor(vim.o.lines * 0.8)
-    end
-    lvim.builtin.notify.opts.render = function(...)
-        local notif = select(2, ...)
-        local style = notif.title[1] == "" and "minimal" or "default"
-        require("notify.render")[style](...)
-    end
-    lvim.builtin.notify.opts.stages = "fade_in_slide_out"
-    lvim.builtin.notify.opts.timeout = 3000
-    lvim.builtin.notify.opts.background_colour = "NormalFloat"
 
     -- Git signs
     lvim.builtin.gitsigns.opts._threaded_diff = true
