@@ -1,11 +1,8 @@
-# Get editor completions based on the config schema
-"$schema" = 'https://starship.rs/config-schema.json'
-
 # Don't print a new line at the start of the prompt
 add_newline = false
 command_timeout = 1000
 
-format = """[❯](red)[❯](yellow)[❯](green) $directory$character"""
+format = """[deck](blue) [❯](red)[❯](yellow)[❯](green) $directory$character"""
 right_format = """
 $git_branch\
 $git_state\

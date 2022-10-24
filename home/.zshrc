@@ -91,7 +91,7 @@ HISTFILE="$HOME/.zsh_history"
 [ -f $HOME/.zsh_secrets ] && source $HOME/.zsh_secrets
 
 # paths
-export PATH=$HOME/.bin:$HOME/.toolbox/bin:$HOME/.pyenv/bin:$HOME/.rbenv/bin:$HOME/.nodenv/bin:$HOME/.goenv/bin:$HOME/.bin:$HOME/.cargo/bin:$HOME/.android/Sdk/platform-tools:$HOME/.toolchain/aarch64-linux-musl/bin:$HOME/.nodenv/shims:$HOME/.pyenv/shims:$HOME/.rbenv/shims:$HOME/.goenv/shims:$PATH
+export PATH=$HOME/.bin:$HOME/.pyenv/bin:$HOME/.rbenv/bin:$HOME/.nodenv/bin:$HOME/.goenv/bin:$HOME/.bin:$HOME/.cargo/bin:$HOME/.android/Sdk/platform-tools:$HOME/.toolchain/aarch64-linux-musl/bin:$HOME/.nodenv/shims:$HOME/.pyenv/shims:$HOME/.rbenv/shims:$HOME/.goenv/shims:$PATH
 
 # terminal
 export TERMINFO=/usr/share/terminfo
@@ -116,8 +116,6 @@ if which direnv > /dev/null; then eval "$(direnv hook zsh)"; fi
 export PYENV_ROOT="$HOME/.pyenv"
 if which pyenv > /dev/null; then 
   eval "$(pyenv init --path)"
-  eval "$(pyenv virtualenv-init -)"
-  source $HOME/.pyenv/completions/pyenv.zsh
   export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 fi
 
@@ -135,9 +133,6 @@ if which goenv > /dev/null; then
   eval "$(goenv init -)" 
   export PATH=$PATH:$GOPATH/bin
 fi
-
-# sdkman
-source "$HOME/.sdkman/bin/sdkman-init.sh"
 
 # sshrc
 compdef sshrc=ssh

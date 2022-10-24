@@ -1,8 +1,6 @@
 [user]
     email = bigo@crisidev.org
     name = Bigo
-    signingKey = 099F4F3AA10B27C97B746F03AEFBBD3BE8C66E4A
-    signingEmail = bigo@crisidev.org
 [color]
     ui = auto
 [pager]
@@ -24,12 +22,12 @@
     st = status
     ci = commit
     co = checkout
-    fix = commit -s --amend
+    fix = commit --amend
     pulf = pull --ff-only
     pulfa = pull --ff-only --autostash
     pulr = pull --rebase
-    fix = commit -s --amend
-    afix = commit -s -a --amend
+    fix = commit --amend
+    afix = commit -a --amend
     shame = "!git log --format='format:%C(yellow)%h%C(reset) %C(blue)<%ae>%C(reset) %C(magenta)%aD%C(reset)%C(auto)%d%C(reset) %s' |sort -r -k5 | grep \" 0\"  |head -n 15 |awk '{print $1\" \"$2\" \"$5\" \"$4\" \"$7\" \"$8\" \"$9\" \"$10\" \"$11\" \"$12\"...\"}' |ccze -m ansi"
     shamer = "!echo \"And the winner is: \" && git log --format='format:%C(yellow)%h%C(reset) %C(blue)<%ae>%C(reset) %C(magenta)%aD%C(reset)%C(auto)%d%C(reset) %s' |sort -r -k5 | grep \" 0\"  |head -n 1 |awk '{print $1\" \"$2\" \"$5\" \"$4\" \"$7\" \"$8\" \"$9\" \"$10\" \"$11\" \"$12\"...\"}' |ccze -m ansi"
 [push]

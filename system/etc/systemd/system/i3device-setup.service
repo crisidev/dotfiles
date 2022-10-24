@@ -1,9 +1,0 @@
-[Unit]
-Description=Setup devices
-
-[Service]
-Type=oneshot
-ExecStart=/home/bigo/.bin/i3device-setup
-
-[Install]
-WantedBy=multi-user.target
