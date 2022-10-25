@@ -93,6 +93,7 @@ M.telescope_theme = function()
     link("IndentBlanklineIndent1 ", "@comment")
 
     local tokyonight_colors = M.colors.tokyonight_colors
+    set_fg_bg("Hlargs", tokyonight_colors.yellow, "none")
     set_fg_bg("CmpBorder", tokyonight_colors.cmp_border, tokyonight_colors.cmp_border)
     set_fg_bg("NoiceCmdlinePopupBorder", tokyonight_colors.cmp_border, tokyonight_colors.cmp_border)
     set_fg_bg("NoiceCmdlinePopupBorderCmdline", tokyonight_colors.cmp_border, tokyonight_colors.cmp_border)

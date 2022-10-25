@@ -53,6 +53,8 @@ M.config = function()
     lvim.builtin.orgmode = { active = false }
     -- Legendary
     lvim.builtin.legendary = { active = false }
+    -- Hlargs
+    lvim.builtin.hlargs = { active = true }
 
     -- Theme
     lvim.builtin.theme.options.style = "storm"

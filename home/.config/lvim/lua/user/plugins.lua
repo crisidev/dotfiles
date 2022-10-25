@@ -588,6 +588,14 @@ M.config = function()
             end,
             disable = not lvim.builtin.legendary.active,
         },
+        {
+            "m-demare/hlargs.nvim",
+            config = function()
+                require("hlargs").setup()
+            end,
+            requires = { "nvim-treesitter/nvim-treesitter" },
+            disable = not lvim.builtin.hlargs.active,
+        },
         -- {
         --     "lvimuser/lsp-inlayhints.nvim",
         --     branch = "anticonceal",
