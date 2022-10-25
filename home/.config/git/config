@@ -1,5 +1,5 @@
 [user]
-    email = bigo@crisidev.org
+    email = 1781140+crisidev@users.noreply.github.com
     name = Bigo
 [color]
     ui = auto
@@ -46,8 +46,6 @@
     untracked = cyan
 [help]
     autocorrect = 20
-[commit]
-    gpgSign = true
 [delta]
     features = decorations
     syntax-theme = Monokai Extended

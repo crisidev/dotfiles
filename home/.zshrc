@@ -91,7 +91,7 @@ HISTFILE="$HOME/.zsh_history"
 [ -f $HOME/.zsh_secrets ] && source $HOME/.zsh_secrets
 
 # paths
-export PATH=$HOME/.bin:$HOME/.pyenv/bin:$HOME/.rbenv/bin:$HOME/.nodenv/bin:$HOME/.goenv/bin:$HOME/.bin:$HOME/.cargo/bin:$HOME/.android/Sdk/platform-tools:$HOME/.toolchain/aarch64-linux-musl/bin:$HOME/.nodenv/shims:$HOME/.pyenv/shims:$HOME/.rbenv/shims:$HOME/.goenv/shims:$PATH
+export PATH=$HOME/.bin:$HOME/.pyenv/bin:$HOME/.rbenv/bin:$HOME/.nodenv/bin:$HOME/.goenv/bin:$HOME/.bin:$HOME/.cargo/bin:$HOME/.android/Sdk/platform-tools:$HOME/.toolchain/aarch64-linux-musl/bin:$HOME/.nodenv/shims:$HOME/.pyenv/shims:$HOME/.rbenv/shims:$HOME/.goenv/shims:~/.local/bin:$PATH
 
 # terminal
 export TERMINFO=/usr/share/terminfo

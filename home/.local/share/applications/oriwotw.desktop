@@ -1,0 +1,20 @@
+[Desktop Entry]
+Comment[en_US]=Ori and the Will of the Wisps
+Comment=Ori and the Will of the Wisps
+Exec=/home/deck/.bin/proton /home/deck/Proton/Ori and the Will of the Wisps/oriwotw.exe
+GenericName[en_US]=Ori and the Will of the Wisps
+GenericName=Ori and the Will of the Wisps
+Icon=/home/deck/.local/share/icons/oriwotw.png
+Categories=Game;
+MimeType=
+Name[en_US]=Ori and the Will of the Wisps
+Name=Ori and the Will of the Wisps
+Path=
+StartupNotify=true
+Terminal=false
+TerminalOptions=
+Type=Application
+X-DBUS-ServiceName=
+X-DBUS-StartupType=
+X-KDE-SubstituteUID=false
+X-KDE-Username=
