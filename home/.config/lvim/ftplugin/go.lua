@@ -28,24 +28,5 @@ which_key.register {
             c = { "<cmd>GoCmt<cr>", "Comment" },
             d = { "<cmd>lua require('dap-go').debug_test()<cr>", "Debug test" },
         },
-        B = {
-            name = icons.settings .. "Build helpers",
-            b = {
-                "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd='go build .;read',count=2,direction='horizontal'})<cr>",
-                "Run go build",
-            },
-            v = {
-                "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd='go vet .;read',count=2,direction='horizontal'})<cr>",
-                "Run go vet",
-            },
-            t = {
-                "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd='go test .;read',count=2,direction='horizontal'})<cr>",
-                "Run go test",
-            },
-            r = {
-                "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd='go run .;read',count=2,direction='horizontal'})<cr>",
-                "Run go run",
-            },
-        },
     },
 }

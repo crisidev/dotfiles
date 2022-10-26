@@ -45,7 +45,10 @@ M.config = function()
     -- Winbar provider
     lvim.builtin.winbar_provider = "navic"
     -- Noice
-    lvim.builtin.noice = { active = true }
+    lvim.builtin.noice = {
+        active = true,
+        lsp_progress = false,
+    }
     -- Cmpline
     lvim.builtin.cmdline = { active = true }
     lvim.builtin.cmp.cmdline.enable = false
@@ -55,6 +58,9 @@ M.config = function()
     lvim.builtin.legendary = { active = false }
     -- Hlargs
     lvim.builtin.hlargs = { active = true }
+    -- UltTest
+    lvim.builtin.test_runner = { active = true }
+    lvim.builtin.task_runner = { active = true }
 
     -- Theme
     lvim.builtin.theme.options.style = "storm"

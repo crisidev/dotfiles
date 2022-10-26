@@ -93,6 +93,13 @@ M.config = function()
                 { "nvim-lua/plenary.nvim" },
             },
         },
+        {
+            "nvim-telescope/telescope-frecency.nvim",
+            config = function()
+                print()
+            end,
+            requires = { "kkharji/sqlite.lua" },
+        },
         ------------------------------------------------------------------------------
         -- LSP extensions.
         ------------------------------------------------------------------------------
@@ -151,13 +158,13 @@ M.config = function()
             end,
         },
         -- Lsp lines
-        {
-            "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
-            config = function()
-                require("lsp_lines").setup()
-            end,
-            event = "BufRead",
-        },
+        -- {
+        --     "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+        --     config = function()
+        --         require("lsp_lines").setup()
+        --     end,
+        --     event = "BufRead",
+        -- },
         -- Diagnostics on right corner.
         {
             "santigo-zero/right-corner-diagnostics.nvim",
@@ -595,6 +602,29 @@ M.config = function()
             end,
             requires = { "nvim-treesitter/nvim-treesitter" },
             disable = not lvim.builtin.hlargs.active,
+        },
+        {
+            "stevearc/overseer.nvim",
+            config = function()
+                require("user.overseer").config()
+            end,
+            disable = not lvim.builtin.task_runner.active,
+        },
+        {
+            "nvim-neotest/neotest",
+            config = function()
+                require("user.ntest").config()
+            end,
+            requires = {
+                { "nvim-neotest/neotest-go" },
+                { "nvim-neotest/neotest-python" },
+                { "nvim-neotest/neotest-plenary" },
+                { "rouge8/neotest-rust" },
+                { "nvim-lua/plenary.nvim" },
+                { "nvim-treesitter/nvim-treesitter" },
+                { "antoinemadec/FixCursorHold.nvim" },
+            },
+            disable = not lvim.builtin.test_runner.active,
         },
         -- {
         --     "lvimuser/lsp-inlayhints.nvim",

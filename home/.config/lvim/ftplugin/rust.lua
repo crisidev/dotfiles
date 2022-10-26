@@ -28,32 +28,5 @@ which_key.register {
             w = { "<cmd>RustReloadWorkspace<cr>", "Reload workspace" },
             D = { "<cmd>RustOpenExternalDocs<cr>", "Open documentation for identifier" },
         },
-        B = {
-            name = icons.settings .. "Build helpers",
-            b = {
-                "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd='cargo build;read',count=2,direction='horizontal'})<cr>",
-                "Run cargo build",
-            },
-            r = {
-                "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd='cargo run;read',count=2,direction='horizontal'})<cr>",
-                "Run cargo run",
-            },
-            C = {
-                "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd='cargo check;read',count=2,direction='horizontal'})<cr>",
-                "Run cargo check",
-            },
-            t = {
-                "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd='cargo test;read',count=2,direction='horizontal'})<cr>",
-                "Run cargo test",
-            },
-            c = {
-                "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd='cargo clippy;read',count=2,direction='horizontal'})<cr>",
-                "Run cargo clippy",
-            },
-            B = {
-                "<cmd>lua require('lvim.core.terminal')._exec_toggle({cmd='cargo bench;read',count=2,direction='horizontal'})<cr>",
-                "Run cargo bench",
-            },
-        },
     },
 }

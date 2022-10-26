@@ -78,7 +78,9 @@ M.icons = {
     collapsed = "",
     circular = "",
     circle_left = "",
-    circle_right = ""
+    circle_right = "",
+    neotest = "ﭧ"
+
 }
 
 M.todo_comments = {

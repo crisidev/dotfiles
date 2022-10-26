@@ -21,7 +21,7 @@ M.which_keys_normal = function()
         p = { "<cmd>lua require('user.telescope').projects()<cr>", "Projects" },
         s = { "<cmd>lua require('user.telescope').find_string()<cr>", "Find string" },
         S = { "<cmd>lua require('user.telescope').find_identifier()<cr>", "Find identifier under cursor" },
-        r = { "<cmd>lua require('user.telescope').recent_files()<cr>", "Recent files" },
+        r = { "<cmd>lua require('user.telescope').frecency()<cr>", "Recent files" },
         R = { "<cmd>lua require('user.telescope').raw_grep()<cr>", "Raw grep" },
         z = { "<cmd>lua require('user.telescope').zoxide()<cr>", "Zoxide list" },
     }
@@ -67,7 +67,7 @@ M.which_keys_normal = function()
 
     -- Recent files
     lvim.builtin.which_key.mappings["r"] = {
-        "<cmd>lua require('user.telescope').recent_files()<cr>",
+        "<cmd>lua require('user.telescope').frecency()<cr>",
         icons.calendar .. "Recent files",
     }
 
@@ -186,6 +186,42 @@ M.which_keys_normal = function()
         "<cmd>lua require('Comment.api').toggle.linewise.current()<CR>",
         icons.comment .. " Comment",
     }
+
+    -- Overseer
+    if lvim.builtin.task_runner.active then
+        lvim.builtin.which_key.mappings["O"] = {
+            name = icons.config .. "Overseer",
+            l = { "<cmd>OverseerLoadBundle<CR>", "Load Bundle" },
+            s = { "<cmd>OverseerSaveBundle<CR>", "Save Bundle" },
+            n = { "<cmd>OverseerBuild<CR>", "New Task" },
+            q = { "<cmd>OverseerQuickAction<CR>", "Quick Action" },
+            f = { "<cmd>OverseerTaskAction<CR>", "Task Action" },
+            t = { "<cmd>OverseerToggle<cr>", "Toggle Output" },
+            r = { "<cmd>OverseerRun<cr>", "Run" },
+            R = { "<cmd>OverseerRunCmd<cr>", "Run with Cmd" },
+        }
+    end
+    -- Neotest
+    if lvim.builtin.test_runner.active then
+        lvim.builtin.which_key.mappings["T"] = {
+            name = icons.settings .. "Test",
+            f = {
+                "<cmd>lua require('neotest').run.run({vim.fn.expand('%'), env=require('user.ntest').get_env()})<cr>",
+                "File",
+            },
+            o = { "<cmd>lua require('neotest').output.open({ enter = true, short = false })<cr>", "Output" },
+            r = { "<cmd>lua require('neotest').run.run({env=require('user.ntest').get_env()})<cr>", "Run" },
+            a = { "<cmd>lua require('user.ntest').run_all()<cr>", "Run All" },
+            c = { "<cmd>lua require('user.ntest').cancel()<cr>", "Cancel" },
+            R = { "<cmd>lua require('user.ntest').run_file_sync()<cr>", "Run Async" },
+            s = { "<cmd>lua require('neotest').summary.toggle()<cr>", "Summary" },
+            n = { "<cmd>lua require('neotest').jump.next({ status = 'failed' })<cr>", "jump to next failed" },
+            p = { "<cmd>lua require('neotest').jump.prev({ status = 'failed' })<cr>", "jump to previous failed" },
+            d = { "<cmd>lua require('neotest').run.run({ strategy = 'dap' })<cr>", "Dap Run" },
+            x = { "<cmd>lua require('neotest').run.stop()<cr>", "Stop" },
+            w = { "<cmd>lua require('neotest').watch.watch()<cr>", "Watch" },
+        }
+    end
 
     -- Names
     lvim.builtin.which_key.mappings["L"]["name"] = icons.moon .. " Lunarvim"
