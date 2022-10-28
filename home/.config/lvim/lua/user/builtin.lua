@@ -49,8 +49,8 @@ M.config = function()
         active = true,
         lsp_progress = false,
     }
+
     -- Cmpline
-    lvim.builtin.cmdline = { active = true }
     lvim.builtin.cmp.cmdline.enable = false
     -- Orgmode
     lvim.builtin.orgmode = { active = false }

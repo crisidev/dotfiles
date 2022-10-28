@@ -216,6 +216,39 @@ M.lsp_normal_keys = function()
             },
         }
     end
+
+    -- Neotest
+    if lvim.builtin.test_runner.active then
+        wk.register {
+            ["f"] = {
+                T = {
+                    name = icons.settings .. "Tests",
+                    f = {
+                        "<cmd>lua require('neotest').run.run({vim.fn.expand('%'), env=require('user.ntest').get_env()})<cr>",
+                        "File",
+                    },
+                    o = { "<cmd>lua require('neotest').output.open({ enter = true, short = false })<cr>", "Output" },
+                    r = { "<cmd>lua require('neotest').run.run({env=require('user.ntest').get_env()})<cr>", "Run" },
+                    a = { "<cmd>lua require('user.ntest').run_all()<cr>", "Run All" },
+                    c = { "<cmd>lua require('user.ntest').cancel()<cr>", "Cancel" },
+                    R = { "<cmd>lua require('user.ntest').run_file_sync()<cr>", "Run Async" },
+                    s = { "<cmd>lua require('neotest').summary.toggle()<cr>", "Toggle summary" },
+                    n = { "<cmd>lua require('neotest').jump.next({ status = 'failed' })<cr>", "Jump to next failed" },
+                    p = {
+                        "<cmd>lua require('neotest').jump.prev({ status = 'failed' })<cr>",
+                        "Jump to previous failed",
+                    },
+                    d = { "<cmd>lua require('neotest').run.run({ strategy = 'dap' })<cr>", "Dap Run" },
+                    l = { "<cmd>lua require('neotest').run.run_last()<cr>", "Last" },
+                    x = { "<cmd>lua require('neotest').run.stop()<cr>", "Stop" },
+                    w = { "<cmd>lua require('neotest').watch.watch()<cr>", "Watch" },
+                    t = { "<cmd>OverseerToggle<cr>", "Toggle tests" },
+                    T = { "<cmd>OverseerRun<cr>", "Run task" },
+                    Tc = { "<cmd>OverseerRunCmd<cr>", "Run task with Cmd" },
+                },
+            },
+        }
+    end
 end
 
 M.lsp_visual_keys = function()

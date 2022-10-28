@@ -12,7 +12,7 @@ local which_key = require "which-key"
 which_key.register {
     ["f"] = {
         K = { "<cmd>RustOpenExternalDocs<cr>", icons.docs .. "Open docs.rs" },
-        T = {
+        B = {
             name = icons.nuclear .. " Rust Tools",
             a = { "<cmd>RustCodeAction<cr>", "Code action" },
             i = { "<cmd>RustToggleInlayHints<cr>", "Toggle inlay hints" },

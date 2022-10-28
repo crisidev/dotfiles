@@ -20,7 +20,7 @@ local icons = require("user.icons").icons
 local which_key = require "which-key"
 which_key.register {
     ["f"] = {
-        T = {
+        B = {
             name = icons.nuclear .. " JdtLs Tools",
             o = { "<Cmd>lua require('jdtls').organize_imports()<CR>", "Organize Imports" },
             v = { "<Cmd>lua require('jdtls').extract_variable()<CR>", "Extract Variable" },

@@ -201,27 +201,6 @@ M.which_keys_normal = function()
             R = { "<cmd>OverseerRunCmd<cr>", "Run with Cmd" },
         }
     end
-    -- Neotest
-    if lvim.builtin.test_runner.active then
-        lvim.builtin.which_key.mappings["T"] = {
-            name = icons.settings .. "Test",
-            f = {
-                "<cmd>lua require('neotest').run.run({vim.fn.expand('%'), env=require('user.ntest').get_env()})<cr>",
-                "File",
-            },
-            o = { "<cmd>lua require('neotest').output.open({ enter = true, short = false })<cr>", "Output" },
-            r = { "<cmd>lua require('neotest').run.run({env=require('user.ntest').get_env()})<cr>", "Run" },
-            a = { "<cmd>lua require('user.ntest').run_all()<cr>", "Run All" },
-            c = { "<cmd>lua require('user.ntest').cancel()<cr>", "Cancel" },
-            R = { "<cmd>lua require('user.ntest').run_file_sync()<cr>", "Run Async" },
-            s = { "<cmd>lua require('neotest').summary.toggle()<cr>", "Summary" },
-            n = { "<cmd>lua require('neotest').jump.next({ status = 'failed' })<cr>", "jump to next failed" },
-            p = { "<cmd>lua require('neotest').jump.prev({ status = 'failed' })<cr>", "jump to previous failed" },
-            d = { "<cmd>lua require('neotest').run.run({ strategy = 'dap' })<cr>", "Dap Run" },
-            x = { "<cmd>lua require('neotest').run.stop()<cr>", "Stop" },
-            w = { "<cmd>lua require('neotest').watch.watch()<cr>", "Watch" },
-        }
-    end
 
     -- Names
     lvim.builtin.which_key.mappings["L"]["name"] = icons.moon .. " Lunarvim"
@@ -355,6 +334,16 @@ M.insert_keys = function()
     else
         lvim.keys.insert_mode["<F3>"] = { "<esc><cmd>NvimTreeToggle<cr>" }
         lvim.keys.insert_mode["<S-F3>"] = { "<esc><cmd>NvimTreeRefresh<cr>" }
+    end
+
+    if lvim.builtin.noice.active then
+        lvim.keys.insert_mode["<C-s>"] = function()
+            vim.lsp.buf_request(0, "textDocument/signatureHelp", params, function(err, result, ctx)
+                require("noice.lsp").signature(err, result, ctx, {
+                    trigger = true,
+                })
+            end)
+        end
     end
 end
 

@@ -18,7 +18,7 @@ if vim.fn.expand "%:t" == "Cargo.toml" then
     local icons = require("user.icons").icons
     which_key.register {
         ["f"] = {
-            T = {
+            B = {
                 name = icons.nuclear .. " Cargo Tools",
                 t = { "<cmd>lua require('crates').toggle()<cr>", "Toggle crates info" },
                 r = { "<cmd>lua require('crates').reload()<cr>", "Reload crates info" },

@@ -1,6 +1,9 @@
 local M = {}
 
 M.config = function()
+    if lvim.builtin.noice.active then
+        vim.lsp.handlers["textDocument/signatureHelp"] = require("noice.util").protect(require("noice.lsp").signature)
+    end
     local status_ok, noice = pcall(require, "noice")
     if not status_ok then
         return
@@ -57,6 +60,7 @@ M.config = function()
                 format_done = {},
             },
             hover = { enabled = true },
+            signature = { enabled = false, auto_open = false },
         },
         cmdline = {
             -- view = "cmdline",

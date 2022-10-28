@@ -17,7 +17,7 @@ local icons = require("user.icons").icons
 local which_key = require "which-key"
 which_key.register {
     ["f"] = {
-        T = {
+        B = {
             name = icons.nuclear .. " Go Tools",
             i = { "<cmd>GoInstallDeps<cr>", "Install dependencies" },
             t = { "<cmd>GoMod tidy<cr>", "Tidy" },

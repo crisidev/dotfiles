@@ -25,7 +25,7 @@ local icons = require("user.icons").icons
 local which_key = require "which-key"
 which_key.register {
     ["f"] = {
-        T = {
+        B = {
             name = icons.nuclear .. " TypeScript Tools",
             a = { "<cmd>TypescriptAddMissingImports<cr>", "Add missing imports" },
             o = { "<cmd>TypescriptOrganizeImports<cr>", "Organize imports" },

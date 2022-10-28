@@ -84,7 +84,7 @@ M.config = function()
             },
         }
         lvim.builtin.cmp.formatting.format = function(entry, vim_item)
-            if entry.source.name == "cmdline" then
+            if entry.source.name == "cmdline_history" then
                 vim_item.kind = "⌘"
                 vim_item.menu = ""
                 return vim_item
@@ -98,7 +98,7 @@ M.config = function()
         lvim.builtin.cmp.formatting = {
             fields = { "kind", "abbr", "menu" },
             format = function(entry, vim_item)
-                if entry.source.name == "cmdline" then
+                if entry.source.name == "cmdline_history" then
                     vim_item.kind = "⌘"
                     vim_item.menu = ""
                     return vim_item
@@ -125,7 +125,7 @@ M.config = function()
                 ["<Down>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i", "c" }),
             },
             sources = {
-                { name = "cmdline", group_index = 1 },
+                { name = "cmdline_history", group_index = 1 },
                 { name = "path", group_index = 1 },
             },
             window = {

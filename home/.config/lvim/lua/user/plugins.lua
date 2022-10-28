@@ -267,10 +267,8 @@ M.config = function()
         -- Cmp all the things.
         ------------------------------------------------------------------------------
         -- Cmp for command line
-        {
-            "hrsh7th/cmp-cmdline",
-            disable = not lvim.builtin.cmdline.active,
-        },
+        { "hrsh7th/cmp-cmdline" },
+        { "dmitmel/cmp-cmdline-history" },
         -- Cmp for emojis..
         { "hrsh7th/cmp-emoji" },
         -- Cmp for to calculate maths expressions.
