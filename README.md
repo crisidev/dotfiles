@@ -35,7 +35,7 @@ I would be happy to understand if   this is heavily inspired by something
 
 ### Editor
 
-- I use [Neovim](https://neovim.io) 0.8 following HEAD
+- I use [Neovim](https://neovim.io) 0.9 following HEAD
 - My config is heavily based on the great work of [abzcoding](https://github.com/abzcoding/lvim)
 - [LunarVim](https://lunarvim.org):
   - [Lua config](/home/.config/lvim/config.lua)
