@@ -22,7 +22,7 @@ NoDisplay=false
 Icon=libreoffice-startcenter
 Type=Application
 Categories=Office;X-Red-Hat-Base;X-SuSE-Core-Office;X-MandrivaLinux-Office-Other;
-Exec=env GTK_THEME=Adwaita libreoffice %U
+Exec=env GTK_THEME=Yaru-purple libreoffice %U
 MimeType=application/vnd.openofficeorg.extension;x-scheme-handler/vnd.libreoffice.cmis;
 Name=LibreOffice
 GenericName=Office
@@ -227,26 +227,26 @@ Actions=Writer;Calc;Impress;Draw;Base;Math;
 
 [Desktop Action Writer]
 Name=Writer
-Exec=env GTK_THEME=Adwaita libreoffice --writer
+Exec=env GTK_THEME=Yaru-purple libreoffice --writer
 
 [Desktop Action Calc]
 Name=Calc
-Exec=env GTK_THEME=Adwaita libreoffice --calc
+Exec=env GTK_THEME=Yaru-purple libreoffice --calc
 
 [Desktop Action Impress]
 Name=Impress
-Exec=env GTK_THEME=Adwaita libreoffice --impress
+Exec=env GTK_THEME=Yaru-purple libreoffice --impress
 
 [Desktop Action Draw]
 Name=Draw
-Exec=env GTK_THEME=Adwaita libreoffice --draw
+Exec=env GTK_THEME=Yaru-purple libreoffice --draw
 
 [Desktop Action Base]
 Name=Base
-Exec=env GTK_THEME=Adwaita libreoffice --base
+Exec=env GTK_THEME=Yaru-purple libreoffice --base
 
 [Desktop Action Math]
 Name=Math
-Exec=env GTK_THEME=Adwaita libreoffice --math
+Exec=env GTK_THEME=Yaru-purple libreoffice --math
 
 ##End of actions menu

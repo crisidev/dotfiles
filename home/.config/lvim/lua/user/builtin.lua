@@ -4,7 +4,6 @@ M.config = function()
     local icons = require("user.icons").icons
 
     lvim.colorscheme = "tokyonight"
-    lvim.builtin.theme.options.style = "storm"
     lvim.leader = ","
     lvim.format_on_save = false
     lvim.line_wrap_cursor_movement = false
@@ -49,7 +48,10 @@ M.config = function()
         active = true,
         lsp_progress = false,
     }
-
+    -- Session manager
+    lvim.builtin.session_manager = "possession"
+    -- Movements
+    lvim.builtin.motion_provider = "hop"
     -- Cmpline
     lvim.builtin.cmp.cmdline.enable = false
     -- Orgmode
@@ -63,9 +65,8 @@ M.config = function()
     lvim.builtin.task_runner = { active = true }
 
     -- Theme
-    lvim.builtin.theme.options.style = "storm"
-    lvim.builtin.theme.options.styles.comments = {}
-    lvim.builtin.theme.options.dim_inactive = true
+    require("user.theme").tokyonight()
+    lvim.builtin.theme.name = "tokyonight"
 
     -- Mason
     lvim.builtin.mason.ui.icons = require("user.icons").mason
@@ -84,11 +85,10 @@ M.config = function()
     lvim.builtin.gitsigns.opts.current_line_blame_formatter = " <author>, <author_time> · <summary>"
 
     -- Disable q/wq when running inside the IDE.
-    if vim.g.crisidev_ide then
-        vim.cmd [[ 
-            cnoremap <expr> <cr> getcmdtype() == ":" && index(["q", "wq"], getcmdline()) >= 0 ? "<C-u>" : "<cr>"
-        ]]
-    end
+    vim.cmd [[
+        cnoremap <expr> <cr> getcmdtype() == ":" && index(["q", "wq"], getcmdline()) >= 0 ? "<C-u>" : "<cr>"
+        cabbrev wq w
+    ]]
 
     -- Log level
     lvim.log.level = "warn"

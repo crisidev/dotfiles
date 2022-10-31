@@ -1,7 +1,11 @@
 local M = {}
 
 M.config = function()
-    require("persisted").setup {
+    local status_ok, persisted = pcall(require, "persisted")
+    if not status_ok then
+        return
+    end
+    persisted.setup {
         use_git_branch = true,
         autosave = true,
         autoload = false,

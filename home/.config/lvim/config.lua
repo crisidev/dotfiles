@@ -1,7 +1,3 @@
--- General
-lvim.colorscheme = "tokyonight"
-lvim.builtin.theme.options.style = "storm"
-
 -- Neovim
 require("user.neovim").config()
 

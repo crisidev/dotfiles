@@ -31,7 +31,7 @@ M.config = function()
         server = {
             -- options to pass to nvim-lspconfig
             -- i.e. the arguments to require("lspconfig").clangd.setup({})
-            cmd = { home .. "/.local/share/nvim/mason/packages/clangd/clangd/bin/clangd", unpack(clangd_flags) },
+            cmd = { "clangd", unpack(clangd_flags) },
             on_attach = require("lvim.lsp").common_on_attach,
             on_init = require("lvim.lsp").common_on_init,
             capabilities = capabilities,

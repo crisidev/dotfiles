@@ -415,7 +415,7 @@ M.config = function()
             end
         end,
         cond = function()
-            return vim.g.persisting ~= nil
+            return vim.g.persisting ~= nil and lvim.builtin.session_manager ~= "persisted"
         end,
         color = { fg = colors.green, bg = colors.bg },
     }

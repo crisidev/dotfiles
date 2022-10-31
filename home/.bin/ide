@@ -19,7 +19,7 @@ function export_env() {
 	[ -f "$HOME/.zsh_secrets" ] && source "$HOME/.zsh_secrets"
 
 	# paths
-	export PATH=$HOME/.bin:$HOME/.toolbox/bin:$HOME/.pyenv/bin:$HOME/.rbenv/bin:$HOME/.nodenv/bin:$HOME/.goenv/bin:$HOME/.bin:$HOME/.cargo/bin:$HOME/.android/Sdk/platform-tools:$HOME/.toolchain/aarch64-linux-musl/bin:$HOME/.nodenv/shims:$HOME/.pyenv/shims:$HOME/.rbenv/shims:$HOME/.goenv/shims:$PATH
+    export PATH=$HOME/.local/share/nvim/mason/bin:$HOME/.bin:$HOME/.toolbox/bin:$HOME/.pyenv/bin:$HOME/.rbenv/bin:$HOME/.nodenv/bin:$HOME/.goenv/bin:$HOME/.bin:$HOME/.cargo/bin:$HOME/.android/Sdk/platform-tools:$HOME/.toolchain/aarch64-linux-musl/bin:$HOME/.nodenv/shims:$HOME/.pyenv/shims:$HOME/.rbenv/shims:$HOME/.goenv/shims:$PATH
 
 	export LUNARVIM_CONFIG_DIR="${LUNARVIM_CONFIG_DIR:-$HOME/.config/lvim}"
 	export LUNARVIM_RUNTIME_DIR="${LUNARVIM_RUNTIME_DIR:-$HOME/.local/share/lunarvim}"
@@ -53,7 +53,7 @@ function export_env() {
 	export NODENV_ROOT="$HOME/.nodenv"
 	if which nodenv >/dev/null; then
 		eval "$(nodenv init -)"
-		export PATH=$PATH:$HOME/.nodenv/versions/17.0.1/bin
+        export PATH=$PATH:$HOME/.nodenv/versions/18.12.0/bin
 	fi
 
 	# godenv
@@ -62,11 +62,8 @@ function export_env() {
 		export GOENV_GOPATH_PREFIX=$HOME/.go
 		eval "$(goenv init -)"
 		export PATH=$PATH:$GOPATH/bin
+        export GOPROXY=direct
 	fi
-
-	# sdkman
-	# shellcheck disable=1091
-	source "$HOME/.sdkman/bin/sdkman-init.sh"
 
 	# zoxide
 	eval "$(zoxide init bash)"

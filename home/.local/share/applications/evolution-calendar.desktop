@@ -5,7 +5,7 @@ X-GNOME-FullName=Calendar
 Comment=Manage your email, contacts and schedule
 Keywords=email;calendar;contact;addressbook;task;
 Actions=new-window;compose;contacts;calendar;mail;memos;tasks;
-Exec=env GTK_THEME=Adwaita evolution -c calendar
+Exec=env GTK_THEME=Yaru-purple evolution -c calendar
 Icon=evolution
 Terminal=false
 Type=Application

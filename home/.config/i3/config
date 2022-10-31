@@ -14,7 +14,7 @@ set $mod Mod4
 set $editor vim
 
 # font
-font pango:MonoLisa Nerd Font, Font Awesome 5 Free 10
+font pango:MonoLisa Nerd Font, Font Awesome 5 Free, Symbols Nerd Font 10
 
 # Gaps configuration
 gaps inner 5
@@ -329,7 +329,7 @@ mode " [a]uto [l]aptop [h]ome [w]ork [m]irror" {
 ###########################
 bar {
     tray_output none
-    font pango:MonoLisa Nerd Font, Font Awesome 5 Free 9.5
+    font pango:MonoLisa Nerd Font, Font Awesome 5 Free, Symbols Nerd Font 10
     position top
     status_command bash -c "source $HOME/.zsh_secrets && $HOME/.cargo/bin/i3status-rs $HOME/.config/i3/top.toml"
     strip_workspace_numbers yes
@@ -349,7 +349,7 @@ bar {
 bar {
     output primary
     tray_output primary
-    font pango:MonoLisa Nerd Font, Font Awesome 5 Free 9.5
+    font pango:MonoLisa Nerd Font, Font Awesome 5 Free, Symbols Nerd Font 10
     status_command bash -c "source $HOME/.zsh_secrets && $HOME/.cargo/bin/i3status-rs $HOME/.config/i3/bottom.toml"
     position bottom
     workspace_buttons no
@@ -384,11 +384,11 @@ exec --no-startup-id "/usr/local/amazon/sbin/acmed-session.sh"
 
 # Appletts
 exec --no-startup-id "/usr/bin/tuxedo-control-center"
-exec --no-startup-id "/usr/bin/cronopete"
+# exec --no-startup-id "/usr/bin/cronopete"
 exec --no-startup-id "/usr/bin/nm-applet"
-exec --no-startup-id "/usr/local/bin/tailscale-ui"
-exec --no-startup-id "/usr/bin/systemctl --user start gotify-dunst"
-exec --no-startup-id "/usr/bin/touchpad-indicator"
+# exec --no-startup-id "/usr/local/bin/tailscale-ui"
+# exec --no-startup-id "/usr/bin/systemctl --user start gotify-dunst"
+# exec --no-startup-id "/usr/bin/touchpad-indicator"
 
 # i3 specific
 exec --no-startup-id "$HOME/.bin/i3alternate"

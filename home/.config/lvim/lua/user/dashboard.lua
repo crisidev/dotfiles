@@ -59,9 +59,6 @@ M.config = function()
     }
 
     local plugins = ""
-    local sessions = ""
-    local date = os.date "%a %d %b"
-    local version = " " .. vim.version().major .. "." .. vim.version().minor .. "." .. vim.version().patch
     local handle = io.popen 'fd -d 2 . $HOME"/.local/share/lunarvim/site/pack/packer" | grep pack | wc -l | tr -d "\n" '
     if handle then
         plugins = handle:read "*a"
@@ -69,18 +66,22 @@ M.config = function()
         plugins = plugins:gsub("^%s*(.-)%s*$", "%1")
     end
 
-    local handle = io.popen 'fd -d 1 . $HOME"/.local/share/nvim/sessions" | wc -l | tr -d "\n" '
-    if handle then
-        sessions = handle:read "*a"
-        handle:close()
-    end
+    local border_upper = text "╭──────────────────────────╮"
+    local date = text("│  " .. icons.calendar .. "Today is " .. os.date "%a %d %b" .. "   │")
+    local version = text(
+        "│  "
+            .. " Neovim version "
+            .. vim.version().major
+            .. "."
+            .. vim.version().minor
+            .. "."
+            .. vim.version().patch
+            .. "  │"
+    )
+    local plugin_count = text("│  " .. kind.Module .. plugins .. " plugins in total  │")
+    local border_lower = text "╰──────────────────────────╯"
 
-    local version = text(version, "Function")
-    date = text("┌─ " .. icons.calendar .. "Today is " .. date .. "  ─┐")
-    local plugin_count = text("❙  " .. kind.Module .. " " .. plugins .. " plugins in total ❙")
-    local session_count = text("└─ " .. icons.session .. " " .. sessions .. " neovim sessions  ─┘")
-
-    local fortune = require "alpha.fortune" ()
+    local fortune = require "alpha.fortune"()
     -- fortune = fortune:gsub("^%s+", ""):gsub("%s+$", "")
     local footer = {
         type = "text",
@@ -122,22 +123,41 @@ M.config = function()
 
     local buttons = {
         type = "group",
+        name = "some",
         val = {
-            button("r", " " .. icons.clock .. " Recent files", ":lua require('user.telescope').recent_files()<cr>"),
-            button("l", " " .. icons.magic .. " Last session", ":SessionLoadLast<cr>"),
-            button("S", " " .. icons.session .. " Sessions", ":lua require('user.telescope').persisted()<cr>"),
-            button("z", " " .. icons.folder .. "  Zoxide", ":lua require('user.telescope').zoxide()<cr>"),
-            button("f", " " .. kind.File .. " Find file", ":lua require('user.telescope').find_project_files()<cr>"),
-            button("s", " " .. icons.text .. "  Find word", ":lua require('user.telescope').find_string()<cr>"),
-            button("n", " " .. icons.stuka .. " New file", ":ene <BAR> startinsert <cr>"),
-            button("b", " " .. icons.files .. " File browswer", ":lua require('user.telescope').file_browser()<cr>"),
-            button("p", " " .. icons.project .. " Projects", ":lua require('user.telescope').projects()<cr>"),
-            button("q", " " .. icons.exit .. " Quit", ":confirm qall<cr>"),
+            button("r", icons.clock .. " Recent files", ":lua require('user.telescope').frecency()<cr>"),
+            button("l", icons.magic .. " Last session", ":SessionLoadLast<cr>"),
+            button("S", icons.session .. " Sessions", ":lua require('user.telescope').possession()<cr>"),
+            button("z", icons.folder .. "  Zoxide", ":lua require('user.telescope').zoxide()<cr>"),
+            button("f", kind.File .. " Find file", ":lua require('user.telescope').find_project_files()<cr>"),
+            button("s", icons.text .. "  Find word", ":lua require('user.telescope').find_string()<cr>"),
+            button("n", icons.stuka .. " New file", ":ene <BAR> startinsert <cr>"),
+            button("b", icons.files .. " File browswer", ":lua require('user.telescope').file_browser()<cr>"),
+            button("p", icons.project .. " Projects", ":lua require('user.telescope').projects()<cr>"),
+            button("q", icons.exit .. " Quit", ":confirm qall<cr>"),
         },
         opts = {
             spacing = 1,
         },
     }
+
+    local query = require "possession.query"
+    local get_layout = function()
+        local layout = query.alpha_workspace_layout({}, button, { others_name = "Sessions" })
+        table.remove(layout[1]["val"], 1)
+        table.remove(layout[1]["val"], 1)
+        return layout
+    end
+    local utils = require "possession.utils"
+    local function session()
+        return {
+            type = "group",
+            val = utils.throttle(get_layout, 5000),
+            opts = {
+                spacing = 1,
+            },
+        }
+    end
 
     local section = {
         header = header,
@@ -147,6 +167,9 @@ M.config = function()
         session_count = session_count,
         buttons = buttons,
         footer = footer,
+        border_upper = border_upper,
+        border_lower = border_lower,
+        session = session(),
     }
 
     local opts = {
@@ -154,15 +177,18 @@ M.config = function()
             { type = "padding", val = 1 },
             section.header,
             { type = "padding", val = 2 },
-            section.version,
-            { type = "padding", val = 1 },
+            section.border_upper,
             section.date,
+            section.version,
             section.plugin_count,
             section.session_count,
+            section.border_lower,
             -- section.top_bar,
             { type = "padding", val = 2 },
             section.buttons,
             -- section.bot_bar,
+            { type = "padding", val = 1 },
+            section.session,
             { type = "padding", val = 1 },
             section.footer,
         },

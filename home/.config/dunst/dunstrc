@@ -111,7 +111,7 @@
 
     ### Text ###
 
-    font = "Inter Regular 10"
+    font = "Ubuntu 10"
 
     # The spacing between lines.  If the height is smaller than the
     # font height, it will get raised to the font height.
@@ -196,7 +196,7 @@
     max_icon_size = 32
 
     # Paths to default icons.
-    icon_path = /usr/share/icons/Paper/32x32:/usr/share/icons/Paper/32x32/actions:/usr/share/icons/Paper/32x32/apps:/usr/share/icons/Paper/32x32/categories:/usr/share/icons/Paper/32x32/devices:/usr/share/icons/Paper/32x32/emblems:/usr/share/icons/Paper/32x32/emotes:/usr/share/icons/Paper/32x32/mimetypes:/usr/share/icons/Paper/32x32/places:/usr/share/icons/Paper/32x32/status:/usr/share/icons/Paper/32x32/web:/usr/share/icons/Paper/32x32@2x:/usr/share/icons/Paper/32x32@2x/actions:/usr/share/icons/Paper/32x32@2x/apps:/usr/share/icons/Paper/32x32@2x/categories:/usr/share/icons/Paper/32x32@2x/devices:/usr/share/icons/Paper/32x32@2x/emblems:/usr/share/icons/Paper/32x32@2x/emotes:/usr/share/icons/Paper/32x32@2x/mimetypes:/usr/share/icons/Paper/32x32@2x/places:/usr/share/icons/Paper/32x32@2x/status:/usr/share/icons/Paper/32x32@2x/web:/usr/share/pixmaps
+    icon_path = /usr/share/icons/Yaru/32x32/status/:/usr/share/icons/Yaru/32x32/devices/:/usr/share/icons/Yaru/32x32/actions:/usr/share/icons/Yaru/32x32/apps:/usr/share/icons/Yaru/32x32/categories:/usr/share/icons/Yaru/32x32/emblems:/usr/share/icons/Yaru/32x32/emotes:/usr/share/icons/Yaru/32x32/mimetypes:/usr/share/icons/Yaru/32x32/places:/usr/share/icons/gnome/32x32/status/:/usr/share/icons/gnome/32x32/devices/:/usr/share/icons/gnome/32x32/actions:/usr/share/icons/gnome/32x32/apps:/usr/share/icons/gnome/32x32/categories:/usr/share/icons/gnome/32x32/emblems:/usr/share/icons/gnome/32x32/emotes:/usr/share/icons/gnome/32x32/mimetypes:/usr/share/icons/gnome/32x32/places:/usr/share/icons/hicolor/32x32/status/:/usr/share/icons/hicolor/32x32/devices/:/usr/share/icons/hicolor/32x32/actions:/usr/share/icons/hicolor/32x32/apps:/usr/share/icons/hicolor/32x32/categories:/usr/share/icons/hicolor/32x32/emblems:/usr/share/icons/hicolor/32x32/emotes:/usr/share/icons/hicolor/32x32/mimetypes:/usr/share/icons/hicolor/32x32/places:/usr/share/icons/hicolor/32x32/animations:/usr/share/icons/hicolor/32x32/emotes:/usr/share/icons/hicolor/32x32/filesystems:/usr/share/icons/hicolor/32x32/intl:/usr/share/icons/hicolor/32x32/stock
 
     ### History ###
 

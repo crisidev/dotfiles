@@ -34,7 +34,7 @@ startup)
 	add_resolutions
 	declare -a arr=(
 		"workspace 5: chime; exec --no-startup-id google-chrome --user-data-dir=$HOME/.local/share/chrome-chime --disable-session-crashed-bubble -app=https://app.chime.aws"
-		"workspace 6: mail; exec --no-startup-id env GTK_THEME=Adwaita evolution -c mail; exec --no-startup-id  env GTK_THEME=Adwaita evolution -c calendar"
+		"workspace 6: mail; exec --no-startup-id env GTK_THEME=Yaru-purple evolution -c mail; exec --no-startup-id env GTK_THEME=Yaru-purple evolution -c calendar"
 		"workspace 8: chat; exec --no-startup-id google-chrome --user-data-dir=$HOME/.local/share/chrome-whatsapp --disable-session-crashed-bubble -app=https://web.whatsapp.com; exec --no-startup-id signal-desktop"
 		"workspace 9: slack; exec --no-startup-id slack"
 		"workspace 2: www; exec --no-startup-id firefox"

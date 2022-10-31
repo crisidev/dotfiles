@@ -29,7 +29,6 @@ M.config = function()
                     rangeVariableTypes = true,
                 },
                 diagnosticsDelay = "500ms",
-                experimentalWatchedFileDelay = "100ms",
                 symbolMatcher = "fuzzy",
                 completeUnimported = true,
                 staticcheck = true,

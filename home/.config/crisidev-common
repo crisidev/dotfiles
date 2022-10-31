@@ -34,7 +34,7 @@ finish_autorandr_switch() {
   notify-send -i display "Autorandr" "Switch to profile $1 finished"
   # feh --bg-fill "${HOME}/Pictures/wallpapers/rickstone.png"
 }
-xrandr --output HDMI-A-0 --gamma 0:0:0
+
 autorandr_safe() {
   loaded=$(autorandr "$@" 2>&1)
   if echo "$loaded" |grep -q "Config already loaded"; then
@@ -79,7 +79,7 @@ setup_zsh_paths() {
   export NODENV_ROOT="$HOME/.nodenv"
   if which nodenv >/dev/null; then
     eval "$(nodenv init -)"
-    export PATH=$PATH:~/.nodenv/versions/17.0.1/bin
+    export PATH=$PATH:~/.nodenv/versions/18.12.0/bin
   fi
 
   # nodenv
@@ -88,5 +88,6 @@ setup_zsh_paths() {
     export GOENV_GOPATH_PREFIX=$HOME/.go
     eval "$(goenv init -)"
     export PATH=$PATH:$GOPATH/bin
+    export GOPROXY=direct
   fi
 }

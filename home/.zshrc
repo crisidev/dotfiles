@@ -91,7 +91,7 @@ HISTFILE="$HOME/.zsh_history"
 [ -f $HOME/.zsh_secrets ] && source $HOME/.zsh_secrets
 
 # paths
-export PATH=$HOME/.bin:$HOME/.toolbox/bin:$HOME/.pyenv/bin:$HOME/.rbenv/bin:$HOME/.nodenv/bin:$HOME/.goenv/bin:$HOME/.bin:$HOME/.cargo/bin:$HOME/.android/Sdk/platform-tools:$HOME/.toolchain/aarch64-linux-musl/bin:$HOME/.nodenv/shims:$HOME/.pyenv/shims:$HOME/.rbenv/shims:$HOME/.goenv/shims:$PATH
+export PATH=$HOME/.local/share/nvim/mason/bin:$HOME/.bin:$HOME/.toolbox/bin:$HOME/.pyenv/bin:$HOME/.rbenv/bin:$HOME/.nodenv/bin:$HOME/.goenv/bin:$HOME/.bin:$HOME/.cargo/bin:$HOME/.android/Sdk/platform-tools:$HOME/.toolchain/aarch64-linux-musl/bin:$HOME/.nodenv/shims:$HOME/.pyenv/shims:$HOME/.rbenv/shims:$HOME/.goenv/shims:$PATH
 
 # terminal
 export TERMINFO=/usr/share/terminfo
@@ -125,19 +125,20 @@ fi
 export NODENV_ROOT="$HOME/.nodenv"
 if which nodenv > /dev/null; then 
   eval "$(nodenv init -)"
-  export PATH=$PATH:~/.nodenv/versions/17.0.1/bin
+  export PATH=$PATH:$HOME/.nodenv/versions/18.12.0/bin
 fi
 
-# godenv
+# goenv
 export GOENV_ROOT="$HOME/.goenv"
 if which goenv > /dev/null; then 
   export GOENV_GOPATH_PREFIX=$HOME/.go
   eval "$(goenv init -)" 
   export PATH=$PATH:$GOPATH/bin
+  export GOPROXY=direct
 fi
 
 # sdkman
-source "$HOME/.sdkman/bin/sdkman-init.sh"
+# source "$HOME/.sdkman/bin/sdkman-init.sh"
 
 # sshrc
 compdef sshrc=ssh

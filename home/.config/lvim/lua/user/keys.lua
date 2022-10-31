@@ -98,14 +98,27 @@ M.which_keys_normal = function()
     }
 
     -- Sessions
-    lvim.builtin.which_key.mappings["S"] = {
-        name = icons.session .. "Session",
-        l = { "<cmd>lua require('user.telescope').persisted()<cr>", "List available sessions" },
-        d = { "<cmd>SessionDelete<cr>", "Delete session" },
-        L = { "<cmd>SessionLoadLast<cr>", "Restore last session" },
-        c = { "<cmd>SessionLoad<cr>", "Restore current dir session" },
-        s = { "<cmd>SessionSave<cr>", "Save current session" },
-    }
+    if lvim.builtin.session_manager == "persisted" then
+        lvim.builtin.which_key.mappings["S"] = {
+            name = icons.session .. "Session",
+            l = { "<cmd>lua require('user.telescope').persisted()<cr>", "List available sessions" },
+            d = { "<cmd>SessionDelete<cr>", "Delete session" },
+            L = { "<cmd>SessionLoadLast<cr>", "Restore last session" },
+            c = { "<cmd>SessionLoad<cr>", "Restore current dir session" },
+            s = { "<cmd>SessionSave<cr>", "Save current session" },
+        }
+    elseif lvim.builtin.session_manager == "possession" then
+        lvim.builtin.which_key.mappings["S"] = {
+            name = icons.session .. "Session",
+            l = { "<cmd>lua require('user.telescope').possession()<cr>", "List available sessions" },
+            l = { "<cmd>PossessionList<cr>", "List available session" },
+            d = { "<cmd>PossessionDelete<cr>", "Delete current session" },
+            L = { "<cmd>PossessionLoad<cr>", "Load current dir session" },
+            c = { "<cmd>PossessionClose<cr>", "Close current session" },
+            s = { "<cmd>PossessionSave<cr>", "Save current session" },
+            S = { "<cmd>PossessionShow<cr>", "Open session" },
+        }
+    end
 
     -- Git
     lvim.builtin.which_key.mappings["g"] = {
@@ -156,15 +169,18 @@ M.which_keys_normal = function()
     end
 
     -- Save
-    lvim.builtin.which_key.mappings["w"] = { "<cmd>w!<cr>", icons.ok .. " Save buffer" }
+    lvim.builtin.which_key.mappings["w"] =
+        { "<cmd>w! | lua vim.notify('File written')<cr>", icons.ok .. " Save buffer" }
 
     -- Window picket
     lvim.builtin.which_key.mappings["W"] = { "<cmd>lua _pick_window()<cr>", icons.world .. "Pick window" }
 
     -- Close buffer with Leader-q
-    lvim.builtin.which_key.mappings["q"] =
-    { "<cmd>lua require('user.bufferline').delete_buffer()<cr>", icons.no .. " Close buffer" }
-    lvim.builtin.which_key.mappings["Q"] = { "<cmd>config qall<cr>", icons.no .. " Close all" }
+    lvim.builtin.which_key.mappings["q"] = {
+        "<cmd>lua require('user.bufferline').delete_buffer()<cr>",
+        icons.no .. " Close buffer",
+    }
+    lvim.builtin.which_key.mappings["Q"] = { "<cmd>confirm qall<cr>", icons.no .. " Quit" }
 
     -- Dashboard
     lvim.builtin.which_key.mappings[";"] = { "<cmd>Alpha<CR>", icons.dashboard .. "Dashboard" }
@@ -282,22 +298,6 @@ M.normal_keys = function()
     end
 end
 
-local Terminal = require("toggleterm.terminal").Terminal
-
-M.float_terminal_toggle = function(cmd)
-    local term = Terminal:new {
-        cmd = cmd,
-        hidden = true,
-        direction = "float",
-        on_open = function(_)
-            vim.cmd "startinsert!"
-        end,
-        on_close = function(_) end,
-        count = 99,
-    }
-    term:toggle()
-end
-
 -- INSERT MODE
 M.insert_keys = function()
     lvim.keys.insert_mode = {
@@ -375,6 +375,48 @@ M.hlslens_keys = function()
     )
     vim.api.nvim_set_keymap("n", "*", "*<Cmd>lua require('hlslens').start()<CR>", opts)
     vim.api.nvim_set_keymap("n", "#", "#<Cmd>lua require('hlslens').start()<CR>", opts)
+end
+
+M.hop_keys = function()
+    local opts = { noremap = true, silent = true }
+    vim.api.nvim_set_keymap("n", "s", ":HopChar2MW<cr>", opts)
+    vim.api.nvim_set_keymap("n", "S", ":HopWordMW<cr>", opts)
+    vim.api.nvim_set_keymap(
+        "n",
+        "l",
+        "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>",
+        {}
+    )
+    vim.api.nvim_set_keymap(
+        "n",
+        "L",
+        "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>",
+        {}
+    )
+    vim.api.nvim_set_keymap(
+        "o",
+        "l",
+        "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true, inclusive_jump = true })<cr>",
+        {}
+    )
+    vim.api.nvim_set_keymap(
+        "o",
+        "L",
+        "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true, inclusive_jump = true })<cr>",
+        {}
+    )
+    vim.api.nvim_set_keymap(
+        "",
+        "t",
+        "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true, hint_offset = -1 })<cr>",
+        {}
+    )
+    vim.api.nvim_set_keymap(
+        "",
+        "T",
+        "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true, hint_offset = -1 })<cr>",
+        {}
+    )
 end
 
 M.terminal_keys = function()

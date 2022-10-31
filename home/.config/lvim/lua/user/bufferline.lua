@@ -1,5 +1,6 @@
 local M = {}
 
+
 M.config = function()
     local icons = require "user.icons"
     local List = require "plenary.collections.py_list"
@@ -29,10 +30,11 @@ M.config = function()
     lvim.builtin.bufferline.options.show_buffer_close_icons = true
     lvim.builtin.bufferline.options = {
         navigation = { mode = "uncentered" },
-        diagnostics = false, -- do not show diagnostics in bufferline
-        diagnostics_indicator = function(_, _, diagnostics)
+        diagnostics = false,
+        diagnostics_indicator = function(_, _, diagnostics, _, _)
+            local icons = require("user.icons")
             local result = {}
-            local symbols = { error = icons.error, warning = icons.warn, info = icons.info }
+            local symbols = { error = " ", warning = " " }
             for name, count in pairs(diagnostics) do
                 if symbols[name] and count > 0 then
                     table.insert(result, symbols[name] .. count)
@@ -139,10 +141,10 @@ M.config = function()
         show_close_icon = false,
         -- indicator = { style = "bold" },
         indicator = {
-            icon = "▎", -- this should be omitted if indicator style is not 'icon'
+            icon = "⭐", -- this should be omitted if indicator style is not 'icon'
             style = "icon", -- can also be 'underline'|'none',
         },
-        max_name_length = 18,
+        max_name_length = 25,
         max_prefix_length = 15, -- prefix used when a buffer is de-duplicated
         truncate_names = true, -- whether or not tab names should be truncated
         tab_size = 18,

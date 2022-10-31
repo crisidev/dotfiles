@@ -22,7 +22,7 @@ NoDisplay=false
 Icon=libreoffice-math
 Type=Application
 Categories=Office;Spreadsheet;Education;Science;Math;
-Exec=env GTK_THEME=Adwaita libreoffice --math %U
+Exec=env GTK_THEME=Yaru-purple libreoffice --math %U
 MimeType=application/vnd.oasis.opendocument.formula;application/vnd.sun.xml.math;application/vnd.oasis.opendocument.formula-template;text/mathml;application/mathml+xml;
 Name=LibreOffice Math
 GenericName=Formula Editor
@@ -321,4 +321,4 @@ Name[zh_CN]=新建公式
 Name[zh_TW]=新增公式
 Name[zu]=New Formula
 Icon=libreoffice-document-new
-Exec=env GTK_THEME=Adwaita libreoffice --math
+Exec=env GTK_THEME=Yaru-purple libreoffice --math

@@ -360,6 +360,15 @@ M.config = function()
             config = function()
                 require("user.persisted").config()
             end,
+            disable = lvim.builtin.session_manager ~= "persisted",
+        },
+        {
+            "jedrzejboczar/possession.nvim",
+            requires = { "nvim-lua/plenary.nvim" },
+            config = function()
+                require("user.possession").config()
+            end,
+            disable = lvim.builtin.session_manager ~= "possession",
         },
         ------------------------------------------------------------------------------
         -- Zen mode
@@ -623,6 +632,22 @@ M.config = function()
                 { "antoinemadec/FixCursorHold.nvim" },
             },
             disable = not lvim.builtin.test_runner.active,
+        },
+        -- Hop
+        {
+            "ggandor/leap.nvim",
+            config = function()
+                require("user.leap").config()
+            end,
+            disable = lvim.builtin.motion_provider ~= "leap",
+        },
+        {
+            "phaazon/hop.nvim",
+            event = "BufRead",
+            config = function()
+                require("user.hop").config()
+            end,
+            disable = lvim.builtin.motion_provider ~= "hop",
         },
         -- {
         --     "lvimuser/lsp-inlayhints.nvim",

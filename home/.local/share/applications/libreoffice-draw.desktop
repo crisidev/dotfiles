@@ -21,7 +21,7 @@ Terminal=false
 Icon=libreoffice-draw
 Type=Application
 Categories=Office;Graphics;FlowChart;Graphics;2DGraphics;VectorGraphics;
-Exec=env GTK_THEME=Adwaita libreoffice --draw %U
+Exec=env GTK_THEME=Yaru-purple libreoffice --draw %U
 MimeType=application/vnd.oasis.opendocument.graphics;application/vnd.oasis.opendocument.graphics-flat-xml;application/vnd.oasis.opendocument.graphics-template;application/vnd.sun.xml.draw;application/vnd.sun.xml.draw.template;application/vnd.visio;application/x-wpg;application/vnd.corel-draw;application/vnd.ms-publisher;image/x-freehand;application/clarisworks;application/x-pagemaker;application/pdf;application/x-stardraw;image/x-emf;image/x-wmf;
 Name=LibreOffice Draw
 GenericName=Drawing Program
@@ -319,4 +319,4 @@ Name[zh_CN]=新建绘图
 Name[zh_TW]=新增繪圖
 Name[zu]=New Drawing
 Icon=libreoffice-document-new
-Exec=env GTK_THEME=Adwaita libreoffice --draw
+Exec=env GTK_THEME=Yaru-purple libreoffice --draw

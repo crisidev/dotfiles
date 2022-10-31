@@ -33,7 +33,7 @@ M.config = function()
         return
     end
 
-    local status_ok, result = pcall(lsp.grammar_guard.setup, opts)
+    status_ok, lsp = pcall(lsp.grammar_guard.setup, opts)
     if not status_ok then
         return
     end

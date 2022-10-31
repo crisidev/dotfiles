@@ -2,12 +2,16 @@ local M = {}
 
 M.config = function()
     if lvim.builtin.noice.active then
-        vim.lsp.handlers["textDocument/signatureHelp"] = require("noice.util").protect(require("noice.lsp").signature)
+        local found, noice_util = pcall(require, "noice.util")
+        if found then
+            vim.lsp.handlers["textDocument/signatureHelp"] = noice_util.protect(require("noice.lsp").signature)
+        end
     end
     local status_ok, noice = pcall(require, "noice")
     if not status_ok then
         return
     end
+    local icons = require("user.icons").icons
     local spinners = require "noice.util.spinners"
     spinners.spinners["mine"] = {
         frames = {
@@ -59,17 +63,22 @@ M.config = function()
                 },
                 format_done = {},
             },
-            hover = { enabled = true },
-            signature = { enabled = false, auto_open = false },
+            hover = { enabled = false },
+            signature = { enabled = false, auto_open = { enabled = false } },
+            -- override = {
+            --     ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+            --     ["vim.lsp.util.stylize_markdown"] = true,
+            --     ["cmp.entry.get_documentation"] = true,
+            -- },
         },
         cmdline = {
             -- view = "cmdline",
             -- view_search = "cmdline",
             format = {
-                filter = { pattern = "^:%s*!", icon = "", ft = "sh" },
+                filter = { pattern = "^:%s*!", icon = icons.term, ft = "sh" },
                 IncRename = {
                     pattern = "^:%s*IncRename%s+",
-                    icon = " ",
+                    icon = icons.rename,
                     conceal = true,
                     opts = {
                         relative = "cursor",
@@ -103,12 +112,13 @@ M.config = function()
         },
         routes = {
             {
-                filter = { event = "msg_show", kind = "search_count" },
-                opts = { skip = true },
+                filter = { event = "msg_show", min_height = 10 },
+                view = "split",
+                opts = { enter = true },
             },
             {
-                view = "split",
-                filter = { event = "msg_show", min_height = 30 },
+                filter = { event = "msg_show", kind = "search_count" },
+                opts = { skip = true },
             },
             {
                 filter = {
@@ -149,26 +159,10 @@ M.config = function()
                 filter = { find = "No active Snippet" },
                 opts = { skip = true },
             },
-            -- Disabled filters.
-            -- {
-            --     view = "notify",
-            --     filter = { event = "msg_showmode" },
-            -- },
-            -- {
-            --     filter = { find = "more lines" },
-            --     opts = { skip = true },
-            -- },
-            -- {
-            --     filter = { find = "fewer lines" },
-            --     opts = { skip = true },
-            -- },
-            -- {
-            --     filter = {
-            --         event = "msg_show",
-            --         find = "E486:",
-            --     },
-            --     opts = { skip = true },
-            -- },
+            {
+                filter = { find = "waiting for cargo metadata" },
+                opts = { skip = true },
+            },
         },
     }
 end

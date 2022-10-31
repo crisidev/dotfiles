@@ -79,8 +79,9 @@ M.icons = {
     circular = "",
     circle_left = "",
     circle_right = "",
-    neotest = "ﭧ"
-
+    neotest = "ﭧ",
+    rename = " ",
+    amazon = " ",
 }
 
 M.todo_comments = {
@@ -171,9 +172,9 @@ M.define_dap_signs = function()
 end
 
 M.mason = {
-  package_pending = " ",
-  package_installed = " ",
-  package_uninstalled = " ",
+    package_pending = " ",
+    package_installed = " ",
+    package_uninstalled = " ",
 }
 
 return M

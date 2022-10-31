@@ -43,18 +43,22 @@ M.config = function()
             },
         },
         on_open = function()
+            lvim.builtin.cmp.active = false
             vim.cmd [[
-          set foldlevel=10
-          lua require("user.zen").hide_diagnostics()
-          ]]
+                set foldlevel=10
+                lua require("user.zen").hide_diagnostics()
+            ]]
+            require("lualine").hide()
         end,
         on_close = function()
+            lvim.builtin.cmp.active = true
             vim.cmd [[
-          set foldlevel=4
-          set foldmethod=expr
-          set foldexpr=nvim_treesitter#foldexpr()
-          lua require("user.zen").show_diagnostics()
-          ]]
+                set foldlevel=4
+                set foldmethod=expr
+                set foldexpr=nvim_treesitter#foldexpr()
+                lua require("user.zen").show_diagnostics()
+            ]]
+            require("lualine").hide { unhide = true }
         end,
     }
 end

@@ -1,12 +1,12 @@
 [Unit]
 Description=Gotify-Dunst
-PartOf=graphical-session.target
+After=network.target
 
 [Service]
-WorkingDirectory=/usr/lib/gotify-dunst/
-ExecStart=/usr/bin/env python3 main.py
+WorkingDirectory=/home/ANT.AMAZON.COM/matbigoi/github/gotify-dunst
+ExecStart=/usr/bin/env python main.py
 Restart=always
 RestartSec=30
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=default.target
