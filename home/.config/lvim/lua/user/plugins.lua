@@ -152,7 +152,7 @@ M.config = function()
         -- Lsp Cland Extensions
         {
             "p00f/clangd_extensions.nvim",
-            ft = { "c", "cpp", "objc", "objcpp" },
+            ft = { "c", "cpp", "objc", "objcpp", "h", "hpp" },
             config = function()
                 require("user.lsp.c").config()
             end,
@@ -244,6 +244,22 @@ M.config = function()
                 require("inc_rename").setup()
             end,
             disable = not lvim.builtin.noice.active,
+        },
+        {
+            "cshuaimin/ssr.nvim",
+            config = function()
+                require("ssr").setup {
+                    min_width = 50,
+                    min_height = 5,
+                    keymaps = {
+                        close = "q",
+                        next_match = "n",
+                        prev_match = "N",
+                        replace_all = "<leader><cr>",
+                    },
+                }
+            end,
+            event = { "BufReadPost", "BufNew" },
         },
         ------------------------------------------------------------------------------
         -- Copilot baby..
@@ -417,8 +433,6 @@ M.config = function()
             "petertriho/nvim-scrollbar",
             config = function()
                 require("user.scrollbar").config()
-                -- Register current position handler.
-                -- require("user.scrollbar").register_current_position_handler()
             end,
             after = { "nvim-hlslens" },
         },
@@ -461,6 +475,11 @@ M.config = function()
                 require("user.neotree").config()
             end,
             disable = lvim.builtin.tree_provider ~= "neo-tree",
+        },
+        -- Treesitter textobject
+        {
+            "nvim-treesitter/nvim-treesitter-textobjects",
+            after = "nvim-treesitter",
         },
         ------------------------------------------------------------------------------
         -- Debug
@@ -643,6 +662,7 @@ M.config = function()
         },
         {
             "phaazon/hop.nvim",
+            branch = "v2",
             event = "BufRead",
             config = function()
                 require("user.hop").config()

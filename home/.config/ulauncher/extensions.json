@@ -27,13 +27,6 @@
         "last_commit": "ee0903174c8b87cd1f7c3b6c1acef10702547507",
         "last_commit_time": "2021-08-12T06:39:56"
     },
-    "com.github.yannishuber.pass-ulauncher": {
-        "id": "com.github.yannishuber.pass-ulauncher",
-        "url": "https://github.com/yannishuber/pass-ulauncher",
-        "updated_at": "2022-11-03T13:47:39.767180",
-        "last_commit": "25160ce85e731cf40e30ca1fe354b29c1fe6e494",
-        "last_commit_time": "2019-05-28T05:27:22"
-    },
     "com.github.iboyperson.ulauncher-system": {
         "id": "com.github.iboyperson.ulauncher-system",
         "url": "https://github.com/iboyperson/ulauncher-system",
@@ -61,5 +54,12 @@
         "updated_at": "2022-11-03T13:48:09.114712",
         "last_commit": "c5d7ab5c94c1b418cb1f8a9161be169a29c65658",
         "last_commit_time": "2022-02-24T01:17:09"
+    },
+    "com.github.kbialek.ulauncher-bitwarden": {
+        "id": "com.github.kbialek.ulauncher-bitwarden",
+        "url": "https://github.com/kbialek/ulauncher-bitwarden",
+        "updated_at": "2022-11-21T23:37:08.547112",
+        "last_commit": "e5c25ebc24142f064eaebb29f6e473ded6d6b315",
+        "last_commit_time": "2022-10-19T06:09:55"
     }
 }

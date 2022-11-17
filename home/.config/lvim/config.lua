@@ -1,5 +1,6 @@
 -- Neovim
 require("user.neovim").config()
+require("user.neovide").config()
 
 -- Builtin
 require("user.builtin").config()

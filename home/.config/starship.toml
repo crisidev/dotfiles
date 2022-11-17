@@ -5,7 +5,7 @@
 add_newline = false
 command_timeout = 1000
 
-format = """[❯](red)[❯](yellow)[❯](green) $directory$character"""
+format = """[❯](red)[❯](yellow)[❯](green) $directory"""
 right_format = """
 $git_branch\
 $git_state\

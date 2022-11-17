@@ -55,7 +55,7 @@ M.config = function()
     -- Undodir
     vim.opt.undodir = vim.fn.stdpath "cache" .. "/undo"
     -- The font used in graphical neovim applications
-    vim.opt.guifont = "MonoLisa Nerd Font:h10"
+    vim.opt.guifont = "MonoLisa Crisidev Light:h10"
     -- Display lines as one long line
     vim.opt.wrap = true
     -- We need to see things like -- INSERT --

@@ -4,7 +4,7 @@ M.config = function()
     vim.cmd [[
         let g:silicon = {
               \   'theme': 'Enki-Tokyo-Night',
-              \   'font': 'FiraCode Nerd Font',
+              \   'font': 'MonoLisa Nerd Font',
               \   'background':         '#202228',
               \   'shadow-color':       '#000000',
               \   'line-pad': 0,

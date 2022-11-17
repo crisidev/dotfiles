@@ -1,7 +1,6 @@
 local M = {}
 
 local icons = require("user.icons").icons
-local wk = require "which-key"
 
 M.edit_wrapper = function(cmd)
     local number = vim.fn.input "Number: "
@@ -24,6 +23,10 @@ M.assignee_wrapper = function(cmd)
 end
 
 M.config = function()
+    local ok, wk = pcall(require, "which-key")
+    if not ok then
+        return
+    end
     require("octo").setup()
 
     wk.register {

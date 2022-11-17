@@ -49,7 +49,7 @@ M.config = function()
         lsp_progress = false,
     }
     -- Session manager
-    lvim.builtin.session_manager = "possession"
+    lvim.builtin.session_manager = "persisted"
     -- Movements
     lvim.builtin.motion_provider = "hop"
     -- Cmpline
@@ -85,10 +85,12 @@ M.config = function()
     lvim.builtin.gitsigns.opts.current_line_blame_formatter = " <author>, <author_time> · <summary>"
 
     -- Disable q/wq when running inside the IDE.
-    vim.cmd [[
-        cnoremap <expr> <cr> getcmdtype() == ":" && index(["q", "wq"], getcmdline()) >= 0 ? "<C-u>" : "<cr>"
-        cabbrev wq w
-    ]]
+    if vim.g.crisidev_ide then
+        vim.cmd [[
+            cnoremap <expr> <cr> getcmdtype() == ":" && index(["q", "wq"], getcmdline()) >= 0 ? "<C-u>" : "<cr>"
+            cabbrev wq w
+        ]]
+    end
 
     -- Log level
     lvim.log.level = "warn"

@@ -3,7 +3,7 @@
 source "$HOME/.config/crisidev-common"
 
 declare -a arr=(
-  "workspace 2: www"
+  "workspace 2:  "
 )
 i3_msg_dispatcher "${arr[@]}"
 

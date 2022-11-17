@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+DUNST_TIMEOUT=3   # duration in seconds
+DUNST_URGENCY=low #
+
+xwininfo -tree -root | grep "[a]pp.chime.aws is sharing your screen." >/dev/null 2>&1
+if [ $? -eq 0 ]; then
+	# running screen sharing
+	if ! [ -f "/tmp/i3notify-block.lock" ]; then
+		touch /tmp/i3notify-block.lock
+		notify-send --icon=amazon -u ${DUNST_URGENCY} -t ${DUNST_TIMEOUT}000 Chime "Sharing mode activated"
+		sleep ${DUNST_TIMEOUT}
+		dunstctl set-paused true
+	fi
+else
+	if [ -f "/tmp/i3notify-block.lock" ]; then
+		rm /tmp/i3notify-block.lock
+		dunstctl set-paused false
+		sleep ${DUNST_TIMEOUT}
+		notify-send --icon=amazon -u ${DUNST_URGENCY} -t ${DUNST_TIMEOUT}000 Chime "Sharing mode deactivated"
+	fi
+fi

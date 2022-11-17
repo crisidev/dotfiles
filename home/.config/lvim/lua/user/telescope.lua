@@ -177,7 +177,7 @@ M.persisted = function()
 end
 
 M.possession = function()
-    require("telescope").extensions.possession.possession.list(M.get_theme())
+    require("telescope").extensions.possession.list(M.get_theme())
 end
 
 M.neoclip = function()
@@ -186,6 +186,14 @@ end
 
 M.frecency = function()
     require("telescope").extensions.frecency.frecency(M.get_theme())
+end
+
+M.session = function ()
+    if lvim.builtin.session_manager == "possession" then
+        M.possession()
+    else
+        M.persisted()
+    end
 end
 
 -- show refrences to this using language server

@@ -1,13 +1,14 @@
 [theme]
-name = "slick"
+theme = "tokyo"
 
 [icons]
-name = "awesome5"
+icons = "awesome6"
 
 [[block]]
 block = "focused_window"
-show_marks = "none"
-max_width = 800
+[block.format]
+full = " $title.str(0,500) |"
+short = " $title.str(0,50) |"
 
 # [[block]]
 # block = "bluetooth"
@@ -15,65 +16,82 @@ max_width = 800
 # mac = "0C:C4:13:F8:76:65"  # pixel 
 # format = ""
 # format_unavailable = ""
+# [[block]]
+# block = "github"
+# token = "$GITHUB_TOKEN"
+# format = " $icon $total.eng(1) "
+# info = ["total"]
+# warning = ["mention","review_requested"]
+# hide_if_total_is_zero = true
+
 
 [[block]]
 block = "custom"
+json = true
+interval = 2
 cycle = ["~/.bin/i3mute get"]
-on_click = "~/.bin/i3mute set"
-json = true
-interval = 2
+[[block.click]]
+button = "left"
+cmd = "~/.bin/i3mute set"
 
 [[block]]
 block = "custom"
-cycle = ["~/.bin/i3exit dunst get"]
-on_click = "~/.bin/i3exit dunst set"
-hide_when_empty = false
 json = true
 interval = 2
-
-[[block]]
-block = "custom"
 cycle = ["~/.bin/i3bluetooth"]
-on_click = "~/.bin/i3bluetooth cycle"
-hide_when_empty = false
-json = true
-interval = 2
+[[block.click]]
+button = "left"
+cmd = "~/.bin/i3bluethooth cycle"
 
 [[block]]
 block = "custom"
 cycle = ["~/.bin/i3vpn"]
-on_click = "~/.bin/i3vpn cycle"
-hide_when_empty = false
 json = true
 interval = 5
+[[block.click]]
+button = "left"
+cmd = "~/.bin/i3vpn cycle"
 
 # [[block]]
 # block = "weather"
 # format = "{weather} ({location}) {temp}, {wind} m/s {direction}"
 # service = { name = "openweathermap", city_id = "2643743", units = "metric" }  # london
 # service = { name = "openweathermap", city_id = "3169522", units = "metric" }  # reggio
+[[block]]
+block = "custom"
+json = true
+interval = 60
+cycle = ["~/.bin/mwhandle"]
+[[block.click]]
+button = "left"
+cmd = "~/.bin/mwhandle"
+
+[[block]]
+block = "custom"
+json = true
+interval = 60
+cycle = ["~/.bin/khandle"]
+[[block.click]]
+button = "left"
+cmd = "~/.bin/khandle"
+
+[[block]]
+block = "notify"
+format = " {$paused{}|} "
 
 [[block]]
 block = "music"
 player = "spotify"
-buttons = ["prev", "play", "next"]
-dynamic_width = false
-max_width = 25
-format = "{artist} - {title}"
+format = " $icon {$combo.str(0,20) $play $next |}"
 hide_when_empty = true
 
 [[block]]
-block = "custom"
-cycle = ["~/.bin/mwhandle"]
-on_click = "~/.bin/mwhandle"
-json = true
-hide_when_empty = false
-interval = 60
+block = "xrandr"
+format = " $icon "
+
 
 [[block]]
 block = "custom"
-cycle = ["~/.bin/khandle"]
-on_click = "~/.bin/khandle"
-hide_when_empty = false
-json = true
-interval = 60
+interval = 5
+cycle = ["~/.bin/i3notify-block"]
+hide_when_empty = true

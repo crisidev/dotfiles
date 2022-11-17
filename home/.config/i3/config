@@ -14,10 +14,10 @@ set $mod Mod4
 set $editor vim
 
 # font
-font pango:MonoLisa Nerd Font, Font Awesome 5 Free, Symbols Nerd Font 10
+font pango:MonoLisaCrisidev Nerd Font, Font Awesome 6 Free, Material Icons 10
 
 # Gaps configuration
-gaps inner 5
+gaps inner 8
 gaps outer 3
 
 # Go back to previous workspace pressing the same move combination
@@ -36,26 +36,23 @@ floating_modifier $mod
 ###########################
 # Appearance
 ###########################
-client.focused           #918ad2 #918ad2 #ffffff #918ad2 #918ad2
-# client.focused_inactive #7789cb #7789cb #ffffff #7789cb #7789cb
-client.urgent           #ff6961 #ff6961 #ff6961 #ff6961 #ff6961
 
 ###########################
 # Workspaces
 ###########################
-set $w1 1: shell
-set $w2 2: www
-set $w3 3: irc
-set $w4 4: videoconf
-set $w5 5: chime
-set $w6 6: mail
-set $w7 7: calendar
-set $w8 8: chat
-set $w9 9: slack
-set $w10 10: outlook
-set $w11 11: spotify
-set $w12 12: quip
-set $w13 13: var1
+set $w1 "1:  "
+set $w2 "2:  "
+set $w3 "3:  "
+set $w4 "4:  "
+set $w5 "5:  "
+set $w6 "6:  "
+set $w7 "7:  "
+set $w8 "8:  "
+set $w9 "9:  "
+set $w10 "10:  "
+set $w11 "11:  "
+set $w12 "12:  "
+set $w13 "13:  "
 
 ###########################
 # Marks
@@ -66,61 +63,61 @@ show_marks yes
 # Windows rules
 ###########################
 # Border options
-for_window [class="^.*"] border pixel 2
+for_window [class="^.*"] border pixel 0
 
 # Float windows
-for_window [class="Vpnui"] floating enable border pixel 1
-for_window [class="Gpick"] floating enable border pixel 1
-for_window [class="Arandr"] floating enable border pixel 1
-for_window [class="System-config-printer.py"] floating enable border pixel 1
-for_window [class="Nautilus"] floating enable border pixel 1
-for_window [class="Gnome-disks"] floating enable border pixel 1
-for_window [class="Volti"] floating enable border pixel 1
-for_window [class="VirtualBox Manager"] floating enable border pixel 1
-for_window [class="VirtualBox Machine"] floating enable border pixel 1
-for_window [class="Steam"] floating enable border pixel 1
-for_window [class="Blueman-manager"] floating enable border pixel 1
-for_window [class="Shutter"] floating enable border pixel 1
-for_window [class="kitty" instance="floating"] floating enable border pixel 1
-for_window [class="Zeal"] floating enable border pixel 1
-for_window [class="Nm-connection-editor"] floating enable border pixel 1
-for_window [class="KibanaAWSElectron"] floating enable border pixel 1
-for_window [class="Lxappearance"] floating enable border pixel 1
-for_window [class="Linphone"] floating enable border pixel 1
-for_window [class="Pavucontrol"] floating enable border pixel 1
-for_window [class="Pavumeter"] floating enable border pixel 1
-for_window [class="Eog"] floating enable border pixel 1
-for_window [class="qemu-system-x86_64"] floating enable border pixel 1
-for_window [class="Gnome-control-center"] floating enable border pixel 1
-for_window [class="Evince"] floating enable border pixel 1
-for_window [class="Xsane"] floating enable border pixel 1
-for_window [class="vlc"] floating enable border pixel 1
-for_window [class="flameshot"] floating enable border pixel 1
-for_window [class="feh"] floating enable border pixel 1
-for_window [class="Geeqie"] floating enable border pixel 1
-for_window [class="python3.6"] floating enable border pixel 1
-for_window [class="Cisco AnyConnect Secure Mobility Client"] floating enable border pixel 1
-for_window [class="Gnome-tweaks"] floating enable  border pixel 1
-for_window [class="Software-properties-gtk"] floating enable border pixel 1
-for_window [class="Dconf-editor"] foggle" ]; thenloating enable border pixel 1
-for_window [class="python3.8"] floating enable border pixel 1
-for_window [class="Espanso"] floating enable border pixel 1
-for_window [class="Simple-scan"] floating enable border pixel 1
-for_window [class="Dconf-editor"] floating enable border pixel 1
-for_window [class="Evolution-alarm-notify"] floating enable border pixel 1
-for_window [class="Gnome-font-viewer"] floating enable border pixel 1
-for_window [class="Blueman-services"] floating enable border pixel 1
-for_window [class="tuxedo-control-center"] floating enable border pixel 1
-for_window [class="cemu.exe"] floating enable border pixel 1
-for_window [title="BOTW Cross-Platform Mod Loader"] floating enable border pixel 1
-for_window [class="steam_app_0"] floating enable border pixel 1
-for_window [class="steam_proton"] floating enable border pixel 1
+for_window [class="Vpnui"] floating enable
+for_window [class="Gpick"] floating enable
+for_window [class="Arandr"] floating enable
+for_window [class="System-config-printer.py"] floating enable
+for_window [class="Nautilus"] floating enable
+for_window [class="Gnome-disks"] floating enable
+for_window [class="Volti"] floating enable
+for_window [class="VirtualBox Manager"] floating enable
+for_window [class="VirtualBox Machine"] floating enable
+for_window [class="Steam"] floating enable
+for_window [class="Blueman-manager"] floating enable
+for_window [class="Shutter"] floating enable
+for_window [class="kitty" instance="floating"] floating enable
+for_window [class="Zeal"] floating enable
+for_window [class="Nm-connection-editor"] floating enable
+for_window [class="KibanaAWSElectron"] floating enable
+for_window [class="Lxappearance"] floating enable
+for_window [class="Linphone"] floating enable
+for_window [class="Pavucontrol"] floating enable
+for_window [class="Pavumeter"] floating enable
+for_window [class="Eog"] floating enable
+for_window [class="qemu-system-x86_64"] floating enable
+for_window [class="Gnome-control-center"] floating enable
+for_window [class="Evince"] floating enable
+for_window [class="Xsane"] floating enable
+for_window [class="vlc"] floating enable
+for_window [class="flameshot"] floating enable
+for_window [class="feh"] floating enable
+for_window [class="Geeqie"] floating enable
+for_window [class="python3.6"] floating enable
+for_window [class="Cisco AnyConnect Secure Mobility Client"] floating enable
+for_window [class="Gnome-tweaks"] floating enable
+for_window [class="Software-properties-gtk"] floating enable
+for_window [class="Dconf-editor"] foggle" ]; thenloating enable
+for_window [class="python3.8"] floating enable
+for_window [class="Espanso"] floating enable
+for_window [class="Simple-scan"] floating enable
+for_window [class="Dconf-editor"] floating enable
+for_window [class="Evolution-alarm-notify"] floating enable
+for_window [class="Gnome-font-viewer"] floating enable
+for_window [class="Blueman-services"] floating enable
+for_window [class="tuxedo-control-center"] floating enable
+for_window [class="cemu.exe"] floating enable
+for_window [title="BOTW Cross-Platform Mod Loader"] floating enable
+for_window [class="steam_app_0"] floating enable
+for_window [class="steam_proton"] floating enable
+for_window [class="Bitwarden"] floating enable
+for_window [class="Ulauncher"] floating enable
 
 # Special borders and floats
-for_window [class="^ide$"] border pixel 2
-for_window [class="Ulauncher"] floating enable border pixel 0
-
 assign [class="firefox"] $w2
+assign [class="irc"] $w3
 assign [class="Google-chrome" instance="google-chrome.*\(/home/.*/.local/share/chrome-chime\)"] $w4
 assign [class="Google-chrome" instance="app.chime.aws"] $w5
 # assign [title=".*Calendar.*"] $w7
@@ -133,6 +130,7 @@ assign [class="Slack"] $w9
 assign [class="slack"] $w9
 assign [class="Google-chrome" instance="ballard.amazon.com__owa"] $w10
 assign [class="spotify"] $w11
+assign [class="Spotify"] $w11
 assign [class="Google-chrome" instance="google-chrome.*\(/home/.*/.local/share/chrome-quip\)"] $w12
 assign [class="Google-chrome" instance="quip-amazon.com"] $w12
 
@@ -329,39 +327,39 @@ mode " [a]uto [l]aptop [h]ome [w]ork [m]irror" {
 ###########################
 bar {
     tray_output none
-    font pango:MonoLisa Nerd Font, Font Awesome 5 Free, Symbols Nerd Font 10
+    font pango:MonoLisaCrisidev Nerd Font, Material Icons 10
     position top
     status_command bash -c "source $HOME/.zsh_secrets && $HOME/.cargo/bin/i3status-rs $HOME/.config/i3/top.toml"
     strip_workspace_numbers yes
     workspace_buttons yes
     height 24
     colors {
-        separator            #666666
-        background           #222222
-        statusline           #dddddd
-        focused_workspace    #7789cb #7789cb #ffffff
-        active_workspace     #7789cb #7789cb #ffffff
-        inactive_workspace   #333333 #333333 #888888
-        urgent_workspace     #918ad2 #918ad2 #ffffff
+        separator            #c0caf5
+        background           #24283b
+        statusline           #c0caf5
+        focused_workspace    #7aa2f7 #7aa2f7 #ffffff
+        active_workspace     #7aa2f7 #7aa2f7 #ffffff
+        inactive_workspace   #24283b #24283b #c0caf5
+        urgent_workspace     #bb9af7 #bb9af7 #ffffff
     }
 }
 
 bar {
     output primary
     tray_output primary
-    font pango:MonoLisa Nerd Font, Font Awesome 5 Free, Symbols Nerd Font 10
+    font pango:MonoLisaCrisidev Nerd Font, Material Icons 10
     status_command bash -c "source $HOME/.zsh_secrets && $HOME/.cargo/bin/i3status-rs $HOME/.config/i3/bottom.toml"
     position bottom
     workspace_buttons no
     height 26
     colors {
-        separator            #666666
-        background           #222222
-        statusline           #dddddd
-        focused_workspace    #7789cb #7789cb #ffffff
-        active_workspace     #7789cb #7789cb #ffffff
-        inactive_workspace   #333333 #333333 #888888
-        urgent_workspace     #918ad2 #918ad2 #ffffff
+        separator            #c0caf5
+        background           #24283b
+        statusline           #c0caf5
+        focused_workspace    #7aa2f7 #7aa2f7 #ffffff
+        active_workspace     #7aa2f7 #7aa2f7 #ffffff
+        inactive_workspace   #24283b #24283b #c0caf5
+        urgent_workspace     #bb9af7 #bb9af7 #ffffff
     }
 }
 
@@ -383,9 +381,11 @@ exec --no-startup-id "/usr/bin/systemctl --user start gnome-flashback"
 exec --no-startup-id "/usr/local/amazon/sbin/acmed-session.sh"
 
 # Appletts
-exec --no-startup-id "/usr/bin/tuxedo-control-center"
-# exec --no-startup-id "/usr/bin/cronopete"
 exec --no-startup-id "/usr/bin/nm-applet"
+exec --no-startup-id "/usr/bin/blueman-applet"
+exec --no-startup-id "/usr/bin/tuxedo-control-center"
+exec --no-startup-id "/usr/bin/cronopete"
+# exec --no-startup-id "/usr/bin/pasystray"
 # exec --no-startup-id "/usr/local/bin/tailscale-ui"
 # exec --no-startup-id "/usr/bin/systemctl --user start gotify-dunst"
 # exec --no-startup-id "/usr/bin/touchpad-indicator"

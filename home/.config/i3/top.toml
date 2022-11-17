@@ -1,8 +1,8 @@
 [theme]
-name = "slick"
+theme = "tokyo"
 
 [icons]
-name = "awesome5"
+icons = "awesome6"
 
 # [[block]]
 # block = "custom"
@@ -12,46 +12,33 @@ name = "awesome5"
 [[block]]
 block = "disk_space"
 path = "/"
-alias = "/"
 info_type = "available"
-format = "{alias} {available}"
-unit = "GB"
+format = " $icon $available "
+format_alt = " $icon $available / $total "
+alert_unit = "GB"
 interval = 20
 warning = 20.0
 alert = 10.0
 
 [[block]]
 block = "net"
-device = "wlp1s0"
-format = "{ssid} {speed_up} {speed_down}"
+format = " $icon  {$ssid|$device}  $speed_down  $speed_up"
 interval = 5
-hide_inactive = true
-
-[[block]]
-block = "net"
-device = "eno1"
-interval = 5
-hide_inactive = true
 
 [[block]]
 block = "memory"
-format_mem = "{mem_avail;M}"
-format_swap = "{swap_free;M}"
-display_type = "memory"
-icons = true
-clickable = true
+format = " $icon$mem_avail.eng(3,B,M) ($mem_total_used_percents) "
+format_alt = " $icon_swap $swap_free.eng(3,B,M) /$swap_total.eng(3,B,M) ($swap_used_percents.eng(2))"
 interval = 10
-warning_mem = 80
-warning_swap = 80
-critical_mem = 95
-critical_swap = 95
+warning_mem = 70
+warning_swap = 70
+critical_mem = 90
+critical_swap = 90
 
 [[block]]
 block = "cpu"
-warning = 60
-critical = 90
 interval = 2
-format = "{barchart} {utilization} {frequency} {boost}"
+format = " $icon $utilization $barchart $boost "
 
 # [[block]]
 # block = "custom"
@@ -60,27 +47,33 @@ format = "{barchart} {utilization} {frequency} {boost}"
 
 [[block]]
 block = "load"
-format = "{1m}"
+format = " $icon $5m "
 interval = 3
 
 [[block]]
 block = "temperature"
-collapsed = false
 interval = 10
 good = 30
 idle = 50
 info = 75
 warning = 90
+format = " $icon $average "
 chip = "k10temp-pci-00c3"
-format = "{average}"
 
 [[block]]
 block = "battery"
+info = 80
+good = 60
+warning = 40
+critical = 20
 driver = "upower"
-format = "{time} ({percentage})"
+format = " $icon $power $time ($percentage) "
 interval = 30
 
 [[block]]
 block = "time"
 interval = 1
-format = "%a %d %b %T"
+locale = "en_US"
+[block.format]
+full = " $icon %a %d %b %T "
+short = " $icon %R "

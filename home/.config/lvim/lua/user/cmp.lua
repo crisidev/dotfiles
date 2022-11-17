@@ -1,6 +1,7 @@
 local M = {}
 
 M.kind = {
+
     Class = " ",
     Color = " ",
     Constant = " ",

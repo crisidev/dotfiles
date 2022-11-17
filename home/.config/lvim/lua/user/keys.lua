@@ -21,7 +21,7 @@ M.which_keys_normal = function()
         p = { "<cmd>lua require('user.telescope').projects()<cr>", "Projects" },
         s = { "<cmd>lua require('user.telescope').find_string()<cr>", "Find string" },
         S = { "<cmd>lua require('user.telescope').find_identifier()<cr>", "Find identifier under cursor" },
-        r = { "<cmd>lua require('user.telescope').frecency()<cr>", "Recent files" },
+        r = { "<cmd>lua require('user.telescope').recent_files()<cr>", "Recent files" },
         R = { "<cmd>lua require('user.telescope').raw_grep()<cr>", "Raw grep" },
         z = { "<cmd>lua require('user.telescope').zoxide()<cr>", "Zoxide list" },
     }
@@ -67,7 +67,7 @@ M.which_keys_normal = function()
 
     -- Recent files
     lvim.builtin.which_key.mappings["r"] = {
-        "<cmd>lua require('user.telescope').frecency()<cr>",
+        "<cmd>lua require('user.telescope').recent_files()<cr>",
         icons.calendar .. "Recent files",
     }
 
@@ -101,7 +101,7 @@ M.which_keys_normal = function()
     if lvim.builtin.session_manager == "persisted" then
         lvim.builtin.which_key.mappings["S"] = {
             name = icons.session .. "Session",
-            l = { "<cmd>lua require('user.telescope').persisted()<cr>", "List available sessions" },
+            l = { "<cmd>lua require('user.telescope').session()<cr>", "List available sessions" },
             d = { "<cmd>SessionDelete<cr>", "Delete session" },
             L = { "<cmd>SessionLoadLast<cr>", "Restore last session" },
             c = { "<cmd>SessionLoad<cr>", "Restore current dir session" },
@@ -110,8 +110,8 @@ M.which_keys_normal = function()
     elseif lvim.builtin.session_manager == "possession" then
         lvim.builtin.which_key.mappings["S"] = {
             name = icons.session .. "Session",
-            l = { "<cmd>lua require('user.telescope').possession()<cr>", "List available sessions" },
-            l = { "<cmd>PossessionList<cr>", "List available session" },
+            l = { "<cmd>lua require('user.telescope').session()<cr>", "List available sessions" },
+            v = { "<cmd>PossessionList<cr>", "List available session" },
             d = { "<cmd>PossessionDelete<cr>", "Delete current session" },
             L = { "<cmd>PossessionLoad<cr>", "Load current dir session" },
             c = { "<cmd>PossessionClose<cr>", "Close current session" },
@@ -146,6 +146,12 @@ M.which_keys_normal = function()
         f = { "<cmd>lua require('spectre').open_file_search()<cr>", "Current Buffer" },
         p = { "<cmd>lua require('spectre').open()<cr>", "Project" },
         w = { "<cmd>lua require('spectre').open_visual({select_word=true})<cr>", "Replace Word" },
+        s = {
+            function()
+                require("ssr").open()
+            end,
+            "Structural replace",
+        },
     }
 
     -- Grammarous

@@ -44,7 +44,7 @@ autorandr_safe() {
 
 # set keyboard speed
 setup_keyboard_speed() {
-  xset r rate 250 60
+  xset r rate 300 40
   xset m 2 60
   xset b off
 }

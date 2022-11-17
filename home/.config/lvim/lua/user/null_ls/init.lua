@@ -46,7 +46,8 @@ M.config = function()
         nls.builtins.formatting.isort,
         nls.builtins.diagnostics.ansiblelint.with {
             condition = function(utils)
-                return (utils.root_has_file "roles" and utils.root_has_file "inventories") or utils.root_has_file "ansible"
+                return (utils.root_has_file "roles" and utils.root_has_file "inventories")
+                    or utils.root_has_file "ansible"
             end,
         },
         nls.builtins.diagnostics.solhint.with {
@@ -76,6 +77,7 @@ M.config = function()
         nls.builtins.diagnostics.statix,
         nls.builtins.diagnostics.markdownlint.with {
             filetypes = { "markdown" },
+            extra_args = { "-r", "~MD013" },
         },
         -- nls.builtins.diagnostics.vale.with {
         --     filetypes = { "markdown" },

@@ -168,3 +168,6 @@ export MCFLY_RESULTS=50
 export MCFLY_INTERFACE_VIEW=BOTTOM       
 export MCFLY_RESULTS_SORT=LAST_RUN
 eval "$(mcfly init zsh)"
+
+# bw
+export BW_SESSION=$(cat $HOME/.bw-session)

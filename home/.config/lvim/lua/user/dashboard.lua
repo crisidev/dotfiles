@@ -1,5 +1,13 @@
 local M = {}
 
+M.session_load_last = function()
+    if lvim.builtin.session_manager == "possession" then
+        require("possession.commands").load()
+    else
+        require("persisted").load { last = true }
+    end
+end
+
 M.config = function()
     local kind = require("user.cmp").kind
     local icons = require("user.icons").icons
@@ -125,9 +133,9 @@ M.config = function()
         type = "group",
         name = "some",
         val = {
-            button("r", icons.clock .. " Recent files", ":lua require('user.telescope').frecency()<cr>"),
-            button("l", icons.magic .. " Last session", ":SessionLoadLast<cr>"),
-            button("S", icons.session .. " Sessions", ":lua require('user.telescope').possession()<cr>"),
+            button("r", icons.clock .. " Recent files", ":lua require('user.telescope').recent_files()<cr>"),
+            button("l", icons.magic .. " Last session", ":lua require('user.dashboard').session_load_last()<cr>"),
+            button("S", icons.session .. " Sessions", ":lua require('user.telescope').session()<cr>"),
             button("z", icons.folder .. "  Zoxide", ":lua require('user.telescope').zoxide()<cr>"),
             button("f", kind.File .. " Find file", ":lua require('user.telescope').find_project_files()<cr>"),
             button("s", icons.text .. "  Find word", ":lua require('user.telescope').find_string()<cr>"),
@@ -141,37 +149,16 @@ M.config = function()
         },
     }
 
-    local query = require "possession.query"
-    local get_layout = function()
-        local layout = query.alpha_workspace_layout({}, button, { others_name = "Sessions" })
-        table.remove(layout[1]["val"], 1)
-        table.remove(layout[1]["val"], 1)
-        return layout
-    end
-    local utils = require "possession.utils"
-    local function session()
-        return {
-            type = "group",
-            val = utils.throttle(get_layout, 5000),
-            opts = {
-                spacing = 1,
-            },
-        }
-    end
-
     local section = {
         header = header,
         version = version,
         date = date,
         plugin_count = plugin_count,
-        session_count = session_count,
         buttons = buttons,
         footer = footer,
         border_upper = border_upper,
         border_lower = border_lower,
-        session = session(),
     }
-
     local opts = {
         layout = {
             { type = "padding", val = 1 },
@@ -188,14 +175,68 @@ M.config = function()
             section.buttons,
             -- section.bot_bar,
             { type = "padding", val = 1 },
-            section.session,
-            { type = "padding", val = 1 },
             section.footer,
         },
         opts = {
             margin = 5,
         },
     }
+    if lvim.builtin.session_manager == "possession" then
+        local query = require "possession.query"
+        local get_layout = function()
+            local layout = query.alpha_workspace_layout({}, button, { others_name = "Sessions" })
+            table.remove(layout[1]["val"], 1)
+            table.remove(layout[1]["val"], 1)
+            return layout
+        end
+        local utils = require "possession.utils"
+        local function session()
+            return {
+                type = "group",
+                val = utils.throttle(get_layout, 5000),
+                opts = {
+                    spacing = 1,
+                },
+            }
+        end
+
+        section = {
+            header = header,
+            version = version,
+            date = date,
+            plugin_count = plugin_count,
+            buttons = buttons,
+            footer = footer,
+            border_upper = border_upper,
+            border_lower = border_lower,
+            session = session(),
+        }
+
+        opts = {
+            layout = {
+                { type = "padding", val = 1 },
+                section.header,
+                { type = "padding", val = 2 },
+                section.border_upper,
+                section.date,
+                section.version,
+                section.plugin_count,
+                section.session_count,
+                section.border_lower,
+                -- section.top_bar,
+                { type = "padding", val = 2 },
+                section.buttons,
+                -- section.bot_bar,
+                { type = "padding", val = 1 },
+                -- section.session,
+                { type = "padding", val = 1 },
+                section.footer,
+            },
+            opts = {
+                margin = 5,
+            },
+        }
+    end
     return opts
 end
 
