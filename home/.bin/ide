@@ -71,8 +71,8 @@ function export_env() {
 
 # Start neovim IDE using class `ide` and listening on $NVIM_LISTEN_ADDRESS
 function start_ide() {
-	# exec kitty --detach --config "$HOME/.config/kitty/ide.conf" --class ide "$HOME/.local/bin/lvim" --listen $NVIM_LISTEN_ADDRESS --cmd "let g:crisidev_ide=1" "$@"
-    exec neovide --x11-wm-class ide -- -u "$LUNARVIM_RUNTIME_DIR/lvim/init.lua"  --listen $NVIM_LISTEN_ADDRESS --cmd "let g:crisidev_ide=1" "$@"
+	exec kitty --detach --config "$HOME/.config/kitty/ide.conf" --class ide "$HOME/.local/bin/lvim" --listen $NVIM_LISTEN_ADDRESS --cmd "let g:crisidev_ide=1" "$@"
+    # exec neovide --x11-wm-class ide -- -u "$LUNARVIM_RUNTIME_DIR/lvim/init.lua"  --listen $NVIM_LISTEN_ADDRESS --cmd "let g:crisidev_ide=1" "$@"
 }
 
 # Open a file inside the running IDE.

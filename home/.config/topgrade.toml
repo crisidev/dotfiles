@@ -1,5 +1,5 @@
 set_title = false
-disable = ["system", "flatpak", "snap", "gnome_shell_extensions", "containers", "nix"]
+disable = ["system", "flatpak", "snap", "gnome_shell_extensions", "containers", "nix", "toolbx"]
 ignore_failures = ["git_repos"]
 
 [git]
@@ -26,8 +26,10 @@ repos = [
     "~/github/0updates/unclutter-xfixes",
     "~/github/0updates/xedgewarp",
     "~/github/0updates/dog",
-    "~/github/0updates/joycond",
-    "~/github/0updates/joycond-cemuhook",
+    "~/github/0updates/rofi-themes",
+    "~/github/0updates/rofi-source",
+    "~/github/0updates/bitwarden-rofi",
+    "~/github/0updates/rofi-emoji",
     "~/.local/share/nvim/mason/packages/smithy-language-server",
 ]
 arguments = "--ff-only --rebase --autostash"

@@ -91,7 +91,7 @@ HISTFILE="$HOME/.zsh_history"
 [ -f $HOME/.zsh_secrets ] && source $HOME/.zsh_secrets
 
 # paths
-export PATH=$HOME/.local/share/nvim/mason/bin:$HOME/.bin:$HOME/.toolbox/bin:$HOME/.pyenv/bin:$HOME/.rbenv/bin:$HOME/.nodenv/bin:$HOME/.goenv/bin:$HOME/.bin:$HOME/.cargo/bin:$HOME/.android/Sdk/platform-tools:$HOME/.toolchain/aarch64-linux-musl/bin:$HOME/.nodenv/shims:$HOME/.pyenv/shims:$HOME/.rbenv/shims:$HOME/.goenv/shims:$PATH
+export PATH=$HOME/.local/share/nvim/mason/bin:$HOME/.bin:$HOME/.toolbox/bin:$HOME/.pyenv/bin:$HOME/.rbenv/bin:$HOME/.nodenv/bin:$HOME/.goenv/bin:$HOME/.bin:$HOME/.cargo/bin:$HOME/.android/Sdk/platform-tools:$HOME/.toolchain/aarch64-linux-musl/bin:$HOME/.nodenv/shims:$HOME/.pyenv/shims:$HOME/.rbenv/shims:$HOME/.goenv/shims:$HOME/.config/rofi/scripts:$PATH
 
 # terminal
 export TERMINFO=/usr/share/terminfo
@@ -171,3 +171,7 @@ eval "$(mcfly init zsh)"
 
 # bw
 export BW_SESSION=$(cat $HOME/.bw-session)
+
+# pnpm
+export PNPM_HOME="$HOME/.local/share/pnpm"
+export PATH="$PNPM_HOME:$PATH"

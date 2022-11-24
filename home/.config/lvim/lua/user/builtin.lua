@@ -63,6 +63,8 @@ M.config = function()
     -- UltTest
     lvim.builtin.test_runner = { active = true }
     lvim.builtin.task_runner = { active = true }
+    -- Big file management
+    lvim.builtin.bigfile.active = true
 
     -- Theme
     require("user.theme").tokyonight()
@@ -85,12 +87,12 @@ M.config = function()
     lvim.builtin.gitsigns.opts.current_line_blame_formatter = " <author>, <author_time> · <summary>"
 
     -- Disable q/wq when running inside the IDE.
-    if vim.g.crisidev_ide then
-        vim.cmd [[
-            cnoremap <expr> <cr> getcmdtype() == ":" && index(["q", "wq"], getcmdline()) >= 0 ? "<C-u>" : "<cr>"
-            cabbrev wq w
-        ]]
-    end
+    -- if vim.g.crisidev_ide then
+    --     vim.cmd [[
+    --         cnoremap <expr> <cr> getcmdtype() == ":" && index(["q", "wq"], getcmdline()) >= 0 ? "<C-u>" : "<cr>"
+    --         cabbrev wq w
+    --     ]]
+    -- end
 
     -- Log level
     lvim.log.level = "warn"

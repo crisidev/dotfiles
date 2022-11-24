@@ -14,6 +14,6 @@ else
 	if bluetoothctl info "$ADDRESS" | grep -q "Connected: no" >/dev/null 2>&1; then
 		echo '{"text":""}'
 	else
-		echo '{"icon":"","state":"Good","text":""}'
+		echo '{"icon":"","state":"Warning","text":""}'
 	fi
 fi

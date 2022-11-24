@@ -1,10 +1,6 @@
 local M = {}
 
 local icons = require("user.icons").icons
-local ok, wk = pcall(require, "which-key")
-if not ok then
-    return
-end
 
 M.comments_keys = function()
     -- NORMAL mode mappings
@@ -45,6 +41,11 @@ M.comments_keys = function()
 end
 
 M.lsp_normal_keys = function()
+    local ok, wk = pcall(require, "which-key")
+    if not ok then
+        return
+    end
+
     -- Hover
     lvim.lsp.buffer_mappings.normal_mode["K"] = {
         "<cmd>lua require('user.lsp').show_documentation()<CR>",
@@ -252,6 +253,11 @@ M.lsp_normal_keys = function()
 end
 
 M.lsp_visual_keys = function()
+    local ok, wk = pcall(require, "which-key")
+    if not ok then
+        return
+    end
+
     -- Visual
     wk.register({
         ["f"] = {

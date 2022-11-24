@@ -1,5 +1,7 @@
 [theme]
 theme = "tokyo"
+[theme.overrides]
+separator = "<span font_family='MonoLisaCrisidev Nerd Font' font='13.3'></span>"
 
 [icons]
 icons = "awesome6"
@@ -13,10 +15,10 @@ icons = "awesome6"
 block = "disk_space"
 path = "/"
 info_type = "available"
-format = " $icon $available "
-format_alt = " $icon $available / $total "
+format = " $icon $available ($percentage) "
+format_alt = " $icon $available / $total ($percentage) "
 alert_unit = "GB"
-interval = 20
+interval = 30
 warning = 20.0
 alert = 10.0
 
@@ -27,8 +29,8 @@ interval = 5
 
 [[block]]
 block = "memory"
-format = " $icon$mem_avail.eng(3,B,M) ($mem_total_used_percents) "
-format_alt = " $icon_swap $swap_free.eng(3,B,M) /$swap_total.eng(3,B,M) ($swap_used_percents.eng(2))"
+format = " $icon$mem_avail.eng(3,B,M) ($mem_avail_percents.eng(2)) "
+format_alt = " $icon_swap $swap_free.eng(3,B,M) ($swap_used_percents.eng(2))"
 interval = 10
 warning_mem = 70
 warning_swap = 70
@@ -52,7 +54,7 @@ interval = 3
 
 [[block]]
 block = "temperature"
-interval = 10
+interval = 5
 good = 30
 idle = 50
 info = 75
@@ -72,7 +74,7 @@ interval = 30
 
 [[block]]
 block = "time"
-interval = 1
+interval = 2
 locale = "en_US"
 [block.format]
 full = " $icon %a %d %b %T "

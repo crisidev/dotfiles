@@ -9,16 +9,19 @@
 ###########################
 # Use win as mod. Win and alt are switched via xmodmap, hence you use alt.
 set $mod Mod4
-
 # Editor
 set $editor vim
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
 
 # font
-font pango:MonoLisaCrisidev Nerd Font, Font Awesome 6 Free, Material Icons 10
+font pango:Ubuntu Regular 10, Font Awesome 6 Free 10, Symbols Nerd Font 10
 
 # Gaps configuration
 gaps inner 8
-gaps outer 3
+gaps outer 0
+gaps horizontal 0
+gaps vertical 0
 
 # Go back to previous workspace pressing the same move combination
 workspace_auto_back_and_forth yes
@@ -29,9 +32,6 @@ floating_maximum_size -1 x -1
 
 # Split orientation
 default_orientation horizontal
-
-# Use Mouse+$mod to drag floating windows to their wanted position
-floating_modifier $mod
 
 ###########################
 # Appearance
@@ -63,6 +63,7 @@ show_marks yes
 # Windows rules
 ###########################
 # Border options
+default_border pixel 0
 for_window [class="^.*"] border pixel 0
 
 # Float windows
@@ -114,6 +115,7 @@ for_window [class="steam_app_0"] floating enable
 for_window [class="steam_proton"] floating enable
 for_window [class="Bitwarden"] floating enable
 for_window [class="Ulauncher"] floating enable
+for_window [class="Zenity"] floating enable
 
 # Special borders and floats
 assign [class="firefox"] $w2
@@ -170,8 +172,9 @@ bindsym $mod+Shift+c reload
 bindsym $mod+Shift+e exec --no-startup-id "gnome-session-quit"
 
 # Ulauncher toogle
-bindsym $mod+space exec --no-startup-id "ulauncher-toggle"
-bindsym $mod+d exec --no-startup-id "ulauncher-toggle"
+bindsym $mod+space exec --no-startup-id "$HOME/.config/rofi/launchers/type-1/launcher.sh"
+bindsym $mod+p exec --no-startup-id "$HOME/.bin/bwmenu"
+bindsym $mod+u exec --no-startup-id "$HOME/.bin/rofi-emoji"
 
 # Start a terminal
 bindsym $mod+Return exec --no-startup-id "$HOME/.bin/kitty --detach"
@@ -295,18 +298,8 @@ bindsym $mod+Mod1+Down exec --no-startup-id $HOME/.bin/i3resize "Down" "5 px or 
 # Power mode
 ###########################
 bindsym $mod+Mod1+l exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3exit lock
-bindsym XF86PowerOff mode " [l]ock [e]xit [s]uspend [h]ibernate [r]eboot [p]oweroff"
-bindsym $mod+Mod1+p mode " [l]ock [e]xit [s]uspend [h]ibernate [r]eboot [p]oweroff"
-mode " [l]ock [e]xit [s]uspend [h]ibernate [r]eboot [p]oweroff" {
-    bindsym l mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3exit lock
-    bindsym e mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3exit logout
-    bindsym s mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3exit suspend
-    bindsym h mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3exit hibernate
-    bindsym r mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3exit reboot
-    bindsym p mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3exit shutdown
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-}
+bindsym XF86PowerOff exec "$HOME/.config/rofi/powermenu/type-1/powermenu.sh"
+bindsym $mod+Mod1+p exec "$HOME/.config/rofi/powermenu/type-1/powermenu.sh"
 
 ###########################
 # Monitor mode
@@ -327,12 +320,12 @@ mode " [a]uto [l]aptop [h]ome [w]ork [m]irror" {
 ###########################
 bar {
     tray_output none
-    font pango:MonoLisaCrisidev Nerd Font, Material Icons 10
+    font pango:Ubuntu Regular 10, Font Awesome 6 Free 10, Symbols Nerd Font 10
     position top
     status_command bash -c "source $HOME/.zsh_secrets && $HOME/.cargo/bin/i3status-rs $HOME/.config/i3/top.toml"
     strip_workspace_numbers yes
     workspace_buttons yes
-    height 24
+    height 26
     colors {
         separator            #c0caf5
         background           #24283b
@@ -347,7 +340,7 @@ bar {
 bar {
     output primary
     tray_output primary
-    font pango:MonoLisaCrisidev Nerd Font, Material Icons 10
+    font pango:Ubuntu Regular 10, Font Awesome 6 Free 10, Symbols Nerd Font 10
     status_command bash -c "source $HOME/.zsh_secrets && $HOME/.cargo/bin/i3status-rs $HOME/.config/i3/bottom.toml"
     position bottom
     workspace_buttons no
@@ -396,6 +389,3 @@ exec --no-startup-id "$HOME/.bin/i3chime"
 
 # Startup monitors and apps
 exec --no-startup-id "$HOME/.bin/i3monitor startup"
-
-# uLauncher
-exec --no-startup-id "zsh -l -c /usr/bin/ulauncher"

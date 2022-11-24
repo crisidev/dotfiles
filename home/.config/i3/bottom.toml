@@ -1,5 +1,7 @@
 [theme]
 theme = "tokyo"
+[theme.overrides]
+separator = "<span font_family='MonoLisaCrisidev Nerd Font' font='13.3'></span>"
 
 [icons]
 icons = "awesome6"
@@ -37,11 +39,11 @@ cmd = "~/.bin/i3mute set"
 [[block]]
 block = "custom"
 json = true
-interval = 2
+interval = 5
 cycle = ["~/.bin/i3bluetooth"]
 [[block.click]]
 button = "left"
-cmd = "~/.bin/i3bluethooth cycle"
+cmd = "~/.bin/i3bluetooth cycle"
 
 [[block]]
 block = "custom"
