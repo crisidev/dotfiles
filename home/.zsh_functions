@@ -1,30 +1,3 @@
-function nvim_sync() {
-  if (( ${+NVIM_SYNC_FILE} )); then
-    cd $(cat $HOME/.config/nvim/filedir)
-    return
-  fi
-  if (( ${+NVIM_SYNC_PROJECT} )); then
-    cd $(cat $HOME/.config/nvim/projdir)
-    return
-  fi
-}
-
-function nvim-sync-on() {
-  echo "Staring Neovim sync file working directory"
-  export NVIM_SYNC_FILE=1
-}
-
-function nvim-sync-off() {
-  echo "Stopping Neovim sync working directory"
-  unset NVIM_SYNC_FILE
-  unset NVIM_SYNC_PROJECT
-}
-
-function nvim-sync-on-project() {
-  echo "Staring Neovim sync project working directory"
-  export NVIM_SYNC_PROJECT=1
-}
-
 function setup_gpg_agent() {
 	envfile="$HOME/.gnupg/gpg-agent.env"
 	if [[ -e "$envfile" ]] && kill -0 $(grep GPG_AGENT_INFO "$envfile" | cut -d: -f 2) 2>/dev/null; then
@@ -116,20 +89,8 @@ function lsfunc {
     lsd --icon never $*
 }
 
-function G {
-  xdg-open "https://www.google.com/search?q=$*" > /dev/null 2>&1
-}
-
 function runbg {
   nohup $* > /dev/null 2>&1 &
-}
-
-function gitupdate {
-   for x in $(/bin/ls -1); do cd $x; git pulf --autostash; cd ..; done
-}
-
-function pyenv_deactivate {
-  export PATH=$(echo $PATH | python -c "import sys; print(':'.join(x for x in sys.stdin.read().strip().split(':') if not 'pyenv' in x))")
 }
 
 function weather {
@@ -141,5 +102,3 @@ function joycond-cemuhook {
   cd ~/github/0updates/joycond-cemuhook && python joycond-cemuhook.py
   cd -
 }
-
-

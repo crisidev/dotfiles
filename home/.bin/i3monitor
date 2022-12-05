@@ -32,8 +32,9 @@ mirror)
 startup)
 	setup_keyboard_speed
 	add_resolutions
+
+	# "workspace 3:  ; exec --no-startup-id kitty $HOME/.bin/irc"
 	declare -a arr=(
-		"workspace 3:  ; exec --no-startup-id kitty $HOME/.bin/irc"
 		"workspace 5:  ; exec --no-startup-id google-chrome --user-data-dir=$HOME/.local/share/chrome-chime --disable-session-crashed-bubble -app=https://app.chime.aws"
 		"workspace 6:  ; exec --no-startup-id env GTK_THEME=Yaru-purple evolution -c mail; exec --no-startup-id env GTK_THEME=Yaru-purple evolution -c calendar"
 		"workspace 8:  ; exec --no-startup-id google-chrome --user-data-dir=$HOME/.local/share/chrome-whatsapp --disable-session-crashed-bubble -app=https://web.whatsapp.com; exec --no-startup-id signal-desktop"

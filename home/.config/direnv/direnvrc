@@ -13,3 +13,10 @@ if [ -f "$direnvrc_git_crisidev" ]; then
     source "$direnvrc_git_crisidev"
 fi
 unset direnvrc_git_crisidev
+
+# home home configs
+direnvrc_git_home="$(cd $(dirname $BASH_SOURCE) &> /dev/null; pwd)/direnvrc-git-home"
+if [ -f "$direnvrc_git_home" ]; then
+    source "$direnvrc_git_home"
+fi
+unset direnvrc_git_home

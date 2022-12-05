@@ -108,6 +108,10 @@ M.config = function()
             filetypes = { "typescript", "javascript", "lua", "c", "cpp", "go", "python", "java", "php" },
         }
     )
+    local ts_found, typescript_code_actions = pcall(require, "typescript.extensions.null-ls.code-actions")
+    if ts_found then
+        table.insert(sources, typescript_code_actions)
+    end
 
     -- you can either config null-ls itself
     nls.setup {

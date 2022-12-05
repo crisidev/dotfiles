@@ -91,8 +91,7 @@ M.numbers = {
 }
 
 M.config = function()
-    local theme = require "user.theme"
-    local colors = theme.colors.tokyonight_colors
+    local colors = require("user.theme").current_colors()
 
     -- Color table for highlights
     local mode_color = {

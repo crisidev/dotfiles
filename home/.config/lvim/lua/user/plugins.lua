@@ -5,6 +5,41 @@ M.config = function()
         ------------------------------------------------------------------------------
         -- Themes and visual stuff.
         ------------------------------------------------------------------------------
+        {
+            "folke/tokyonight.nvim",
+            config = function()
+                require("user.theme").tokyonight()
+                vim.cmd [[colorscheme tokyonight]]
+            end,
+            cond = lvim.builtin.theme.name == "tokyonight"
+        },
+        {
+            "rose-pine/neovim",
+            as = "rose-pine",
+            config = function()
+                require("user.theme").rose_pine()
+                vim.cmd [[colorscheme rose-pine]]
+            end,
+            cond = lvim.builtin.theme.name == "rose-pine"
+        },
+        {
+            "catppuccin/nvim",
+            as = "catppuccin",
+            run = ":CatppuccinCompile",
+            config = function()
+                require("user.theme").catppuccin()
+                vim.cmd [[colorscheme catppuccin-mocha]]
+            end,
+            cond = lvim.builtin.theme.name == "catppuccin"
+        },
+        {
+            "rebelot/kanagawa.nvim",
+            config = function()
+                require("user.theme").kanagawa()
+                vim.cmd [[colorscheme kanagawa]]
+            end,
+            cond = lvim.builtin.theme.name == "kanagawa"
+        },
         -- Colorizer
         {
             "norcalli/nvim-colorizer.lua",

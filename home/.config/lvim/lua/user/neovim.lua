@@ -187,7 +187,7 @@ M.config = function()
     vim.wo.foldexpr = "nvim_treesitter#foldexpr()"
     vim.wo.foldlevel = 4
     vim.wo.foldtext =
-    [[substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g').'...'.trim(getline(v:foldend)) . ' (' . (v:foldend - v:foldstart + 1) . ' lines)']]
+        [[substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g').'...'.trim(getline(v:foldend)) . ' (' . (v:foldend - v:foldstart + 1) . ' lines)']]
     vim.wo.foldnestmax = 3
     vim.wo.foldminlines = 1
 
@@ -205,6 +205,23 @@ M.config = function()
 
     -- Colorcolumn
     vim.cmd [[set colorcolumn=]]
+
+    if vim.fn.has "nvim-0.8" == 1 then
+        vim.filetype.add {
+            extension = {
+                fnl = "fennel",
+                wiki = "markdown",
+            },
+            filename = {
+                ["go.sum"] = "gosum",
+                ["go.mod"] = "gomod",
+            },
+            pattern = {
+                ["*.tml"] = "gohtmltmpl",
+                ["%.env.*"] = "sh",
+            },
+        }
+    end
 
     -- Mouse handling
     vim.cmd [[

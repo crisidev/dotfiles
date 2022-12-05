@@ -172,9 +172,8 @@ bindsym $mod+Shift+c reload
 bindsym $mod+Shift+e exec --no-startup-id "gnome-session-quit"
 
 # Ulauncher toogle
-bindsym $mod+space exec --no-startup-id "$HOME/.config/rofi/launchers/type-1/launcher.sh"
-bindsym $mod+p exec --no-startup-id "$HOME/.bin/bwmenu"
-bindsym $mod+u exec --no-startup-id "$HOME/.bin/rofi-emoji"
+bindsym $mod+space exec --no-startup-id "ulauncher-toggle"
+bindsym $mod+d exec --no-startup-id "ulauncher-toggle"
 
 # Start a terminal
 bindsym $mod+Return exec --no-startup-id "$HOME/.bin/kitty --detach"
@@ -293,13 +292,22 @@ bindsym $mod+Mod1+Right exec --no-startup-id $HOME/.bin/i3resize "Right" "5 px o
 bindsym $mod+Mod1+Up exec --no-startup-id $HOME/.bin/i3resize "Up" "5 px or 5 ppt"
 bindsym $mod+Mod1+Down exec --no-startup-id $HOME/.bin/i3resize "Down" "5 px or 5 ppt"
 
-
 ###########################
 # Power mode
 ###########################
 bindsym $mod+Mod1+l exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3exit lock
-bindsym XF86PowerOff exec "$HOME/.config/rofi/powermenu/type-1/powermenu.sh"
-bindsym $mod+Mod1+p exec "$HOME/.config/rofi/powermenu/type-1/powermenu.sh"
+bindsym XF86PowerOff mode " [l]ock [e]xit [s]uspend [h]ibernate [r]eboot [p]oweroff"
+bindsym $mod+Mod1+p mode " [l]ock [e]xit [s]uspend [h]ibernate [r]eboot [p]oweroff"
+mode " [l]ock [e]xit [s]uspend [h]ibernate [r]eboot [p]oweroff" {
+    bindsym l mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3exit lock
+    bindsym e mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3exit logout
+    bindsym s mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3exit suspend
+    bindsym h mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3exit hibernate
+    bindsym r mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3exit reboot
+    bindsym p mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3exit shutdown
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
 
 ###########################
 # Monitor mode
@@ -378,6 +386,7 @@ exec --no-startup-id "/usr/bin/nm-applet"
 exec --no-startup-id "/usr/bin/blueman-applet"
 exec --no-startup-id "/usr/bin/tuxedo-control-center"
 exec --no-startup-id "/usr/bin/cronopete"
+exec --no-startup-id "zsh -l -c /usr/bin/ulauncher"
 # exec --no-startup-id "/usr/bin/pasystray"
 # exec --no-startup-id "/usr/local/bin/tailscale-ui"
 # exec --no-startup-id "/usr/bin/systemctl --user start gotify-dunst"

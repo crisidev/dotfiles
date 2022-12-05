@@ -1,74 +1,45 @@
-#
-# Executes commands at the start of an interactive session.
-#
-# Authors:
-#   Sorin Ionescu <sorin.ionescu@gmail.com>
-#
-# Source Prezto.
+# antigen
+export ANTIGEN_LOG=/tmp/antigen.log
+source $HOME/.cache/antigen.zsh
 
-#zmodload zsh/zprof
-export skip_global_compinit=1
+antigen use oh-my-zsh
 
-if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
-  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
-fi
+antigen bundle command-not-found
+antigen bundle fd
+antigen bundle history
+antigen bundle web-search
 
-# title
-precmd () { print -Pn "\e]2;zsh | %~\a" } # title bar prompt
+antigen bundle zsh-users/zsh-completions
+antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle zsh-users/zsh-autosuggestions
+antigen bundle zsh-users/zsh-history-substring-search
+antigen bundle zsh-users/zaw
 
-# completion
-autoload -Uz compinit
-compinit -i
+export ZSH_FZF_HISTORY_SEARCH_BIND="^f"
+export ZSH_FZF_HISTORY_SEARCH_FZF_ARGS="+s +m +x -e --height 40% --reverse"
+antigen bundle joshskidmore/zsh-fzf-history-search
 
-# Customize to your needs...
-# unsetopt CORRECT
+antigen bundle hlissner/zsh-autopair
+antigen bundle supercrabtree/k
+antigen bundle --branch=main zdharma/fast-syntax-highlighting
+antigen bundle MichaelAquilina/zsh-you-should-use
+# antigen bundle --branch=main marlonrichert/zsh-autocomplete
+antigen bundle mafredri/zsh-async
+antigen bundle djui/alias-tips
+
+antigen apply
+
+# options
 setopt NO_LIST_BEEP
-
-# 10 second wait if you do something that will delete everything.  I wish I'd had this before...
-# setopt RM_STAR_WAIT
-
-# use magic (this is default, but it can't hurt!)
-setopt ZLE
-
-# ?
-setopt NO_HUP
-
-# If I could disable Ctrl-s completely I would!
-setopt NO_FLOW_CONTROL
-
-# Keep echo "station" > station from clobbering station
-# setopt CLOBBER
-
-# Case insensitive globbing
-setopt NO_CASE_GLOB
-
-# Be Reasonable!
-setopt NUMERIC_GLOB_SORT
-
-# I don't know why I never set this before.
-setopt EXTENDED_GLOB
-
-# hows about arrays be awesome?  (that is, frew${cool}frew has frew surrounding all the variables, not just first and last
-setopt RC_EXPAND_PARAM
-
-# oh wow!  This is killer...  try it!
-bindkey -M vicmd "q" push-line
-
-# it's like, space AND completion.  Gnarlbot.
-bindkey -M viins ' ' magic-space
-
-# make ctrl-r work
-bindkey -M viins '^r' history-incremental-search-backward
-bindkey -M vicmd '^r' history-incremental-search-backward
-bindkey "^[f" forward-word
-bindkey "^[b" backward-word
-
-# bindkey -v
-# bindkey -e
+setopt NO_CASE_GLOB # Case insensitive globbing
+setopt NUMERIC_GLOB_SORT # Be Reasonable!
+setopt EXTENDED_GLOB # I don't know why I never set this before.
+setopt RC_EXPAND_PARAM # hows about arrays be awesome?  (that is, frew${cool}frew has frew surrounding all the variables, not just first and last
 
 # history
-HISTSIZE=10000000
-SAVEHIST=10000000
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=999999999
+SAVEHIST=$HISTSIZE
 setopt BANG_HIST                 # Treat the '!' character specially during expansion.
 setopt EXTENDED_HISTORY          # Write the history file in the ":start:elapsed;command" format.
 setopt INC_APPEND_HISTORY        # Write to the history file immediately, not when the shell exits.
@@ -81,8 +52,11 @@ setopt HIST_IGNORE_SPACE         # Don't record an entry starting with a space.
 setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in the history file.
 setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording entry.
 setopt HIST_VERIFY               # Don't execute immediately upon history expansion.
-setopt HIST_BEEP                 # Beep when accessing nonexistent history.
-HISTFILE="$HOME/.zsh_history"
+unsetopt HIST_BEEP                 # Beep when accessing nonexistent history.
+
+# history substring search
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
 
 # source files
 [ -f $HOME/.zsh_aliases ] && source $HOME/.zsh_aliases
@@ -91,19 +65,18 @@ HISTFILE="$HOME/.zsh_history"
 [ -f $HOME/.zsh_secrets ] && source $HOME/.zsh_secrets
 
 # paths
-export PATH=$HOME/.local/share/nvim/mason/bin:$HOME/.bin:$HOME/.toolbox/bin:$HOME/.pyenv/bin:$HOME/.rbenv/bin:$HOME/.nodenv/bin:$HOME/.goenv/bin:$HOME/.bin:$HOME/.cargo/bin:$HOME/.android/Sdk/platform-tools:$HOME/.toolchain/aarch64-linux-musl/bin:$HOME/.nodenv/shims:$HOME/.pyenv/shims:$HOME/.rbenv/shims:$HOME/.goenv/shims:$HOME/.config/rofi/scripts:$PATH
+CUSTOM_PATH=$HOME/.local/share/nvim/mason/bin:$HOME/.bin:$HOME/.toolbox/bin
+CUSTOM_PATH=$CUSTOM_PATH:$HOME/.pyenv/bin:$HOME/.rbenv/bin:$HOME/.nodenv/bin:$HOME/.goenv/bin
+CUSTOM_PATH=$CUSTOM_PATH:$HOME/.pyenv/shims:$HOME/.rbenv/shims:$HOME/.nodenv/shims:$HOME/.goenv/shims
+CUSTOM_PATH=$CUSTOM_PATH:$HOME/.cargo/bin:$HOME/.config/rofi/scripts
+export PATH=$CUSTOM_PATH:$PATH
 
-# terminal
+# # terminal
 export TERMINFO=/usr/share/terminfo
-# export TERM="xterm-kitty"
-export TERMINAL=xterm-256color
 export GREP_COLOR='1;31'
 export VISUAL=vim
 export EDITOR=vim
 export PAGER=less
-export P4CONFIG=.p4config
-# export RUSTC_WRAPPER=~/.cargo/bin/sccache
-export LANG="en_US.UTF-8"
 
 # rbenv
 export RBENV_ROOT="$HOME/.rbenv"
@@ -137,41 +110,21 @@ if which goenv > /dev/null; then
   export GOPROXY=direct
 fi
 
-# sdkman
-# source "$HOME/.sdkman/bin/sdkman-init.sh"
-
 # sshrc
 compdef sshrc=ssh
 
 # fzf
-# [ -f ~/github/0updates/fzf-marks/fzf-marks.plugin.zsh ] && source ~/github/0updates/fzf-marks/fzf-marks.plugin.zsh
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude build'
-
-# docktor
-export DOCKTOR_API_URL=https://docktor.crisidev.org
-export DRONE_SERVER=https://build.crisidev.org
-
-# rip
-export GRAVEYARD=~/.local/share/Trash
-
-# android
-export ANDROID_SDK_ROOT=~/.android/Sdk
 
 # zoxide
 eval "$(zoxide init zsh)"
 
-# spaceship
-eval "$(starship init zsh)"
-
-# mcfly
-export MCFLY_RESULTS=50  
-export MCFLY_INTERFACE_VIEW=BOTTOM       
-export MCFLY_RESULTS_SORT=LAST_RUN
-eval "$(mcfly init zsh)"
-
 # bw
-export BW_SESSION=$(cat $HOME/.bw-session)
+export RUSTC_WRAPPER=$HOME/.cargo/bin/sccache
 
 # pnpm
 export PNPM_HOME="$HOME/.local/share/pnpm"
 export PATH="$PNPM_HOME:$PATH"
+
+# spaceship
+eval "$(starship init zsh)"
