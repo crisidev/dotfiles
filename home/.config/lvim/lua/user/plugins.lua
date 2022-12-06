@@ -11,7 +11,7 @@ M.config = function()
                 require("user.theme").tokyonight()
                 vim.cmd [[colorscheme tokyonight]]
             end,
-            cond = lvim.builtin.theme.name == "tokyonight"
+            cond = lvim.builtin.theme.name == "tokyonight",
         },
         {
             "rose-pine/neovim",
@@ -20,7 +20,7 @@ M.config = function()
                 require("user.theme").rose_pine()
                 vim.cmd [[colorscheme rose-pine]]
             end,
-            cond = lvim.builtin.theme.name == "rose-pine"
+            cond = lvim.builtin.theme.name == "rose-pine",
         },
         {
             "catppuccin/nvim",
@@ -30,7 +30,7 @@ M.config = function()
                 require("user.theme").catppuccin()
                 vim.cmd [[colorscheme catppuccin-mocha]]
             end,
-            cond = lvim.builtin.theme.name == "catppuccin"
+            cond = lvim.builtin.theme.name == "catppuccin",
         },
         {
             "rebelot/kanagawa.nvim",
@@ -38,7 +38,7 @@ M.config = function()
                 require("user.theme").kanagawa()
                 vim.cmd [[colorscheme kanagawa]]
             end,
-            cond = lvim.builtin.theme.name == "kanagawa"
+            cond = lvim.builtin.theme.name == "kanagawa",
         },
         -- Colorizer
         {
@@ -192,15 +192,21 @@ M.config = function()
                 require("user.lsp.c").config()
             end,
         },
+        {
+            "Civitasv/cmake-tools.nvim",
+            config = function()
+                require("user.lsp.c").cmake_config()
+            end,
+            ft = { "c", "cpp", "objc", "objcpp", "h", "hpp" },
+        },
         -- Lsp lines
-        -- {
-        --     "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
-        --     config = function()
-        --         require("lsp_lines").setup()
-        --     end,
-        --     event = "BufRead",
-        -- },
-        -- Diagnostics on right corner.
+        {
+            "lvimuser/lsp-inlayhints.nvim",
+            config = function()
+                require("user.inlay").config()
+            end,
+            disable = not lvim.builtin.inlay_hints.active,
+        },
         {
             "santigo-zero/right-corner-diagnostics.nvim",
             event = "LspAttach",
@@ -210,7 +216,7 @@ M.config = function()
                     auto_cmds = true,
                 }
             end,
-            disable = true,
+            disable = false,
         },
         -- Crates
         {

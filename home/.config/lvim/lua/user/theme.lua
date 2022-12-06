@@ -355,6 +355,7 @@ M.colors = {
         surface1 = "#302D41",
         bg_alt = "#1E1E2E",
         fg = "#D9E0EE",
+        fg_dark = "#D9E0EE",
         black = "#1A1826",
         git = {
             add = "#ABE9B3",
@@ -370,6 +371,7 @@ M.colors = {
         bg_alt = "#1F1F28",
         bg_br = "#363646",
         fg = "#DCD7BA",
+        fg_dark = "#DCD7BA",
         red = "#E46876",
         orange = "#FFA066",
         yellow = "#DCA561",
@@ -470,11 +472,7 @@ M.telescope_theme = function()
     set_fg_bg("SignColumnSB", colors.bg, "NONE")
     set_fg_bg("NormalFloat", colors.fg, "#181924")
     set_fg_bg("Cursor", colors.bg, colors.fg)
-    if lvim.builtin.theme.name == "tokyonight" then
-        set_fg_bg("NormalNC", colors.fg_dark, "#1c1d28")
-    else
-        set_fg_bg("NormalNC", colors.fg, "#1c1d28")
-    end
+    set_fg_bg("NormalNC", colors.fg_dark, "#1c1d28")
     set_fg_bg("Normal", colors.fg, "#1f2335")
     set_fg_bg("CursorLineNr", colors.orange, "bold")
 

@@ -167,6 +167,14 @@ M.lsp_normal_keys = function()
         },
     }
 
+    if lvim.builtin.inlay_hints.active then
+        wk.register {
+            ["f"] = {
+                R = { "<cmd>lua require('lsp-inlayhints').toggle()<cr>", icons.inlay .. "Toggle Inlay" },
+            },
+        }
+    end
+
     -- Rename
     if lvim.builtin.noice.active then
         wk.register {

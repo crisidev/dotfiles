@@ -63,52 +63,7 @@ bindkey '^[[B' history-substring-search-down
 [ -f $HOME/.zsh_amzn ] && source $HOME/.zsh_amzn
 [ -f $HOME/.zsh_functions ] && source $HOME/.zsh_functions
 [ -f $HOME/.zsh_secrets ] && source $HOME/.zsh_secrets
-
-# paths
-CUSTOM_PATH=$HOME/.local/share/nvim/mason/bin:$HOME/.bin:$HOME/.toolbox/bin
-CUSTOM_PATH=$CUSTOM_PATH:$HOME/.pyenv/bin:$HOME/.rbenv/bin:$HOME/.nodenv/bin:$HOME/.goenv/bin
-CUSTOM_PATH=$CUSTOM_PATH:$HOME/.pyenv/shims:$HOME/.rbenv/shims:$HOME/.nodenv/shims:$HOME/.goenv/shims
-CUSTOM_PATH=$CUSTOM_PATH:$HOME/.cargo/bin:$HOME/.config/rofi/scripts
-export PATH=$CUSTOM_PATH:$PATH
-
-# # terminal
-export TERMINFO=/usr/share/terminfo
-export GREP_COLOR='1;31'
-export VISUAL=vim
-export EDITOR=vim
-export PAGER=less
-
-# rbenv
-export RBENV_ROOT="$HOME/.rbenv"
-if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
-
-# direnv
-if which direnv > /dev/null; then eval "$(direnv hook zsh)"; fi
-
-# pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-if which pyenv > /dev/null; then 
-  eval "$(pyenv init --path)"
-  eval "$(pyenv virtualenv-init -)"
-  source $HOME/.pyenv/completions/pyenv.zsh
-  export PYENV_VIRTUALENV_DISABLE_PROMPT=1
-fi
-
-# nodenv
-export NODENV_ROOT="$HOME/.nodenv"
-if which nodenv > /dev/null; then 
-  eval "$(nodenv init -)"
-  export PATH=$PATH:$HOME/.nodenv/versions/18.12.0/bin
-fi
-
-# goenv
-export GOENV_ROOT="$HOME/.goenv"
-if which goenv > /dev/null; then 
-  export GOENV_GOPATH_PREFIX=$HOME/.go
-  eval "$(goenv init -)" 
-  export PATH=$PATH:$GOPATH/bin
-  export GOPROXY=direct
-fi
+[ -f $HOME/.zsh_env ] && source $HOME/.zsh_env
 
 # sshrc
 compdef sshrc=ssh
@@ -118,13 +73,6 @@ export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclu
 
 # zoxide
 eval "$(zoxide init zsh)"
-
-# bw
-export RUSTC_WRAPPER=$HOME/.cargo/bin/sccache
-
-# pnpm
-export PNPM_HOME="$HOME/.local/share/pnpm"
-export PATH="$PNPM_HOME:$PATH"
 
 # spaceship
 eval "$(starship init zsh)"

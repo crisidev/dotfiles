@@ -82,6 +82,7 @@ M.icons = {
     neotest = "ﭧ",
     rename = " ",
     amazon = " ",
+    inlay = " ",
 }
 
 M.todo_comments = {

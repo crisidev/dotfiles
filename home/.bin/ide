@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/zsh
 
 # set -x
 set -e -o pipefail
@@ -12,75 +12,24 @@ usage() {
 	exit 2
 }
 
-# Export shell environment to let vim be happy about finding dependencies
-function export_env() {
-	# secrets
-	# shellcheck disable=1091
-	[ -f "$HOME/.zsh_secrets" ] && source "$HOME/.zsh_secrets"
-
-	# paths
-    export PATH=$HOME/.local/share/nvim/mason/bin:$HOME/.bin:$HOME/.toolbox/bin:$HOME/.pyenv/bin:$HOME/.rbenv/bin:$HOME/.nodenv/bin:$HOME/.goenv/bin:$HOME/.bin:$HOME/.cargo/bin:$HOME/.android/Sdk/platform-tools:$HOME/.toolchain/aarch64-linux-musl/bin:$HOME/.nodenv/shims:$HOME/.pyenv/shims:$HOME/.rbenv/shims:$HOME/.goenv/shims:$PATH
+# Start neovim IDE using class `ide` and listening on $NVIM_LISTEN_ADDRESS
+function start_ide() {
+    [ -f $HOME/.zsh_env ] && source $HOME/.zsh_env
+    [ -f $HOME/.zsh_secrets ] && source $HOME/.zsh_secrets
 
 	export LUNARVIM_CONFIG_DIR="${LUNARVIM_CONFIG_DIR:-$HOME/.config/lvim}"
 	export LUNARVIM_RUNTIME_DIR="${LUNARVIM_RUNTIME_DIR:-$HOME/.local/share/lunarvim}"
-	export TERMINAL=xterm-256color
-	export GREP_COLOR='1;31'
-	export VISUAL=vim
-	export EDITOR=vim
-	export PAGER=less
-	export P4CONFIG=.p4config
-	# export RUSTC_WRAPPER=~/.cargo/bin/sccache
-	export LANG="en_US.UTF-8"
+    export LUNARVIM_BASE_DIR="${LUNARVIM_BASE_DIR:-$HOME/.local/share/lunarvim/lvim}"
 
-	# rbenv
-	export RBENV_ROOT="$HOME/.rbenv"
-	if which rbenv >/dev/null; then eval "$(rbenv init -)"; fi
-
-	# direnv
-	if which direnv >/dev/null; then eval "$(direnv hook bash)"; fi
-
-	# pyenv
-	export PYENV_ROOT="$HOME/.pyenv"
-	if which pyenv >/dev/null; then
-		eval "$(pyenv init --path)"
-		eval "$(pyenv virtualenv-init -)"
-		# shellcheck disable=1091,2086
-		source $HOME/.pyenv/completions/pyenv.bash
-		export PYENV_VIRTUALENV_DISABLE_PROMPT=1
-	fi
-
-	# nodenv
-	export NODENV_ROOT="$HOME/.nodenv"
-	if which nodenv >/dev/null; then
-		eval "$(nodenv init -)"
-        export PATH=$PATH:$HOME/.nodenv/versions/18.12.0/bin
-	fi
-
-	# godenv
-	export GOENV_ROOT="$HOME/.goenv"
-	if which goenv >/dev/null; then
-		export GOENV_GOPATH_PREFIX=$HOME/.go
-		eval "$(goenv init -)"
-		export PATH=$PATH:$GOPATH/bin
-        export GOPROXY=direct
-	fi
-
-    export RUSTC_WRAPPER=$HOME/.cargo/bin/sccache
-
-	# zoxide
-	eval "$(zoxide init bash)"
-}
-
-# Start neovim IDE using class `ide` and listening on $NVIM_LISTEN_ADDRESS
-function start_ide() {
-	exec kitty --detach --config "$HOME/.config/kitty/ide.conf" --class ide "$HOME/.local/bin/lvim" --listen $NVIM_LISTEN_ADDRESS --cmd "let g:crisidev_ide=1" "$@"
-    # exec neovide --x11-wm-class ide -- -u "$LUNARVIM_RUNTIME_DIR/lvim/init.lua"  --listen $NVIM_LISTEN_ADDRESS --cmd "let g:crisidev_ide=1" "$@"
+    # exec /home/ANT.AMAZON.COM/matbigoi/github/gnvim/target/release/gnvim -- -u "$LUNARVIM_BASE_DIR/init.lua" "$@"
+	# exec kitty --detach --config "$HOME/.config/kitty/ide.conf" --class ide "$HOME/.local/bin/lvim" --listen $NVIM_LISTEN_ADDRESS --cmd "let g:crisidev_ide=1" "$@"
+    neovide --x11-wm-class ide -- -u "$LUNARVIM_RUNTIME_DIR/lvim/init.lua"  --listen $NVIM_LISTEN_ADDRESS --cmd "let g:crisidev_ide=1" "$@"
+    # exec ~/github/fvim/bin/Release/net6.0/linux-x64/FVim -u "$LUNARVIM_BASE_DIR/init.lua"  "$@"
 }
 
 # Open a file inside the running IDE.
 function open_in_ide() {
 	if ! pgrep -f "\-class ide"; then
-		export_env
 		start_ide
 		sleep 0.5
 	fi
@@ -90,7 +39,6 @@ function open_in_ide() {
 # Toggle the IDE window.
 function toggle_ide() {
 	if ! pgrep -f "\-class ide"; then
-		export_env
 		start_ide
 		sleep 0.5
 	fi

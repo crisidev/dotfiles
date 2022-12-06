@@ -12,7 +12,7 @@ M.config = function()
             executor = require("rust-tools/executors").termopen, -- can be quickfix or termopen
             reload_workspace_from_cargo_toml = true,
             inlay_hints = {
-                auto = true,
+                auto = not lvim.builtin.inlay_hints.active,
                 only_current_line = true,
                 show_parameter_hints = true,
                 parameter_hints_prefix = "in: ",
@@ -65,6 +65,7 @@ M.config = function()
     rust_tools.setup(opts)
 
     lvim.format_on_save = {
+        enabled = true,
         pattern = "*.rs",
         timeout = 2000,
         filter = require("lvim.lsp.utils").format_filter,

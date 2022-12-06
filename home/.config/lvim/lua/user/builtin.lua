@@ -5,7 +5,7 @@ M.config = function()
 
     -- Theme
     lvim.colorscheme = "tokyonight"
-    lvim.builtin.theme.name = "tokyonight"
+    lvim.builtin.theme.name = lvim.colorscheme
     lvim.leader = ","
     lvim.format_on_save = false
     lvim.line_wrap_cursor_movement = false
@@ -67,6 +67,8 @@ M.config = function()
     lvim.builtin.task_runner = { active = true }
     -- Big file management
     lvim.builtin.bigfile.active = true
+    -- Inlay hints
+    lvim.builtin.inlay_hints = { active = true }
 
     -- Mason
     lvim.builtin.mason.ui.icons = require("user.icons").mason
