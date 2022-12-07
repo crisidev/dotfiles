@@ -225,7 +225,7 @@ M.config = function()
                     auto_cmds = true,
                 }
             end,
-            disable = lvim.builtin.right_corner_diagnostics.active,
+            disable = not lvim.builtin.right_corner_diagnostics.active,
         },
         -- Crates
         {
@@ -288,6 +288,7 @@ M.config = function()
                 require("user.refactoring").config()
             end,
         },
+        -- Incremental rename
         {
             "smjonas/inc-rename.nvim",
             config = function()
@@ -310,6 +311,12 @@ M.config = function()
                 }
             end,
             event = { "BufReadPost", "BufNew" },
+        },
+        {
+            "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+            config = function()
+                require("lsp_lines").setup()
+            end,
         },
         ------------------------------------------------------------------------------
         -- Copilot baby..
@@ -719,13 +726,6 @@ M.config = function()
             end,
             disable = lvim.builtin.motion_provider ~= "hop",
         },
-        -- {
-        --     "lvimuser/lsp-inlayhints.nvim",
-        --     branch = "anticonceal",
-        --     config = function()
-        --         require("lsp-inlayhints").setup()
-        --     end,
-        -- },
     }
 end
 
