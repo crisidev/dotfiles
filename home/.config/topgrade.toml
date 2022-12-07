@@ -5,8 +5,6 @@ ignore_failures = ["git_repos"]
 [git]
 max_concurrency = 5
 repos = [
-    # Zsh
-    "~/.zprezto",
     # Password store
     "~/.password-store",
     # Envs

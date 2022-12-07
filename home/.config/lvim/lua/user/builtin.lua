@@ -86,6 +86,9 @@ M.config = function()
     lvim.builtin.gitsigns.opts._extmark_signs = true
     lvim.builtin.gitsigns.opts.current_line_blame_formatter = " <author>, <author_time> · <summary>"
 
+    -- Right corner diagnostics
+    lvim.builtin.right_corner_diagnostics = { active = false }
+
     -- Disable q/wq when running inside the IDE.
     -- if vim.g.crisidev_ide then
     --     vim.cmd [[

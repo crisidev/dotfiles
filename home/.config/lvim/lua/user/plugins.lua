@@ -211,12 +211,21 @@ M.config = function()
             "santigo-zero/right-corner-diagnostics.nvim",
             event = "LspAttach",
             config = function()
+                vim.diagnostic.config {
+                    -- Disable default virtual text since you are using this plugin
+                    -- already :)
+                    virtual_text = false,
+
+                    -- Do not display diagnostics while you are in insert mode, so if you have
+                    -- `auto_cmds = true` it will not update the diagnostics while you type.
+                    update_in_insert = true,
+                }
                 require("rcd").setup {
                     position = "bottom",
                     auto_cmds = true,
                 }
             end,
-            disable = false,
+            disable = lvim.builtin.right_corner_diagnostics.active,
         },
         -- Crates
         {
