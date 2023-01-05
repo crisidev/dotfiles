@@ -42,6 +42,7 @@ M.config = function()
             on_init = require("lvim.lsp").common_on_init,
             settings = {
                 ["rust-analyzer"] = {
+                    inlayHints = { locationLinks = false },
                     cargo = {
                         features = "all",
                     },

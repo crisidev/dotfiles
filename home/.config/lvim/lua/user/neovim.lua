@@ -192,7 +192,7 @@ M.config = function()
     vim.wo.foldminlines = 1
 
     -- Conceal
-    vim.o.conceallevel = 2
+    -- vim.o.conceallevel = 2
 
     -- Setup clipboard
     vim.opt.clipboard = { "unnamedplus" }

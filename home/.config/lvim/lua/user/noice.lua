@@ -112,6 +112,13 @@ M.config = function()
         },
         routes = {
             {
+                filter = {
+                    event = "msg_show",
+                    find = "%d+L, %d+B",
+                },
+                view = "mini",
+            },
+            {
                 filter = { event = "msg_show", min_height = 10 },
                 view = "split",
                 opts = { enter = true },

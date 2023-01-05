@@ -89,6 +89,8 @@ M.config = function()
     -- Right corner diagnostics
     lvim.builtin.right_corner_diagnostics = { active = false }
 
+    lvim.reload_config_on_save = false
+
     -- Disable q/wq when running inside the IDE.
     -- if vim.g.crisidev_ide then
     --     vim.cmd [[

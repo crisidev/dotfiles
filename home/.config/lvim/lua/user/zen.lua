@@ -47,6 +47,7 @@ M.config = function()
             vim.cmd [[
                 set foldlevel=10
                 lua require("user.zen").hide_diagnostics()
+                lua require('lsp-inlayhints').toggle()
             ]]
             require("lualine").hide()
         end,
@@ -57,6 +58,7 @@ M.config = function()
                 set foldmethod=expr
                 set foldexpr=nvim_treesitter#foldexpr()
                 lua require("user.zen").show_diagnostics()
+                lua require('lsp-inlayhints').toggle()
             ]]
             require("lualine").hide { unhide = true }
         end,

@@ -429,7 +429,7 @@ M.config = function()
         },
         -- Session manager
         {
-            "crisidev/persisted.nvim",
+            "olimorris/persisted.nvim",
             config = function()
                 require("user.persisted").config()
             end,

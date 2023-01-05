@@ -64,6 +64,7 @@ bindkey '^[[B' history-substring-search-down
 [ -f $HOME/.zsh_functions ] && source $HOME/.zsh_functions
 [ -f $HOME/.zsh_secrets ] && source $HOME/.zsh_secrets
 [ -f $HOME/.zsh_env ] && source $HOME/.zsh_env
+[ -f $HOME/.cargo/env ] && source $HOME/.cargo/env
 
 # sshrc
 compdef sshrc=ssh

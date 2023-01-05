@@ -22,8 +22,8 @@ function start_ide() {
     export LUNARVIM_BASE_DIR="${LUNARVIM_BASE_DIR:-$HOME/.local/share/lunarvim/lvim}"
 
     # exec /home/ANT.AMAZON.COM/matbigoi/github/gnvim/target/release/gnvim -- -u "$LUNARVIM_BASE_DIR/init.lua" "$@"
-	# exec kitty --detach --config "$HOME/.config/kitty/ide.conf" --class ide "$HOME/.local/bin/lvim" --listen $NVIM_LISTEN_ADDRESS --cmd "let g:crisidev_ide=1" "$@"
-    neovide --x11-wm-class ide -- -u "$LUNARVIM_RUNTIME_DIR/lvim/init.lua"  --listen $NVIM_LISTEN_ADDRESS --cmd "let g:crisidev_ide=1" "$@"
+	exec kitty --detach --config "$HOME/.config/kitty/ide.conf" --class ide "$HOME/.local/bin/lvim" --listen $NVIM_LISTEN_ADDRESS --cmd "let g:crisidev_ide=1" "$@"
+    # neovide --x11-wm-class ide -- -u "$LUNARVIM_RUNTIME_DIR/lvim/init.lua"  --listen $NVIM_LISTEN_ADDRESS --cmd "let g:crisidev_ide=1" "$@"
     # exec ~/github/fvim/bin/Release/net6.0/linux-x64/FVim -u "$LUNARVIM_BASE_DIR/init.lua"  "$@"
 }
 
