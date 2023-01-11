@@ -25,7 +25,6 @@ M.config = function()
         },
     }
     lvim.builtin.treesitter.highlight.enable = true
-    lvim.builtin.treesitter.indent = { enable = true }
     lvim.builtin.treesitter.matchup.enable = true
     -- lvim.treesitter.textsubjects.enable = true
     -- lvim.treesitter.playground.enable = true
