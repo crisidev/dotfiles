@@ -9,6 +9,7 @@ M.session_load_last = function()
 end
 
 M.config = function()
+    require("user.theme").dashboard_theme()
     local kind = require("user.cmp").kind
     local icons = require("user.icons").icons
 
@@ -67,7 +68,7 @@ M.config = function()
     }
 
     local plugins = ""
-    local handle = io.popen 'fd -d 2 . $HOME"/.local/share/lunarvim/site/pack/packer" | grep pack | wc -l | tr -d "\n" '
+    local handle = io.popen 'fd -d 2 . $HOME"/.local/share/lunarvim/site/pack/lazy" | grep pack | wc -l | tr -d "\n" '
     if handle then
         plugins = handle:read "*a"
         handle:close()

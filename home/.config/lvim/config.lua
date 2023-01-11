@@ -11,6 +11,9 @@ require("user.cmp").config()
 -- Additional Plugins
 require("user.plugins").config()
 
+-- Autocommands
+require("user.autocmd").config()
+
 -- Treesitter
 require("user.treesitter").config()
 
@@ -28,10 +31,6 @@ require("user.terminal").config()
 
 -- Keys
 require("user.keys").config()
-
--- Autocommands
-require("user.autocmd").config()
-
 -- Lsp
 require("user.lsp").config()
 

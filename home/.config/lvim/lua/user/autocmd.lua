@@ -3,6 +3,15 @@ local M = {}
 -- Function to replace local autocmds with global ones.
 
 M.config = function()
+    -- Colorscheme
+    vim.api.nvim_create_autocmd("ColorScheme", {
+        pattern = "*",
+        callback = function()
+            require("user.theme").telescope_theme()
+            require("user.theme").dashboard_theme()
+        end,
+    })
+
     -- Autocommands
     vim.api.nvim_clear_autocmds { pattern = "lir", group = "_filetype_settings" }
     vim.api.nvim_clear_autocmds { pattern = "*", group = "_lvim_colorscheme" }

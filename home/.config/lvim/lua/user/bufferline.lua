@@ -118,8 +118,8 @@ M.config = function()
                 separator = true,
             },
             {
-                text = " PACKER",
-                filetype = "packer",
+                text = " LAZY",
+                filetype = "lazy",
                 highlight = "PanelHeading",
                 separator = true,
             },

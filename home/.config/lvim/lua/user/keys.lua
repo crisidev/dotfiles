@@ -226,7 +226,7 @@ M.which_keys_normal = function()
 
     -- Names
     lvim.builtin.which_key.mappings["L"]["name"] = icons.moon .. " Lunarvim"
-    lvim.builtin.which_key.mappings["p"]["name"] = icons.package .. " Packer"
+    lvim.builtin.which_key.mappings["p"]["name"] = icons.package .. " Lazy"
 
     -- Disable
     lvim.builtin.which_key.mappings["h"] = nil

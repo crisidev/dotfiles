@@ -54,7 +54,7 @@ M.enable = function()
                     ["."] = false,
                     ["*"] = true,
                 },
-                plugin_manager_path = home .. "/.local/share/lunarvim" .. "/site/pack/packer",
+                plugin_manager_path = home .. "/.local/share/lunarvim" .. "/site/pack/lazy",
             }
         end, 100)
     end
