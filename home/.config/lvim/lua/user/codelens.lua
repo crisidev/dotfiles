@@ -8,13 +8,12 @@ if vim.tbl_isempty(vim.fn.sign_getdefined(SIGN_NAME)) then
     vim.fn.sign_define(SIGN_NAME, { text = require("user.icons").icons.code_action, texthl = "MoreMsg" })
 end
 
-
 M.show_line_sign = function()
     -- Check for code action capability
     local code_action_cap_found = false
     for _, client in pairs(vim.lsp.buf_get_clients()) do
         if client then
-            if client.supports_method("textDocument/codeAction") then
+            if client.supports_method "textDocument/codeAction" then
                 code_action_cap_found = true
             end
         end
@@ -39,7 +38,8 @@ M.code_lens_available = function(cursor)
         table.insert(codelens_actions, { start = l.range.start, finish = l.range["end"] })
     end
     for _, action in ipairs(codelens_actions) do
-        if action.start.line <= cursor[1]
+        if
+            action.start.line <= cursor[1]
             and cursor[1] <= action.finish.line
             and action.start.character <= cursor[2]
             and cursor[2] <= action.finish.character
@@ -122,7 +122,7 @@ M.mk_handler = function(fn)
     end
 end
 
---- Write a function to requests                            
+--- Write a function to requests
 
 --- Update sign position from `old_line` to `new_line`.
 ---

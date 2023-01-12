@@ -580,7 +580,10 @@ M.config = function()
                 require("user.noice").config()
             end,
             -- version = '1.5.2',
-            dependencies = { "rcarriga/nvim-notify" },
+            dependencies = {
+                "rcarriga/nvim-notify",
+                "MunifTanjim/nui.nvim",
+            },
             enabled = lvim.builtin.noice.active,
         },
         ------------------------------------------------------------------------------

@@ -1,6 +1,5 @@
 local M = {}
 
-
 M.config = function()
     local icons = require "user.icons"
     local List = require "plenary.collections.py_list"
@@ -32,7 +31,7 @@ M.config = function()
         navigation = { mode = "uncentered" },
         diagnostics = false,
         diagnostics_indicator = function(_, _, diagnostics, _, _)
-            local icons = require("user.icons")
+            local icons = require "user.icons"
             local result = {}
             local symbols = { error = " ", warning = " " }
             for name, count in pairs(diagnostics) do

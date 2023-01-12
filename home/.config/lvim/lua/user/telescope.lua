@@ -42,8 +42,9 @@ function M._multiopen(prompt_bufnr, open_cmd)
     local picker = action_state.get_current_picker(prompt_bufnr)
     local num_selections = table.getn(picker:get_multi_selection())
     local border_contents = picker.prompt_border.contents[1]
-    if not (
-        string.find(border_contents, "Find Files")
+    if
+        not (
+            string.find(border_contents, "Find Files")
             or string.find(border_contents, "Git Files")
             or string.find(border_contents, "Sessions")
         )
@@ -188,7 +189,7 @@ M.frecency = function()
     require("telescope").extensions.frecency.frecency(M.get_theme())
 end
 
-M.session = function ()
+M.session = function()
     if lvim.builtin.session_manager == "possession" then
         M.possession()
     else

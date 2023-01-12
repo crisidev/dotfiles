@@ -6,4 +6,4 @@ formatters.setup {}
 local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {}
 
-require'lspconfig'.ansiblels.setup{}
+require("lspconfig").ansiblels.setup {}

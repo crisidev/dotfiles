@@ -145,8 +145,8 @@ function M.Peek(what)
         if not success then
             vim.notify(
                 'peek: Error calling LSP method "textDocument/'
-                .. what
-                .. '". The current language lsp might not support it.',
+                    .. what
+                    .. '". The current language lsp might not support it.',
                 vim.log.levels.ERROR
             )
         end
