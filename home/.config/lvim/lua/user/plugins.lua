@@ -76,6 +76,7 @@ M.config = function()
             config = function()
                 require("user.octo").config()
             end,
+            lazy = true,
             dependencies = { "which-key.nvim" },
             event = "BufRead",
         },
@@ -587,6 +588,35 @@ M.config = function()
             enabled = lvim.builtin.noice.active,
         },
         ------------------------------------------------------------------------------
+        -- Scrollin
+        ------------------------------------------------------------------------------
+        {
+            "karb94/neoscroll.nvim",
+            config = function()
+                require("neoscroll").setup {
+                    easing_function = "quadratic",
+                    hide_cursor = true,
+                }
+            end,
+            event = "BufRead",
+            enabled = lvim.builtin.smooth_scroll == "neoscroll",
+        },
+        {
+            "declancm/cinnamon.nvim",
+            config = function()
+                require("cinnamon").setup {
+                    default_keymaps = true,
+                    default_delay = 4,
+                    extra_keymaps = true,
+                    extended_keymaps = false,
+                    centered = true,
+                    scroll_limit = 100,
+                }
+            end,
+            event = "BufRead",
+            enabled = lvim.builtin.smooth_scroll == "cinnamon",
+        },
+        ------------------------------------------------------------------------------
         -- Miscellaneous
         ------------------------------------------------------------------------------
         -- Screenshots
@@ -685,9 +715,6 @@ M.config = function()
         -- Clipboard management
         {
             "AckslD/nvim-neoclip.lua",
-            dependencies = {
-                { "nvim-telescope/telescope.nvim" },
-            },
             config = function()
                 require("neoclip").setup {
                     on_paste = {
@@ -750,6 +777,25 @@ M.config = function()
             end,
             enabled = lvim.builtin.motion_provider == "hop",
         },
+        -- Matchup
+        {
+            "andymass/vim-matchup",
+            event = "BufReadPost",
+            config = function()
+                vim.g.matchup_enabled = 1
+                vim.g.matchup_surround_enabled = 1
+                vim.g.matchup_matchparen_deferred = 1
+                vim.g.matchup_matchparen_offscreen = { method = "popup" }
+            end,
+        },
+        { "mtdl9/vim-log-highlighting", ft = { "text", "log" } },
+        {
+            "abecodes/tabout.nvim",
+            config = function()
+                require("user.tabout").config()
+            end,
+        },
+        { "MunifTanjim/nui.nvim" },
     }
 end
 

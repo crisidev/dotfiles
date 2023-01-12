@@ -48,7 +48,7 @@ M.config = function()
     lvim.builtin.winbar_provider = "navic"
     -- Noice
     lvim.builtin.noice = {
-        active = false,
+        active = true,
         lsp_progress = false,
     }
     -- Session manager
@@ -70,6 +70,8 @@ M.config = function()
     lvim.builtin.bigfile.active = true
     -- Inlay hints
     lvim.builtin.inlay_hints = { active = true }
+    -- Scrolling
+    lvim.builtin.smooth_scroll = false
 
     -- Mason
     lvim.builtin.mason.ui.icons = require("user.icons").mason
