@@ -91,7 +91,6 @@ hide_when_empty = true
 block = "xrandr"
 format = " $icon "
 
-
 [[block]]
 block = "custom"
 interval = 5
