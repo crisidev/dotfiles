@@ -5,12 +5,13 @@ M.config = function()
 
     -- Theme
     lvim.colorscheme = "tokyonight"
+    require("user.theme").tokyonight()
     lvim.builtin.theme.name = lvim.colorscheme
     lvim.leader = ","
     lvim.format_on_save = false
     lvim.line_wrap_cursor_movement = false
     lvim.termguicolors = true
-    lvim.transparent_window = true
+    lvim.transparent_window = false
     lvim.reload_config_on_save = true
     lvim.debug = false
 
@@ -47,7 +48,7 @@ M.config = function()
     lvim.builtin.winbar_provider = "navic"
     -- Noice
     lvim.builtin.noice = {
-        active = true,
+        active = false,
         lsp_progress = false,
     }
     -- Session manager
@@ -84,6 +85,7 @@ M.config = function()
     -- Git signs
     lvim.builtin.gitsigns.opts._threaded_diff = true
     lvim.builtin.gitsigns.opts._extmark_signs = true
+    lvim.builtin.gitsigns.opts.attach_to_untracked = false
     lvim.builtin.gitsigns.opts.current_line_blame_formatter = " <author>, <author_time> · <summary>"
 
     -- Right corner diagnostics

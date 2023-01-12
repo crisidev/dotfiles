@@ -146,7 +146,7 @@ M.config = function()
                 require("user/lsp_signature").config()
             end,
             event = { "BufRead", "BufNew" },
-            enable = lvim.builtin.lsp_signature_help.active,
+            enabled = lvim.builtin.lsp_signature_help.active,
         },
         -- Lsp progreess in fidget
         {
@@ -206,7 +206,7 @@ M.config = function()
             config = function()
                 require("user.inlay").config()
             end,
-            enable = lvim.builtin.inlay_hints.active,
+            enabled = lvim.builtin.inlay_hints.active,
         },
         {
             "santigo-zero/right-corner-diagnostics.nvim",
@@ -226,7 +226,7 @@ M.config = function()
                     auto_cmds = true,
                 }
             end,
-            enable = lvim.builtin.right_corner_diagnostics.active,
+            enabled = lvim.builtin.right_corner_diagnostics.active,
         },
         -- Crates
         {
@@ -284,7 +284,7 @@ M.config = function()
         {
             "ThePrimeagen/refactoring.nvim",
             ft = { "typescript", "javascript", "lua", "c", "cpp", "go", "python", "java", "rust", "kotlin" },
-            event = "BufRead",
+            event = "BufReadPost",
             lazy = true,
             config = function()
                 require("user.refactoring").config()
@@ -297,7 +297,7 @@ M.config = function()
                 require("inc_rename").setup()
             end,
             lazy = true,
-            enable = lvim.builtin.noice.active,
+            enabled = lvim.builtin.noice.active,
         },
         {
             "cshuaimin/ssr.nvim",
@@ -329,7 +329,7 @@ M.config = function()
         {
             "zbirenbaum/copilot.lua",
             event = "VimEnter",
-            enable = lvim.builtin.copilot.active,
+            enabled = lvim.builtin.copilot.active,
         },
         {
             "zbirenbaum/copilot-cmp",
@@ -339,7 +339,7 @@ M.config = function()
                     method = "getCompletionsCycling",
                 }
             end,
-            enable = lvim.builtin.copilot.active,
+            enabled = lvim.builtin.copilot.active,
         },
         ------------------------------------------------------------------------------
         -- Cmp all the things.
@@ -439,7 +439,7 @@ M.config = function()
             config = function()
                 require("user.persisted").config()
             end,
-            enable = lvim.builtin.session_manager == "persisted",
+            enabled = lvim.builtin.session_manager == "persisted",
         },
         {
             "jedrzejboczar/possession.nvim",
@@ -447,7 +447,7 @@ M.config = function()
             config = function()
                 require("user.possession").config()
             end,
-            enable = lvim.builtin.session_manager == "possession",
+            enabled = lvim.builtin.session_manager == "possession",
         },
         ------------------------------------------------------------------------------
         -- Zen mode
@@ -466,7 +466,7 @@ M.config = function()
                 require("user.twilight").config()
             end,
             lazy = true,
-            enable = lvim.builtin.twilight.enable,
+            enabled = lvim.builtin.twilight.enable,
         },
         ------------------------------------------------------------------------------
         -- Search and replace
@@ -539,7 +539,7 @@ M.config = function()
             config = function()
                 require("user.neotree").config()
             end,
-            enable = lvim.builtin.tree_provider == "neo-tree",
+            enabled = lvim.builtin.tree_provider == "neo-tree",
         },
         -- Treesitter textobject
         {
@@ -579,12 +579,9 @@ M.config = function()
             config = function()
                 require("user.noice").config()
             end,
-            version = '1.5.2',
-            dependencies = {
-                "MunifTanjim/nui.nvim",
-                "rcarriga/nvim-notify",
-            },
-            enable = lvim.builtin.noice.active,
+            -- version = '1.5.2',
+            dependencies = { "rcarriga/nvim-notify" },
+            enabled = lvim.builtin.noice.active,
         },
         ------------------------------------------------------------------------------
         -- Miscellaneous
@@ -680,7 +677,7 @@ M.config = function()
             config = function()
                 require("user.orgmode").setup()
             end,
-            enable = lvim.builtin.orgmode.active,
+            enabled = lvim.builtin.orgmode.active,
         },
         -- Clipboard management
         {
@@ -702,7 +699,7 @@ M.config = function()
             config = function()
                 require("user.legendary").config()
             end,
-            enable = lvim.builtin.legendary.active,
+            enabled = lvim.builtin.legendary.active,
         },
         {
             "m-demare/hlargs.nvim",
@@ -712,14 +709,14 @@ M.config = function()
             lazy = true,
             event = "VeryLazy",
             dependencies = { "nvim-treesitter/nvim-treesitter" },
-            enable = lvim.builtin.hlargs.active,
+            enabled = lvim.builtin.hlargs.active,
         },
         {
             "stevearc/overseer.nvim",
             config = function()
                 require("user.overseer").config()
             end,
-            enable = lvim.builtin.task_runner.active,
+            enabled = lvim.builtin.task_runner.active,
         },
         {
             "nvim-neotest/neotest",
@@ -727,7 +724,8 @@ M.config = function()
                 require("user.ntest").config()
             end,
             dependencies = { "nvim-neotest/neotest-plenary" },
-            enable = lvim.builtin.test_runner.active,
+            event = { "BufReadPost", "BufNew" },
+            enabled = lvim.builtin.test_runner.active,
         },
         { "nvim-neotest/neotest-go", event = { "BufEnter *.go" } },
         { "nvim-neotest/neotest-python", event = { "BufEnter *.py" } },
@@ -738,7 +736,7 @@ M.config = function()
             config = function()
                 require("user.leap").config()
             end,
-            enable = lvim.builtin.motion_provider == "leap",
+            enabled = lvim.builtin.motion_provider == "leap",
         },
         {
             "phaazon/hop.nvim",
@@ -747,7 +745,7 @@ M.config = function()
             config = function()
                 require("user.hop").config()
             end,
-            enable = lvim.builtin.motion_provider == "hop",
+            enabled = lvim.builtin.motion_provider == "hop",
         },
     }
 end

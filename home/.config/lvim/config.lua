@@ -31,6 +31,7 @@ require("user.terminal").config()
 
 -- Keys
 require("user.keys").config()
+
 -- Lsp
 require("user.lsp").config()
 
