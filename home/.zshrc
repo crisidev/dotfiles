@@ -1,13 +1,12 @@
 # antigen
-export ANTIGEN_LOG=/tmp/antigen.log
-source $HOME/.cache/antigen.zsh
+#export ANTIGEN_LOG=/tmp/antigen.log
+source $HOME/.cache/antigen/antigen.zsh
 
 antigen use oh-my-zsh
 
 antigen bundle command-not-found
 antigen bundle fd
 antigen bundle history
-antigen bundle web-search
 
 antigen bundle zsh-users/zsh-completions
 antigen bundle zsh-users/zsh-syntax-highlighting
@@ -18,14 +17,13 @@ antigen bundle zsh-users/zaw
 export ZSH_FZF_HISTORY_SEARCH_BIND="^f"
 export ZSH_FZF_HISTORY_SEARCH_FZF_ARGS="+s +m +x -e --height 40% --reverse"
 antigen bundle joshskidmore/zsh-fzf-history-search
-
 antigen bundle hlissner/zsh-autopair
 antigen bundle supercrabtree/k
 antigen bundle --branch=main zdharma/fast-syntax-highlighting
 antigen bundle MichaelAquilina/zsh-you-should-use
-# antigen bundle --branch=main marlonrichert/zsh-autocomplete
-antigen bundle mafredri/zsh-async
 antigen bundle djui/alias-tips
+# antigen bundle --branch=main marlonrichert/zsh-autocomplete
+# antigen bundle mafredri/zsh-async
 
 antigen apply
 

@@ -187,7 +187,7 @@ M.which_keys_normal = function()
         icons.no .. " Close buffer",
     }
     lvim.builtin.which_key.mappings["Q"] =
-        { "<cmd>lua require('lvim.utils.functions').smart_quit()<cr>", icons.no .. " Quit" }
+        { "<cmd>lua require('user.builtin').smart_quit()<cr>", icons.no .. " Quit" }
 
     -- Dashboard
     lvim.builtin.which_key.mappings[";"] = { "<cmd>Alpha<CR>", icons.dashboard .. "Dashboard" }

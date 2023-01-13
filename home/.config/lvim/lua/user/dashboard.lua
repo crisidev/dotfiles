@@ -9,7 +9,6 @@ M.session_load_last = function()
 end
 
 M.config = function()
-    require("user.theme").dashboard_theme()
     local kind = require("user.cmp").kind
     local icons = require("user.icons").icons
 
@@ -143,7 +142,7 @@ M.config = function()
             button("n", icons.stuka .. " New file", ":ene <BAR> startinsert <cr>"),
             button("b", icons.files .. " File browswer", ":lua require('user.telescope').file_browser()<cr>"),
             button("p", icons.project .. " Projects", ":lua require('user.telescope').projects()<cr>"),
-            button("q", icons.exit .. " Quit", ":lua require('lvim.utils.functions').smart_quit()<cr>"),
+            button("q", icons.exit .. " Quit", ":lua require('user.builtin').smart_quit()<cr>"),
         },
         opts = {
             spacing = 1,
