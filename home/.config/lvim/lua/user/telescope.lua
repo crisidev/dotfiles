@@ -185,8 +185,8 @@ M.neoclip = function()
     require("telescope").extensions.neoclip.neoclip(M.get_theme())
 end
 
-M.frecency = function()
-    require("telescope").extensions.frecency.frecency(M.get_theme())
+M.smart_open = function()
+    require("telescope").extensions.smart_open.smart_open(M.get_theme())
 end
 
 M.session = function()
@@ -421,17 +421,7 @@ M.config = function()
             telescope.load_extension "possession"
         end
         telescope.load_extension "neoclip"
-        telescope.extensions.frecency.settings = {
-            show_scores = true,
-            show_unindexed = true,
-            ignore_patterns = { "*.git/*", "*/tmp/*", "*/target/*" },
-            workspaces = {
-                ["github"] = "/home/matbigoi/github",
-                ["smithy-rs"] = "/home/matbigoi/github/smithy-rs",
-                ["workplace"] = "/home/matbigoi/workplace",
-            },
-        }
-        telescope.load_extension "frecency"
+        telescope.load_extension "smart_open"
     end
 end
 

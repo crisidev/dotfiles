@@ -15,7 +15,6 @@ M.which_keys_normal = function()
     lvim.builtin.which_key.mappings["F"] = {
         name = icons.telescope .. " Find",
         f = { "<cmd>lua require('user.telescope').find_files()<cr>", "Find files" },
-        p = { "<cmd>lua require('user.telescope').find_project_files()<cr>", "Find files" },
         F = { "<cmd>lua require('user.telescope').search_only_certain_files()<cr>", "File certain filetype" },
         b = { "<cmd>lua require('user.telescope').file_browser()<cr>", "File browser" },
         p = { "<cmd>lua require('user.telescope').projects()<cr>", "Projects" },
@@ -24,6 +23,7 @@ M.which_keys_normal = function()
         r = { "<cmd>lua require('user.telescope').recent_files()<cr>", "Recent files" },
         R = { "<cmd>lua require('user.telescope').raw_grep()<cr>", "Raw grep" },
         z = { "<cmd>lua require('user.telescope').zoxide()<cr>", "Zoxide list" },
+        o = { "<cmd>lua require('user.telescope').smart_open()<cr>", "Smart open" },
     }
     lvim.builtin.which_key.mappings["T"] = {
         "<cmd>lua require('user.telescope').resume()<cr>",
@@ -66,6 +66,12 @@ M.which_keys_normal = function()
     }
 
     -- Recent files
+    lvim.builtin.which_key.mappings["r"] = {
+        "<cmd>lua require('user.telescope').smart_open()<cr>",
+        icons.calendar .. "Smart open",
+    }
+
+    -- Smart open
     lvim.builtin.which_key.mappings["r"] = {
         "<cmd>lua require('user.telescope').recent_files()<cr>",
         icons.calendar .. "Recent files",
@@ -186,8 +192,7 @@ M.which_keys_normal = function()
         "<cmd>lua require('user.bufferline').delete_buffer()<cr>",
         icons.no .. " Close buffer",
     }
-    lvim.builtin.which_key.mappings["Q"] =
-        { "<cmd>lua require('user.builtin').smart_quit()<cr>", icons.no .. " Quit" }
+    lvim.builtin.which_key.mappings["Q"] = { "<cmd>lua require('user.builtin').smart_quit()<cr>", icons.no .. " Quit" }
 
     -- Dashboard
     lvim.builtin.which_key.mappings[";"] = { "<cmd>Alpha<CR>", icons.dashboard .. "Dashboard" }
@@ -262,6 +267,13 @@ end
 -- NORMAL MODE
 M.normal_keys = function()
     lvim.keys.normal_mode = {
+        -- Search
+        ["<esc><esc>"] = "<cmd>nohlsearch<CR>",
+        -- CR maximize
+        ["<CR>"] = {
+            "<cmd>lua require('user.neovim').maximize_current_split()<CR>",
+            { noremap = true, silent = true, nowait = true },
+        },
         -- Buffers
         ["<F1>"] = "<cmd>BufferLineCyclePrev<cr>",
         ["<F2>"] = "<cmd>BufferLineCycleNext<cr>",
@@ -351,6 +363,8 @@ M.insert_keys = function()
                 })
             end)
         end
+    else
+        lvim.keys.insert_mode["<C-s>"] = "<cmd>lua vim.lsp.buf.signature_help()<CR>"
     end
 end
 
@@ -363,6 +377,8 @@ M.visual_keys = function()
         ["<C-x>"] = '"+c',
         -- Paste with Ctrl-v
         ["<C-v>"] = 'c<Esc>"+p',
+        -- Paste
+        ["p"] = [["_dP]],
     }
 end
 

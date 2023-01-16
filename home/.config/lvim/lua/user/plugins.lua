@@ -25,7 +25,6 @@ M.config = function()
         {
             "catppuccin/nvim",
             name = "catppuccin",
-            build = ":CatppuccinCompile",
             config = function()
                 require("user.theme").catppuccin()
                 lvim.colorscheme = "catppuccin-mocha"
@@ -111,16 +110,24 @@ M.config = function()
         {
             "jvgrootveld/telescope-zoxide",
             dependencies = { "nvim-telescope/telescope.nvim" },
+            lazy = true,
         },
         -- Telescope repo
         {
             "cljoly/telescope-repo.nvim",
             dependencies = { "nvim-lua/plenary.nvim" },
+            lazy = true,
         },
         -- Telescope file browser
-        { "nvim-telescope/telescope-file-browser.nvim" },
+        {
+            "nvim-telescope/telescope-file-browser.nvim",
+            lazy = true,
+        },
         -- Telescope live grep
-        { "nvim-telescope/telescope-live-grep-args.nvim" },
+        {
+            "nvim-telescope/telescope-live-grep-args.nvim",
+            lazy = true,
+        },
         {
             "sudormrfbin/cheatsheet.nvim",
             dependencies = {
@@ -131,11 +138,9 @@ M.config = function()
             lazy = true,
         },
         {
-            "nvim-telescope/telescope-frecency.nvim",
-            config = function()
-                print()
-            end,
+            "danielfalk/smart-open.nvim",
             dependencies = { "kkharji/sqlite.lua" },
+            lazy = true,
         },
         ------------------------------------------------------------------------------
         -- LSP extensions.
@@ -280,6 +285,11 @@ M.config = function()
             "AckslD/swenv.nvim",
             ft = "python",
             event = { "BufRead", "BufNew" },
+        },
+        -- Requirements
+        {
+            "raimon49/requirements.txt.vim",
+            event = "VeryLazy",
         },
         -- Refactoring
         {
@@ -576,7 +586,7 @@ M.config = function()
         { "MunifTanjim/nui.nvim" },
         {
             "folke/noice.nvim",
-            event = "VimEnter",
+            event = "VeryLazy",
             config = function()
                 require("user.noice").config()
             end,
@@ -641,8 +651,7 @@ M.config = function()
             config = function()
                 require("user.bqf").config()
             end,
-            lazy = true,
-            event = "BufRead",
+            event = "BufReadPost",
         },
         -- Trouble
         {

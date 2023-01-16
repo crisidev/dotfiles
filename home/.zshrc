@@ -22,6 +22,7 @@ antigen bundle supercrabtree/k
 antigen bundle --branch=main zdharma/fast-syntax-highlighting
 antigen bundle MichaelAquilina/zsh-you-should-use
 antigen bundle djui/alias-tips
+antigen bundle mroth/evalcache
 # antigen bundle --branch=main marlonrichert/zsh-autocomplete
 # antigen bundle mafredri/zsh-async
 
@@ -71,7 +72,7 @@ compdef sshrc=ssh
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude build'
 
 # zoxide
-eval "$(zoxide init zsh)"
+_evalcache zoxide init zsh
 
 # spaceship
-eval "$(starship init zsh)"
+_evalcache starship init zsh

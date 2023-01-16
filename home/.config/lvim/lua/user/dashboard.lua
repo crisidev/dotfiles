@@ -133,7 +133,7 @@ M.config = function()
         type = "group",
         name = "some",
         val = {
-            button("r", icons.clock .. " Recent files", ":lua require('user.telescope').recent_files()<cr>"),
+            button("r", icons.clock .. " Smart open", ":lua require('user.telescope').smart_open()<cr>"),
             button("l", icons.magic .. " Last session", ":lua require('user.dashboard').session_load_last()<cr>"),
             button("S", icons.session .. " Sessions", ":lua require('user.telescope').session()<cr>"),
             button("z", icons.folder .. "  Zoxide", ":lua require('user.telescope').zoxide()<cr>"),
