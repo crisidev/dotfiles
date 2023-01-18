@@ -179,8 +179,9 @@ M.config = function()
         ".git,.svn",
     }
 
-    -- Disable perl provider.
+    -- Disable perl and ruby providers.
     vim.g.loaded_perl_provider = 0
+    vim.g.loaded_ruby_provider = 0
 
     -- Folding
     vim.wo.foldmethod = "expr"

@@ -374,7 +374,6 @@ M.config = function()
                     },
                 }
             end,
-            rocks = { "mpack" },
         },
         -- Cmp for github/gitlab issues
         {
@@ -420,7 +419,7 @@ M.config = function()
                     captures = { "comment" },
                 }
             end,
-            fd = { "markdown", "text", "rst" },
+            ft = { "markdown", "text", "rst" },
         },
         -- Grammarous
         {
@@ -430,7 +429,7 @@ M.config = function()
         -- Grammar guard
         {
             "brymer-meneses/grammar-guard.nvim",
-            filetype = { "latex", "tex", "bib", "markdown", "rst", "text" },
+            ft = { "latex", "tex", "bib", "markdown", "rst", "text" },
             dependencies = { "neovim/nvim-lspconfig" },
         },
         ------------------------------------------------------------------------------
@@ -665,7 +664,7 @@ M.config = function()
                     use_diagnostic_signs = true,
                 }
             end,
-            command = "Trouble",
+            cmd = "Trouble",
             event = "VeryLazy",
         },
         -- Dressing
@@ -781,7 +780,7 @@ M.config = function()
         {
             "phaazon/hop.nvim",
             event = "VeryLazy",
-            commands = { "HopChar1CurrentLineAC", "HopChar1CurrentLineBC", "HopChar2MW", "HopWordMW" },
+            cmd = { "HopChar1CurrentLineAC", "HopChar1CurrentLineBC", "HopChar2MW", "HopWordMW" },
             config = function()
                 require("user.hop").config()
             end,
