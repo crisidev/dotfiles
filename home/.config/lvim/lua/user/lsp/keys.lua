@@ -127,6 +127,11 @@ M.lsp_normal_keys = function()
                 "<cmd>lua vim.lsp.buf.format { async = true }<cr>",
                 icons.magic .. "Format file",
             },
+            -- Rename
+            R = {
+                "<cmd>lua vim.lsp.buf.rename()<cr>",
+                icons.rename .. "Rename symbol",
+            },
             -- Peek
             z = {
                 "<cmd>lua require('user.peek').Peek('definition')<cr>",
@@ -170,30 +175,21 @@ M.lsp_normal_keys = function()
     if lvim.builtin.inlay_hints.active then
         wk.register {
             ["f"] = {
-                R = { "<cmd>lua require('lsp-inlayhints').toggle()<cr>", icons.inlay .. "Toggle Inlay" },
+                E = { "<cmd>lua require('lsp-inlayhints').toggle()<cr>", icons.inlay .. "Toggle Inlay" },
             },
         }
     end
 
-    -- Rename
+    -- Incremental rename
     if lvim.builtin.noice.active then
         wk.register {
             ["f"] = {
-                R = {
+                I = {
                     function()
                         return ":IncRename " .. vim.fn.expand "<cword>"
                     end,
-                    icons.magic .. "Rename symbol",
+                    icons.rename .. "Rename incremental",
                     expr = true,
-                },
-            },
-        }
-    else
-        wk.register {
-            ["f"] = {
-                R = {
-                    "<cmd>lua vim.lsp.buf.rename()<cr>",
-                    icons.magic .. "Rename symbol",
                 },
             },
         }

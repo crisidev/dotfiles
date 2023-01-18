@@ -308,6 +308,7 @@ M.config = function()
                 require("inc_rename").setup()
             end,
             lazy = true,
+            cmd = "IncRename",
             enabled = lvim.builtin.noice.active,
         },
         {
@@ -441,7 +442,6 @@ M.config = function()
             config = function()
                 require("remember").setup {}
             end,
-            event = "BufWinEnter",
         },
         -- Session manager
         {
@@ -711,6 +711,7 @@ M.config = function()
             config = function()
                 require("spaceless").setup()
             end,
+            enabled = false,
         },
         -- Orgmode
         {

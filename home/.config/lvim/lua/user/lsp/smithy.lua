@@ -11,8 +11,8 @@ M.config = function()
         configs.smithy_language_server = {
             default_config = {
                 -- NOTE: to install and run the smithy_language_server you need to do this:
-                -- $ git clone https://github.com/awslabs/smithy-language-server $HOME/.local/share/nvim/lsp_servers/smithy_language_server
-                -- $ cd $HOME/.local/share/nvim/lsp_servers/smithy_language_server
+                -- $ git clone https://github.com/awslabs/smithy-language-server $HOME/.local/share/nvim/mason/packages/smithy_language_server
+                -- $ cd $HOME/.local/share/nvim/mason/packages/smithy_language_server
                 -- $ ./gradlew build
 
                 -- This will generate the jar with the server implementation.

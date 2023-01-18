@@ -65,15 +65,13 @@ M.config = function()
             },
             hover = { enabled = false },
             signature = { enabled = false, auto_open = { enabled = false } },
-            -- override = {
-            --     ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-            --     ["vim.lsp.util.stylize_markdown"] = true,
-            --     ["cmp.entry.get_documentation"] = true,
-            -- },
+            override = {
+                ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+                ["vim.lsp.util.stylize_markdown"] = true,
+                ["cmp.entry.get_documentation"] = true,
+            },
         },
         cmdline = {
-            -- view = "cmdline",
-            -- view_search = "cmdline",
             format = {
                 filter = { pattern = "^:%s*!", icon = icons.term, ft = "sh" },
                 IncRename = {
@@ -168,6 +166,10 @@ M.config = function()
             },
             {
                 filter = { find = "waiting for cargo metadata" },
+                opts = { skip = true },
+            },
+            {
+                filter = { find = "nil" },
                 opts = { skip = true },
             },
         },

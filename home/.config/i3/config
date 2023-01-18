@@ -116,6 +116,7 @@ for_window [class="steam_proton"] floating enable
 for_window [class="Bitwarden"] floating enable
 for_window [class="Ulauncher"] floating enable
 for_window [class="Zenity"] floating enable
+for_window [class="Skype"] floating enable
 
 # Special borders and floats
 assign [class="firefox"] $w2

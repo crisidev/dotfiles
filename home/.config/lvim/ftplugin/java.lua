@@ -1,12 +1,6 @@
 -- Formatting
 local formatters = require "lvim.lsp.null-ls.formatters"
-formatters.setup {
-    {
-        exe = "uncrustify",
-        -- args = {},
-        filetypes = { "java" },
-    },
-}
+formatters.setup {}
 
 -- Linting
 local linters = require "lvim.lsp.null-ls.linters"

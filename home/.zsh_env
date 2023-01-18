@@ -12,6 +12,8 @@ export VISUAL=vim
 export EDITOR=vim
 export PAGER=less
 
+source $HOME/.antigen/bundles/mroth/evalcache/evalcache.plugin.zsh
+
 # rbenv
 export RBENV_ROOT="$HOME/.rbenv"
 if which rbenv > /dev/null; then

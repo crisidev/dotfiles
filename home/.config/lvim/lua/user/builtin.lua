@@ -31,7 +31,7 @@ M.config = function()
     -- Telescope max path length
     lvim.builtin.telescope.max_path_length = 5
     -- LSP Signature help
-    lvim.builtin.lsp_signature_help = { active = false }
+    lvim.builtin.lsp_signature_help = { active = true }
     -- Twilight
     lvim.builtin.twilight.enable = true
     -- Lir

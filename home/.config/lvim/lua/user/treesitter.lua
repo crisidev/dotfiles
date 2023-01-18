@@ -12,6 +12,7 @@ M.config = function()
         { "markdown", "nix", "ocaml", "perl", "php", "python", "query", "r" },
         { "regex", "rego", "ruby", "rust", "scala", "scss", "solidity", "swift" },
         { "teal", "toml", "tsx", "typescript", "vim", "vue", "yaml", "zig", "smithy" },
+        { "markdown_inline", "gitcommit" },
     }
     lvim.builtin.treesitter.ensure_installed = languages
     lvim.builtin.treesitter.ignore_install = { "haskell" }
