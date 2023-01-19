@@ -501,7 +501,6 @@ M.dashboard_theme = function()
     vim.api.nvim_set_hl(0, "StartLogo6", { fg = "#228E5C" })
     vim.api.nvim_set_hl(0, "StartLogo7", { fg = "#239B59" })
     vim.api.nvim_set_hl(0, "StartLogo8", { fg = "#24A755" })
-
 end
 
 return M

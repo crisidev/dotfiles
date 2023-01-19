@@ -21,7 +21,7 @@ M.config = function()
         CONFIG = "linux"
         WORKSPACE_PATH = home .. "/.cache/.jdtls/workspace/"
     else
-        print("Unsupported system")
+        print "Unsupported system"
         return
     end
 
@@ -43,9 +43,14 @@ M.config = function()
     if #bundles == 0 then
         bundles = vim.fn.glob(mason_path .. "/packages/java-test/extension/server/*.jar", 1, 1)
     end
-    local extra_bundles = vim.fn.glob(mason_path .. "/packages/java-debug-adapter/extension/server/com.microsoft.java.debug.plugin-*.jar")
+    local extra_bundles =
+        vim.fn.glob(mason_path .. "/packages/java-debug-adapter/extension/server/com.microsoft.java.debug.plugin-*.jar")
     if #extra_bundles == 0 then
-        extra_bundles = vim.fn.glob(mason_path .. "/packages/java-debug-adapter/extension/server/com.microsoft.java.debug.plugin-*.jar", 1, 1)
+        extra_bundles = vim.fn.glob(
+            mason_path .. "/packages/java-debug-adapter/extension/server/com.microsoft.java.debug.plugin-*.jar",
+            1,
+            1
+        )
     end
     vim.list_extend(bundles, extra_bundles)
 
