@@ -31,9 +31,8 @@ M.config = function()
         navigation = { mode = "uncentered" },
         diagnostics = false,
         diagnostics_indicator = function(_, _, diagnostics, _, _)
-            local icons = require "user.icons"
             local result = {}
-            local symbols = { error = " ", warning = " " }
+            local symbols = { error = icons.error, warning = icons.warning }
             for name, count in pairs(diagnostics) do
                 if symbols[name] and count > 0 then
                     table.insert(result, symbols[name] .. count)
@@ -42,7 +41,6 @@ M.config = function()
             local res = table.concat(result, " ")
             return #res > 0 and res or ""
         end,
-
         mode = "buffers",
         sort_by = "insert_after_current",
         groups = {
@@ -50,7 +48,7 @@ M.config = function()
                 toggle_hidden_on_enter = true,
             },
             items = {
-                bufferline_groups.builtin.pinned:with { icon = "" },
+                bufferline_groups.builtin.pinned:with { icon = icons.pinned },
                 bufferline_groups.builtin.ungrouped,
                 M.language_files("rust", "#ff6965", "rs"),
                 M.language_files("python", "#006400", "py"),
@@ -138,11 +136,11 @@ M.config = function()
         separator_style = vim.env.KITTY_WINDOW_ID and "slant" or "thin",
         right_mouse_command = "vert sbuffer %d",
         show_close_icon = false,
-        -- indicator = { style = "bold" },
-        indicator = {
-            icon = "⭐", -- this should be omitted if indicator style is not 'icon'
-            style = "icon", -- can also be 'underline'|'none',
-        },
+        indicator = { style = "bold" },
+        -- indicator = {
+        --     icon = "⭐", -- this should be omitted if indicator style is not 'icon'
+        --     style = "icon", -- can also be 'underline'|'none',
+        -- },
         max_name_length = 25,
         max_prefix_length = 15, -- prefix used when a buffer is de-duplicated
         truncate_names = true, -- whether or not tab names should be truncated

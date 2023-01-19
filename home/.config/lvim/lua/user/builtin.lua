@@ -95,14 +95,6 @@ M.config = function()
 
     lvim.reload_config_on_save = false
 
-    -- Disable q/wq when running inside the IDE.
-    -- if vim.g.crisidev_ide then
-    --     vim.cmd [[
-    --         cnoremap <expr> <cr> getcmdtype() == ":" && index(["q", "wq"], getcmdline()) >= 0 ? "<C-u>" : "<cr>"
-    --         cabbrev wq w
-    --     ]]
-    -- end
-
     -- Log level
     lvim.log.level = "warn"
 end

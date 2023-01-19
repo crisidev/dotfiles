@@ -339,7 +339,7 @@ M.insert_keys = function()
         -- Paste with Ctrl-v
         ["<C-v>"] = "<C-r><C-o>+",
         -- Snippets
-        ["<C-s>"] = "<cmd>lua require('telescope').extensions.luasnip.luasnip{}<cr>",
+        ["<C-x>"] = "<cmd>lua require('telescope').extensions.luasnip.luasnip{}<cr>",
         -- Toggle terminals
         ["<C-\\>"] = "<cmd>lua require('user.terminal').float_terminal_toggle('zsh', 100)<cr>",
         ["<C-]>"] = "<cmd>lua require('user.terminal').horizontal_terminal_toggle('zsh', 101, 20)<cr>",

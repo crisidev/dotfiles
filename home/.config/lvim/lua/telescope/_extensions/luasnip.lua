@@ -116,7 +116,6 @@ local luasnip_fn = function(opts)
         .new(opts, {
             prompt_title = "LuaSnip",
             finder = finders.new_table {
-
                 results = objs,
                 entry_maker = function(entry)
                     return {

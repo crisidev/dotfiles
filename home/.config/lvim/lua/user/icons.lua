@@ -83,6 +83,7 @@ M.icons = {
     rename = " ",
     amazon = " ",
     inlay = " ",
+    pinned = " ",
 }
 
 M.todo_comments = {
