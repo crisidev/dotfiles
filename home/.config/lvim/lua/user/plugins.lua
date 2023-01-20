@@ -77,7 +77,7 @@ M.config = function()
             end,
             lazy = true,
             dependencies = { "which-key.nvim" },
-            event = "BufRead",
+            event = "VeryLazy",
         },
         -- Git linker
         {
