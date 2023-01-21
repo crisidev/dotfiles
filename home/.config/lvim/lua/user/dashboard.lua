@@ -140,7 +140,7 @@ M.config = function()
             button("f", kind.File .. " Find file", ":lua require('user.telescope').find_project_files()<cr>"),
             button("s", icons.text .. "  Find word", ":lua require('user.telescope').find_string()<cr>"),
             button("n", icons.stuka .. " New file", ":ene <BAR> startinsert <cr>"),
-            button("b", icons.files .. " File browswer", ":lua require('user.telescope').file_browser()<cr>"),
+            button("b", icons.files .. " File browser", ":lua require('user.telescope').file_browser()<cr>"),
             button("p", icons.project .. " Projects", ":lua require('user.telescope').projects()<cr>"),
             button("q", icons.exit .. " Quit", ":lua require('user.builtin').smart_quit()<cr>"),
         },

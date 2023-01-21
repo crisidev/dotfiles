@@ -9,6 +9,7 @@ M.config = function()
         callback = function()
             require("user.theme").telescope_theme()
             require("user.theme").dashboard_theme()
+            require("user.icons").define_dap_signs()
         end,
     })
 
