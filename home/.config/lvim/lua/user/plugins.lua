@@ -712,15 +712,6 @@ M.config = function()
             end,
             enabled = false,
         },
-        -- Orgmode
-        {
-            "kristijanhusak/orgmode.nvim",
-            ft = { "org" },
-            config = function()
-                require("user.orgmode").setup()
-            end,
-            enabled = lvim.builtin.orgmode.active,
-        },
         -- Clipboard management
         {
             "AckslD/nvim-neoclip.lua",

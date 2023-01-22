@@ -6,6 +6,7 @@ M.config = function()
     -- Colorscheme
     vim.api.nvim_create_autocmd("ColorScheme", {
         pattern = "*",
+        desc = "Apply the custom colorschemes",
         callback = function()
             require("user.theme").telescope_theme()
             require("user.theme").dashboard_theme()
@@ -13,15 +14,41 @@ M.config = function()
         end,
     })
 
-    -- Autocommands
+    -- Cleanup.
     vim.api.nvim_clear_autocmds { pattern = "lir", group = "_filetype_settings" }
     vim.api.nvim_clear_autocmds { pattern = "*", group = "_lvim_colorscheme" }
+
+    -- Custom group.
     vim.api.nvim_create_augroup("_lvim_user", {})
+
+    -- Close Neotree during wq
+    vim.api.nvim_create_autocmd("BufWritePost,VimLeave", {
+        group = "_lvim_user",
+        pattern = "*",
+        desc = "Close Neotree during wq",
+        command = "Neotree close",
+    })
+
+    if lvim.builtin.nonumber_unfocus.active then
+        vim.api.nvim_create_autocmd("WinEnter", {
+            group = "_lvim_user",
+            pattern = "*",
+            desc = "Enable numbers",
+            command = "set relativenumber number",
+        })
+        vim.api.nvim_create_autocmd("WinLeave", {
+            group = "_lvim_user",
+            pattern = "*",
+            desc = "Disable numbers",
+            command = "set norelativenumber nonumber",
+        })
+    end
 
     -- Codelense viewer
     vim.api.nvim_create_autocmd("CursorHold", {
         group = "_lvim_user",
         pattern = { "*.rs", "*.c", "*.cpp", "*.go", "*.ts", "*.tsx", "*.kt", "*.py", "*.pyi", "*.java" },
+        desc = "Enable and refresh codelens",
         command = "lua require('user.codelens').show_line_sign()",
     })
 
@@ -29,6 +56,7 @@ M.config = function()
     vim.api.nvim_create_autocmd("TermOpen", {
         group = "_lvim_user",
         pattern = "term://*",
+        desc = "Set terminal keymappings",
         command = "lua require('user.keys').terminal_keys()",
     })
 
@@ -36,6 +64,7 @@ M.config = function()
     vim.api.nvim_create_autocmd("BufRead,BufNewFile", {
         group = "_lvim_user",
         pattern = "*.smithy",
+        desc = "Set the smithy filetype",
         command = "setfiletype smithy",
     })
 
@@ -53,6 +82,7 @@ M.config = function()
     vim.api.nvim_create_autocmd("BufEnter", {
         group = "_lvim_user",
         pattern = "*",
+        desc = "Disable the ANNOYING colorcolumn",
         command = "set colorcolumn=",
     })
 
@@ -60,6 +90,7 @@ M.config = function()
     vim.api.nvim_create_autocmd("BufWritePre", {
         group = "_lvim_user",
         pattern = { "/tmp/*", "COMMIT_EDITMSG", "MERGE_MSG", "*.tmp", "*.bak" },
+        desc = "Disable undo for specific files",
         callback = function()
             vim.opt_local.undofile = false
         end,
@@ -69,6 +100,7 @@ M.config = function()
     vim.api.nvim_create_autocmd("CmdlineLeave", {
         group = "_lvim_user",
         pattern = "*",
+        desc = "Allow hlslense in scrollbar",
         command = "lua ok, sb = pcall(require, 'scrollbar.handlers.search'); if ok then sb.handler.hide() end",
     })
 
@@ -76,6 +108,7 @@ M.config = function()
     vim.api.nvim_create_autocmd("Filetype", {
         group = "_lvim_user",
         pattern = { "scala", "sbt" },
+        desc = "Start Scala metals",
         callback = require("user.lsp.scala").start,
     })
 
@@ -86,15 +119,6 @@ M.config = function()
         desc = "Highlight text on yank",
         callback = function()
             require("vim.highlight").on_yank { higroup = "Search", timeout = 200 }
-        end,
-    })
-
-    -- Orgmode triggers
-    vim.api.nvim_create_autocmd("Filetype", {
-        group = "_lvim_user",
-        pattern = { "org" },
-        callback = function()
-            lvim.builtin.which_key.setup.triggers = { "<leader>", "<space>", "g", "f", "z", "]", "[" }
         end,
     })
 

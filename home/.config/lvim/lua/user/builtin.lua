@@ -57,8 +57,6 @@ M.config = function()
     lvim.builtin.motion_provider = "hop"
     -- Cmpline
     lvim.builtin.cmp.cmdline.enable = false
-    -- Orgmode
-    lvim.builtin.orgmode = { active = false }
     -- Legendary
     lvim.builtin.legendary = { active = false }
     -- Hlargs
@@ -74,6 +72,8 @@ M.config = function()
     lvim.builtin.smooth_scroll = false
     -- Mind not taking
     lvim.builtin.mind = { active = true, root_path = "~/.mind" }
+    -- Focus / unfocus numbers
+    lvim.builtin.nonumber_unfocus = { active = true }
 
     -- Mason
     lvim.builtin.mason.ui.icons = require("user.icons").mason
@@ -104,6 +104,7 @@ end
 M.smart_quit = function()
     local bufnr = vim.api.nvim_get_current_buf()
     local modified = vim.api.nvim_buf_get_option(bufnr, "modified")
+    vim.cmd "Neotree close"
     if modified then
         vim.ui.input({
             prompt = "You have unsaved changes. Quit anyway? (y/n) ",
