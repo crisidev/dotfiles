@@ -25,17 +25,14 @@ My personal dotfiles are compatible with
 - [Zsh rc](/home/.zshrc) file
 - [Zsh aliases](/home/.zsh_aliases) file
 - [Zsh functions](/home/.zsh_functions) file
-- [Zprezto](https://github.com/sorin-ionescu/prezto) [config](/home/.zpreztorc) file
 - [Starship](https://starship.rs) [config](/home/.config/starship.toml) file
 - [Kitty](https://sw.kovidgoyal.net/kitty/) [config](/home/.config/kitty) file
 - [Tmux](https://github.com/tmux/tmux/wiki) [config](/home/.tmux.conf) file
 - [Direnv](https://direnv.net/) [config](/home/.config/direnv) directory
 
-I would be happy to understand if   this is heavily inspired by something
-
 ### Editor
 
-- I use [Neovim](https://neovim.io) 0.9 following HEAD
+- I use [Neovim](https://neovim.io) 0.8 following the stable branch
 - My config is heavily based on the great work of [abzcoding](https://github.com/abzcoding/lvim)
 - [LunarVim](https://lunarvim.org):
   - [Lua config](/home/.config/lvim/config.lua)
@@ -56,8 +53,6 @@ I would be happy to understand if   this is heavily inspired by something
   [config](/home/.imwheelrc) file
 - [Picom](https://github.com/yshui/picom)
   [config](/home/.config/picom/picom.conf) file
-- [Redshift](https://wiki.archlinux.org/title/redshift)
-  [config](/home/.config/redshift/redshift.conf)
 - [Dunst](https://dunst-project.org/)
   [config](/home/.config/i3/config/dunst/dunstrc) file
 - [Ulauncher](https://ulauncher.io/)
