@@ -1,3 +1,7 @@
+local M = {}
+
+M.config = function()
+    vim.cmd [[
 runtime! syntax/html.vim
 
 if exists('b:current_syntax')
@@ -150,4 +154,7 @@ syntax match NoSpellAcronym '\<\(\u\|\d\)\{3,}s\?\>' contains=@NoSpell
 let b:current_syntax = "mkd"
 
 delcommand HtmlHiLink
-" vim: ts=8
+]]
+end
+
+return M

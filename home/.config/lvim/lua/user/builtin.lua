@@ -72,6 +72,8 @@ M.config = function()
     lvim.builtin.inlay_hints = { active = true }
     -- Scrolling
     lvim.builtin.smooth_scroll = false
+    -- Mind not taking
+    lvim.builtin.mind = { active = true, root_path = "~/.mind" }
 
     -- Mason
     lvim.builtin.mason.ui.icons = require("user.icons").mason

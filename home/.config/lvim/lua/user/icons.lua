@@ -84,6 +84,13 @@ M.icons = {
     amazon = " ",
     inlay = " ",
     pinned = " ",
+    mind = " ",
+    mind_tasks = "陼",
+    mind_backlog = " ",
+    mind_on_going = " ",
+    mind_done = " ",
+    mind_cancelled = " ",
+    mind_notes = " ",
 }
 
 M.todo_comments = {
