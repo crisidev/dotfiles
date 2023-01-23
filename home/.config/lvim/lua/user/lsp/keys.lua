@@ -100,7 +100,7 @@ M.lsp_normal_keys = function()
             },
             L = {
                 "<cmd>lua require('lsp_lines').toggle()<cr>",
-                icons.hint .. "Toggle LSP lines",
+                icons.ls_active .. "Toggle LSP lines",
             },
             e = {
                 "<cmd>lua require('user.telescope').diagnostics()<cr>",
@@ -108,19 +108,19 @@ M.lsp_normal_keys = function()
             },
             N = {
                 "<cmd>lua vim.diagnostic.goto_next({float = {border = 'rounded', focusable = false, source = 'always'}, severity = {min = vim.diagnostic.severity.ERROR}})<cr>",
-                icons.hint .. "Next ERROR diagnostic",
+                icons.error .. "Next ERROR diagnostic",
             },
             P = {
                 "<cmd>lua vim.diagnostic.goto_prev({float = {border = 'rounded', focusable = false, source = 'always'}, severity = {min = vim.diagnostic.severity.ERROR}})<cr>",
-                icons.hint .. "Previous ERROR diagnostic",
+                icons.error .. "Previous ERROR diagnostic",
             },
             n = {
                 "<cmd>lua vim.diagnostic.goto_next({float = {border = 'rounded', focusable = false, source = 'always'}, severity = {min = vim.diagnostic.severity.WARN}})<cr>",
-                icons.hint .. "Next diagnostic",
+                icons.warn .. "Next diagnostic",
             },
             p = {
                 "<cmd>lua vim.diagnostic.goto_prev({float = {border = 'rounded', focusable = false, source = 'always'}, severity = {min = vim.diagnostic.severity.WARN}})<cr>",
-                icons.hint .. "Previous diagnostic",
+                icons.warn .. "Previous diagnostic",
             },
             -- Format
             F = {

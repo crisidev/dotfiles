@@ -73,7 +73,7 @@ M.config = function()
     -- Mind not taking
     lvim.builtin.mind = { active = true, root_path = "~/.mind" }
     -- Focus / unfocus numbers
-    lvim.builtin.nonumber_unfocus = { active = true }
+    lvim.builtin.nonumber_unfocus = { active = false }
 
     -- Mason
     lvim.builtin.mason.ui.icons = require("user.icons").mason
