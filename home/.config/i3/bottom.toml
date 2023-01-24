@@ -94,5 +94,5 @@ format = " $icon "
 [[block]]
 block = "custom"
 interval = 5
-cycle = ["~/.bin/i3notify-block"]
+cycle = ["~/.bin/i3notify-chime"]
 hide_when_empty = true
