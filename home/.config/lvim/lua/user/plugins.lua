@@ -5,32 +5,16 @@ M.config = function()
         ------------------------------------------------------------------------------
         -- Themes and visual stuff.
         ------------------------------------------------------------------------------
-        -- {
-        --     "folke/tokyonight.nvim",
-        --     config = function()
-        --         require("user.theme").tokyonight()
-        --         lvim.colorscheme = "tokyonight"
-        --     end,
-        --     enabled = lvim.builtin.theme.name == "tokyonight",
-        -- },
-        {
-            "rose-pine/neovim",
-            name = "rose-pine",
-            config = function()
-                require("user.theme").rose_pine()
-            end,
-        },
-        {
-            "catppuccin/nvim",
-            name = "catppuccin",
-            config = function()
-                require("user.theme").catppuccin()
-            end,
-        },
         {
             "rebelot/kanagawa.nvim",
             config = function()
                 require("user.theme").kanagawa()
+            end,
+        },
+        {
+            "EdenEast/nightfox.nvim",
+            config = function()
+                require("user.theme").nightfox()
             end,
         },
         -- Colorizer

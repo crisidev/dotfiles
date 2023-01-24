@@ -3,10 +3,18 @@ local M = {}
 M.config = function()
     local icons = require("user.icons").icons
 
+    -- Noice
+    lvim.builtin.noice = {
+        active = true,
+        lsp_progress = false,
+    }
+
     -- Theme
     lvim.colorscheme = "tokyonight"
     require("user.theme").tokyonight()
-    lvim.builtin.theme.name = lvim.colorscheme
+    lvim.builtin.theme.name = "tokyonight"
+
+    -- Builtins 
     lvim.leader = ","
     lvim.format_on_save = false
     lvim.line_wrap_cursor_movement = false
@@ -46,11 +54,6 @@ M.config = function()
     lvim.builtin.global_statusline = true
     -- Winbar provider
     lvim.builtin.winbar_provider = "navic"
-    -- Noice
-    lvim.builtin.noice = {
-        active = true,
-        lsp_progress = false,
-    }
     -- Session manager
     lvim.builtin.session_manager = "persisted"
     -- Movements

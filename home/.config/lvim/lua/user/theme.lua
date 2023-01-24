@@ -1,5 +1,36 @@
 local M = {}
 
+M.nightfox = function()
+    require("nightfox").setup {
+        options = {
+            -- Compiled file's destination location
+            compile_path = vim.fn.stdpath "cache" .. "/nightfox",
+            compile_file_suffix = "_compiled", -- Compiled file suffix
+            transparent = false, -- Disable setting background
+            terminal_colors = true, -- Set terminal colors (vim.g.terminal_color_*) used in `:terminal`
+            dim_inactive = true, -- Non focused panes set to alternative background
+            module_default = true, -- Default enable value for modules
+            styles = { -- Style to be applied to different syntax groups
+                comments = "italic", -- Value is any valid attr-list value `:help attr-list`
+                conditionals = "NONE",
+                constants = "NONE",
+                functions = "NONE",
+                keywords = "italic",
+                types = "italic,bold",
+                numbers = "NONE",
+                operators = "NONE",
+                strings = "NONE",
+                variables = "NONE",
+            },
+            inverse = { -- Inverse highlight for different types
+                match_paren = false,
+                visual = false,
+                search = false,
+            },
+        },
+    }
+end
+
 M.tokyonight = function()
     -- require("tokyonight").setup {
     lvim.builtin.theme.tokyonight.options = {
@@ -46,182 +77,6 @@ M.tokyonight = function()
             hl.CursorLineNr = { fg = current_colors.orange, style = "bold" }
         end,
     }
-end
-
-M.rose_pine = function()
-    require("rose-pine").setup {
-        ---@usage 'main'|'moon'
-        dark_variant = "main",
-        bold_vert_split = false,
-        dim_nc_background = lvim.builtin.global_statusline,
-        disable_background = lvim.transparent_window,
-        disable_float_background = true,
-        disable_italics = true,
-        ---@usage string hex value or named color from rosepinetheme.com/palette
-        groups = {
-            border = "highlight_med",
-            comment = "muted",
-            link = "iris",
-            punctuation = "subtle",
-
-            error = "love",
-            hint = "iris",
-            info = "foam",
-            warn = "gold",
-
-            headings = {
-                h1 = "iris",
-                h2 = "foam",
-                h3 = "rose",
-                h4 = "gold",
-                h5 = "pine",
-                h6 = "foam",
-            },
-        },
-        highlight_groups = {
-            Boolean = { fg = "love" },
-            Cursor = { fg = "#232136", bg = "text" },
-            NormalFloat = { bg = "base" },
-            MsgArea = { fg = "text" },
-            VertSplit = { fg = "highlight_low", bg = "highlight_low" },
-            SignColumn = { fg = "text", bg = "none" },
-            SignColumnSB = { fg = "text", bg = "none" },
-            mkdInlineURL = { fg = "iris", style = "none" },
-            ["@variable"] = { fg = "text" },
-            ["@variable.builtin"] = { fg = "love" },
-            ["@type"] = { fg = "foam" },
-            ["@text"] = { fg = "text" },
-            ["@property"] = { fg = "iris" },
-            ["@parameter"] = { fg = "iris" },
-            ["@constant.builtin"] = { fg = "love" },
-            ["@constant"] = { fg = "foam" },
-            ["@constructor"] = { fg = "foam" },
-            ["@field"] = { fg = "foam" },
-            ["@function.builtin"] = { fg = "love" },
-            ["@function"] = { fg = "rose" },
-            ["@include"] = { fg = "pine" },
-            ["@keyword"] = { fg = "pine" },
-            ["@keyword.operator"] = { fg = "subtle" },
-            ["@label"] = { fg = "foam" },
-            ["@punctuation.bracket"] = { fg = "muted" },
-            ["@punctuation.delimiter"] = { fg = "muted" },
-            ["@punctuation.special"] = { fg = "muted" },
-            ["@string.escape"] = { fg = "pine" },
-            ["@string.special"] = { fg = "gold" },
-            ["@tag"] = { fg = "foam" },
-            ["@tag.delimiter"] = { fg = "subtle" },
-            ["@text.title"] = { fg = "iris", style = "bold" },
-            ["@text.uri"] = { fg = "iris" },
-            CmpItemKindText = { fg = "gold" },
-            CmpItemKindConstructor = { fg = "foam" },
-            CmpItemKindField = { fg = "foam" },
-            CmpItemKindValue = { fg = "text" },
-            CmpItemKindEvent = { fg = "text" },
-            CmpItemKindUnit = { fg = "gold" },
-            CmpItemKindConstant = { fg = "gold" },
-            CmpItemKindModule = { fg = "iris" },
-            CmpItemKindEnum = { fg = "#c5a8e8" },
-            CmpItemKindStruct = { fg = "#56949f" },
-            CmpItemKindTypeParameter = { fg = "foam" },
-            CmpItemKindTypeKeyword = { fg = "pine" },
-            CmpItemKindTypeDirectory = { fg = "foam" },
-            CmpItemKindReference = { fg = "gold" },
-            CmpItemKindOperator = { fg = "subtle" },
-            CmpItemKindTypeSnippet = { fg = "pine" },
-        },
-    }
-end
-
-M.catppuccin = function()
-    local catppuccin = require "catppuccin"
-    local opts = {
-        flavour = "mocha",
-        background = { light = "latte", dark = "mocha" },
-        transparent_background = lvim.transparent_window,
-        term_colors = false,
-        styles = {
-            comments = {},
-            keywords = { "italic" },
-        },
-        compile = {
-            enabled = true, -- NOTE: make sure to run `:CatppuccinCompile`
-            path = vim.fn.stdpath "cache" .. "/catppuccin",
-        },
-        dim_inactive = {
-            enabled = lvim.builtin.global_statusline,
-            shade = "dark",
-            percentage = 0.15,
-        },
-        integrations = {
-            cmp = true,
-            fidget = true,
-            lsp_trouble = true,
-            telescope = true,
-            treesitter = true,
-            mason = true,
-            neotest = lvim.builtin.test_runner == "neotest",
-            noice = lvim.builtin.noice.active,
-            native_lsp = {
-                enabled = true,
-                virtual_text = {
-                    errors = { "italic" },
-                    hints = {},
-                    warnings = { "italic" },
-                    information = {},
-                },
-                underlines = {
-                    errors = { "undercurl" },
-                    hints = {},
-                    warnings = { "undercurl" },
-                    information = {},
-                },
-            },
-            dap = {
-                enabled = lvim.builtin.dap.active,
-                enable_ui = lvim.builtin.dap.active,
-            },
-            indent_blankline = {
-                enabled = true,
-                colored_indent_levels = false,
-            },
-            gitsigns = lvim.builtin.gitsigns.active,
-            notify = lvim.builtin.noice.active,
-            nvimtree = true,
-            neotree = lvim.builtin.tree_provider == "neo-tree",
-            overseer = lvim.builtin.task_runner == "overseer",
-            symbols_outline = lvim.builtin.tag_provider == "symbols-outline",
-            which_key = lvim.builtin.which_key.active,
-            leap = lvim.builtin.motion_provider == "leap",
-            hop = lvim.builtin.motion_provider == "hop",
-        },
-        highlight_overrides = {
-            mocha = {
-                NormalFloat = { fg = "#CDD6F4", bg = "#151521" },
-                CmpItemKindEnum = { fg = "#B4BEFE" },
-                CmpItemKindEnumMember = { fg = "#F5C2E7" },
-                CmpItemMenu = { fg = "#7F849C" },
-                CmpItemAbbr = { fg = "#BAC2DE" },
-                Cursor = { fg = "#1e1e2e", bg = "#d9e0ee" },
-                ["@constant.builtin"] = { fg = "#EBA0AC" },
-                TSConstBuiltin = { fg = "#EBA0AC" },
-            },
-        },
-    }
-    if lvim.transparent_window then
-        local colors = require("catppuccin.palettes").get_palette()
-        colors.none = "NONE"
-        opts.custom_highlights = {
-            Comment = { fg = colors.overlay1 },
-            LineNr = { fg = colors.overlay1 },
-            CursorLine = { bg = colors.none },
-            CursorLineNr = { fg = colors.lavender },
-            DiagnosticVirtualTextError = { bg = colors.none },
-            DiagnosticVirtualTextWarn = { bg = colors.none },
-            DiagnosticVirtualTextInfo = { bg = colors.none },
-            DiagnosticVirtualTextHint = { bg = colors.none },
-        }
-    end
-    catppuccin.setup(opts)
 end
 
 M.kanagawa = function()
@@ -290,81 +145,6 @@ M.colors = {
         gitSigns = { add = "#164846", change = "#394b70", delete = "#823c41" },
     },
 
-    rose_pine_colors = {
-        cmp_border = "#191724",
-        none = "NONE",
-        bg = "#2a273f",
-        fg = "#e0def4",
-        fg_gutter = "#3b4261",
-        black = "#393b44",
-        gray = "#2a2e36",
-        red = "#eb6f92",
-        green = "#97c374",
-        yellow = "#ea9d34",
-        hlargs = "#c4a7e7",
-        blue = "#9ccfd8",
-        magenta = "#c4a7e7",
-        cyan = "#9ccfd8",
-        white = "#dfdfe0",
-        orange = "#ea9a97",
-        pink = "#D67AD2",
-        black_br = "#7f8c98",
-        red_br = "#e06c75",
-        green_br = "#58cd8b",
-        yellow_br = "#FFE37E",
-        bg_br = "#393552",
-        blue_br = "#84CEE4",
-        violet = "#B8A1E3",
-        cyan_br = "#59F0FF",
-        white_br = "#FDEBC3",
-        orange_br = "#F6A878",
-        pink_br = "#DF97DB",
-        comment = "#526175",
-        bg_alt = "#191724",
-        git = {
-            add = "#84Cee4",
-            change = "#c4a7e7",
-            delete = "#eb6f92",
-            conflict = "#f6c177",
-        },
-    },
-
-    catppuccin_colors = {
-        cmp_border = "#151521",
-        rosewater = "#F5E0DC",
-        flamingo = "#F2CDCD",
-        violet = "#DDB6F2",
-        pink = "#F5C2E7",
-        red = "#F28FAD",
-        maroon = "#E8A2AF",
-        orange = "#FAB387",
-        yellow = "#F9E2AF",
-        hlargs = "#EBA0AC",
-        green = "#ABE9B3",
-        blue = "#96CDFB",
-        cyan = "#89DCEB",
-        teal = "#B5E8E0",
-        lavender = "#C9CBFF",
-        white = "#D9E0EE",
-        gray2 = "#C3BAC6",
-        gray1 = "#988BA2",
-        gray0 = "#6E6C7E",
-        black4 = "#575268",
-        bg_br = "#302D41",
-        bg = "#302D41",
-        surface1 = "#302D41",
-        bg_alt = "#1E1E2E",
-        fg = "#D9E0EE",
-        fg_dark = "#D9E0EE",
-        black = "#1A1826",
-        git = {
-            add = "#ABE9B3",
-            change = "#96CDFB",
-            delete = "#F28FAD",
-            conflict = "#FAE3B0",
-        },
-    },
-
     kanagawa_colors = {
         cmp_border = "#16161D",
         bg = "#21212A",
@@ -393,12 +173,10 @@ M.colors = {
 M.current_colors = function()
     if lvim.builtin.theme.name == "tokyonight" then
         return M.colors.tokyonight_colors
-    elseif lvim.builtin.theme.name == "catppuccin" then
-        return M.colors.catppuccin_colors
+    elseif lvim.builtin.theme.name == "nightfox" then
+        return M.colors.tokyonight_colors
     elseif lvim.builtin.theme.name == "kanagawa" then
         return M.colors.kanagawa_colors
-    elseif lvim.builtin.theme.name == "rose-pine" then
-        return M.colors.rose_pine_colors
     else
         return M.colors.tokyonight_colors
     end
@@ -509,21 +287,16 @@ M.toggle_theme = function()
     local theme = lvim.colorscheme
     local colorset = require("user.theme").colors.tokyonight_colors
     if theme == "tokyonight" then
-        lvim.colorscheme = "catppuccin-mocha"
-        lvim.builtin.theme.name = "catppuccin-mocha"
-        colorset = require("user.theme").colors.catppuccin_colors
-    elseif theme == "catppuccin-mocha" then
+        lvim.colorscheme = "nightfox"
+        lvim.builtin.theme.name = "nightfox"
+        colorset = require("user.theme").colors.tokyonight_colors
+    elseif theme == "nightfox" then
         lvim.colorscheme = "kanagawa"
         lvim.builtin.theme.name = "kanagawa"
         colorset = require("user.theme").colors.kanagawa_colors
-    elseif theme == "kanagawa" then
-        lvim.colorscheme = "rose-pine"
-        lvim.builtin.theme.name = "rose-pine"
-        colorset = require("user.theme").colors.rose_pine
     else
         lvim.colorscheme = "tokyonight"
         lvim.builtin.theme.name = "tokyonight"
-        colorset = require("user.theme").colors.tokyonight
     end
     vim.cmd("colorscheme " .. lvim.colorscheme)
     require("user.theme").telescope_theme(colorset)
