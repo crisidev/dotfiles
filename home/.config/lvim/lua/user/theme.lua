@@ -38,7 +38,7 @@ M.tokyonight = function()
         transparent = lvim.transparent_window,
         terminal_colors = true,
         styles = {
-            comments = {},
+            comments = { italic = true },
             keywords = { italic = true },
             functions = {},
             variables = {},
@@ -83,7 +83,7 @@ M.kanagawa = function()
     local kanagawa = require "kanagawa"
     kanagawa.setup {
         undercurl = true, -- enable undercurls
-        commentStyle = {},
+        commentStyle = { italic = true },
         functionStyle = {},
         keywordStyle = { italic = true },
         statementStyle = { italic = true },

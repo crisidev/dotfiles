@@ -20,10 +20,9 @@ M.which_keys_normal = function()
         p = { "<cmd>lua require('user.telescope').projects()<cr>", "Projects" },
         s = { "<cmd>lua require('user.telescope').find_string()<cr>", "Find string" },
         S = { "<cmd>lua require('user.telescope').find_identifier()<cr>", "Find identifier under cursor" },
-        r = { "<cmd>lua require('user.telescope').recent_files()<cr>", "Recent files" },
         R = { "<cmd>lua require('user.telescope').raw_grep()<cr>", "Raw grep" },
         z = { "<cmd>lua require('user.telescope').zoxide()<cr>", "Zoxide list" },
-        o = { "<cmd>lua require('user.telescope').smart_open()<cr>", "Smart open" },
+        r = { "<cmd>lua require('user.telescope').smart_open()<cr>", "Smart open" },
     }
     lvim.builtin.which_key.mappings["T"] = {
         "<cmd>lua require('user.telescope').resume()<cr>",
@@ -65,16 +64,10 @@ M.which_keys_normal = function()
         icons.find .. " Find string",
     }
 
-    -- Recent files
+    -- Smart open
     lvim.builtin.which_key.mappings["r"] = {
         "<cmd>lua require('user.telescope').smart_open()<cr>",
         icons.calendar .. "Smart open",
-    }
-
-    -- Smart open
-    lvim.builtin.which_key.mappings["r"] = {
-        "<cmd>lua require('user.telescope').recent_files()<cr>",
-        icons.calendar .. "Recent files",
     }
 
     -- Zoxide
