@@ -26,7 +26,6 @@ stds.nvim = {
 }
 std = "lua51+nvim"
 
-
 -- Don't report unused self arguments of methods.
 self = false
 
