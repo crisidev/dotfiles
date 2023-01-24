@@ -1,0 +1,15 @@
+#!/bin/bash
+#
+export PATH=$HOME/.bin:$PATH
+
+dbus-monitor --session "type='signal',interface='org.gnome.ScreenSaver'" |
+	while read x; do
+		case "$x" in
+		*"boolean true"*) 
+		    dunstctl set-paused true
+            ;;
+		*"boolean false"*) 
+		    dunstctl set-paused false
+            ;;
+		esac
+	done
