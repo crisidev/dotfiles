@@ -1,6 +1,8 @@
 local M = {}
 
 M.config = function()
+    vim.cmd "function! TbToggle_theme(a,b,c,d) \n lua require('user.theme').toggle_theme() \n endfunction"
+    vim.cmd "function! Quit_vim(a,b,c,d) \n qa \n endfunction"
     local icons = require "user.icons"
     local List = require "plenary.collections.py_list"
     lvim.builtin.bufferline.highlights = {
@@ -148,6 +150,15 @@ M.config = function()
         color_icons = true,
         show_buffer_close_icons = true,
         diagnostics_update_in_insert = false,
+    }
+
+    lvim.builtin.bufferline.options.custom_areas = {
+        right = function()
+            return {
+                { text = "%@TbToggle_theme@ " .. icons.icons.magic .. " %X" },
+                { text = "%@Quit_vim@ %X", fg = "#f7768e" },
+            }
+        end,
     }
 end
 

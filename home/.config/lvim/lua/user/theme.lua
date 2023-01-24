@@ -434,7 +434,7 @@ M.hi_colors = function()
     return colors
 end
 
-M.telescope_theme = function()
+M.telescope_theme = function(colorset)
     local function link(group, other)
         vim.cmd("highlight! link " .. group .. " " .. other)
     end
@@ -455,8 +455,10 @@ M.telescope_theme = function()
     link("LspDiagnosticsSignInfo", "DiagnosticInfo")
     link("NeoTreeDirectoryIcon", "NvimTreeFolderIcon")
     link("IndentBlanklineIndent1 ", "@comment")
-
-    local current_colors = M.current_colors()
+    local current_colors = colorset
+    if colorset == nil or #colorset == 0 then
+        current_colors = M.current_colors()
+    end
     set_fg_bg("Hlargs", current_colors.hlargs, "none")
     set_fg_bg("CmpBorder", current_colors.cmp_border, current_colors.cmp_border)
     link("NoiceCmdlinePopupBorder", "CmpBorder")
@@ -501,6 +503,30 @@ M.dashboard_theme = function()
     vim.api.nvim_set_hl(0, "StartLogo6", { fg = "#228E5C" })
     vim.api.nvim_set_hl(0, "StartLogo7", { fg = "#239B59" })
     vim.api.nvim_set_hl(0, "StartLogo8", { fg = "#24A755" })
+end
+
+M.toggle_theme = function()
+    local theme = lvim.colorscheme
+    local colorset = require("user.theme").colors.tokyonight_colors
+    if theme == "tokyonight" then
+        lvim.colorscheme = "catppuccin-mocha"
+        lvim.builtin.theme.name = "catppuccin-mocha"
+        colorset = require("user.theme").colors.catppuccin_colors
+    elseif theme == "catppuccin-mocha" then
+        lvim.colorscheme = "kanagawa"
+        lvim.builtin.theme.name = "kanagawa"
+        colorset = require("user.theme").colors.kanagawa_colors
+    elseif theme == "kanagawa" then
+        lvim.colorscheme = "rose-pine"
+        lvim.builtin.theme.name = "rose-pine"
+        colorset = require("user.theme").colors.rose_pine
+    else
+        lvim.colorscheme = "tokyonight"
+        lvim.builtin.theme.name = "tokyonight"
+        colorset = require("user.theme").colors.tokyonight
+    end
+    vim.cmd("colorscheme " .. lvim.colorscheme)
+    require("user.theme").telescope_theme(colorset)
 end
 
 return M

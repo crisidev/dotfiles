@@ -91,6 +91,8 @@ M.icons = {
     mind_done = " ",
     mind_cancelled = " ",
     mind_notes = " ",
+    button_off = " ",
+    button_on = " ",
 }
 
 M.todo_comments = {

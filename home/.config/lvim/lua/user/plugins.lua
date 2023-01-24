@@ -18,26 +18,20 @@ M.config = function()
             name = "rose-pine",
             config = function()
                 require("user.theme").rose_pine()
-                lvim.colorscheme = "rose-pine"
             end,
-            enabled = lvim.builtin.theme.name == "rose-pine",
         },
         {
             "catppuccin/nvim",
             name = "catppuccin",
             config = function()
                 require("user.theme").catppuccin()
-                lvim.colorscheme = "catppuccin-mocha"
             end,
-            enabled = lvim.builtin.theme.name == "catppuccin",
         },
         {
             "rebelot/kanagawa.nvim",
             config = function()
                 require("user.theme").kanagawa()
-                lvim.colorscheme = "kanagawa"
             end,
-            enabled = lvim.builtin.theme.name == "kanagawa",
         },
         -- Colorizer
         {
