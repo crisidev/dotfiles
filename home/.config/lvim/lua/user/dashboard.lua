@@ -74,9 +74,10 @@ M.config = function()
         plugins = plugins:gsub("^%s*(.-)%s*$", "%1")
     end
 
-    local border_upper = text "╭──────────────────────────╮"
-    local date = text("│  " .. icons.calendar .. "Today is " .. os.date "%a %d %b" .. "   │")
-    local version = text(
+    local border_upper =
+        text "╭────────────────────────────╮"
+    local date = text("│  " .. icons.calendar .. "Today is " .. os.date "%a %d %b" .. "     │")
+    local nvim_version = text(
         "│  "
             .. " Neovim version "
             .. vim.version().major
@@ -84,10 +85,13 @@ M.config = function()
             .. vim.version().minor
             .. "."
             .. vim.version().patch
-            .. "  │"
+            .. "    │"
     )
-    local plugin_count = text("│  " .. kind.Module .. plugins .. " plugins in total  │")
-    local border_lower = text "╰──────────────────────────╯"
+    local lvim_version =
+        text("│  " .. icons.moon .. " LunarVim " .. require("lvim.utils.git").get_lvim_version() .. " │")
+    local plugin_count = text("│  " .. kind.Module .. plugins .. " plugins in total    │")
+    local border_lower =
+        text "╰────────────────────────────╯"
 
     local fortune = require "alpha.fortune"()
     -- fortune = fortune:gsub("^%s+", ""):gsub("%s+$", "")
@@ -152,8 +156,9 @@ M.config = function()
 
     local section = {
         header = header,
-        version = version,
+        nvim_version = nvim_version,
         date = date,
+        lvim_version = lvim_version,
         plugin_count = plugin_count,
         buttons = buttons,
         footer = footer,
@@ -167,7 +172,8 @@ M.config = function()
             { type = "padding", val = 2 },
             section.border_upper,
             section.date,
-            section.version,
+            section.nvim_version,
+            section.lvim_version,
             section.plugin_count,
             section.session_count,
             section.border_lower,

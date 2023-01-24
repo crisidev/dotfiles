@@ -14,7 +14,7 @@ M.config = function()
     require("user.theme").tokyonight()
     lvim.builtin.theme.name = "tokyonight"
 
-    -- Builtins 
+    -- Builtins
     lvim.leader = ","
     lvim.format_on_save = false
     lvim.line_wrap_cursor_movement = false
