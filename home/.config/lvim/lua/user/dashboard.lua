@@ -75,8 +75,8 @@ M.config = function()
     end
 
     local border_upper =
-        text "╭────────────────────────────╮"
-    local date = text("│  " .. icons.calendar .. "Today is " .. os.date "%a %d %b" .. "     │")
+        text "╭─────────────────────────────╮"
+    local date = text("│  " .. icons.calendar .. "Today is " .. os.date "%a %d %b" .. "      │")
     local nvim_version = text(
         "│  "
             .. " Neovim version "
@@ -85,13 +85,13 @@ M.config = function()
             .. vim.version().minor
             .. "."
             .. vim.version().patch
-            .. "    │"
+            .. "     │"
     )
     local lvim_version =
-        text("│  " .. icons.moon .. " LunarVim " .. require("lvim.utils.git").get_lvim_version() .. " │")
-    local plugin_count = text("│  " .. kind.Module .. plugins .. " plugins in total    │")
+        text("│  " .. icons.moon .. " LunarVim " .. require("lvim.utils.git").get_lvim_version() .. "  │")
+    local plugin_count = text("│  " .. kind.Module .. plugins .. " plugins in total     │")
     local border_lower =
-        text "╰────────────────────────────╯"
+        text "╰─────────────────────────────╯"
 
     local fortune = require "alpha.fortune"()
     -- fortune = fortune:gsub("^%s+", ""):gsub("%s+$", "")
