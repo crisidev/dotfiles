@@ -3,7 +3,7 @@ local M = {}
 M.config = function()
     vim.cmd "function! TbToggle_theme(a,b,c,d) \n lua require('user.theme').toggle_theme() \n endfunction"
     vim.cmd "function! Quit_vim(a,b,c,d) \n qa \n endfunction"
-    local icons = require "user.icons"
+    local icons = require("user.icons").icons
     local List = require "plenary.collections.py_list"
     lvim.builtin.bufferline.highlights = {
         fill = {
@@ -27,12 +27,10 @@ M.config = function()
             },
         }
     end
-    lvim.builtin.bufferline.options.show_buffer_icons = true
-    lvim.builtin.bufferline.options.show_buffer_close_icons = true
     lvim.builtin.bufferline.options = {
         navigation = { mode = "uncentered" },
         diagnostics = false,
-        diagnostics_indicator = function(_, _, diagnostics, _, _)
+        diagnostics_indicator = function(_, _, diagnostics, _)
             local result = {}
             local symbols = { error = icons.error, warning = icons.warning }
             for name, count in pairs(diagnostics) do
@@ -45,6 +43,7 @@ M.config = function()
         end,
         mode = "buffers",
         sort_by = "insert_after_current",
+        always_show_bufferline = false,
         groups = {
             options = {
                 toggle_hidden_on_enter = true,
@@ -52,16 +51,15 @@ M.config = function()
             items = {
                 bufferline_groups.builtin.pinned:with { icon = icons.pinned },
                 bufferline_groups.builtin.ungrouped,
-                M.language_files("rust", "#ff6965", "rs"),
-                M.language_files("python", "#006400", "py"),
-                M.language_files("kotlin", "#966fd6", "kt"),
-                M.language_files("java", "#966fd6", "java"),
-                M.language_files("lua", "#ffaa1d", "lua"),
-                M.language_files("ruby", "#ff6965", "rb"),
-                M.language_files("smithy", "#ffff66", "smithy"),
-                M.language_files("go", "#51AFEF", "go"),
+                M.language_files("rust", "rs"),
+                M.language_files("python", "py"),
+                M.language_files("kotlin", "kt"),
+                M.language_files("java", "java"),
+                M.language_files("lua", "lua"),
+                M.language_files("ruby", "rb"),
+                M.language_files("smithy", "smithy"),
+                M.language_files("go", "go"),
                 {
-                    highlight = { sp = "#51AFEF" },
                     name = "tests",
                     icon = icons.test,
                     matcher = function(buf)
@@ -69,7 +67,6 @@ M.config = function()
                     end,
                 },
                 {
-                    highlight = { sp = "#C678DD" },
                     name = "docs",
                     matcher = function(buf)
                         local list = List { "md", "org", "norg", "wiki", "rst", "txt" }
@@ -77,7 +74,6 @@ M.config = function()
                     end,
                 },
                 {
-                    highlight = { sp = "#F6A878" },
                     name = "cfg",
                     matcher = function(buf)
                         return buf.filename:match "go.mod"
@@ -91,6 +87,13 @@ M.config = function()
                             or buf.filename:match "gradle.properties"
                             or buf.filename:match "build.gradle.kts"
                             or buf.filename:match "settings.gradle.kts"
+                    end,
+                },
+                {
+                    name = "terms",
+                    auto_close = true,
+                    matcher = function(buf)
+                        return buf.path:match "term://" ~= nil
                     end,
                 },
             },
@@ -138,33 +141,31 @@ M.config = function()
         separator_style = vim.env.KITTY_WINDOW_ID and "slant" or "thin",
         right_mouse_command = "vert sbuffer %d",
         show_close_icon = false,
-        indicator = { style = "bold" },
-        -- indicator = {
-        --     icon = "⭐", -- this should be omitted if indicator style is not 'icon'
-        --     style = "icon", -- can also be 'underline'|'none',
-        -- },
+        indicator = {
+            -- icon = "⭐", -- this should be omitted if indicator style is not 'icon'
+            style = "none", -- can also be 'underline'|'none',
+        },
         max_name_length = 25,
         max_prefix_length = 15, -- prefix used when a buffer is de-duplicated
         truncate_names = true, -- whether or not tab names should be truncated
-        tab_size = 18,
+        tab_size = 25,
         color_icons = true,
-        show_buffer_close_icons = true,
         diagnostics_update_in_insert = false,
-    }
-
-    lvim.builtin.bufferline.options.custom_areas = {
-        right = function()
-            return {
-                { text = "%@TbToggle_theme@ " .. icons.icons.magic .. " %X" },
-                { text = "%@Quit_vim@ %X", fg = "#f7768e" },
-            }
-        end,
+        show_buffer_icons = true,
+        show_buffer_close_icons = true,
+        custom_areas = {
+            right = function()
+                return {
+                    { text = "%@TbToggle_theme@ " .. icons.magic .. " %X" },
+                    { text = "%@Quit_vim@" .. icons.exit2 .. " %X", fg = "#f7768e" },
+                }
+            end,
+        },
     }
 end
 
-M.language_files = function(name, sp, extension)
+M.language_files = function(name, extension)
     local opts = {
-        highlight = { sp = sp },
         name = name,
         matcher = function(buf)
             return vim.fn.fnamemodify(buf.path, ":e") == extension

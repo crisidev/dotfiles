@@ -5,7 +5,7 @@ M.config = function()
 
     -- Noice
     lvim.builtin.noice = {
-        active = true,
+        active = false,
         lsp_progress = false,
     }
 
@@ -33,15 +33,13 @@ M.config = function()
     -- Debugging
     lvim.builtin.dap.active = true
     -- Twilight
-    lvim.builtin.twilight = { active = true }
+    lvim.builtin.twilight = { enable = true }
     -- Copilot
     lvim.builtin.copilot = { active = true }
     -- Telescope max path length
     lvim.builtin.telescope.max_path_length = 5
     -- LSP Signature help
     lvim.builtin.lsp_signature_help = { active = true }
-    -- Twilight
-    lvim.builtin.twilight.enable = true
     -- Lir
     lvim.builtin.lir.active = false
     -- Breadcrumbs
@@ -77,6 +75,8 @@ M.config = function()
     lvim.builtin.mind = { active = true, root_path = "~/.mind" }
     -- Focus / unfocus numbers
     lvim.builtin.nonumber_unfocus = { active = false }
+    -- Drop stars
+    lvim.builtin.drop = { active = false }
 
     -- Mason
     lvim.builtin.mason.ui.icons = require("user.icons").mason

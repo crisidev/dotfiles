@@ -29,6 +29,7 @@ M.icons = {
     git = "",
     magic = " ",
     exit = " ",
+    exit2 = " ",
     session = " ",
     project = "⚝ ",
     stuka = " ",

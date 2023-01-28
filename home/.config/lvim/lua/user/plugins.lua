@@ -785,6 +785,18 @@ M.config = function()
             event = "VeryLazy",
             enabled = lvim.builtin.mind.active,
         },
+        {
+            "folke/drop.nvim",
+            event = "VimEnter",
+            config = function()
+                require("drop").setup {
+                    theme = "stars", -- xmas - snow - stars - leaves
+                    interval = 100, -- every 150ms we update the drops
+                    screensaver = 1000 * 60 * 5, -- show after 5 minutes. Set to false, to disable
+                }
+            end,
+            enabled = lvim.builtin.drop.active,
+        },
     }
 end
 

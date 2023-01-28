@@ -22,10 +22,10 @@ M.config = function()
     vim.api.nvim_create_augroup("_lvim_user", {})
 
     -- Close Neotree during wq
-    vim.api.nvim_create_autocmd("BufWritePost,VimLeave", {
+    vim.api.nvim_create_autocmd("VimLeave", {
         group = "_lvim_user",
         pattern = "*",
-        desc = "Close Neotree during wq",
+        desc = "Close Neotree during quit",
         command = "Neotree close",
     })
 

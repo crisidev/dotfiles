@@ -87,9 +87,9 @@ M.which_keys_normal = function()
         name = icons.buffers .. "Buffers",
         b = { "<cmd>lua require('user.telescope').buffers()<cr>", "Show buffers" },
         l = { "<cmd>BufferLinePick<cr>", "Pick buffer" },
-        P = { "<cmd>BufferLineTogglePin<cr>", "Pin/Unpin buffer" },
-        p = { "<cmd>BufferLineCyclePrev<cr>", "Next buffer" },
-        n = { "<cmd>BufferLineCycleNext<cr>", "Prev buffer" },
+        x = { "<cmd>BufferLineTogglePin<cr>", "Pin/Unpin buffer" },
+        p = { "<cmd>BufferLineCyclePrev<cr>", "Prev buffer" },
+        n = { "<cmd>BufferLineCycleNext<cr>", "Next buffer" },
     }
     lvim.builtin.which_key.mappings["b"] = {
         "<cmd>lua require('user.telescope').buffers()<cr>",
