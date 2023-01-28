@@ -29,21 +29,6 @@ M.config = function()
         command = "Neotree close",
     })
 
-    if lvim.builtin.nonumber_unfocus.active then
-        vim.api.nvim_create_autocmd("WinEnter", {
-            group = "_lvim_user",
-            pattern = "*",
-            desc = "Enable numbers",
-            command = "set relativenumber number",
-        })
-        vim.api.nvim_create_autocmd("WinLeave", {
-            group = "_lvim_user",
-            pattern = "*",
-            desc = "Disable numbers",
-            command = "set norelativenumber nonumber",
-        })
-    end
-
     -- Codelense viewer
     vim.api.nvim_create_autocmd("CursorHold", {
         group = "_lvim_user",

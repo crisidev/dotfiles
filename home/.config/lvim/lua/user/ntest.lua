@@ -53,15 +53,13 @@ M.config = function()
             require "neotest-plenary",
         },
     }
-    if lvim.builtin.task_runner.active then
-        opts.consumers = {
-            overseer = require "neotest.consumers.overseer",
-        }
-        opts.overseer = {
-            enabled = true,
-            force_default = true,
-        }
-    end
+    opts.consumers = {
+        overseer = require "neotest.consumers.overseer",
+    }
+    opts.overseer = {
+        enabled = true,
+        force_default = true,
+    }
 
     nt.setup(opts)
 end
@@ -89,13 +87,7 @@ end
 
 M.run_all = function()
     local neotest = require "neotest"
-    if lvim.builtin.task_runner.active then
-        neotest.run.run(vim.fn.expand "%")
-    else
-        for _, adapter_id in ipairs(neotest.run.adapters()) do
-            neotest.run.run { suite = true, adapter = adapter_id }
-        end
-    end
+    neotest.run.run(vim.fn.expand "%")
 end
 
 M.cancel = function()

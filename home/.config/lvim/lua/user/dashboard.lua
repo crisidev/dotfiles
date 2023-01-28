@@ -1,11 +1,7 @@
 local M = {}
 
 M.session_load_last = function()
-    if lvim.builtin.session_manager == "possession" then
-        require("possession.commands").load()
-    else
-        require("persisted").load { last = true }
-    end
+    require("persisted").load { last = true }
 end
 
 M.config = function()
@@ -188,62 +184,6 @@ M.config = function()
             margin = 5,
         },
     }
-    if lvim.builtin.session_manager == "possession" then
-        local query = require "possession.query"
-        local get_layout = function()
-            local layout = query.alpha_workspace_layout({}, button, { others_name = "Sessions" })
-            table.remove(layout[1]["val"], 1)
-            table.remove(layout[1]["val"], 1)
-            return layout
-        end
-        local utils = require "possession.utils"
-        local function session()
-            return {
-                type = "group",
-                val = utils.throttle(get_layout, 5000),
-                opts = {
-                    spacing = 1,
-                },
-            }
-        end
-
-        section = {
-            header = header,
-            version = version,
-            date = date,
-            plugin_count = plugin_count,
-            buttons = buttons,
-            footer = footer,
-            border_upper = border_upper,
-            border_lower = border_lower,
-            session = session(),
-        }
-
-        opts = {
-            layout = {
-                { type = "padding", val = 1 },
-                section.header,
-                { type = "padding", val = 2 },
-                section.border_upper,
-                section.date,
-                section.version,
-                section.plugin_count,
-                section.session_count,
-                section.border_lower,
-                -- section.top_bar,
-                { type = "padding", val = 2 },
-                section.buttons,
-                -- section.bot_bar,
-                { type = "padding", val = 1 },
-                -- section.session,
-                { type = "padding", val = 1 },
-                section.footer,
-            },
-            opts = {
-                margin = 5,
-            },
-        }
-    end
     return opts
 end
 

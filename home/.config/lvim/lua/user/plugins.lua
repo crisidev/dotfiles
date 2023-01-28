@@ -28,12 +28,6 @@ M.config = function()
         ------------------------------------------------------------------------------
         -- Git and VCS.
         ------------------------------------------------------------------------------
-        -- Fugitive
-        {
-            "tpope/vim-fugitive",
-            cmd = { "Git", "Gdiffsplit" },
-            ft = { "fugitive" },
-        },
         -- Git blame
         {
             "APZelos/blamer.nvim",
@@ -55,7 +49,7 @@ M.config = function()
             end,
             lazy = true,
             dependencies = { "which-key.nvim" },
-            event = "VeryLazy",
+            cmd = "Octo",
         },
         -- Git linker
         {
@@ -104,15 +98,6 @@ M.config = function()
         -- Telescope live grep
         {
             "nvim-telescope/telescope-live-grep-args.nvim",
-            lazy = true,
-        },
-        {
-            "sudormrfbin/cheatsheet.nvim",
-            dependencies = {
-                { "nvim-telescope/telescope.nvim" },
-                { "nvim-lua/popup.nvim" },
-                { "nvim-lua/plenary.nvim" },
-            },
             lazy = true,
         },
         {
@@ -190,27 +175,6 @@ M.config = function()
             config = function()
                 require("user.inlay").config()
             end,
-            enabled = lvim.builtin.inlay_hints.active,
-        },
-        {
-            "santigo-zero/right-corner-diagnostics.nvim",
-            event = "LspAttach",
-            config = function()
-                vim.diagnostic.config {
-                    -- Disable default virtual text since you are using this plugin
-                    -- already :)
-                    virtual_text = false,
-
-                    -- Do not display diagnostics while you are in insert mode, so if you have
-                    -- `auto_cmds = true` it will not update the diagnostics while you type.
-                    update_in_insert = true,
-                }
-                require("rcd").setup {
-                    position = "bottom",
-                    auto_cmds = true,
-                }
-            end,
-            enabled = lvim.builtin.right_corner_diagnostics.active,
         },
         -- Crates
         {
@@ -306,13 +270,6 @@ M.config = function()
             lazy = true,
             event = { "BufReadPost", "BufNew" },
         },
-        {
-            url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
-            lazy = true,
-            config = function()
-                require("lsp_lines").setup()
-            end,
-        },
         ------------------------------------------------------------------------------
         -- Copilot baby..
         ------------------------------------------------------------------------------
@@ -336,11 +293,8 @@ M.config = function()
         ------------------------------------------------------------------------------
         -- Cmp for command line
         { "hrsh7th/cmp-cmdline" },
-        { "dmitmel/cmp-cmdline-history" },
         -- Cmp for emojis..
         { "hrsh7th/cmp-emoji" },
-        -- Cmp for to calculate maths expressions.
-        { "hrsh7th/cmp-calc" },
         {
             "uga-rosa/cmp-dictionary",
             config = function()
@@ -352,6 +306,7 @@ M.config = function()
                     },
                 }
             end,
+            enabled = lvim.builtin.cmp.dictionary.enable,
         },
         -- Cmp for github/gitlab issues
         {
@@ -403,6 +358,7 @@ M.config = function()
         {
             "rhysd/vim-grammarous",
             cmd = "GrammarousCheck",
+            enabled = lvim.builtin.grammarous.active,
         },
         -- Grammar guard
         {
@@ -427,15 +383,6 @@ M.config = function()
             config = function()
                 require("user.persisted").config()
             end,
-            enabled = lvim.builtin.session_manager == "persisted",
-        },
-        {
-            "jedrzejboczar/possession.nvim",
-            dependencies = { "nvim-lua/plenary.nvim" },
-            config = function()
-                require("user.possession").config()
-            end,
-            enabled = lvim.builtin.session_manager == "possession",
         },
         ------------------------------------------------------------------------------
         -- Zen mode
@@ -481,42 +428,12 @@ M.config = function()
         ------------------------------------------------------------------------------
         -- Zoxide
         { "nanotee/zoxide.vim" },
-        -- Scrollbar
-        {
-            "petertriho/nvim-scrollbar",
-            config = function()
-                require("user.scrollbar").config()
-            end,
-            dependencies = { "nvim-hlslens" },
-        },
         -- Preview jumps
         {
             "nacro90/numb.nvim",
             event = "BufRead",
             config = function()
                 require("numb").setup()
-            end,
-        },
-        -- Window picker
-        {
-            "s1n7ax/nvim-window-picker",
-            version = "1.*",
-            config = function()
-                require("window-picker").setup {
-                    autoselect_one = true,
-                    include_current = false,
-                    filter_rules = {
-                        -- filter using buffer options
-                        bo = {
-                            -- if the file type is one of following, the window will be ignored
-                            filetype = { "neo-tree", "neo-tree-popup", "notify", "quickfix" },
-
-                            -- if the buffer type is one of following, the window will be ignored
-                            buftype = { "terminal" },
-                        },
-                    },
-                    other_win_hl_color = "#e35e4f",
-                }
             end,
         },
         -- Neotree
@@ -560,7 +477,6 @@ M.config = function()
         ------------------------------------------------------------------------------
         -- Noice
         ------------------------------------------------------------------------------
-        { "MunifTanjim/nui.nvim" },
         {
             "folke/noice.nvim",
             event = "VeryLazy",
@@ -573,35 +489,6 @@ M.config = function()
                 "MunifTanjim/nui.nvim",
             },
             enabled = lvim.builtin.noice.active,
-        },
-        ------------------------------------------------------------------------------
-        -- Scrollin
-        ------------------------------------------------------------------------------
-        {
-            "karb94/neoscroll.nvim",
-            config = function()
-                require("neoscroll").setup {
-                    easing_function = "quadratic",
-                    hide_cursor = true,
-                }
-            end,
-            event = "BufRead",
-            enabled = lvim.builtin.smooth_scroll == "neoscroll",
-        },
-        {
-            "declancm/cinnamon.nvim",
-            config = function()
-                require("cinnamon").setup {
-                    default_keymaps = true,
-                    default_delay = 4,
-                    extra_keymaps = true,
-                    extended_keymaps = false,
-                    centered = true,
-                    scroll_limit = 100,
-                }
-            end,
-            event = "BufRead",
-            enabled = lvim.builtin.smooth_scroll == "cinnamon",
         },
         ------------------------------------------------------------------------------
         -- Miscellaneous
@@ -690,25 +577,7 @@ M.config = function()
             end,
             enabled = false,
         },
-        -- Clipboard management
-        {
-            "AckslD/nvim-neoclip.lua",
-            config = function()
-                require("neoclip").setup {
-                    on_paste = {
-                        set_reg = true,
-                    },
-                }
-            end,
-        },
-        -- Legendary
-        {
-            "mrjones2014/legendary.nvim",
-            config = function()
-                require("user.legendary").config()
-            end,
-            enabled = lvim.builtin.legendary.active,
-        },
+        -- Better hl
         {
             "m-demare/hlargs.nvim",
             config = function()
@@ -717,14 +586,13 @@ M.config = function()
             lazy = true,
             event = "VeryLazy",
             dependencies = { "nvim-treesitter/nvim-treesitter" },
-            enabled = lvim.builtin.hlargs.active,
         },
+        -- Testing
         {
             "stevearc/overseer.nvim",
             config = function()
                 require("user.overseer").config()
             end,
-            enabled = lvim.builtin.task_runner.active,
         },
         {
             "nvim-neotest/neotest",
@@ -733,19 +601,11 @@ M.config = function()
             end,
             dependencies = { "nvim-neotest/neotest-plenary" },
             event = { "BufReadPost", "BufNew" },
-            enabled = lvim.builtin.test_runner.active,
         },
         { "nvim-neotest/neotest-go", event = { "BufEnter *.go" } },
         { "nvim-neotest/neotest-python", event = { "BufEnter *.py" } },
         { "rouge8/neotest-rust", event = { "BufEnter *.rs" } },
         -- Hop
-        {
-            "ggandor/leap.nvim",
-            config = function()
-                require("user.leap").config()
-            end,
-            enabled = lvim.builtin.motion_provider == "leap",
-        },
         {
             "phaazon/hop.nvim",
             event = "VeryLazy",
@@ -753,7 +613,6 @@ M.config = function()
             config = function()
                 require("user.hop").config()
             end,
-            enabled = lvim.builtin.motion_provider == "hop",
         },
         -- Matchup
         {
@@ -766,14 +625,19 @@ M.config = function()
                 vim.g.matchup_matchparen_offscreen = { method = "popup" }
             end,
         },
-        { "mtdl9/vim-log-highlighting", ft = { "text", "log" } },
+        -- Highligh logs
+        {
+            "mtdl9/vim-log-highlighting",
+            ft = { "text", "log" },
+            lazy = true,
+        },
+        -- Powerful tab
         {
             "abecodes/tabout.nvim",
             config = function()
                 require("user.tabout").config()
             end,
         },
-        { "MunifTanjim/nui.nvim" },
         -- Mind
         {
             "phaazon/mind.nvim",
@@ -785,6 +649,7 @@ M.config = function()
             event = "VeryLazy",
             enabled = lvim.builtin.mind.active,
         },
+        -- Silly stars
         {
             "folke/drop.nvim",
             event = "VimEnter",

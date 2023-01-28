@@ -3,12 +3,6 @@ local M = {}
 M.config = function()
     local icons = require("user.icons").icons
 
-    -- Noice
-    lvim.builtin.noice = {
-        active = false,
-        lsp_progress = false,
-    }
-
     -- Theme
     lvim.colorscheme = "tokyonight"
     require("user.theme").tokyonight()
@@ -18,26 +12,31 @@ M.config = function()
     lvim.leader = ","
     lvim.format_on_save = false
     lvim.line_wrap_cursor_movement = false
+    lvim.reload_config_on_save = false
     lvim.termguicolors = true
     lvim.transparent_window = false
     lvim.reload_config_on_save = true
     lvim.debug = false
 
-    -- Cmp borders
-    lvim.builtin.borderless_cmp = true
     -- Tree support
     lvim.builtin.tree_provider = "neo-tree"
+    lvim.builtin.nvimtree.active = false
     -- Project
     lvim.builtin.project.active = true
     lvim.builtin.project.detection_methods = { "lsp", "pattern" }
     -- Debugging
     lvim.builtin.dap.active = true
+    -- Noice
+    lvim.builtin.noice = {
+        active = false,
+        lsp_progress = false,
+    }
+    -- Grammarous
+    lvim.builtin.grammarous = { active = false }
     -- Twilight
     lvim.builtin.twilight = { enable = true }
     -- Copilot
     lvim.builtin.copilot = { active = true }
-    -- Telescope max path length
-    lvim.builtin.telescope.max_path_length = 5
     -- LSP Signature help
     lvim.builtin.lsp_signature_help = { active = true }
     -- Lir
@@ -52,37 +51,20 @@ M.config = function()
     lvim.builtin.global_statusline = true
     -- Winbar provider
     lvim.builtin.winbar_provider = "navic"
-    -- Session manager
-    lvim.builtin.session_manager = "persisted"
-    -- Movements
-    lvim.builtin.motion_provider = "hop"
     -- Cmpline
     lvim.builtin.cmp.cmdline.enable = false
-    -- Legendary
-    lvim.builtin.legendary = { active = false }
-    -- Hlargs
-    lvim.builtin.hlargs = { active = true }
-    -- UltTest
-    lvim.builtin.test_runner = { active = true }
-    lvim.builtin.task_runner = { active = true }
+    lvim.builtin.cmp.dictionary = { enable = false }
     -- Big file management
     lvim.builtin.bigfile.active = true
     -- Inlay hints
     lvim.builtin.inlay_hints = { active = true }
-    -- Scrolling
-    lvim.builtin.smooth_scroll = false
     -- Mind not taking
     lvim.builtin.mind = { active = true, root_path = "~/.mind" }
-    -- Focus / unfocus numbers
-    lvim.builtin.nonumber_unfocus = { active = false }
     -- Drop stars
     lvim.builtin.drop = { active = false }
 
     -- Mason
     lvim.builtin.mason.ui.icons = require("user.icons").mason
-
-    -- Nvimtree
-    lvim.builtin.nvimtree.active = false
 
     -- Dashboard
     lvim.builtin.alpha.active = true
@@ -94,12 +76,6 @@ M.config = function()
     lvim.builtin.gitsigns.opts._extmark_signs = true
     lvim.builtin.gitsigns.opts.attach_to_untracked = false
     lvim.builtin.gitsigns.opts.current_line_blame_formatter = " <author>, <author_time> · <summary>"
-
-    -- Right corner diagnostics
-    lvim.builtin.right_corner_diagnostics = { active = false }
-
-    lvim.reload_config_on_save = false
-
     -- Log level
     lvim.log.level = "warn"
 end

@@ -98,10 +98,6 @@ M.lsp_normal_keys = function()
                 "<cmd>lua vim.diagnostic.open_float()<cr>",
                 icons.hint .. "Show line diagnostics",
             },
-            L = {
-                "<cmd>lua require('lsp_lines').toggle()<cr>",
-                icons.ls_active .. "Toggle LSP lines",
-            },
             e = {
                 "<cmd>lua require('user.telescope').diagnostics()<cr>",
                 icons.hint .. "All diagnostics",
@@ -169,16 +165,36 @@ M.lsp_normal_keys = function()
                 l = { "<cmd>Trouble loclist<cr>", "LocationList" },
                 w = { "<cmd>Trouble workspace_diagnostics<cr>", "Wordspace Diagnostics" },
             },
+            -- Inlay hints
+            E = { "<cmd>lua require('lsp-inlayhints').toggle()<cr>", icons.inlay .. "Toggle Inlay" },
+            -- Neotest
+            T = {
+                name = icons.settings .. "Tests",
+                f = {
+                    "<cmd>lua require('neotest').run.run({vim.fn.expand('%'), env=require('user.ntest').get_env()})<cr>",
+                    "File",
+                },
+                o = { "<cmd>lua require('neotest').output.open({ enter = true, short = false })<cr>", "Output" },
+                r = { "<cmd>lua require('neotest').run.run({env=require('user.ntest').get_env()})<cr>", "Run" },
+                a = { "<cmd>lua require('user.ntest').run_all()<cr>", "Run All" },
+                c = { "<cmd>lua require('user.ntest').cancel()<cr>", "Cancel" },
+                R = { "<cmd>lua require('user.ntest').run_file_sync()<cr>", "Run Async" },
+                s = { "<cmd>lua require('neotest').summary.toggle()<cr>", "Toggle summary" },
+                n = { "<cmd>lua require('neotest').jump.next({ status = 'failed' })<cr>", "Jump to next failed" },
+                p = {
+                    "<cmd>lua require('neotest').jump.prev({ status = 'failed' })<cr>",
+                    "Jump to previous failed",
+                },
+                d = { "<cmd>lua require('neotest').run.run({ strategy = 'dap' })<cr>", "Dap Run" },
+                l = { "<cmd>lua require('neotest').run.run_last()<cr>", "Last" },
+                x = { "<cmd>lua require('neotest').run.stop()<cr>", "Stop" },
+                w = { "<cmd>lua require('neotest').watch.watch()<cr>", "Watch" },
+                t = { "<cmd>OverseerToggle<cr>", "Toggle tests" },
+                T = { "<cmd>OverseerRun<cr>", "Run task" },
+                Tc = { "<cmd>OverseerRunCmd<cr>", "Run task with Cmd" },
+            },
         },
     }
-
-    if lvim.builtin.inlay_hints.active then
-        wk.register {
-            ["f"] = {
-                E = { "<cmd>lua require('lsp-inlayhints').toggle()<cr>", icons.inlay .. "Toggle Inlay" },
-            },
-        }
-    end
 
     -- Incremental rename
     if lvim.builtin.noice.active then
@@ -217,39 +233,6 @@ M.lsp_normal_keys = function()
                     },
                     s = { "<cmd>Copilot suggestion<cr>", "Suggestion" },
                     S = { "<cmd>Copilot suggestion toggle_auth_trigger<cr>", "Suggestion auto trigger" },
-                },
-            },
-        }
-    end
-
-    -- Neotest
-    if lvim.builtin.test_runner.active then
-        wk.register {
-            ["f"] = {
-                T = {
-                    name = icons.settings .. "Tests",
-                    f = {
-                        "<cmd>lua require('neotest').run.run({vim.fn.expand('%'), env=require('user.ntest').get_env()})<cr>",
-                        "File",
-                    },
-                    o = { "<cmd>lua require('neotest').output.open({ enter = true, short = false })<cr>", "Output" },
-                    r = { "<cmd>lua require('neotest').run.run({env=require('user.ntest').get_env()})<cr>", "Run" },
-                    a = { "<cmd>lua require('user.ntest').run_all()<cr>", "Run All" },
-                    c = { "<cmd>lua require('user.ntest').cancel()<cr>", "Cancel" },
-                    R = { "<cmd>lua require('user.ntest').run_file_sync()<cr>", "Run Async" },
-                    s = { "<cmd>lua require('neotest').summary.toggle()<cr>", "Toggle summary" },
-                    n = { "<cmd>lua require('neotest').jump.next({ status = 'failed' })<cr>", "Jump to next failed" },
-                    p = {
-                        "<cmd>lua require('neotest').jump.prev({ status = 'failed' })<cr>",
-                        "Jump to previous failed",
-                    },
-                    d = { "<cmd>lua require('neotest').run.run({ strategy = 'dap' })<cr>", "Dap Run" },
-                    l = { "<cmd>lua require('neotest').run.run_last()<cr>", "Last" },
-                    x = { "<cmd>lua require('neotest').run.stop()<cr>", "Stop" },
-                    w = { "<cmd>lua require('neotest').watch.watch()<cr>", "Watch" },
-                    t = { "<cmd>OverseerToggle<cr>", "Toggle tests" },
-                    T = { "<cmd>OverseerRun<cr>", "Run task" },
-                    Tc = { "<cmd>OverseerRunCmd<cr>", "Run task with Cmd" },
                 },
             },
         }

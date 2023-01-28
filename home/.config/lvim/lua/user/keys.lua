@@ -2,14 +2,6 @@ local M = {}
 
 M.which_keys_normal = function()
     local icons = require("user.icons").icons
-    local picker = require "window-picker"
-
-    function _pick_window()
-        local picked_window_id = picker.pick_window {
-            include_current_win = true,
-        } or vim.api.nvim_get_current_win()
-        vim.api.nvim_set_current_win(picked_window_id)
-    end
 
     -- Find
     lvim.builtin.which_key.mappings["F"] = {
@@ -97,27 +89,14 @@ M.which_keys_normal = function()
     }
 
     -- Sessions
-    if lvim.builtin.session_manager == "persisted" then
-        lvim.builtin.which_key.mappings["S"] = {
-            name = icons.session .. "Session",
-            l = { "<cmd>lua require('user.telescope').session()<cr>", "List available sessions" },
-            d = { "<cmd>SessionDelete<cr>", "Delete session" },
-            L = { "<cmd>SessionLoadLast<cr>", "Restore last session" },
-            c = { "<cmd>SessionLoad<cr>", "Restore current dir session" },
-            s = { "<cmd>SessionSave<cr>", "Save current session" },
-        }
-    elseif lvim.builtin.session_manager == "possession" then
-        lvim.builtin.which_key.mappings["S"] = {
-            name = icons.session .. "Session",
-            l = { "<cmd>lua require('user.telescope').session()<cr>", "List available sessions" },
-            v = { "<cmd>PossessionList<cr>", "List available session" },
-            d = { "<cmd>PossessionDelete<cr>", "Delete current session" },
-            L = { "<cmd>PossessionLoad<cr>", "Load current dir session" },
-            c = { "<cmd>PossessionClose<cr>", "Close current session" },
-            s = { "<cmd>PossessionSave<cr>", "Save current session" },
-            S = { "<cmd>PossessionShow<cr>", "Open session" },
-        }
-    end
+    lvim.builtin.which_key.mappings["S"] = {
+        name = icons.session .. "Session",
+        l = { "<cmd>lua require('user.telescope').session()<cr>", "List available sessions" },
+        d = { "<cmd>SessionDelete<cr>", "Delete session" },
+        L = { "<cmd>SessionLoadLast<cr>", "Restore last session" },
+        c = { "<cmd>SessionLoad<cr>", "Restore current dir session" },
+        s = { "<cmd>SessionSave<cr>", "Save current session" },
+    }
 
     -- Git
     lvim.builtin.which_key.mappings["g"] = {
@@ -154,17 +133,19 @@ M.which_keys_normal = function()
     }
 
     -- Grammarous
-    lvim.builtin.which_key.mappings["H"] = {
-        name = icons.grammar .. "Grammarous",
-        c = { "<cmd>GrammarousCheck<cr>", "Run grammar check" },
-        p = { "<Plug>(grammarous-move-to-previous-error)", "Goto previous error" },
-        n = { "<Plug>(grammarous-move-to-next-error)", "Goto next error" },
-        f = { "<Plug>(grammarous-fixit)", "Fix the error under the cursor" },
-        F = { "<Plug>(grammarous-fixall)", "Fix all errors int the document" },
-        o = { "<Plug>(grammarous-open-info-window)", "Open info window" },
-        q = { "<Plug>(grammarous-close-info-window)", "Close info window" },
-        d = { "<Plug>(grammarous-disable-rule)", "Disable rule under cursor" },
-    }
+    if lvim.builtin.grammarous.active then
+        lvim.builtin.which_key.mappings["H"] = {
+            name = icons.grammar .. "Grammarous",
+            c = { "<cmd>GrammarousCheck<cr>", "Run grammar check" },
+            p = { "<Plug>(grammarous-move-to-previous-error)", "Goto previous error" },
+            n = { "<Plug>(grammarous-move-to-next-error)", "Goto next error" },
+            f = { "<Plug>(grammarous-fixit)", "Fix the error under the cursor" },
+            F = { "<Plug>(grammarous-fixall)", "Fix all errors int the document" },
+            o = { "<Plug>(grammarous-open-info-window)", "Open info window" },
+            q = { "<Plug>(grammarous-close-info-window)", "Close info window" },
+            d = { "<Plug>(grammarous-disable-rule)", "Disable rule under cursor" },
+        }
+    end
 
     -- Nvimtree
     if lvim.builtin.tree_provider == "neo-tree" then
@@ -176,9 +157,6 @@ M.which_keys_normal = function()
     -- Save
     lvim.builtin.which_key.mappings["w"] =
         { "<cmd>w! | lua vim.notify('File written')<cr>", icons.ok .. " Save buffer" }
-
-    -- Window picket
-    lvim.builtin.which_key.mappings["W"] = { "<cmd>lua _pick_window()<cr>", icons.world .. "Pick window" }
 
     -- Close buffer with Leader-q
     lvim.builtin.which_key.mappings["q"] = {
@@ -209,19 +187,17 @@ M.which_keys_normal = function()
     }
 
     -- Overseer
-    if lvim.builtin.task_runner.active then
-        lvim.builtin.which_key.mappings["O"] = {
-            name = icons.config .. "Overseer",
-            l = { "<cmd>OverseerLoadBundle<CR>", "Load Bundle" },
-            s = { "<cmd>OverseerSaveBundle<CR>", "Save Bundle" },
-            n = { "<cmd>OverseerBuild<CR>", "New Task" },
-            q = { "<cmd>OverseerQuickAction<CR>", "Quick Action" },
-            f = { "<cmd>OverseerTaskAction<CR>", "Task Action" },
-            t = { "<cmd>OverseerToggle<cr>", "Toggle Output" },
-            r = { "<cmd>OverseerRun<cr>", "Run" },
-            R = { "<cmd>OverseerRunCmd<cr>", "Run with Cmd" },
-        }
-    end
+    lvim.builtin.which_key.mappings["O"] = {
+        name = icons.config .. "Overseer",
+        l = { "<cmd>OverseerLoadBundle<CR>", "Load Bundle" },
+        s = { "<cmd>OverseerSaveBundle<CR>", "Save Bundle" },
+        n = { "<cmd>OverseerBuild<CR>", "New Task" },
+        q = { "<cmd>OverseerQuickAction<CR>", "Quick Action" },
+        f = { "<cmd>OverseerTaskAction<CR>", "Task Action" },
+        t = { "<cmd>OverseerToggle<cr>", "Toggle Output" },
+        r = { "<cmd>OverseerRun<cr>", "Run" },
+        R = { "<cmd>OverseerRunCmd<cr>", "Run with Cmd" },
+    }
 
     -- Names
     lvim.builtin.which_key.mappings["L"]["name"] = icons.moon .. " Lunarvim"

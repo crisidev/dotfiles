@@ -177,24 +177,12 @@ M.persisted = function()
     require("telescope").extensions.persisted.persisted(M.get_theme())
 end
 
-M.possession = function()
-    require("telescope").extensions.possession.list(M.get_theme())
-end
-
-M.neoclip = function()
-    require("telescope").extensions.neoclip.neoclip(M.get_theme())
-end
-
 M.smart_open = function()
     require("telescope").extensions.smart_open.smart_open(M.get_theme())
 end
 
 M.session = function()
-    if lvim.builtin.session_manager == "possession" then
-        M.possession()
-    else
-        M.persisted()
-    end
+    M.persisted()
 end
 
 -- show refrences to this using language server
@@ -336,6 +324,7 @@ end
 M.config = function()
     -- Telescope
     local icons = require("user.icons").icons
+    lvim.builtin.telescope.max_path_length = 5
     lvim.builtin.telescope.defaults.dynamic_preview_title = true
     lvim.builtin.telescope.defaults.layout_config = M.layout_config()
     lvim.builtin.telescope.defaults.path_display = M.path_display()
@@ -415,12 +404,7 @@ M.config = function()
         telescope.load_extension "zoxide"
         telescope.load_extension "repo"
         telescope.load_extension "file_browser"
-        if lvim.builtin.session_manager == "persisted" then
-            telescope.load_extension "persisted"
-        elseif lvim.builtin.session_manager == "possession" then
-            telescope.load_extension "possession"
-        end
-        telescope.load_extension "neoclip"
+        telescope.load_extension "persisted"
         telescope.load_extension "smart_open"
     end
 end
