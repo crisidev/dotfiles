@@ -340,6 +340,10 @@ M.config = function()
             "mzlogin/vim-markdown-toc",
             ft = "markdown",
         },
+        {
+            "jghauser/follow-md-links.nvim",
+            ft = { "markdown" },
+        },
         ------------------------------------------------------------------------------
         -- Spelling and grammar
         ------------------------------------------------------------------------------
@@ -661,6 +665,23 @@ M.config = function()
                 }
             end,
             enabled = lvim.builtin.drop.active,
+        },
+        -- Translate
+        {
+            "potamides/pantran.nvim",
+            lazy = true,
+            cmd = "Pantran",
+            confg = function()
+                require("pantran").setup {
+                    default_engine = "argos",
+                    engines = {
+                        argos = {
+                            default_source = "auto",
+                            default_target = "auto",
+                        },
+                    },
+                }
+            end,
         },
     }
 end
