@@ -277,7 +277,7 @@ M.lsp_visual_keys = function()
             -- Range code actions
             a = {
                 "<cmd>lua vim.lsp.buf.range_code_action()<cr>",
-                icons.code_lens_action .. " Code actions",
+                icons.code_lens_action .. "Code actions",
             },
         },
     }, { mode = "v" })

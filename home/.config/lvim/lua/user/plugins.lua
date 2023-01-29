@@ -406,6 +406,7 @@ M.config = function()
                 require("user.twilight").config()
             end,
             lazy = true,
+            cmd = "Twilight",
             enabled = lvim.builtin.twilight.enable,
         },
         ------------------------------------------------------------------------------
