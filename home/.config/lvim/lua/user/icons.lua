@@ -108,6 +108,22 @@ M.todo_comments = {
     SHIELD = "",
 }
 
+M.languages = {
+    c = "",
+    rust = "",
+    js = "",
+    ts = "",
+    ruby = "",
+    vim = "",
+    git = "",
+    c_sharp = "",
+    python = "",
+    go = "",
+    java = "",
+    kotlin = "",
+    toml = "",
+}
+
 M.file_icons = {
     Brown = { "" },
     Aqua = { "" },

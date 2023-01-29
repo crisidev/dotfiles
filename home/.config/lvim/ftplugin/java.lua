@@ -17,19 +17,22 @@ vim.cmd "command! -buffer JdtUpdateConfig lua require('jdtls').update_project_co
 vim.cmd "command! -buffer JdtBytecode lua require('jdtls').javap()"
 vim.cmd "command! -buffer JdtJshell lua require('jdtls').jshell()"
 
-local icons = require("user.icons").icons
+local icons = require "user.icons"
 local which_key = require "which-key"
 which_key.register {
     ["f"] = {
         B = {
-            name = icons.nuclear .. " JdtLs Tools",
-            o = { "<Cmd>lua require('jdtls').organize_imports()<CR>", "Organize Imports" },
-            v = { "<Cmd>lua require('jdtls').extract_variable()<CR>", "Extract Variable" },
-            c = { "<Cmd>lua require('jdtls').extract_constant()<CR>", "Extract Constant" },
-            m = { "<Cmd>lua require('jdtls').extract_method(true)<CR>", "Extract Method" },
-            t = { "<Cmd>lua require('jdtls').test_nearest_method()<CR>", "Test Method" },
-            T = { "<Cmd>lua require('jdtls').test_class()<CR>", "Test Class" },
-            u = { "<Cmd>JdtUpdateConfig<CR>", "Update Config" },
+            name = icons.icons.nuclear .. " Build helpers",
+            j = {
+                name = icons.languages.java .. " Java",
+                o = { "<Cmd>lua require('jdtls').organize_imports()<CR>", "Organize Imports" },
+                v = { "<Cmd>lua require('jdtls').extract_variable()<CR>", "Extract Variable" },
+                c = { "<Cmd>lua require('jdtls').extract_constant()<CR>", "Extract Constant" },
+                m = { "<Cmd>lua require('jdtls').extract_method(true)<CR>", "Extract Method" },
+                t = { "<Cmd>lua require('jdtls').test_nearest_method()<CR>", "Test Method" },
+                T = { "<Cmd>lua require('jdtls').test_class()<CR>", "Test Class" },
+                u = { "<Cmd>JdtUpdateConfig<CR>", "Update Config" },
+            },
         },
     },
 }

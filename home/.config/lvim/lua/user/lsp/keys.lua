@@ -99,8 +99,12 @@ M.lsp_normal_keys = function()
                 icons.hint .. "Show line diagnostics",
             },
             e = {
-                "<cmd>lua require('user.telescope').diagnostics()<cr>",
-                icons.hint .. "All diagnostics",
+                "<cmd>Trouble document_diagnostics<cr>",
+                icons.hint .. "Document diagnostics",
+            },
+            E = {
+                "<cmd>Trouble workspace_diagnostics<cr>",
+                icons.hint .. "Wordspace diagnostics",
             },
             N = {
                 "<cmd>lua vim.diagnostic.goto_next({float = {border = 'rounded', focusable = false, source = 'always'}, severity = {min = vim.diagnostic.severity.ERROR}})<cr>",
@@ -166,7 +170,7 @@ M.lsp_normal_keys = function()
                 w = { "<cmd>Trouble workspace_diagnostics<cr>", "Wordspace Diagnostics" },
             },
             -- Inlay hints
-            E = { "<cmd>lua require('lsp-inlayhints').toggle()<cr>", icons.inlay .. "Toggle Inlay" },
+            w = { "<cmd>lua require('lsp-inlayhints').toggle()<cr>", icons.inlay .. "Toggle Inlay" },
             -- Neotest
             T = {
                 name = icons.settings .. "Tests",

@@ -24,17 +24,20 @@ linters.setup {
 }
 
 -- Additional mappings
-local icons = require("user.icons").icons
+local icons = require "user.icons"
 local which_key = require "which-key"
 which_key.register {
     ["f"] = {
         B = {
-            name = icons.nuclear .. " Python Tools",
-            c = { "<cmd>lua require('dap-python').test_class()<cr>", "Test class" },
-            m = { "<cmd>lua require('dap-python').test_method()<cr>", "Test method" },
-            s = { "<cmd>lua require('dap-python').debug_selection()<cr>", "Debug selection" },
-            e = { "<cmd>lua require('swenv.api').pick_venv()<cr>", "Pick env" },
-            E = { "<cmd>lua require('swenv.api').get_current_venv()<cr>", "Show env" },
+            name = icons.icons.nuclear .. " Build helpers",
+            p = {
+                name = icons.languages.python .. " Python",
+                c = { "<cmd>lua require('dap-python').test_class()<cr>", "Test class" },
+                m = { "<cmd>lua require('dap-python').test_method()<cr>", "Test method" },
+                s = { "<cmd>lua require('dap-python').debug_selection()<cr>", "Debug selection" },
+                e = { "<cmd>lua require('swenv.api').pick_venv()<cr>", "Pick env" },
+                E = { "<cmd>lua require('swenv.api').get_current_venv()<cr>", "Show env" },
+            },
         },
     },
 }
