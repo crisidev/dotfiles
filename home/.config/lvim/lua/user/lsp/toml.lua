@@ -45,7 +45,24 @@ M.build_tools = function()
             c = { "<cmd>lua require('crates').open_crates_io()<cr>", "Open crates.io" },
         },
     }
+    local vopts = {
+        mode = "v",
+        prefix = "f",
+        buffer = vim.fn.bufnr(),
+        silent = true,
+        noremap = true,
+        nowait = true,
+    }
+    -- Cargo tools mappings
+    local vmappings = {
+        B = {
+            name = icons.languages.toml .. " Build helpers",
+            u = { "<cmd>lua require('crates').update_crates()<cr>", "Update crates" },
+            U = { "<cmd>lua require('crates').upgrade_crates()<cr>", "Upgrade crates" },
+        },
+    }
     which_key.register(mappings, opts)
+    which_key.register(vmappings, vopts)
 end
 
 return M
