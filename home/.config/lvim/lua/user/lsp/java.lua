@@ -164,4 +164,38 @@ M.config = function()
     jdtls.start_or_attach(config)
 end
 
+M.build_tools = function()
+    -- Additional mappings
+    vim.cmd "command! -buffer -nargs=? -complete=custom,v:lua.require'jdtls'._complete_compile JdtCompile lua require('jdtls').compile(<f-args>)"
+    vim.cmd "command! -buffer -nargs=? -complete=custom,v:lua.require'jdtls'._complete_set_runtime JdtSetRuntime lua require('jdtls').set_runtime(<f-args>)"
+    vim.cmd "command! -buffer JdtUpdateConfig lua require('jdtls').update_project_config()"
+    -- vim.cmd "command! -buffer JdtJol lua require('jdtls').jol()"
+    vim.cmd "command! -buffer JdtBytecode lua require('jdtls').javap()"
+    vim.cmd "command! -buffer JdtJshell lua require('jdtls').jshell()"
+
+    local icons = require "user.icons"
+    local which_key = require "which-key"
+    local opts = {
+        mode = "n",
+        prefix = "f",
+        buffer = vim.fn.bufnr(),
+        silent = true,
+        noremap = true,
+        nowait = true,
+    }
+    local mappings = {
+        j = {
+            name = icons.languages.java .. " Build helpers",
+            o = { "<Cmd>lua require('jdtls').organize_imports()<CR>", "Organize Imports" },
+            v = { "<Cmd>lua require('jdtls').extract_variable()<CR>", "Extract Variable" },
+            c = { "<Cmd>lua require('jdtls').extract_constant()<CR>", "Extract Constant" },
+            m = { "<Cmd>lua require('jdtls').extract_method(true)<CR>", "Extract Method" },
+            t = { "<Cmd>lua require('jdtls').test_nearest_method()<CR>", "Test Method" },
+            T = { "<Cmd>lua require('jdtls').test_class()<CR>", "Test Class" },
+            u = { "<Cmd>JdtUpdateConfig<CR>", "Update Config" },
+        },
+    }
+    which_key.register(mappings, opts)
+end
+
 return M

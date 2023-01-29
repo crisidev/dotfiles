@@ -121,6 +121,60 @@ M.config = function()
             end,
         })
     end
+
+    -- Build tools mappings
+    vim.api.nvim_create_augroup("_build_tools", {})
+
+    -- Cargo.toml
+    vim.api.nvim_create_autocmd("FileType", {
+        group = "_build_tools",
+        pattern = "toml",
+        desc = "Set additional buffer keymaps for Cargo.toml",
+        callback = require("user.lsp.toml").build_tools,
+    })
+
+    -- Rust
+    vim.api.nvim_create_autocmd("FileType", {
+        group = "_build_tools",
+        pattern = { "rust", "rs" },
+        desc = "Set additional buffer keymaps for Rust files",
+        callback = require("user.lsp.rust").build_tools,
+    })
+
+    -- Python
+    vim.api.nvim_create_autocmd("FileType", {
+        group = "_build_tools",
+        pattern = "python",
+        desc = "Set additional buffer keymaps for Python files",
+        callback = require("user.lsp.python").build_tools,
+    })
+
+    -- Java
+    vim.api.nvim_create_autocmd("FileType", {
+        group = "_build_tools",
+        pattern = "java",
+        desc = "Set additional buffer keymaps for Java files",
+        callback = function(_args)
+            require("user.lsp.java").config()
+            require("user.lsp.java").build_tools()
+        end,
+    })
+
+    -- Js/Ts
+    vim.api.nvim_create_autocmd("FileType", {
+        group = "_build_tools",
+        pattern = { "typescript", "javascript" },
+        desc = "Set additional buffer keymaps for Typescript files",
+        callback = require("user.lsp.typescript").build_tools,
+    })
+
+    -- Go
+    vim.api.nvim_create_autocmd("FileType", {
+        group = "_build_tools",
+        pattern = "go",
+        desc = "Set additional buffer keymaps for Go files",
+        callback = require("user.lsp.go").build_tools,
+    })
 end
 
 return M

@@ -177,4 +177,28 @@ M.config = function()
     }
 end
 
+M.build_tools = function()
+    local icons = require "user.icons"
+    local which_key = require "which-key"
+    local opts = {
+        mode = "n",
+        prefix = "f",
+        buffer = vim.fn.bufnr(),
+        silent = true,
+        noremap = true,
+        nowait = true,
+    }
+    local mappings = {
+        B = {
+            name = icons.languages.ts .. " Build helpers",
+            a = { "<cmd>TypescriptAddMissingImports<cr>", "Add missing imports" },
+            o = { "<cmd>TypescriptOrganizeImports<cr>", "Organize imports" },
+            f = { "<cmd>TypescriptFixAll<cr>", "Fix all" },
+            r = { "<cmd>TypescriptRenameFile<cr>", "Rename file" },
+            u = { "<cmd>TypescriptRemoveUnused<cr>", "Remove unused" },
+        },
+    }
+    which_key.register(mappings, opts)
+end
+
 return M

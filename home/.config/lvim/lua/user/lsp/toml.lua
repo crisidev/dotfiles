@@ -16,4 +16,36 @@ M.config = function()
     require("lvim.lsp.manager").setup("taplo", opts)
 end
 
+M.build_tools = function()
+    local which_key = require "which-key"
+    local icons = require "user.icons"
+    local opts = {
+        mode = "n",
+        prefix = "f",
+        buffer = vim.fn.bufnr(),
+        silent = true,
+        noremap = true,
+        nowait = true,
+    }
+    -- Cargo tools mappings
+    local mappings = {
+        B = {
+            name = icons.languages.toml .. " Build helpers",
+            t = { "<cmd>lua require('crates').toggle()<cr>", "Toggle crates info" },
+            r = { "<cmd>lua require('crates').reload()<cr>", "Reload crates info" },
+            v = { "<cmd>lua require('crates').show_versions_popup()<cr>", "Show versions popup" },
+            f = { "<cmd>lua require('crates').show_features_popup()<cr>", "Show features popup" },
+            u = { "<cmd>lua require('crates').update_crate()<cr>", "Update crate" },
+            a = { "<cmd>lua require('crates').update_all_crates()<cr>", "Update all crates" },
+            U = { "<cmd>lua require('crates').upgrade_crate()<cr>", "Upgrade crate" },
+            A = { "<cmd>lua require('crates').upgrade_all_crates()<cr>", "Upgrade all crates" },
+            h = { "<cmd>lua require('crates').open_homepage()<cr>", "Open crate homepage" },
+            R = { "<cmd>lua require('crates').open_repository()<cr>", "Open crate repository" },
+            d = { "<cmd>lua require('crates').open_documentation()<cr>", "Open crate documentation" },
+            c = { "<cmd>lua require('crates').open_crates_io()<cr>", "Open crates.io" },
+        },
+    }
+    which_key.register(mappings, opts)
+end
+
 return M

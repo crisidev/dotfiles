@@ -161,7 +161,7 @@ M.lsp_normal_keys = function()
             },
             -- Trouble
             D = {
-                name = icons.error .. "Trouble",
+                name = icons.error .. "Diagnostics",
                 r = { "<cmd>Trouble lsp_references<cr>", "References" },
                 f = { "<cmd>Trouble lsp_definitions<cr>", "Definitions" },
                 d = { "<cmd>Trouble document_diagnostics<cr>", "Diagnostics" },

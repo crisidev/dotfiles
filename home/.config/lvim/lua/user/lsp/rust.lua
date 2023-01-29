@@ -73,4 +73,37 @@ M.config = function()
     }
 end
 
+M.build_tools = function()
+    local which_key = require "which-key"
+    local icons = require "user.icons"
+    local opts = {
+        mode = "n",
+        prefix = "f",
+        buffer = vim.fn.bufnr(),
+        silent = true,
+        noremap = true,
+        nowait = true,
+    }
+    local mappings = {
+        K = { "<cmd>RustOpenExternalDocs<cr>", icons.icons.docs .. "Open docs.rs" },
+        B = {
+            name = icons.languages.rust .. " Build helpers",
+            a = { "<cmd>RustCodeAction<cr>", "Code action" },
+            i = { "<cmd>RustToggleInlayHints<cr>", "Toggle inlay hints" },
+            r = { "<cmd>RustRunnables<cr>", "Run targes" },
+            R = { "<cmd>RustDebuggables<cr>", "Debug targes" },
+            e = { "<cmd>RustExpandMacro<cr>", "Expand macro" },
+            m = { "<cmd>RustParentModule<cr>", "Parent module" },
+            u = { "<cmd>RustMoveItemUp<cr>", "Move item up" },
+            d = { "<cmd>RustMoveItemDown<cr>", "Move item down" },
+            h = { "<cmd>RustHoverActions<cr>", "Hover actions" },
+            H = { "<cmd>RustHoverRange<cr>", "Hover range" },
+            c = { "<cmd>RustOpenCargo<cr>", "Open Cargo.toml" },
+            w = { "<cmd>RustReloadWorkspace<cr>", "Reload workspace" },
+            D = { "<cmd>RustOpenExternalDocs<cr>", "Open documentation for identifier" },
+        },
+    }
+    which_key.register(mappings, opts)
+end
+
 return M

@@ -36,15 +36,22 @@ M.config = function()
         nls.builtins.formatting.stylua,
         nls.builtins.formatting.goimports,
         nls.builtins.formatting.gofumpt,
+        nls.builtins.formatting.clang_format,
         nls.builtins.formatting.cmake_format,
         nls.builtins.formatting.scalafmt,
         nls.builtins.formatting.sqlformat,
         nls.builtins.formatting.terraform_fmt,
         -- Support for nix files
         nls.builtins.formatting.alejandra,
-        nls.builtins.formatting.shfmt,
-        nls.builtins.formatting.black,
-        nls.builtins.formatting.isort,
+        nls.builtins.formatting.shfmt.with {
+            extra_args = { "-i", "4", "-ci" },
+        },
+        nls.builtins.formatting.black.with {
+            extra_args = { "--fast", "--line-length=120" },
+        },
+        nls.builtins.formatting.isort.with {
+            extra_args = { "--profile", "black", "-l", "120", "-m", "3", "-tc" },
+        },
         nls.builtins.diagnostics.ansiblelint.with {
             condition = function(utils)
                 return (utils.root_has_file "roles" and utils.root_has_file "inventories")
@@ -70,7 +77,9 @@ M.config = function()
             extra_args = { "--metrics", "off", "--exclude", "vendor", "--config", semgrep_rule_folder },
         },
         nls.builtins.diagnostics.shellcheck,
-        nls.builtins.diagnostics.luacheck,
+        nls.builtins.diagnostics.luacheck.with {
+            extra_args = { "--globals vim lvim" },
+        },
         nls.builtins.diagnostics.vint,
         nls.builtins.diagnostics.chktex,
         -- Support for nix files
