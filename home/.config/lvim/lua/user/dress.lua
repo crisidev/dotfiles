@@ -26,7 +26,7 @@ M.config = function()
                 end,
             },
         },
-        -- telescope = require('user.telescope').get_theme(),
+        telescope = require('user.telescope').get_theme(),
     }
 end
 

@@ -51,7 +51,6 @@ M.lsp_normal_keys = function()
         "<cmd>lua require('user.lsp').show_documentation()<CR>",
         icons.docs .. "Show Documentation",
     }
-    lvim.lsp.buffer_mappings.visual_mode["K"] = lvim.lsp.buffer_mappings.normal_mode["K"]
 
     wk.register {
         -- Lsp
@@ -248,6 +247,12 @@ M.lsp_visual_keys = function()
     if not ok then
         return
     end
+
+    -- Hover
+    lvim.lsp.buffer_mappings.visual_mode["K"] = {
+        "<cmd>lua require('user.lsp').show_documentation()<CR>",
+        icons.docs .. "Show Documentation",
+    }
 
     -- Visual
     wk.register({
