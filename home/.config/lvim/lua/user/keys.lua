@@ -310,6 +310,8 @@ M.insert_keys = function()
         ["<C-]>"] = "<cmd>lua require('user.terminal').horizontal_terminal_toggle('zsh', 101, 20)<cr>",
         ["<C-g>"] = "<cmd>lua require('user.terminal').float_terminal_toggle('lazygit', 102)<cr>",
         ["<C-B>"] = "<cmd>lua require('user.terminal').horizontal_terminal_toggle('bemol --watch', 103, 10)<cr>",
+        -- Signature help
+        ["<C-s>"] = "<cmd>lua vim.lsp.buf.signature_help()<cr>",
     }
 
     -- File explorer
@@ -318,18 +320,6 @@ M.insert_keys = function()
     else
         lvim.keys.insert_mode["<F3>"] = { "<esc><cmd>NvimTreeToggle<cr>" }
         lvim.keys.insert_mode["<S-F3>"] = { "<esc><cmd>NvimTreeRefresh<cr>" }
-    end
-
-    if lvim.builtin.noice.active then
-        lvim.keys.insert_mode["<C-s>"] = function()
-            vim.lsp.buf_request(0, "textDocument/signatureHelp", params, function(err, result, ctx)
-                require("noice.lsp").signature(err, result, ctx, {
-                    trigger = true,
-                })
-            end)
-        end
-    else
-        lvim.keys.insert_mode["<C-s>"] = "<cmd>lua vim.lsp.buf.signature_help()<CR>"
     end
 end
 
