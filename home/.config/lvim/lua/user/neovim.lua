@@ -61,7 +61,8 @@ M.config = function()
     -- We need to see things like -- INSERT --
     vim.opt.showmode = true
     -- What the title of the window will be set to
-    vim.opt.titlestring = "neovim %<%F%=%l/%L"
+    -- vim.opt.titlestring = "neovim %<%F%=%l/%L"
+    vim.opt.titlestring = "neovim"
     -- Ignore case in search
     vim.opt.ignorecase = true
     -- Space in the neovim command line for displaying messages

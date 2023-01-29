@@ -255,8 +255,6 @@ M.normal_keys = function()
         ["<F5>"] = "<cmd>MouseToggle<cr>",
         -- Yank current path
         ["<F6>"] = '<cmd>let @+ = expand("%:p")<cr>',
-        -- Symbols vista
-        ["<F10>"] = "<cmd>Vista!!<cr>",
         -- Toggle numbers
         ["<F11>"] = "<cmd>NoNuMode<cr>",
         ["<F12>"] = "<cmd>NuModeToggle<cr>",
@@ -298,8 +296,6 @@ M.insert_keys = function()
         ["<F5>"] = "<esc><cmd>MouseToggle<cr>",
         -- Yank current path
         ["<F6>"] = '<esc><cmd>let @+ = expand("%:p")<cr>',
-        -- Symbols vista
-        ["<F10>"] = "<esc><cmd>Vista!!<cr>",
         -- Windows navigation
         ["<A-Up>"] = "<cmd>wincmd k<cr>",
         ["<A-Down>"] = "<cmd>wincmd j<cr>",

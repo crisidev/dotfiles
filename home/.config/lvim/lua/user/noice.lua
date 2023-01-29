@@ -8,7 +8,6 @@ M.config = function()
     local icons = require("user.icons").icons
     noice.setup {
         presets = {
-            command_palette = true,
             bottom_search = true,
         },
         lsp = {
@@ -28,8 +27,22 @@ M.config = function()
                 filter = { pattern = "^:%s*!", icon = icons.term, ft = "sh" },
             },
         },
+        views = {
+            cmdline = {
+                win_options = {
+                    winblend = 5,
+                    winhighlight = {
+                        Normal = "NormalFloat",
+                        FloatBorder = "NoiceCmdlinePopupBorder",
+                        IncSearch = "",
+                        Search = "",
+                    },
+                    cursorline = false,
+                },
+            },
+        },
         popupmenu = {
-            enabled = true,
+            enabled = false,
         },
         routes = {
             {

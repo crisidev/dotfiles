@@ -28,7 +28,7 @@ M.config = function()
     lvim.builtin.dap.active = true
     -- Noice
     lvim.builtin.noice = {
-        active = false,
+        active = true,
         lsp_progress = false,
     }
     -- Grammarous

@@ -102,14 +102,27 @@ M.config = function()
             config = { sources = function(...) end },
         }
     end
-    for _, cmd_type in ipairs { ":", "/", "?", "@" } do
-        cmp.setup.cmdline(":", {
-            mapping = cmp.mapping.preset.cmdline {
-                ["<Up>"] = cmp.mapping(cmp.mapping.select_prev_item(), { "i", "c" }),
-                ["<Down>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i", "c" }),
+    cmp.setup.cmdline(":", {
+        mapping = cmp.mapping.preset.cmdline {
+            ["<Up>"] = cmp.mapping(cmp.mapping.select_prev_item(), { "i", "c" }),
+            ["<Down>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i", "c" }),
+        },
+        sources = {
+            { name = "cmdline_history" },
+            { name = "cmdline" },
+            { name = "path" },
+        },
+        window = {
+            completion = {
+                border = cmp_border,
+                winhighlight = "Search:None",
             },
+        },
+    })
+    for _, cmd_type in ipairs { "/", "?" } do
+        cmp.setup.cmdline(cmd_type, {
+            mapping = cmp.mapping.preset.cmdline {},
             sources = {
-                { name = "cmdline" },
                 { name = "path" },
             },
             window = {

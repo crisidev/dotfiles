@@ -293,6 +293,7 @@ M.config = function()
         ------------------------------------------------------------------------------
         -- Cmp for command line
         { "hrsh7th/cmp-cmdline" },
+        { "dmitmel/cmp-cmdline-history" },
         -- Cmp for emojis..
         { "hrsh7th/cmp-emoji" },
         {
@@ -545,14 +546,6 @@ M.config = function()
             lazy = true,
             event = "BufWinEnter",
         },
-        -- Vista
-        {
-            "liuchengxu/vista.vim",
-            config = function()
-                require("user.vista").config()
-            end,
-            event = "BufReadPost",
-        },
         -- i3 syntax
         { "mboughaba/i3config.vim" },
         -- Visual multi
@@ -615,7 +608,8 @@ M.config = function()
             event = "VeryLazy",
             cmd = { "HopChar1CurrentLineAC", "HopChar1CurrentLineBC", "HopChar2MW", "HopWordMW" },
             config = function()
-                require("user.hop").config()
+                require("hop").setup()
+                require("user.keys").hop_keys()
             end,
         },
         -- Matchup
