@@ -55,3 +55,7 @@ export PATH="$PNPM_HOME:$PATH"
 
 # Rustc
 export RUSTC_WRAPPER=$HOME/.cargo/bin/sccache
+
+# Sdkman
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"

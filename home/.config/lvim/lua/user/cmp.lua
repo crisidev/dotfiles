@@ -44,6 +44,8 @@ M.config = function()
         { name = "git", group_index = 1 },
         { name = "crates", group_index = 1 },
         { name = "emoji", group_index = 1 },
+        { name = "plugins", group_index = 1 },
+        { name = "cmdline_history", group_index = 1 },
     }
 
     lvim.builtin.cmp.experimental = {
@@ -109,7 +111,6 @@ M.config = function()
         },
         sources = {
             { name = "cmdline_history" },
-            { name = "cmdline" },
             { name = "path" },
         },
         window = {
@@ -123,6 +124,7 @@ M.config = function()
         cmp.setup.cmdline(cmd_type, {
             mapping = cmp.mapping.preset.cmdline {},
             sources = {
+                { name = "buffer" },
                 { name = "path" },
             },
             window = {

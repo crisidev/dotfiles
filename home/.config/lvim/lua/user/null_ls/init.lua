@@ -36,7 +36,9 @@ M.config = function()
         nls.builtins.formatting.stylua,
         nls.builtins.formatting.goimports,
         nls.builtins.formatting.gofumpt,
-        nls.builtins.formatting.clang_format,
+        nls.builtins.formatting.clang_format.with {
+            filetypes = { "c", "cpp", "objc", "objcpp", "h", "hpp" },
+        },
         nls.builtins.formatting.cmake_format,
         nls.builtins.formatting.scalafmt,
         nls.builtins.formatting.sqlformat,

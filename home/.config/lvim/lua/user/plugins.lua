@@ -292,10 +292,24 @@ M.config = function()
         -- Cmp all the things.
         ------------------------------------------------------------------------------
         -- Cmp for command line
-        { "hrsh7th/cmp-cmdline" },
-        { "dmitmel/cmp-cmdline-history" },
+        {
+            "dmitmel/cmp-cmdline-history",
+        },
+        -- Lua plugins
+        {
+            "KadoBOT/cmp-plugins",
+            config = function()
+                local home = vim.env.HOME
+                require("cmp-plugins").setup {
+                    files = { home .. "/.homesick/repos/dotfiles/home/.config/lvim/lua/user/plugins.lua" }, -- Recommended: use static filenames or partial paths
+                }
+            end,
+            ft = { "lua" },
+        },
         -- Cmp for emojis..
-        { "hrsh7th/cmp-emoji" },
+        {
+            "hrsh7th/cmp-emoji",
+        },
         {
             "uga-rosa/cmp-dictionary",
             config = function()
@@ -317,7 +331,6 @@ M.config = function()
                 require("cmp_git").setup()
             end,
         },
-        { "hrsh7th/cmp-nvim-lsp-signature-help" },
         ------------------------------------------------------------------------------
         -- Markdown support
         ------------------------------------------------------------------------------
