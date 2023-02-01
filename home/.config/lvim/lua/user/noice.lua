@@ -97,6 +97,13 @@ M.config = function()
                 opts = { skip = true },
             },
             {
+                filter = {
+                    event = "msg_show",
+                    find = "no valid signature or incorrect lsp reponse",
+                },
+                opts = { skip = true },
+            },
+            {
                 filter = { find = "No active Snippet" },
                 opts = { skip = true },
             },

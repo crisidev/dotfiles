@@ -84,12 +84,6 @@ M.config = function()
             dependencies = { "nvim-telescope/telescope.nvim" },
             lazy = true,
         },
-        -- Telescope repo
-        {
-            "cljoly/telescope-repo.nvim",
-            dependencies = { "nvim-lua/plenary.nvim" },
-            lazy = true,
-        },
         -- Telescope file browser
         {
             "nvim-telescope/telescope-file-browser.nvim",

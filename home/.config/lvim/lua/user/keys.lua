@@ -9,7 +9,6 @@ M.which_keys_normal = function()
         f = { "<cmd>lua require('user.telescope').find_files()<cr>", "Find files" },
         F = { "<cmd>lua require('user.telescope').search_only_certain_files()<cr>", "File certain filetype" },
         b = { "<cmd>lua require('user.telescope').file_browser()<cr>", "File browser" },
-        p = { "<cmd>lua require('user.telescope').projects()<cr>", "Projects" },
         s = { "<cmd>lua require('user.telescope').find_string()<cr>", "Find string" },
         S = { "<cmd>lua require('user.telescope').find_identifier()<cr>", "Find identifier under cursor" },
         R = { "<cmd>lua require('user.telescope').raw_grep()<cr>", "Raw grep" },

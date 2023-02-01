@@ -145,10 +145,10 @@ M.config = function()
             -- icon = "⭐", -- this should be omitted if indicator style is not 'icon'
             style = "none", -- can also be 'underline'|'none',
         },
-        max_name_length = 25,
-        max_prefix_length = 15, -- prefix used when a buffer is de-duplicated
+        max_name_length = 18,
+        max_prefix_length = 10, -- prefix used when a buffer is de-duplicated
         truncate_names = true, -- whether or not tab names should be truncated
-        tab_size = 25,
+        tab_size = 18,
         color_icons = true,
         diagnostics_update_in_insert = false,
         show_buffer_icons = true,

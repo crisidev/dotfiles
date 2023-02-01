@@ -142,7 +142,6 @@ M.config = function()
             button("m", icons.mind .. " Mind open", "<cmd>MindOpenMain<cr>"),
             button("n", icons.stuka .. " New file", "<cmd>ene <BAR> startinsert <cr>"),
             button("b", icons.files .. " File browser", "<cmd>lua require('user.telescope').file_browser()<cr>"),
-            button("p", icons.project .. " Projects", "<cmd>lua require('user.telescope').projects()<cr>"),
             button("q", icons.exit .. " Quit", "<cmd>quit<cr>"),
         },
         opts = {

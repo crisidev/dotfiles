@@ -101,7 +101,7 @@ function M.layout_config()
     return {
         width = 0.9,
         height = 0.4,
-        preview_cutoff = 150,
+        preview_cutoff = 135,
         prompt_position = "bottom",
         horizontal = {
             preview_width = 0.32,
@@ -163,10 +163,6 @@ M.noice = function()
     local opts = M.get_theme()
     opts["previewer"] = false
     require("telescope").extensions.noice.noice(opts)
-end
-
-M.projects = function()
-    require("telescope").extensions.repo.list(M.get_theme())
 end
 
 M.zoxide = function()
@@ -402,7 +398,6 @@ M.config = function()
     lvim.builtin.telescope.on_config_done = function(telescope)
         telescope.load_extension "luasnip"
         telescope.load_extension "zoxide"
-        telescope.load_extension "repo"
         telescope.load_extension "file_browser"
         telescope.load_extension "persisted"
         telescope.load_extension "smart_open"
