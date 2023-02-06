@@ -528,7 +528,7 @@ M.config = function()
             config = function()
                 require("user.bqf").config()
             end,
-            event = "BufReadPost",
+            event = "WinEnter",
         },
         -- Trouble
         {

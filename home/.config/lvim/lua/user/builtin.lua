@@ -27,7 +27,7 @@ M.config = function()
     -- Debugging
     lvim.builtin.dap.active = true
     -- Noice
-    lvim.builtin.noice = { active = true }
+    lvim.builtin.noice = { active = false }
     -- Grammarous
     lvim.builtin.grammarous = { active = false }
     -- Twilight

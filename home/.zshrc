@@ -17,7 +17,7 @@ export ZSH_FZF_HISTORY_SEARCH_FZF_ARGS="+s +m +x -e --height 40% --reverse"
 antigen bundle joshskidmore/zsh-fzf-history-search
 antigen bundle hlissner/zsh-autopair
 antigen bundle supercrabtree/k
-# antigen bundle --branch=main zdharma/fast-syntax-highlighting
+antigen bundle --branch=main zdharma/fast-syntax-highlighting
 antigen bundle MichaelAquilina/zsh-you-should-use
 antigen bundle djui/alias-tips
 antigen bundle mroth/evalcache

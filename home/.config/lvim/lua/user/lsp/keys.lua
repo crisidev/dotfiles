@@ -201,6 +201,7 @@ M.lsp_normal_keys = function()
 
     -- Incremental rename
     if lvim.builtin.noice.active then
+        vim.lsp.handlers["textDocument/hover"] = require("noice.lsp.hover").on_hover
         wk.register {
             ["f"] = {
                 I = {
