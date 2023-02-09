@@ -168,7 +168,7 @@ M.nvimtree_icons = {
 }
 
 if lvim.builtin.tree_provider == "neo-tree" then
-    M.nvintree_icons["git"] = {
+    M.nvimtree_icons["git"] = {
         unmerged = "",
         added = "",
         deleted = "",

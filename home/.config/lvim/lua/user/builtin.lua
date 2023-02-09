@@ -1,8 +1,6 @@
 local M = {}
 
 M.config = function()
-    local icons = require("user.icons").icons
-
     -- Theme
     lvim.colorscheme = "tokyonight"
     require("user.theme").tokyonight()
@@ -27,7 +25,7 @@ M.config = function()
     -- Debugging
     lvim.builtin.dap.active = true
     -- Noice
-    lvim.builtin.noice = { active = false }
+    lvim.builtin.noice = { active = true }
     -- Grammarous
     lvim.builtin.grammarous = { active = false }
     -- Twilight
