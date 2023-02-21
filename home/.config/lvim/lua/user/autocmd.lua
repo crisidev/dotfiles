@@ -45,14 +45,6 @@ M.config = function()
         command = "lua require('user.keys').terminal_keys()",
     })
 
-    -- Smithy filetype
-    vim.api.nvim_create_autocmd("BufRead,BufNewFile", {
-        group = "_lvim_user",
-        pattern = "*.smithy",
-        desc = "Set the smithy filetype",
-        command = "setfiletype smithy",
-    })
-
     vim.api.nvim_create_autocmd("BufWinEnter", {
         group = "_lvim_user",
         pattern = "*.md",
