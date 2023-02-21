@@ -36,7 +36,6 @@ repos = [
     "~/github/0updates/rofi-source",
     "~/github/0updates/bitwarden-rofi",
     "~/github/0updates/rofi-emoji",
-    "~/.local/share/nvim/mason/packages/smithy-language-server",
 ]
 arguments = "--ff-only --rebase --autostash"
 

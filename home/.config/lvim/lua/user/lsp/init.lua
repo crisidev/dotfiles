@@ -35,7 +35,6 @@ M.config = function()
         "rust_analyzer",
         "tsserver",
         "yamlls",
-        "smithy_language_server",
         "grammar_guard",
     })
     lvim.lsp.document_highlight = true
@@ -113,7 +112,6 @@ M.config = function()
     require("user.lsp.go").config()
     require("user.lsp.yaml").config()
     require("user.lsp.toml").config()
-    require("user.lsp.smithy").config()
     require("user.lsp.markdown").config()
 
     -- Mappings

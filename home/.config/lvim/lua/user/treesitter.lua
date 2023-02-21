@@ -100,18 +100,6 @@ M.config = function()
             },
         },
     }
-
-    local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-    parser_config.smithy = {
-        install_info = {
-            url = "https://github.com/indoorvivants/tree-sitter-smithy",
-            files = { "src/parser.c" },
-            branch = "main",
-            generate_requires_npm = true,
-            requires_generate_from_grammar = true,
-        },
-        filetype = "smithy",
-    }
 end
 
 return M
