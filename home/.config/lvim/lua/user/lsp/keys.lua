@@ -40,6 +40,8 @@ M.comments_keys = function()
     vim.keymap.set("x", "fb", "<Plug>(comment_toggle_blockwise_visual)", { desc = "Comment toggle blockwise (visual)" })
 end
 
+M.debugprint_keys = function() end
+
 M.lsp_normal_keys = function()
     local ok, wk = pcall(require, "which-key")
     if not ok then

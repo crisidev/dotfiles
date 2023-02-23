@@ -685,6 +685,16 @@ M.config = function()
                 }
             end,
         },
+        {
+            "andrewferrier/debugprint.nvim",
+            config = function()
+                opts = {
+                    create_keymaps = false,
+                    create_commands = false,
+                }
+                require("debugprint").setup(opts)
+            end,
+        },
     }
 end
 
