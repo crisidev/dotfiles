@@ -1,6 +1,7 @@
 local M = {}
 
 M.config = function()
+    local icons = require("user.icons").icons
     -- NORMAL mode mappings
     vim.keymap.set("n", "fc", "<Plug>(comment_toggle_linewise)", { desc = icons.comment .. " Comment linewise" })
     vim.keymap.set("n", "fcc", function()

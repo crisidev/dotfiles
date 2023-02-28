@@ -115,6 +115,7 @@ M.config = function()
     require("user.lsp.markdown").config()
 
     -- Mappings
+    require("user.comment").config()
     require("user.lsp.keys").config()
     require("user.debugprint").config()
 end

@@ -189,6 +189,7 @@ M.config = function()
             "scalameta/nvim-metals",
             dependencies = { "nvim-lua/plenary.nvim" },
             ft = { "scala", "sbt" },
+            enabled = lvim.builtin.metals.active,
         },
         -- Go
         {

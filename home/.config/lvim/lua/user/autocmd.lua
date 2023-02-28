@@ -82,12 +82,14 @@ M.config = function()
     })
 
     -- Start metals
-    vim.api.nvim_create_autocmd("Filetype", {
-        group = "_lvim_user",
-        pattern = { "scala", "sbt" },
-        desc = "Start Scala metals",
-        callback = require("user.lsp.scala").start,
-    })
+    if lvim.builtin.metals.active then
+        vim.api.nvim_create_autocmd("Filetype", {
+            group = "_lvim_user",
+            pattern = { "scala", "sbt" },
+            desc = "Start Scala metals",
+            callback = require("user.lsp.scala").start,
+        })
+    end
 
     -- Faster yank
     vim.api.nvim_create_autocmd("TextYankPost", {

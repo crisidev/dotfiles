@@ -57,6 +57,8 @@ M.config = function()
     lvim.builtin.mind = { active = true, root_path = "~/.mind" }
     -- Drop stars
     lvim.builtin.drop = { active = false }
+    -- Scala
+    lvim.builtin.metals = { active = false }
 
     -- Mason
     lvim.builtin.mason.ui.icons = require("user.icons").mason
