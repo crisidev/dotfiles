@@ -4,3 +4,4 @@ python 3.10
 golang 1.20
 java corretto-17
 neovim nightly
+fzf latest
