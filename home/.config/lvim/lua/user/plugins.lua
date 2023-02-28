@@ -685,14 +685,16 @@ M.config = function()
                 }
             end,
         },
+        -- Debug print
         {
             "andrewferrier/debugprint.nvim",
             config = function()
-                opts = {
-                    create_keymaps = false,
-                    create_commands = false,
+                local opts = {
+                    create_keymaps = true,
+                    create_commands = true,
                 }
                 require("debugprint").setup(opts)
+                require("user.debugprint").config()
             end,
         },
     }

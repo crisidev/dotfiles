@@ -47,7 +47,7 @@ M.config = function()
     -- Winbar provider
     lvim.builtin.winbar_provider = "navic"
     -- Cmpline
-    lvim.builtin.cmp.cmdline.enable = false
+    lvim.builtin.cmp.cmdline.enable = true
     lvim.builtin.cmp.dictionary = { enable = false }
     -- Big file management
     lvim.builtin.bigfile.active = true

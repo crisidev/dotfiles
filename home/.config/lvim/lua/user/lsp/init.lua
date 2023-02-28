@@ -116,6 +116,7 @@ M.config = function()
 
     -- Mappings
     require("user.lsp.keys").config()
+    require("user.debugprint").config()
 end
 
 return M

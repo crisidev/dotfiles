@@ -109,7 +109,7 @@ M.config = function()
             ["<Down>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i", "c" }),
         },
         sources = {
-            { name = "cmdline_history" },
+            { name = "cmdline" },
             { name = "path" },
         },
         window = {

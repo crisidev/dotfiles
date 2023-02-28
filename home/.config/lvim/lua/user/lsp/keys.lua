@@ -2,49 +2,6 @@ local M = {}
 
 local icons = require("user.icons").icons
 
-M.comments_keys = function()
-    -- NORMAL mode mappings
-    vim.keymap.set("n", "fc", "<Plug>(comment_toggle_linewise)", { desc = icons.comment .. " Comment linewise" })
-    vim.keymap.set("n", "fcc", function()
-        return vim.v.count == 0 and "<Plug>(comment_toggle_linewise_current)" or "<Plug>(comment_toggle_linewise_count)"
-    end, { expr = true, desc = "Comment toggle current line" })
-
-    vim.keymap.set("n", "fb", "<Plug>(comment_toggle_blockwise)", { desc = icons.comment .. " Comment blockwise" })
-    vim.keymap.set("n", "fbc", function()
-        return vim.v.count == 0 and "<Plug>(comment_toggle_blockwise_current)"
-            or "<Plug>(comment_toggle_blockwise_count)"
-    end, { expr = true, desc = "Comment toggle current block" })
-
-    -- Above, below, eol
-    vim.keymap.set(
-        "n",
-        "fco",
-        '<cmd>lua require("Comment.api").locked.insert_linewise_below()<cr>',
-        { desc = "Comment insert below" }
-    )
-    vim.keymap.set(
-        "n",
-        "fcO",
-        '<cmd>lua require("Comment.api").locked.insert_linewise_above()<cr>',
-        { desc = "Comment insert above" }
-    )
-    vim.keymap.set(
-        "n",
-        "fcA",
-        '<cmd>lua require("Comment.api").locked.insert_linewise_eol()<cr>',
-        { desc = "Comment insert end of line" }
-    )
-
-    -- VISUAL mode mappings
-    vim.keymap.set("x", "fc", "<Plug>(comment_toggle_linewise_visual)", { desc = "Comment toggle linewise (visual)" })
-    vim.keymap.set("x", "fb", "<Plug>(comment_toggle_blockwise_visual)", { desc = "Comment toggle blockwise (visual)" })
-end
-
-M.debugprint_keys = function()
-    -- Write debugprint keys configuration
-     
-end
-
 M.lsp_normal_keys = function()
     local ok, wk = pcall(require, "which-key")
     if not ok then
@@ -246,6 +203,22 @@ M.lsp_normal_keys = function()
             },
         }
     end
+
+    wk.register {
+        ["f"] = {
+            g = {
+                name = icons.debug .. "Debug line",
+                b = { "<cmd>lua require('debugprint').debugprint()<cr>", "Add below" },
+                B = { "<cmd>lua require('debugprint').debugprint{ variable = true }<cr>", "Add variable below" },
+                a = { "<cmd>lua require('debugprint').debugprint{ above = true }<cr>", "Add above" },
+                A = {
+                    "<cmd>lua require('debugprint').debugprint{ variable = true, above = true }<cr>",
+                    "Add variable above",
+                },
+                m = { "<cmd>lua require('debugprint').debugprint{ motion = true }<cr>", "Start motion" },
+            },
+        },
+    }
 end
 
 M.lsp_visual_keys = function()
@@ -295,10 +268,8 @@ M.lsp_visual_keys = function()
 end
 
 M.config = function()
-    M.comments_keys()
     M.lsp_normal_keys()
     M.lsp_visual_keys()
-    M.debugprint_keys()
 end
 
 return M

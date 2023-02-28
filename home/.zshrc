@@ -1,5 +1,6 @@
 # antigen
 #export ANTIGEN_LOG=/tmp/antigen.log
+# zmodload zsh/zprof
 source $HOME/.cache/antigen/antigen.zsh
 
 antigen use oh-my-zsh
@@ -92,3 +93,4 @@ eval "$(zoxide init zsh)"
 
 # spaceship
 eval "$(starship init zsh)"
+# zprof
