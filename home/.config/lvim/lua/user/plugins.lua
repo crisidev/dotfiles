@@ -286,20 +286,6 @@ M.config = function()
         -- Cmp all the things.
         ------------------------------------------------------------------------------
         -- Cmp for command line
-        {
-            "dmitmel/cmp-cmdline-history",
-        },
-        -- Lua plugins
-        {
-            "KadoBOT/cmp-plugins",
-            config = function()
-                local home = vim.env.HOME
-                require("cmp-plugins").setup {
-                    files = { home .. "/.homesick/repos/dotfiles/home/.config/lvim/lua/user/plugins.lua" }, -- Recommended: use static filenames or partial paths
-                }
-            end,
-            ft = { "lua" },
-        },
         -- Cmp for emojis..
         {
             "hrsh7th/cmp-emoji",
