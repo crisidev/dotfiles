@@ -13,6 +13,13 @@ M.config = function()
             -- Reload the LSP servers
             vim.lsp.stop_client(vim.lsp.get_active_clients())
         end,
+        should_autosave = function()
+            -- do not autosave if the alpha dashboard is the current filetype
+            if vim.bo.filetype == "alpha" or vim.bo.filetype == "neo-tree" then
+                return false
+            end
+            return true
+        end,
     }
 end
 

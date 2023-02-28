@@ -4,7 +4,7 @@ M.config = function()
     local tree_icons = require("user.icons").nvimtree_icons
     require("neo-tree").setup {
         popup_border_style = "rounded",
-        enable_diagnostics = false,
+        enable_diagnostics = true,
         source_selector = {
             winbar = true,
             separator_active = " ",
