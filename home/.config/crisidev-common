@@ -58,36 +58,5 @@ restart_night_light() {
 
 setup_zsh_paths() {
   # paths
-  export PATH=~/.bin:~/.toolbox/bin:~/.pyenv/bin:~/.rbenv/bin:~/.nodenv/bin:~/.goenv/bin:~/.bin:~/.cargo/bin:$PATH
-
-  # rbenv
-  export RBENV_ROOT="$HOME/.rbenv"
-  if which rbenv >/dev/null; then eval "$(rbenv init -)"; fi
-
-  # direnv
-  if which direnv >/dev/null; then eval "$(direnv hook bash)"; fi
-
-  # pyenv
-  export PYENV_ROOT="$HOME/.pyenv"
-  if which pyenv >/dev/null; then
-    eval "$(pyenv init --path)"
-    eval "$(pyenv virtualenv-init -)"
-    export PYENV_VIRTUALENV_DISABLE_PROMPT=1
-  fi
-
-  # nodenv
-  export NODENV_ROOT="$HOME/.nodenv"
-  if which nodenv >/dev/null; then
-    eval "$(nodenv init -)"
-    export PATH=$PATH:~/.nodenv/versions/18.12.0/bin
-  fi
-
-  # nodenv
-  export GOENV_ROOT="$HOME/.goenv"
-  if which goenv >/dev/null; then
-    export GOENV_GOPATH_PREFIX=$HOME/.go
-    eval "$(goenv init -)"
-    export PATH=$PATH:$GOPATH/bin
-    export GOPROXY=direct
-  fi
+  export PATH=~/.bin:~/.toolbox/bin:~/.bin:~/.cargo/bin:$PATH
 }

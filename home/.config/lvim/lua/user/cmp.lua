@@ -45,7 +45,6 @@ M.config = function()
         { name = "crates", group_index = 1 },
         { name = "emoji", group_index = 1 },
         { name = "plugins", group_index = 1 },
-        { name = "cmdline_history", group_index = 1 },
     }
 
     lvim.builtin.cmp.experimental = {

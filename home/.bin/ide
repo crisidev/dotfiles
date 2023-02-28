@@ -1,4 +1,4 @@
-#!/usr/bin/zsh
+#!/usr/bin/bash
 
 # set -x
 set -e -o pipefail
@@ -14,14 +14,15 @@ usage() {
 
 # Start neovim IDE using class `ide` and listening on $NVIM_LISTEN_ADDRESS
 function start_ide() {
-    [ -f $HOME/.zsh_env ] && source $HOME/.zsh_env
+    [ -f $HOME/.cargo/env ] && source $HOME/.cargo/env
+    eval "$(rtx activate bash)"
     [ -f $HOME/.zsh_secrets ] && source $HOME/.zsh_secrets
     export LUNARVIM_RUNTIME_DIR="${LUNARVIM_RUNTIME_DIR:-"/home/ANT.AMAZON.COM/matbigoi/.local/share/lunarvim"}"
     export LUNARVIM_CONFIG_DIR="${LUNARVIM_CONFIG_DIR:-"/home/ANT.AMAZON.COM/matbigoi/.config/lvim"}"
     export LUNARVIM_CACHE_DIR="${LUNARVIM_CACHE_DIR:-"/home/ANT.AMAZON.COM/matbigoi/.cache/lvim"}"
     export LUNARVIM_BASE_DIR="${LUNARVIM_BASE_DIR:-"/home/ANT.AMAZON.COM/matbigoi/.local/share/lunarvim/lvim"}"
     # exec /home/ANT.AMAZON.COM/matbigoi/github/gnvim/target/release/gnvim -- -u "$LUNARVIM_BASE_DIR/init.lua" "$@"
-	exec kitty --detach --config "$HOME/.config/kitty/ide.conf" --class ide "$HOME/.bin/vim" --listen $NVIM_LISTEN_ADDRESS --cmd "let g:crisidev_ide=1" "$@"
+	exec /home/ANT.AMAZON.COM/matbigoi/.bin/kitty --detach --config "$HOME/.config/kitty/ide.conf" --class ide "$HOME/.bin/vim" --listen $NVIM_LISTEN_ADDRESS --cmd "let g:crisidev_ide=1" "$@"
     # neovide --x11-wm-class ide -- -u "$LUNARVIM_RUNTIME_DIR/lvim/init.lua"  --listen $NVIM_LISTEN_ADDRESS --cmd "let g:crisidev_ide=1" "$@"
     # exec ~/github/fvim/bin/Release/net6.0/linux-x64/FVim -u "$LUNARVIM_BASE_DIR/init.lua"  "$@"
 }
@@ -53,7 +54,6 @@ toggle)
 	toggle_ide
 	;;
 new)
-	export_env
 	shift
 	start_ide "$@"
 	;;

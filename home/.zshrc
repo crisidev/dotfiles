@@ -20,7 +20,6 @@ antigen bundle supercrabtree/k
 antigen bundle --branch=main zdharma/fast-syntax-highlighting
 antigen bundle MichaelAquilina/zsh-you-should-use
 antigen bundle djui/alias-tips
-antigen bundle mroth/evalcache
 
 antigen apply
 
@@ -58,8 +57,29 @@ bindkey '^[[B' history-substring-search-down
 [ -f $HOME/.zsh_amzn ] && source $HOME/.zsh_amzn
 [ -f $HOME/.zsh_functions ] && source $HOME/.zsh_functions
 [ -f $HOME/.zsh_secrets ] && source $HOME/.zsh_secrets
-[ -f $HOME/.zsh_env ] && source $HOME/.zsh_env
 [ -f $HOME/.cargo/env ] && source $HOME/.cargo/env
+
+# paths
+CUSTOM_PATH=$HOME/.local/share/nvim/mason/bin:$HOME/.bin:$HOME/.toolbox/bin
+export PATH=$CUSTOM_PATH:$PATH
+
+# # terminal
+export TERMINFO=/usr/share/terminfo
+export GREP_COLOR='1;31'
+export VISUAL=vim
+export EDITOR=vim
+export PAGER=less
+
+# direnv
+if which direnv > /dev/null; then
+    eval "$(direnv hook zsh)"
+fi
+
+# rtx
+eval "$(rtx activate zsh)"
+
+# Rustc
+export RUSTC_WRAPPER=$HOME/.cargo/bin/sccache
 
 # sshrc
 compdef sshrc=ssh
@@ -68,7 +88,7 @@ compdef sshrc=ssh
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude build'
 
 # zoxide
-_evalcache zoxide init zsh
+eval "$(zoxide init zsh)"
 
 # spaceship
-_evalcache starship init zsh
+eval "$(starship init zsh)"

@@ -1,4 +1,4 @@
-#!/usr/bin/env /home/bigo/.pyenv/shims/python
+#!/usr/bin/env python
 
 import getopt
 import os
