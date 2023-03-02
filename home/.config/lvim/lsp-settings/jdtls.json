@@ -1,3 +1,44 @@
 {
-    "java.format.enabled": true
+  "java.autobuild.enabled": true,
+  "java.codeAction.sortMembers.avoidVolatileChanges": true,
+  "java.codeGeneration.generateComments": true,
+  "java.codeGeneration.hashCodeEquals.useInstanceof": true,
+  "java.codeGeneration.insertionLocation": "afterCursor",
+  "java.codeGeneration.toString.codeStyle": "STRING_CONCATENATION",
+  "java.codeGeneration.useBlocks": true,
+  "java.compile.nullAnalysis.mode": "automatic",
+  "java.compile.nullAnalysis.nonnull": [
+    "javax.annotation.Nonnull",
+    "org.eclipse.jdt.annotation.NonNull",
+    "org.springframework.lang.NonNull"
+  ],
+  "java.compile.nullAnalysis.nullable": [
+    "javax.annotation.Nullable",
+    "org.eclipse.jdt.annotation.Nullable",
+    "org.springframework.lang.Nullable"
+  ],
+  "java.completion.enabled": true,
+  "java.completion.guessMethodArguments": true,
+  "java.completion.importOrder": ["#", "java", "javax", "org", "com", ""],
+  "java.format.comments.enabled": true,
+  "java.format.enabled": true,
+  "java.format.onType.enabled": true,
+  "java.implementationsCodeLens.enabled": true,
+  "java.import.gradle.enabled": true,
+  "java.inlayHints.parameterNames.enabled": "all",
+  "java.inlayHints.parameterNames.exclusions": [],
+  "java.jdt.ls.androidSupport.enabled": "auto",
+  "java.jdt.ls.lombokSupport.enabled": true,
+  "java.jdt.ls.protobufSupport.enabled": true,
+  "java.maven.downloadSources": true,
+  "java.maven.updateSnapshots": true,
+  "java.progressReports.enabled": true,
+  "java.project.importHint": true,
+  "java.references.includeAccessors": false,
+  "java.references.includeDecompiledSources": false,
+  "java.referencesCodeLens.enabled": true,
+  "java.saveActions.organizeImports": true,
+  "java.server.launchMode": "Standard",
+  "java.signatureHelp.enabled": true,
+  "java.typeHierarchy.lazyLoad": true
 }

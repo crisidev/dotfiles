@@ -111,6 +111,16 @@ M.config = function()
         },
         {
             type = "go",
+            name = "Debug with args",
+            request = "launch",
+            program = "${file}",
+            args = function()
+                local argument_string = vim.fn.input "Program arg(s): "
+                return vim.fn.split(argument_string, " ", true)
+            end,
+        },
+        {
+            type = "go",
             name = "Debug test", -- configuration for debugging test files
             request = "launch",
             mode = "test",
@@ -151,7 +161,6 @@ M.config = function()
             -- CHANGE THIS to your path!
             command = lldb_cmd,
             args = { "--port", "${port}" },
-
             -- On windows you may have to uncomment this:
             -- detached = false,
         },

@@ -116,6 +116,7 @@ M.config = function()
             },
         },
     }
+    vim.lsp.handlers["textDocument/hover"] = require("noice.lsp.hover").on_hover
 end
 
 return M

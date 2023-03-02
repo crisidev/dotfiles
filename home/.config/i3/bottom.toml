@@ -9,8 +9,8 @@ icons = "awesome6"
 [[block]]
 block = "focused_window"
 [block.format]
-full = " $title.str(0,500) |"
-short = " $title.str(0,50) |"
+full = " $title.str(max_w:500) |"
+short = " $title.str(max_w:50) |"
 
 # [[block]]
 # block = "bluetooth"
@@ -78,18 +78,25 @@ button = "left"
 cmd = "~/.bin/khandle"
 
 [[block]]
+block = "github"
+format = " $icon  $total.eng(w:1)  "
+info = ["total"]
+warning = ["mention", "review_requested"]
+critical = ["assign", "security_alert"]
+hide_if_total_is_zero = false
+
+[[block]]
 block = "notify"
 format = " {$paused{}|} "
 
-[[block]]
-block = "music"
-player = "spotify"
-format = " $icon {$combo.str(0,20) $play $next |}"
-hide_when_empty = true
+# [[block]]
+# block = "music"
+# player = "spotify"
+# format = " $icon {$combo.str(max_w:20) $play $next |}"
 
-[[block]]
-block = "xrandr"
-format = " $icon "
+# [[block]]
+# block = "xrandr"
+# format = " $icon "
 
 [[block]]
 block = "custom"

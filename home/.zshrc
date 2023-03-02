@@ -1,6 +1,15 @@
 # antigen
 #export ANTIGEN_LOG=/tmp/antigen.log
 # zmodload zsh/zprof
+
+# direnv
+if which direnv > /dev/null; then
+    eval "$(direnv hook zsh)"
+fi
+
+# rtx
+eval "$(rtx activate zsh)"
+
 source $HOME/.cache/antigen/antigen.zsh
 
 antigen use oh-my-zsh
@@ -8,11 +17,9 @@ antigen use oh-my-zsh
 antigen bundle command-not-found
 antigen bundle fd
 antigen bundle history
-
 antigen bundle zsh-users/zsh-completions
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zsh-users/zsh-history-substring-search
-
 export ZSH_FZF_HISTORY_SEARCH_BIND="^f"
 export ZSH_FZF_HISTORY_SEARCH_FZF_ARGS="+s +m +x -e --height 40% --reverse"
 antigen bundle joshskidmore/zsh-fzf-history-search
@@ -21,6 +28,7 @@ antigen bundle supercrabtree/k
 antigen bundle --branch=main zdharma/fast-syntax-highlighting
 antigen bundle MichaelAquilina/zsh-you-should-use
 antigen bundle djui/alias-tips
+# antigen bundle ellie/atuin@main
 
 antigen apply
 
@@ -61,23 +69,13 @@ bindkey '^[[B' history-substring-search-down
 [ -f $HOME/.cargo/env ] && source $HOME/.cargo/env
 
 # paths
-CUSTOM_PATH=$HOME/.local/share/nvim/mason/bin:$HOME/.bin:$HOME/.toolbox/bin
+CUSTOM_PATH=$HOME/.bin:$HOME/.toolbox/bin:$HOME/.local/share/nvim/mason/bin
 export PATH=$CUSTOM_PATH:$PATH
 
 # # terminal
 export TERMINFO=/usr/share/terminfo
 export GREP_COLOR='1;31'
-export VISUAL=vim
 export EDITOR=vim
-export PAGER=less
-
-# direnv
-if which direnv > /dev/null; then
-    eval "$(direnv hook zsh)"
-fi
-
-# rtx
-eval "$(rtx activate zsh)"
 
 # Rustc
 export RUSTC_WRAPPER=$HOME/.cargo/bin/sccache

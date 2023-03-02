@@ -163,7 +163,6 @@ M.lsp_normal_keys = function()
 
     -- Incremental rename
     if lvim.builtin.noice.active then
-        vim.lsp.handlers["textDocument/hover"] = require("noice.lsp.hover").on_hover
         wk.register {
             ["f"] = {
                 I = {
@@ -203,22 +202,6 @@ M.lsp_normal_keys = function()
             },
         }
     end
-
-    wk.register {
-        ["f"] = {
-            g = {
-                name = icons.debug .. "Debug line",
-                b = { "<cmd>lua require('debugprint').debugprint()<cr>", "Add below" },
-                B = { "<cmd>lua require('debugprint').debugprint{ variable = true }<cr>", "Add variable below" },
-                a = { "<cmd>lua require('debugprint').debugprint{ above = true }<cr>", "Add above" },
-                A = {
-                    "<cmd>lua require('debugprint').debugprint{ variable = true, above = true }<cr>",
-                    "Add variable above",
-                },
-                m = { "<cmd>lua require('debugprint').debugprint{ motion = true }<cr>", "Start motion" },
-            },
-        },
-    }
 end
 
 M.lsp_visual_keys = function()
@@ -270,6 +253,7 @@ end
 M.config = function()
     M.lsp_normal_keys()
     M.lsp_visual_keys()
+    require("user.debugprint").config()
 end
 
 return M

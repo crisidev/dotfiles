@@ -117,7 +117,7 @@ M.config = function()
     table.insert(
         sources,
         nls.builtins.code_actions.refactoring.with {
-            filetypes = { "typescript", "javascript", "lua", "c", "cpp", "go", "python", "java", "php" },
+            filetypes = { "typescript", "javascript", "c", "cpp", "go", "python", "php" },
         }
     )
     local ts_found, typescript_code_actions = pcall(require, "typescript.extensions.null-ls.code-actions")

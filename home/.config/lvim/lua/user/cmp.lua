@@ -93,14 +93,7 @@ M.config = function()
 
         return vim_item
     end
-    local cmp_ok, cmp = pcall(require, "cmp")
-    if not cmp_ok or cmp == nil then
-        cmp = {
-            mapping = function(...) end,
-            setup = { filetype = function(...) end, cmdline = function(...) end },
-            config = { sources = function(...) end },
-        }
-    end
+    local cmp = require "cmp"
     cmp.setup.cmdline(":", {
         mapping = cmp.mapping.preset.cmdline {
             ["<Up>"] = cmp.mapping(cmp.mapping.select_prev_item(), { "i", "c" }),

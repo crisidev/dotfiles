@@ -2,6 +2,8 @@
 
 stds.nvim = {
 	globals = {
+        "lvim",
+        "reload",
 		"O",
 		vim = { fields = { "g" } },
 		"CONFIG_PATH",
@@ -9,12 +11,12 @@ stds.nvim = {
 		"DATA_PATH",
 		"TERMINAL",
 		"USER",
-    "C",
-    "Config",
-    "WORKSPACE_PATH",
-    "JAVA_LS_EXECUTABLE",
-    "MUtils",
-    os = {fields = {"capture"}}
+        "C",
+        "Config",
+        "WORKSPACE_PATH",
+        "JAVA_LS_EXECUTABLE",
+        "MUtils",
+        os = {fields = {"capture"}}
 	},
 	read_globals = {
 		"jit",

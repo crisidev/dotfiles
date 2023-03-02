@@ -290,6 +290,7 @@ M.config = function()
         -- Cmp for emojis..
         {
             "hrsh7th/cmp-emoji",
+            lazy = true,
         },
         {
             "uga-rosa/cmp-dictionary",
@@ -302,12 +303,14 @@ M.config = function()
                     },
                 }
             end,
+            lazy = true,
             enabled = lvim.builtin.cmp.dictionary.enable,
         },
         -- Cmp for github/gitlab issues
         {
             "petertriho/cmp-git",
             dependencies = "nvim-lua/plenary.nvim",
+            lazy = true,
             config = function()
                 require("cmp_git").setup()
             end,
@@ -573,7 +576,9 @@ M.config = function()
         {
             "m-demare/hlargs.nvim",
             config = function()
-                require("hlargs").setup()
+                require("hlargs").setup {
+                    excluded_filetype = { "TelescopePrompt", "guihua", "guihua_rust", "clap_input" },
+                }
             end,
             lazy = true,
             event = "VeryLazy",
@@ -676,12 +681,10 @@ M.config = function()
         {
             "andrewferrier/debugprint.nvim",
             config = function()
-                local opts = {
+                require("debugprint").setup {
                     create_keymaps = true,
                     create_commands = true,
                 }
-                require("debugprint").setup(opts)
-                require("user.debugprint").config()
             end,
         },
     }

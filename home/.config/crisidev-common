@@ -1,62 +1,55 @@
-#!/usr/bin/env bash
-
 i3_msg_dispatcher() {
-  arr=${1}
-  for cmd in "${arr[@]}"; do
-    i3-msg "${cmd}"
-    sleep 0.1
-  done
+    arr=${1}
+    for cmd in "${arr[@]}"; do
+        i3-msg "${cmd}"
+        sleep 0.1
+    done
 }
 
 display_off() {
-  xrandr --output eDP --off --output HDMI-A-0 --off
+    xrandr --output eDP --off --output HDMI-A-0 --off
 }
 
 mirror_display() {
-  display_off
-  xrandr --output HDMI-A-0 --mode 1920x1080
-  xrandr --output eDP --auto
-  finish_autorandr_switch mirror
+    display_off
+    xrandr --output HDMI-A-0 --mode 1920x1080
+    xrandr --output eDP --auto
+    finish_autorandr_switch mirror
 }
 
 add_resolutions() {
-  xrandr --newmode "1600x900" 118.25 1600 1696 1856 2112 900 903 908 934 -hsync +vsync
-  xrandr --addmode eDP "1600x900"
-  xrandr --output eDP --set "scaling mode" "Full aspect"
+    xrandr --newmode "1600x900" 118.25 1600 1696 1856 2112 900 903 908 934 -hsync +vsync
+    xrandr --addmode eDP "1600x900"
+    xrandr --output eDP --set "scaling mode" "Full aspect"
 }
 
 set_audio() {
-  pactl set-default-source "$1"
-  pactl set-default-sink "$2"
+    pactl set-default-source "$1"
+    pactl set-default-sink "$2"
 }
 
 finish_autorandr_switch() {
-  notify-send -i display "Autorandr" "Switch to profile $1 finished"
-  # feh --bg-fill "${HOME}/Pictures/wallpapers/rickstone.png"
+    notify-send -i display "Autorandr" "Switch to profile $1 finished"
+    # feh --bg-fill "${HOME}/Pictures/wallpapers/rickstone.png"
 }
 
 autorandr_safe() {
-  loaded=$(autorandr "$@" 2>&1)
-  if echo "$loaded" |grep -q "Config already loaded"; then
-    bash "$HOME/.config/autorandr/$2/postswitch"
-  fi
+    # loaded=$($(rtx which autorandr) "$@" 2>&1)
+    loaded=$(autorandr "$@" 2>&1)
+    if echo "$loaded" | grep -q "Config already loaded"; then
+        bash "$HOME/.config/autorandr/$2/postswitch"
+    fi
 }
 
 # set keyboard speed
 setup_keyboard_speed() {
-  xset r rate 320 60
-  xset m 2 60
-  xset b off
+    xset r rate 320 60
+    xset m 2 60
+    xset b off
 }
-
 
 restart_night_light() {
-  gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled false
-  sleep 2
-  gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled true
-}
-
-setup_zsh_paths() {
-  # paths
-  export PATH=~/.bin:~/.toolbox/bin:~/.bin:~/.cargo/bin:$PATH
+    gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled false
+    sleep 2
+    gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled true
 }

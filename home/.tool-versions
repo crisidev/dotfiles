@@ -5,3 +5,9 @@ golang 1.20
 java corretto-17
 neovim nightly
 fzf latest
+jq latest
+lazygit latest
+github-cli latest
+meson latest
+delta latest
+gradle latest

@@ -5,14 +5,14 @@ require("user.neovide").config()
 -- Builtin
 require("user.builtin").config()
 
--- Cmp
-require("user.cmp").config()
-
 -- Additional Plugins
 require("user.plugins").config()
 
 -- Autocommands
 require("user.autocmd").config()
+
+-- Cmp
+require("user.cmp").config()
 
 -- Treesitter
 require("user.treesitter").config()

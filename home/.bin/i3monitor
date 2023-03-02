@@ -6,7 +6,6 @@ usage() {
 }
 
 source "$HOME/.config/crisidev-common"
-setup_zsh_paths
 
 mode=${1}
 

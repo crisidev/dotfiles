@@ -288,10 +288,11 @@ bindsym $mod+Shift+Right exec --no-startup-id $HOME/.bin/i3window swap right
 # bindsym --whole-window Control+button2 swap with mark quickswap; [con_mark="quickswap"] focus; unmark quickswap
 
 # Resize mode
-bindsym $mod+Mod1+Left exec --no-startup-id $HOME/.bin/i3resize "Left" "5 px or 5 ppt"
-bindsym $mod+Mod1+Right exec --no-startup-id $HOME/.bin/i3resize "Right" "5 px or 5 ppt"
-bindsym $mod+Mod1+Up exec --no-startup-id $HOME/.bin/i3resize "Up" "5 px or 5 ppt"
-bindsym $mod+Mod1+Down exec --no-startup-id $HOME/.bin/i3resize "Down" "5 px or 5 ppt"
+bindsym $mod+Mod1+Left exec --no-startup-id $HOME/.bin/i3resize "Left" "5 px or 5 ppt" >> /tmp/i3resize 2>&1
+bindsym $mod+Mod1+Right exec --no-startup-id $HOME/.bin/i3resize "Right" "5 px or 5 ppt" >> /tmp/i3resize 2>&1
+bindsym $mod+Mod1+Up exec --no-startup-id $HOME/.bin/i3resize "Up" "5 px or 5 ppt" >> /tmp/i3resize 2>&1
+bindsym $mod+Mod1+Down exec --no-startup-id $HOME/.bin/i3resize "Down" "5 px or 5 ppt" >> /tmp/i3resize 2>&1
+
 
 ###########################
 # Power mode
@@ -317,7 +318,7 @@ bindsym $mod+Mod1+m mode " [a]uto [l]aptop [h]ome [w]ork [m]irror"
 mode " [a]uto [l]aptop [h]ome [w]ork [m]irror" {
     bindsym a mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3monitor auto
     bindsym l mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3monitor laptop
-    bindsym h mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3monitor home
+    bindsym h mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3monitor home >> /tmp/i3monitor 2>&1
     bindsym w mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3monitor work
     bindsym m mode "default", exec --no-startup-id DISPLAY=":0" XAUTHORITY="$HOME/.Xauthority" $HOME/.bin/i3monitor mirror
     bindsym Return mode "default"
@@ -388,14 +389,9 @@ exec --no-startup-id "/usr/bin/blueman-applet"
 exec --no-startup-id "/usr/bin/tuxedo-control-center"
 exec --no-startup-id "/usr/bin/cronopete"
 exec --no-startup-id "zsh -l -c /usr/bin/ulauncher"
-# exec --no-startup-id "/usr/bin/pasystray"
-# exec --no-startup-id "/usr/local/bin/tailscale-ui"
-# exec --no-startup-id "/usr/bin/systemctl --user start gotify-dunst"
-# exec --no-startup-id "/usr/bin/touchpad-indicator"
 
 # i3 specific
 exec --no-startup-id "$HOME/.bin/i3alternate"
-exec --no-startup-id "$HOME/.bin/i3chime"
 
 # Startup monitors and apps
 exec --no-startup-id "$HOME/.bin/i3monitor startup"
