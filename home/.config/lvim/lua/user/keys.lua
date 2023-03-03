@@ -309,9 +309,21 @@ M.insert_keys = function()
         ["<C-]>"] = "<cmd>lua require('user.terminal').horizontal_terminal_toggle('zsh', 101, 20)<cr>",
         ["<C-g>"] = "<cmd>lua require('user.terminal').float_terminal_toggle('lazygit', 102)<cr>",
         ["<C-B>"] = "<cmd>lua require('user.terminal').horizontal_terminal_toggle('bemol --watch', 103, 10)<cr>",
-        -- Signature help
-        ["<C-s>"] = "<cmd>lua vim.lsp.buf.signature_help()<cr>",
     }
+
+    -- Signature help
+    if lvim.builtin.noice.active then
+        lvim.keys.insert_mode["<C-s>"] = function()
+            local params = vim.lsp.util.make_position_params(0, "utf-16")
+            vim.lsp.buf_request(0, "textDocument/signatureHelp", params, function(err, result, ctx)
+                require("noice.lsp").signature(err, result, ctx, {
+                    trigger = true,
+                })
+            end)
+        end
+    else
+        lvim.keys.insert_mode["<C-s>"] = "<cmd>lua vim.lsp.buf.signature_help()<cr>"
+    end
 
     -- File explorer
     if lvim.builtin.tree_provider == "neo-tree" then

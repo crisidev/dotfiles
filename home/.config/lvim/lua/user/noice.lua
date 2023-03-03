@@ -5,13 +5,57 @@ M.config = function()
     if not status_ok then
         return
     end
+    local noice_over = require "noice.lsp.hover"
+    vim.lsp.handlers["textDocument/hover"] = noice_over.on_hover
     local icons = require("user.icons").icons
+    local spinners = require "noice.util.spinners"
+    spinners.spinners["mine"] = {
+        frames = {
+            " ",
+            " ",
+            " ",
+            " ",
+            " ",
+            " ",
+            " ",
+            " ",
+            " ",
+            " ",
+            " ",
+            " ",
+            " ",
+            " ",
+            " ",
+            " ",
+            " ",
+            " ",
+            " ",
+            " ",
+            " ",
+            " ",
+            " ",
+            " ",
+            " ",
+            " ",
+            " ",
+            " ",
+        },
+        interval = 80,
+    }
     noice.setup {
         presets = {
             bottom_search = true,
         },
         lsp = {
-            progress = { enabled = false },
+            progress = {
+                enabled = false,
+                format = {
+                    { "{data.progress.percentage} ", hl_group = "Comment" },
+                    { "{spinner} ", hl_group = "NoiceLspProgressSpinner" },
+                    { "{data.progress.title} ", hl_group = "Comment" },
+                },
+                format_done = {},
+            },
             messages = { enabled = false },
             hover = { enabled = false },
             signature = { enabled = false, auto_open = { enabled = false } },
@@ -116,7 +160,6 @@ M.config = function()
             },
         },
     }
-    vim.lsp.handlers["textDocument/hover"] = require("noice.lsp.hover").on_hover
 end
 
 return M
