@@ -364,6 +364,40 @@ M.config = function()
         },
     }
 
+    path = vim.fn.glob(vim.fn.stdpath "data" .. "/mason/packages/kotlin-debug-adapter/")
+    local kotlin_debug = path .. "adapter/bin/kotlin-debug-adapter"
+    local util = require "lspconfig.util"
+    local root_files = {
+        "settings.gradle",
+        "settings.gradle.kts",
+        "build.xml",
+        "pom.xml",
+        "build.gradle",
+        "build.gradle.kts",
+    }
+    local fname = vim.fn.getcwd()
+
+    dap.adapters.kotlin = {
+        type = "executable",
+        command = kotlin_debug,
+        args = { "--interpreter=vscode" },
+    }
+    dap.configurations.kotlin = {
+        {
+            type = "kotlin",
+            name = "launch - kotlin",
+            request = "launch",
+            projectRoot = util.root_pattern(unpack(root_files))(fname)
+                or util.root_pattern ".git"(fname)
+                or util.path.dirname(fname),
+            mainClass = function()
+                -- return vim.fn.input("Path to main class > ", "myapp.sample.app.AppKt", "file")
+                return vim.fn.input("Path to main class > ", "", "file")
+            end,
+        },
+    }
+
+
     local icons = require("user.icons").icons
 
     lvim.builtin.dap.on_config_done = function(_)

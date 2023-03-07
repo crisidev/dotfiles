@@ -69,7 +69,7 @@ bindkey '^[[B' history-substring-search-down
 [ -f $HOME/.cargo/env ] && source $HOME/.cargo/env
 
 # paths
-CUSTOM_PATH=$HOME/.bin:$HOME/.toolbox/bin:$HOME/.local/share/nvim/mason/bin
+CUSTOM_PATH=$HOME/.bin:$HOME/.toolbox/bin:$HOME/.local/share/nvim/mason/bin:$HOME/.rodar/bin
 export PATH=$CUSTOM_PATH:$PATH
 
 # # terminal

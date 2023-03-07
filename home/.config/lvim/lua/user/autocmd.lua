@@ -169,6 +169,14 @@ M.config = function()
         desc = "Set additional buffer keymaps for Go files",
         callback = require("user.lsp.go").build_tools,
     })
+
+    -- Kotlin
+    vim.api.nvim_create_autocmd("FileType", {
+        group = "_build_tools",
+        pattern = "kotlin",
+        desc = "Set additional buffer keymaps for Kotlin files",
+        callback = require("user.lsp.kotlin").build_tools,
+    })
 end
 
 return M

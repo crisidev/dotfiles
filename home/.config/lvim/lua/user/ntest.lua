@@ -51,7 +51,9 @@ M.config = function()
                 dap = { justMyCode = false, console = "integratedTerminal" },
             },
             require "neotest-plenary",
+            require "neotest-vim-test",
         },
+        log_level = vim.log.levels.DEBUG,
     }
     opts.consumers = {
         overseer = require "neotest.consumers.overseer",
@@ -62,6 +64,16 @@ M.config = function()
     }
 
     nt.setup(opts)
+
+    vim.cmd [[
+        let test#strategy = {
+          \ 'nearest': 'neovim',
+          \ 'file':    'neovim',
+          \ 'suite':   'neovim',
+        \}
+        let test#java#runner = 'gradletest'
+        let test#kotlin#runner = 'gradletest'
+    ]]
 end
 
 M.get_env = function()

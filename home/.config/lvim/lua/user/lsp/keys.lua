@@ -157,6 +157,11 @@ M.lsp_normal_keys = function()
                 t = { "<cmd>OverseerToggle<cr>", "Toggle tests" },
                 T = { "<cmd>OverseerRun<cr>", "Run task" },
                 Tc = { "<cmd>OverseerRunCmd<cr>", "Run task with Cmd" },
+                N = {"<cmd>TestNearest<cr>", "Run nearer test"},
+                S = {"<cmd>TestSuite<cr>", "Run suite test"},
+                F = {"<cmd>TestFile<cr>", "Run file test"},
+                L = {"<cmd>TestLast<cr>", "Run Las test"},
+                V = {"<cmd>TestVisit<cr>", "Run visit test"},
             },
         },
     }

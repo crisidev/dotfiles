@@ -10,7 +10,8 @@ M.nightfox = function()
             terminal_colors = true, -- Set terminal colors (vim.g.terminal_color_*) used in `:terminal`
             dim_inactive = true, -- Non focused panes set to alternative background
             module_default = true, -- Default enable value for modules
-            styles = { -- Style to be applied to different syntax groups
+            styles = {
+                -- Style to be applied to different syntax groups
                 comments = "italic", -- Value is any valid attr-list value `:help attr-list`
                 conditionals = "NONE",
                 constants = "NONE",
@@ -22,7 +23,8 @@ M.nightfox = function()
                 strings = "NONE",
                 variables = "NONE",
             },
-            inverse = { -- Inverse highlight for different types
+            inverse = {
+                -- Inverse highlight for different types
                 match_paren = false,
                 visual = false,
                 search = false,
@@ -58,7 +60,6 @@ M.tokyonight = function()
         hide_inactive_statusline = true,
         dim_inactive = true,
         lualine_bold = false, -- When `true`, section headers in the lualine theme will be bold
-
         on_colors = function(colors)
             colors.git = { change = "#6183bb", add = "#449dab", delete = "#f7768e", conflict = "#bb7a61" }
             colors.bg_dark = "#1a1e30"
@@ -79,27 +80,44 @@ M.tokyonight = function()
     }
 end
 
+M.kanagawa = function() end
 M.kanagawa = function()
     local kanagawa = require "kanagawa"
     kanagawa.setup {
         undercurl = true, -- enable undercurls
-        commentStyle = { italic = true },
+        commentStyle = {},
         functionStyle = {},
         keywordStyle = { italic = true },
         statementStyle = { italic = true },
         typeStyle = {},
         variablebuiltinStyle = { italic = true },
-        specialReturn = true, -- special highlight for the return keyword
-        specialException = true, -- special highlight for exception handling keywords
-        dimInactive = lvim.builtin.global_statusline, -- dim inactive window `:h hl-NormalNC`
-        globalStatus = lvim.builtin.global_statusline, -- adjust window separators highlight for laststatus=3
+        specialReturn = true,
+        specialException = true,
+        dimInactive = lvim.builtin.global_statusline,
+        globalStatus = lvim.builtin.global_statusline,
         transparent = lvim.transparent_window,
-        colors = { sumiInk1b = "#1b1b23" },
-        overrides = {
-            diffRemoved = { fg = "#E46876" },
-            NvimTreeFolderIcon = { fg = "#7e9cd8" },
-            CmpItemKindEnum = { fg = "#957FB8" },
-            ["@parameter"] = { fg = "#DCA561" },
+        colors = {
+            palette = { sumiInk1b = "#1b1b23" },
+            theme = {
+                all = {
+                    ui = {
+                        bg_gutter = "none",
+                    },
+                },
+            },
+        },
+        overrides = function(_)
+            return {
+                diffRemoved = { fg = "#E46876" },
+                NvimTreeFolderIcon = { fg = "#7e9cd8" },
+                CmpItemKindEnum = { fg = "#957FB8" },
+                ["@parameter"] = { fg = "#DCA561" },
+            }
+        end,
+        theme = "wave",
+        background = {
+            dark = "wave",
+            light = "lotus",
         },
     }
 end
@@ -144,7 +162,6 @@ M.colors = {
         git = { change = "#6183bb", add = "#449dab", delete = "#f7768e", conflict = "#bb7a61" },
         gitSigns = { add = "#164846", change = "#394b70", delete = "#823c41" },
     },
-
     kanagawa_colors = {
         cmp_border = "#16161D",
         bg = "#21212A",

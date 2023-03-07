@@ -1,4 +1,5 @@
-set_title = false
+set_title = true
+display_time = true
 disable = [
     "system",
     "flatpak",
@@ -36,5 +37,7 @@ repos = [
 arguments = "--ff-only --rebase --autostash"
 
 [commands]
-"Pip packages" = "pip-review -a"
 "Amzn toolbox" = "toolbox update"
+
+[python]
+enable_pip_review = true

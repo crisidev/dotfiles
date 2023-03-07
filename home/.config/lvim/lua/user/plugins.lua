@@ -596,12 +596,22 @@ M.config = function()
             config = function()
                 require("user.ntest").config()
             end,
-            dependencies = { "nvim-neotest/neotest-plenary" },
+            dependencies = {
+                "vim-test/vim-test",
+                "nvim-lua/plenary.nvim",
+                "nvim-treesitter/nvim-treesitter",
+                "antoinemadec/FixCursorHold.nvim",
+            },
             event = { "BufReadPost", "BufNew" },
         },
+        { "nvim-neotest/neotest-plenary" },
         { "nvim-neotest/neotest-go", event = { "BufEnter *.go" } },
         { "nvim-neotest/neotest-python", event = { "BufEnter *.py" } },
         { "rouge8/neotest-rust", event = { "BufEnter *.rs" } },
+        {
+            "nvim-neotest/neotest-vim-test",
+            ft = { "kotlin", "java" },
+        },
         -- Hop
         {
             "phaazon/hop.nvim",
