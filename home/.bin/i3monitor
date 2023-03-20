@@ -7,6 +7,8 @@ usage() {
 
 source "$HOME/.config/crisidev-common"
 
+set -x
+
 mode=${1}
 
 case "$mode" in

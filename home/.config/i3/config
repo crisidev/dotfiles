@@ -371,7 +371,7 @@ bar {
 # Startup commands
 ###########################
 # Start compositor and X stuff first
-exec --no-startup-id "/usr/bin/picom"
+exec --no-startup-id "/usr/local/bin/picom"
 exec --no-startup-id "/usr/bin/unclutter --ignore-scrolling"
 exec --no-startup-id "/usr/bin/xedgewarp -m closest"
 exec --no-startup-id "/usr/bin/dunst -c ~/.config/dunst/dunstrc"

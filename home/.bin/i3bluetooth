@@ -11,9 +11,10 @@ elif [ "$1" = "cycle" ]; then
 		bluetoothctl disconnect "$ADDRESS"
 	fi
 else
+    percentage=$(upower -i /org/freedesktop/UPower/devices/headphones_dev_78_2B_64_9F_C0_D3 |grep percentage: |awk '{print $2}')
 	if bluetoothctl info "$ADDRESS" | grep -q "Connected: no" >/dev/null 2>&1; then
 		echo '{"text":""}'
 	else
-		echo '{"icon":"","state":"Warning","text":""}'
+		echo "{\"icon\":\"\",\"state\":\"Warning\",\"text\":\" $percentage\"}"
 	fi
 fi

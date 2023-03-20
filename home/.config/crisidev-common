@@ -34,7 +34,6 @@ finish_autorandr_switch() {
 }
 
 autorandr_safe() {
-    # loaded=$($(rtx which autorandr) "$@" 2>&1)
     loaded=$(autorandr "$@" 2>&1)
     if echo "$loaded" | grep -q "Config already loaded"; then
         bash "$HOME/.config/autorandr/$2/postswitch"

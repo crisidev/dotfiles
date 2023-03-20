@@ -32,6 +32,7 @@ M.config = function()
         "hiddenoff",
         "algorithm:minimal",
     }
+    vim.g.toggle_theme_icon = "   "
     -- Set wrap
     vim.opt.wrap = true
     -- Enable term GUI
@@ -118,6 +119,9 @@ M.config = function()
         precedes = "‹", -- Alternatives: … «
         trail = "•", -- BULLET (U+2022, UTF-8: E2 80 A2)
     }
+    vim.opt.backupskip = "/tmp/*,$TMPDIR/*,$TMP/*,$TEMP/*,*/shm/*,/private/var/*,.vault.vim"
+    vim.opt.ttyfast = true
+
     -- Cursorline highlighting control
     --  Only have it on in the active buffer
     vim.opt.cursorline = true -- Highlight the current line

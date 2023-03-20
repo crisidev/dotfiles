@@ -33,6 +33,7 @@ repos = [
     "~/github/0updates/rofi-source",
     "~/github/0updates/bitwarden-rofi",
     "~/github/0updates/rofi-emoji",
+    "~/github/0updates/picom",
 ]
 arguments = "--ff-only --rebase --autostash"
 

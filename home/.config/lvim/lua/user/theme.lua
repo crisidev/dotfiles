@@ -59,7 +59,7 @@ M.tokyonight = function()
         day_brightness = 0.3,
         hide_inactive_statusline = true,
         dim_inactive = true,
-        lualine_bold = false, -- When `true`, section headers in the lualine theme will be bold
+        lualine_bold = true,
         on_colors = function(colors)
             colors.git = { change = "#6183bb", add = "#449dab", delete = "#f7768e", conflict = "#bb7a61" }
             colors.bg_dark = "#1a1e30"
@@ -71,6 +71,7 @@ M.tokyonight = function()
             c.bg_dim = "#1f2335"
             c.bg_float = "#1a1e30"
             local current_colors = M.colors.tokyonight_colors
+            hl["@variable"] = { fg = c.fg }
             hl.NormalFloat = { fg = current_colors.fg, bg = "#181924" }
             hl.Cursor = { fg = current_colors.bg, bg = current_colors.fg }
             hl.NormalNC = { fg = current_colors.fg_dark, bg = "#1c1d28" }
@@ -80,7 +81,6 @@ M.tokyonight = function()
     }
 end
 
-M.kanagawa = function() end
 M.kanagawa = function()
     local kanagawa = require "kanagawa"
     kanagawa.setup {
@@ -250,6 +250,16 @@ M.telescope_theme = function(colorset)
     link("LspDiagnosticsSignInfo", "DiagnosticInfo")
     link("NeoTreeDirectoryIcon", "NvimTreeFolderIcon")
     link("IndentBlanklineIndent1 ", "@comment")
+    if vim.fn.has "nvim-0.9" == 1 then
+        link("@lsp.type.enum", "@type")
+        link("@lsp.type.keyword", "@keyword")
+        link("@lsp.type.namespace", "@namespace")
+        link("@lsp.type.parameter", "@parameter")
+        link("@lsp.type.variable", "@variable")
+        link("@lsp.type.property", "@property")
+        link("@lsp.typemod.function.defaultLibrary", "Special")
+        link("@lsp.typemod.variable.defaultLibrary", "@variable.builtin")
+    end
     local current_colors = colorset
     if colorset == nil or #colorset == 0 then
         current_colors = M.current_colors()
