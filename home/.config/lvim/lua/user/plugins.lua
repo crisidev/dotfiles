@@ -106,7 +106,7 @@ M.config = function()
         {
             "ray-x/lsp_signature.nvim",
             config = function()
-                require("user/lsp_signature").config()
+                require("user.lsp.signature").config()
             end,
             ft = { "typescript", "javascript", "lua", "c", "cpp", "go", "python", "java", "rust" },
             event = { "BufRead", "BufNew" },
