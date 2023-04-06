@@ -12,6 +12,8 @@ usage() {
 	exit 2
 }
 
+eval "$(rtx activate bash)"
+
 # Start neovim IDE using class `ide` and listening on $NVIM_LISTEN_ADDRESS
 function start_ide() {
     [ -f $HOME/.cargo/env ] && source $HOME/.cargo/env

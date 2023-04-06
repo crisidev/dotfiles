@@ -397,7 +397,6 @@ M.config = function()
         },
     }
 
-
     local icons = require("user.icons").icons
 
     lvim.builtin.dap.on_config_done = function(_)

@@ -32,7 +32,7 @@ M.config = function()
     -- Codelense viewer
     vim.api.nvim_create_autocmd("CursorHold", {
         group = "_lvim_user",
-        pattern = { "*.rs", "*.c", "*.cpp", "*.go", "*.ts", "*.tsx", "*.kt", "*.py", "*.pyi", "*.java" },
+        pattern = { "*.rs", "*.c", "*.cpp", "*.go", "*.ts", "*.tsx", "*.py", "*.pyi", "*.java" },
         desc = "Enable and refresh codelens",
         command = "lua require('user.codelens').show_line_sign()",
     })

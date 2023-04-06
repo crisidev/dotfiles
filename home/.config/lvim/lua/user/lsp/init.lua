@@ -36,6 +36,7 @@ M.config = function()
         "tsserver",
         "yamlls",
         "grammar_guard",
+        "kotlin_language_server",
     })
     lvim.lsp.document_highlight = true
     lvim.lsp.code_lens_refresh = true
@@ -113,6 +114,7 @@ M.config = function()
     require("user.lsp.yaml").config()
     require("user.lsp.toml").config()
     require("user.lsp.markdown").config()
+    require("user.lsp.kotlin").config()
 
     -- Mappings
     require("user.comment").config()

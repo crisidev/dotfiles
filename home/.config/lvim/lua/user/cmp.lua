@@ -37,9 +37,9 @@ M.config = function()
         { name = "nvim_lsp", group_index = 1 },
         { name = "nvim_lsp_signature_help", group_index = 1 },
         { name = "nvim_lua", group_index = 1 },
-        { name = "buffer", group_index = 1, max_item_count = 5, keyword_length = 3 },
+        { name = "buffer", group_index = 1, max_item_count = 5, keyword_length = 4 },
         { name = "path", group_index = 1 },
-        { name = "dictionary", group_index = 1 },
+        { name = "dictionary", group_index = 1, keyword_length = 4 },
         { name = "git", group_index = 1 },
         { name = "crates", group_index = 1 },
         { name = "emoji", group_index = 1 },
@@ -125,6 +125,17 @@ M.config = function()
             },
         })
     end
+    cmp.setup.filetype("kotlin", {
+        sources = cmp.config.sources({
+            { name = "copilot", group_index = 1 },
+            { name = "luasnip", group_index = 1, max_item_count = 5, keyword_length = 3 },
+            { name = "nvim_lsp", group_index = 1 },
+            { name = "buffer", group_index = 1, max_item_count = 5, keyword_length = 4 },
+            { name = "path", group_index = 1 },
+            { name = "dictionary", group_index = 1, keyword_length = 4 },
+            { name = "emoji", group_index = 2 },
+        }, {}),
+    })
     cmp.setup.filetype("toml", {
         sources = cmp.config.sources({
             { name = "nvim_lsp", group_index = 1 },

@@ -1,5 +1,22 @@
 local M = {}
 
+M.config = function()
+    local home = vim.env.HOME
+    local cmd_path =
+        vim.fn.glob(home .. "/github/kotlin-language-server/server/build/install/server/bin/kotlin-language-server")
+    local util = require "lspconfig.util"
+    local opts = {
+        cmd = { cmd_path },
+        on_attach = require("lvim.lsp").common_on_attach,
+        on_init = require("lvim.lsp").common_on_init,
+        capabilities = require("lvim.lsp").common_capabilities(),
+        filetypes = { "kotlin", "kt", "kts" },
+        root_dir = util.root_pattern("settings.gradle.kts", "gradlew"),
+    }
+
+    require("lvim.lsp.manager").setup("kotlin_language_server", opts)
+end
+
 M.build_tools = function()
     local icons = require "user.icons"
     local which_key = require "which-key"

@@ -182,6 +182,8 @@ M.config = function()
         "*.swp,.lock,.DS_Store,._*,tags.lock",
         -- version control
         ".git,.svn",
+        -- Rust
+        "Cargo.lock,Cargo.Bazel.lock",
     }
 
     -- Disable perl and ruby providers.

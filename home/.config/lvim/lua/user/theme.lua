@@ -259,6 +259,12 @@ M.telescope_theme = function(colorset)
         link("@lsp.type.property", "@property")
         link("@lsp.typemod.function.defaultLibrary", "Special")
         link("@lsp.typemod.variable.defaultLibrary", "@variable.builtin")
+        -- link("@lsp.typemod.variable.global", "@constant.builtin")
+        link("@lsp.typemod.operator", "@operator")
+        link("@lsp.typemod.string", "@string")
+        link("@lsp.typemod.variable", "@variable")
+        link("@lsp.typemod.parameter.label", "@field")
+        link("@type.qualifier", "@keyword")
     end
     local current_colors = colorset
     if colorset == nil or #colorset == 0 then

@@ -108,6 +108,7 @@ M.config = function()
             config = function()
                 require("user/lsp_signature").config()
             end,
+            ft = { "typescript", "javascript", "lua", "c", "cpp", "go", "python", "java", "rust" },
             event = { "BufRead", "BufNew" },
             enabled = lvim.builtin.lsp_signature_help.active,
         },
