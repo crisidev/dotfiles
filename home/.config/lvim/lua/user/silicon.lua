@@ -3,8 +3,8 @@ local M = {}
 M.config = function()
     vim.cmd [[
         let g:silicon = {
-              \   'theme': 'Enki-Tokyo-Night',
-              \   'font': 'MonoLisa Nerd Font',
+              \   'theme': 'Enki-Tokyo-Night', 
+              \   'font': 'MonoLisaCrisidev Nerd Font',
               \   'background':         '#202228',
               \   'shadow-color':       '#000000',
               \   'line-pad': 0,

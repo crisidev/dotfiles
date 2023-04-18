@@ -81,7 +81,7 @@ M.config = function()
             .. vim.version().minor
             .. "."
             .. vim.version().patch
-            .. "     │"
+            .. "    │"
     )
     local lvim_version =
         text("│  " .. icons.moon .. " LunarVim " .. require("lvim.utils.git").get_lvim_version() .. " │")
