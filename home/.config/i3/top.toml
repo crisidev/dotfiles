@@ -75,6 +75,7 @@ good = 60
 warning = 40
 critical = 20
 driver = "upower"
+# device = "BAT0"
 format = " $icon $power $time ($percentage) "
 interval = 30
 

@@ -20,7 +20,7 @@ M.config = function()
         CONFIG = "mac"
         WORKSPACE_PATH = home .. "/.cache/jdtls/workspace/"
     elseif vim.fn.has "unix" == 1 then
-        WORKSPACE_PATH = home .. "/.cache/.jdtls/workspace/"
+        WORKSPACE_PATH = home .. "/.cache/jdtls/workspace/"
     else
         vim.notify("Unsupported system", vim.log.levels.ERROR)
         return
@@ -65,7 +65,7 @@ M.config = function()
             "-Declipse.product=org.eclipse.jdt.ls.core.product",
             "-Dlog.protocol=true",
             "-Dlog.level=ALL",
-            "-javaagent:" .. home .. "/.local/share/nvim/mason/packages/jdtls/lombok.jar",
+            "-javaagent:" .. mason_path .. "/packages/jdtls/lombok.jar",
             "-Xms1g",
             "--add-modules=ALL-SYSTEM",
             "--add-opens",

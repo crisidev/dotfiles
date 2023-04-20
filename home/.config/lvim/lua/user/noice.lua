@@ -5,8 +5,10 @@ M.config = function()
     if not status_ok then
         return
     end
-    local noice_over = require "noice.lsp.hover"
-    vim.lsp.handlers["textDocument/hover"] = noice_over.on_hover
+    if lvim.builtin.noice.hover then
+        local noice_over = require "noice.lsp.hover"
+        vim.lsp.handlers["textDocument/hover"] = noice_over.on_hover
+    end
     local icons = require("user.icons").icons
     local spinners = require "noice.util.spinners"
     spinners.spinners["mine"] = {

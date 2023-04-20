@@ -59,6 +59,11 @@ M.config = function()
         nls.builtins.formatting.isort.with {
             extra_args = { "--profile", "black", "-l", "120", "-m", "3", "-tc" },
         },
+        nls.builtins.formatting.ruff.with {
+            condition = function(utils)
+                return utils.root_has_file { "ruff.toml", ".ruff.toml" }
+            end,
+        },
         nls.builtins.diagnostics.ansiblelint.with {
             condition = function(utils)
                 return (utils.root_has_file "roles" and utils.root_has_file "inventories")
@@ -109,6 +114,11 @@ M.config = function()
                 d.end_col = d.col
                 d.end_row = d.row
                 d.end_lnum = d.lnum
+            end,
+        },
+        nls.builtins.diagnostics.ruff.with {
+            condition = function(utils)
+                return utils.root_has_file { "ruff.toml", ".ruff.toml" }
             end,
         },
         nls.builtins.code_actions.shellcheck,
