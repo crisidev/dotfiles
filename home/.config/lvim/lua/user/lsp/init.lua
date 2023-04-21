@@ -25,7 +25,8 @@ M.config = function()
     -- Log level
     vim.lsp.set_log_level "error"
 
-    -- Installer
+    -- Disabled server
+    -- Remember to run :LvimCacheReset if you change this list.
     vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, {
         "clangd",
         "gopls",
