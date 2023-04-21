@@ -32,6 +32,7 @@ M.config = function()
         "golangci_lint_ls",
         "jdtls",
         "pyright",
+        "pylyzer",
         "rust_analyzer",
         "tsserver",
         "yamlls",
