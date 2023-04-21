@@ -63,7 +63,7 @@ M.config = function()
                     name = "tests",
                     icon = icons.test,
                     matcher = function(buf)
-                        return buf.filename:match "_spec" or buf.filename:match "test_"
+                        return vim.api.nvim_buf_get_name(buf.id):match "_spec" or buf.filename:match "test_"
                     end,
                 },
                 {
@@ -76,17 +76,17 @@ M.config = function()
                 {
                     name = "cfg",
                     matcher = function(buf)
-                        return buf.filename:match "go.mod"
-                            or buf.filename:match "go.sum"
-                            or buf.filename:match "Cargo.toml"
-                            or buf.filename:match "manage.py"
-                            or buf.filename:match "config.toml"
-                            or buf.filename:match "setup.py"
-                            or buf.filename:match "Makefile"
-                            or buf.filename:match "Config"
-                            or buf.filename:match "gradle.properties"
-                            or buf.filename:match "build.gradle.kts"
-                            or buf.filename:match "settings.gradle.kts"
+                        return vim.api.nvim_buf_get_name(buf.id):match "go.mod"
+                            or vim.api.nvim_buf_get_name(buf.id):match "go.sum"
+                            or vim.api.nvim_buf_get_name(buf.id):match "Cargo.toml"
+                            or vim.api.nvim_buf_get_name(buf.id):match "manage.py"
+                            or vim.api.nvim_buf_get_name(buf.id):match "config.toml"
+                            or vim.api.nvim_buf_get_name(buf.id):match "setup.py"
+                            or vim.api.nvim_buf_get_name(buf.id):match "Makefile"
+                            or vim.api.nvim_buf_get_name(buf.id):match "Config"
+                            or vim.api.nvim_buf_get_name(buf.id):match "gradle.properties"
+                            or vim.api.nvim_buf_get_name(buf.id):match "build.gradle.kts"
+                            or vim.api.nvim_buf_get_name(buf.id):match "settings.gradle.kts"
                     end,
                 },
                 {

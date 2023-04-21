@@ -53,8 +53,6 @@ M.config = function()
     lvim.builtin.bigfile.active = true
     -- Inlay hints
     lvim.builtin.inlay_hints = { active = true }
-    -- Mind not taking
-    lvim.builtin.mind = { active = true, root_path = "~/.mind" }
     -- Drop stars
     lvim.builtin.drop = { active = false }
     -- Scala

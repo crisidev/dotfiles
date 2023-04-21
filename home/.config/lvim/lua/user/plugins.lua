@@ -647,17 +647,6 @@ M.config = function()
                 require("user.tabout").config()
             end,
         },
-        -- Mind
-        {
-            "phaazon/mind.nvim",
-            branch = "v2.2",
-            dependencies = { "nvim-lua/plenary.nvim" },
-            config = function()
-                require("user.mind").config()
-            end,
-            event = "VeryLazy",
-            enabled = lvim.builtin.mind.active,
-        },
         -- Silly stars
         {
             "folke/drop.nvim",

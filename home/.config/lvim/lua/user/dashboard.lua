@@ -139,7 +139,6 @@ M.config = function()
             button("z", icons.folder .. "  Zoxide", "<cmd>lua require('user.telescope').zoxide()<cr>"),
             button("f", kind.File .. " Find file", "<cmd>lua require('user.telescope').find_project_files()<cr>"),
             button("s", icons.text .. "  Find word", "<cmd>lua require('user.telescope').find_string()<cr>"),
-            button("m", icons.mind .. " Mind open", "<cmd>MindOpenMain<cr>"),
             button("n", icons.stuka .. " New file", "<cmd>ene <BAR> startinsert <cr>"),
             button("b", icons.files .. " File browser", "<cmd>lua require('user.telescope').file_browser()<cr>"),
             button("q", icons.exit .. " Quit", "<cmd>quit<cr>"),
