@@ -217,6 +217,9 @@ M.config = function()
     -- Colorcolumn
     vim.cmd [[set colorcolumn=]]
 
+    -- Editorconfig
+    vim.g.editorconfig = true
+
     if vim.fn.has "nvim-0.8" == 1 then
         vim.filetype.add {
             extension = {

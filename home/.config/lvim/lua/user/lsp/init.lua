@@ -1,5 +1,7 @@
 local M = {}
 
+local icons = require("user.icons").icons
+
 M.show_documentation = function()
     local filetype = vim.bo.filetype
     if vim.tbl_contains({ "vim", "help" }, filetype) then
@@ -20,8 +22,39 @@ M.show_documentation = function()
     end
 end
 
+M.default_diagnostic_config = {
+    signs = {
+        active = true,
+        values = {
+            { name = "DiagnosticSignError", text = icons.error },
+            { name = "DiagnosticSignWarn", text = icons.warn },
+            { name = "DiagnosticSignInfo", text = icons.info },
+            { name = "DiagnosticSignHint", text = icons.hint },
+        },
+    },
+    virtual_text = false,
+    underline = true,
+    severity_sort = true,
+    float = {
+        focusable = false,
+        style = "minimal",
+        source = "if_many",
+        header = "",
+        prefix = "",
+        border = {
+            { " ", "FloatBorder" },
+            { " ", "FloatBorder" },
+            { " ", "FloatBorder" },
+            { " ", "FloatBorder" },
+            { " ", "FloatBorder" },
+            { " ", "FloatBorder" },
+            { " ", "FloatBorder" },
+            { " ", "FloatBorder" },
+        },
+    },
+}
+
 M.config = function()
-    local icons = require("user.icons").icons
     -- Log level
     vim.lsp.set_log_level "error"
 
@@ -43,58 +76,40 @@ M.config = function()
     lvim.lsp.document_highlight = true
     lvim.lsp.code_lens_refresh = true
 
-    -- Disable inline diagnostics
-    lvim.lsp.diagnostics.virtual_text = false
     -- LSP lines
     vim.diagnostic.config { virtual_lines = false }
 
-    -- Setup diagnostics icons
-    lvim.lsp.diagnostics.signs.values = {
-        { name = "DiagnosticSignError", text = icons.error },
-        { name = "DiagnosticSignWarn", text = icons.warn },
-        { name = "DiagnosticSignInfo", text = icons.info },
-        { name = "DiagnosticSignHint", text = icons.hint },
-    }
+    -- Setup diagnostics
+    if lvim.builtin.lsp_lines then
+        M.default_diagnostic_config.virtual_text = false
+    end
+    vim.diagnostic.config(M.default_diagnostic_config)
 
-    -- Borders
-    lvim.lsp.float.border = {
-        { "╔", "FloatBorder" },
-        { "═", "FloatBorder" },
-        { "╗", "FloatBorder" },
-        { "║", "FloatBorder" },
-        { "╝", "FloatBorder" },
-        { "═", "FloatBorder" },
-        { "╚", "FloatBorder" },
-        { "║", "FloatBorder" },
-    }
-    lvim.lsp.diagnostics.float.border = {
-        { " ", "FloatBorder" },
-        { " ", "FloatBorder" },
-        { " ", "FloatBorder" },
-        { " ", "FloatBorder" },
-        { " ", "FloatBorder" },
-        { " ", "FloatBorder" },
-        { " ", "FloatBorder" },
-        { " ", "FloatBorder" },
-    }
-    if vim.env.KITTY_WINDOW_ID then
-        lvim.lsp.float.border = {
-            { "🭽", "FloatBorder" },
-            { "▔", "FloatBorder" },
-            { "🭾", "FloatBorder" },
-            { "▕", "FloatBorder" },
-            { "🭿", "FloatBorder" },
-            { "▁", "FloatBorder" },
-            { "🭼", "FloatBorder" },
-            { "▏", "FloatBorder" },
+    if lvim.builtin.noice.hover then
+        local found, noice_util = pcall(require, "noice.util")
+        if found then
+            vim.lsp.handlers["textDocument/signatureHelp"] = noice_util.protect(require("noice.lsp").signature)
+            vim.lsp.handlers["textDocument/hover"] = noice_util.protect(require("noice.lsp.hover").on_hover)
+        end
+        local float_config = {
+            focusable = true,
+            style = "minimal",
+            border = {
+                { "🭽", "FloatBorder" },
+                { "▔", "FloatBorder" },
+                { "🭾", "FloatBorder" },
+                { "▕", "FloatBorder" },
+                { "🭿", "FloatBorder" },
+                { "▁", "FloatBorder" },
+                { "🭼", "FloatBorder" },
+                { "▏", "FloatBorder" },
+            },
         }
-        lvim.lsp.diagnostics.float.border = lvim.lsp.float.border
+        vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, float_config)
+        vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, float_config)
     end
 
     -- Float
-    lvim.lsp.diagnostics.float.focusable = false
-    lvim.lsp.float.focusable = true
-    lvim.lsp.diagnostics.float.source = "if_many"
     lvim.lsp.document_highlight = true
     lvim.lsp.code_lens_refresh = true
 

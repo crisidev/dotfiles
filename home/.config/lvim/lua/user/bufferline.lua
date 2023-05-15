@@ -63,7 +63,8 @@ M.config = function()
                     name = "tests",
                     icon = icons.test,
                     matcher = function(buf)
-                        return vim.api.nvim_buf_get_name(buf.id):match "_spec" or buf.filename:match "test_"
+                        return vim.api.nvim_buf_get_name(buf.id):match "_spec"
+                            or vim.api.nvim_buf_get_name(buf.id):match "test_"
                     end,
                 },
                 {

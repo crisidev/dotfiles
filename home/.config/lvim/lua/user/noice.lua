@@ -5,10 +5,6 @@ M.config = function()
     if not status_ok then
         return
     end
-    if lvim.builtin.noice.hover then
-        local noice_over = require "noice.lsp.hover"
-        vim.lsp.handlers["textDocument/hover"] = noice_over.on_hover
-    end
     local icons = require("user.icons").icons
     local spinners = require "noice.util.spinners"
     spinners.spinners["mine"] = {
@@ -63,7 +59,7 @@ M.config = function()
             signature = { enabled = false, auto_open = { enabled = false } },
             override = {
                 ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-                ["vim.lsp.util.stylize_markdown"] = true,
+                ["vim.lsp.util.stylize_markdown"] = false,
                 ["cmp.entry.get_documentation"] = true,
             },
         },
