@@ -85,12 +85,13 @@ M.config = function()
     end
     vim.diagnostic.config(M.default_diagnostic_config)
 
-    if lvim.builtin.noice.hover then
+    if lvim.builtin.noice.active and lvim.builtin.noice.hover then
         local found, noice_util = pcall(require, "noice.util")
         if found then
             vim.lsp.handlers["textDocument/signatureHelp"] = noice_util.protect(require("noice.lsp").signature)
             vim.lsp.handlers["textDocument/hover"] = noice_util.protect(require("noice.lsp.hover").on_hover)
         end
+    else
         local float_config = {
             focusable = true,
             style = "minimal",
@@ -132,7 +133,7 @@ M.config = function()
     require("user.lsp.toml").config()
     require("user.lsp.markdown").config()
     require("user.lsp.kotlin").config()
-    -- require("user.lsp.rust").config()
+    require("user.lsp.rust").config()
 
     -- Mappings
     require("user.comment").config()

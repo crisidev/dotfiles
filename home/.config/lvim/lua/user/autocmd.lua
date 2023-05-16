@@ -132,10 +132,7 @@ M.config = function()
         group = "_build_tools",
         pattern = { "rust", "rs" },
         desc = "Set additional buffer keymaps for Rust files",
-        callback = function(_args)
-            require("user.lsp.rust").config()
-            require("user.lsp.rust").build_tools()
-        end,
+        callback = require("user.lsp.rust").build_tools,
     })
 
     -- Python

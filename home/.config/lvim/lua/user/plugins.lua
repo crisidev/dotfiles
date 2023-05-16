@@ -124,9 +124,6 @@ M.config = function()
             "simrat39/rust-tools.nvim",
             ft = { "rust", "rs" },
             lazy = true,
-            config = function()
-                require("user.lsp.rust").config()
-            end,
         },
         -- Lsp java
         {
@@ -167,6 +164,7 @@ M.config = function()
         -- Lsp lines
         {
             "lvimuser/lsp-inlayhints.nvim",
+            ft = { "typescript", "javascript", "lua", "c", "cpp", "go", "python", "java", "kotlin" },
             config = function()
                 require("user.inlay").config()
             end,

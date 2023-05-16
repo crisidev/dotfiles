@@ -12,7 +12,7 @@ M.config = function()
             executor = require("rust-tools/executors").termopen, -- can be quickfix or termopen
             reload_workspace_from_cargo_toml = true,
             inlay_hints = {
-                auto = false,
+                auto = true,
                 only_current_line = true,
                 show_parameter_hints = true,
                 parameter_hints_prefix = "in: ",
@@ -34,7 +34,7 @@ M.config = function()
                     { "╰", "FloatBorder" },
                     { "│", "FloatBorder" },
                 },
-                auto_focus = true,
+                auto_focus = false,
             },
         },
         server = {
@@ -42,7 +42,9 @@ M.config = function()
             on_init = require("lvim.lsp").common_on_init,
             settings = {
                 ["rust-analyzer"] = {
-                    inlayHints = { locationLinks = false },
+                    inlayHints = {
+                        locationLinks = false,
+                    },
                     cargo = {
                         features = "all",
                     },
