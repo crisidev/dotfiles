@@ -70,13 +70,9 @@ M.config = function()
         plugins = plugins:gsub("^%s*(.-)%s*$", "%1")
     end
     local minor_len = string.len(vim.version().minor)
-    local empty_space = ""
-    for i = 1, minor_len do
-        empty_space = empty_space .. " "
-    end
     local border_upper =
         text "╭─────────────────────────────╮"
-    local date = text("│  " .. icons.calendar .. empty_space .. "Today is " .. os.date "%a %d %b" .. "      │")
+    local date = text("│  " .. icons.calendar .. "Today is " .. os.date "%a %d %b" .. "      │")
     local nvim_version = text(
         "│  "
             .. " Neovim version "

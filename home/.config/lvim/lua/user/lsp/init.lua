@@ -132,6 +132,7 @@ M.config = function()
     require("user.lsp.toml").config()
     require("user.lsp.markdown").config()
     require("user.lsp.kotlin").config()
+    -- require("user.lsp.rust").config()
 
     -- Mappings
     require("user.comment").config()

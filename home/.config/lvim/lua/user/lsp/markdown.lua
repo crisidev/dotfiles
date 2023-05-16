@@ -13,12 +13,12 @@ M.config = function()
             ltex = {
                 checkFrequency = "save",
                 enabled = { "latex", "tex", "bib", "markdown", "rst", "text" },
-                language = "en",
+                language = "en-US",
                 diagnosticSeverity = "information",
                 sentenceCacheSize = 2000,
                 additionalRules = {
                     enablePickyRules = true,
-                    motherTongue = "en",
+                    -- motherTongue = "it-IT",
                 },
                 trace = { server = "warning" },
             },
