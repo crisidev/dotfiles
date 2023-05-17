@@ -85,12 +85,10 @@ M.config = function()
     end
     vim.diagnostic.config(M.default_diagnostic_config)
 
-    if lvim.builtin.noice.active and lvim.builtin.noice.hover then
-        local found, noice_util = pcall(require, "noice.util")
-        if found then
-            vim.lsp.handlers["textDocument/signatureHelp"] = noice_util.protect(require("noice.lsp").signature)
-            vim.lsp.handlers["textDocument/hover"] = noice_util.protect(require("noice.lsp.hover").on_hover)
-        end
+    local found, noice_util = pcall(require, "noice.util")
+    if found and lvim.builtin.noice.active then
+        vim.lsp.handlers["textDocument/signatureHelp"] = noice_util.protect(require("noice.lsp").signature)
+        vim.lsp.handlers["textDocument/hover"] = noice_util.protect(require("noice.lsp.hover").on_hover)
     else
         local float_config = {
             focusable = true,

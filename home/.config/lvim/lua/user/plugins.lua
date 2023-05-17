@@ -113,12 +113,12 @@ M.config = function()
             enabled = lvim.builtin.lsp_signature_help.active,
         },
         -- Lsp progreess in fidget
-        {
-            "j-hui/fidget.nvim",
-            config = function()
-                require("user.fidget").config()
-            end,
-        },
+        -- {
+        --     "j-hui/fidget.nvim",
+        --     config = function()
+        --         require("user.fidget").config()
+        -- end,
+        -- },
         -- Lsp Rust
         {
             "simrat39/rust-tools.nvim",
@@ -236,16 +236,6 @@ M.config = function()
             config = function()
                 require("user.refactoring").config()
             end,
-        },
-        -- Incremental rename
-        {
-            "smjonas/inc-rename.nvim",
-            config = function()
-                require("inc_rename").setup()
-            end,
-            lazy = true,
-            cmd = "IncRename",
-            enabled = lvim.builtin.noice.active,
         },
         {
             "cshuaimin/ssr.nvim",
@@ -489,6 +479,8 @@ M.config = function()
             dependencies = {
                 "rcarriga/nvim-notify",
                 "MunifTanjim/nui.nvim",
+
+                "smjonas/inc-rename.nvim",
             },
             enabled = lvim.builtin.noice.active,
         },

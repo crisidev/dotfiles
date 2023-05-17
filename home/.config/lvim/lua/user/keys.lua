@@ -312,18 +312,7 @@ M.insert_keys = function()
     }
 
     -- Signature help
-    if lvim.builtin.noice.active then
-        lvim.keys.insert_mode["<C-s>"] = function()
-            local params = vim.lsp.util.make_position_params(0, "utf-16")
-            vim.lsp.buf_request(0, "textDocument/signatureHelp", params, function(err, result, ctx)
-                require("noice.lsp").signature(err, result, ctx, {
-                    trigger = true,
-                })
-            end)
-        end
-    else
-        lvim.keys.insert_mode["<C-s>"] = "<cmd>lua vim.lsp.buf.signature_help()<cr>"
-    end
+    lvim.keys.insert_mode["<C-s>"] = "<cmd>lua vim.lsp.buf.signature_help()<cr>"
 
     -- File explorer
     if lvim.builtin.tree_provider == "neo-tree" then

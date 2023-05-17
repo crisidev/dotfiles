@@ -41,21 +41,28 @@ M.config = function()
         interval = 80,
     }
     noice.setup {
+        format = {
+            spinner = {
+                name = "mine",
+            },
+        },
         presets = {
             bottom_search = true,
+            inc_rename = true,
+            lsp_doc_border = false,
+            command_palette = false,
         },
         lsp = {
             progress = {
-                enabled = false,
+                enabled = true,
                 format = {
-                    { "{data.progress.percentage} ", hl_group = "Comment" },
-                    { "{spinner} ", hl_group = "NoiceLspProgressSpinner" },
-                    { "{data.progress.title} ", hl_group = "Comment" },
+                    { "{spinner}", hl_group = "NoiceLspProgressSpinner" },
+                    { "{data.progress.percentage} ", hl_group = "NoiceLspProgressClient" },
+                    { "{data.progress.title} ", hl_group = "NoiceLspProgressTitle" },
                 },
                 format_done = {},
             },
-            messages = { enabled = false },
-            hover = { enabled = false },
+            hover = { enabled = true },
             signature = { enabled = false, auto_open = { enabled = false } },
             override = {
                 ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
