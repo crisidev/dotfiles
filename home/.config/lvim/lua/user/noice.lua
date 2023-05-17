@@ -73,7 +73,62 @@ M.config = function()
         cmdline = {
             view = "cmdline",
             format = {
-                filter = { pattern = "^:%s*!", icon = icons.term, ft = "sh" },
+                cmdline = { pattern = "^:", icon = "", lang = "vim" },
+                search_down = { kind = "search", pattern = "^/", icon = "  ", lang = "regex" },
+                search_up = { kind = "search", pattern = "^%?", icon = "  ", lang = "regex" },
+                filter = { pattern = "^:%s*!", icon = "$ ", lang = "bash" },
+                lua = { pattern = "^:%s*lua%s+", icon = " ", lang = "lua" },
+                help = { pattern = "^:%s*h%s+", icon = " " },
+                calculator = { pattern = "^=", icon = " ", lang = "vimnormal" },
+                input = {},
+            },
+        },
+        messages = {
+            enabled = true,
+            view = "notify",
+            view_error = "notify",
+            view_warn = "notify",
+            view_history = "split",
+            view_search = false,
+        },
+        popupmenu = {
+            enabled = true,
+            backend = "nui",
+            kind_icons = {},
+        },
+        commands = {
+            history = {
+                view = "split",
+                opts = { enter = true, format = "details" },
+                filter = {
+                    any = {
+                        { event = "notify" },
+                        { error = true },
+                        { warning = true },
+                        { event = "msg_show", kind = { "" } },
+                        { event = "lsp", kind = "message" },
+                    },
+                },
+            },
+            last = {
+                view = "popup",
+                opts = { enter = true, format = "details" },
+                filter = {
+                    any = {
+                        { event = "notify" },
+                        { error = true },
+                        { warning = true },
+                        { event = "msg_show", kind = { "" } },
+                        { event = "lsp", kind = "message" },
+                    },
+                },
+                filter_opts = { count = 1 },
+            },
+            errors = {
+                view = "popup",
+                opts = { enter = true, format = "details" },
+                filter = { error = true },
+                filter_opts = { reverse = true },
             },
         },
         views = {
@@ -89,9 +144,6 @@ M.config = function()
                     cursorline = false,
                 },
             },
-        },
-        popupmenu = {
-            enabled = false,
         },
         routes = {
             {
