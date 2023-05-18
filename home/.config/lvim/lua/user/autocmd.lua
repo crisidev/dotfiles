@@ -11,6 +11,9 @@ M.config = function()
             require("user.theme").telescope_theme {}
             require("user.theme").dashboard_theme()
             require("user.icons").define_dap_signs()
+            if lvim.use_icons == false and lvim.builtin.custom_web_devicons then
+                require("user.icons").set_icon()
+            end
         end,
     })
 
@@ -118,6 +121,7 @@ M.config = function()
 
     -- Build tools mappings
     vim.api.nvim_create_augroup("_build_tools", {})
+    vim.api.nvim_create_augroup("_format_tools", {})
 
     -- Cargo.toml
     vim.api.nvim_create_autocmd("FileType", {
@@ -142,6 +146,16 @@ M.config = function()
         desc = "Set additional buffer keymaps for Python files",
         callback = require("user.lsp.python").build_tools,
     })
+    -- vim.api.nvim_create_autocmd("BufWritePre", {
+    --     group = "_format_tools",
+    --     pattern = { "*.py", "*.pyi" },
+    --     callback = function()
+    --         require("lvim.lsp.utils").format {
+    --             timeout_ms = 2500,
+    --             filter = require("lvim.lsp.utils").format_filter,
+    --         }
+    --     end,
+    -- })
 
     -- Java
     vim.api.nvim_create_autocmd("FileType", {

@@ -37,7 +37,7 @@ startup)
 	# "workspace 3:  ; exec --no-startup-id kitty $HOME/.bin/irc"
 	declare -a arr=(
 		"workspace 5:  ; exec --no-startup-id google-chrome --user-data-dir=$HOME/.local/share/chrome-chime --disable-session-crashed-bubble -app=https://app.chime.aws"
-		"workspace 6:  ; exec --no-startup-id env GTK_THEME=Yaru-purple evolution -c mail; exec --no-startup-id env GTK_THEME=Yaru-purple evolution -c calendar"
+		"workspace 6:  ; exec --no-startup-id thunderbird"
 		"workspace 8:  ; exec --no-startup-id google-chrome --user-data-dir=$HOME/.local/share/chrome-whatsapp --disable-session-crashed-bubble -app=https://web.whatsapp.com; exec --no-startup-id signal-desktop"
 		"workspace 9:  ; exec --no-startup-id slack"
 		"workspace 2:  ; exec --no-startup-id firefox"

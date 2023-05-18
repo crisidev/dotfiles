@@ -444,6 +444,7 @@ M.config = function()
             lazy = true,
             event = "BufReadPre",
             dependencies = "nvim-treesitter",
+            enabled = lvim.builtin.treesitter_textobjects.active
         },
         ------------------------------------------------------------------------------
         -- Debug
@@ -676,6 +677,13 @@ M.config = function()
                     create_commands = true,
                 }
             end,
+        },
+        {
+            "abzcoding/nvim-mini-file-icons",
+            config = function()
+                require("nvim-web-devicons").setup()
+            end,
+            enabled = lvim.builtin.custom_web_devicons or not lvim.use_icons,
         },
     }
 end

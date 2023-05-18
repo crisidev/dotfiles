@@ -17,7 +17,6 @@ eval "$(rtx activate bash)"
 # Start neovim IDE using class `ide` and listening on $NVIM_LISTEN_ADDRESS
 function start_ide() {
     [ -f $HOME/.cargo/env ] && source $HOME/.cargo/env
-    eval "$(rtx activate bash)"
     [ -f $HOME/.zsh_secrets ] && source $HOME/.zsh_secrets
     export LUNARVIM_RUNTIME_DIR="${LUNARVIM_RUNTIME_DIR:-"/home/ANT.AMAZON.COM/matbigoi/.local/share/lunarvim"}"
     export LUNARVIM_CONFIG_DIR="${LUNARVIM_CONFIG_DIR:-"/home/ANT.AMAZON.COM/matbigoi/.config/lvim"}"

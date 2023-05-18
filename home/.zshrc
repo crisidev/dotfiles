@@ -69,7 +69,7 @@ bindkey '^[[B' history-substring-search-down
 [ -f $HOME/.cargo/env ] && source $HOME/.cargo/env
 
 # paths
-CUSTOM_PATH=$HOME/.bin:$HOME/.toolbox/bin:$HOME/.local/share/lvim/mason/bin:$HOME/.rodar/bin
+CUSTOM_PATH=$HOME/.bin:$HOME/.toolbox/bin:$HOME/.local/share/lvim/mason/bin:$HOME/.rodar/bin:$HOME/.local/share/pnpm
 export PATH=$CUSTOM_PATH:$PATH
 
 # # terminal
@@ -92,3 +92,8 @@ eval "$(zoxide init zsh)"
 # spaceship
 eval "$(starship init zsh)"
 # zprof
+
+# pnpm
+export PNPM_HOME="/home/ANT.AMAZON.COM/matbigoi/.local/share/pnpm"
+export PATH="$PNPM_HOME:$PATH"
+# pnpm end

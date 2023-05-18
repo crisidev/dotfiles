@@ -123,9 +123,7 @@ assign [class="firefox"] $w2
 assign [class="irc"] $w3
 assign [class="Google-chrome" instance="google-chrome.*\(/home/.*/.local/share/chrome-chime\)"] $w4
 assign [class="Google-chrome" instance="app.chime.aws"] $w5
-# assign [title=".*Calendar.*"] $w7
-# assign [class="Evolution.real" title=".*Meeting.*"] $w7
-assign [class="Evolution.real"] $w6
+assign [class="thunderbird"] $w6
 assign [class="signal"] $w8
 assign [class="Signal"] $w8
 assign [class="Google-chrome" instance="web.whatsapp.com"] $w8

@@ -66,13 +66,6 @@ M.config = function()
         }
     end
     rust_tools.setup(opts)
-
-    lvim.format_on_save = {
-        enabled = true,
-        pattern = "*.rs",
-        timeout = 2000,
-        filter = require("lvim.lsp.utils").format_filter,
-    }
 end
 
 M.build_tools = function()
