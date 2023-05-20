@@ -111,6 +111,7 @@ for_window [class="Blueman-services"] floating enable
 for_window [class="tuxedo-control-center"] floating enable
 for_window [class="cemu.exe"] floating enable
 for_window [title="BOTW Cross-Platform Mod Loader"] floating enable
+for_window [title=".* Reminder"] floating enable
 for_window [class="steam_app_0"] floating enable
 for_window [class="steam_proton"] floating enable
 for_window [class="Bitwarden"] floating enable

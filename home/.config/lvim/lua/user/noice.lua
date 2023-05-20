@@ -212,7 +212,15 @@ M.config = function()
                 opts = { skip = true },
             },
             {
-                filter = { find = "nil" },
+                filter = { find = "E21: Cannot make changes, 'modifiable' is off" },
+                opts = { skip = true },
+            },
+            {
+                filter = { find = "E433: No tags file" },
+                opts = { skip = true },
+            },
+            {
+                filter = { find = "E426: Tag not found:" },
                 opts = { skip = true },
             },
         },

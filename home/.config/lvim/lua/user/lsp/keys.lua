@@ -93,6 +93,10 @@ M.lsp_normal_keys = function()
                 "<cmd>lua vim.lsp.buf.rename()<cr>",
                 icons.rename .. "Rename symbol",
             },
+            x = {
+                "<cmd>execute '!open ' . shellescape(expand('<cfile>'), 1)<cr>",
+                icons.world .. "Open URL",
+            },
             -- Peek
             z = {
                 "<cmd>lua require('user.peek').Peek('definition')<cr>",

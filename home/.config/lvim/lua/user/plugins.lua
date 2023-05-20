@@ -444,7 +444,7 @@ M.config = function()
             lazy = true,
             event = "BufReadPre",
             dependencies = "nvim-treesitter",
-            enabled = lvim.builtin.treesitter_textobjects.active
+            enabled = lvim.builtin.treesitter_textobjects.active,
         },
         ------------------------------------------------------------------------------
         -- Debug
