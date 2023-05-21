@@ -11,7 +11,7 @@ end
 M.show_line_sign = function()
     -- Check for code action capability
     local code_action_cap_found = false
-    for _, client in pairs(vim.lsp.buf_get_clients()) do
+    for _, client in pairs(vim.lsp.get_active_clients()) do
         if client then
             if client.supports_method "textDocument/codeAction" then
                 code_action_cap_found = true
@@ -29,9 +29,6 @@ M.show_line_sign = function()
     vim.lsp.buf_request_all(0, "textDocument/codeAction", params, M.handler_factory(params.range.start.line, bufnr))
 end
 
---- Check if the current line contains a codelens action
----@param cursor {number, number} The cursor position
----@return boolean True if the line contains a codelens action
 M.code_lens_available = function(cursor)
     local codelens_actions = {}
     for _, l in ipairs(vim.lsp.codelens.get(0)) do

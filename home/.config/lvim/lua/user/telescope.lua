@@ -280,7 +280,7 @@ M.subrange = function(table, first, last)
 end
 
 M.path_display = function()
-    return function(opts, path)
+    return function(_, path)
         local os_sep = utils.get_separator()
         local split_path = vim.split(path, os_sep)
         local path_count = M.table_lenght(split_path)

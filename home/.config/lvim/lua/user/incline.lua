@@ -5,16 +5,6 @@ local function truncate(str, max_len)
     return vim.api.nvim_strwidth(str) > max_len and str:sub(1, max_len) .. "…" or str
 end
 
-local function table_slice(tbl, first, last, step)
-    local sliced = {}
-
-    for i = first or 1, last or #tbl, step or 1 do
-        sliced[#sliced + 1] = tbl[i]
-    end
-
-    return sliced
-end
-
 local function render(props)
     local fmt = string.format
     local devicons = require "nvim-web-devicons"

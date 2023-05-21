@@ -69,7 +69,6 @@ M.config = function()
         handle:close()
         plugins = plugins:gsub("^%s*(.-)%s*$", "%1")
     end
-    local minor_len = string.len(vim.version().minor)
     local border_upper =
         text "╭─────────────────────────────╮"
     local date = text("│  " .. icons.calendar .. "Today is " .. os.date "%a %d %b" .. "      │")

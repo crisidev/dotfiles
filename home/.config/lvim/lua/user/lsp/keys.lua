@@ -262,7 +262,6 @@ end
 M.config = function()
     M.lsp_normal_keys()
     M.lsp_visual_keys()
-    require("user.debugprint").config()
 end
 
 return M

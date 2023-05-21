@@ -4,7 +4,7 @@ local icons = require("user.icons").icons
 
 M.enabled = function()
     if lvim.builtin.copilot.active then
-        for idx, source in pairs(vim.lsp.buf_get_clients()) do
+        for idx, source in pairs(vim.lsp.get_active_clients()) do
             if source.name == "copilot" then
                 return true
             end
@@ -62,7 +62,7 @@ end
 
 M.disable = function()
     if lvim.builtin.copilot.active then
-        for idx, source in pairs(vim.lsp.buf_get_clients()) do
+        for idx, source in pairs(vim.lsp.get_active_clients()) do
             if source.name == "copilot" then
                 vim.lsp.stop_client(source.id)
             end

@@ -21,7 +21,7 @@ M.config = function()
             builtin = {
                 pinned = {
                     name = "pinned",
-                    with = function(_ico) end,
+                    with = function(_) end,
                 },
                 ungroupued = { name = "ungrouped" },
             },

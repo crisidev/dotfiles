@@ -261,7 +261,7 @@ M.set_icon = function()
 end
 
 M.use_my_icons = function()
-    for _, sign in ipairs(require("user.lsp.init").default_diagnostic_config.signs.values) do
+    for _, sign in ipairs(require("user.lsp").default_diagnostic_config.signs.values) do
         vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = sign.name })
     end
     if lvim.builtin.tree_provider == "nvimtree" then

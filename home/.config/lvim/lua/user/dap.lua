@@ -1,13 +1,6 @@
 local M = {}
 
 M.config = function()
-    local function sep_os_replacer(str)
-        local result = str
-        local path_sep = package.config:sub(1, 1)
-        result = result:gsub("/", path_sep)
-        return result
-    end
-
     local status_ok, dap = pcall(require, "dap")
     if not status_ok then
         return
@@ -307,8 +300,7 @@ M.config = function()
         program = "${file}",
         python = function() end,
         pythonPath = function()
-            local path
-            for _, server in pairs(vim.lsp.buf_get_clients()) do
+            for _, server in pairs(vim.lsp.get_active_clients()) do
                 if server.name == "pyright" or server.name == "pylance" then
                     path = vim.tbl_get(server, "config", "settings", "python", "pythonPath")
                     break
