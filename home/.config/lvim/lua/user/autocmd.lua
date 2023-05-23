@@ -24,6 +24,17 @@ M.config = function()
     -- Custom group.
     vim.api.nvim_create_augroup("_lvim_user", {})
 
+    -- Prevent entering buffers in insert mode.
+    vim.api.nvim_create_autocmd("WinLeave", {
+        group = "_lvim_user",
+        desc = "Prevent entering buffers in insert mode.",
+        callback = function()
+            if vim.bo.ft == "TelescopePrompt" and vim.fn.mode() == "i" then
+                vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "i", false)
+            end
+        end,
+    })
+
     -- Close Neotree during wq
     vim.api.nvim_create_autocmd("VimLeave", {
         group = "_lvim_user",

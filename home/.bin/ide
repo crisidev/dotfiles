@@ -18,6 +18,7 @@ eval "$(rtx activate bash)"
 function start_ide() {
     [ -f $HOME/.cargo/env ] && source $HOME/.cargo/env
     [ -f $HOME/.zsh_secrets ] && source $HOME/.zsh_secrets
+    export PATH=$PATH:$HOME/.toolbox/bin
     export LUNARVIM_RUNTIME_DIR="${LUNARVIM_RUNTIME_DIR:-"/home/ANT.AMAZON.COM/matbigoi/.local/share/lunarvim"}"
     export LUNARVIM_CONFIG_DIR="${LUNARVIM_CONFIG_DIR:-"/home/ANT.AMAZON.COM/matbigoi/.config/lvim"}"
     export LUNARVIM_CACHE_DIR="${LUNARVIM_CACHE_DIR:-"/home/ANT.AMAZON.COM/matbigoi/.cache/lvim"}"
