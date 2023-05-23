@@ -2,6 +2,25 @@ local M = {}
 
 M.config = function()
     local debugprint = require "debugprint"
+
+    debugprint.setup {
+        create_keymaps = false,
+        create_commands = true,
+        move_to_debugline = true,
+        display_snippet = true,
+        display_counter = true,
+        filetypes = {
+            ["rust"] = {
+                left = 'dbg!("',
+                right = '");',
+                mid_var = '{:?}", &',
+                right_var = ");",
+            },
+        },
+        print_tag = "DBG",
+    }
+
+    -- Keymaps
     vim.keymap.set("n", "f?b", function()
         return debugprint.debugprint()
     end, {
@@ -49,6 +68,12 @@ M.config = function()
     end, {
         expr = true,
         desc = "Text-obj-selected variable debug above current line",
+    })
+    vim.keymap.set("n", "f?d", function()
+        print('DBG[1]: debugprint.lua:73: deleteprints=' .. vim.inspect(debugprint))
+        return debugprint.deleteprints()
+    end, {
+        desc = "Delete all debug lines",
     })
 end
 

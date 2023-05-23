@@ -675,6 +675,18 @@ M.config = function()
                 require("debugprint").setup {
                     create_keymaps = true,
                     create_commands = true,
+                    move_to_debugline = true,
+                    display_snippet = true,
+                    display_counter = true,
+                    filetypes = {
+                        ["rust"] = {
+                            left = 'dbg!("',
+                            right = '");',
+                            mid_var = '{:?}", &',
+                            right_var = ");",
+                        },
+                    },
+                    print_tag = "DBG-CRISIDEV",
                 }
             end,
         },
