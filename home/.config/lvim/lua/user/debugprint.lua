@@ -70,7 +70,7 @@ M.config = function()
         desc = "Text-obj-selected variable debug above current line",
     })
     vim.keymap.set("n", "f?d", function()
-        print('DBG[1]: debugprint.lua:73: deleteprints=' .. vim.inspect(debugprint))
+        print("DBG[1]: debugprint.lua:73: deleteprints=" .. vim.inspect(debugprint))
         return debugprint.deleteprints()
     end, {
         desc = "Delete all debug lines",
