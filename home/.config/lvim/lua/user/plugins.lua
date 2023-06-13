@@ -69,7 +69,12 @@ M.config = function()
                     },
                     callbacks = {
                         ["code.crisidev.org"] = require("gitlinker.hosts").get_gitea_type_url,
-                        ["git.amazon.com"] = require("user.amzn").get_amazon_type_url,
+                        ["git.amazon.com"] = function(url_data)
+                            local ok, amzn = pcall(require, "user.amzn")
+                            if ok then
+                                return amzn.get_amazon_type_url(url_data)
+                            end
+                        end,
                     },
                 }
             end,
@@ -160,14 +165,6 @@ M.config = function()
                 require("user.lsp.c").cmake_config()
             end,
             ft = { "c", "cpp", "objc", "objcpp", "h", "hpp" },
-        },
-        -- Lsp lines
-        {
-            "lvimuser/lsp-inlayhints.nvim",
-            ft = { "typescript", "javascript", "lua", "c", "cpp", "go", "python", "java", "kotlin" },
-            config = function()
-                require("user.inlay").config()
-            end,
         },
         -- Crates
         {

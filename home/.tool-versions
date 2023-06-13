@@ -5,7 +5,6 @@ gitui latest
 golang 1.20
 gradle latest
 java corretto-17
-jq latest
 lazygit latest
 meson latest
 neovim nightly

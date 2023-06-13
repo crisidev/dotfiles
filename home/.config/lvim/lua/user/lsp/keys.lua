@@ -135,7 +135,7 @@ M.lsp_normal_keys = function()
                 w = { "<cmd>Trouble workspace_diagnostics<cr>", "Wordspace Diagnostics" },
             },
             -- Inlay hints
-            w = { "<cmd>lua require('lsp-inlayhints').toggle()<cr>", icons.inlay .. "Toggle Inlay" },
+            w = { "<cmd>lua require('vim.lsp._inlay_hint').refresh()<cr>", icons.inlay .. "Toggle Inlay" },
             -- Neotest
             T = {
                 name = icons.settings .. "Tests",

@@ -51,8 +51,6 @@ M.config = function()
     lvim.builtin.cmp.dictionary = { enable = false }
     -- Big file management
     lvim.builtin.bigfile.active = true
-    -- Inlay hints
-    lvim.builtin.inlay_hints = { active = true }
     -- Drop stars
     lvim.builtin.drop = { active = false }
     -- Scala
