@@ -51,6 +51,10 @@ M.config = function()
                     lens = {
                         enable = true,
                     },
+                    checkOnSave = {
+                        enable = true,
+                        command = "check",
+                    },
                     cargo = {
                         features = "all",
                     },

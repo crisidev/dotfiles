@@ -238,10 +238,10 @@ M.normal_keys = function()
         -- Search
         ["<esc><esc>"] = "<cmd>nohlsearch<CR>",
         -- CR maximize
-        ["<CR>"] = {
-            "<cmd>lua require('user.neovim').maximize_current_split()<CR>",
-            { noremap = true, silent = true, nowait = true },
-        },
+        -- ["<CR>"] = {
+        --     "<cmd>lua require('user.neovim').maximize_current_split()<CR>",
+        --     { noremap = true, silent = true, nowait = true },
+        -- },
         -- Buffers
         ["<F1>"] = "<cmd>BufferLineCyclePrev<cr>",
         ["<F2>"] = "<cmd>BufferLineCycleNext<cr>",

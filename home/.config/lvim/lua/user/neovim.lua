@@ -209,7 +209,7 @@ M.config = function()
     vim.o.qftf = "{info -> v:lua._G.qftf(info)}"
 
     -- Session
-    vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal"
+    vim.o.sessionoptions = "buffers,curdir,folds,globals,help,tabpages,winpos,winsize,terminal"
 
     -- Splitkeep
     vim.o.splitkeep = "screen"

@@ -78,7 +78,7 @@ export GREP_COLOR='1;31'
 export EDITOR=vim
 
 # Rustc
-export RUSTC_WRAPPER=$HOME/.cargo/bin/sccache
+# export RUSTC_WRAPPER=$HOME/.cargo/bin/sccache
 
 # sshrc
 compdef sshrc=ssh

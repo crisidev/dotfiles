@@ -101,7 +101,8 @@ M.config = function()
         },
         {
             "danielfalk/smart-open.nvim",
-            dependencies = { "kkharji/sqlite.lua" },
+            branch = "0.2.x",
+            dependencies = { "kkharji/sqlite.lua", "nvim-telescope/telescope-fzy-native.nvim" },
             lazy = true,
         },
         ------------------------------------------------------------------------------

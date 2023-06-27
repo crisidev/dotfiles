@@ -20,6 +20,10 @@ M.config = function()
             end
             return true
         end,
+        telescope = { -- options for the telescope extension
+            reset_prompt_after_deletion = true, -- whether to reset prompt after session deleted
+        },
+        silent = false,
     }
 end
 
