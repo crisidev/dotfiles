@@ -61,8 +61,8 @@ M.config = function()
     lvim.builtin.treesitter_textobjects = { active = false }
 
     -- Icons
-    lvim.builtin.custom_web_devicons = true
-    lvim.use_icons = false
+    lvim.builtin.custom_web_devicons = false
+    lvim.use_icons = true
     if not lvim.use_icons and lvim.builtin.custom_web_devicons then
         require("user.icons").use_my_icons()
     end
