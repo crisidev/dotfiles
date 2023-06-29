@@ -51,7 +51,6 @@ M.config = function()
                 dap = { justMyCode = false, console = "integratedTerminal" },
             },
             require "neotest-plenary",
-            require "neotest-vim-test",
         },
         log_level = vim.log.levels.DEBUG,
     }
