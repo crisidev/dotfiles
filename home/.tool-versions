@@ -9,5 +9,5 @@ lazygit latest
 meson latest
 neovim nightly
 node 18
-python 3.10
+python 3.10.11
 ruby 3.2

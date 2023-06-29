@@ -49,11 +49,6 @@ M.lsp_normal_keys = function()
                 "<cmd>lua require('user.telescope').lsp_implementations()<cr>",
                 icons.go .. " Goto implementations",
             },
-            -- Signature
-            s = {
-                "<cmd>lua vim.lsp.buf.signature_help()<cr>",
-                icons.Function .. " Show signature help",
-            },
             -- Diagnostics
             l = {
                 "<cmd>lua vim.diagnostic.open_float()<cr>",
@@ -169,6 +164,35 @@ M.lsp_normal_keys = function()
             },
         },
     }
+
+    -- Signature
+    if lvim.builtin.lsp_signature_help.active then
+        vim.keymap.set({ "n" }, "<C-k>", function()
+            require("lsp_signature").toggle_float_win()
+        end, { silent = true, noremap = true, desc = "Toggle signature" })
+
+        wk.register {
+            ["f"] = {
+                s = {
+                    "<cmd>lua require('lsp_signature').toggle_float_win()<cr>",
+                    icons.Function .. " Show signature help",
+                },
+            },
+        }
+    else
+        vim.keymap.set({ "n" }, "<C-k>", function()
+            vim.lsp.buf.signature_help()
+        end, { silent = true, noremap = true, desc = "Toggle signature" })
+
+        wk.register {
+            ["f"] = {
+                s = {
+                    "<cmd>lua vim.lsp.buf.signature_help()<cr>",
+                    icons.Function .. " Show signature help",
+                },
+            },
+        }
+    end
 
     -- Incremental rename
     if lvim.builtin.noice.active then

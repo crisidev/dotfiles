@@ -199,6 +199,7 @@ M.config = function()
             },
             {
                 filter = {
+                    event = "msg_show",
                     find = "no valid signature or incorrect lsp reponse",
                 },
                 opts = { skip = true },

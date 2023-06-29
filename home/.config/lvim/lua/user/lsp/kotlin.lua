@@ -7,11 +7,20 @@ M.config = function()
     local util = require "lspconfig.util"
     local opts = {
         cmd = { cmd_path },
-        on_attach = require("lvim.lsp").common_on_attach,
+        -- on_attach = require("lvim.lsp").common_on_attach,
         on_init = require("lvim.lsp").common_on_init,
         capabilities = require("lvim.lsp").common_capabilities(),
         filetypes = { "kotlin", "kt", "kts" },
         root_dir = util.root_pattern("settings.gradle.kts", "gradlew"),
+        settings = {
+            kotlin = {
+                compiler = {
+                    jvm = {
+                        target = "1.8",
+                    },
+                },
+            },
+        },
     }
 
     require("lvim.lsp.manager").setup("kotlin_language_server", opts)

@@ -118,13 +118,6 @@ M.config = function()
             event = { "BufRead", "BufNew" },
             enabled = lvim.builtin.lsp_signature_help.active,
         },
-        -- Lsp progreess in fidget
-        -- {
-        --     "j-hui/fidget.nvim",
-        --     config = function()
-        --         require("user.fidget").config()
-        -- end,
-        -- },
         -- Lsp Rust
         {
             "simrat39/rust-tools.nvim",
@@ -301,6 +294,10 @@ M.config = function()
             config = function()
                 require("cmp_git").setup()
             end,
+        },
+        {
+            "hrsh7th/cmp-nvim-lsp-signature-help",
+            enabled = not lvim.builtin.lsp_signature_help.active,
         },
         ------------------------------------------------------------------------------
         -- Markdown support
@@ -695,6 +692,7 @@ M.config = function()
             end,
             enabled = lvim.builtin.custom_web_devicons or not lvim.use_icons,
         },
+        { "cappyzawa/trim.nvim" },
     }
 end
 

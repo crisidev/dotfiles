@@ -85,7 +85,11 @@ M.config = function()
             require("jdtls").setup_dap { hotcodereplace = "auto" }
             require("lvim.lsp").on_attach(client, bufnr)
         end,
-        on_init = require("lvim.lsp").common_on_init,
+        on_init = function(client)
+            if client.config.settings then
+                client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
+            end
+        end,
         on_exit = require("lvim.lsp").common_on_exit,
         capabilities = require("lvim.lsp").common_capabilities(),
         root_dir = root_dir,
