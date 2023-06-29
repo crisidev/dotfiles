@@ -105,6 +105,18 @@ M.config = function()
         })
     end
 
+    -- Automatic inlay hints
+    if lvim.builtin.automatic_inlay_hints.active then
+        vim.api.nvim_create_autocmd("Filetype", {
+            group = "_lvim_user",
+            pattern = lvim.builtin.automatic_inlay_hints.ft,
+            desc = "Enable automatic inlay hints",
+            callback = function()
+                vim.lsp.buf.inlay_hint(0)
+            end,
+        })
+    end
+
     -- Faster yank
     vim.api.nvim_create_autocmd("TextYankPost", {
         group = "_general_settings",
@@ -142,16 +154,6 @@ M.config = function()
         desc = "Set additional buffer keymaps for Python files",
         callback = require("user.lsp.python").build_tools,
     })
-    -- vim.api.nvim_create_autocmd("BufWritePre", {
-    --     group = "_format_tools",
-    --     pattern = { "*.py", "*.pyi" },
-    --     callback = function()
-    --         require("lvim.lsp.utils").format {
-    --             timeout_ms = 2500,
-    --             filter = require("lvim.lsp.utils").format_filter,
-    --         }
-    --     end,
-    -- })
 
     -- Java
     vim.api.nvim_create_autocmd("FileType", {

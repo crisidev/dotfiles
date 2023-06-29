@@ -34,6 +34,11 @@ M.config = function()
     lvim.builtin.copilot = { active = true }
     -- LSP Signature help
     lvim.builtin.lsp_signature_help = { active = true }
+    -- Atomatic inlay hints
+    lvim.builtin.automatic_inlay_hints = {
+        active = true,
+        ft = { "rust", "lua", "java", "python", "typescript", "go", "c", "cpp" },
+    }
     -- Lir
     lvim.builtin.lir.active = false
     -- Breadcrumbs
@@ -61,8 +66,8 @@ M.config = function()
     lvim.builtin.treesitter_textobjects = { active = false }
 
     -- Icons
-    lvim.builtin.custom_web_devicons = false
-    lvim.use_icons = true
+    lvim.builtin.custom_web_devicons = true
+    lvim.use_icons = false
     if not lvim.use_icons and lvim.builtin.custom_web_devicons then
         require("user.icons").use_my_icons()
     end
