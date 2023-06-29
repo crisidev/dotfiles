@@ -56,8 +56,6 @@ M.config = function()
     lvim.builtin.cmp.dictionary = { enable = false }
     -- Big file management
     lvim.builtin.bigfile.active = true
-    -- Drop stars
-    lvim.builtin.drop = { active = false }
     -- Scala
     lvim.builtin.metals = { active = false }
 

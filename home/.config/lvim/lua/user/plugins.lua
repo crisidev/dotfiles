@@ -633,31 +633,18 @@ M.config = function()
                 require("user.tabout").config()
             end,
         },
-        -- Silly stars
-        {
-            "folke/drop.nvim",
-            event = "VimEnter",
-            config = function()
-                require("drop").setup {
-                    theme = "stars", -- xmas - snow - stars - leaves
-                    interval = 100, -- every 150ms we update the drops
-                    screensaver = 1000 * 60 * 5, -- show after 5 minutes. Set to false, to disable
-                }
-            end,
-            enabled = lvim.builtin.drop.active,
-        },
         -- Translate
         {
             "potamides/pantran.nvim",
             lazy = true,
             cmd = "Pantran",
-            confg = function()
+            config = function()
                 require("pantran").setup {
                     default_engine = "argos",
                     engines = {
                         argos = {
                             default_source = "auto",
-                            default_target = "auto",
+                            default_target = "en",
                         },
                     },
                 }
@@ -685,6 +672,7 @@ M.config = function()
                 }
             end,
         },
+        -- Custom icons 
         {
             "abzcoding/nvim-mini-file-icons",
             config = function()
@@ -692,6 +680,7 @@ M.config = function()
             end,
             enabled = lvim.builtin.custom_web_devicons or not lvim.use_icons,
         },
+        -- Auto trim
         { "cappyzawa/trim.nvim" },
     }
 end
