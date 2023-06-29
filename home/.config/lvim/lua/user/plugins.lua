@@ -672,7 +672,7 @@ M.config = function()
                 }
             end,
         },
-        -- Custom icons 
+        -- Custom icons
         {
             "abzcoding/nvim-mini-file-icons",
             config = function()

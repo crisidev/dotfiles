@@ -252,7 +252,13 @@ M.find_string_visual = function()
 end
 
 M.buffers = function()
-    builtin.buffers(M.get_theme())
+    local opts = M.get_theme()
+    opts["on_complete"] = {
+        function(_picker)
+            vim.cmd "startinsert"
+        end,
+    }
+    builtin.buffers(opts)
 end
 
 M.resume = function()
