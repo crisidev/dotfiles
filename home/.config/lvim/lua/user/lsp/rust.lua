@@ -74,6 +74,8 @@ M.config = function()
         opts.dap = {
             adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
         }
+    else
+        vim.notify("please reinstall codellb, cannot find liblldb or codelldb", vim.log.levels.WARN)
     end
     rust_tools.setup(opts)
 end
