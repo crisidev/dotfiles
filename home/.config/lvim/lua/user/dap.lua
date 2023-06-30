@@ -470,7 +470,7 @@ M.config = function()
 
     local icons = require("user.icons").icons
     lvim.builtin.which_key.mappings["de"] = {
-        name = icons.debug "Debug",
+        name = icons.debug .. "Debug",
         R = { "<cmd>lua require'dap'.run_to_cursor()<cr>", "Run to Cursor" },
         E = { "<cmd>lua require'dapui'.eval(vim.fn.input '[Expression] > ')<cr>", "Evaluate Input" },
         C = { "<cmd>lua require'dap'.set_breakpoint(vim.fn.input '[Condition] > ')<cr>", "Conditional Breakpoint" },

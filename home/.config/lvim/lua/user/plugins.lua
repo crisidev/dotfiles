@@ -445,6 +445,7 @@ M.config = function()
             config = function()
                 require("dap-go").setup()
             end,
+            lazy = true,
             ft = { "go", "gomod" },
         },
         {
@@ -454,6 +455,7 @@ M.config = function()
                 require("dap-python").setup(mason_path .. "packages/debugpy/venv/bin/python")
                 require("dap-python").test_runner = "pytest"
             end,
+            lazy = true,
             ft = "python",
         },
         {
@@ -461,6 +463,7 @@ M.config = function()
             config = function()
                 require("nvim-dap-virtual-text").setup()
             end,
+            lazy = true,
         },
         ------------------------------------------------------------------------------
         -- Noice
@@ -475,7 +478,6 @@ M.config = function()
             dependencies = {
                 "rcarriga/nvim-notify",
                 "MunifTanjim/nui.nvim",
-
                 "smjonas/inc-rename.nvim",
             },
             enabled = lvim.builtin.noice.active,
@@ -557,7 +559,6 @@ M.config = function()
             config = function()
                 require("spaceless").setup()
             end,
-            enabled = false,
         },
         -- Better hl
         {
@@ -603,6 +604,7 @@ M.config = function()
                 require("hop").setup()
                 require("user.keys").hop_keys()
             end,
+            enabled = lvim.builtin.hop.active,
         },
         -- Matchup
         {
@@ -675,8 +677,6 @@ M.config = function()
             end,
             enabled = lvim.builtin.custom_web_devicons or not lvim.use_icons,
         },
-        -- Auto trim
-        { "cappyzawa/trim.nvim" },
     }
 end
 

@@ -1,6 +1,6 @@
 local M = {}
 
-M.set_syntax = function()
+M.config = function()
     vim.cmd [[
 runtime! syntax/html.vim
 

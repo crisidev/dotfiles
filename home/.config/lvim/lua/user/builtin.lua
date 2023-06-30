@@ -37,7 +37,7 @@ M.config = function()
     -- Atomatic inlay hints
     lvim.builtin.automatic_inlay_hints = {
         active = true,
-        ft = { "rust", "lua", "java", "python", "typescript", "go", "c", "cpp" },
+        ft = { "rust", "lua", "java", "typescript", "go", "c", "cpp" },
     }
     -- Lir
     lvim.builtin.lir.active = false
@@ -58,6 +58,8 @@ M.config = function()
     lvim.builtin.bigfile.active = true
     -- Scala
     lvim.builtin.metals = { active = false }
+    -- Hop
+    lvim.builtin.hop = { active = false }
 
     -- Mason
     lvim.builtin.mason.ui.icons = require("user.icons").mason

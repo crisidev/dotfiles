@@ -25,6 +25,7 @@ M.config = function()
         },
         silent = false,
     }
+
 end
 
 return M

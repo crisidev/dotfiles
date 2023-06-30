@@ -41,5 +41,6 @@ require("user.dap").config()
 -- Custom work stuff
 local ok, amzn = pcall(require, "user.amzn")
 if ok then
+    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
     amzn.config()
 end
