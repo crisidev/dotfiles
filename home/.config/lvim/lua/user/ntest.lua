@@ -63,16 +63,6 @@ M.config = function()
     }
 
     nt.setup(opts)
-
-    vim.cmd [[
-        let test#strategy = {
-          \ 'nearest': 'neovim',
-          \ 'file':    'neovim',
-          \ 'suite':   'neovim',
-        \}
-        let test#java#runner = 'gradletest'
-        let test#kotlin#runner = 'gradletest'
-    ]]
 end
 
 M.get_env = function()

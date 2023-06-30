@@ -1,11 +1,20 @@
 local M = {}
 
-M.config = function()
-    local status_ok, dap = pcall(require, "dap")
-    if not status_ok then
-        return
-    end
+local status_ok, dap = pcall(require, "dap")
+if not status_ok then
+    return
+end
 
+local mason_path = vim.fn.glob(vim.fn.stdpath "data" .. "/mason/")
+local function sep_os_replacer(str)
+    local result = str
+    local path_sep = package.config:sub(1, 1)
+    result = result:gsub("/", path_sep)
+    return result
+end
+local join_path = require("lvim.utils").join_paths
+
+M.lua = function()
     dap.configurations.lua = {
         {
             type = "nlua",
@@ -28,41 +37,9 @@ M.config = function()
     dap.adapters.nlua = function(callback, config)
         callback { type = "server", host = config.host or "127.0.0.1", port = config.port or 8086 }
     end
+end
 
-    -- NOTE: if you want to use `dap` instead of `RustDebuggables` you can use the following configuration
-    if vim.fn.executable "lldb-vscode" == 1 then
-        dap.adapters.lldbrust = {
-            type = "executable",
-            attach = { pidProperty = "pid", pidSelect = "ask" },
-            command = "lldb-vscode",
-            env = { LLDB_LAUNCH_FLAG_LAUNCH_IN_TTY = "YES" },
-        }
-        dap.adapters.rust = dap.adapters.lldbrust
-        dap.configurations.rust = {
-            {
-                type = "rust",
-                request = "launch",
-                name = "lldbrust",
-                program = function()
-                    local metadata_json = vim.fn.system "cargo metadata --format-version 1 --no-deps"
-                    local metadata = vim.fn.json_decode(metadata_json)
-                    local target_name = metadata.packages[1].targets[1].name
-                    local target_dir = metadata.target_directory
-                    return target_dir .. "/debug/" .. target_name
-                end,
-                args = function()
-                    local inputstr = vim.fn.input("Params: ", "")
-                    local params = {}
-                    local sep = "%s"
-                    for str in string.gmatch(inputstr, "([^" .. sep .. "]+)") do
-                        table.insert(params, str)
-                    end
-                    return params
-                end,
-            },
-        }
-    end
-
+M.go = function()
     dap.adapters.go = function(callback, _)
         local stdout = vim.loop.new_pipe(false)
         local handle
@@ -128,23 +105,182 @@ M.config = function()
             program = "./${relativeFileDirname}",
         },
     }
+end
 
-    dap.configurations.cpp = {
-        {
-            name = "Launch",
-            type = "lldb",
-            request = "launch",
-            program = function()
-                return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
-            end,
-            cwd = "${workspaceFolder}",
-            stopOnEntry = true,
-            args = {},
-            runInTerminal = false,
+M.typescript = function()
+    local firefox_path = mason_path .. "packages/firefox-debug-adapter/"
+
+    dap.adapters.firefox = {
+        type = "executable",
+        command = "node",
+        args = {
+            firefox_path .. "dist/adapter.bundle.js",
         },
     }
 
-    local path = vim.fn.glob(vim.fn.stdpath "data" .. "/mason/packages/codelldb/extension/")
+    local firefoxExecutable = "/usr/bin/firefox"
+    if vim.fn.has "mac" == 1 then
+        firefoxExecutable = "/Applications/Firefox.app/Contents/MacOS/firefox"
+    end
+    local custom_adapter = "pwa-node-custom"
+    dap.adapters[custom_adapter] = function(cb, config)
+        if config.preLaunchTask then
+            local async = require "plenary.async"
+            local notify = require("notify").async
+
+            async.run(function()
+                ---@diagnostic disable-next-line: missing-parameter
+                notify("Running [" .. config.preLaunchTask .. "]").events.close()
+            end, function()
+                vim.fn.system(config.preLaunchTask)
+                config.type = "pwa-node"
+                dap.run(config)
+            end)
+        end
+    end
+
+    dap.configurations.typescript = {
+        {
+            type = "node2",
+            name = "node attach",
+            request = "attach",
+            program = "${file}",
+            cwd = vim.fn.getcwd(),
+            sourceMaps = true,
+            protocol = "inspector",
+        },
+        {
+            type = "chrome",
+            name = "Debug with Chrome",
+            request = "attach",
+            program = "${file}",
+            -- cwd = "${workspaceFolder}",
+            -- protocol = "inspector",
+            port = 9222,
+            webRoot = "${workspaceFolder}",
+            -- sourceMaps = true,
+            sourceMapPathOverrides = {
+                -- Sourcemap override for nextjs
+                ["webpack://_N_E/./*"] = "${webRoot}/*",
+                ["webpack:///./*"] = "${webRoot}/*",
+            },
+        },
+        {
+            name = "Debug with Firefox",
+            type = "firefox",
+            request = "launch",
+            reAttach = true,
+            sourceMaps = true,
+            url = "http://localhost:6969",
+            webRoot = "${workspaceFolder}",
+            firefoxExecutable = firefoxExecutable,
+        },
+        {
+            name = "Launch",
+            type = "pwa-node",
+            request = "launch",
+            program = "${file}",
+            rootPath = "${workspaceFolder}",
+            cwd = "${workspaceFolder}",
+            sourceMaps = true,
+            skipFiles = { "<node_internals>/**" },
+            protocol = "inspector",
+            console = "integratedTerminal",
+        },
+        {
+            name = "Attach to node process",
+            type = "pwa-node",
+            request = "attach",
+            rootPath = "${workspaceFolder}",
+            processId = require("dap.utils").pick_process,
+        },
+        {
+            name = "Debug Main Process (Electron)",
+            type = "pwa-node",
+            request = "launch",
+            program = "${workspaceFolder}/node_modules/.bin/electron",
+            args = {
+                "${workspaceFolder}/dist/index.js",
+            },
+            outFiles = {
+                "${workspaceFolder}/dist/*.js",
+            },
+            resolveSourceMapLocations = {
+                "${workspaceFolder}/dist/**/*.js",
+                "${workspaceFolder}/dist/*.js",
+            },
+            rootPath = "${workspaceFolder}",
+            cwd = "${workspaceFolder}",
+            sourceMaps = true,
+            skipFiles = { "<node_internals>/**" },
+            protocol = "inspector",
+            console = "integratedTerminal",
+        },
+        {
+            name = "Compile & Debug Main Process (Electron)",
+            type = custom_adapter,
+            request = "launch",
+            preLaunchTask = "npm run build-ts",
+            program = "${workspaceFolder}/node_modules/.bin/electron",
+            args = {
+                "${workspaceFolder}/dist/index.js",
+            },
+            outFiles = {
+                "${workspaceFolder}/dist/*.js",
+            },
+            resolveSourceMapLocations = {
+                "${workspaceFolder}/dist/**/*.js",
+                "${workspaceFolder}/dist/*.js",
+            },
+            rootPath = "${workspaceFolder}",
+            cwd = "${workspaceFolder}",
+            sourceMaps = true,
+            skipFiles = { "<node_internals>/**" },
+            protocol = "inspector",
+            console = "integratedTerminal",
+        },
+        {
+            type = "pwa-node",
+            request = "launch",
+            name = "Debug Jest Tests",
+            -- trace = true, -- include debugger info
+            runtimeExecutable = "node",
+            runtimeArgs = {
+                "./node_modules/jest/bin/jest.js",
+                "--runInBand",
+            },
+            rootPath = "${workspaceFolder}",
+            cwd = "${workspaceFolder}",
+            console = "integratedTerminal",
+            internalConsoleOptions = "neverOpen",
+        },
+    }
+
+    dap.configurations.typescriptreact = dap.configurations.typescript
+    dap.configurations.javascript = dap.configurations.typescript
+    dap.configurations.javascriptreact = dap.configurations.typescript
+end
+
+M.java = function()
+    dap.configurations.java = {
+        {
+            name = "Debug (Attach) - Remote",
+            type = "java",
+            request = "attach",
+            hostName = "127.0.0.1",
+            port = 5005,
+        },
+        {
+            name = "Debug Non-Project class",
+            type = "java",
+            request = "launch",
+            program = "${file}",
+        },
+    }
+end
+
+M.cpp = function()
+    local path = vim.fn.glob(mason_path .. "packages/codelldb/extension/")
     local lldb_cmd = path .. "adapter/codelldb"
 
     dap.adapters.codelldb = {
@@ -154,6 +290,7 @@ M.config = function()
             -- CHANGE THIS to your path!
             command = lldb_cmd,
             args = { "--port", "${port}" },
+
             -- On windows you may have to uncomment this:
             -- detached = false,
         },
@@ -169,129 +306,37 @@ M.config = function()
             end,
             cwd = "${workspaceFolder}",
             stopOnEntry = true,
+            runInTerminal = true,
         },
     }
+
     dap.configurations.c = dap.configurations.cpp
-    dap.configurations.rust = dap.configurations.cpp
+end
 
-    dap.configurations.typescript = {
-        {
-            type = "node2",
-            name = "node attach",
-            request = "attach",
-            program = "${file}",
-            cwd = vim.fn.getcwd(),
-            sourceMaps = true,
-            protocol = "inspector",
-        },
-        {
-            type = "chrome",
-            name = "chrome",
-            request = "attach",
-            program = "${file}",
-            -- cwd = "${workspaceFolder}",
-            -- protocol = "inspector",
-            port = 9222,
-            webRoot = "${workspaceFolder}",
-            -- sourceMaps = true,
-            sourceMapPathOverrides = {
-                -- Sourcemap override for nextjs
-                ["webpack://_N_E/./*"] = "${webRoot}/*",
-                ["webpack:///./*"] = "${webRoot}/*",
+M.scala = function()
+    if lvim.builtin.metals.active then
+        dap.configurations.scala = {
+            {
+                type = "scala",
+                request = "launch",
+                name = "Run or Test Target",
+                metals = {
+                    runType = "runOrTestFile",
+                },
             },
-        },
-    }
+            {
+                type = "scala",
+                request = "launch",
+                name = "Test Target",
+                metals = {
+                    runType = "testTarget",
+                },
+            },
+        }
+    end
+end
 
-    dap.configurations.typescriptreact = {
-        {
-            type = "chrome",
-            request = "chrome attach",
-            name = "chrome",
-            program = "${file}",
-            -- cwd = "${workspaceFolder}",
-            -- protocol = "inspector",
-            port = 9222,
-            webRoot = "${workspaceFolder}",
-            -- sourceMaps = true,
-            sourceMapPathOverrides = {
-                -- Sourcemap override for nextjs
-                ["webpack://_N_E/./*"] = "${webRoot}/*",
-                ["webpack:///./*"] = "${webRoot}/*",
-            },
-        },
-    }
-
-    dap.configurations.javascript = {
-        {
-            type = "node2",
-            name = "node attach",
-            request = "attach",
-            program = "${file}",
-            cwd = vim.fn.getcwd(),
-            sourceMaps = true,
-            protocol = "inspector",
-        },
-        {
-            type = "node2",
-            name = "node launch",
-            request = "launch",
-            program = "${workspaceFolder}/${file}",
-            cwd = "${workspaceFolder}",
-            sourceMaps = true,
-            protocol = "inspector",
-        },
-        {
-            type = "chrome",
-            request = "attach",
-            name = "chrome",
-            program = "${file}",
-            port = 9222,
-            webRoot = "${workspaceFolder}",
-            sourceMapPathOverrides = {
-                -- Sourcemap override for nextjs
-                ["webpack://_N_E/./*"] = "${webRoot}/*",
-                ["webpack:///./*"] = "${webRoot}/*",
-            },
-        },
-    }
-
-    dap.configurations.javascriptreact = {
-        {
-            type = "chrome",
-            name = "chrome attach",
-            request = "attach",
-            program = "${file}",
-            -- cwd = vim.fn.getcwd(),
-            -- sourceMaps = true,
-            -- protocol = "inspector",
-            port = 9222,
-            sourceMapPathOverrides = {
-                -- Sourcemap override for nextjs
-                ["webpack://_N_E/./*"] = "${webRoot}/*",
-                ["webpack:///./*"] = "${webRoot}/*",
-            },
-        },
-    }
-
-    dap.configurations.scala = {
-        {
-            type = "scala",
-            request = "launch",
-            name = "Run or Test Target",
-            metals = {
-                runType = "runOrTestFile",
-            },
-        },
-        {
-            type = "scala",
-            request = "launch",
-            name = "Test Target",
-            metals = {
-                runType = "testTarget",
-            },
-        },
-    }
-
+M.python = function()
     dap.configurations.python = dap.configurations.python or {}
     table.insert(dap.configurations.python, {
         type = "python",
@@ -300,7 +345,8 @@ M.config = function()
         program = "${file}",
         python = function() end,
         pythonPath = function()
-            for _, server in pairs(vim.lsp.get_active_clients()) do
+            local path
+            for _, server in pairs(vim.lsp.buf_get_clients()) do
                 if server.name == "pyright" or server.name == "pylance" then
                     path = vim.tbl_get(server, "config", "settings", "python", "pythonPath")
                     break
@@ -338,25 +384,45 @@ M.config = function()
         end,
         console = "integratedTerminal",
     })
+end
 
-    --Java debugger adapter settings
-    dap.configurations.java = {
-        {
-            name = "Debug (Attach) - Remote",
-            type = "java",
-            request = "attach",
-            hostName = "127.0.0.1",
-            port = 5005,
-        },
-        {
-            name = "Debug Non-Project class",
-            type = "java",
-            request = "launch",
-            program = "${file}",
-        },
-    }
+M.rust = function()
+    if vim.fn.executable "lldb-vscode" == 1 then
+        dap.adapters.lldbrust = {
+            type = "executable",
+            attach = { pidProperty = "pid", pidSelect = "ask" },
+            command = "lldb-vscode",
+            env = { LLDB_LAUNCH_FLAG_LAUNCH_IN_TTY = "YES" },
+        }
+        dap.adapters.rust = dap.adapters.lldbrust
+        dap.configurations.rust = {
+            {
+                type = "rust",
+                request = "launch",
+                name = "lldbrust",
+                program = function()
+                    local metadata_json = vim.fn.system "cargo metadata --format-version 1 --no-deps"
+                    local metadata = vim.fn.json_decode(metadata_json)
+                    local target_name = metadata.packages[1].targets[1].name
+                    local target_dir = metadata.target_directory
+                    return target_dir .. "/debug/" .. target_name
+                end,
+                args = function()
+                    local inputstr = vim.fn.input("Params: ", "")
+                    local params = {}
+                    local sep = "%s"
+                    for str in string.gmatch(inputstr, "([^" .. sep .. "]+)") do
+                        table.insert(params, str)
+                    end
+                    return params
+                end,
+            },
+        }
+    end
+end
 
-    path = vim.fn.glob(vim.fn.stdpath "data" .. "/mason/packages/kotlin-debug-adapter/")
+M.kotlin = function()
+    local path = mason_path .. "packages/kotlin-debug-adapter/"
     local kotlin_debug = path .. "adapter/bin/kotlin-debug-adapter"
     local util = require "lspconfig.util"
     local root_files = {
@@ -388,7 +454,17 @@ M.config = function()
             end,
         },
     }
+end
 
+M.config = function()
+    M.lua()
+    M.go()
+    M.cpp()
+    M.java()
+    M.rust()
+    M.scala()
+    M.python()
+    M.typescript()
     local icons = require("user.icons").icons
 
     lvim.builtin.dap.on_config_done = function(_)

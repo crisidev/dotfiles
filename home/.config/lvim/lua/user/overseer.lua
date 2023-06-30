@@ -51,7 +51,7 @@ M.config = function()
     }
 
     see.register_template {
-        generator = function()
+        generator = function(opts, cb)
             local logHandler = io.popen [[fd -e log]]
             local ret = {}
             if logHandler then
@@ -71,7 +71,7 @@ M.config = function()
                     })
                 end
             end
-            return ret
+            cb(ret)
         end,
     }
 end
