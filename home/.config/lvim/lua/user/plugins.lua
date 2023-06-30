@@ -115,7 +115,6 @@ M.config = function()
                 require("user.lsp.signature").config()
             end,
             ft = { "typescript", "javascript", "lua", "c", "cpp", "go", "python", "java", "rust" },
-            event = { "BufRead", "BufNew" },
             enabled = lvim.builtin.lsp_signature_help.active,
         },
         -- Lsp Rust
@@ -196,7 +195,6 @@ M.config = function()
                 }
             end,
             ft = { "go", "gomod" },
-            event = { "BufRead", "BufNew" },
         },
         -- Node
         {
@@ -211,7 +209,6 @@ M.config = function()
         {
             "AckslD/swenv.nvim",
             ft = "python",
-            event = { "BufRead", "BufNew" },
         },
         -- Requirements
         {
@@ -222,7 +219,6 @@ M.config = function()
         {
             "ThePrimeagen/refactoring.nvim",
             ft = { "typescript", "javascript", "lua", "c", "cpp", "go", "python", "java", "rust", "kotlin" },
-            event = "BufReadPost",
             lazy = true,
             config = function()
                 require("user.refactoring").config()
@@ -450,7 +446,6 @@ M.config = function()
                 require("dap-go").setup()
             end,
             ft = { "go", "gomod" },
-            event = { "BufRead", "BufNew" },
         },
         {
             "mfussenegger/nvim-dap-python",
@@ -460,7 +455,6 @@ M.config = function()
                 require("dap-python").test_runner = "pytest"
             end,
             ft = "python",
-            event = { "BufRead", "BufNew" },
         },
         ------------------------------------------------------------------------------
         -- Noice
