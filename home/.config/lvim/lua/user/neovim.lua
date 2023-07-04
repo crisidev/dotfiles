@@ -55,8 +55,6 @@ M.config = function()
     vim.opt.backupdir = { vim.fn.stdpath "cache" .. "/backups" }
     -- Undodir
     vim.opt.undodir = vim.fn.stdpath "cache" .. "/undo"
-    -- The font used in graphical neovim applications
-    vim.opt.guifont = "MonoLisaCrisidevLight Nerd Font:h10"
     -- Display lines as one long line
     vim.opt.wrap = true
     -- We need to see things like -- INSERT --
