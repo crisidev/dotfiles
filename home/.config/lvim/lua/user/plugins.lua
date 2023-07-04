@@ -677,6 +677,21 @@ M.config = function()
             end,
             enabled = lvim.builtin.custom_web_devicons or not lvim.use_icons,
         },
+        -- Ufo folding
+        {
+            "kevinhwang91/nvim-ufo",
+            dependencies = "kevinhwang91/promise-async",
+            config = function()
+                require("user.ufo").config()
+            end,
+            enabled = lvim.builtin.ufo.active,
+        },
+        {
+            "luukvbaal/statuscol.nvim",
+            config = function()
+                require("user.statuscol").config()
+            end,
+        },
     }
 end
 

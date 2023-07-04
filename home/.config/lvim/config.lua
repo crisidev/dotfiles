@@ -1,9 +1,9 @@
+-- Builtin
+require("user.builtin").config()
+
 -- Neovim
 require("user.neovim").config()
 require("user.neovide").config()
-
--- Builtin
-require("user.builtin").config()
 
 -- Additional Plugins
 require("user.plugins").config()

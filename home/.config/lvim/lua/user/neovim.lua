@@ -141,13 +141,13 @@ M.config = function()
 
     -- Better fillchars
     vim.opt.fillchars = {
-        fold = " ",
         eob = " ", -- suppress ~ at EndOfBuffer
         diff = "╱", -- alternatives = ⣿ ░ ─
         msgsep = "‾",
-        foldopen = "▾",
-        foldsep = "│",
-        foldclose = "▸",
+        fold = " ",
+        foldopen = "",
+        foldclose = "",
+        foldsep = " ",
         horiz = "━",
         horizup = "┻",
         horizdown = "┳",
@@ -189,13 +189,20 @@ M.config = function()
     vim.g.loaded_ruby_provider = 0
 
     -- Folding
-    vim.wo.foldmethod = "expr"
-    vim.wo.foldexpr = "nvim_treesitter#foldexpr()"
-    vim.wo.foldlevel = 4
-    vim.wo.foldtext =
-        [[substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g').'...'.trim(getline(v:foldend)) . ' (' . (v:foldend - v:foldstart + 1) . ' lines)']]
-    vim.wo.foldnestmax = 3
-    vim.wo.foldminlines = 1
+    if lvim.builtin.ufo.active then
+        vim.o.foldcolumn = "1" -- Show the fold column
+        vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+        vim.o.foldlevelstart = 99
+        vim.o.foldenable = true
+    else
+        vim.o.foldmethod = "expr"
+        vim.o.foldexpr = "nvim_treesitter#foldexpr()"
+        vim.o.foldlevel = 4
+        vim.o.foldtext =
+            [[substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g').'...'.trim(getline(v:foldend)) . ' (' . (v:foldend - v:foldstart + 1) . ' lines)']]
+        vim.o.foldnestmax = 3
+        vim.o.foldminlines = 1
+    end
 
     -- Conceal
     -- vim.o.conceallevel = 2
@@ -217,23 +224,6 @@ M.config = function()
 
     -- Editorconfig
     vim.g.editorconfig = true
-
-    if vim.fn.has "nvim-0.8" == 1 then
-        vim.filetype.add {
-            extension = {
-                fnl = "fennel",
-                wiki = "markdown",
-            },
-            filename = {
-                ["go.sum"] = "gosum",
-                ["go.mod"] = "gomod",
-            },
-            pattern = {
-                ["*.tml"] = "gohtmltmpl",
-                ["%.env.*"] = "sh",
-            },
-        }
-    end
 
     -- Mouse handling
     vim.cmd [[
@@ -274,30 +264,6 @@ M.config = function()
         endfunction
         command! NoNuMode :call <SID>NoNuModeFunc()
     ]]
-
-    -- Disable syntax highlighting in big files
-    -- vim.cmd [[
-    --     function! DisableSyntaxTreesitter()
-    --         echo("Big file, disabling syntax, treesitter and folding")
-    --         if exists(':TSBufDisable')
-    --             exec 'TSBufDisable autotag'
-    --             exec 'TSBufDisable highlight'
-    --         endif
-    --         set foldmethod=manual
-    --         syntax clear
-    --         syntax off
-    --         filetype off
-    --         set noundofile
-    --         set noswapfile
-    --         set noloadplugins
-    --         set lazyredraw
-    --     endfunction
-
-    --     augroup BigFileDisable
-    --         autocmd!
-    --         autocmd BufReadPre,FileReadPre * if getfsize(expand("%")) > 1024 * 1024 | exec DisableSyntaxTreesitter() | endif
-    --     augroup END
-    -- ]]
 
     -- Clean search with <esc>
     vim.cmd [[

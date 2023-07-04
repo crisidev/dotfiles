@@ -22,6 +22,18 @@ M.config = function()
         end,
         telescope = { -- options for the telescope extension
             reset_prompt_after_deletion = true, -- whether to reset prompt after session deleted
+            -- jump between session smoothly
+            after_source = function(param)
+                vim.api.nvim_command "%bd"
+                local path = param.dir_path
+                if string.find(path, "/") ~= 1 then
+                    vim.api.nvim_command("cd " .. vim.fn.expand "~" .. "/" .. path)
+                    vim.api.nvim_command("tcd " .. vim.fn.expand "~" .. "/" .. path)
+                else
+                    vim.api.nvim_command("cd " .. path)
+                    vim.api.nvim_command("tcd " .. path)
+                end
+            end,
         },
         silent = false,
     }
