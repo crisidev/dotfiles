@@ -48,7 +48,10 @@ M.config = function()
                 },
             },
             require "neotest-python" {
-                dap = { justMyCode = false, console = "integratedTerminal" },
+                dap = {
+                    justMyCode = false,
+                    console = "integratedTerminal",
+                },
             },
             require "neotest-plenary",
         },

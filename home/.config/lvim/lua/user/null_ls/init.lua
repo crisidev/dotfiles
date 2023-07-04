@@ -56,9 +56,9 @@ M.config = function()
         nls.builtins.formatting.black.with {
             extra_args = { "--fast", "--line-length=120" },
         },
-        nls.builtins.formatting.isort.with {
-            extra_args = { "--profile", "black", "-l", "120", "-m", "3", "-tc" },
-        },
+        -- nls.builtins.formatting.isort.with {
+        --     extra_args = { "--profile", "black", "-l", "120", "-m", "3", "-tc" },
+        -- },
         nls.builtins.formatting.ruff.with {
             condition = function(utils)
                 return utils.root_has_file { "ruff.toml", ".ruff.toml" }

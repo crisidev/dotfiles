@@ -1,22 +1,24 @@
 local M = {}
 
 M.config = function()
+    local util = require "lspconfig.util"
+    local root_files = {
+        "pyproject.toml",
+        "setup.py",
+        "setup.cfg",
+        "requirements.txt",
+        "Pipfile",
+        "manage.py",
+        "pyrightconfig.json",
+    }
+    local root_dir = util.root_pattern(unpack(root_files))(fname)
+        or util.root_pattern ".git"(fname)
+        or util.path.dirname(fname)
+
     -- Lsp config
     local pyright_opts = {
         root_dir = function(fname)
-            local util = require "lspconfig.util"
-            local root_files = {
-                "pyproject.toml",
-                "setup.py",
-                "setup.cfg",
-                "requirements.txt",
-                "Pipfile",
-                "manage.py",
-                "pyrightconfig.json",
-            }
-            return util.root_pattern(unpack(root_files))(fname)
-                or util.root_pattern ".git"(fname)
-                or util.path.dirname(fname)
+            return root_dir
         end,
         settings = {
             pyright = {
@@ -32,9 +34,20 @@ M.config = function()
             },
         },
         single_file_support = true,
+        filetypes = { "python" },
     }
 
     require("lvim.lsp.manager").setup("pyright", pyright_opts)
+
+    local ruff_opts = {
+        root_dir = function(fname)
+            return root_dir
+        end,
+        single_file_support = true,
+        filetypes = { "python" },
+    }
+
+    require("lvim.lsp.manager").setup("ruff_lsp", ruff_opts)
 end
 
 M.build_tools = function()

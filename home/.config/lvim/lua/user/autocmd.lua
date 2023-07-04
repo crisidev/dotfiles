@@ -112,7 +112,7 @@ M.config = function()
             pattern = lvim.builtin.automatic_inlay_hints.ft,
             desc = "Enable automatic inlay hints",
             callback = function()
-                vim.lsp.buf.inlay_hint(0)
+                vim.lsp.inlay_hint(0)
             end,
         })
     end
