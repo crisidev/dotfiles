@@ -32,13 +32,7 @@ M.config = function()
         {
             "APZelos/blamer.nvim",
             config = function()
-                local icons = require("user.icons").icons
-                vim.g.blamer_enabled = 0
-                vim.g.blamer_prefix = " " .. icons.magic .. " "
-                vim.g.blamer_template = "<committer-time> • <author> • <summary>"
-                vim.g.blamer_relative_time = 1
-                vim.g.blamer_delay = 200
-                vim.cmd "highlight Blamer guifg=#d3d3d3"
+                require("user.blamer").config()
             end,
         },
         -- Github management
@@ -56,27 +50,7 @@ M.config = function()
             "ruifm/gitlinker.nvim",
             event = "BufRead",
             config = function()
-                require("gitlinker").setup {
-                    opts = {
-                        -- adds current line nr in the url for normal mode
-                        add_current_line_on_normal_mode = true,
-                        -- callback for what to do with the url
-                        action_callback = require("gitlinker.actions").copy_to_clipboard,
-                        -- print the url after performing the action
-                        print_url = false,
-                        -- mapping to call url generation
-                        mappings = nil,
-                    },
-                    callbacks = {
-                        ["code.crisidev.org"] = require("gitlinker.hosts").get_gitea_type_url,
-                        ["git.amazon.com"] = function(url_data)
-                            local ok, amzn = pcall(require, "user.amzn")
-                            if ok then
-                                return amzn.get_amazon_type_url(url_data)
-                            end
-                        end,
-                    },
-                }
+                require("user.gitlinker").config()
             end,
             dependencies = "nvim-lua/plenary.nvim",
         },
@@ -513,13 +487,7 @@ M.config = function()
         {
             "folke/trouble.nvim",
             config = function()
-                require("trouble").setup {
-                    auto_open = false,
-                    auto_close = true,
-                    padding = false,
-                    height = 10,
-                    use_diagnostic_signs = true,
-                }
+                require("user.trouble").config()
             end,
             cmd = "Trouble",
             event = "VeryLazy",
@@ -630,43 +598,11 @@ M.config = function()
                 require("user.tabout").config()
             end,
         },
-        -- Translate
-        {
-            "potamides/pantran.nvim",
-            lazy = true,
-            cmd = "Pantran",
-            config = function()
-                require("pantran").setup {
-                    default_engine = "argos",
-                    engines = {
-                        argos = {
-                            default_source = "auto",
-                            default_target = "en",
-                        },
-                    },
-                }
-            end,
-        },
         -- Debug print
         {
             "andrewferrier/debugprint.nvim",
             config = function()
-                require("debugprint").setup {
-                    create_keymaps = true,
-                    create_commands = true,
-                    move_to_debugline = true,
-                    display_snippet = true,
-                    display_counter = true,
-                    filetypes = {
-                        ["rust"] = {
-                            left = 'dbg!("',
-                            right = '");',
-                            mid_var = '{:?}", &',
-                            right_var = ");",
-                        },
-                    },
-                    print_tag = "DBG-CRISIDEV",
-                }
+                require("user.debugprint").config()
             end,
         },
         -- Custom icons

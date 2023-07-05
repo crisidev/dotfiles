@@ -37,9 +37,3 @@ require("user.lsp").config()
 
 -- Debugging
 require("user.dap").config()
-
--- Custom work stuff
-local ok, amzn = pcall(require, "user.amzn")
-if ok then
-    amzn.config()
-end

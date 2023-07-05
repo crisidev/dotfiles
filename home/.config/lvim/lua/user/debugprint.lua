@@ -4,7 +4,7 @@ M.config = function()
     local debugprint = require "debugprint"
 
     debugprint.setup {
-        create_keymaps = false,
+        create_keymaps = true,
         create_commands = true,
         move_to_debugline = true,
         display_snippet = true,
@@ -17,7 +17,7 @@ M.config = function()
                 right_var = ");",
             },
         },
-        print_tag = "DBG",
+        print_tag = "DBG-CRISIDEV",
     }
 
     -- Keymaps
