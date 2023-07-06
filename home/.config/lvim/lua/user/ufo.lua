@@ -43,7 +43,7 @@ M.lsp_capabilities = function()
 end
 
 M.config = function()
-    M.lsp_capabilities()
+    -- M.lsp_capabilities()
     require("ufo").setup {
         fold_virt_text_handler = M.handler,
     }

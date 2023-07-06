@@ -144,6 +144,10 @@ M.config = function()
                         enabled = true,
                         name = "crates",
                     },
+                    popup = {
+                        style = "minimal",
+                        border = "rounded",
+                    },
                 }
             end,
         },

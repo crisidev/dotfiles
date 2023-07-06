@@ -195,6 +195,7 @@ M.config = function()
         vim.o.foldlevelstart = 99
         vim.o.foldenable = true
     else
+        vim.o.foldcolumn = "1" -- Show the fold column
         vim.o.foldmethod = "expr"
         vim.o.foldexpr = "nvim_treesitter#foldexpr()"
         vim.o.foldlevel = 4

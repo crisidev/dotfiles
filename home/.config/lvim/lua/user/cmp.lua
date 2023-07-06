@@ -55,7 +55,6 @@ M.config = function()
         { name = "path", group_index = 1 },
         { name = "dictionary", group_index = 1, keyword_length = 4 },
         { name = "git", group_index = 1 },
-        { name = "crates", group_index = 1 },
         { name = "emoji", group_index = 1 },
     }
 

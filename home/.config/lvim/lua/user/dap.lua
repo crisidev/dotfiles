@@ -469,7 +469,7 @@ M.config = function()
     M.typescript()
 
     local icons = require("user.icons").icons
-    lvim.builtin.which_key.mappings["de"] = {
+    lvim.builtin.which_key.mappings["d"] = {
         name = icons.debug .. "Debug",
         R = { "<cmd>lua require'dap'.run_to_cursor()<cr>", "Run to Cursor" },
         E = { "<cmd>lua require'dapui'.eval(vim.fn.input '[Expression] > ')<cr>", "Evaluate Input" },
