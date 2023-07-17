@@ -253,11 +253,11 @@ end
 
 M.buffers = function()
     local opts = M.get_theme()
-    opts["on_complete"] = {
-        function(_picker)
-            vim.cmd "startinsert"
-        end,
-    }
+    -- opts["on_complete"] = {
+    --     function(_picker)
+    --         vim.cmd "startinsert"
+    --     end,
+    -- }
     builtin.buffers(opts)
 end
 

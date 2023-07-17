@@ -53,7 +53,7 @@ M.config = function()
                     },
                     checkOnSave = {
                         enable = true,
-                        command = "check",
+                        command = "clippy",
                     },
                     cargo = {
                         features = "all",
