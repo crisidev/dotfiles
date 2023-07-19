@@ -1,0 +1,97 @@
+#!/bin/bash
+
+# released under Creative Commons Attribution-ShareAlike 3.0
+# http://creativecommons.org/licenses/by-sa/3.0/
+# v1.4
+# 26. 3. 2012
+# dependencies: gifsicle
+
+#setting optional arguments
+sflag=
+vflag=
+cflag=
+wflag=
+
+verbose="-w"
+
+while getopts :s:c:wv name; do
+	case $name in
+	s)
+		s=1
+		sval="$OPTARG"
+		sflag="set"
+		;;
+	c)
+		c=1
+		cropDim="$OPTARG"
+		cflag="set"
+		;;
+	w) wflag=1 ;;
+	v)
+		verbose="-V"
+		vflag="set"
+		;;
+	:)
+		echo "Error: please specify the number of seconds."
+		exit 2
+		;;
+	?)
+		printf "Usage: [-s <seconds>] [-c x1,y1-x2,y2] [-w] [-v]\n"
+		exit 2
+		;;
+	esac
+done
+
+#screen capturing
+if [ -z "$sflag" ]; then
+	sval=5
+fi
+seconds=$(echo "$sval"*5 | bc)
+cd /tmp
+if [ -n "$vflag" ]; then
+	echo "Now recording..."
+fi
+for ((i = 1; i < $seconds; i++)); do
+	padi=$(printf "%04d" $i)
+	screencapture -C -t "gif" "recorderframe""$padi"".gif"
+	sleep 0.1
+done
+screencapture -C -t "gif" "recorderframe9999.gif"
+if [ -n "$vflag" ]; then
+	echo "Recording complete."
+fi
+
+#processing the frames
+framelist=$(
+	frames=$(ls | grep -a recorderframe)
+	echo ${frames//\n/ }
+)
+named=$(date -j +"%Y-%m-%d")
+namet=$(
+	tim=$(date -j +"%r")
+	echo ${tim//:/.}
+)
+filename=$(echo "Screen shot ""$named"" at ""$namet"".gif")
+if [ -n "$cflag" ]; then
+	crop="--crop ""$cropDim"
+fi
+if [ -n "$wflag" ]; then
+	terminal=$(echo $TERM_PROGRAM)
+	if [ "$terminal" == "Apple_Terminal" ]; then
+		cropDim=$(osascript -e "tell application \"Terminal\" to get the bounds of the first window" | sed "s/,/-/2" | sed "s/ //g")
+		crop="--crop ""$cropDim"
+	elif [ "$terminal" == "iTerm.app" ]; then
+		cropDim=$(osascript -e "tell application \"iterm\" to get the bounds of the first window" | sed "s/,/-/2" | sed "s/ //g")
+		crop="--crop ""$cropDim"
+	fi
+fi
+gifsicle $verbose --delay 25 --loopcount $crop $framelist >"$filename"
+gifsicle $verbose -b --optimize=2 "$filename"
+mv "$filename" ~/Desktop/
+if [ -n "$vflag" ]; then
+	echo "Screen recording saved to ~/Desktop/""$filename""."
+fi
+
+#cleaning up
+rm recorderframe*
+exit

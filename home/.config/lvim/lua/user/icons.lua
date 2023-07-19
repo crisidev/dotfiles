@@ -1,64 +1,61 @@
 local M = {}
 
 M.icons = {
-    error = " ",
-    warn = " ",
-    info = " ",
-    hint = " ",
+    error = " ",
+    warn = " ",
+    info = "󰗖 ",
+    hint = " ",
     debug = " ",
     trace = "✎",
     code_action = "",
-    code_lens_action = " ",
+    code_lens_action = "󰄄 ",
     test = " ",
     docs = " ",
-    clock = " ",
+    clock = " ",
     calendar = " ",
-    buffer = " ",
+    buffer = "󱡗 ",
     layers = "",
     settings = " ",
-    ls_inactive_old = "轢",
-    ls_active_old = "歷",
-    ls_active = "舘",
+    ls_active = "󰕮 ",
     ls_inactive = "",
     question = " ",
     added = "  ",
-    modified = "柳",
+    modified = " ",
     removed = " ",
     screen = "冷",
-    dart = " ",
     config = " ",
-    git = "",
+    git = "",
     magic = " ",
-    exit = " ",
-    exit2 = " ",
-    session = " ",
+    exit = " ",
+    exit2 = " ",
+    session = "󰔚 ",
     project = "⚝ ",
     stuka = " ",
-    text = "",
+    text = "󰊄",
     files = " ",
-    zoxide = "Z",
+    zoxide = "",
     repo = "",
     term = " ",
     palette = " ",
-    buffers = "﩯",
+    buffers = "󰨝 ",
     telescope = "",
-    dashboard = "舘",
+    dashboard = "󰕮 ",
     boat = " ",
     unmute = "",
     mute = "",
-    quit = "",
+    quit = "󰗼",
     replace = "",
     find = "",
-    comment = "",
+    comment = "",
     ok = "",
     no = "",
     moon = "",
     go = "",
     resume = " ",
-    codelens = " ",
+    codelens = "󰄄 ",
     folder = "",
-    package = "",
-    spelling = " ",
+    package = "",
+    spelling = " ",
     copilot = "",
     attention = "",
     Function = "",
@@ -69,8 +66,8 @@ M.icons = {
     grammar = "暈",
     treesitter = "",
     lock = "",
-    presence_on = " ",
-    presence_off = " ",
+    presence_on = "󰅠 ",
+    presence_off = " ",
     right = " ",
     caret = "-",
     flash = " ",
@@ -88,10 +85,10 @@ M.icons = {
     inlay = " ",
     pinned = " ",
     mind = " ",
-    mind_tasks = "陼",
-    mind_backlog = " ",
-    mind_on_going = " ",
-    mind_done = " ",
+    mind_tasks = "󱗽",
+    mind_backlog = " ",
+    mind_on_going = " ",
+    mind_done = " ",
     mind_cancelled = " ",
     mind_notes = " ",
     button_off = " ",
@@ -99,16 +96,17 @@ M.icons = {
 }
 
 M.todo_comments = {
-    FIX = "律",
-    TODO = " ",
-    HACK = " ",
-    WARN = "裂",
-    PERF = "龍",
-    NOTE = " ",
+    FIX = " ",
+    TODO = " ",
+    HACK = " ",
+    WARN = " ",
+    PERF = " ",
+    NOTE = " ",
     ERROR = " ",
     REFS = "",
     SHIELD = "",
 }
+
 
 M.languages = {
     c = "",
@@ -131,17 +129,17 @@ M.file_icons = {
     Aqua = { "" },
     LightBlue = { "", "" },
     Blue = { "", "", "", "", "", "", "", "", "", "", "", "", "" },
-    Darkblue = { "", "" },
+    DarkBlue = { "", "" },
     Purple = { "", "", "", "", "" },
     Red = { "", "", "", "", "", "" },
     Beige = { "", "", "" },
     Yellow = { "", "", "λ", "", "" },
     Orange = { "", "" },
-    Darkorange = { "", "", "", "", "" },
+    DarkOrange = { "", "", "", "", "" },
     Pink = { "", "" },
     Salmon = { "" },
     Green = { "", "", "", "", "", "" },
-    Lightgreen = { "", "", " ", "﵂" },
+    LightGreen = { "", "", "", "﵂" },
     White = { "", "", "", "", "", "" },
 }
 
@@ -172,17 +170,23 @@ M.nvimtree_icons = {
 if lvim.builtin.tree_provider == "neo-tree" then
     M.nvimtree_icons["git"] = {
         unmerged = "",
-        added = "",
-        deleted = "",
-        modified = "",
-        renamed = "",
+        added = "",
+        deleted = "",
+        modified = "",
+        renamed = "󰙏",
         untracked = "",
-        ignored = "",
-        unstaged = "",
+        ignored = "",
+        unstaged = "",
         staged = "",
         conflict = "",
     }
 end
+
+M.mason = {
+    package_pending = " ",
+    package_installed = "󰄳 ",
+    package_uninstalled = " 󰚌",
+}
 
 M.define_dap_signs = function()
     vim.fn.sign_define("DapBreakpoint", lvim.builtin.dap.breakpoint)
@@ -195,71 +199,11 @@ M.define_dap_signs = function()
         "DapBreakpointCondition",
         { text = "", texthl = "DapBreakpoint", linehl = "DapBreakpoint", numhl = "DapBreakpoint" }
     )
+    -- FIX
     vim.fn.sign_define(
         "DapLogPoint",
         { text = "", texthl = "DapLogPoint", linehl = "DapLogPoint", numhl = "DapLogPoint" }
     )
-end
-
-M.mason = {
-    package_pending = " ",
-    package_installed = " ",
-    package_uninstalled = " ",
-}
-
-M.set_icon = function()
-    require("nvim-web-devicons").set_icon {
-        toml = {
-            icon = "📦",
-            color = "#8FAA54",
-            name = "Toml",
-        },
-        rs = {
-            icon = "🦀",
-            color = "#d28445",
-            name = "Rust",
-        },
-        tf = {
-            icon = "",
-            color = "#3d59a1",
-            name = "Terraform",
-        },
-        mod = {
-            icon = "",
-            color = "#6a9fb5",
-            name = "Mod",
-        },
-        sum = {
-            icon = "",
-            color = "#6a9fb5",
-            name = "Sum",
-        },
-        txt = {
-            icon = "",
-            color = "#bbc2cf",
-            name = "Text",
-        },
-        csv = {
-            icon = "",
-            color = "#31B53E",
-            name = "CSV",
-        },
-        plist = {
-            icon = "",
-            color = "#8FAA54",
-            name = "Plist",
-        },
-        mp4 = {
-            icon = "",
-            color = "#5fd7ff",
-            name = "MP4",
-        },
-        mkv = {
-            icon = "",
-            color = "#5fd7ff",
-            name = "MKV",
-        },
-    }
 end
 
 M.use_my_icons = function()

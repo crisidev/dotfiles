@@ -1,8 +1,8 @@
 [user]
     email = bigo@crisidev.org
     name = Bigo
-    signingKey = 099F4F3AA10B27C97B746F03AEFBBD3BE8C66E4A
-    signingEmail = bigo@crisidev.org
+    ; signingKey = 099F4F3AA10B27C97B746F03AEFBBD3BE8C66E4A
+    ; signingEmail = bigo@crisidev.org
 [color]
     ui = auto
 [pager]
@@ -48,8 +48,8 @@
     untracked = cyan
 [help]
     autocorrect = 20
-[commit]
-    gpgSign = true
+; [commit]
+    ; gpgSign = true
 [delta]
     features = decorations
     syntax-theme = Monokai Extended

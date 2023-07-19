@@ -20,7 +20,7 @@ M.start = function()
             "akka.stream.javadsl",
         },
         fallbackScalaVersion = "3.2.0-RC3",
-        serverVersion = "0.11.8",
+        serverVersion = "0.11.12",
     }
 
     metals_config.init_options.statusBarProvider = "on"

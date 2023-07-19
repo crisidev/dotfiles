@@ -8,6 +8,7 @@ if which direnv > /dev/null; then
 fi
 
 # rtx
+[ -f $HOME/.cargo/env ] && source $HOME/.cargo/env
 eval "$(rtx activate zsh)"
 
 source $HOME/.cache/antigen/antigen.zsh
@@ -66,15 +67,13 @@ bindkey '^[[B' history-substring-search-down
 [ -f $HOME/.zsh_amzn ] && source $HOME/.zsh_amzn
 [ -f $HOME/.zsh_functions ] && source $HOME/.zsh_functions
 [ -f $HOME/.zsh_secrets ] && source $HOME/.zsh_secrets
-[ -f $HOME/.cargo/env ] && source $HOME/.cargo/env
 
 # paths
-CUSTOM_PATH=$HOME/.bin:$HOME/.toolbox/bin:$HOME/.local/share/lvim/mason/bin:$HOME/.rodar/bin:$HOME/.local/share/pnpm
-export PATH=$CUSTOM_PATH:$PATH
+export PATH=$HOME/.bin:$HOME/.local/share/lvim/mason/bin:$HOME/.local/share/pnpm:$PATH
 
 # # terminal
 export TERMINFO=/usr/share/terminfo
-export GREP_COLOR='1;31'
+export GREP_COLOR='mt=1;31'
 export EDITOR=vim
 
 # Rustc
@@ -87,7 +86,13 @@ compdef sshrc=ssh
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude build'
 
 # zoxide
-eval "$(zoxide init zsh)"
+eval "$(zoxide init zsh --no-cmd)"
+function z {
+    __zoxide_z "$@"
+}
+function zi {
+    __zoxide_zi "$@"
+}
 
 # spaceship
 eval "$(starship init zsh)"

@@ -17,6 +17,7 @@ M.lsp_normal_keys = function()
     wk.register {
         -- Lsp
         ["f"] = {
+            ["?"] = icons.debug .. "Add debug",
             name = icons.codelens .. "Lsp actions",
             -- Code actions popup
             A = {

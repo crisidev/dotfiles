@@ -1,0 +1,22 @@
+#!/bin/bash
+
+if [ "$1" = "-h" ] || [ "$1" = "--help" ] || [ "$1" = "help" ]; then
+	echo "Usage: $(basename $0) <cycle>"
+elif [ "$1" = "cycle" ]; then
+	if nmcli dev status | grep vpn0 | grep -q connected >/dev/null 2>&1; then
+		~/.bin/vpn-down
+	elif ifconfig | grep -q cscotun0 >/dev/null 2>&1; then
+		~/.bin/cisco-vpn disconnect
+	else
+		~/.bin/vpn-up
+	fi
+else
+	# dbus-send --system --print-reply --dest=org.freedesktop.DBus /org/freedesktop/DBus org.freedesktop.DBus.ListNames |wc -l
+	if nmcli dev status | grep vpn0 | grep -q connected >/dev/null 2>&1; then
+		echo '{"icon":"","state":"Info","text":""}'
+	elif ifconfig | grep -q cscotun0 >/dev/null 2>&1; then
+		echo '{"icon":"","state":"Good","text":""}'
+	else
+		echo '{"text":""}'
+	fi
+fi

@@ -1,0 +1,81 @@
+[theme]
+theme = "tokyo"
+[theme.overrides]
+separator = "<span font_family='MonoLisa Nerd Font Light' font='15'></span>"
+
+[icons]
+icons = "awesome6"
+
+# [[block]]
+# block = "custom"
+# command = "~/.bin/get_disk_io -R\"/^nvme.*/\" -t 1 |tail -n 1"
+# interval = 3
+
+[[block]]
+block = "disk_space"
+path = "/"
+info_type = "available"
+format = " $icon $available ($percentage) "
+format_alt = " $icon $available / $total ($percentage) "
+alert_unit = "GB"
+interval = 30
+warning = 20.0
+alert = 10.0
+
+[[block]]
+block = "net"
+format = "$icon  {$ssid|$device}  $speed_down  $speed_up "
+interval = 5
+
+[[block]]
+block = "memory"
+format = " $icon$mem_avail.eng(w:3,u:B,p:M) ($mem_avail_percents.eng(w:2)) "
+format_alt = "$icon_swap $swap_free.eng(w:3,u:B,p:M) ($swap_used_percents.eng(w:2)) "
+interval = 10
+warning_mem = 70
+warning_swap = 70
+critical_mem = 90
+critical_swap = 90
+
+[[block]]
+block = "cpu"
+interval = 2
+format = "$icon $utilization $barchart $boost "
+
+# [[block]]
+# block = "custom"
+# cycle = ["~/.bin/i3cpu"]
+# interval = 5
+
+[[block]]
+block = "load"
+format = "$icon $5m"
+interval = 3
+
+[[block]]
+block = "temperature"
+interval = 5
+good = 30
+idle = 50
+info = 75
+warning = 90
+format = "$icon $average "
+chip = "coretemp-isa-0000"
+
+[[block]]
+block = "battery"
+info = 80
+good = 60
+warning = 40
+critical = 20
+driver = "upower"
+# device = "BAT0"
+format = "$icon $power $time ($percentage) "
+interval = 30
+
+[[block]]
+block = "time"
+interval = 2
+[block.format]
+full = "$icon $timestamp.datetime(f:'%a %d %b %T', l:en_US) "
+short = "$icon $timestamp.datetime(f:%R, l:en_US) "

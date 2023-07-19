@@ -78,16 +78,16 @@ local function get_file_icon_color()
 end
 
 M.numbers = {
-    " ",
-    " ",
-    " ",
-    " ",
-    " ",
-    " ",
-    " ",
-    " ",
-    " ",
-    " ",
+    "󰼏 ",
+    "󰼐 ",
+    "󰼑 ",
+    "󰼒 ",
+    "󰼓 ",
+    "󰼔 ",
+    "󰼕 ",
+    "󰼖 ",
+    "󰼗 ",
+    "󰿪 ",
 }
 
 M.config = function()
@@ -224,7 +224,7 @@ M.config = function()
     -- Branch
     ins_left {
         "b:gitsigns_head",
-        icon = " ",
+        icon = " " .. icons.git,
         cond = conditions.check_git_workspace,
         color = { fg = colors.blue, bg = colors.bg },
         padding = 0,

@@ -1,0 +1,24 @@
+#!/bin/bash
+aecArgs="$*"
+# If no "aec_args" are passed on to the script, use this "aec_args" as default:
+[ -z "$aecArgs" ] && aecArgs="digital_gain_control=1 experimental_agc=1 analog_gain_control=0 noise_suppression=1 voice_detection=1 extended_filter=1"
+newSourceName="echoCancelSource"
+defaultSourceName="alsa_input.usb-21102019_THRONMAX_PULSE_MICROPHONE-00.analog-stereo"
+newSinkName="alsa_output.pci-0000_00_1f.3.analog-stereo"
+
+# "module-switch-on-connect" with "ignore_virtual=no" (needs PulseAudio 12 or higher) is needed to automatically move existing streams to a new (virtual) default source and sink.
+if ! pactl list modules short | grep "module-switch-on-connect" >/dev/null 2>&1; then
+	echo Load module \"module-switch-on-connect\"
+	pactl unload-module module-switch-on-connect 2>/dev/null
+	pactl load-module module-switch-on-connect
+fi
+
+# Reload "module-echo-cancel"
+echo Reload \"module-echo-cancel\" with \"aec_args=$aecArgs\"
+pactl unload-module module-echo-cancel 2>/dev/null
+if pactl load-module module-echo-cancel use_volume_sharing=1 use_master_format=1 aec_method=webrtc aec_args=\"$aecArgs\" source_name=$newSourceName; then
+	# Set a new default source and sink, if module-echo-cancel has loaded successfully.
+	echo "Loaded module \"module-echo-cancel\""
+fi
+pacmd set-default-source $defaultSourceName
+pacmd set-default-sink $newSinkName

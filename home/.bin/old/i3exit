@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+lock() {
+	dbus-send --type=method_call --dest=org.gnome.ScreenSaver /org/gnome/ScreenSaver org.gnome.ScreenSaver.Lock
+}
+
+case "${1:-}" in
+lock)
+	lock
+	;;
+logout)
+	gnome-session-quit --logout
+	;;
+suspend)
+	lock
+	systemctl suspend -i
+	;;
+hibernate)
+	lock
+	systemctl hibernate -i
+	;;
+reboot)
+	systemctl restart -i
+	;;
+shutdown)
+	systemctl poweroff -i
+	;;
+*)
+	echo "Usage: $0 lock|logout|suspend|hibernate|reboot|shutdown"
+	exit 2
+	;;
+esac
+
+exit 0

@@ -67,13 +67,6 @@ M.config = function()
     lvim.builtin.mason.ui.icons = require("user.icons").mason
     lvim.builtin.treesitter_textobjects = { active = false }
 
-    -- Icons
-    lvim.builtin.custom_web_devicons = true
-    lvim.use_icons = false
-    if not lvim.use_icons and lvim.builtin.custom_web_devicons then
-        require("user.icons").use_my_icons()
-    end
-
     -- Dashboard
     lvim.builtin.alpha.active = true
     lvim.builtin.alpha.mode = "custom"

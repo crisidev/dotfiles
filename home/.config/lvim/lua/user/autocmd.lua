@@ -11,9 +11,6 @@ M.config = function()
             require("user.theme").telescope_theme()
             require("user.theme").dashboard_theme()
             require("user.icons").define_dap_signs()
-            if lvim.use_icons == false and lvim.builtin.custom_web_devicons then
-                require("user.icons").set_icon()
-            end
         end,
     })
 

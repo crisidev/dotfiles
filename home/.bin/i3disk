@@ -1,3 +1,0 @@
-#!/bin/bash
-
-df -H / |tail -n 1 |awk '{print $4}'

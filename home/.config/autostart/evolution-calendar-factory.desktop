@@ -1,7 +1,0 @@
-[Desktop Entry]
-Type=Application
-Exec=bash -c 'sleep 1m; /usr/lib/evolution/evolution-calendar-factory'
-Hidden=false
-NoDisplay=true
-X-GNOME-Autostart-enabled=true
-Name=Workaround for evolution-calendar-factory

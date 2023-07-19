@@ -5,7 +5,7 @@
 add_newline = false
 command_timeout = 1000
 
-format = """[❯](red)[❯](yellow)[❯](green) $directory"""
+format = """[❯](red)[❯](yellow)[❯](green) $hostname$directory"""
 right_format = """
 $git_branch\
 $git_state\
@@ -50,6 +50,12 @@ $cmd_duration\
 $jobs\
 $status\
 """
+
+[hostname]
+disabled = false
+format = "on [$hostname](bold) "
+ssh_only = true
+trim_at = "."
 
 [cmd_duration]
 min_time = 1000

@@ -1,0 +1,9 @@
+#!/bin/bash
+if [ "$1" == "force" ]; then
+	umount -l /dev/mapper/luks-f1bc4a9f-0c33-44f5-b756-ac8d39634810
+	umount -l /dev/mapper/luks-44227493-4fb2-4e92-92fa-b4d245c5fbab
+else
+	umount /div/mapper/luks-f1bc4a9f-0c33-44f5-b756-ac8d39634810 || notify-send -u critical "Umount disks" "Unable to umount Cronopete"
+	umount /dev/mapper/luks-44227493-4fb2-4e92-92fa-b4d245c5fbab || notify-send -u critical "Umount disks" "Unable to umount DataBeego"
+fi
+notify-send "Umount disks" "Finished"

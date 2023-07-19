@@ -609,14 +609,6 @@ M.config = function()
                 require("user.debugprint").config()
             end,
         },
-        -- Custom icons
-        {
-            "abzcoding/nvim-mini-file-icons",
-            config = function()
-                require("nvim-web-devicons").setup()
-            end,
-            enabled = lvim.builtin.custom_web_devicons or not lvim.use_icons,
-        },
         -- Ufo folding
         {
             "kevinhwang91/nvim-ufo",
