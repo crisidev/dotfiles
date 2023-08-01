@@ -111,5 +111,7 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
-. "$HOME/.cargo/env"
+
+[ -f "$HOME/.zsh_secrets" ] && source "$HOME/.zsh_secrets"
+[ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
 eval "$(rtx activate bash)"

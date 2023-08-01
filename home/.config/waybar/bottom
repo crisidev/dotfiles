@@ -1,0 +1,78 @@
+{
+    "position": "bottom",
+    "layer": "top",
+    "height": 30,
+    "modules-right": [
+        "custom/tailscale",
+        "custom/mic",
+        "custom/notify",
+        "custom/bluetooth",
+        "backlight",
+        "custom/separator",
+        "tray",
+        "custom/separator",
+        "custom/power",
+    ],
+    "modules-left": [
+        "hyprland/window",
+    ],
+    "tray": {
+        "icon-size": 19,
+        "spacing": 5
+    },
+    "backlight": {
+        "device": "intel_backlight",
+        "format": "{icon} {percent}%",
+        "format-icons": [
+            " ",
+            " ",
+            " ",
+            " ",
+            " ",
+            " ",
+            " ",
+            " ",
+            " ",
+            " ",
+            " ",
+            " ",
+        ]
+    },
+    "custom/power": {
+        "format": "󰐥",
+        "on-click": "swaynag -t tokyonight -m 'system: shutdown - reboot - suspend - logout - lock?' -Z 'shutdown' 'systemctl poweroff' -Z 'reboot' 'systemctl reboot' -Z 'suspend' 'hyprlander suspend' -Z 'logout' 'hyprctl exit' -Z 'lock' 'hyprlander lock' -s '󰗼' -y 'top'"
+    },
+    "custom/separator": {
+        "format": " ",
+        "interval": "once",
+        "tooltip": false
+    },
+    "custom/notify": {
+        "format": "{}",
+        "interval": 2,
+        "exec": "hyprlander notify",
+        "on-click": "hyprlander notify --toggle",
+        "return-type": "json"
+    },
+    "custom/mic": {
+        "format": "{}",
+        "interval": 2,
+        "exec": "hyprlander mic",
+        "on-click": "hyprlander mic --toggle",
+        "return-type": "json"
+    },
+    "custom/tailscale": {
+        "format": "{}",
+        "interval": 2,
+        "exec": "hyprlander tailscale",
+        "on-click": "hyprlander tailscale --toggle",
+        "return-type": "json"
+    },
+    "custom/bluetooth": {
+        "format": "{}",
+        "interval": 2,
+        "exec": "hyprlander bluetooth 78:2B:64:9F:C0:D3",
+        "on-click": "hyprlander bluetooth 78:2B:64:9F:C0:D3 --toggle",
+        "return-type": "json"
+    }
+}

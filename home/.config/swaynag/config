@@ -1,5 +1,5 @@
-[custom]
-font=mononoki Nerd Font 10
+[tokyonight]
+font=Canterell,Symbols Nerd Font 9
 dismiss-button=Dismiss
 background=24283B
 border=414868
@@ -14,4 +14,3 @@ button-gap=5
 button-dismiss-gap=5
 button-margin-right=5
 button-padding=5
-

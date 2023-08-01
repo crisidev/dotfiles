@@ -1,0 +1,13 @@
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Name=Telegram
+Comment=Telegram web application
+MimeType=text/english;text/plain;text/x-makefile;text/x-c++hdr;text/x-c++src;text/x-chdr;text/x-csrc;text/x-java;text/x-moc;text/x-pascal;text/x-tcl;text/x-tex;application/x-shellscript;text/x-c;text/x-c++;
+Exec=chromium --user-data-dir=/home/bigo/.local/share/chrome-telegram --disable-session-crashed-bubble -app=https://web.telegram.org
+Icon=telegram
+Type=Application
+Terminal=false
+Categories=Utility;Chat;
+X-GNOME-SingleWindow=false
+NoDisplay=false

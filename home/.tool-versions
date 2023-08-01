@@ -1,12 +1,19 @@
+# language build
+gradle latest
+meson latest
+ninja latest
+
+# language runtimes
+python 3.11.4
+java corretto-17
+golang 1.20.6
+node 18.16.1
+ruby 3.2.2
+
+# tools
+jq latest
+neovim nightly
 fzf latest
 github-cli latest
 gitui latest
-golang 1.20
-gradle latest
-java corretto-17
 lazygit latest
-meson latest
-neovim nightly
-node 18.16.1
-python 3.10.11
-ruby 3.2

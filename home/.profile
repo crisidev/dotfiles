@@ -25,5 +25,6 @@ fi
 if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
-. "$HOME/.cargo/env"
+[ -f "$HOME/.zsh_secrets" ] && source "$HOME/.zsh_secrets"
+[ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
 eval "$(rtx env -s bash)"

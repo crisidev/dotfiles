@@ -1,0 +1,143 @@
+{
+    "position": "top",
+    "layer": "top",
+    "height": 30,
+    "modules-left": [
+        "wlr/workspaces"
+    ],
+    "modules-right": [
+        "disk",
+        "custom/separator",
+        "network",
+        "custom/separator",
+        "memory",
+        "custom/separator",
+        "cpu",
+        "custom/separator",
+        "temperature",
+        "custom/separator",
+        "battery",
+        "custom/separator",
+        "clock",
+        "custom/date",
+    ],
+    "cpu": {
+        "interval": 2,
+        "format": "  {usage:>2}%  {icon0}{icon1}{icon2}{icon3}{icon4}{icon5}{icon6}{icon7}{icon8}{icon9}{icon10}{icon11}{icon12}{icon13}{icon14}{icon3}  󰁥 {avg_frequency}GHz    {load}",
+        "format-icons": [
+            "▁",
+            "▂",
+            "▃",
+            "▄",
+            "▅",
+            "▆",
+            "▇",
+            "█"
+        ],
+        "states": {
+            "nope": 15,
+            "cool": 30,
+            "warm": 50,
+            "hot": 70,
+            "sun": 90,
+        },
+    },
+    "temperature": {
+        "critical-threshold": 80,
+        "format": " {temperatureC}°C"
+    },
+    "clock": {
+        "format": "  {:%a %d}",
+        "format-alt": " {:%A, %B %d, %Y}",
+        "tooltip-format": "<tt><small>{calendar}</small></tt>",
+        "calendar": {
+            "mode": "year",
+            "mode-mon-col": 3,
+            "weeks-pos": "right",
+            "on-scroll": 1,
+            "on-click-right": "mode",
+            "format": {
+                "months": "<span color='#7aa2f7'><b>{}</b></span>",
+                "days": "<span color='#c0caf5'><b>{}</b></span>",
+                "weeks": "<span color='#9ece6a'><b>W{}</b></span>",
+                "weekdays": "<span color='#bb9af7'><b>{}</b></span>",
+                "today": "<span color='#7aa2f7'><b><u>{}</u></b></span>"
+            }
+        },
+        "actions": {
+            "on-click-right": "mode",
+            "on-click-forward": "tz_up",
+            "on-click-backward": "tz_down",
+            "on-scroll-up": "shift_up",
+            "on-scroll-down": "shift_down"
+        }
+    },
+    "memory": {
+        "interval": 10,
+        "format": "  {avail:0.1f}G/{total:0.1f}G",
+        "format-alt": " {swapAvail:0.1f}G/{swapTotal:0.1f}G",
+    },
+    "wlr/workspaces": {
+        "disable-scroll": true,
+        "format": "{icon}",
+        "on-click": "activate",
+        "on-scroll-up": "hyprctl dispatch workspace e+1",
+        "on-scroll-down": "hyprctl dispatch workspace e-1",
+        "format-icons": {
+            "1": " ",
+            "2": " ",
+            "3": " ",
+            "4": "󰭹 ",
+            "5": " ",
+            "6": " ",
+            "7": "󰒱 ",
+            "8": "󰙯 ",
+            "9": " ",
+            "10": " ",
+            "11": " ",
+        }
+    },
+    "disk": {
+        "interval": 30,
+        "format": "󰨣 {free} ({percentage_free}%) on {path}",
+    },
+    "custom/date": {
+        "format": "{}",
+        "interval": 2,
+        "exec": "date +\"%H:%M:%S\""
+    },
+    "custom/power": {
+        "format": "󰐥",
+        "on-click": "swaynag -t tokyonight -m 'system: reboot, shutdown, logout, suspend?' -B 'logout' 'hyprctl exit' -B 'shutdown' 'systemctl poweroff' -B 'reboot' 'systemctl reboot' -B 'suspend' 'hyprlander suspend' -s exit -y top",
+    },
+    "battery": {
+        "interval": 30,
+        "states": {
+            "warning": 40,
+            "critical": 20,
+        },
+        "format": "{icon} {capacity}% - {time}",
+        "format-full": "{icon} {capacity}%",
+        "format-charging": "󱐋 {icon} {capacity}% - {time}",
+        "format-icons": [
+            " ",
+            " ",
+            " ",
+            " ",
+            " "
+        ]
+    },
+    "network": {
+        "interval": 2,
+        "format-wifi": "  {essid}  {bandwidthDownBytes}  {bandwidthUpBytes}",
+        "format-ethernet": "󰈀 {ipaddr}/{cidr}  {bandwidthDownBytes}  {bandwidthUpBytes}",
+        "format-linked": "󰈀 {ifname}",
+        "format-disconnected": "󰤮 ",
+        "tooltip-format": "󰈀 {ifname},   {essid}, 󰩟 {ipaddr}/{cidr}, 󱇢 {gwaddr},  {bandwidthDownBytes}  {bandwidthUpBytes}"
+    },
+    "custom/separator": {
+        "format": " ",
+        "interval": "once",
+        "tooltip": false
+    },
+}
