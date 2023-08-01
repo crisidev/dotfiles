@@ -38,7 +38,7 @@ See my [lvim](https://github.com/crisidev/lvim) configuration.
 ### Wayland
 
 - [Hyprland](https://wiki.hyprland.org/) [config](/home/.config/hypr/)
-- [Waybar](https://github.com/Alexays/Waybar) [top](/home/.config/waybar/top) and [bottom](/home/.config/waybar/bottom) bars
+- [Waybar](https://github.com/Alexays/Waybar) [top](/home/.config/waybar/top) and [bottom](/home/.config/waybar/bottom)
 * [SwayNC](https://github.com/ErikReider/SwayNotificationCenter) [config](/home/.config/swaync/)
 
 ### X11
