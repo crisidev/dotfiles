@@ -7,6 +7,7 @@ Take what you need, it also comes warrant free 😊
     * [Terminal](#terminal)
     * [Editor](#editor)
     * [Wayland](#wayland)
+    * [X11](#x11)
     * [System](#system)
 * [Installation](#installation)
 
@@ -39,6 +40,10 @@ See my [lvim](https://github.com/crisidev/lvim) configuration.
 - [Hyprland](https://wiki.hyprland.org/) [config](/home/.config/hypr/)
 - [Waybar](https://github.com/Alexays/Waybar) [top](/home/.config/waybar/top) and [bottom](/home/.config/waybar/bottom) bars
 * [SwayNC](https://github.com/ErikReider/SwayNotificationCenter) [config](/home/.config/swaync/)
+
+### X11
+
+My old X11, i3 and Gnome based configuration can be found [here](https://github.com/crisidev/dotfiles/tree/x11).
 
 ### System
 
