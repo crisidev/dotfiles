@@ -1,5 +1,12 @@
 # 🤟 Crisidev Dotfiles 🤟
 
+**This config is not actively maintained anymore as I am primarly using
+Hyperland on Wayland now**
+
+See the `wayland` branch of this repo.
+
+# Old README
+
 Take what you need, it also comes warrant free 😊
 
 - [Version](#version)
