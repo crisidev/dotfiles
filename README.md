@@ -2,12 +2,17 @@
 
 Take what you need, it also comes warrant free 😊
 
-- [Configurations](#configurations)
-  - [Terminal](#terminal)
-  - [Editor](#editor)
-  - [Wayland](#Wayland)
-  * [System](#System)
-- [Installation](#installation)
+* [Look and feel](#look-and-feel)
+* [Configurations](#configurations)
+    * [Terminal](#terminal)
+    * [Editor](#editor)
+    * [Wayland](#wayland)
+    * [System](#system)
+* [Installation](#installation)
+
+## Look and feel
+
+![Desktop](desktop.png)
 
 ## Configurations
 
