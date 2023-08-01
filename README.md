@@ -3,7 +3,7 @@
 **This config is not actively maintained anymore as I am primarly using
 Hyperland on Wayland now**
 
-See the `wayland` branch of this repo.
+See the `main` branch of this repo.
 
 # Old README
 
