@@ -3,7 +3,9 @@
     "layer": "top",
     "height": 30,
     "modules-left": [
-        "wlr/workspaces"
+        "wlr/workspaces",
+        "custom/separator",
+        "hyprland/submap",
     ],
     "modules-right": [
         "disk",
@@ -43,8 +45,14 @@
         },
     },
     "temperature": {
+        "interval": 2,
         "critical-threshold": 80,
         "format": " {temperatureC}°C"
+    },
+    "hyprland/submap": {
+        "format": "󰕳 {}",
+        "max-length": 40,
+        "tooltip": false
     },
     "clock": {
         "format": "  {:%a %d}",

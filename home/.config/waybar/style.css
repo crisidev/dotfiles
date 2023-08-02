@@ -45,7 +45,14 @@ window#waybar {
   background-color: #24283b;
   border-radius: 5px;
   padding: 5px 10px;
-  margin: 5px 5px 5px 5px;
+  margin: 5px;
+}
+
+#submap {
+  background-color: #24283b;
+  margin: 5px;
+  padding: 5px 10px;
+  border-radius: 5px;
 }
 
 #clock,
@@ -62,13 +69,26 @@ window#waybar {
 
 #backlight,
 #custom-notify,
+#idle_inhibitor,
 #custom-bluetooth,
 #custom-tailscale,
 #custom-power,
+#cava,
+#mpris,
 #custom-mic {
   background-color: #24283b;
   padding: 5px 10px;
   margin: 5px 0px 5px 0px;
+}
+
+#mpris {
+  border-radius: 5px;
+}
+
+#idle_inhibitor.activated {
+  color: #24283b;
+  background: #bb9af7;
+  border-radius: 5px;
 }
 
 #tray {
@@ -78,8 +98,17 @@ window#waybar {
   border-radius: 5px;
 }
 
-#custom-tailscale {
+#custom-tailscale.ok {
   border-radius: 5px 0px 0px 5px;
+  background-color: #7aa2f7;
+  border-radius: 5px;
+  color: #24283b;
+}
+
+#custom-mic.ok {
+  background-color: #f7768e;
+  border-radius: 5px;
+  color: #24283b;
 }
 
 #backlight {

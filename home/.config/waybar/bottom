@@ -3,9 +3,12 @@
     "layer": "top",
     "height": 30,
     "modules-right": [
+        "hyprland/window",
+        "custom/separator",
         "custom/tailscale",
         "custom/mic",
         "custom/notify",
+        "idle_inhibitor",
         "custom/bluetooth",
         "backlight",
         "custom/separator",
@@ -14,15 +17,42 @@
         "custom/power",
     ],
     "modules-left": [
-        "hyprland/window",
+        "mpris"
     ],
+    "mpris": {
+        "format": "{player_icon} {dynamic} {status_icon}",
+        "format-paused": "{player_icon} <i>{dynamic}</i> {status_icon}",
+        "player-icons": {
+            "default": "▶ ",
+            "mpv": " ",
+            "spotify": " "
+        },
+        "status-icons": {
+            "paused": " ",
+            "playing": " ",
+            "stopped": " "
+        },
+        // "ignored-players": ["firefox"]
+    },
+    "hyprland/window": {
+        "format": "  {}",
+        "separate-outputs": false
+    },
     "tray": {
         "icon-size": 19,
         "spacing": 5
     },
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "",
+            "deactivated": ""
+        }
+    },
     "backlight": {
         "device": "intel_backlight",
-        "format": "{icon} {percent}%",
+        "format": "{icon}",
+        "format-alt": "{icon} {percent}%",
         "format-icons": [
             " ",
             " ",

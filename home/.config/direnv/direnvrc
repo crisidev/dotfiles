@@ -8,8 +8,8 @@ fi
 unset direnvrc_git_crisidev
 
 # home home configs
-direnvrc_git_home="$(cd $(dirname $BASH_SOURCE) &> /dev/null; pwd)/direnvrc-git-home"
-if [ -f "$direnvrc_git_home" ]; then
-    source "$direnvrc_git_home"
+direnvrc_git_bigo="$(cd $(dirname $BASH_SOURCE) &> /dev/null; pwd)/direnvrc-git-bigo"
+if [ -f "$direnvrc_git_bigo" ]; then
+    source "$direnvrc_git_bigo"
 fi
-unset direnvrc_git_home
+unset direnvrc_git_bigo
