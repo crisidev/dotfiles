@@ -39,7 +39,7 @@
         "separate-outputs": false
     },
     "tray": {
-        "icon-size": 19,
+        "icon-size": 22,
         "spacing": 5
     },
     "idle_inhibitor": {

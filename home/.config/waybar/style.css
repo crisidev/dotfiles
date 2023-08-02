@@ -14,8 +14,9 @@ window#waybar {
 
 #workspaces {
   background-color: #24283b;
-  margin: 5px;
   border-radius: 5px;
+  /* padding: 5px; */
+  /* margin: 5px 0px 0px 5px; */
 }
 #workspaces button {
   padding: 5px 10px;
@@ -42,10 +43,12 @@ window#waybar {
 }
 
 #window {
-  background-color: #24283b;
+  /* background-color: #24283b; */
   border-radius: 5px;
+  /* padding: 5px 10px; */
+  /* margin: 5px; */
+  background-color: #24283b;
   padding: 5px 10px;
-  margin: 5px;
 }
 
 #submap {
@@ -64,7 +67,7 @@ window#waybar {
 #memory {
   background-color: #24283b;
   padding: 5px 10px;
-  margin: 5px 0px 0px 0px;
+  margin: 0px 0px 0px 0px;
 }
 
 #backlight,
@@ -78,11 +81,11 @@ window#waybar {
 #custom-mic {
   background-color: #24283b;
   padding: 5px 10px;
-  margin: 5px 0px 5px 0px;
 }
 
 #mpris {
   border-radius: 5px;
+  margin: 0px 0px 0px 5px;
 }
 
 #idle_inhibitor.activated {
@@ -94,7 +97,6 @@ window#waybar {
 #tray {
   background-color: #24283b;
   padding: 5px 10px;
-  margin: 5px 0px 5px 0px;
   border-radius: 5px;
 }
 
@@ -128,7 +130,7 @@ window#waybar {
 /* } */
 
 #custom-separator {
-  margin: 5px 0px 0px 0px;
+  /* margin: 5px 0px 0px 0px; */
   /* background-color: #24283b; */
 }
 
@@ -136,14 +138,13 @@ window#waybar {
   color: #24283b;
   background-color: #7aa2f7;
   border-radius: 5px 0px 0px 5px;
-  margin: 5px 0px 0px 0px;
 }
 
 #custom-date {
   color: #24283b;
   background-color: #7aa2f7;
   border-radius: 0px 5px 5px 0px;
-  margin: 5px 5px 0px 0px;
+  margin: 0px 5px 0px 0px;
   padding: 0px 10px;
 }
 
@@ -151,11 +152,11 @@ window#waybar {
   color: #24283b;
   background-color: #db4b4b;
   border-radius: 5px;
-  margin: 5px 5px 5px 5px;
+  margin: 0px 5px 0px 0px;
 }
 
 #cpu {
-  border-radius: 0px 5px 5px 0px;
+  border-radius: 5px;
 }
 
 #memory,
