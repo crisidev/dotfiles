@@ -21,6 +21,7 @@ window#waybar {
 #workspaces button {
   padding: 5px 10px;
   background: #24283b;
+  border-radius: 5px;
   color: #c0caf5;
 }
 
@@ -52,8 +53,8 @@ window#waybar {
 }
 
 #submap {
-  background-color: #24283b;
-  margin: 5px;
+  color: #24283b;
+  background: #bb9af7;
   padding: 5px 10px;
   border-radius: 5px;
 }
