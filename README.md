@@ -47,7 +47,7 @@ My old X11, i3 and Gnome based configuration can be found [here](https://github.
 
 ### System
 
-- [Keyd](https://github.com/rvaiya/keyd) [config](/system/etc/keyd/keyd.cfg) file
+- [Keyd](https://github.com/rvaiya/keyd) [config](/system/etc/keyd/default.cfg) file
 - [Topgrade](https://github.com/r-darwish/topgrade)
   [config](/home/.config/topgrade.toml) file
 
