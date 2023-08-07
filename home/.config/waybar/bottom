@@ -11,6 +11,7 @@
         "idle_inhibitor",
         "custom/bluetooth",
         "backlight",
+        "pulseaudio",
         "custom/separator",
         "tray",
         "custom/separator",
@@ -19,20 +20,40 @@
     "modules-left": [
         "mpris"
     ],
+    "pulseaudio": {
+        "format": "{icon}",
+        "format-bluetooth": "{icon}",
+        "tooltip-format":"{desc} {format_source}",
+        "format-muted": "󰸈",
+        "format-icons": {
+            "default": [
+                "󰕿",
+                "󰖀",
+                "󰕾"
+            ]
+        },
+        "scroll-step": 1,
+        "on-click": "pavucontrol",
+        "ignored-sinks": [
+            "Easy Effects Sink"
+        ]
+    },
     "mpris": {
         "format": "{player_icon} {dynamic} {status_icon}",
         "format-paused": "{player_icon} <i>{dynamic}</i> {status_icon}",
         "player-icons": {
             "default": "▶ ",
             "mpv": " ",
-            "spotify": " "
+            "spotify": " ",
+            "firefox": "󰈹 ",
+            "chrome": " ",
+            "chromium": " ",
         },
         "status-icons": {
-            "paused": " ",
-            "playing": " ",
-            "stopped": " "
+            "paused": "  ",
+            "playing": "  ",
+            "stopped": "  "
         },
-        // "ignored-players": ["firefox"]
     },
     "hyprland/window": {
         "format": "  {}",

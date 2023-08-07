@@ -79,6 +79,7 @@ window#waybar {
 #custom-power,
 #cava,
 #mpris,
+#pulseaudio,
 #custom-mic {
   background-color: #24283b;
   padding: 5px 10px;
@@ -114,7 +115,9 @@ window#waybar {
   color: #24283b;
 }
 
-#backlight {
+#pulseaudio {
+  font-size: 22px;
+  /* padding: 5px 10px; */
   border-radius: 0px 5px 5px 0px;
 }
 
