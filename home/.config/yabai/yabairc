@@ -1,0 +1,92 @@
+#!/usr/bin/env sh
+
+MONITORS=$(yabai -m query --displays | jq '.[].index')
+NB_MONITORS="$(yabai -m query --displays | jq '. | length')"
+
+sudo yabai --load-sa
+yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
+
+debug() {
+  echo "$@" 1>&2;
+}
+delete_all_spaces() {
+  for monitor in ${MONITORS[@]}; do
+    local FOCUS_SPACE=$(yabai -m query --spaces --display $monitor | jq '.[0].index')
+    debug "Focusing space $FOCUS_SPACE"
+    yabai -m space --focus "$FOCUS_SPACE"
+    while [ $(yabai -m query --spaces --display $monitor | jq '. | length') -ne 1 ]; do
+      local SPACE_ID=$(yabai -m query --spaces --display $monitor | jq '.[-1].index')
+      debug "Deleting space $SPACE_ID"
+      yabai -m space --destroy "$SPACE_ID"
+    done
+  done
+}
+
+name_first_space() {
+  local SPACE_ID=$(get_first_space_of_monitor $1)
+  debug "Name space ($SPACE_ID): $2"
+  yabai -m space "$SPACE_ID"  --label "$2"
+}
+
+name_space() {
+  local SPACE_ID=$(yabai -m query --spaces --display $1 | jq '[.[] | select (.label=="")] | .[0] | .index')
+  debug "Name space ($SPACE_ID): $2"
+  yabai -m space "$SPACE_ID" --label "$2"
+}
+
+get_first_space_of_monitor() {
+  yabai -m query --spaces --display $1 | jq '.[0].index'
+}
+
+create_space_on_monitor() {
+  local FIRST_SPACE=$(get_first_space_of_monitor $1)
+  debug "Create space after $FIRST_SPACE"
+  yabai -m space --create $FIRST_SPACE
+  name_space $1 "$2"
+}
+
+# global settings
+#yabai -m config external_bar                 all:24:0
+yabai -m config mouse_follows_focus          on
+yabai -m config focus_follows_mouse          autofocus
+yabai -m config window_placement             first_child
+yabai -m config window_topmost               on
+yabai -m config window_opacity               on
+yabai -m config window_opacity_duration      0.0
+yabai -m config window_shadow                on
+yabai -m config insert_feedback_color        0xaad75f5f
+yabai -m config active_window_opacity        1.0
+yabai -m config normal_window_opacity        0.95
+yabai -m config split_ratio                  0.50
+yabai -m config auto_balance                 off
+yabai -m config mouse_modifier               cmd
+yabai -m config mouse_action1                move
+yabai -m config mouse_action2                resize
+
+# general space settings
+yabai -m config layout                       bsp
+yabai -m config top_padding                  8
+yabai -m config bottom_padding               8
+yabai -m config left_padding                 8
+yabai -m config right_padding                8
+yabai -m config window_gap                   8
+
+# rules
+## makes system preferences always floating
+yabai -m rule --add app="^System Settings$" manage=off
+yabai -m rule --add app="^Finder$" manage=off
+yabai -m rule --add app="^Digital Colou?r Meter$" sticky=on
+
+# spaces
+yabai -m space 1 --label terminal
+yabai -m space 2 --label firefox
+yabai -m space 3 --label teams
+yabai -m space 4 --label outlook
+
+# signals
+## updates workspace widget when space changes
+yabai -m signal --add event=space_changed action="osascript -e 'tell application \"Übersicht\" to refresh widget id \"pecan-workspace-jsx\"'"
+
+delete_all_spaces
+
+echo "yabai configuration loaded.."

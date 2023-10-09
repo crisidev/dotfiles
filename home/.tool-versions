@@ -4,14 +4,13 @@ meson latest
 ninja latest
 
 # language runtimes
-python 3.11.4
+python 3.12.0
 java corretto-17
 golang 1.20.6
 node 18.16.1
 ruby 3.2.2
 
 # tools
-jq latest
 neovim nightly
 fzf latest
 github-cli latest

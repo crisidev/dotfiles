@@ -11,7 +11,7 @@ fi
 [ -f $HOME/.cargo/env ] && source $HOME/.cargo/env
 eval "$(rtx activate zsh)"
 
-source $HOME/.cache/antigen/antigen.zsh
+source $HOME/.local/antigen/antigen.zsh
 
 antigen use oh-my-zsh
 
@@ -70,6 +70,7 @@ bindkey '^[[B' history-substring-search-down
 
 # paths
 export PATH=$HOME/.bin:$HOME/.local/share/lvim/mason/bin:$HOME/.local/share/pnpm:$PATH
+export PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:$PATH"
 
 # # terminal
 export TERMINFO=/usr/share/terminfo
