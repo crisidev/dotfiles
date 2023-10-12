@@ -11,7 +11,7 @@ node 18.16.1
 ruby 3.2.2
 
 # tools
-neovim nightly
+neovim stable
 fzf latest
 github-cli latest
 gitui latest

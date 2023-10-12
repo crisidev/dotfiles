@@ -154,11 +154,3 @@ style = "bold blue"
 
 [deno]
 style = "bold blue"
-
-[custom.path_type]
-description = "Brazil path type"
-when = "true"
-command = "starship-brazil-context path-type 'BR|' 'PE|' '📂' '📦'" 
-shell = ["bash", "--noprofile", "--norc"]
-style = "bold fg:yellow"
-format = "[($output )]($style)"
