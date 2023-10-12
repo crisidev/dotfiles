@@ -13,3 +13,9 @@ if [ -f "$direnvrc_git_bigo" ]; then
     source "$direnvrc_git_bigo"
 fi
 unset direnvrc_git_bigo
+
+direnvrc_git_omniva="$(cd $(dirname $BASH_SOURCE) &> /dev/null; pwd)/direnvrc-git-omniva"
+if [ -f "$direnvrc_git_omniva" ]; then
+    source "$direnvrc_git_omniva"
+fi
+unset direnvrc_git_omniva

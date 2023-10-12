@@ -1,0 +1,14 @@
+ohmyzsh/ohmyzsh path:lib
+ohmyzsh/ohmyzsh path:plugins/command-not-found
+ohmyzsh/ohmyzsh path:plugins/history
+
+zsh-users/zsh-completions
+zsh-users/zsh-autosuggestions
+zsh-users/zsh-history-substring-search
+joshskidmore/zsh-fzf-history-search
+hlissner/zsh-autopair
+supercrabtree/k
+zdharma/fast-syntax-highlighting
+MichaelAquilina/zsh-you-should-use
+djui/alias-tips
+mroth/evalcache

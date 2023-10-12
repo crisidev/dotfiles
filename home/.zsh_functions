@@ -106,3 +106,7 @@ function joycond-cemuhook {
   cd ~/github/0updates/joycond-cemuhook && python joycond-cemuhook.py
   cd -
 }
+
+function aws-complete {
+  complete -C "$(rtx which aws)_completer" aws
+}

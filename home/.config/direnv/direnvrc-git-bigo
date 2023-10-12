@@ -1,0 +1,8 @@
+#!/bin/bash
+
+function use_git_bigo() {
+  export GIT_AUTHOR_EMAIL=bigo@crisidev.org
+  export GIT_AUTHOR_NAME=Bigo
+  export GIT_COMMITTER_EMAIL=bigo@crisidev.org
+  export GIT_COMMITTER_NAME=Bigo
+}
