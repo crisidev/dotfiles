@@ -38,6 +38,11 @@
     rebase = true
 [credential]
     helper = cache
+	helper = 
+	helper = /usr/local/share/gcm-core/git-credential-manager
+	guiPrompt = false
+	gitLabAuthModes = pat
+	credentialStore = keychain
 [color "branch"]
     current = yellow reverse
     local = yellow
@@ -59,3 +64,5 @@
     file-style = bold blue ul
     file-decoration-style = none
     hunk-header-style = omit
+[credential "https://dev.azure.com"]
+	useHttpPath = true

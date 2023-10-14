@@ -11,7 +11,12 @@ export ZSH_FZF_HISTORY_SEARCH_BIND="^f"
 export ZSH_FZF_HISTORY_SEARCH_FZF_ARGS="+s +m +x -e --height 40% --reverse"
 
 # configure antidote
-autoload -Uz compinit && compinit
+if which brew > /dev/null; then
+    FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+
+    autoload -Uz compinit
+    compinit
+fi
 source /opt/homebrew/opt/antidote/share/antidote/antidote.zsh
 antidote load $HOME/.zsh_plugins
 
@@ -51,8 +56,7 @@ bindkey '^[[B' history-substring-search-down
 [ -f $HOME/.zsh_secrets ] && source $HOME/.zsh_secrets
 
 # paths
-export PATH=$HOME/.bin:$HOME/.local/share/lvim/mason/bin:$HOME/.local/share/pnpm:$PATH
-export PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:$PATH"
+export PATH="$HOME/.bin:$HOME/.local/share/lvim/mason/bin:/opt/homebrew/opt/gnu-sed/libexec/gnubin:/opt/homebrew/opt/coreutils/libexec/gnubin:/opt/homebrew/opt/grep/libexec/gnubin:/opt/homebrew/opt/ssh-copy-id/bin:$PATH"
 
 # # terminal
 export TERMINFO=/usr/share/terminfo

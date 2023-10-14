@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
 # set -x
 set -e -o pipefail
@@ -12,31 +12,27 @@ usage() {
 # nvim listen socket
 NVIM_LISTEN_ADDRESS=/tmp/nvimsocket
 export PATH=$HOME/.bin:$HOME/.local/share/lvim/mason/bin:$HOME/.cargo/bin:$HOME/.local/share/pnpm:$PATH
-eval "$(rtx env -s bash)"
+eval "$(rtx activate bash)"
 
 # Start neovim IDE using class `ide` and listening on $NVIM_LISTEN_ADDRESS
 function start_ide() {
     [ -f "$HOME/.zsh_secrets" ] && source "$HOME/.zsh_secrets"
+
     export NVIM_APPNAME="${NVIM_APPNAME:-"lvim"}"
-    export LUNARVIM_RUNTIME_DIR="${LUNARVIM_RUNTIME_DIR:-"/home/bigo/.local/share/lunarvim"}"
-    export LUNARVIM_CONFIG_DIR="${LUNARVIM_CONFIG_DIR:-"/home/bigo/.config/lvim"}"
-    export LUNARVIM_CACHE_DIR="${LUNARVIM_CACHE_DIR:-"/home/bigo/.cache/lvim"}"
-    export LUNARVIM_BASE_DIR="${LUNARVIM_BASE_DIR:-"/home/bigo/.local/share/lunarvim/lvim"}"
-    export NVIM_APPNAME="${NVIM_APPNAME:-"lvim"}"
-    export LUNARVIM_RUNTIME_DIR="${LUNARVIM_RUNTIME_DIR:-"/home/bigo/.local/share/lunarvim"}"
-    export LUNARVIM_CONFIG_DIR="${LUNARVIM_CONFIG_DIR:-"/home/bigo/.config/lvim"}"
-    export LUNARVIM_CACHE_DIR="${LUNARVIM_CACHE_DIR:-"/home/bigo/.cache/lvim"}"
-    export LUNARVIM_BASE_DIR="${LUNARVIM_BASE_DIR:-"/home/bigo/.local/share/lunarvim/lvim"}"
+    export LUNARVIM_RUNTIME_DIR="${LUNARVIM_RUNTIME_DIR:-"/Users/matteobigoi/.local/share/lunarvim"}"
+    export LUNARVIM_CONFIG_DIR="${LUNARVIM_CONFIG_DIR:-"/Users/matteobigoi/.config/lvim"}"
+    export LUNARVIM_CACHE_DIR="${LUNARVIM_CACHE_DIR:-"/Users/matteobigoi/.cache/lvim"}"
+    export LUNARVIM_BASE_DIR="${LUNARVIM_BASE_DIR:-"/Users/matteobigoi/.local/share/lunarvim/lvim"}"
+
     # exec /home/ANT.AMAZON.COM/matbigoi/github/gnvim/target/release/gnvim -- -u "$LUNARVIM_BASE_DIR/init.lua" "$@"
-    exec -a "$NVIM_APPNAME" kitty --detach --config "$HOME/.config/kitty/ide.conf" --class ide \
-        nvim --listen $NVIM_LISTEN_ADDRESS -u "$LUNARVIM_BASE_DIR/init.lua" --cmd "let g:crisidev_ide=1" "$@"
+    exec -a "$NVIM_APPNAME" /Applications/neovide.app/Contents/MacOS/neovide -- -u "$LUNARVIM_BASE_DIR/init.lua" --listen "$NVIM_LISTEN_ADDRESS" "$@"
     # neovide --x11-wm-class ide -- -u "$LUNARVIM_RUNTIME_DIR/lvim/init.lua"  --listen $NVIM_LISTEN_ADDRESS --cmd "let g:crisidev_ide=1" "$@"
     # exec ~/github/fvim/bin/Release/net6.0/linux-x64/FVim -u "$LUNARVIM_BASE_DIR/init.lua"  "$@"
 }
 
 # Open a file inside the running IDE.
 function open_in_ide() {
-    if ! pgrep -f "\-class ide"; then
+    if ! pgrep -f "neovide" >/dev/null; then
         start_ide
         sleep 0.5
     fi

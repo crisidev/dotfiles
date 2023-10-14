@@ -1,6 +1,7 @@
 # open kitty terminal
 cmd - return: /Applications/kitty.app/Contents/MacOS/kitty --single-instance ~
 cmd + shift - return: /Applications/kitty.app/Contents/MacOS/kitty --single-instance --title=float-term ~
+cmd - e: bash /Users/matteobigoi/.bin/ide
 
 ctrl + alt + cmd - r : yabai --restart-service
 
