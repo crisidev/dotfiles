@@ -11,12 +11,8 @@ export ZSH_FZF_HISTORY_SEARCH_BIND="^f"
 export ZSH_FZF_HISTORY_SEARCH_FZF_ARGS="+s +m +x -e --height 40% --reverse"
 
 # configure antidote
-if which brew > /dev/null; then
-    FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
-
-    autoload -Uz compinit
-    compinit
-fi
+autoload -Uz compinit
+compinit
 source /opt/homebrew/opt/antidote/share/antidote/antidote.zsh
 antidote load $HOME/.zsh_plugins
 
@@ -56,7 +52,7 @@ bindkey '^[[B' history-substring-search-down
 [ -f $HOME/.zsh_secrets ] && source $HOME/.zsh_secrets
 
 # paths
-export PATH="$HOME/.bin:$HOME/.local/share/lvim/mason/bin:/opt/homebrew/opt/gnu-sed/libexec/gnubin:/opt/homebrew/opt/coreutils/libexec/gnubin:/opt/homebrew/opt/grep/libexec/gnubin:/opt/homebrew/opt/ssh-copy-id/bin:$PATH"
+export PATH="$HOME/.bin:$HOME/.local/share/lvim/mason/bin:/opt/homebrew/bin:/opt/homebrew/opt/gnu-sed/libexec/gnubin:/opt/homebrew/opt/coreutils/libexec/gnubin:/opt/homebrew/opt/grep/libexec/gnubin:/opt/homebrew/opt/ssh-copy-id/bin:$PATH"
 
 # # terminal
 export TERMINFO=/usr/share/terminfo
@@ -72,14 +68,13 @@ export LESSOPEN="|/opt/homebrew/bin/lesspipe.sh %s"
 # fzf
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude build'
 
+# brew
+_evalcache /opt/homebrew/bin/brew shellenv
+FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+
 # direnv
 if which direnv > /dev/null; then
     _evalcache direnv hook zsh
-fi
-
-# brew
-if which brew > /dev/null; then
-    _evalcache /opt/homebrew/bin/brew shellenv
 fi
 
 # zoxide

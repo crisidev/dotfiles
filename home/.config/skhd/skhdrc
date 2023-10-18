@@ -1,24 +1,25 @@
 # open kitty terminal
-cmd - return: /Applications/kitty.app/Contents/MacOS/kitty --single-instance ~
-cmd + shift - return: /Applications/kitty.app/Contents/MacOS/kitty --single-instance --title=float-term ~
-cmd - e: bash /Users/matteobigoi/.bin/ide
+# cmd - return: /Applications/kitty.app/Contents/MacOS/kitty --single-instance ~
+# cmd + shift - return: /Applications/kitty.app/Contents/MacOS/kitty --single-instance --title=float-term ~
+# cmd + shift - e: bash /Users/matteobigoi/.bin/ide
+# cmd + shift - b: open -a Finder
 
-ctrl + alt + cmd - r : yabai --restart-service
+# ctrl + alt + cmd - r : yabai --restart-service
 
 # focus window
-cmd - right: yabai -m window --focus east
-cmd - left: yabai -m window --focus west
-cmd - up: yabai -m window --focus north
-cmd - down: yabai -m window --focus south
+# cmd - right: yabai -m window --focus east
+# cmd - left: yabai -m window --focus west
+# cmd - up: yabai -m window --focus north
+# cmd - down: yabai -m window --focus south
 
 # swap windows
-cmd + shift - right: yabai -m window --swap east
-cmd + shift - left: yabai -m window --swap west
-cmd + shift - up: yabai -m window --swap north
-cmd + shift - down: yabai -m window --swap south
+# cmd + shift - right: yabai -m window --swap east
+# cmd + shift - left: yabai -m window --swap west
+# cmd + shift - up: yabai -m window --swap north
+# cmd + shift - down: yabai -m window --swap south
 
 # fullscreen
-cmd + shift - f: yabai -m window --toggle zoom-fullscreen
+# cmd + shift - f: yabai -m window --toggle zoom-fullscreen
 
 # focus workspace
 #cmd - escape: yabai -m space --focus terminal || yabai -m display --focus recent
@@ -45,13 +46,13 @@ cmd + alt - backspace: yabai -m space --display 1
 cmd + alt - home: yabai -m space --display 2
 
 # toogle float and center window
-cmd - 0x2A: yabai -m window --toggle float; yabai -m window --grid 4:4:1:1:2:2
+# cmd - 0x2A: yabai -m window --toggle float; yabai -m window --grid 4:4:1:1:2:2
 
 # resize
-cmd + alt - left: yabai -m window --resize left:-50:0 || yabai -m window --resize right:-50:0
-cmd + alt - down: yabai -m window --resize bottom:0:50  || yabai -m window --resize top:0:50
-cmd + alt - up: yabai -m window --resize top:0:-50 || yabai -m window --resize bottom:0:-50
-cmd + alt - right: yabai -m window --resize right:50:0  || yabai -m window --resize left:50:0
+# cmd + alt - left: yabai -m window --resize left:-50:0 || yabai -m window --resize right:-50:0
+# cmd + alt - down: yabai -m window --resize bottom:0:50  || yabai -m window --resize top:0:50
+# cmd + alt - up: yabai -m window --resize top:0:-50 || yabai -m window --resize bottom:0:-50
+# cmd + alt - right: yabai -m window --resize right:50:0  || yabai -m window --resize left:50:0
 
 # focus window
 # alt - h : yabai -m window --focus west

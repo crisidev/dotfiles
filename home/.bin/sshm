@@ -1,0 +1,76 @@
+#!/usr/bin/env python
+
+import json
+import sys
+import subprocess
+import os
+import sshconf
+
+LOCAL_HOSTS = {}
+
+
+def main() -> None:
+    load_local_host()
+    if len(sys.argv) < 2:
+        select_with_fzf()
+        sys.exit(0)
+    else:
+        hostname = sys.argv[1]
+        find_host_config(hostname)
+    sys.exit(0)
+
+
+def load_local_host() -> None:
+    global LOCAL_HOSTS
+    with open(os.path.expanduser("~/.config/sshm/hosts.json")) as f:
+        LOCAL_HOSTS = json.load(f)
+
+
+def find_host_config(hostname: str) -> None:
+    for f in os.listdir(os.path.expanduser("~/.ssh/config.d")):
+        ssh_config_file = os.path.expanduser(f"~/.ssh/config.d/{f}")
+        ssh_config = sshconf.read_ssh_config(ssh_config_file)
+        host = ssh_config.host(hostname)
+        if host:
+            max_width = max(len(word) for word in host.keys()) + 2
+            name = "Name".ljust(max_width)
+            print(f"{name}{hostname}")
+            for k, v in host.items():
+                print(f"{k.title().ljust(max_width)}{v}")
+    conf = LOCAL_HOSTS.get(hostname)
+    if conf:
+        print(f"Command\t{conf}")
+
+
+def select_with_fzf() -> None:
+    py = subprocess.run(["rtx", "which", "python"], stdout=subprocess.PIPE).stdout.decode().strip()
+    fzf_default_opts = f'+s +m +x +e --height=40% --reverse --prompt="SSH > " --preview="{py} ~/.bin/sshm {{}}"'
+    ssh_config_hosts = find_ssh_config_hosts()
+    available_hosts = list(LOCAL_HOSTS.keys())
+    available_hosts.extend(ssh_config_hosts)
+    fzf = subprocess.Popen(
+        ["/opt/homebrew/bin/fzf"],
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        env={"FZF_DEFAULT_OPTS": fzf_default_opts, "SHELL": "/bin/zsh"},
+    )
+    output = fzf.communicate(input="\n".join(available_hosts).encode())
+    if len(output) > 1:
+        host = output[0].decode().strip()
+        if host in ssh_config_hosts:
+            subprocess.run(["ssh", host])
+        if host in LOCAL_HOSTS.keys():
+            subprocess.run([LOCAL_HOSTS[host]], shell=True)
+
+
+def find_ssh_config_hosts() -> list[str]:
+    hosts = []
+    for f in os.listdir(os.path.expanduser("~/.ssh/config.d")):
+        ssh_config_file = os.path.expanduser(f"~/.ssh/config.d/{f}")
+        ssh_config = sshconf.read_ssh_config(ssh_config_file)
+        hosts.extend(ssh_config.hosts())
+    return hosts
+
+
+if __name__ == "__main__":
+    main()

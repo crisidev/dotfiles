@@ -74,7 +74,7 @@ yabai -m config mouse_action2 resize
 
 # general space settings
 yabai -m config layout bsp
-yabai -m config top_padding 10
+yabai -m config top_padding 0
 yabai -m config bottom_padding 8
 yabai -m config left_padding 8
 yabai -m config right_padding 8
@@ -89,6 +89,7 @@ yabai -m space 5 --label teams
 yabai -m space 6 --label whatsapp
 yabai -m space 7 --label telegram
 yabai -m space 8 --label signal
+yabai -m space 9 --label videoconf
 
 # spaces
 #delete_all_spaces
@@ -113,7 +114,7 @@ yabai -m space 8 --label signal
 #    create_space_on_monitor "$LAPTOP_MONITOR" "signal"
 #fi
 
-yabai -m rule --add app="^kitty$" space=1
+# application for desktop
 yabai -m rule --add app="^Firefox$" space=2 sticky=off
 yabai -m rule --add app="^Microsoft Outlook$" space=3
 yabai -m rule --add app="^Microsoft Outlook$" title="^Calendar$" space=3
@@ -124,11 +125,13 @@ yabai -m rule --add app="^Telegram$" space=7
 yabai -m rule --add app="^Signal$" space=8
 
 # rules
+yabai -m rule --add title="^float-term$" manage=off sticky=off
 yabai -m rule --add app="^Microsoft Outlook$" title="^Outlook Settings$" manage=off
+yabai -m rule --add app="^Microsoft Outlook$" title="^Rules$" manage=off
 yabai -m rule --add app="^System Settings$" manage=off
 yabai -m rule --add app="^Finder$" manage=off
-yabai -m rule --add app="^kitty$" title="^float-term$" manage=off sticky=on
 yabai -m rule --add app="^Bitwarden$" manage=off
+yabai -m rule --add app="^1Password$" manage=off
 yabai -m rule --add app="^Preview$" manage=off
 yabai -m rule --add app="^App Store$" manage=off
 yabai -m rule --add app="^Font Book$" manage=off
@@ -148,5 +151,11 @@ yabai -m rule --add app="^Digital Colou?r Meter$" sticky=on
 # signals
 ## updates workspace widget when space changes
 yabai -m signal --add event=space_changed action="osascript -e 'tell application id \"tracesOf.Uebersicht\" to refresh widget id \"simple-bar-index-jsx\"'"
+yabai -m signal --add event=window_created action='
+  yabai -m query --windows --window $YABAI_WINDOW_ID | jq -er ".\"can-resize\" or .\"is-floating\"" || \
+  yabai -m window $YABAI_WINDOW_ID --toggle float && \
+  yabai -m window $YABAI_WINDOW_ID --layer above && \
+  yabai -m window $YABAI_WINDOW_ID --grid 4:4:1:1:2:2
+'
 
 echo "yabai configuration loaded.."

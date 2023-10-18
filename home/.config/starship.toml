@@ -1,144 +1,156 @@
-format = """
-[](#9A348E)\
-$os\
-$username\
-[](bg:#DA627D fg:#9A348E)\
-$directory\
-[](fg:#DA627D bg:#FCA17D)\
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# Don't print a new line at the start of the prompt
+add_newline = false
+command_timeout = 1000
+
+format = """[❯](red)[❯](yellow)[❯](green) $hostname$directory"""
+right_format = """
 $git_branch\
+$git_state\
 $git_status\
-[](fg:#FCA17D bg:#86BBD8)\
-$c\
+$git_commit\
+$hg_branch\
+$package\
+$cmake\
+$dart\
+$deno\
+$dotnet\
 $elixir\
 $elm\
+$erlang\
 $golang\
-$gradle\
-$haskell\
+$helm\
 $java\
 $julia\
-$nodejs\
+$kotlin\
 $nim\
+$nodejs\
+$ocaml\
+$perl\
+$php\
+$purescript\
+$python\
+$ruby\
 $rust\
+$red\
 $scala\
-[](fg:#86BBD8 bg:#06969A)\
-$docker_context\
-[](fg:#06969A bg:#33658A)\
-$time\
-[ ](fg:#33658A)\
+$swift\
+$terraform\
+$vlang\
+$vagrant\
+$nix_shell\
+$zig\
+$lua\
+$crystal\
+$custom\
+$battery\
+$cmd_duration\
+$jobs\
+$status\
 """
 
-# Disable the blank line at the start of the prompt
-# add_newline = false
-
-# You can also replace your username with a neat symbol like   or disable this
-# and use the os module below
-[username]
-show_always = true
-style_user = "bg:#9A348E"
-style_root = "bg:#9A348E"
-format = '[$user ]($style)'
+[hostname]
 disabled = false
+format = "on [$hostname](bold) "
+ssh_only = true
+trim_at = "."
 
-# An alternative to the username module which displays a symbol that
-# represents the current operating system
-[os]
-style = "bg:#9A348E"
-disabled = true # Disabled by default
+[cmd_duration]
+min_time = 1000
+format = "took [$duration](bold yellow) "
 
 [directory]
-style = "bg:#DA627D"
-format = "[ $path ]($style)"
-truncation_length = 3
+truncation_length = 50
+truncate_to_repo = false
 truncation_symbol = "…/"
-
-# Here is how you can shorten some long paths by text replacement
-# similar to mapped_locations in Oh My Posh:
-[directory.substitutions]
-"Documents" = "󰈙 "
-"Downloads" = " "
-"Music" = " "
-"Pictures" = " "
-# Keep in mind that the order matters. For example:
-# "Important Documents" = " 󰈙 "
-# will not be replaced, because "Documents" was already substituted before.
-# So either put "Important Documents" before "Documents" or use the substituted version:
-# "Important 󰈙 " = " 󰈙 "
-
-[c]
-symbol = " "
-style = "bg:#86BBD8"
-format = '[ $symbol ($version) ]($style)'
-
-[docker_context]
-symbol = " "
-style = "bg:#06969A"
-format = '[ $symbol $context ]($style) $path'
-
-[elixir]
-symbol = " "
-style = "bg:#86BBD8"
-format = '[ $symbol ($version) ]($style)'
-
-[elm]
-symbol = " "
-style = "bg:#86BBD8"
-format = '[ $symbol ($version) ]($style)'
+style = "blue"
+format = "[$path]($style)[$read_only]($read_only_style) "
 
 [git_branch]
-symbol = ""
-style = "bg:#FCA17D"
-format = '[ $symbol $branch ]($style)'
+style = "bold yellow"
+symbol = " "
+format = "[$symbol$branch]($style) "
+
+[git_commit]
+style = "normal"
+only_detached = true
+tag_disabled = false
+tag_symbol = " 🔖"
+format = "\\[[$hash](bold green)[$tag](bold red)\\] "
 
 [git_status]
-style = "bg:#FCA17D"
-format = '[$all_status$ahead_behind ]($style)'
+style = "normal"
+conflicted = "[ ](bold red)"
+ahead = "[↑×${count}](bold green)"
+diverged = "[↑×${ahead_count}](bold green) [↓×${behind_count}](bold red)"
+behind = "↓×${count}(bold red)"
+stashed = "[⊙](bold purple)"
+staged = "[](bold blue)"
+untracked = "[](normal)"
+deleted = "[](bold red)"
+modified = "[](#FF7F00)"
 
-[golang]
-symbol = " "
-style = "bg:#86BBD8"
-format = '[ $symbol ($version) ]($style)'
+[line_break]
+disabled = true
 
-[gradle]
-style = "bg:#86BBD8"
-format = '[ $symbol ($version) ]($style)'
+[package]
+format = "is [$symbol$version]($style) "
 
-[haskell]
-symbol = " "
-style = "bg:#86BBD8"
-format = '[ $symbol ($version) ]($style)'
-
-[java]
-symbol = " "
-style = "bg:#86BBD8"
-format = '[ $symbol ($version) ]($style)'
-
-[julia]
-symbol = " "
-style = "bg:#86BBD8"
-format = '[ $symbol ($version) ]($style)'
-
-[nodejs]
-symbol = ""
-style = "bg:#86BBD8"
-format = '[ $symbol ($version) ]($style)'
-
-[nim]
-symbol = "󰆥 "
-style = "bg:#86BBD8"
-format = '[ $symbol ($version) ]($style)'
+[status]
+disabled = false
+map_symbol = false
+format = "errno [$status]($style)"
 
 [rust]
-symbol = ""
-style = "bg:#86BBD8"
-format = '[ $symbol ($version) ]($style)'
+style = "bold blue"
+detect_files = ["!Config"]
+
+[java]
+style = "bold blue"
+
+[python]
+style = "bold blue"
+
+[kotlin]
+style = "bold blue"
+
+[ruby]
+style = "bold blue"
+
+[golang]
+style = "bold blue"
+
+[lua]
+style = "bold blue"
+
+[php]
+style = "bold blue"
+
+[perl]
+style = "bold blue"
+
+[nim]
+style = "bold blue"
+
+[nodejs]
+style = "bold blue"
+
+[ocaml]
+style = "bold blue"
 
 [scala]
-symbol = " "
-style = "bg:#86BBD8"
-format = '[ $symbol ($version) ]($style)'
+style = "bold blue"
 
-[time]
-disabled = false
-time_format = "%R" # Hour:Minute Format
-style = "bg:#33658A"
-format = '[ ♥ $time ]($style)'
+[zig]
+style = "bold blue"
+
+[crystal]
+style = "bold blue"
+
+[elixir]
+style = "bold blue"
+
+[deno]
+style = "bold blue"
