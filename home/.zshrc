@@ -6,6 +6,12 @@ if which rtx > /dev/null; then
     eval "$(rtx activate zsh)"
 fi
 
+# paths
+MY_PATH="$HOME/.bin:$HOME/.local/share/lvim/mason/bin"
+BREW_PATH="/opt/homebrew/bin:/opt/homebrew/opt/gnu-sed/libexec/gnubin:/opt/homebrew/opt/coreutils/libexec/gnubin:/opt/homebrew/opt/grep/libexec/gnubin:/opt/homebrew/opt/ssh-copy-id/bin"
+SYSTEM_PATH="/usr/local/bin"
+export PATH="$MY_PATH:$BREW_PATH:$SYSTEM_PATH:$PATH"
+
 # configure fzf history search
 export ZSH_FZF_HISTORY_SEARCH_BIND="^f"
 export ZSH_FZF_HISTORY_SEARCH_FZF_ARGS="+s +m +x -e --height 40% --reverse"
@@ -50,9 +56,6 @@ bindkey '^[[B' history-substring-search-down
 [ -f $HOME/.zsh_private ] && source $HOME/.zsh_private
 [ -f $HOME/.zsh_functions ] && source $HOME/.zsh_functions
 [ -f $HOME/.zsh_secrets ] && source $HOME/.zsh_secrets
-
-# paths
-export PATH="$HOME/.bin:$HOME/.local/share/lvim/mason/bin:/opt/homebrew/bin:/opt/homebrew/opt/gnu-sed/libexec/gnubin:/opt/homebrew/opt/coreutils/libexec/gnubin:/opt/homebrew/opt/grep/libexec/gnubin:/opt/homebrew/opt/ssh-copy-id/bin:/usr/local/bin:$PATH"
 
 # # terminal
 export TERMINFO=/usr/share/terminfo

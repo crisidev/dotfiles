@@ -4,7 +4,7 @@
 # cmd + shift - e: bash /Users/matteobigoi/.bin/ide
 # cmd + shift - b: open -a Finder
 
-# ctrl + alt + cmd - r : yabai --restart-service
+ctrl + alt + cmd - r : yabai --restart-service
 
 # focus window
 # cmd - right: yabai -m window --focus east

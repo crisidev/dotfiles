@@ -1,84 +1,40 @@
 #!/usr/bin/env bash
-
-#MONITORS=$(yabai -m query --displays | jq '.[].index')
 #
-#debug() {
-#    echo "$@" 1>&2
-#}
-#
-#delete_all_spaces() {
-#    for monitor in ${MONITORS[@]}; do
-#        local FOCUS_SPACE=$(yabai -m query --spaces --display $monitor | jq '.[0].index')
-#        debug "Focusing space $FOCUS_SPACE"
-#        yabai -m space --focus "$FOCUS_SPACE"
-#        while [ $(yabai -m query --spaces --display $monitor | jq '. | length') -ne 1 ]; do
-#            local SPACE_ID=$(yabai -m query --spaces --display $monitor | jq '.[-1].index')
-#            debug "Deleting space $SPACE_ID"
-#            yabai -m space --destroy "$SPACE_ID"
-#        done
-#    done
-#}
-#
-#name_first_space() {
-#    local SPACE_ID=$(get_first_space_of_monitor $1)
-#    debug "Name space ($SPACE_ID): $2"
-#    yabai -m space "$SPACE_ID" --label "$2"
-#}
-#
-#name_space() {
-#    local SPACE_ID=$(yabai -m query --spaces --display $1 | jq '[.[] | select (.label=="")] | .[0] | .index')
-#    debug "Name space ($SPACE_ID): $2"
-#    yabai -m space "$SPACE_ID" --label "$2"
-#}
-#
-#get_first_space_of_monitor() {
-#    yabai -m query --spaces --display $1 | jq '.[0].index'
-#}
-#
-#create_space_on_monitor() {
-#    local FIRST_SPACE=$(get_first_space_of_monitor $1)
-#    debug "Create space after $FIRST_SPACE"
-#    yabai -m space --create $FIRST_SPACE
-#    name_space $1 "$2"
-#}
-#
-#NB_MONITORS="$(yabai -m query --displays | jq '. | length')"
-#CENTRAL_MONITOR=1
-#LAPTOP_MONITOR=2
-#
-#LAPTOP_MONITOR=$(yabai -m query --displays | jq '.[] | select(.uuid|test("37D8832A-2D66-02CA-B9F7-8F30A301B230"))| .index')
-#if [ "$NB_MONITORS" = "2" ]; then
-#    CENTRAL_MONITOR=$(yabai -m query --displays | jq '.[] | select(.uuid|test("37D8832A.")|not) | .index')
-#fi
-#
-#sudo yabai --load-sa
-#yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
+set -x
+launchctl unload -F /System/Library/LaunchAgents/com.apple.WindowManager.plist > /dev/null 2>&1
 
 # global settings
-yabai -m config external_bar all:24:0
-yabai -m config mouse_follows_focus on
-yabai -m config focus_follows_mouse autoraise
-yabai -m config window_placement first_child
-yabai -m config window_topmost on
-yabai -m config window_opacity on
-yabai -m config window_opacity_duration 0.0
-yabai -m config window_shadow on
-yabai -m config insert_feedback_color 0xaad75f5f
-yabai -m config active_window_opacity 1.0
-yabai -m config normal_window_opacity 0.95
-yabai -m config split_ratio 0.50
-yabai -m config auto_balance off
-yabai -m config mouse_modifier cmd
-yabai -m config mouse_action1 move
-yabai -m config mouse_action2 resize
-
-# general space settings
-yabai -m config layout bsp
-yabai -m config top_padding 0
-yabai -m config bottom_padding 8
-yabai -m config left_padding 8
-yabai -m config right_padding 8
-yabai -m config window_gap 8
+yabai -m config external_bar               all:24:0     \
+                window_border              on           \
+                mouse_follows_focus        on           \
+                focus_follows_mouse        autoraise    \
+                window_zoom_persist        off          \
+                window_placement           first_child  \
+                window_shadow              on           \
+                window_opacity             on           \
+                window_opacity_duration    0.15         \
+                active_window_opacity      1.0          \
+                normal_window_opacity      0.95         \
+                window_border_blur         off          \
+                window_border_width        1            \
+                window_border_hidpi        off           \
+                window_border_radius       11           \
+                active_window_border_color 0xff007aff   \
+                normal_window_border_color 0xff282c34   \
+                insert_feedback_color      0xff9dd274   \
+                split_ratio                0.50         \
+                auto_balance               off          \
+                layout                     bsp          \
+                mouse_modifier             cmd          \
+                mouse_action1              move         \
+                mouse_action2              resize       \
+                mouse_drop_action          swap         \
+                                                        \
+                top_padding                0            \
+                bottom_padding             8            \
+                left_padding               8            \
+                right_padding              8            \
+                window_gap                 8
 
 # rename spaces
 yabai -m space 1 --label terminal
@@ -91,29 +47,6 @@ yabai -m space 7 --label telegram
 yabai -m space 8 --label signal
 yabai -m space 9 --label videoconf
 
-# spaces
-#delete_all_spaces
-#if [ "$NB_MONITORS" = "2" ]; then
-#    name_first_space "$CENTRAL_MONITOR" "terminal"
-#    create_space_on_monitor "$CENTRAL_MONITOR" "firefox"
-#    create_space_on_monitor "$CENTRAL_MONITOR" "outlook"
-#    create_space_on_monitor "$CENTRAL_MONITOR" "spotify"
-#    name_first_space "$LAPTOP_MONITOR" "teams"
-#    create_space_on_monitor "$LAPTOP_MONITOR" "whatsapp"
-#    create_space_on_monitor "$LAPTOP_MONITOR" "telegram"
-#    create_space_on_monitor "$LAPTOP_MONITOR" "signal"
-## -----------------------------------------------------------
-#else
-#    name_first_space "$LAPTOP_MONITOR" "terminal"
-#    create_space_on_monitor "$LAPTOP_MONITOR" "firefox"
-#    create_space_on_monitor "$LAPTOP_MONITOR" "outlook"
-#    create_space_on_monitor "$LAPTOP_MONITOR" "spotify"
-#    create_space_on_monitor "$LAPTOP_MONITOR" "teams"
-#    create_space_on_monitor "$LAPTOP_MONITOR" "whatsapp"
-#    create_space_on_monitor "$LAPTOP_MONITOR" "telegram"
-#    create_space_on_monitor "$LAPTOP_MONITOR" "signal"
-#fi
-
 # application for desktop
 yabai -m rule --add app="^Firefox$" space=2 sticky=off
 yabai -m rule --add app="^Microsoft Outlook$" space=3
@@ -125,25 +58,23 @@ yabai -m rule --add app="^Telegram$" space=7
 yabai -m rule --add app="^Signal$" space=8
 
 # rule
-# floating
+# unmanaged
 yabai -m rule --add title="^Hammerspoon Console$" manage=off
 yabai -m rule --add app="^Preview$" manage=off
 yabai -m rule --add app="^Font Book$" manage=off
 yabai -m rule --add app="^Archive Utility$" manage=off
 yabai -m rule --add app="^Installer$" manage=off
 yabai -m rule --add app="^iStat Menus$" manage=off sticky=off
-
-# floating centered
-yabai -m rule --add title="^float-term$" manage=off sticky=off grid=4:4:1:1:2:2
-yabai -m rule --add app="^Microsoft Outlook$" title="^Outlook Settings$" grid=5:5:1:1:3:3 manage=off layer=above
-yabai -m rule --add app="^Microsoft Outlook$" title="^Rules$" grid=5:5:1:1:3:3 manage=off layer=above
-yabai -m rule --add app="^System Settings$" manage=off grid=5:5:1:1:3:3 layer=above
-yabai -m rule --add app="^Finder$" manage=off grid=4:4:1:1:2:2 layer=above
-yabai -m rule --add app="^Bitwarden$" manage=off grid=5:5:1:1:3:3 layer=above
-yabai -m rule --add app="^1Password$" manage=off grid=5:5:1:1:3:3 layer=above
-yabai -m rule --add app="^App Store$" manage=off grid=5:5:1:1:3:3 layer=above
-yabai -m rule --add app="^The Unarchiver$" manage=off grid=4:4:1:1:2:2 layer=above
-yabai -m rule --add app="^Activity Monitor$" manage=off grid=5:5:1:1:3:3 layer=above
+yabai -m rule --add app="^App Store$" manage=off
+yabai -m rule --add title="^float-term$" manage=off
+yabai -m rule --add app="^Microsoft Outlook$" title="^Outlook Settings$" manage=off
+yabai -m rule --add app="^Microsoft Outlook$" title="^Rules$" manage=off
+yabai -m rule --add app="^System Settings$" manage=off
+yabai -m rule --add app="^Finder$" manage=off
+yabai -m rule --add app="^Bitwarden$" manage=off
+yabai -m rule --add app="^1Password$" manage=off
+yabai -m rule --add app="^The Unarchiver$" manage=off
+yabai -m rule --add app="^Activity Monitor$" manage=off
 
 # sticky
 yabai -m rule --add app="^Digital Colou?r Meter$" sticky=on
@@ -151,11 +82,7 @@ yabai -m rule --add app="^Digital Colou?r Meter$" sticky=on
 # signals
 ## updates workspace widget when space changes
 yabai -m signal --add event=space_changed action="osascript -e 'tell application id \"tracesOf.Uebersicht\" to refresh widget id \"simple-bar-index-jsx\"'"
-yabai -m signal --add event=window_created action='
-  yabai -m query --windows --window $YABAI_WINDOW_ID | jq -er ".\"can-resize\" or .\"is-floating\"" || \
-  yabai -m window $YABAI_WINDOW_ID --toggle float && \
-  yabai -m window $YABAI_WINDOW_ID --layer above && \
-  yabai -m window $YABAI_WINDOW_ID --grid 4:4:1:1:2:2
-'
+## make all non resizable windows that
+yabai -m signal --add event=window_created action='yabai -m query --windows --window $YABAI_WINDOW_ID | jq -er ".\"can-resize\" or .\"is-floating\"" || yabai -m window $YABAI_WINDOW_ID --toggle float --grid 3:3:1:1:1:1'
 
 echo "yabai configuration loaded.."

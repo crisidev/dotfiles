@@ -1,4 +1,25 @@
 ------------------------------------------
+-- Spoons
+------------------------------------------
+hs.loadSpoon("EmmyLua")
+hs.loadSpoon("HoldToQuit")
+hs.loadSpoon("MicMute")
+hs.loadSpoon("ReloadConfiguration")
+
+spoon.HoldToQuit:start()
+spoon.MicMute:bindHotkeys({ toggle = { { "fn" }, "f10" } }, 0.75)
+spoon.ReloadConfiguration.watch_paths = {
+	hs.configdir,
+	"/Users/matteobigoi/.homesick/repos/dotfiles/home/.hammerspoon",
+}
+spoon.ReloadConfiguration:start()
+
+hs.loadSpoon("TextClipboardHistory")
+spoon.TextClipboardHistory.show_in_menubar = false
+spoon.TextClipboardHistory:start()
+spoon.TextClipboardHistory:bindHotkeys({ toggle_clipboard = { { "cmd", "option" }, "h" } })
+
+------------------------------------------
 -- Variables
 ------------------------------------------
 local helpers = require("helpers")
@@ -15,16 +36,21 @@ hs.hotkey.bind({ "cmd", "option" }, "return", function()
 		"/Applications/kitty.app/Contents/MacOS/kitty --single-instance --instance-group=1 --title=float-term ~ &"
 	)
 end)
-hs.hotkey.bind({ "cmd", "shift" }, "e", function()
-	hs.execute("bash ~/.bin/ide")
+hs.hotkey.bind({ "cmd", "option" }, "e", function()
+	os.execute("bash ~/.bin/ide &")
 end)
-hs.hotkey.bind({ "cmd", "shift" }, "b", function()
+hs.hotkey.bind({ "cmd", "option" }, "b", function()
 	hs.application.launchOrFocus("Finder")
 end)
 
+-- Toggle mic mute
+hs.hotkey.bind({ "fn" }, "f8", function()
+	hs.caffeinate.lockScreen()
+end)
+
 -- Lock screen
-hs.hotkey.bind({"cmd", "option"}, "l", function()
-  hs.caffeinate.lockScreen()
+hs.hotkey.bind({ "cmd", "option" }, "l", function()
+	hs.caffeinate.lockScreen()
 end)
 
 -- Restart yabai
@@ -52,39 +78,39 @@ end)
 -- Focus space
 hs.hotkey.bind({ "cmd" }, "escape", function()
 	hs.eventtap.keyStroke({ "cmd", "alt", "shift" }, "escape", 0)
-    helpers.focus_space_or_previous(1)
+	helpers.focus_space_or_previous(1)
 end)
 hs.hotkey.bind({ "cmd" }, "f2", function()
 	hs.eventtap.keyStroke({ "fn", "cmd", "alt", "shift" }, "f2", 0)
-    helpers.focus_space_or_previous(2)
+	helpers.focus_space_or_previous(2)
 end)
 hs.hotkey.bind({ "cmd" }, "f1", function()
 	hs.eventtap.keyStroke({ "fn", "cmd", "alt", "shift" }, "f1", 0)
-    helpers.focus_space_or_previous(3)
+	helpers.focus_space_or_previous(3)
 end)
 hs.hotkey.bind({ "cmd" }, "f3", function()
 	hs.eventtap.keyStroke({ "fn", "cmd", "alt", "shift" }, "f3", 0)
-    helpers.focus_space_or_previous(4)
+	helpers.focus_space_or_previous(4)
 end)
 hs.hotkey.bind({ "cmd" }, "1", function()
 	hs.eventtap.keyStroke({ "cmd", "alt", "shift" }, "1", 0)
-    helpers.focus_space_or_previous(5)
+	helpers.focus_space_or_previous(5)
 end)
 hs.hotkey.bind({ "cmd" }, "2", function()
 	hs.eventtap.keyStroke({ "cmd", "alt", "shift" }, "2", 0)
-    helpers.focus_space_or_previous(6)
+	helpers.focus_space_or_previous(6)
 end)
 hs.hotkey.bind({ "cmd" }, "3", function()
 	hs.eventtap.keyStroke({ "cmd", "alt", "shift" }, "3", 0)
-    helpers.focus_space_or_previous(7)
+	helpers.focus_space_or_previous(7)
 end)
 hs.hotkey.bind({ "cmd" }, "4", function()
 	hs.eventtap.keyStroke({ "cmd", "alt", "shift" }, "4", 0)
-    helpers.focus_space_or_previous(8)
+	helpers.focus_space_or_previous(8)
 end)
 hs.hotkey.bind({ "cmd" }, "f4", function()
 	hs.eventtap.keyStroke({ "fn", "cmd", "alt", "shift" }, "f4", 0)
-    helpers.focus_space_or_previous(9)
+	helpers.focus_space_or_previous(9)
 end)
 
 -- Move windows to specific spaces
