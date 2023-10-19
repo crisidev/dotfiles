@@ -19,25 +19,9 @@ repos = [
     # Home sick
     "~/.homesick/repos/homeshick",
     "~/.homesick/repos/dotfiles",
+    "~/.homesick/repos/lvim",
     # Updates
-    "~/github/0updates/avizo",
-    "~/github/0updates/cliphist",
-    "~/github/0updates/keyd",
-    "~/github/0updates/Hyprland",
-    "~/github/0updates/Hyprland-plugins",
-    "~/github/0updates/hyprpaper",
-    "~/github/0updates/hyprpicker",
-    "~/github/0updates/hyprvm-contrib",
-    "~/github/0updates/ipu6-drivers",
-    "~/github/0updates/libinput-gestures",
-    "~/github/0updates/libliftoff",
-    "~/github/0updates/libxcb-errors",
-    "~/github/0updates/rofi",
-    "~/github/0updates/rofi-themes",
-    "~/github/0updates/Waybar",
-    "~/github/0updates/wlr-randr",
-    "~/github/0updates/wlrctl",
-    "~/github/0updates/xdg-desktop-portal-hyprland",
+    "~/github/yabai",
 ]
 arguments = "--ff-only --rebase --autostash"
 

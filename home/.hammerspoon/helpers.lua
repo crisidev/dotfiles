@@ -20,6 +20,9 @@ M.float_windows_to_center = {
 	"Outlook Settings",
 	"System Settings",
 	"Rules",
+	"AppCleaner",
+	"Font Book",
+	"Installer",
 }
 
 ------------------------------------------
@@ -135,8 +138,7 @@ M.resize_window = function(direction1, direction2)
 	hs.task
 		.new(M.yabai_bin, function(exit_code)
 			if exit_code == 1 then
-				local args = { "-m", "window", "--resize", direction2 }
-				M.yabai(args)
+				M.yabai({ "-m", "window", "--resize", direction2 })
 			end
 		end, function()
 			return true
@@ -145,9 +147,9 @@ M.resize_window = function(direction1, direction2)
 end
 
 -- Housekeeping for launched and terminated apps with their watchers
-M.handle_global_event = function(name, event, app)
+M.handle_global_event = function(_, event, app)
 	if event == hs.application.watcher.launched then
-		M.watch_app(app, true)
+		M.watch_app(app)
 	elseif event == hs.application.watcher.terminated then
 		-- Clean up
 		local app_watcher = M.app_watchers[app:pid()]
@@ -165,17 +167,19 @@ M.handle_global_event = function(name, event, app)
 end
 
 -- Handle any window event
-M.handle_window_event = function(element, event, watcher, info)
+M.handle_window_event = function(element, _, _, _)
 	if hs.uielement.watcher.focusedWindowChanged then
-		local application = element:application()
-		if application then
-			local app_name = application:title()
-			local window_title = element:title()
-			local window = element:application():focusedWindow()
-			if window then
-				for _, title in pairs(M.float_windows_to_center) do
-					if window_title and app_name and window_title == title or app_name == title then
-						window:centerOnScreen(nil, true, 0)
+		if element then
+			local application = element:application()
+			if application then
+				local app_name = application:title()
+				local window_title = element:title()
+				local window = element:application():focusedWindow()
+				if window then
+					for _, title in pairs(M.float_windows_to_center) do
+						if window_title and app_name and window_title == title or app_name == title then
+							window:centerOnScreen(nil, true, 0)
+						end
 					end
 				end
 			end
@@ -184,7 +188,7 @@ M.handle_window_event = function(element, event, watcher, info)
 end
 
 -- Add a watcher for a new app
-M.watch_app = function(app, initializing)
+M.watch_app = function(app)
 	if M.app_watchers[app:pid()] then
 		return
 	end
@@ -204,7 +208,7 @@ M.attach_existing_apps = function()
 		return app:title() ~= "Hammerspoon"
 	end)
 	hs.fnutils.each(apps, function(app)
-		M.watch_app(app, true)
+		M.watch_app(app)
 	end)
 end
 
