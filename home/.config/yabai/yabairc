@@ -9,7 +9,7 @@ yabai -m config external_bar               all:24:0     \
                 mouse_follows_focus        on           \
                 focus_follows_mouse        autoraise    \
                 window_zoom_persist        off          \
-                window_placement           first_child  \
+                window_placement           second_child  \
                 window_shadow              on           \
                 window_opacity             on           \
                 window_opacity_duration    0.15         \
