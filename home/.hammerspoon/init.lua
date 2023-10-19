@@ -43,11 +43,6 @@ hs.hotkey.bind({ "cmd", "option" }, "b", function()
 	hs.application.launchOrFocus("Finder")
 end)
 
--- Toggle mic mute
-hs.hotkey.bind({ "fn" }, "f8", function()
-	hs.caffeinate.lockScreen()
-end)
-
 -- Lock screen
 hs.hotkey.bind({ "cmd", "option" }, "l", function()
 	hs.caffeinate.lockScreen()
