@@ -52,7 +52,7 @@ bindkey '^[[B' history-substring-search-down
 [ -f $HOME/.zsh_secrets ] && source $HOME/.zsh_secrets
 
 # paths
-export PATH="$HOME/.bin:$HOME/.local/share/lvim/mason/bin:/opt/homebrew/bin:/opt/homebrew/opt/gnu-sed/libexec/gnubin:/opt/homebrew/opt/coreutils/libexec/gnubin:/opt/homebrew/opt/grep/libexec/gnubin:/opt/homebrew/opt/ssh-copy-id/bin:$PATH"
+export PATH="$HOME/.bin:$HOME/.local/share/lvim/mason/bin:/opt/homebrew/bin:/opt/homebrew/opt/gnu-sed/libexec/gnubin:/opt/homebrew/opt/coreutils/libexec/gnubin:/opt/homebrew/opt/grep/libexec/gnubin:/opt/homebrew/opt/ssh-copy-id/bin:/usr/local/bin:$PATH"
 
 # # terminal
 export TERMINFO=/usr/share/terminfo

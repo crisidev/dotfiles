@@ -124,28 +124,28 @@ yabai -m rule --add app="^WhatsApp$" space=6
 yabai -m rule --add app="^Telegram$" space=7
 yabai -m rule --add app="^Signal$" space=8
 
-# rules
-yabai -m rule --add title="^float-term$" manage=off sticky=off
-yabai -m rule --add app="^Microsoft Outlook$" title="^Outlook Settings$" manage=off
-yabai -m rule --add app="^Microsoft Outlook$" title="^Rules$" manage=off
-yabai -m rule --add app="^System Settings$" manage=off
-yabai -m rule --add app="^Finder$" manage=off
-yabai -m rule --add app="^Bitwarden$" manage=off
-yabai -m rule --add app="^1Password$" manage=off
+# rule
+# floating
+yabai -m rule --add title="^Hammerspoon Console$" manage=off
 yabai -m rule --add app="^Preview$" manage=off
-yabai -m rule --add app="^App Store$" manage=off
 yabai -m rule --add app="^Font Book$" manage=off
-yabai -m rule --add app="^Alfred$" manage=off
-yabai -m rule --add app="^The Unarchiver$" manage=off
-yabai -m rule --add app="^iBar$" manage=off
-yabai -m rule --add app="^Alfred Preferences$" manage=off
 yabai -m rule --add app="^Archive Utility$" manage=off
-yabai -m rule --add app="^Hidden Bar$" manage=off
-yabai -m rule --add app="^Bartender 5$" manage=off
 yabai -m rule --add app="^Installer$" manage=off
 yabai -m rule --add app="^iStat Menus$" manage=off sticky=off
-yabai -m rule --add app="^Activity Monitor$" manage=off
-yabai -m rule --add app="^Microsoft Outlook$" title="^Outlook Settings$" manage=off
+
+# floating centered
+yabai -m rule --add title="^float-term$" manage=off sticky=off grid=4:4:1:1:2:2
+yabai -m rule --add app="^Microsoft Outlook$" title="^Outlook Settings$" grid=5:5:1:1:3:3 manage=off layer=above
+yabai -m rule --add app="^Microsoft Outlook$" title="^Rules$" grid=5:5:1:1:3:3 manage=off layer=above
+yabai -m rule --add app="^System Settings$" manage=off grid=5:5:1:1:3:3 layer=above
+yabai -m rule --add app="^Finder$" manage=off grid=4:4:1:1:2:2 layer=above
+yabai -m rule --add app="^Bitwarden$" manage=off grid=5:5:1:1:3:3 layer=above
+yabai -m rule --add app="^1Password$" manage=off grid=5:5:1:1:3:3 layer=above
+yabai -m rule --add app="^App Store$" manage=off grid=5:5:1:1:3:3 layer=above
+yabai -m rule --add app="^The Unarchiver$" manage=off grid=4:4:1:1:2:2 layer=above
+yabai -m rule --add app="^Activity Monitor$" manage=off grid=5:5:1:1:3:3 layer=above
+
+# sticky
 yabai -m rule --add app="^Digital Colou?r Meter$" sticky=on
 
 # signals
