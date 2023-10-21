@@ -1,40 +1,52 @@
 #!/usr/bin/env bash
-#
-set -x
+
+# set -x
 launchctl unload -F /System/Library/LaunchAgents/com.apple.WindowManager.plist > /dev/null 2>&1
 
+# signals
+yabai -m signal --add event=window_focused action="/opt/homebrew/bin/sketchybar --trigger window_focus"
+yabai -m signal --add event=window_created action="/opt/homebrew/bin/sketchybar --trigger windows_on_spaces"
+yabai -m signal --add event=window_destroyed action="/opt/homebrew/bin/sketchybar --trigger windows_on_spaces"
+## make all non resizable windows that
+yabai -m signal --add event=window_created action='yabai -m query --windows --window $YABAI_WINDOW_ID | jq -er ".\"can-resize\" or .\"is-floating\"" || yabai -m window $YABAI_WINDOW_ID --toggle float --grid 3:3:1:1:1:1'
+
 # global settings
-yabai -m config external_bar               all:24:0     \
-                window_border              on           \
-                mouse_follows_focus        on           \
-                focus_follows_mouse        autoraise    \
-                window_zoom_persist        off          \
-                window_placement           second_child  \
-                window_shadow              on           \
-                window_opacity             on           \
-                window_opacity_duration    0.15         \
-                active_window_opacity      1.0          \
-                normal_window_opacity      0.95         \
-                window_border_blur         off          \
-                window_border_width        1            \
-                window_border_hidpi        off           \
-                window_border_radius       11           \
-                active_window_border_color 0xff007aff   \
-                normal_window_border_color 0xff282c34   \
-                insert_feedback_color      0xff9dd274   \
-                split_ratio                0.50         \
-                auto_balance               off          \
-                layout                     bsp          \
-                mouse_modifier             cmd          \
-                mouse_action1              move         \
-                mouse_action2              resize       \
-                mouse_drop_action          swap         \
-                                                        \
-                top_padding                0            \
-                bottom_padding             8            \
-                left_padding               8            \
-                right_padding              8            \
-                window_gap                 8
+# active_window_border_color 0xff007aff 0xffe1e3e4
+yabai -m config mouse_follows_focus        on
+yabai -m config focus_follows_mouse        autoraise
+yabai -m config window_zoom_persist        off
+yabai -m config window_placement           second_child
+yabai -m config window_shadow              on
+yabai -m config window_opacity             on
+yabai -m config window_opacity_duration    0.15
+yabai -m config active_window_opacity      1.0
+yabai -m config normal_window_opacity      0.95
+yabai -m config split_ratio                0.50
+yabai -m config auto_balance               off
+
+# borders
+yabai -m config window_border              on
+yabai -m config window_border_blur         off
+yabai -m config window_border_width        2
+yabai -m config window_border_hidpi        off
+yabai -m config window_border_radius       11
+yabai -m config active_window_border_color 0xff0f68d9
+yabai -m config normal_window_border_color 0xff494d64
+yabai -m config insert_feedback_color      0xff9dd274
+
+# paddings, bar and gaps
+yabai -m config external_bar               all:35:0
+yabai -m config top_padding                10
+yabai -m config bottom_padding             6
+yabai -m config left_padding               6
+yabai -m config right_padding              6
+yabai -m config window_gap                 6
+
+# mouse settings
+yabai -m config mouse_modifier             cmd
+yabai -m config mouse_action1              move
+yabai -m config mouse_action2              resize
+yabai -m config mouse_drop_action          swap
 
 # rename spaces
 yabai -m space 1 --label terminal
@@ -65,6 +77,7 @@ yabai -m rule --add app="^Font Book$" manage=off
 yabai -m rule --add app="^Archive Utility$" manage=off
 yabai -m rule --add app="^Installer$" manage=off
 yabai -m rule --add app="^iStat Menus$" manage=off sticky=off
+yabai -m rule --add app="^Stats$" manage=off
 yabai -m rule --add app="^App Store$" manage=off
 yabai -m rule --add title="^float-term$" manage=off
 yabai -m rule --add app="^Microsoft Outlook$" title="^Outlook Settings$" manage=off
@@ -76,14 +89,12 @@ yabai -m rule --add app="^1Password$" manage=off
 yabai -m rule --add app="^The Unarchiver$" manage=off
 yabai -m rule --add app="^AppCleaner$" manage=off
 yabai -m rule --add app="^Activity Monitor$" manage=off
+yabai -m rule --add app="^Color Picker$" manage=off
 
 # sticky
-yabai -m rule --add app="^Digital Colou?r Meter$" sticky=on
+yabai -m rule --add app="^Digital Colou?r Meter$" manage=off
 
-# signals
-## updates workspace widget when space changes
-yabai -m signal --add event=space_changed action="osascript -e 'tell application id \"tracesOf.Uebersicht\" to refresh widget id \"simple-bar-index-jsx\"'"
-## make all non resizable windows that
-# yabai -m signal --add event=window_created action='yabai -m query --windows --window $YABAI_WINDOW_ID | jq -er ".\"can-resize\" or .\"is-floating\"" || yabai -m window $YABAI_WINDOW_ID --toggle float --grid 3:3:1:1:1:1'
+# layout
+yabai -m config layout bsp
 
 echo "yabai configuration loaded.."

@@ -1,12 +1,11 @@
-local spaces = require("hs.spaces")
-
 ------------------------------------------
 -- Variables
 ------------------------------------------
+local homedir = os.getenv("HOME")
 local M = {}
-M.monitor_benq = "758E5DAE-250B-4686-8171-9BEAA176F7B2"
-M.monitor_macbook = "37D8832A-2D66-02CA-B9F7-8F30A301B230"
-M.yabai_bin = "/Users/matteobigoi/.bin/yabai"
+M.screen_benq = "758E5DAE-250B-4686-8171-9BEAA176F7B2"
+M.screen_macbook = "37D8832A-2D66-02CA-B9F7-8F30A301B230"
+M.yabai_bin = homedir .. "/.bin/yabai"
 M.previous_space = 0
 M.app_watchers = {}
 M.float_windows_to_center = {
@@ -23,6 +22,8 @@ M.float_windows_to_center = {
 	"AppCleaner",
 	"Font Book",
 	"Installer",
+	"Color Picker",
+	"Stats",
 }
 
 ------------------------------------------
@@ -41,21 +42,29 @@ M.index_of = function(array, value)
 	return nil
 end
 
+function M.length(set)
+	local c = 0
+	for _, _ in pairs(set) do
+		c = c + 1
+	end
+	return c
+end
+
 -- Get the list of spaces in order, independently from screens
 M.get_ordered_spaces = function()
-	local all_spaces = spaces.allSpaces()
 	local ordered_spaces = {}
-	if M.contains(all_spaces, M.monitor_benq) then
-		ordered_spaces = all_spaces[M.monitor_benq]
-		for _, space in pairs(all_spaces[M.monitor_macbook]) do
-			table.insert(ordered_spaces, space)
+	local all_spaces = hs.spaces.allSpaces()
+	if all_spaces then
+		for _, values in pairs(all_spaces) do
+			for _, value in ipairs(values) do
+				table.insert(ordered_spaces, value)
+			end
 		end
-	else
-		ordered_spaces = all_spaces[M.monitor_macbook]
 	end
 	return ordered_spaces
 end
 
+-- Focus a specific space of the previous one if we are already on the target space
 M.focus_space_or_previous = function(space)
 	local current_space = hs.spaces.activeSpaceOnScreen()
 	local ordered_spaces = M.get_ordered_spaces()
@@ -79,6 +88,8 @@ M.focus_space_or_previous = function(space)
 			hs.eventtap.keyStroke({ "cmd", "alt", "shift" }, "4", 0)
 		elseif M.previous_space == 9 then
 			hs.eventtap.keyStroke({ "fn", "cmd", "alt", "shift" }, "f4", 0)
+		elseif M.previous_space == 10 then
+			hs.eventtap.keyStroke({ "cmd", "alt", "shift" }, "5", 0)
 		end
 	end
 	M.previous_space = M.index_of(ordered_spaces, current_space)
@@ -89,7 +100,7 @@ M.move_current_window_to_space = function(space)
 	local win = hs.window.focusedWindow() -- current window
 	local ordered_spaces = M.get_ordered_spaces()
 	local space_id = ordered_spaces[space]
-	spaces.moveWindowToSpace(win:id(), space_id)
+	hs.spaces.moveWindowToSpace(win:id(), space_id)
 end
 
 -- Checks if a window belongs to a screen
@@ -100,8 +111,25 @@ end
 -- Moves focus to a specific screen
 M.focus_screen = function(screen)
 	local windows = hs.fnutils.filter(hs.window.orderedWindows(), hs.fnutils.partial(M.is_in_screen, screen))
-	local windowToFocus = #windows > 0 and windows[1] or hs.window.desktop()
-	windowToFocus:focus()
+	local window_to_focus = #windows > 0 and windows[1] or hs.window.desktop()
+	window_to_focus:focus()
+end
+
+-- Focus a specific screen if the space is already visible
+M.focus_space_or_screen = function(space)
+	if M.length(hs.spaces.allSpaces()) > 1 then
+		local ordered_spaces = M.get_ordered_spaces()
+		local macbook_space_mission_control_id = hs.spaces.activeSpaceOnScreen(M.screen_macbook)
+		local benq_space_mission_control_id = hs.spaces.activeSpaceOnScreen(M.screen_benq)
+		local macbook_space = M.index_of(ordered_spaces, macbook_space_mission_control_id)
+		local benq_space = M.index_of(ordered_spaces, benq_space_mission_control_id)
+		print("visible spaces are " .. macbook_space .. " " .. benq_space .. " " .. space)
+		if space == macbook_space then
+			M.yabai({ "-m", "display", "--focus", "2" })
+		elseif space == benq_space then
+			M.yabai({ "-m", "display", "--focus", "1" })
+		end
+	end
 end
 
 -- Run a yabai command in background
@@ -179,6 +207,7 @@ M.handle_window_event = function(element, _, _, _)
 					for _, title in pairs(M.float_windows_to_center) do
 						if window_title and app_name and window_title == title or app_name == title then
 							window:centerOnScreen(nil, true, 0)
+							hs.execute("/opt/homebrew/bin/sketchybar --trigger window_focus", false)
 						end
 					end
 				end
