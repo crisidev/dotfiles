@@ -15,7 +15,7 @@ battery=(
 )
 
 battery_info=(
-  icon=$LOCK
+  # icon=$LOCK
   label="Info"
   click_script=""
 )

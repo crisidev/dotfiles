@@ -37,13 +37,22 @@ popup() {
   sketchybar --set $NAME popup.drawing=$1
 }
 
+update() {
+    label="Charge $PERCENTAGE%"
+    if [ "$REMAINING_TIME" != "" ]; then
+        label="$label, remaining time $REMAINING_TIME"
+    fi
+    args=(--remove battery.info \
+        --add item battery.info popup.battery --set battery.info \
+        label="$label")
+    sketchybar -m "${args[@]}" > /dev/null
+}
+
 case "$SENDER" in
-  "routine"|"forced") update
-  ;;
-  "mouse.entered") popup on
+  "mouse.entered") update && popup on
   ;;
   "mouse.exited"|"mouse.exited.global") popup off
   ;;
-  "mouse.clicked") popup toggle
+  "mouse.clicked") popup off
   ;;
 esac

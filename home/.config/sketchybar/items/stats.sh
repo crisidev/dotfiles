@@ -15,3 +15,7 @@ sketchybar --add alias "Stats,Disk" right \
 sketchybar --add alias "Stats,Network" right  \
            --set "Stats,Network" padding_right=-8 padding_left=-10 label.width=0 \
                  click_script="open -a /System/Applications/Utilities/Activity\ Monitor.app"
+
+sketchybar --add alias "Stats,Sensors" right  \
+           --set "Stats,Sensors" padding_right=-8 padding_left=-10 label.width=0 \
+                 click_script="open -a /System/Applications/Utilities/Activity\ Monitor.app"
