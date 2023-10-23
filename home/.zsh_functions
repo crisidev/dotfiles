@@ -1,5 +1,13 @@
-function timezsh() {                                                                                                                                                                                                                                                                                                                                                                                                             e
+function timezsh() {
     for i in $(seq 1 10); do time zsh -i -c 'exit'; done
+}
+
+function brew() {
+  command brew "$@"
+
+  if [[ $* =~ "upgrade" ]] || [[ $* =~ "update" ]] || [[ $* =~ "outdated" ]]; then
+    sketchybar --trigger brew_update
+  fi
 }
 
 function setup_gpg_agent() {
@@ -68,31 +76,6 @@ function scp_wrap {
   command scp "${(@)args}"
 }
 
-function irc_cleanup {
-  killall -9 autossh
-  killall -9 rino
-  for x in $(pgrep -f _irc); do kill -9 $x; done
-}
-
-function light {
-    if  [ $# -lt 2 ]; then
-        echo "usage: light syntax filename [fontsize] [additional args]"
-        return 1
-    fi
-    local fontsize=18
-    local syntax=$1; shift
-    local filename=$1; shift
-    if [ $# -ge 1 ]; then
-        fontsize=$1; shift
-    fi
-    local rest=$@
-    cat $filename | highlight -O rtf --syntax $syntax --font Inconsolata --style moria --font-size $fontsize --inline-css $@ | pbcopy
-}
-
-function lsfunc {
-    lsd --icon never $*
-}
-
 function runbg {
   nohup $* > /dev/null 2>&1 &
 }
@@ -100,13 +83,4 @@ function runbg {
 function weather {
   local city=$(curl -s https://ipvigilante.com/$(curl -s https://ipinfo.io/ip) | jq -r '.data.city_name')
   curl --silent "wttr.in/${city}?m" | grep -v Follow
-}
-
-function joycond-cemuhook {
-  cd ~/github/0updates/joycond-cemuhook && python joycond-cemuhook.py
-  cd -
-}
-
-function aws-complete {
-  complete -C "$(rtx which aws)_completer" aws
 }
