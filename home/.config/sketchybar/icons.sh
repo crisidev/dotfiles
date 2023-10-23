@@ -48,3 +48,7 @@ VOLUME_0=􀊣
 # WiFi
 WIFI_CONNECTED=􀙇
 WIFI_DISCONNECTED=􀙈
+
+# Microphone
+MIC_ON=󰍬
+MIC_OFF=󰍭

@@ -77,7 +77,7 @@ yabai -m rule --add app="^Font Book$" manage=off
 yabai -m rule --add app="^Archive Utility$" manage=off
 yabai -m rule --add app="^Installer$" manage=off
 yabai -m rule --add app="^iStat Menus$" manage=off sticky=off
-yabai -m rule --add app="^Stats$" manage=off
+yabai -m rule --add app="^Stats$" manage=off sticky=off
 yabai -m rule --add app="^App Store$" manage=off
 yabai -m rule --add title="^float-term$" manage=off
 yabai -m rule --add app="^Microsoft Outlook$" title="^Outlook Settings$" manage=off

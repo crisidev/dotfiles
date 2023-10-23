@@ -6,6 +6,7 @@ local M = {}
 M.screen_benq = "758E5DAE-250B-4686-8171-9BEAA176F7B2"
 M.screen_macbook = "37D8832A-2D66-02CA-B9F7-8F30A301B230"
 M.yabai_bin = homedir .. "/.bin/yabai"
+M.sketchybar_bin = "/opt/homebrew/bin/sketchybar"
 M.previous_space = 0
 M.app_watchers = {}
 M.float_windows_to_center = {

@@ -28,6 +28,5 @@ sketchybar --add item battery right \
 	mouse.entered \
 	mouse.exited \
 	mouse.exited.global \
-	\
 	--add item battery.info popup.battery \
 	--set battery.info "${battery_info[@]}"

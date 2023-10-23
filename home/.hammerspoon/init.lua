@@ -8,7 +8,6 @@ hs.loadSpoon("MicMute")
 hs.loadSpoon("ReloadConfiguration")
 
 spoon.HoldToQuit:start()
-spoon.MicMute:bindHotkeys({ toggle = { { "fn" }, "f10" } }, 0.75)
 spoon.ReloadConfiguration.watch_paths = {
 	hs.configdir,
 	homedir .. "/.homesick/repos/dotfiles/home/.hammerspoon",
@@ -48,6 +47,12 @@ end)
 -- Lock screen
 hs.hotkey.bind({ "cmd", "option" }, "l", function()
 	hs.caffeinate.lockScreen()
+end)
+
+-- Toggle mic mute
+hs.hotkey.bind({ "fn" }, "f10", function()
+    spoon.MicMute:toggleMicMute()
+    hs.execute(helpers.sketchybar_bin .. " --trigger mic_update", false)
 end)
 
 -- Restart yabai

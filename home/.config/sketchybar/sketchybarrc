@@ -78,15 +78,16 @@ source "$ITEM_DIR/github.sh"
 source "$ITEM_DIR/wifi.sh"
 source "$ITEM_DIR/battery.sh"
 source "$ITEM_DIR/volume.sh"
+source "$ITEM_DIR/mic.sh"
 # source "$ITEM_DIR/cpu.sh"
 source "$ITEM_DIR/stats.sh"
 source "$ITEM_DIR/spotify.sh"
 
 sketchybar --hotload on
 
+sketchybar --trigger windows_on_spaces
+
 # Forcing all item scripts to run (never do this outside of sketchybarrc)
 sketchybar --update
-
-sketchybar --trigger windows_on_spaces
 
 echo "sketchybar configuation loaded.."
