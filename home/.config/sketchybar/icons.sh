@@ -52,3 +52,7 @@ WIFI_DISCONNECTED=􀙈
 # Microphone
 MIC_ON=󰍬
 MIC_OFF=󰍭
+
+# Tailscale
+TAILSCALE_ON=󰞉
+TAILSCALE_OFF=󰕑

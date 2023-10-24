@@ -78,6 +78,7 @@ yabai -m rule --add app="^Archive Utility$" manage=off
 yabai -m rule --add app="^Installer$" manage=off
 yabai -m rule --add app="^iStat Menus$" manage=off sticky=off
 yabai -m rule --add app="^Stats$" manage=off sticky=off
+yabai -m rule --add app="^Company Portal$" manage=off
 yabai -m rule --add app="^App Store$" manage=off
 yabai -m rule --add title="^float-term$" manage=off
 yabai -m rule --add app="^Microsoft Outlook$" title="^Outlook Settings$" manage=off
@@ -96,5 +97,10 @@ yabai -m rule --add app="^Digital Colou?r Meter$" manage=off
 
 # layout
 yabai -m config layout bsp
+
+# reload sketchybar
+$HOME/.bin/hs -c "hs.helpers.cycle_all_spaces_mission_control()"
+sleep 0.2
+sketchybar --trigger mic_update window_focus front_app_switched wifi_change windows_on_space
 
 echo "yabai configuration loaded.."

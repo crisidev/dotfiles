@@ -169,16 +169,22 @@ def to_formatted_icons(apps):
     return " ".join([to_formatted_icon(app, cnt) for app, cnt in apps.items()])
 
 
-spaces = {}
 home = os.path.expanduser("~")
+available_spaces = {}
+yabai_spaces = json.loads(os.popen(f"{home}/.bin/yabai -m query --spaces").read())
+for space in yabai_spaces:
+    available_spaces[space["index"]] = {}
 apps = json.loads(os.popen(f"{home}/.bin/yabai -m query --windows").read())
 for app in apps:
-    spaces[app["space"]] = spaces.get(app["space"], {})
-    spaces[app["space"]][app["app"]] = spaces[app["space"]].get(app["app"], 0) + 1
+    available_spaces[app["space"]] = available_spaces.get(app["space"], {})
+    available_spaces[app["space"]][app["app"]] = available_spaces[app["space"]].get(app["app"], 0) + 1
 
-args = " ".join(
-    [f'--set space.{space} label="{to_formatted_icons(apps)}" label.drawing=on' for space, apps in spaces.items()]
-)
+args = ""
+for space, apps in available_spaces.items():
+    if apps:
+        args += f' --set space.{space} label="{to_formatted_icons(apps)}" label.drawing=on'
+    else:
+        args += f' --set space.{space} label.drawing=off'
 default_args = "--set '/space\..*/' background.drawing=on --animate sin 10"
 
 os.system(f"sketchybar -m {default_args} {args}")

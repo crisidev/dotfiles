@@ -1,30 +1,31 @@
 #!/bin/bash
+# shellcheck disable=1091
 
 update() {
-	source "$CONFIG_DIR/colors.sh"
-	COLOR=$BACKGROUND_2
-	if [ "$SELECTED" = "true" ]; then
-		COLOR=$GREY
-	fi
-	sketchybar --set $NAME icon.highlight=$SELECTED \
-		label.highlight=$SELECTED \
-		background.border_color=$COLOR
+    source "$CONFIG_DIR/colors.sh"
+    COLOR=$BACKGROUND_2
+    if [ "$SELECTED" = "true" ]; then
+        COLOR=$GREY
+    fi
+    sketchybar --set "$NAME" icon.highlight="$SELECTED" \
+        label.highlight="$SELECTED" \
+        background.border_color="$COLOR"
 }
 
 mouse_clicked() {
-	if [ "$BUTTON" = "right" ]; then
-		$HOME/.bin/yabai -m space --destroy $SID
-		sketchybar --trigger windows_on_spaces --trigger space_change
-	else
-		$HOME/.bin/yabai -m space --focus $SID 2>/dev/null
-	fi
+    if [ "$BUTTON" = "right" ]; then
+        "$HOME/.bin/hs" -c "hs.spaces.removeSpace($SID)"
+        sketchybar --trigger windows_on_spaces --trigger space_change
+    else
+        "$HOME/.bin/hs" -c "hs.helpers.focus_space_mission_control($SID)"
+    fi
 }
 
 case "$SENDER" in
-"mouse.clicked")
-	mouse_clicked
-	;;
-*)
-	update
-	;;
+    "mouse.clicked")
+        mouse_clicked
+        ;;
+    *)
+        update
+        ;;
 esac

@@ -19,7 +19,7 @@ M.float_windows_to_center = {
 	"Activity Monitor",
 	"Outlook Settings",
 	"System Settings",
-	"Rules",
+	"Company Portal",
 	"AppCleaner",
 	"Font Book",
 	"Installer",
@@ -96,12 +96,74 @@ M.focus_space_or_previous = function(space)
 	M.previous_space = M.index_of(ordered_spaces, current_space)
 end
 
+M.focus_space_in_direction = function(direction)
+	local ordered_spaces = M.get_ordered_spaces()
+	local ordered_spaces_length = M.length(ordered_spaces)
+	local current_space = hs.spaces.focusedSpace()
+	local index = M.index_of(ordered_spaces, current_space)
+	local go_to = 1
+	if direction == "left" then
+		if index - 1 < 1 then
+			go_to = ordered_spaces[ordered_spaces_length]
+		else
+			go_to = ordered_spaces[index - 1]
+		end
+	elseif direction == "right" then
+		if index + 1 > ordered_spaces_length then
+			go_to = ordered_spaces[1]
+		else
+			go_to = ordered_spaces[index + 1]
+		end
+	end
+	hs.spaces.gotoSpace(go_to)
+end
+
+M.focus_space_mission_control = function(space)
+	local ordered_spaces = M.get_ordered_spaces()
+	local target_space = ordered_spaces[space]
+	hs.spaces.gotoSpace(target_space)
+end
+
 -- Move windows to spaces
 M.move_current_window_to_space = function(space)
 	local win = hs.window.focusedWindow() -- current window
 	local ordered_spaces = M.get_ordered_spaces()
 	local space_id = ordered_spaces[space]
 	hs.spaces.moveWindowToSpace(win:id(), space_id)
+end
+
+M.focus_space = function(space)
+	if space == 1 then
+		hs.eventtap.keyStroke({ "cmd", "alt", "shift" }, "escape", 0)
+	elseif space == 2 then
+		hs.eventtap.keyStroke({ "fn", "cmd", "alt", "shift" }, "f2", 0)
+	elseif space == 3 then
+		hs.eventtap.keyStroke({ "fn", "cmd", "alt", "shift" }, "f1", 0)
+	elseif space == 4 then
+		hs.eventtap.keyStroke({ "fn", "cmd", "alt", "shift" }, "f3", 0)
+	elseif space == 5 then
+		hs.eventtap.keyStroke({ "cmd", "alt", "shift" }, "1", 0)
+	elseif space == 6 then
+		hs.eventtap.keyStroke({ "cmd", "alt", "shift" }, "2", 0)
+	elseif space == 7 then
+		hs.eventtap.keyStroke({ "cmd", "alt", "shift" }, "3", 0)
+	elseif space == 8 then
+		hs.eventtap.keyStroke({ "cmd", "alt", "shift" }, "4", 0)
+	elseif space == 9 then
+		hs.eventtap.keyStroke({ "fn", "cmd", "alt", "shift" }, "f4", 0)
+	else
+		return nil
+	end
+	M.focus_space_or_previous(space)
+	M.focus_space_or_screen(space)
+end
+
+M.cycle_all_spaces_mission_control = function()
+	for i = 1, 9 do
+		M.focus_space(i)
+		os.execute("sleep 0.3")
+	end
+	M.focus_space(1)
 end
 
 -- Checks if a window belongs to a screen

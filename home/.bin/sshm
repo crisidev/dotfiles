@@ -5,18 +5,26 @@ import sys
 import subprocess
 import os
 import sshconf
+import argparse
 
 LOCAL_HOSTS = {}
 
 
+def parser() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(prog="sshm", description="FZF based SSH manager")
+    parser.add_argument("-s", "--sshrc", action="store_true")
+    parser.add_argument("hostname", nargs="?", default=None)
+    return parser.parse_args()
+
+
 def main() -> None:
+    args = parser()
     load_local_host()
-    if len(sys.argv) < 2:
-        select_with_fzf()
-        sys.exit(0)
-    else:
+    if args.hostname:
         hostname = sys.argv[1]
         find_host_config(hostname)
+    else:
+        select_with_fzf(args.sshrc)
     sys.exit(0)
 
 
@@ -42,7 +50,7 @@ def find_host_config(hostname: str) -> None:
         print(f"Command\t{conf}")
 
 
-def select_with_fzf() -> None:
+def select_with_fzf(use_sshrc: bool) -> None:
     py = subprocess.run(["rtx", "which", "python"], stdout=subprocess.PIPE).stdout.decode().strip()
     fzf_default_opts = f'+s +m +x +e --height=40% --reverse --prompt="SSH > " --preview="{py} ~/.bin/sshm {{}}"'
     ssh_config_hosts = find_ssh_config_hosts()
@@ -58,7 +66,10 @@ def select_with_fzf() -> None:
     if len(output) > 1:
         host = output[0].decode().strip()
         if host in ssh_config_hosts:
-            subprocess.run(["ssh", host])
+            if use_sshrc:
+                subprocess.run(["sshrc", host])
+            else:
+                subprocess.run(["ssh", host])
         if host in LOCAL_HOSTS.keys():
             subprocess.run([LOCAL_HOSTS[host]], shell=True)
 

@@ -7,8 +7,8 @@ if which rtx > /dev/null; then
 fi
 
 # paths
-MY_PATH="$HOME/.bin:$HOME/.local/share/lvim/mason/bin"
-BREW_PATH="/opt/homebrew/bin:/opt/homebrew/opt/gnu-sed/libexec/gnubin:/opt/homebrew/opt/coreutils/libexec/gnubin:/opt/homebrew/opt/grep/libexec/gnubin:/opt/homebrew/opt/ssh-copy-id/bin"
+MY_PATH="$HOME/.bin:$HOME/.local/share/lvim/mason/bin:/opt/homebrew/bin"
+BREW_PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:/opt/homebrew/opt/coreutils/libexec/gnubin:/opt/homebrew/opt/grep/libexec/gnubin:/opt/homebrew/opt/ssh-copy-id/bin:/opt/homebrew/opt/gnu-tar/libexec/gnubin"
 SYSTEM_PATH="/usr/local/bin"
 export PATH="$MY_PATH:$BREW_PATH:$SYSTEM_PATH:$PATH"
 
