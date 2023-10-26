@@ -56,3 +56,5 @@ MIC_OFF=󰍭
 # Tailscale
 TAILSCALE_ON=󰞉
 TAILSCALE_OFF=󰕑
+
+WARNING=

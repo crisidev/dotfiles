@@ -27,6 +27,9 @@ update_gh() {
     args+=(--set github.bell icon.color="$COLOR")
 
     while read -r repo url type title; do
+        if [ "${repo}" = "" ] && [ "${title}" = "" ]; then
+            continue
+        fi
         COUNTER=$((COUNTER + 1))
         IMPORTANT="$(echo "$title" | grep -Ei "(deprecat|break|broke|bug)")"
         COLOR=$BLUE
@@ -62,7 +65,7 @@ update_gh() {
 
         notification=(
             label="$(echo "$title" | sed -e "s/^'//" -e "s/'$//")"
-            icon="$ICON  󰊤  $(echo "$repo" | sed -e "s/^'//" -e "s/'$//"):"
+            icon="󰊤  $ICON $(echo "$repo" | sed -e "s/^'//" -e "s/'$//"):"
             icon.padding_left="$PADDING"
             label.padding_right="$PADDING"
             icon.color="$COLOR"
@@ -93,6 +96,7 @@ update() {
         sketchybar -m --set "$NAME" icon="$BELL" label="0"
         notification=(
             title="No new notifications"
+            repo="Note"
             drawing=on
             background.corner_radius=12
             padding_left=7
