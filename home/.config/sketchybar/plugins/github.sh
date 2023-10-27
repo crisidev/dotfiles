@@ -1,15 +1,15 @@
 #!/bin/bash
 # shellcheck disable=1091
 
+BELL_RED=0
+TOTAL_NOTIFICATION=0
+PREV_COUNT=$(sketchybar --query github.bell | jq -r .label.value)
+
 source "$CONFIG_DIR/colors.sh"
 source "$CONFIG_DIR/icons.sh"
 if [ -e "$CONFIG_DIR/plugins/gitlab.sh" ]; then
     source "$CONFIG_DIR/plugins/gitlab.sh"
 fi
-
-BELL_RED=0
-TOTAL_NOTIFICATION=0
-PREV_COUNT=$(sketchybar --query github.bell | jq -r .label.value)
 
 update_gh() {
     NOTIFICATIONS="$(gh api notifications)"
@@ -93,20 +93,20 @@ update() {
     fi
     update_gh
     if [ "$TOTAL_NOTIFICATION" -eq 0 ]; then
-        sketchybar -m --set "$NAME" icon="$BELL" label="0"
+        args=(--set "$NAME" icon="$BELL" label="0")
         notification=(
-            title="No new notifications"
-            repo="Note"
+            label="No new notifications"
+            icon="$ICON Note: "
+            icon.padding_left="$PADDING"
+            label.padding_right="$PADDING"
+            icon.color="$COLOR"
+            position=popup.github.bell
+            icon.background.color="$COLOR"
             drawing=on
-            background.corner_radius=12
-            padding_left=7
-            padding_right=7
-            icon.background.height=2
-            icon.background.y_offset=-12
         )
-        args=(--clone "github.notification.1" github.template
+        args+=(--clone "github.notification.1" github.template
             --set "github.notification.1" "${notification[@]}")
-        sketchybar -m "${args[0]}" >/dev/null
+        sketchybar -m "${args[@]}" >/dev/null
     else
         sketchybar -m --set "$NAME" icon="$BELL_DOT" label="$TOTAL_NOTIFICATION"
     fi

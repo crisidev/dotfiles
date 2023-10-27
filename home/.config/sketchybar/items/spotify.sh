@@ -35,6 +35,7 @@ spotify_title=(
     width=0
     label.font="$FONT:Heavy:15.0"
     y_offset=55
+    label.max_chars=20
 )
 
 spotify_artist=(
@@ -43,6 +44,7 @@ spotify_artist=(
     padding_left=0
     padding_right=0
     width=0
+    label.max_chars=20
 )
 
 spotify_album=(
@@ -51,6 +53,7 @@ spotify_album=(
     padding_right=0
     y_offset=15
     width=0
+    label.max_chars=20
 )
 
 spotify_state=(

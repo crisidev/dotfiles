@@ -93,4 +93,9 @@ fi
 # aws cli completer
 complete -C "$(rtx which aws)_completer" aws
 
+# complete jira
+if which jira > /dev/null; then
+    _evalcache jira completion zsh
+fi
+
 # zprof

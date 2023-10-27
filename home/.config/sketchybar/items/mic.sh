@@ -21,5 +21,5 @@ sketchybar --add event mic_update \
 	--set mic "${mic[@]}" \
 	--subscribe mic mic_update mouse.clicked
 
-sketchybar --add bracket status brew github.bell volume_icon mic \
+sketchybar --add bracket status brew github.bell wifi volume_icon mic \
 	--set status "${status_bracket[@]}"

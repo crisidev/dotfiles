@@ -24,13 +24,13 @@ github_template=(
     icon.background.y_offset=-12
 )
 
-sketchybar --add item github.bell right \
+sketchybar --add event github.update \
+    --add item github.bell right \
     --set github.bell "${github_bell[@]}" \
-    --subscribe github.bell \
-    mouse.clicked \
-    mouse.entered \
-    mouse.exited \
-    mouse.exited.global \
-    github.update \
+    --subscribe github.bell mouse.clicked \
+                            mouse.entered \
+                            mouse.exited \
+                            mouse.exited.global \
+                            github.update \
     --add item github.template popup.github.bell \
     --set github.template "${github_template[@]}"
