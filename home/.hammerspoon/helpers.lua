@@ -260,7 +260,7 @@ end
 -- Handle any window event
 M.handle_window_event = function(element, _, _, _)
 	if hs.uielement.watcher.focusedWindowChanged then
-		if element then
+		if element and element["application"] then
 			local application = element:application()
 			if application then
 				local app_name = application:title()
