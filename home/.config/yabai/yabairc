@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 # set -x
-launchctl unload -F /System/Library/LaunchAgents/com.apple.WindowManager.plist > /dev/null 2>&1
 
 # signals
 yabai -m signal --add event=window_focused action="/opt/homebrew/bin/sketchybar --trigger window_focus"
@@ -64,10 +63,10 @@ yabai -m rule --add app="^Firefox$" space=2 sticky=off
 yabai -m rule --add app="^Microsoft Outlook$" space=3
 yabai -m rule --add app="^Microsoft Outlook$" title="^Calendar$" space=3
 yabai -m rule --add app="^Spotify$" space=4
-yabai -m rule --add app="^Microsoft Teams (work or school)$" space=5
-yabai -m rule --add app="^WhatsApp$" space=6
-yabai -m rule --add app="^Telegram$" space=7
-yabai -m rule --add app="^Signal$" space=8
+yabai -m rule --add app="^Microsoft Teams (work or school)$" space=6
+yabai -m rule --add app="^WhatsApp$" space=7
+yabai -m rule --add app="^Telegram$" space=8
+yabai -m rule --add app="^Signal$" space=9
 
 # rule
 # unmanaged
@@ -99,7 +98,7 @@ yabai -m rule --add app="^Digital Colou?r Meter$" manage=off
 yabai -m config layout bsp
 
 # reload sketchybar
-$HOME/.bin/hs -c "hs.helpers.cycle_all_spaces_mission_control()"
+"$HOME/.bin/hs" -c "hs.helpers.cycle_all_spaces_mission_control()"
 sleep 0.2
 sketchybar --trigger mic_update window_focus front_app_switched wifi_change windows_on_space
 
