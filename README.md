@@ -1,14 +1,13 @@
-# 🤟 Crisidev Dotfiles 🤟
+# 🤟 Crisidev Dotfiles - OSX version 🤟
 
 Take what you need, it also comes warrant free 😊
 
+
 * [Look and feel](#look-and-feel)
 * [Configurations](#configurations)
+    * [Window management](#window-management)
     * [Terminal](#terminal)
     * [Editor](#editor)
-    * [Wayland](#wayland)
-    * [X11](#x11)
-    * [System](#system)
 * [Installation](#installation)
 
 ## Look and feel
@@ -21,37 +20,31 @@ My personal dotfiles are compatible with
 [homesick](https://github.com/technicalpickles/homesick) /
 [homeshick](https://github.com/andsens/homeshick)
 
+### Window management
+
+I make heavy use of tiled windows, based on the amazing [Yabai](https://github.com/koekeishiya/yabai) window manager.
+Since I don't want to disable SIP and my setup is completely keyboard centric,
+I use [Hammerspoon]() to configure keybinding and to overcome Yabai's
+shortcomings when SIP is fully enabled. The fancy top bar is [SketchyBar](https://felixkratz.github.io/SketchyBar/)
+and I use Yabai from [FelixKratz fork](https://github.com/FelixKratz/yabai/).
+
+- Yabai [config](/home/.yabai/yabairc)
+- Hammerspoon [config](home/.hammerspoon)
+- SketchyBar [config](home/.config/sketchybar)
+
 ### Terminal
 
 - [Zsh rc](/home/.zshrc) file
+- Zsh [plugins](home/.zsh_plugins) for [antidote](https://getantidote.github.io/)
 - [Zsh aliases](/home/.zsh_aliases) file
 - [Zsh functions](/home/.zsh_functions) file
 - [Starship](https://starship.rs) [config](/home/.config/starship.toml) file
 - [Kitty](https://sw.kovidgoyal.net/kitty/) [config](/home/.config/kitty) file
-- [Tmux](https://github.com/tmux/tmux/wiki) [config](/home/.tmux.conf) file
 - [Direnv](https://direnv.net/) [config](/home/.config/direnv) directory
 
 ### Editor
 
 See my [lvim](https://github.com/crisidev/lvim) configuration.
-
-### Wayland
-
-- [Hyprland](https://wiki.hyprland.org/) [config](/home/.config/hypr/)
-- [Waybar](https://github.com/Alexays/Waybar) [top](/home/.config/waybar/top) and [bottom](/home/.config/waybar/bottom)
-* [SwayNC](https://github.com/ErikReider/SwayNotificationCenter) [config](/home/.config/swaync/)
-
-### X11
-
-My old X11, i3 and Gnome based configuration can be found [here](https://github.com/crisidev/dotfiles/tree/x11).
-
-### System
-
-- [Keyd](https://github.com/rvaiya/keyd) [config](/system/etc/keyd/default.conf) file
-- [Topgrade](https://github.com/r-darwish/topgrade)
-  [config](/home/.config/topgrade.toml) file
-
-There are also plenty of useless and useful scripts inside the [bin/folder](/home/.bin)
 
 ## Installation
 
