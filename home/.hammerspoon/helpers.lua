@@ -24,6 +24,7 @@ M.float_windows_to_center = {
 	"Installer",
 	"Color Picker",
 	"Stats",
+	"Weather",
 }
 
 ------------------------------------------
@@ -66,12 +67,39 @@ end
 
 -- Check if a space is already visible
 M.is_space_already_visible = function(active_spaces, space)
-  for _, value in pairs(active_spaces) do
-    if value == space then
-      return true
-    end
-  end
-  return false
+	for _, value in pairs(active_spaces) do
+		if value == space then
+			return true
+		end
+	end
+	return false
+end
+
+-- Focus a space
+M.focus_space = function(space)
+	if space == 1 then
+		hs.eventtap.keyStroke({ "cmd", "alt", "shift" }, "escape", 0)
+	elseif space == 2 then
+		hs.eventtap.keyStroke({ "fn", "cmd", "alt", "shift" }, "f2", 0)
+	elseif space == 3 then
+		hs.eventtap.keyStroke({ "fn", "cmd", "alt", "shift" }, "f1", 0)
+	elseif space == 4 then
+		hs.eventtap.keyStroke({ "fn", "cmd", "alt", "shift" }, "f3", 0)
+	elseif space == 5 then
+		hs.eventtap.keyStroke({ "fn", "cmd", "alt", "shift" }, "f4", 0)
+	elseif space == 6 then
+		hs.eventtap.keyStroke({ "cmd", "alt", "shift" }, "1", 0)
+	elseif space == 7 then
+		hs.eventtap.keyStroke({ "cmd", "alt", "shift" }, "2", 0)
+	elseif space == 8 then
+		hs.eventtap.keyStroke({ "cmd", "alt", "shift" }, "3", 0)
+	elseif space == 9 then
+		hs.eventtap.keyStroke({ "cmd", "alt", "shift" }, "4", 0)
+	elseif space == 10 then
+		hs.eventtap.keyStroke({ "cmd", "alt", "shift" }, "5", 0)
+	else
+		return nil
+	end
 end
 
 -- Focus a specific space of the previous one if we are already on the target space
@@ -80,36 +108,17 @@ M.focus_space_or_previous = function(space)
 	local ordered_spaces = M.get_ordered_spaces()
 	local target_space = ordered_spaces[space]
 	if M.previous_space and current_space == target_space then
-        if M.is_space_already_visible(hs.spaces.activeSpaces(), ordered_spaces[M.previous_space]) then
-            M.focus_space_or_screen(M.previous_space)
-            return nil
-        end
-		if M.previous_space == 1 then
-			hs.eventtap.keyStroke({ "cmd", "alt", "shift" }, "escape", 0)
-		elseif M.previous_space == 2 then
-			hs.eventtap.keyStroke({ "fn", "cmd", "alt", "shift" }, "f2", 0)
-		elseif M.previous_space == 3 then
-			hs.eventtap.keyStroke({ "fn", "cmd", "alt", "shift" }, "f1", 0)
-		elseif M.previous_space == 4 then
-			hs.eventtap.keyStroke({ "fn", "cmd", "alt", "shift" }, "f3", 0)
-		elseif M.previous_space == 5 then
-			hs.eventtap.keyStroke({ "fn", "cmd", "alt", "shift" }, "f4", 0)
-		elseif M.previous_space == 6 then
-			hs.eventtap.keyStroke({ "cmd", "alt", "shift" }, "1", 0)
-		elseif M.previous_space == 7 then
-			hs.eventtap.keyStroke({ "cmd", "alt", "shift" }, "2", 0)
-		elseif M.previous_space == 8 then
-			hs.eventtap.keyStroke({ "cmd", "alt", "shift" }, "3", 0)
-		elseif M.previous_space == 9 then
-			hs.eventtap.keyStroke({ "cmd", "alt", "shift" }, "4", 0)
-		elseif M.previous_space == 10 then
-			hs.eventtap.keyStroke({ "cmd", "alt", "shift" }, "5", 0)
-		else
+		if M.is_space_already_visible(hs.spaces.activeSpaces(), ordered_spaces[M.previous_space]) then
+			M.focus_space_or_screen(M.previous_space)
+			M.previous_space = M.index_of(ordered_spaces, current_space)
 			return nil
 		end
+		M.focus_space(M.previous_space)
+	else
+		M.focus_space(space)
 	end
 	M.previous_space = M.index_of(ordered_spaces, current_space)
-    M.focus_space_or_screen(space)
+	M.focus_space_or_screen(space)
 end
 
 -- Focus a space in a specific direction
@@ -149,34 +158,6 @@ M.move_current_window_to_space = function(space)
 	hs.spaces.moveWindowToSpace(win:id(), space_id)
 end
 
--- Focus a space or go back to the previous one
-M.focus_space = function(space)
-	if space == 1 then
-		hs.eventtap.keyStroke({ "cmd", "alt", "shift" }, "escape", 0)
-	elseif space == 2 then
-		hs.eventtap.keyStroke({ "fn", "cmd", "alt", "shift" }, "f2", 0)
-	elseif space == 3 then
-		hs.eventtap.keyStroke({ "fn", "cmd", "alt", "shift" }, "f1", 0)
-	elseif space == 4 then
-		hs.eventtap.keyStroke({ "fn", "cmd", "alt", "shift" }, "f3", 0)
-	elseif space == 5 then
-		hs.eventtap.keyStroke({ "fn", "cmd", "alt", "shift" }, "f4", 0)
-	elseif space == 6 then
-		hs.eventtap.keyStroke({ "cmd", "alt", "shift" }, "1", 0)
-	elseif space == 7 then
-		hs.eventtap.keyStroke({ "cmd", "alt", "shift" }, "2", 0)
-	elseif space == 8 then
-		hs.eventtap.keyStroke({ "cmd", "alt", "shift" }, "3", 0)
-	elseif space == 9 then
-		hs.eventtap.keyStroke({ "cmd", "alt", "shift" }, "4", 0)
-	elseif space == 10 then
-		hs.eventtap.keyStroke({ "cmd", "alt", "shift" }, "5", 0)
-	else
-		return nil
-	end
-	M.focus_space_or_previous(space)
-end
-
 -- Cycle all mission control spaces
 M.cycle_all_spaces_mission_control = function()
 	local current_space = hs.spaces.focusedSpace()
@@ -207,7 +188,7 @@ M.focus_space_or_screen = function(space)
 		local macbook_space = M.index_of(ordered_spaces, macbook_space_mission_control_id)
 		if space == macbook_space then
 			M.yabai({ "-m", "display", "--focus", "2" })
-        else
+		else
 			M.yabai({ "-m", "display", "--focus", "1" })
 		end
 	end

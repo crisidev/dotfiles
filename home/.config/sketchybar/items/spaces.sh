@@ -47,7 +47,7 @@ separator=(
     padding_right=8
     label.drawing=off
     associated_display=active
-    click_script="$HOME/.bin/hs -c \"hs.spaces.addSpaceToScreen(hs.screen.mainScreen(), true)\""
+    click_script="$HOME/.bin/hs -c \"return hs.spaces.addSpaceToScreen(hs.screen.mainScreen(), true)\""
     icon.color="$WHITE"
 )
 

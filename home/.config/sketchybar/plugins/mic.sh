@@ -2,13 +2,13 @@
 # shellcheck disable=1091,2086
 
 toggle_mic() {
-    "$HOME/.bin/hs" -c "spoon.MicMute:toggleMicMute()"
+    "$HOME/.bin/hs" -c "return spoon.MicMute:toggleMicMute()"
 }
 
 update() {
     source "$CONFIG_DIR/colors.sh"
 
-    MUTED=$("$HOME/.bin/hs" -c "hs.audiodevice.defaultInputDevice():muted()")
+    MUTED=$("$HOME/.bin/hs" -c "return hs.audiodevice.defaultInputDevice():muted()")
     if [ "$MUTED" = "true" ]; then
         COLOR=$RED
     else

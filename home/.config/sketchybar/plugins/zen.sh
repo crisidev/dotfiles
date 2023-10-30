@@ -12,6 +12,8 @@ zen_on() {
         --set spotify.play updates=off \
         --set brew drawing=off \
         --set mic drawing=off \
+        --set weather drawing=off \
+        --set battery drawing=off \
         --set github.bell drawing=off \
         --set github.template drawing=off
 }
@@ -27,6 +29,8 @@ zen_off() {
         --set spotify.play updates=on \
         --set brew drawing=on \
         --set mic drawing=on \
+        --set weather drawing=on \
+        --set battery drawing=on \
         --set github.bell drawing=on \
         --set github.template drawing=on
 }

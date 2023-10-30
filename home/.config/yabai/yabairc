@@ -90,6 +90,7 @@ yabai -m rule --add app="^The Unarchiver$" manage=off
 yabai -m rule --add app="^AppCleaner$" manage=off
 yabai -m rule --add app="^Activity Monitor$" manage=off
 yabai -m rule --add app="^Color Picker$" manage=off
+yabai -m rule --add app="^Weather$" manage=off
 
 # sticky
 yabai -m rule --add app="^Digital Colou?r Meter$" manage=off
@@ -98,7 +99,7 @@ yabai -m rule --add app="^Digital Colou?r Meter$" manage=off
 yabai -m config layout bsp
 
 # reload sketchybar
-"$HOME/.bin/hs" -c "hs.helpers.cycle_all_spaces_mission_control()"
+"$HOME/.bin/hs" -c "return hs.helpers.cycle_all_spaces_mission_control()"
 sleep 0.2
 sketchybar --trigger mic_update window_focus front_app_switched wifi_change windows_on_space
 
