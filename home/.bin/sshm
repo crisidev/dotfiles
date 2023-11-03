@@ -7,8 +7,6 @@ import os
 import sshconf
 import argparse
 
-LOCAL_HOSTS = {}
-
 
 def parser() -> argparse.Namespace:
     parser = argparse.ArgumentParser(prog="sshm", description="FZF based SSH manager")
@@ -19,19 +17,12 @@ def parser() -> argparse.Namespace:
 
 def main() -> None:
     args = parser()
-    load_local_host()
     if args.hostname:
         hostname = sys.argv[1]
         find_host_config(hostname)
     else:
         select_with_fzf(args.sshrc)
     sys.exit(0)
-
-
-def load_local_host() -> None:
-    global LOCAL_HOSTS
-    with open(os.path.expanduser("~/.config/sshm/hosts.json")) as f:
-        LOCAL_HOSTS = json.load(f)
 
 
 def find_host_config(hostname: str) -> None:
@@ -45,41 +36,52 @@ def find_host_config(hostname: str) -> None:
             print(f"{name}{hostname}")
             for k, v in host.items():
                 print(f"{k.title().ljust(max_width)}{v}")
-    conf = LOCAL_HOSTS.get(hostname)
-    if conf:
-        print(f"Command\t{conf}")
 
 
 def select_with_fzf(use_sshrc: bool) -> None:
-    py = subprocess.run(["rtx", "which", "python"], stdout=subprocess.PIPE).stdout.decode().strip()
-    fzf_default_opts = f'+s +m +x +e --height=40% --reverse --prompt="SSH > " --preview="{py} ~/.bin/sshm {{}}"'
-    ssh_config_hosts = find_ssh_config_hosts()
-    available_hosts = list(LOCAL_HOSTS.keys())
-    available_hosts.extend(ssh_config_hosts)
-    fzf = subprocess.Popen(
-        ["/opt/homebrew/bin/fzf"],
-        stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE,
-        env={"FZF_DEFAULT_OPTS": fzf_default_opts, "SHELL": "/bin/zsh"},
+    py = (
+        subprocess.run(["rtx", "which", "python"], stdout=subprocess.PIPE)
+        .stdout.decode()
+        .strip()
     )
-    output = fzf.communicate(input="\n".join(available_hosts).encode())
-    if len(output) > 1:
-        host = output[0].decode().strip()
-        if host in ssh_config_hosts:
-            if use_sshrc:
-                subprocess.run(["sshrc", host])
-            else:
-                subprocess.run(["ssh", host])
-        if host in LOCAL_HOSTS.keys():
-            subprocess.run([LOCAL_HOSTS[host]], shell=True)
+    fzf_default_opts = f'+s +m +x +e --no-sort --height=40% --reverse --prompt="SSH > " --preview="{py} ~/.bin/sshm {{}}"'
+    available_hosts = find_ssh_config_hosts()
+    with open(os.path.expanduser("~/.config/sshm/frecency.json")) as f:
+        frecency = json.load(f)
+        for host, visits in frecency.items():
+            if host in available_hosts:
+                available_hosts[host] = visits
+        available_hosts = [
+            h[0]
+            for h in sorted(available_hosts.items(), key=lambda x: x[1], reverse=True)
+        ]
+        fzf = subprocess.Popen(
+            ["/opt/homebrew/bin/fzf"],
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            env={"FZF_DEFAULT_OPTS": fzf_default_opts, "SHELL": "/bin/zsh"},
+        )
+        output = fzf.communicate(input="\n".join(available_hosts).encode())
+        if len(output) > 1:
+            host = output[0].decode().strip()
+            if host in available_hosts:
+                host_visits = frecency.get(host, 0)
+                frecency[host] = host_visits + 1
+                if use_sshrc:
+                    subprocess.run(["sshrc", host])
+                else:
+                    subprocess.run(["ssh", host])
+    with open(os.path.expanduser("~/.config/sshm/frecency.json"), "w") as f:
+        json.dump(frecency, f)
 
 
-def find_ssh_config_hosts() -> list[str]:
-    hosts = []
+def find_ssh_config_hosts() -> dict[str, int]:
+    hosts = {}
     for f in os.listdir(os.path.expanduser("~/.ssh/config.d")):
         ssh_config_file = os.path.expanduser(f"~/.ssh/config.d/{f}")
         ssh_config = sshconf.read_ssh_config(ssh_config_file)
-        hosts.extend(ssh_config.hosts())
+        for host in ssh_config.hosts():
+            hosts[host] = 0
     return hosts
 
 

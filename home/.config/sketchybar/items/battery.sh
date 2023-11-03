@@ -1,8 +1,6 @@
 #!/bin/bash
 # shellcheck disable=2016
 
-POPUP_CLICK_SCRIPT='sketchybar --set $NAME popup.drawing=toggle'
-
 battery=(
     script="$PLUGIN_DIR/battery.sh"
     icon.font="$FONT:Regular:19.0"
@@ -11,7 +9,6 @@ battery=(
     label.drawing=off
     update_freq=120
     updates=on
-    click_script="$POPUP_CLICK_SCRIPT"
     popup.height=35
 )
 
@@ -26,8 +23,6 @@ sketchybar --add item battery right \
     --subscribe battery \
     power_source_change \
     system_woke \
-    mouse.entered \
-    mouse.exited \
-    mouse.exited.global \
+    mouse.clicked \
     --add item battery.info popup.battery \
     --set battery.info "${battery_info[@]}"
