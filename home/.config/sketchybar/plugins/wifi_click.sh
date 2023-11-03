@@ -61,8 +61,8 @@ update_details() {
 }
 
 toggle_details() {
-    INITIAL_WIDTH=$(sketchybar --query wifi | jq -r .popup.drawing)
-    if [ "$INITIAL_WIDTH" = "on" ]; then
+    POPUP=$(sketchybar --query wifi | jq -r .popup.drawing)
+    if [ "$POPUP" = "on" ]; then
         sketchybar --set "$NAME" popup.drawing=off
     else
         update_details

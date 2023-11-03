@@ -83,8 +83,14 @@ update_gh() {
 
 }
 
-popup() {
-    sketchybar --set "$NAME" popup.drawing="$1"
+toggle_details() {
+    POPUP=$(sketchybar --query $NAME | jq -r .popup.drawing)
+    if [ "$POPUP" = "on" ]; then
+        sketchybar --set "$NAME" popup.drawing=off
+    else
+        sketchybar --set "$NAME" popup.drawing=on
+        update
+    fi
 }
 
 update() {
@@ -122,13 +128,7 @@ case "$SENDER" in
     "routine" | "forced" | "github.update")
         update
         ;;
-    "mouse.entered")
-        popup on
-        ;;
-    "mouse.exited" | "mouse.exited.global")
-        popup off
-        ;;
     "mouse.clicked")
-        update
+        toggle_details
         ;;
 esac

@@ -1,7 +1,5 @@
 #!/bin/bash
 
-POPUP_CLICK_SCRIPT="sketchybar --set \$NAME popup.drawing=toggle"
-
 github_bell=(
     padding_right=6
     update_freq=180
@@ -12,7 +10,6 @@ github_bell=(
     label.highlight_color="$BLUE"
     popup.align=right
     script="$PLUGIN_DIR/github.sh"
-    click_script="$POPUP_CLICK_SCRIPT"
 )
 
 github_template=(
@@ -28,9 +25,6 @@ sketchybar --add event github.update \
     --add item github.bell right \
     --set github.bell "${github_bell[@]}" \
     --subscribe github.bell mouse.clicked \
-                            mouse.entered \
-                            mouse.exited \
-                            mouse.exited.global \
                             github.update \
     --add item github.template popup.github.bell \
     --set github.template "${github_template[@]}"
