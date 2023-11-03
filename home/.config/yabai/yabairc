@@ -23,23 +23,13 @@ yabai -m config normal_window_opacity      0.95
 yabai -m config split_ratio                0.50
 yabai -m config auto_balance               off
 
-# borders
-yabai -m config window_border              on
-yabai -m config window_border_blur         off
-yabai -m config window_border_width        2
-yabai -m config window_border_hidpi        off
-yabai -m config window_border_radius       11
-yabai -m config active_window_border_color 0xff939ab7 # 0xff0f68d9
-yabai -m config normal_window_border_color 0xff494d64
-yabai -m config insert_feedback_color      0xff9dd274
-
 # paddings, bar and gaps
 yabai -m config external_bar               all:35:0
 yabai -m config top_padding                10
-yabai -m config bottom_padding             6
-yabai -m config left_padding               6
-yabai -m config right_padding              6
-yabai -m config window_gap                 6
+yabai -m config bottom_padding             8
+yabai -m config left_padding               8
+yabai -m config right_padding              8
+yabai -m config window_gap                 8
 
 # mouse settings
 yabai -m config mouse_modifier             cmd
@@ -102,5 +92,8 @@ yabai -m config layout bsp
 "$HOME/.bin/hs" -c "return hs.helpers.cycle_all_spaces_mission_control()"
 sleep 0.2
 sketchybar --trigger mic_update window_focus front_app_switched wifi_change windows_on_space
+
+# add borders
+LANG="en_US.UTF-8" /opt/homebrew/opt/borders/bin/borders active_color=0xff939ab7 inactive_color=0xff494d64 width=4.0 2>/dev/null 1>&2 &
 
 echo "yabai configuration loaded.."

@@ -22,6 +22,7 @@ eval "$(rtx activate bash)"
 # Start neovim IDE using class `ide` and listening on $NVIM_LISTEN_ADDRESS
 function start_ide() {
     [ -f "$HOME/.zsh_secrets" ] && source "$HOME/.zsh_secrets"
+    [ -f "$HOME/.zsh_private" ] && source "$HOME/.zsh_private"
 
     export NVIM_APPNAME="${NVIM_APPNAME:-"lvim"}"
     export LUNARVIM_RUNTIME_DIR="${LUNARVIM_RUNTIME_DIR:-"$HOME/.local/share/lunarvim"}"

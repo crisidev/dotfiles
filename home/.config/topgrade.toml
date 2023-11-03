@@ -20,8 +20,6 @@ pull_only_repos = [
     "~/.homesick/repos/homeshick",
     "~/.homesick/repos/dotfiles",
     "~/.homesick/repos/lvim",
-    # Updates
-    "~/github/yabai",
 ]
 pull_arguments = "--ff-only --rebase --autostash"
 
