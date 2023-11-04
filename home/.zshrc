@@ -58,9 +58,11 @@ bindkey '^[[B' history-substring-search-down
 [ -f $HOME/.zsh_secrets ] && source $HOME/.zsh_secrets
 
 # # terminal
-export TERMINFO=/usr/share/terminfo
 export GREP_COLOR='mt=1;31'
-export EDITOR=vim
+export EDITOR="$(which lvim)"
+export VISUAL="$(which lvim)"
+export MANPAGER="$(which lvim) +Man!"
+export XDG_CONFIG_HOME="$HOME/.config"
 
 # lesspipe
 export LESSOPEN="|/opt/homebrew/bin/lesspipe.sh %s"

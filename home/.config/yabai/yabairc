@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# set -x
+set -x
 
 # signals
 yabai -m signal --add event=window_focused action="/opt/homebrew/bin/sketchybar --trigger window_focus"
@@ -23,9 +23,15 @@ yabai -m config normal_window_opacity      0.95
 yabai -m config split_ratio                0.50
 yabai -m config auto_balance               off
 
+TOP_PADDING=6
+MONITORS=$(yabai -m query --displays | jq '. | length')
+if [ "$MONITORS" -gt 1 ]; then
+    TOP_PADDING=8
+fi
+
 # paddings, bar and gaps
 yabai -m config external_bar               all:35:0
-yabai -m config top_padding                10
+yabai -m config top_padding                "$TOP_PADDING"
 yabai -m config bottom_padding             8
 yabai -m config left_padding               8
 yabai -m config right_padding              8
