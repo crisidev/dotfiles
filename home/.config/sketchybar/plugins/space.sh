@@ -17,7 +17,7 @@ mouse_clicked() {
         "$HOME/.bin/hs" -c "return hs.spaces.removeSpace($SID)"
         sketchybar --trigger windows_on_spaces --trigger space_change
     else
-        "$HOME/.bin/hs" -c "return hs.helpers.focus_space_mission_control($SID)"
+        "$HOME/.bin/hs" -c "return hs.helpers.focus_space($SID)"
     fi
 }
 

@@ -76,7 +76,7 @@ ICON_MAP = [
     {"regex": r"MoneyMoney", "icon": ":bank:"},
     {"regex": r"mpv", "icon": ":mpv:"},
     {"regex": r"Music", "icon": ":music:"},
-    {"regex": r"Neovide|MacVim|Vim|VimR", "icon": ":vim:"},
+    {"regex": r"neovide|Neovide|MacVim|Vim|VimR", "icon": ":vim:"},
     {"regex": r"Notability", "icon": ":notability:"},
     {"regex": r"Notes", "icon": ":notes:"},
     {"regex": r"Notion", "icon": ":notion:"},

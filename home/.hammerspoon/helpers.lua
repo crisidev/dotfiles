@@ -144,6 +144,56 @@ M.focus_space_in_direction = function(direction)
 	hs.spaces.gotoSpace(go_to)
 end
 
+-- Ensure all spaces are present
+M.ensure_all_spaces_are_present = function()
+	-- 2 monitors
+	if M.length(hs.spaces.allSpaces()) > 1 then
+		local spaces_per_display = 5
+		local main_spaces = hs.spaces.spacesForScreen()
+		local main_spaces_len = M.length(main_spaces)
+		if spaces_per_display > main_spaces_len then
+			for i = 1, spaces_per_display - main_spaces_len do
+                hs.spaces.addSpaceToScreen(hs.screen.mainScreen(), true)
+			end
+		elseif spaces_per_display < main_spaces_len then
+			for i = #main_spaces, 1, -1 do
+                if i > spaces_per_display then
+                    hs.spaces.removeSpace(main_spaces[i], true)
+                end
+			end
+		end
+		local macbook_spaces = hs.spaces.spacesForScreen(M.screen_macbook)
+        local macbook_spaces_len = M.length(macbook_spaces)
+		if spaces_per_display > macbook_spaces_len then
+			for i = 1, spaces_per_display - macbook_spaces_len do
+                hs.spaces.addSpaceToScreen(M.screen_macbook, true)
+			end
+		elseif spaces_per_display < macbook_spaces_len then
+			for i = #macbook_spaces, 1, -1 do
+                if i > spaces_per_display then
+                    hs.spaces.removeSpace(macbook_spaces[i], true)
+                end
+			end
+		end
+    -- 1 monitor
+	else
+		local spaces_per_display = 10
+		local main_spaces = hs.spaces.spacesForScreen()
+		local main_spaces_len = M.length(main_spaces)
+		if spaces_per_display > main_spaces_len then
+			for i = 1, spaces_per_display - main_spaces_len do
+                hs.spaces.addSpaceToScreen(hs.screen.mainScreen(), true)
+			end
+		elseif spaces_per_display < main_spaces_len then
+			for i = #main_spaces, 1, -1 do
+                if i > spaces_per_display then
+                    hs.spaces.removeSpace(main_spaces[i], true)
+                end
+			end
+		end
+	end
+end
+
 M.focus_space_mission_control = function(space)
 	local ordered_spaces = M.get_ordered_spaces()
 	local target_space = ordered_spaces[space]
