@@ -13,7 +13,6 @@ ruby 3.2.2
 # tools
 neovim nightly
 fzf latest
-github-cli latest
 gitui latest
 lazygit latest
 awscli latest

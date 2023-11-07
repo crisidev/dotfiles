@@ -56,12 +56,29 @@ end)
 
 -- Restart yabai
 hs.hotkey.bind({ "cmd", "option" }, "y", function()
+	hs.notify.new({ title = "Hammerspoon", informativeText = "Restarting yabai" }):send()
 	hs.execute(helpers.yabai_bin .. " --restart-service")
+end)
+
+-- Restart hammerspoon
+hs.hotkey.bind({ "cmd", "option" }, "s", function()
+	hs.notify.new({ title = "Hammerspoon", informativeText = "Restarting hammerspoon" }):send()
+    hs.reload()
+end)
+
+-- Toggle hammerspoon debug
+hs.hotkey.bind({ "cmd", "option" }, "d", function()
+	helpers.set_log_level()
 end)
 
 -- Cycle all screens
 hs.hotkey.bind({ "cmd", "option" }, "m", function()
 	helpers.cycle_all_spaces_mission_control()
+end)
+
+-- Ensure all screen are present
+hs.hotkey.bind({ "cmd", "option", "shift" }, "m", function()
+	helpers.ensure_all_spaces_are_present()
 end)
 
 -- Switch between windows

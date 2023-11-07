@@ -26,10 +26,30 @@ M.float_windows_to_center = {
 	"Stats",
 	"Weather",
 }
+M.log = hs.logger.new("helpers", "info")
 
 ------------------------------------------
 -- Helper functions
 ------------------------------------------
+M.set_log_level = function(level)
+	if level then
+		M.log.setLogLevel(level)
+		hs.notify.new({ title = "Hammerspoon", informativeText = "Log level set to " .. level }):send()
+		return
+	end
+	if M.log.getLogLevel() == 3 then
+		hs.notify.new({ title = "Hammerspoon", informativeText = "Setting log level to debug" }):send()
+		M.log.w("setting log level to debug")
+		M.log.setLogLevel("debug")
+		hs.openConsole()
+	else
+		hs.notify.new({ title = "Hammerspoon", informativeText = "Setting log level to info" }):send()
+		M.log.w("setting log level to info")
+		M.log.setLogLevel("info")
+		hs.closeConsole()
+	end
+end
+
 M.contains = function(set, key)
 	return set[key] ~= nil
 end
@@ -55,13 +75,26 @@ end
 M.get_ordered_spaces = function()
 	local ordered_spaces = {}
 	local all_spaces = hs.spaces.allSpaces()
+	local screen_main = hs.screen.primaryScreen():getUUID()
+	M.log.vf("get_ordered_spaces(): all spaces %s", hs.inspect.inspect(all_spaces))
+	M.log.vf("get_ordered_spaces(): main screen is %s, macbook screen is %s", screen_main, M.screen_macbook)
 	if all_spaces then
-		for _, values in pairs(all_spaces) do
-			for _, value in pairs(values) do
-				table.insert(ordered_spaces, value)
+		if screen_main ~= M.screen_macbook then
+			local spaces_main = all_spaces[screen_main]
+			if spaces_main then
+				for _, space in pairs(spaces_main) do
+					table.insert(ordered_spaces, space)
+				end
+			end
+		end
+		local spaces_macbook = all_spaces[M.screen_macbook]
+		if spaces_macbook then
+			for _, space in pairs(spaces_macbook) do
+				table.insert(ordered_spaces, space)
 			end
 		end
 	end
+	M.log.vf("get_ordered_spaces(): ordered spaces %s", hs.inspect.inspect(ordered_spaces))
 	return ordered_spaces
 end
 
@@ -69,14 +102,18 @@ end
 M.is_space_already_visible = function(active_spaces, space)
 	for _, value in pairs(active_spaces) do
 		if value == space then
+			M.log.df("is_space_already_visible(): mission control space id %d is already visible", space)
 			return true
 		end
 	end
+	M.log.df("is_space_already_visible(): mission control space id %d is not already visible", space)
 	return false
 end
 
 -- Focus a space
 M.focus_space = function(space)
+	local space_id = M.get_ordered_spaces()[space]
+	M.log.df("focus_space(): focusing space %d [%d] using mission control keybinds", space, space_id)
 	if space == 1 then
 		hs.eventtap.keyStroke({ "cmd", "alt", "shift" }, "escape", 0)
 	elseif space == 2 then
@@ -107,18 +144,39 @@ M.focus_space_or_previous = function(space)
 	local current_space = hs.spaces.focusedSpace()
 	local ordered_spaces = M.get_ordered_spaces()
 	local target_space = ordered_spaces[space]
-	if M.previous_space and current_space == target_space then
+	M.log.vf(
+		"focus_space_or_previous(): ordered_spaces %s, current_space: %d, target_space: %d, previous_space: %d",
+		hs.inspect.inspect(ordered_spaces),
+		current_space,
+		target_space,
+		M.previous_space
+	)
+	if current_space == target_space then
 		if M.is_space_already_visible(hs.spaces.activeSpaces(), ordered_spaces[M.previous_space]) then
+			M.log.df("focus_space_or_previous(): current space equal to target space and target space already visible")
 			M.focus_space_or_screen(M.previous_space)
-			M.previous_space = M.index_of(ordered_spaces, current_space)
-			return nil
+		else
+			M.log.df("focus_space_or_previous(): current space equal to target space")
+			M.focus_space(M.previous_space)
 		end
-		M.focus_space(M.previous_space)
 	else
-		M.focus_space(space)
+		if M.is_space_already_visible(hs.spaces.activeSpaces(), ordered_spaces[space]) then
+			M.log.df(
+				"focus_space_or_previous(): current space not equal to target space and target space already visible"
+			)
+			M.focus_space_or_screen(space)
+		else
+			M.log.df("focus_space_or_previous(): current space not equal to target space")
+			M.focus_space(space)
+		end
 	end
-	M.previous_space = M.index_of(ordered_spaces, current_space)
-	M.focus_space_or_screen(space)
+	local current_space_id = M.index_of(ordered_spaces, current_space)
+	M.log.df(
+		"focus_space_or_previous(): storing current space %d [%d] as previous space",
+		current_space_id,
+		current_space
+	)
+	M.previous_space = current_space_id
 end
 
 -- Focus a space in a specific direction
@@ -141,6 +199,7 @@ M.focus_space_in_direction = function(direction)
 			go_to = ordered_spaces[index + 1]
 		end
 	end
+	M.log.df("focus_space_in_direction(): focusing space %d [%d] in direction %s", index, go_to, direction)
 	hs.spaces.gotoSpace(go_to)
 end
 
@@ -153,51 +212,45 @@ M.ensure_all_spaces_are_present = function()
 		local main_spaces_len = M.length(main_spaces)
 		if spaces_per_display > main_spaces_len then
 			for i = 1, spaces_per_display - main_spaces_len do
-                hs.spaces.addSpaceToScreen(hs.screen.mainScreen(), true)
+				hs.spaces.addSpaceToScreen(hs.screen.mainScreen(), true)
 			end
 		elseif spaces_per_display < main_spaces_len then
 			for i = #main_spaces, 1, -1 do
-                if i > spaces_per_display then
-                    hs.spaces.removeSpace(main_spaces[i], true)
-                end
+				if i > spaces_per_display then
+					hs.spaces.removeSpace(main_spaces[i], true)
+				end
 			end
 		end
 		local macbook_spaces = hs.spaces.spacesForScreen(M.screen_macbook)
-        local macbook_spaces_len = M.length(macbook_spaces)
+		local macbook_spaces_len = M.length(macbook_spaces)
 		if spaces_per_display > macbook_spaces_len then
 			for i = 1, spaces_per_display - macbook_spaces_len do
-                hs.spaces.addSpaceToScreen(M.screen_macbook, true)
+				hs.spaces.addSpaceToScreen(M.screen_macbook, true)
 			end
 		elseif spaces_per_display < macbook_spaces_len then
 			for i = #macbook_spaces, 1, -1 do
-                if i > spaces_per_display then
-                    hs.spaces.removeSpace(macbook_spaces[i], true)
-                end
+				if i > spaces_per_display then
+					hs.spaces.removeSpace(macbook_spaces[i], true)
+				end
 			end
 		end
-    -- 1 monitor
+		-- 1 monitor
 	else
 		local spaces_per_display = 10
 		local main_spaces = hs.spaces.spacesForScreen()
 		local main_spaces_len = M.length(main_spaces)
 		if spaces_per_display > main_spaces_len then
 			for i = 1, spaces_per_display - main_spaces_len do
-                hs.spaces.addSpaceToScreen(hs.screen.mainScreen(), true)
+				hs.spaces.addSpaceToScreen(hs.screen.mainScreen(), true)
 			end
 		elseif spaces_per_display < main_spaces_len then
 			for i = #main_spaces, 1, -1 do
-                if i > spaces_per_display then
-                    hs.spaces.removeSpace(main_spaces[i], true)
-                end
+				if i > spaces_per_display then
+					hs.spaces.removeSpace(main_spaces[i], true)
+				end
 			end
 		end
 	end
-end
-
-M.focus_space_mission_control = function(space)
-	local ordered_spaces = M.get_ordered_spaces()
-	local target_space = ordered_spaces[space]
-	hs.spaces.gotoSpace(target_space)
 end
 
 -- Move windows to spaces
@@ -205,6 +258,7 @@ M.move_current_window_to_space = function(space)
 	local win = hs.window.focusedWindow() -- current window
 	local ordered_spaces = M.get_ordered_spaces()
 	local space_id = ordered_spaces[space]
+	M.log.df("move_current_window_to_space(): moving window %s to space %d [%d]", win:title(), space, space_id)
 	hs.spaces.moveWindowToSpace(win:id(), space_id)
 end
 
@@ -246,6 +300,7 @@ end
 
 -- Run a yabai command in background
 M.yabai = function(args)
+	M.log.df("yabai(): running yabai with arguments %s", hs.inspect.inspect(args))
 	hs.task
 		.new(M.yabai_bin, nil, function()
 			return true
@@ -256,13 +311,16 @@ end
 -- Focus a window or a screen based on a direction
 M.focus_window_or_screen = function(direction)
 	local args = { "-m", "window", "--focus", direction }
+	M.log.df("focus_window_or_screen(): running yabai with arguments %s", hs.inspect.inspect(args))
 	hs.task
 		.new(M.yabai_bin, function(exit_code)
 			if exit_code == 1 then
 				if direction == "east" then
+					M.log.df("focus_window_or_screen(): reached edge of current screen, focusing next screen")
 					M.focus_screen(hs.window.focusedWindow():screen():next())
 				end
 				if direction == "west" then
+					M.log.df("focus_window_or_screen(): reached edge of current screen, focusing previous screen")
 					M.focus_screen(hs.window.focusedWindow():screen():previous())
 				end
 			end
@@ -275,6 +333,7 @@ end
 -- Focus a window or a screen based on a direction
 M.resize_window = function(direction1, direction2)
 	local args = { "-m", "window", "--resize", direction1 }
+	M.log.df("resize_window(): running yabai with arguments %s", hs.inspect.inspect(args))
 	hs.task
 		.new(M.yabai_bin, function(exit_code)
 			if exit_code == 1 then
@@ -318,6 +377,7 @@ M.handle_window_event = function(element, _, _, _)
 				if window then
 					for _, title in pairs(M.float_windows_to_center) do
 						if window_title and app_name and window_title == title or app_name == title then
+							M.log.df("handle_window_event(): centering window for app %s, title %s", app_name, title)
 							window:centerOnScreen(nil, true, 0)
 							hs.execute("/opt/homebrew/bin/sketchybar --trigger window_focus", false)
 						end
@@ -363,5 +423,14 @@ M.window_switcher.ui.showSelectedTitle = false
 -- Watch for application events
 M.app_watcher = hs.application.watcher.new(M.handle_global_event):start()
 M.attach_existing_apps()
+
+local ordered_spaces = M.get_ordered_spaces()
+M.log.f("started hammerspoon with ordered spaces %s", hs.inspect.inspect(ordered_spaces))
+hs.notify
+	.new({
+		title = "Hammerspoon",
+		informativeText = "Started hammerspoon with ordered spaces " .. hs.inspect.inspect(ordered_spaces),
+	})
+	:send()
 
 return M

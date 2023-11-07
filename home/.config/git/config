@@ -38,11 +38,10 @@
     rebase = true
 [credential]
     helper = cache
-	helper = 
-	helper = /usr/local/share/gcm-core/git-credential-manager
 	guiPrompt = false
 	gitLabAuthModes = pat
 	credentialStore = keychain
+	helper = /usr/local/share/gcm-core/git-credential-manager
 [color "branch"]
     current = yellow reverse
     local = yellow

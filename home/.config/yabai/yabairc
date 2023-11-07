@@ -74,8 +74,7 @@ yabai -m rule --add app="^Signal$" space=9
 yabai -m rule --add title="^float-term$" manage=off
 yabai -m rule --add title="^Hammerspoon Console$" manage=off
 # by app and title
-yabai -m rule --add app="^Microsoft Outlook$" title="^Outlook Settings$" manage=off
-yabai -m rule --add app="^Microsoft Outlook$" title="^Rules$" manage=off
+yabai -m rule --add app="^Microsoft Outlook$" title="^(Outlook Settings|Rules|Categories)$" manage=off
 # by app
 yabai -m rule --add app="^Preview$" manage=off
 yabai -m rule --add app="^Font Book$" manage=off
