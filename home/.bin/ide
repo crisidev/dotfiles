@@ -47,7 +47,7 @@ function open_in_ide() {
 
 # main switch
 case $1 in
-    *help*)
+    --help)
         usage
         ;;
     new)

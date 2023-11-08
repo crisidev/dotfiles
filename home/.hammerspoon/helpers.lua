@@ -210,27 +210,51 @@ M.ensure_all_spaces_are_present = function()
 		local spaces_per_display = 5
 		local main_spaces = hs.spaces.spacesForScreen()
 		local main_spaces_len = M.length(main_spaces)
-		if spaces_per_display > main_spaces_len then
-			for i = 1, spaces_per_display - main_spaces_len do
-				hs.spaces.addSpaceToScreen(hs.screen.mainScreen(), true)
-			end
-		elseif spaces_per_display < main_spaces_len then
-			for i = #main_spaces, 1, -1 do
-				if i > spaces_per_display then
-					hs.spaces.removeSpace(main_spaces[i], true)
+		if main_spaces then
+			if spaces_per_display > main_spaces_len then
+				for i = 1, spaces_per_display - main_spaces_len do
+					M.log.df(
+						"ensure_all_spaces_are_present(): %d spaces on main display is less than %d spaces, adding space to main display",
+						main_spaces_len,
+						spaces_per_display
+					)
+					hs.spaces.addSpaceToScreen(hs.screen.mainScreen(), true)
+				end
+			elseif spaces_per_display < main_spaces_len then
+				for i = #main_spaces, 1, -1 do
+					M.log.df(
+						"ensure_all_spaces_are_present(): %d spaces on main display is more than %d spaces, removing space to main display",
+						main_spaces_len,
+						spaces_per_display
+					)
+					if i > spaces_per_display then
+						hs.spaces.removeSpace(main_spaces[i], true)
+					end
 				end
 			end
 		end
 		local macbook_spaces = hs.spaces.spacesForScreen(M.screen_macbook)
 		local macbook_spaces_len = M.length(macbook_spaces)
-		if spaces_per_display > macbook_spaces_len then
-			for i = 1, spaces_per_display - macbook_spaces_len do
-				hs.spaces.addSpaceToScreen(M.screen_macbook, true)
-			end
-		elseif spaces_per_display < macbook_spaces_len then
-			for i = #macbook_spaces, 1, -1 do
-				if i > spaces_per_display then
-					hs.spaces.removeSpace(macbook_spaces[i], true)
+		if macbook_spaces then
+			if spaces_per_display > macbook_spaces_len then
+				for i = 1, spaces_per_display - macbook_spaces_len do
+					M.log.df(
+						"ensure_all_spaces_are_present(): %d spaces on macbook display is less than %d spaces, adding space to main display",
+						macbook_spaces_len,
+						spaces_per_display
+					)
+					hs.spaces.addSpaceToScreen(M.screen_macbook, true)
+				end
+			elseif spaces_per_display < macbook_spaces_len then
+				for i = #macbook_spaces, 1, -1 do
+					if i > spaces_per_display then
+						M.log.df(
+							"ensure_all_spaces_are_present(): %d spaces on macbook display is more than %d spaces, removing space to main display",
+							macbook_spaces_len,
+							spaces_per_display
+						)
+						hs.spaces.removeSpace(macbook_spaces[i], true)
+					end
 				end
 			end
 		end
@@ -241,10 +265,20 @@ M.ensure_all_spaces_are_present = function()
 		local main_spaces_len = M.length(main_spaces)
 		if spaces_per_display > main_spaces_len then
 			for i = 1, spaces_per_display - main_spaces_len do
+				M.log.df(
+					"ensure_all_spaces_are_present(): %d spaces on macbook display is less than %d spaces, adding space to main display",
+					main_spaces_len,
+					spaces_per_display
+				)
 				hs.spaces.addSpaceToScreen(hs.screen.mainScreen(), true)
 			end
 		elseif spaces_per_display < main_spaces_len then
 			for i = #main_spaces, 1, -1 do
+				M.log.df(
+					"ensure_all_spaces_are_present(): %d spaces on macbook display is more than %d spaces, removing space to main display",
+					main_spaces_len,
+					spaces_per_display
+				)
 				if i > spaces_per_display then
 					hs.spaces.removeSpace(main_spaces[i], true)
 				end
@@ -370,9 +404,11 @@ M.handle_window_event = function(element, _, _, _)
 	if hs.uielement.watcher.focusedWindowChanged then
 		if element and element["application"] then
 			local application = element:application()
+			M.log.df("handle_window_event(): found application %s", application)
 			if application then
 				local app_name = application:title()
 				local window_title = element:title()
+				M.log.df("handle_window_event(): found window for app %s with title", app_name, window_title)
 				local window = element:application():focusedWindow()
 				if window then
 					for _, title in pairs(M.float_windows_to_center) do
