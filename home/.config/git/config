@@ -1,8 +1,6 @@
 [user]
     email = bigo@crisidev.org
     name = Bigo
-    signingKey = 099F4F3AA10B27C97B746F03AEFBBD3BE8C66E4A
-    signingEmail = bigo@crisidev.org
 [color]
     ui = auto
 [pager]
@@ -36,12 +34,6 @@
     default = upstream
 [pull]
     rebase = true
-[credential]
-    helper = cache
-	guiPrompt = false
-	gitLabAuthModes = pat
-	credentialStore = keychain
-	helper = /usr/local/share/gcm-core/git-credential-manager
 [color "branch"]
     current = yellow reverse
     local = yellow
@@ -52,8 +44,6 @@
     untracked = cyan
 [help]
     autocorrect = 20
-[commit]
-    gpgSign = true
 [delta]
     features = decorations
     syntax-theme = Monokai Extended
@@ -63,5 +53,3 @@
     file-style = bold blue ul
     file-decoration-style = none
     hunk-header-style = omit
-[credential "https://dev.azure.com"]
-	useHttpPath = true

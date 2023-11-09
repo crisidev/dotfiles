@@ -5,7 +5,7 @@
 add_newline = false
 command_timeout = 1000
 
-format = """[❯](red)[❯](yellow)[❯](green) $hostname$directory"""
+format = """[❯](red)[❯](yellow)[❯](green) dev-dsk $directory"""
 right_format = """
 $git_branch\
 $git_state\

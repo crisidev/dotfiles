@@ -8,9 +8,8 @@ fi
 
 # paths
 MY_PATH="$HOME/.bin:$HOME/.local/share/lvim/mason/bin:/opt/homebrew/bin"
-BREW_PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:/opt/homebrew/opt/coreutils/libexec/gnubin:/opt/homebrew/opt/grep/libexec/gnubin:/opt/homebrew/opt/ssh-copy-id/bin:/opt/homebrew/opt/gnu-tar/libexec/gnubin:/opt/homebrew/opt/llvm/bin"
 SYSTEM_PATH="/usr/local/bin"
-export PATH="$MY_PATH:$BREW_PATH:$SYSTEM_PATH:$PATH"
+export PATH="$MY_PATH:$SYSTEM_PATH:$PATH"
 
 # configure fzf history search
 export ZSH_FZF_HISTORY_SEARCH_BIND="^f"
@@ -19,7 +18,7 @@ export ZSH_FZF_HISTORY_SEARCH_FZF_ARGS="+s +m +x -e --height 40% --reverse"
 # configure antidote
 autoload -Uz compinit
 compinit
-source /opt/homebrew/opt/antidote/share/antidote/antidote.zsh
+source $HOME/.antidote/antidote.zsh
 antidote load $HOME/.zsh_plugins
 
 # options
@@ -64,18 +63,11 @@ export VISUAL="$(which lvim)"
 export MANPAGER="$(which lvim) +Man!"
 export XDG_CONFIG_HOME="$HOME/.config"
 
-# lesspipe
-export LESSOPEN="|/opt/homebrew/bin/lesspipe.sh %s"
-
 # Rustc
 # export RUSTC_WRAPPER=$HOME/.cargo/bin/sccache
 
 # fzf
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude build'
-
-# brew
-_evalcache /opt/homebrew/bin/brew shellenv
-FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
 
 # direnv
 if which direnv > /dev/null; then
@@ -94,31 +86,5 @@ fi
 
 # aws cli completer
 complete -C "$(rtx which aws)_completer" aws
-
-# complete jira
-if which jira > /dev/null; then
-    _evalcache jira completion zsh
-fi
-
-# export cross toolchains
-# needed to compile for x86 linux
-export CC_x86_64_unknown_linux_gnu=x86_64-unknown-linux-gnu-gcc
-export CXX_x86_64_unknown_linux_gnu=x86_64-unknown-linux-gnu-g++
-export AR_x86_64_unknown_linux_gnu=x86_64-unknown-linux-gnu-ar
-export CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER=x86_64-unknown-linux-gnu-gcc
-export CC_x86_64_unknown_linux_musl=x86_64-unknown-linux-musl-gcc
-export CXX_x86_64_unknown_linux_musl=x86_64-unknown-linux-musl-g++
-export AR_x86_64_unknown_linux_musl=x86_64-unknown-linux-musl-ar
-export CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_LINKER=x86_64-unknown-linux-musl-gcc
-
-# needed to compile for arm64 linux
-export CC_AARCH64_unknown_linux_gnu=aarch64-unknown-linux-gnu-gcc
-export CXX_AARCH64_unknown_linux_gnu=aarch64-unknown-linux-gnu-g++
-export AR_AARCH64_unknown_linux_gnu=aarch64-unknown-linux-gnu-ar
-export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-unknown-linux-gnu-gcc
-export CC_AARCH64_unknown_linux_musl=aarch64-unknown-linux-musl-gcc
-export CXX_AARCH64_unknown_linux_musl=aarch64-unknown-linux-musl-g++
-export AR_AARCH64_unknown_linux_musl=aarch64-unknown-linux-musl-ar
-export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER=aarch64-unknown-linux-musl-gcc
 
 # zprof
