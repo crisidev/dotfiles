@@ -15,7 +15,7 @@ update() {
 mouse_clicked() {
     if [ "$BUTTON" = "right" ]; then
         "$HOME/.bin/hs" -c "return hs.spaces.removeSpace($SID)"
-        sketchybar --trigger windows_on_spaces --trigger space_change
+        sketchybar --trigger windows_on_spaces
     else
         "$HOME/.bin/hs" -c "return hs.helpers.focus_space($SID)"
     fi

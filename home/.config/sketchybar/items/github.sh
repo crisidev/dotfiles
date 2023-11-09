@@ -26,5 +26,6 @@ sketchybar --add event github.update \
     --set github.bell "${github_bell[@]}" \
     --subscribe github.bell mouse.clicked \
                             github.update \
+                            system_woke   \
     --add item github.template popup.github.bell \
     --set github.template "${github_template[@]}"

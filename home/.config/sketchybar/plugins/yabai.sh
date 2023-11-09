@@ -5,7 +5,7 @@ window_state() {
     source "$CONFIG_DIR/colors.sh"
     source "$CONFIG_DIR/icons.sh"
 
-    WINDOW=$("$HOME/.bin/yabai" -m query --windows --window)
+    WINDOW=$("/opt/homebrew/bin/yabai" -m query --windows --window)
     STACK_INDEX=$(echo "$WINDOW" | jq '.["stack-index"]')
 
     COLOR=$BAR_BORDER_COLOR
@@ -21,14 +21,13 @@ window_state() {
         ICON+=$YABAI_PARENT_ZOOM
         COLOR=$BLUE
     elif [[ $STACK_INDEX -gt 0 ]]; then
-        LAST_STACK_INDEX=$("$HOME/.bin/yabai" -m query --windows --window stack.last | jq '.["stack-index"]')
+        LAST_STACK_INDEX=$("/opt/homebrew/bin/yabai" -m query --windows --window stack.last | jq '.["stack-index"]')
         ICON+=$YABAI_STACK
         LABEL="$(printf "[%s/%s]" "$STACK_INDEX" "$LAST_STACK_INDEX")"
         COLOR=$RED
     fi
 
-    args=(--animate sin 10 --bar border_color="$COLOR"
-        --set "$NAME" icon.color="$COLOR")
+    args=(--bar border_color=$COLOR --animate sin 10 --set $NAME icon.color=$COLOR)
 
     [ -z "$LABEL" ] && args+=(label.width=0) ||
         args+=(label="$LABEL" label.width=40)
@@ -44,7 +43,7 @@ windows_on_spaces() {
 }
 
 mouse_clicked() {
-    "$HOME/.bin/yabai" -m window --toggle float
+    "/opt/homebrew/bin/yabai" -m window --toggle float
     window_state
 }
 

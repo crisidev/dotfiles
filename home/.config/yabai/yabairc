@@ -6,24 +6,24 @@ set -x
 yabai -m signal --add event=window_focused action="/opt/homebrew/bin/sketchybar --trigger window_focus"
 yabai -m signal --add event=window_created action="/opt/homebrew/bin/sketchybar --trigger windows_on_spaces"
 yabai -m signal --add event=window_destroyed action="/opt/homebrew/bin/sketchybar --trigger windows_on_spaces"
-yabai -m signal --add event=display_added action="sleep 2 && $HOME/.bin/hs -c \"return hs.helpers.ensure_all_spaces_are_present()\" && sketchybar --trigger space_change --trigger windows_on_spaces"
-yabai -m signal --add event=display_removed action="sleep 1 && $HOME/.bin/hs -c \"return hs.helpers.ensure_all_spaces_are_present()\" && sketchybar --trigger space_change --trigger windows_on_spaces"
+yabai -m signal --add event=display_added action="sleep 2 && $HOME/.bin/hs -c \"return hs.helpers.ensure_all_spaces_are_present()\" && sketchybar --trigger windows_on_spaces"
+yabai -m signal --add event=display_removed action="sleep 1 && $HOME/.bin/hs -c \"return hs.helpers.ensure_all_spaces_are_present()\" && sketchybar --trigger windows_on_spaces"
 ## make all non resizable windows that
 # yabai -m signal --add event=window_created action='yabai -m query --windows --window $YABAI_WINDOW_ID | jq -er ".\"can-resize\" or .\"is-floating\"" || yabai -m window $YABAI_WINDOW_ID --toggle float --grid 3:3:1:1:1:1'
 
 # global settings
-yabai -m config mouse_follows_focus        on
-yabai -m config focus_follows_mouse        autofocus
-yabai -m config window_zoom_persist        off
-yabai -m config window_placement           second_child
-yabai -m config window_shadow              on
-yabai -m config window_opacity             on
-yabai -m config window_opacity_duration    0.2
-yabai -m config active_window_opacity      1.0
-yabai -m config normal_window_opacity      0.95
-yabai -m config split_ratio                0.50
-yabai -m config auto_balance               off
-yabai -m config auto_padding               on
+yabai -m config mouse_follows_focus on
+yabai -m config focus_follows_mouse autofocus
+yabai -m config window_zoom_persist off
+yabai -m config window_placement second_child
+yabai -m config window_shadow on
+yabai -m config window_opacity on
+yabai -m config window_opacity_duration 0.2
+yabai -m config active_window_opacity 1.0
+yabai -m config normal_window_opacity 0.95
+yabai -m config split_ratio 0.50
+yabai -m config auto_balance off
+yabai -m config auto_padding on
 
 # paddings, bar and gaps
 TOP_PADDING=6
@@ -32,18 +32,18 @@ if [ "$DISPLAYS" -gt 1 ]; then
     TOP_PADDING=8
 fi
 
-yabai -m config external_bar               all:35:0
-yabai -m config top_padding                "$TOP_PADDING"
-yabai -m config bottom_padding             8
-yabai -m config left_padding               8
-yabai -m config right_padding              8
-yabai -m config window_gap                 8
+yabai -m config external_bar all:35:0
+yabai -m config top_padding "$TOP_PADDING"
+yabai -m config bottom_padding 8
+yabai -m config left_padding 8
+yabai -m config right_padding 8
+yabai -m config window_gap 8
 
 # mouse settings
-yabai -m config mouse_modifier             cmd
-yabai -m config mouse_action1              move
-yabai -m config mouse_action2              resize
-yabai -m config mouse_drop_action          swap
+yabai -m config mouse_modifier cmd
+yabai -m config mouse_action1 move
+yabai -m config mouse_action2 resize
+yabai -m config mouse_drop_action swap
 
 # rename spaces
 yabai -m space 1 --label terminal
@@ -69,33 +69,22 @@ yabai -m rule --add app="^WhatsApp$" space=7
 yabai -m rule --add app="^Telegram$" space=8
 yabai -m rule --add app="^Signal$" space=9
 
-# unmanaged
-# by title
-yabai -m rule --add title="^float-term$" manage=off
-yabai -m rule --add title="^Hammerspoon Console$" manage=off
-# by app and title
-yabai -m rule --add app="^Microsoft Outlook$" title="^(Outlook Settings|Rules|Categories)$" manage=off
-# by app
-yabai -m rule --add app="^Preview$" manage=off
-yabai -m rule --add app="^Font Book$" manage=off
-yabai -m rule --add app="^Archive Utility$" manage=off
-yabai -m rule --add app="^Installer$" manage=off
-yabai -m rule --add app="^iStat Menus$" manage=off sticky=off
-yabai -m rule --add app="^Stats$" manage=off sticky=off
-yabai -m rule --add app="^Company Portal$" manage=off
-yabai -m rule --add app="^App Store$" manage=off
-yabai -m rule --add app="^System Settings$" manage=off
-yabai -m rule --add app="^System Preferences$" manage=off
-yabai -m rule --add app="^Finder$" manage=off
-yabai -m rule --add app="^Bitwarden$" manage=off
-yabai -m rule --add app="^1Password$" manage=off
-yabai -m rule --add app="^The Unarchiver$" manage=off
-yabai -m rule --add app="^AppCleaner$" manage=off
-yabai -m rule --add app="^Activity Monitor$" manage=off
-yabai -m rule --add app="^Color Picker$" manage=off
-yabai -m rule --add app="^Weather$" manage=off
-yabai -m rule --add app="^Software Update$" manage=off
-yabai -m rule --add app="^System Information$" manage=off
+# unmanaged windows by app
+jq -r '.apps | keys[]' "$HOME/.config/yabai/windows.json" | while read -r app; do
+    yabai -m rule --add app="^$app\$" manage=off
+done
+
+# unmanaged windows by title
+jq -r '.titles | keys[]' "$HOME/.config/yabai/windows.json" | while read -r title; do
+    yabai -m rule --add title="^$title\$" manage=off
+done
+
+# unmanaged windows by app and title
+jq -r '.apps_and_titles | to_entries[] | "\(.key)|\(.value.titles[])"' "$HOME/.config/yabai/windows.json" | while read -r app_and_title; do
+    app=$(echo "$app_and_title" | cut -d'|' -f1)
+    title=$(echo "$app_and_title" | cut -d'|' -f2)
+    yabai -m rule --add app="^$app$" title="^$title$" manage=off
+done
 
 # layout
 yabai -m config layout bsp

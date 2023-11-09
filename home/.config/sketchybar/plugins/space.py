@@ -171,10 +171,10 @@ def to_formatted_icons(apps):
 
 home = os.path.expanduser("~")
 available_spaces = {}
-yabai_spaces = json.loads(os.popen(f"{home}/.bin/yabai -m query --spaces").read())
+yabai_spaces = json.loads(os.popen("/opt/homebrew/bin/yabai -m query --spaces").read())
 for space in yabai_spaces:
     available_spaces[space["index"]] = {}
-apps = json.loads(os.popen(f"{home}/.bin/yabai -m query --windows").read())
+apps = json.loads(os.popen("/opt/homebrew/bin/yabai -m query --windows").read())
 for app in apps:
     available_spaces[app["space"]] = available_spaces.get(app["space"], {})
     available_spaces[app["space"]][app["app"]] = available_spaces[app["space"]].get(app["app"], 0) + 1
