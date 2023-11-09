@@ -100,6 +100,10 @@ if which jira > /dev/null; then
     _evalcache jira completion zsh
 fi
 
+zstyle ':completion:*:(ssh|scp|rsync):*' ignored-patterns '*(.|:)*'
+zstyle ':completion:*:(ssh|scp|rsync):*' hosts
+zstyle ':completion:*:(ssh|scp|rsync):*' users
+
 # export cross toolchains
 # needed to compile for x86 linux
 export CC_x86_64_unknown_linux_gnu=x86_64-unknown-linux-gnu-gcc

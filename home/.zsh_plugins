@@ -1,6 +1,7 @@
 ohmyzsh/ohmyzsh path:lib
 ohmyzsh/ohmyzsh path:plugins/command-not-found
 ohmyzsh/ohmyzsh path:plugins/history
+ohmyzsh/ohmyzsh path:plugins/ssh-agent
 
 zsh-users/zsh-completions
 zsh-users/zsh-autosuggestions

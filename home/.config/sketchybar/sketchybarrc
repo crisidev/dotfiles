@@ -82,6 +82,7 @@ source "$ITEM_DIR/volume.sh"
 source "$ITEM_DIR/mic.sh"
 # source "$ITEM_DIR/cpu.sh"
 source "$ITEM_DIR/stats.sh"
+source "$ITEM_DIR/svim.sh"
 source "$ITEM_DIR/weather.sh"
 source "$ITEM_DIR/spotify.sh"
 
