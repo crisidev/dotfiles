@@ -78,6 +78,7 @@ done
 jq -r '.titles | keys[]' "$HOME/.config/yabai/windows.json" | while read -r title; do
     yabai -m rule --add title="^$title\$" manage=off
 done
+yabai -m rule --add title="^.*WhatsApp Voice Call$" manage=off
 
 # unmanaged windows by app and title
 jq -r '.apps_and_titles | to_entries[] | "\(.key)|\(.value.titles[])"' "$HOME/.config/yabai/windows.json" | while read -r app_and_title; do
@@ -92,7 +93,7 @@ yabai -m config layout bsp
 # reload sketchybar
 "$HOME/.bin/hs" -c "return hs.helpers.cycle_all_spaces_mission_control()"
 sleep 0.2
-sketchybar --trigger mic_update --trigger window_focus --trigger front_app_switched --trigger wifi_change --trigger space_change --trigger windows_on_space
+sketchybar --trigger mic_update --trigger window_focus --trigger front_app_switched --trigger wifi_change --trigger space_change --trigger windows_on_spaces
 
 # add borders
 LANG="en_US.UTF-8" /opt/homebrew/opt/borders/bin/borders active_color=0xff939ab7 inactive_color=0xff494d64 width=4.0 2>/dev/null 1>&2 &
