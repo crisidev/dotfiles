@@ -3,9 +3,9 @@
 set -x
 
 # signals
-yabai -m signal --add event=window_focused action="/opt/homebrew/bin/sketchybar --trigger window_focus"
-yabai -m signal --add event=window_created action="/opt/homebrew/bin/sketchybar --trigger windows_on_spaces"
-yabai -m signal --add event=window_destroyed action="/opt/homebrew/bin/sketchybar --trigger windows_on_spaces"
+# yabai -m signal --add event=window_focused action="/opt/homebrew/bin/sketchybar --trigger window_focus"
+# yabai -m signal --add event=window_created action="/opt/homebrew/bin/sketchybar --trigger windows_on_spaces"
+# yabai -m signal --add event=window_destroyed action="/opt/homebrew/bin/sketchybar --trigger windows_on_spaces"
 yabai -m signal --add event=display_added action="sleep 2 && $HOME/.bin/hs -c \"return hs.helpers.ensure_all_spaces_are_present()\" && sketchybar --trigger windows_on_spaces"
 yabai -m signal --add event=display_removed action="sleep 1 && $HOME/.bin/hs -c \"return hs.helpers.ensure_all_spaces_are_present()\" && sketchybar --trigger windows_on_spaces"
 ## make all non resizable windows that

@@ -171,20 +171,24 @@ def to_formatted_icons(apps):
 
 home = os.path.expanduser("~")
 available_spaces = {}
-yabai_spaces = json.loads(os.popen("/opt/homebrew/bin/yabai -m query --spaces").read())
-for space in yabai_spaces:
-    available_spaces[space["index"]] = {}
-apps = json.loads(os.popen("/opt/homebrew/bin/yabai -m query --windows").read())
-for app in apps:
-    available_spaces[app["space"]] = available_spaces.get(app["space"], {})
-    available_spaces[app["space"]][app["app"]] = available_spaces[app["space"]].get(app["app"], 0) + 1
+try:
+    yabai_spaces = json.loads(os.popen("/opt/homebrew/bin/yabai -m query --spaces").read())
+except json.decoder.JSONDecodeError:
+    pass
+else:
+    for space in yabai_spaces:
+        available_spaces[space["index"]] = {}
+    apps = json.loads(os.popen("/opt/homebrew/bin/yabai -m query --windows").read())
+    for app in apps:
+        available_spaces[app["space"]] = available_spaces.get(app["space"], {})
+        available_spaces[app["space"]][app["app"]] = available_spaces[app["space"]].get(app["app"], 0) + 1
 
-args = ""
-for space, apps in available_spaces.items():
-    if apps:
-        args += f' --set space.{space} label="{to_formatted_icons(apps)}" label.drawing=on'
-    else:
-        args += f' --set space.{space} label.drawing=off'
-default_args = "--set '/space\..*/' background.drawing=on --animate sin 10"
+    args = ""
+    for space, apps in available_spaces.items():
+        if apps:
+            args += f' --set space.{space} label="{to_formatted_icons(apps)}" label.drawing=on'
+        else:
+            args += f' --set space.{space} label.drawing=off'
+    default_args = "--set '/space\..*/' background.drawing=on --animate sin 10"
 
-os.system(f"sketchybar -m {default_args} {args}")
+    os.system(f"sketchybar -m {default_args} {args}")

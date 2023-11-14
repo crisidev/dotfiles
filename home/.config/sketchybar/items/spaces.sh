@@ -33,12 +33,7 @@ for i in "${!SPACE_ICONS[@]}"; do
         --subscribe space.$sid mouse.clicked
 done
 
-spaces_bracket=(
-    background.color="$BACKGROUND_1"
-    background.border_color="$BACKGROUND_2"
-)
-
-separator=(
+space_creator=(
     icon=􀆊
     icon.font="$FONT:Heavy:16.0"
     padding_left=10
@@ -46,11 +41,10 @@ separator=(
     label.drawing=off
     display=active
     click_script="$HOME/.bin/hs -c \"return hs.spaces.addSpaceToScreen(hs.screen.mainScreen(), true)\""
+    script="$PLUGIN_DIR/space_windows.sh"
     icon.color="$WHITE"
 )
 
-sketchybar --add bracket spaces_bracket '/space\..*/' \
-    --set spaces_bracket "${spaces_bracket[@]}" \
-    \
-    --add item separator left \
-    --set separator "${separator[@]}"
+sketchybar --add item space_creator left \
+    --set space_creator "${space_creator[@]}" \
+    --subscribe space_creator space_windows_change
