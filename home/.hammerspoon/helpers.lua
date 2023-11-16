@@ -7,6 +7,7 @@ local M = {}
 M.screen_macbook = "37D8832A-2D66-02CA-B9F7-8F30A301B230"
 M.yabai_bin = "/opt/homebrew/bin/yabai"
 M.sketchybar_bin = "/opt/homebrew/bin/sketchybar"
+M.kitty_bin = "/Applications/kitty.app/Contents/MacOS/kitty"
 M.previous_space = 1
 M.app_watchers = {}
 M.windows_configuration_file = homedir .. "/.config/yabai/windows.json"

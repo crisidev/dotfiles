@@ -4,14 +4,6 @@ local homedir = os.getenv("HOME")
 ------------------------------------------
 hs.loadSpoon("EmmyLua")
 hs.loadSpoon("MicMute")
-hs.loadSpoon("ReloadConfiguration")
-
--- Reload config.
-spoon.ReloadConfiguration.watch_paths = {
-    hs.configdir,
-    homedir .. "/.homesick/repos/dotfiles/home/.hammerspoon",
-}
-spoon.ReloadConfiguration:start()
 
 -- Clipboard
 hs.loadSpoon("TextClipboardHistory")
@@ -32,17 +24,16 @@ spoon.AppBindings:bind("Microsoft Teams (work or school)", {
 require("hs.ipc")
 local helpers = require("helpers")
 hs["helpers"] = helpers
-local kitty_bin = "/Applications/kitty.app/Contents/MacOS/kitty"
 
 ------------------------------------------
 -- Keybindings
 ------------------------------------------
 -- Open terminals
 hs.hotkey.bind({ "cmd" }, "return", function()
-    os.execute(kitty_bin .. " --single-instance --instance-group=1 ~ &")
+    os.execute(helpers.kitty_bin .. " --single-instance --instance-group=1 ~ &")
 end)
 hs.hotkey.bind({ "cmd", "option" }, "return", function()
-    os.execute(kitty_bin .. " --single-instance --instance-group=1 --title=float-term ~ &")
+    os.execute(helpers.kitty_bin .. " --single-instance --instance-group=1 --title=float-term ~ &")
 end)
 
 -- Open neovide

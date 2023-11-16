@@ -84,3 +84,7 @@ function weather {
   local city=$(curl -s https://ipvigilante.com/$(curl -s https://ipinfo.io/ip) | jq -r '.data.city_name')
   curl --silent "wttr.in/${city}?m" | grep -v Follow
 }
+
+function enable-sudo-touchid() {
+  sudo sed -i -e '1s;^;auth       sufficient     pam_tid.so\n;' /etc/pam.d/sudo
+}
