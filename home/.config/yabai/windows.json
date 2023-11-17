@@ -32,7 +32,8 @@
                 "Outlook Settings",
                 "Rules",
                 "Categories",
-                "General"
+                "General",
+                ".*Calendar • Omniva"
             ],
             "manage": true
         }
