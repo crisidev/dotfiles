@@ -26,3 +26,4 @@ alias htop="sudo htop"
 alias ssm="sshm"
 alias ssr="sshm -s"
 alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
+alias beachballing='~/.bin/hs -t 30 -c "hs.inspect(hs.window._timed_allWindows())" |sed "s/\[//g" | sed "s/\]//g" |sed "s/=/:/g"'
