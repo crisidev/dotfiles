@@ -12,6 +12,7 @@ M.previous_space = 1
 M.app_watchers = {}
 M.windows_configuration_file = homedir .. "/.config/yabai/windows.json"
 M.windows_configuration = {}
+M.focused_screen_for_floating_windows = nil
 M.all_spaces = hs.spaces.allSpaces()
 M.ordered_spaces = {}
 M.log = hs.logger.new("helpers", "info")
@@ -309,20 +310,12 @@ M.ensure_all_spaces_are_present = function()
 	M.update_cache()
 end
 
--- Move windows to spaces
-M.move_current_window_to_space = function(space)
-	local win = hs.window.focusedWindow() -- current window
-	local space_id = M.ordered_spaces[space]
-	M.log.df("move_current_window_to_space(): moving window %s to space %d [%d]", win:title(), space, space_id)
-	hs.spaces.moveWindowToSpace(win:id(), space_id)
-end
-
 -- Cycle all mission control spaces
 M.cycle_all_spaces_mission_control = function()
 	local current_space = hs.spaces.focusedSpace()
 	for i = 1, 10 do
 		M.focus_space(i)
-		os.execute("sleep 0.3")
+		hs.execute("sleep 0.3", false)
 	end
 	M.focus_space(M.index_of(M.ordered_spaces, current_space))
 end
@@ -442,20 +435,20 @@ M.handle_window_event = function(element, _, _, _)
 					for app, manage in pairs(M.windows_configuration.apps) do
 						if app_name and app_name == app and manage == true then
 							M.log.df("handle_window_event(): centering window for app %s", app_name)
-							window:centerOnScreen(nil, true, 0)
+							window:centerOnScreen(M.focused_screen_for_floating_windows, true, 0)
 							hs.execute(M.sketchybar_bin .. " --trigger window_focus", false)
 							return
 						end
 					end
 					-- Title only
 					for title, manage in pairs(M.windows_configuration.titles) do
-						if window_title and window_title:find(title) and manage == true then
+						if window_title and (window_title == title or window_title:find(title)) and manage == true then
 							M.log.df(
 								"handle_window_event(): centering window for app %s, title %s",
 								app_name,
 								window_title
 							)
-							window:centerOnScreen(nil, true, 0)
+							window:centerOnScreen(M.focused_screen_for_floating_windows, true, 0)
 							hs.execute(M.sketchybar_bin .. " --trigger window_focus", false)
 							return
 						end
@@ -467,7 +460,7 @@ M.handle_window_event = function(element, _, _, _)
 								app
 								and window_title
 								and app_name == app
-								and window_title:find(title)
+								and (window_title == title or window_title:find(title))
 								and config.manage == true
 							then
 								M.log.df(
@@ -475,7 +468,7 @@ M.handle_window_event = function(element, _, _, _)
 									app_name,
 									window_title
 								)
-								window:centerOnScreen(nil, true, 0)
+								window:centerOnScreen(M.focused_screen_for_floating_windows, true, 0)
 								hs.execute(M.sketchybar_bin .. " --trigger window_focus", false)
 								return
 							end
@@ -484,7 +477,12 @@ M.handle_window_event = function(element, _, _, _)
 				end
 			end
 		end
+		M.focused_screen_for_floating_windows = nil
 	end
+end
+
+M.set_focused_screen_for_floating_windows_to_current_screen = function ()
+    M.focused_screen_for_floating_windows = hs.screen.mainScreen()
 end
 
 -- Add a watcher for a new app
