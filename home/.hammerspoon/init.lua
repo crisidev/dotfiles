@@ -30,16 +30,16 @@ hs["helpers"] = helpers
 ------------------------------------------
 -- Open terminals
 hs.hotkey.bind({ "cmd" }, "return", function()
-	hs.execute(helpers.kitty_bin .. " --single-instance --instance-group=1 ~ &", false)
+	os.execute(helpers.kitty_bin .. " --single-instance --instance-group=1 ~ &")
 end)
 hs.hotkey.bind({ "cmd", "option" }, "return", function()
     helpers.set_focused_screen_for_floating_windows_to_current_screen()
-	hs.execute(helpers.kitty_bin .. " --single-instance --instance-group=1 --title=float-term ~ &", false)
+	os.execute(helpers.kitty_bin .. " --single-instance --instance-group=1 --title=float-term ~ &")
 end)
 
 -- Open neovide
 hs.hotkey.bind({ "cmd", "shift" }, "e", function()
-	hs.execute(homedir .. "/.bin/ide", true)
+	os.execute(homedir .. "/.bin/ide")
 end)
 
 -- Open finder
@@ -55,14 +55,14 @@ end)
 -- Toggle mic mute
 hs.hotkey.bind({ "fn" }, "f10", function()
 	spoon.MicMute:toggleMicMute()
-	hs.execute(helpers.sketchybar_bin .. " --trigger mic_update", false)
+	os.execute(helpers.sketchybar_bin .. " --trigger mic_update")
 end)
 
 -- Restart yabai
 hs.hotkey.bind({ "cmd", "option" }, "y", function()
 	---@diagnostic disable-next-line: undefined-field
 	hs.notify.new({ title = "Hammerspoon", informativeText = "Restarting yabai" }):send()
-	hs.execute(helpers.yabai_bin .. " --restart-service")
+	os.execute(helpers.yabai_bin .. " --restart-service")
 end)
 
 -- Restart hammerspoon
@@ -76,7 +76,7 @@ end)
 hs.hotkey.bind({ "cmd", "option" }, "n", function()
 	---@diagnostic disable-next-line: undefined-field
 	hs.notify.new({ title = "Hammerspoon", informativeText = "Going to sleep" }):send()
-	hs.execute("sleep 1", false)
+	os.execute("sleep 1")
 	hs.osascript.applescript('tell app "System Events" to sleep')
 end)
 
@@ -105,12 +105,12 @@ end)
 -- Toggle window fullscreen
 hs.hotkey.bind({ "cmd", "shift" }, "f", function()
 	helpers.yabai({ "-m", "window", "--toggle", "zoom-fullscreen" })
-	hs.execute(helpers.sketchybar_bin .. " --trigger window_focus", false)
+	os.execute(helpers.sketchybar_bin .. " --trigger window_focus")
 end)
 -- Toggle float and center window
 hs.hotkey.bind({ "cmd" }, "\\", function()
 	helpers.yabai({ "-m", "window", "--toggle", "float", "--grid", "4:4:1:1:2:2" })
-	hs.execute(helpers.sketchybar_bin .. " --trigger window_focus", false)
+	os.execute(helpers.sketchybar_bin .. " --trigger window_focus")
 end)
 
 -- Focus space

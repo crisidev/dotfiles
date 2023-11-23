@@ -315,7 +315,7 @@ M.cycle_all_spaces_mission_control = function()
 	local current_space = hs.spaces.focusedSpace()
 	for i = 1, 10 do
 		M.focus_space(i)
-		hs.execute("sleep 0.3", false)
+		os.execute("sleep 0.3")
 	end
 	M.focus_space(M.index_of(M.ordered_spaces, current_space))
 end
@@ -436,7 +436,7 @@ M.handle_window_event = function(element, _, _, _)
 						if app_name and app_name == app and manage == true then
 							M.log.df("handle_window_event(): centering window for app %s", app_name)
 							window:centerOnScreen(M.focused_screen_for_floating_windows, true, 0)
-							hs.execute(M.sketchybar_bin .. " --trigger window_focus", false)
+							os.execute(M.sketchybar_bin .. " --trigger window_focus")
 							return
 						end
 					end
@@ -449,7 +449,7 @@ M.handle_window_event = function(element, _, _, _)
 								window_title
 							)
 							window:centerOnScreen(M.focused_screen_for_floating_windows, true, 0)
-							hs.execute(M.sketchybar_bin .. " --trigger window_focus", false)
+							os.execute(M.sketchybar_bin .. " --trigger window_focus")
 							return
 						end
 					end
@@ -469,7 +469,7 @@ M.handle_window_event = function(element, _, _, _)
 									window_title
 								)
 								window:centerOnScreen(M.focused_screen_for_floating_windows, true, 0)
-								hs.execute(M.sketchybar_bin .. " --trigger window_focus", false)
+								os.execute(M.sketchybar_bin .. " --trigger window_focus")
 								return
 							end
 						end

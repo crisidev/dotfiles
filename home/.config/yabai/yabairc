@@ -65,28 +65,32 @@ yabai -m rule --add app="^WhatsApp$" space=7
 yabai -m rule --add app="^Telegram$" space=8
 yabai -m rule --add app="^Signal$" space=9
 
-# ensure neovide is always managed
+# manual rules
 yabai -m rule --add app="^Neovide$" manage=on
-
-# unmanaged windows by app
-jq -r '.apps | keys[]' "$HOME/.config/yabai/windows.json" | while read -r app; do
-    yabai -m rule --add app="^$app\$" manage=off
-done
-
-# unmanaged windows by title
-jq -r '.titles | keys[]' "$HOME/.config/yabai/windows.json" | while read -r title; do
-    yabai -m rule --add title="^$title\$" manage=off
-done
+yabai -m rule --add app="^Skype$" sticky=off
 yabai -m rule --add title="^.*WhatsApp Voice Call$" manage=off
 
-# unmanaged windows by app and title
-jq -r '.apps_and_titles | to_entries[] | "\(.key)|\(.value.titles[])"' "$HOME/.config/yabai/windows.json" | while read -r app_and_title; do
-    app=$(echo "$app_and_title" | cut -d'|' -f1)
-    title=$(echo "$app_and_title" | cut -d'|' -f2)
-    yabai -m rule --add app="^$app$" title="^$title$" manage=off
-done
+# rules from windows.json
+if [ -f "$HOME/.config/yabai/windows.json" ]; then
+    # unmanaged windows by app
+    jq -r '.apps | keys[]' "$HOME/.config/yabai/windows.json" | while read -r app; do
+        yabai -m rule --add app="^$app\$" manage=off
+    done
 
-# layout
+    # unmanaged windows by title
+    jq -r '.titles | keys[]' "$HOME/.config/yabai/windows.json" | while read -r title; do
+        yabai -m rule --add title="^$title\$" manage=off
+    done
+
+    # unmanaged windows by app and title
+    jq -r '.apps_and_titles | to_entries[] | "\(.key)|\(.value.titles[])"' "$HOME/.config/yabai/windows.json" | while read -r app_and_title; do
+        app=$(echo "$app_and_title" | cut -d'|' -f1)
+        title=$(echo "$app_and_title" | cut -d'|' -f2)
+        yabai -m rule --add app="^$app$" title="^$title$" manage=off
+    done
+fi
+
+# layout is always BSP
 yabai -m config layout bsp
 
 # add borders
