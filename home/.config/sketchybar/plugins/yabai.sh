@@ -38,10 +38,6 @@ window_state() {
     sketchybar -m "${args[@]}"
 }
 
-windows_on_spaces() {
-    /usr/bin/python3 "$CONFIG_DIR/plugins/space.py"
-}
-
 mouse_clicked() {
     "/opt/homebrew/bin/yabai" -m window --toggle float
     window_state
@@ -51,13 +47,7 @@ case "$SENDER" in
     "mouse.clicked")
         mouse_clicked
         ;;
-    "forced")
-        exit 0
-        ;;
     "window_focus")
         window_state
-        ;;
-    "windows_on_spaces" | "space_change")
-        windows_on_spaces
         ;;
 esac

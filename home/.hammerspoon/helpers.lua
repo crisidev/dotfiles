@@ -514,6 +514,25 @@ M.attach_existing_apps = function()
 end
 
 ------------------------------------------
+-- Beachballers
+------------------------------------------
+-- Find any application causing Hammerspoon to beachball
+M.find_beachballers = function()
+	---@diagnostic disable-next-line: undefined-field
+	local timed_apps = hs.window._timed_allWindows()
+	for name, time in pairs(timed_apps) do
+		if time > 1.0 then
+			M.log.ef("application %s is slow: %f", name, time)
+			hs
+				.notify
+				.new({ title = "Hammerspoon", informativeText = "Found beachballing application: " .. name })
+				---@diagnostic disable-next-line: undefined-field
+				:send()
+		end
+	end
+end
+
+------------------------------------------
 -- Main
 ------------------------------------------
 -- Include minimized/hidden windows, current Space only

@@ -9,7 +9,7 @@ disable = [
     "containers",
     "nix",
     "toolbx",
-    "pnpm"
+    "pnpm",
 ]
 ignore_failures = ["git_repos"]
 
@@ -20,6 +20,8 @@ pull_only_repos = [
     "~/.homesick/repos/homeshick",
     "~/.homesick/repos/dotfiles",
     "~/.homesick/repos/lvim",
+    # Github stuff
+    "~/github/neovide",
 ]
 pull_arguments = "--ff-only --rebase --autostash"
 

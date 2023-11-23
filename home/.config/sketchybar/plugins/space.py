@@ -3,6 +3,7 @@
 import os
 import json
 import re
+import sys
 
 ICON_MAP = [
     {"regex": r"1Password 7", "icon": ":one_password:"},
@@ -23,9 +24,15 @@ ICON_MAP = [
     {"regex": r"Brave Browser", "icon": ":brave_browser:"},
     {"regex": r"Calendar|Fantastical", "icon": ":calendar:"},
     {"regex": r"Calibre", "icon": ":book:"},
-    {"regex": r"Canary Mail|HEY|Mail|Mailspring|MailMate|邮件|Outlook", "icon": ":mail:"},
+    {
+        "regex": r"Canary Mail|HEY|Mail|Mailspring|MailMate|邮件|Outlook",
+        "icon": ":mail:",
+    },
     {"regex": r"Caprine", "icon": ":caprine:"},
-    {"regex": r"Chromium|Google Chrome|Google Chrome Canary", "icon": ":google_chrome:"},
+    {
+        "regex": r"Chromium|Google Chrome|Google Chrome Canary",
+        "icon": ":google_chrome:",
+    },
     {"regex": r"CleanMyMac X", "icon": ":desktop:"},
     {"regex": r"ClickUp", "icon": ":click_up:"},
     {"regex": r"Code|Code - Insiders", "icon": ":code:"},
@@ -43,7 +50,10 @@ ICON_MAP = [
     {"regex": r"Figma", "icon": ":figma:"},
     {"regex": r"Final Cut Pro", "icon": ":final_cut_pro:"},
     {"regex": r"Finder|访达", "icon": ":finder:"},
-    {"regex": r"Firefox Developer Edition|Firefox Nightly", "icon": ":firefox_developer_edition:"},
+    {
+        "regex": r"Firefox Developer Edition|Firefox Nightly",
+        "icon": ":firefox_developer_edition:",
+    },
     {"regex": r"Firefox", "icon": ":firefox:"},
     {"regex": r"Folx", "icon": ":folx:"},
     {"regex": r"GitHub Desktop", "icon": ":git_hub:"},
@@ -169,26 +179,17 @@ def to_formatted_icons(apps):
     return " ".join([to_formatted_icon(app, cnt) for app, cnt in apps.items()])
 
 
-home = os.path.expanduser("~")
-available_spaces = {}
 try:
-    yabai_spaces = json.loads(os.popen("/opt/homebrew/bin/yabai -m query --spaces").read())
-except json.decoder.JSONDecodeError:
+    input = json.loads(sys.argv[1].strip())
+except KeyError:
     pass
 else:
-    for space in yabai_spaces:
-        available_spaces[space["index"]] = {}
-    apps = json.loads(os.popen("/opt/homebrew/bin/yabai -m query --windows").read())
-    for app in apps:
-        available_spaces[app["space"]] = available_spaces.get(app["space"], {})
-        available_spaces[app["space"]][app["app"]] = available_spaces[app["space"]].get(app["app"], 0) + 1
-
-    args = ""
-    for space, apps in available_spaces.items():
+    space = input.get("space")
+    apps = input.get("apps")
+    if space:
+        args = "--animate sin 10"
         if apps:
             args += f' --set space.{space} label="{to_formatted_icons(apps)}" label.drawing=on'
         else:
-            args += f' --set space.{space} label.drawing=off'
-    default_args = "--set '/space\..*/' background.drawing=on --animate sin 10"
-
-    os.system(f"sketchybar -m {default_args} {args}")
+            args += f" --set space.{space} label.drawing=off"
+        os.system(f"sketchybar -m {args}")

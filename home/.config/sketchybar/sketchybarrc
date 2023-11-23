@@ -88,8 +88,6 @@ source "$ITEM_DIR/spotify.sh"
 
 sketchybar --hotload on
 
-sketchybar --trigger windows_on_spaces
-
 # Forcing all item scripts to run (never do this outside of sketchybarrc)
 sketchybar --update
 
