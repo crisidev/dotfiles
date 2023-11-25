@@ -5,8 +5,11 @@ local homedir = os.getenv "HOME"
 local M = {}
 
 M.screen_macbook = "37D8832A-2D66-02CA-B9F7-8F30A301B230"
+M.screen_benq = "758E5DAE-250B-4686-8171-9BEAA176F7B2"
+M.screen_asus = "D07DE44C-E07F-46BE-925E-8BF395720287"
 M.yabai_bin = "/opt/homebrew/bin/yabai"
 M.sketchybar_bin = "/opt/homebrew/bin/sketchybar"
+M.mirror_bin = "/opt/homebrew/bin/mirror"
 M.kitty_bin = "/Applications/kitty.app/Contents/MacOS/kitty"
 M.previous_space = 1
 M.app_watchers = {}
@@ -94,18 +97,35 @@ M.get_ordered_spaces = function()
     M.log.vf("get_ordered_spaces(): all spaces %s", hs.inspect.inspect(M.all_spaces))
     M.log.vf("get_ordered_spaces(): main screen is %s, macbook screen is %s", screen_main, M.screen_macbook)
     if M.all_spaces then
-        if screen_main ~= M.screen_macbook then
-            local spaces_main = M.all_spaces[screen_main]
-            if spaces_main then
-                for _, space in pairs(spaces_main) do
+        -- Main screen first
+        local spaces_main = M.all_spaces[screen_main]
+        if spaces_main then
+            for _, space in pairs(spaces_main) do
+                table.insert(ordered_spaces, space)
+            end
+        end
+        if screen_main ~= M.screen_benq and M.contains(M.all_spaces, M.screen_benq) then
+            local spaces_benq = M.all_spaces[M.screen_benq]
+            if spaces_benq then
+                for _, space in pairs(spaces_benq) do
                     table.insert(ordered_spaces, space)
                 end
             end
         end
-        local spaces_macbook = M.all_spaces[M.screen_macbook]
-        if spaces_macbook then
-            for _, space in pairs(spaces_macbook) do
-                table.insert(ordered_spaces, space)
+        if screen_main ~= M.screen_asus and M.contains(M.all_spaces, M.screen_asus) then
+            local spaces_asus = M.all_spaces[M.screen_asus]
+            if spaces_asus then
+                for _, space in pairs(spaces_asus) do
+                    table.insert(ordered_spaces, space)
+                end
+            end
+        end
+        if screen_main ~= M.screen_macbook and M.contains(M.all_spaces, M.screen_macbook) then
+            local spaces_macbook = M.all_spaces[M.screen_macbook]
+            if spaces_macbook then
+                for _, space in pairs(spaces_macbook) do
+                    table.insert(ordered_spaces, space)
+                end
             end
         end
     end
@@ -241,7 +261,7 @@ M.ensure_all_spaces_are_present = function()
             elseif spaces_per_display < main_spaces_len then
                 for i = #main_spaces, 1, -1 do
                     M.log.df(
-                        "ensure_all_spaces_are_present(): %d spaces on main display is more than %d spaces, removing space to main display",
+                        "ensure_all_spaces_are_present(): %d spaces on main display is more than %d spaces, removing space from main display",
                         main_spaces_len,
                         spaces_per_display
                     )
@@ -251,27 +271,35 @@ M.ensure_all_spaces_are_present = function()
                 end
             end
         end
-        local macbook_spaces = hs.spaces.spacesForScreen(M.screen_macbook)
-        local macbook_spaces_len = M.length(macbook_spaces)
-        if macbook_spaces then
-            if spaces_per_display > macbook_spaces_len then
-                for _ = 1, spaces_per_display - macbook_spaces_len do
+        local other_spaces = nil
+        local screen_main = hs.screen.primaryScreen():getUUID()
+        if screen_main == M.screen_macbook then
+            M.log.df("ensure_all_spaces_are_present(): second display is asus")
+            other_spaces = hs.spaces.spacesForScreen(M.screen_asus)
+        else
+            M.log.df("ensure_all_spaces_are_present(): second display is macbook")
+            other_spaces = hs.spaces.spacesForScreen(M.screen_macbook)
+        end
+        local other_spaces_len = M.length(other_spaces)
+        if other_spaces then
+            if spaces_per_display > other_spaces_len then
+                for _ = 1, spaces_per_display - other_spaces_len do
                     M.log.df(
-                        "ensure_all_spaces_are_present(): %d spaces on macbook display is less than %d spaces, adding space to main display",
-                        macbook_spaces_len,
+                        "ensure_all_spaces_are_present(): %d spaces on second display is less than %d spaces, adding space to second display",
+                        other_spaces_len,
                         spaces_per_display
                     )
                     hs.spaces.addSpaceToScreen(M.screen_macbook, true)
                 end
-            elseif spaces_per_display < macbook_spaces_len then
-                for i = #macbook_spaces, 1, -1 do
+            elseif spaces_per_display < other_spaces_len then
+                for i = #other_spaces, 1, -1 do
                     if i > spaces_per_display then
                         M.log.df(
-                            "ensure_all_spaces_are_present(): %d spaces on macbook display is more than %d spaces, removing space to main display",
-                            macbook_spaces_len,
+                            "ensure_all_spaces_are_present(): %d spaces on second display is more than %d spaces, removing space from second display",
+                            other_spaces_len,
                             spaces_per_display
                         )
-                        hs.spaces.removeSpace(macbook_spaces[i], true)
+                        hs.spaces.removeSpace(other_spaces[i], true)
                     end
                 end
             end
@@ -306,6 +334,7 @@ M.ensure_all_spaces_are_present = function()
         end
     end
     M.update_cache()
+    os.execute(M.sketchybar_bin .. " --reload")
 end
 
 -- Cycle all mission control spaces
@@ -423,9 +452,11 @@ M.handle_window_event = function(element, _, _, _)
                     window_title,
                     element:id()
                 )
+                -- Handle Outlook reminders
                 if app_name == "Microsoft Outlook" and window_title:find " Reminder" then
                     M.log.df "handle_window_event(): outlook reminder window created, focusing it now"
                     M.yabai { "-m", "window", "--focus", tostring(element:id()) }
+                    return
                 end
                 local window = element:application():focusedWindow()
                 if window then

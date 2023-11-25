@@ -52,6 +52,12 @@ hs.hotkey.bind({ "cmd", "option" }, "l", function()
     hs.caffeinate.lockScreen()
 end)
 
+-- Toggle display mirror
+hs.hotkey.bind({ "cmd", "shift" }, "m", function()
+    os.execute(helpers.mirror_bin)
+    os.execute(helpers.sketchybar_bin .. " --reload")
+end)
+
 -- Toggle mic mute
 hs.hotkey.bind({ "fn" }, "f10", function()
     spoon.MicMute:toggleMicMute()
