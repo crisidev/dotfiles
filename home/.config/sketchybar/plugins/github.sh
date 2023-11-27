@@ -89,7 +89,6 @@ toggle_details() {
         sketchybar --set "$NAME" popup.drawing=off
     else
         sketchybar --set "$NAME" popup.drawing=on
-        update
     fi
 }
 

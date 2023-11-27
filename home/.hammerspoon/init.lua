@@ -43,7 +43,7 @@ hs.hotkey.bind({ "cmd", "shift" }, "e", function()
 end)
 
 -- Open finder
-hs.hotkey.bind({ "cmd", "option" }, "b", function()
+hs.hotkey.bind({ "ctrl" }, "space", function()
     hs.application.launchOrFocus "Finder"
 end)
 
