@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
-set -x
+# set -x
 
 # signals
 yabai -m signal --add event=window_focused action="/opt/homebrew/bin/sketchybar --trigger window_focus"
 yabai -m signal --add event=display_added action="sleep 3 && $HOME/.bin/hs -c \"return hs.helpers.ensure_all_spaces_are_present()\""
 yabai -m signal --add event=display_removed action="sleep 3 && $HOME/.bin/hs -c \"return hs.helpers.ensure_all_spaces_are_present()\""
+yabai -m signal --add event=window_destroyed active=yes action="yabai -m query --windows --window &> /dev/null || yabai -m window --focus mouse &> /dev/null || yabai -m window --focus \$(yabai -m query --windows --space | jq .[0].id) &> /dev/null"
+yabai -m signal --add event=window_minimized active=yes action="if \$(yabai -m query --windows --window \$YABAI_WINDOW_ID | jq -r '.\"is-floating\"'); then yabai -m query --windows --window &> /dev/null || yabai -m window --focus mouse &> /dev/null || yabai -m window --focus \$(yabai -m query --windows --space | jq .[0].id) &> /dev/null; fi"
 
 # global settings
 yabai -m config mouse_follows_focus on

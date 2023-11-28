@@ -90,6 +90,9 @@ toggle_details() {
     else
         sketchybar --set "$NAME" popup.drawing=on
     fi
+    if [ "$BUTTON" = "right" ]; then
+        update
+    fi
 }
 
 update() {

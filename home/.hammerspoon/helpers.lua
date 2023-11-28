@@ -240,6 +240,36 @@ M.focus_space_in_direction = function(direction)
     hs.spaces.gotoSpace(go_to)
 end
 
+-- Helper function to add or remove spaces
+M.add_or_remove_spaces = function(spaces, spaces_per_display, screen)
+    if spaces then
+        local spaces_len = M.length(spaces)
+        if spaces_per_display > spaces_len then
+            for _ = 1, spaces_per_display - spaces_len do
+                M.log.df(
+                    "ensure_all_spaces_are_present(): %d spaces on main display is less than %d spaces, adding space to display %s",
+                    spaces_len,
+                    spaces_per_display,
+                    screen
+                )
+                hs.spaces.addSpaceToScreen(screen, true)
+            end
+        elseif spaces_per_display < spaces_len then
+            for i = #spaces, 1, -1 do
+                M.log.df(
+                    "ensure_all_spaces_are_present(): %d spaces on main display is more than %d spaces, removing space from display %s",
+                    spaces_len,
+                    spaces_per_display,
+                    screen
+                )
+                if i > spaces_per_display then
+                    hs.spaces.removeSpace(spaces[i], true)
+                end
+            end
+        end
+    end
+end
+
 -- Ensure all spaces are present
 M.ensure_all_spaces_are_present = function()
     M.update_cache()
@@ -247,91 +277,21 @@ M.ensure_all_spaces_are_present = function()
     if M.length(M.all_spaces) > 1 then
         local spaces_per_display = 5
         local main_spaces = hs.spaces.spacesForScreen()
-        local main_spaces_len = M.length(main_spaces)
-        if main_spaces then
-            if spaces_per_display > main_spaces_len then
-                for _ = 1, spaces_per_display - main_spaces_len do
-                    M.log.df(
-                        "ensure_all_spaces_are_present(): %d spaces on main display is less than %d spaces, adding space to main display",
-                        main_spaces_len,
-                        spaces_per_display
-                    )
-                    hs.spaces.addSpaceToScreen(hs.screen.mainScreen(), true)
-                end
-            elseif spaces_per_display < main_spaces_len then
-                for i = #main_spaces, 1, -1 do
-                    M.log.df(
-                        "ensure_all_spaces_are_present(): %d spaces on main display is more than %d spaces, removing space from main display",
-                        main_spaces_len,
-                        spaces_per_display
-                    )
-                    if i > spaces_per_display then
-                        hs.spaces.removeSpace(main_spaces[i], true)
-                    end
-                end
-            end
-        end
-        local other_spaces = nil
+        M.add_or_remove_spaces(main_spaces, spaces_per_display, hs.screen.mainScreen():getUUID())
         local screen_main = hs.screen.primaryScreen():getUUID()
         if screen_main == M.screen_macbook then
-            M.log.df("ensure_all_spaces_are_present(): second display is asus")
-            other_spaces = hs.spaces.spacesForScreen(M.screen_asus)
+            M.log.df "ensure_all_spaces_are_present(): second display is asus"
+            local other_spaces = hs.spaces.spacesForScreen(M.screen_asus)
+            M.add_or_remove_spaces(other_spaces, spaces_per_display, M.screen_asus)
         else
-            M.log.df("ensure_all_spaces_are_present(): second display is macbook")
-            other_spaces = hs.spaces.spacesForScreen(M.screen_macbook)
+            M.log.df "ensure_all_spaces_are_present(): second display is macbook"
+            local other_spaces = hs.spaces.spacesForScreen(M.screen_macbook)
+            M.add_or_remove_spaces(other_spaces, spaces_per_display, M.screen_macbook)
         end
-        local other_spaces_len = M.length(other_spaces)
-        if other_spaces then
-            if spaces_per_display > other_spaces_len then
-                for _ = 1, spaces_per_display - other_spaces_len do
-                    M.log.df(
-                        "ensure_all_spaces_are_present(): %d spaces on second display is less than %d spaces, adding space to second display",
-                        other_spaces_len,
-                        spaces_per_display
-                    )
-                    hs.spaces.addSpaceToScreen(M.screen_macbook, true)
-                end
-            elseif spaces_per_display < other_spaces_len then
-                for i = #other_spaces, 1, -1 do
-                    if i > spaces_per_display then
-                        M.log.df(
-                            "ensure_all_spaces_are_present(): %d spaces on second display is more than %d spaces, removing space from second display",
-                            other_spaces_len,
-                            spaces_per_display
-                        )
-                        hs.spaces.removeSpace(other_spaces[i], true)
-                    end
-                end
-            end
-        end
-        -- 1 monitor
     else
         local spaces_per_display = 10
         local main_spaces = hs.spaces.spacesForScreen()
-        local main_spaces_len = M.length(main_spaces)
-        if main_spaces then
-            if spaces_per_display > main_spaces_len then
-                for _ = 1, spaces_per_display - main_spaces_len do
-                    M.log.df(
-                        "ensure_all_spaces_are_present(): %d spaces on macbook display is less than %d spaces, adding space to main display",
-                        main_spaces_len,
-                        spaces_per_display
-                    )
-                    hs.spaces.addSpaceToScreen(hs.screen.mainScreen(), true)
-                end
-            elseif spaces_per_display < main_spaces_len then
-                for i = #main_spaces, 1, -1 do
-                    M.log.df(
-                        "ensure_all_spaces_are_present(): %d spaces on macbook display is more than %d spaces, removing space to main display",
-                        main_spaces_len,
-                        spaces_per_display
-                    )
-                    if i > spaces_per_display then
-                        hs.spaces.removeSpace(main_spaces[i], true)
-                    end
-                end
-            end
-        end
+        M.add_or_remove_spaces(main_spaces, spaces_per_display, hs.screen.mainScreen():getUUID())
     end
     M.update_cache()
     os.execute(M.sketchybar_bin .. " --reload")
