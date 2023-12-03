@@ -7,7 +7,7 @@ if which rtx > /dev/null; then
 fi
 
 # paths
-MY_PATH="$HOME/.bin:$HOME/.local/share/lvim/mason/bin:/opt/homebrew/bin"
+MY_PATH="$HOME/.bin:$HOME/.local/share/lvim/mason/bin:$HOME/.local/bin"
 SYSTEM_PATH="/usr/local/bin"
 export PATH="$MY_PATH:$SYSTEM_PATH:$PATH"
 
@@ -86,5 +86,10 @@ fi
 
 # aws cli completer
 complete -C "$(rtx which aws)_completer" aws
+
+# ssh complete
+zstyle ':completion:*:(ssh|scp|rsync):*' ignored-patterns '*(.|:)*'
+zstyle ':completion:*:(ssh|scp|rsync):*' hosts
+zstyle ':completion:*:(ssh|scp|rsync):*' users
 
 # zprof
