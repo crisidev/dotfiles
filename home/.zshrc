@@ -7,7 +7,7 @@ if which rtx > /dev/null; then
 fi
 
 # paths
-MY_PATH="$HOME/.bin:$HOME/.local/share/lvim/mason/bin:/opt/homebrew/bin"
+MY_PATH="$HOME/.bin:$HOME/.local/share/lvim/mason/bin:$HOME/.local/bin:/opt/homebrew/bin"
 BREW_PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:/opt/homebrew/opt/coreutils/libexec/gnubin:/opt/homebrew/opt/grep/libexec/gnubin:/opt/homebrew/opt/ssh-copy-id/bin:/opt/homebrew/opt/gnu-tar/libexec/gnubin:/opt/homebrew/opt/llvm/bin"
 SYSTEM_PATH="/usr/local/bin"
 export PATH="$MY_PATH:$BREW_PATH:$SYSTEM_PATH:$PATH"
@@ -100,6 +100,7 @@ if which jira > /dev/null; then
     _evalcache jira completion zsh
 fi
 
+# ssh complete
 zstyle ':completion:*:(ssh|scp|rsync):*' ignored-patterns '*(.|:)*'
 zstyle ':completion:*:(ssh|scp|rsync):*' hosts
 zstyle ':completion:*:(ssh|scp|rsync):*' users
