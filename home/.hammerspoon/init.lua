@@ -93,11 +93,11 @@ end)
 
 -- Cycle all screens
 hs.hotkey.bind({ "cmd", "option" }, "m", function()
-    helpers.cycle_all_spaces_mission_control()
+    helpers.ensure_all_spaces_are_present()
 end)
 -- Ensure all screen are present
 hs.hotkey.bind({ "cmd", "option", "shift" }, "m", function()
-    helpers.ensure_all_spaces_are_present()
+    helpers.cycle_all_spaces_mission_control()
 end)
 
 -- Switch between windows
@@ -109,7 +109,7 @@ hs.hotkey.bind({ "cmd", "shift" }, "`", function()
 end)
 
 -- Toggle window fullscreen
-hs.hotkey.bind({ "cmd", "shift" }, "f", function()
+hs.hotkey.bind({ "cmd", "option" }, "f", function()
     helpers.yabai { "-m", "window", "--toggle", "zoom-fullscreen" }
     os.execute(helpers.sketchybar_bin .. " --trigger window_focus")
 end)

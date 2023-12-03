@@ -4,9 +4,6 @@
 local homedir = os.getenv "HOME"
 local M = {}
 
-M.screen_macbook = "37D8832A-2D66-02CA-B9F7-8F30A301B230"
-M.screen_benq = "758E5DAE-250B-4686-8171-9BEAA176F7B2"
-M.screen_asus = "D07DE44C-E07F-46BE-925E-8BF395720287"
 M.yabai_bin = "/opt/homebrew/bin/yabai"
 M.sketchybar_bin = "/opt/homebrew/bin/sketchybar"
 M.mirror_bin = "/opt/homebrew/bin/mirror"
@@ -18,6 +15,8 @@ M.windows_configuration = {}
 M.focused_screen_for_floating_windows = nil
 M.all_spaces = hs.spaces.allSpaces()
 M.ordered_spaces = {}
+M.screen_main = hs.screen.primaryScreen():getUUID()
+M.screen_other = nil
 M.log = hs.logger.new("helpers", "info")
 
 ------------------------------------------
@@ -93,37 +92,19 @@ end
 -- Get the list of spaces in order, independently from screens
 M.get_ordered_spaces = function()
     local ordered_spaces = {}
-    local screen_main = hs.screen.primaryScreen():getUUID()
     M.log.vf("get_ordered_spaces(): all spaces %s", hs.inspect.inspect(M.all_spaces))
-    M.log.vf("get_ordered_spaces(): main screen is %s, macbook screen is %s", screen_main, M.screen_macbook)
     if M.all_spaces then
         -- Main screen first
+        local screen_main = hs.screen.primaryScreen():getUUID()
         local spaces_main = M.all_spaces[screen_main]
         if spaces_main then
             for _, space in pairs(spaces_main) do
                 table.insert(ordered_spaces, space)
             end
         end
-        if screen_main ~= M.screen_benq and M.contains(M.all_spaces, M.screen_benq) then
-            local spaces_benq = M.all_spaces[M.screen_benq]
-            if spaces_benq then
-                for _, space in pairs(spaces_benq) do
-                    table.insert(ordered_spaces, space)
-                end
-            end
-        end
-        if screen_main ~= M.screen_asus and M.contains(M.all_spaces, M.screen_asus) then
-            local spaces_asus = M.all_spaces[M.screen_asus]
-            if spaces_asus then
-                for _, space in pairs(spaces_asus) do
-                    table.insert(ordered_spaces, space)
-                end
-            end
-        end
-        if screen_main ~= M.screen_macbook and M.contains(M.all_spaces, M.screen_macbook) then
-            local spaces_macbook = M.all_spaces[M.screen_macbook]
-            if spaces_macbook then
-                for _, space in pairs(spaces_macbook) do
+        for screen, spaces in pairs(M.all_spaces) do
+            if screen ~= screen_main then
+                for _, space in pairs(spaces) do
                     table.insert(ordered_spaces, space)
                 end
             end
@@ -133,10 +114,26 @@ M.get_ordered_spaces = function()
     return ordered_spaces
 end
 
+-- Find the secondary screen.
+M.find_other_screen = function()
+    if M.length(M.all_spaces) > 1 then
+        for screen, _ in pairs(M.all_spaces) do
+            if screen ~= M.screen_main then
+                return screen
+            end
+        end
+        return nil
+    else
+        return nil
+    end
+end
+
 -- Update the cached objects
 M.update_cache = function()
     M.all_spaces = hs.spaces.allSpaces()
     M.ordered_spaces = M.get_ordered_spaces()
+    M.screen_main = hs.screen.primaryScreen():getUUID()
+    M.screen_other = M.find_other_screen()
 end
 
 -- Check if a space is already visible
@@ -276,17 +273,15 @@ M.ensure_all_spaces_are_present = function()
     -- 2 monitors
     if M.length(M.all_spaces) > 1 then
         local spaces_per_display = 5
-        local main_spaces = hs.spaces.spacesForScreen()
-        M.add_or_remove_spaces(main_spaces, spaces_per_display, hs.screen.mainScreen():getUUID())
         local screen_main = hs.screen.primaryScreen():getUUID()
-        if screen_main == M.screen_macbook then
-            M.log.df "ensure_all_spaces_are_present(): second display is asus"
-            local other_spaces = hs.spaces.spacesForScreen(M.screen_asus)
-            M.add_or_remove_spaces(other_spaces, spaces_per_display, M.screen_asus)
-        else
-            M.log.df "ensure_all_spaces_are_present(): second display is macbook"
-            local other_spaces = hs.spaces.spacesForScreen(M.screen_macbook)
-            M.add_or_remove_spaces(other_spaces, spaces_per_display, M.screen_macbook)
+        local main_spaces = M.all_spaces[screen_main]
+        if main_spaces then
+            M.add_or_remove_spaces(main_spaces, spaces_per_display, screen_main)
+        end
+        for screen, spaces in pairs(M.all_spaces) do
+            if screen ~= screen_main then
+                M.add_or_remove_spaces(spaces, spaces_per_display, screen)
+            end
         end
     else
         local spaces_per_display = 10
@@ -324,12 +319,15 @@ end
 -- Focus a specific screen if the space is already visible
 M.focus_space_or_screen = function(space)
     if M.length(M.all_spaces) > 1 then
-        local main_space_mission_control_id = hs.spaces.activeSpaceOnScreen(hs.screen.mainScreen())
-        local main_space = M.index_of(M.ordered_spaces, main_space_mission_control_id)
-        if space == main_space then
-            M.yabai { "-m", "display", "--focus", "next" }
+        local main_screen = hs.screen.primaryScreen():getUUID()
+        local other_screen = M.find_other_screen(main_screen)
+        local other_space_mission_control_id = hs.spaces.activeSpaceOnScreen(other_screen)
+        local other_space = M.index_of(M.ordered_spaces, other_space_mission_control_id)
+        M.log.df("focus_space_or_screen(): target space %d, other space %d", space, other_space)
+        if space == other_space then
+            M.yabai { "-m", "display", "--focus", "2" }
         else
-            M.yabai { "-m", "display", "--focus", "prev" }
+            M.yabai { "-m", "display", "--focus", "1" }
         end
     end
 end
@@ -539,7 +537,8 @@ if M.file_exists(M.windows_configuration_file) then
     M.attach_existing_apps()
 end
 
-M.ordered_spaces = M.get_ordered_spaces()
+-- Update cache on startup
+M.update_cache()
 M.log.f("started hammerspoon with ordered spaces %s", hs.inspect.inspect(M.ordered_spaces))
 M.log.f("watching for float applications and windows configuration: %s", hs.inspect.inspect(M.windows_configuration))
 M.log.f("there are %s application watchers", M.length(M.app_watchers))
