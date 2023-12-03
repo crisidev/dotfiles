@@ -247,7 +247,7 @@ M.add_or_remove_spaces = function(spaces, spaces_per_display, screen)
         if spaces_per_display > spaces_len then
             for _ = 1, spaces_per_display - spaces_len do
                 M.log.df(
-                    "ensure_all_spaces_are_present(): %d spaces on main display is less than %d spaces, adding space to display %s",
+                    "add_or_remove_spaces(): %d spaces on main display is less than %d spaces, adding space to display %s",
                     spaces_len,
                     spaces_per_display,
                     screen
@@ -257,7 +257,7 @@ M.add_or_remove_spaces = function(spaces, spaces_per_display, screen)
         elseif spaces_per_display < spaces_len then
             for i = #spaces, 1, -1 do
                 M.log.df(
-                    "ensure_all_spaces_are_present(): %d spaces on main display is more than %d spaces, removing space from display %s",
+                    "add_or_remove_spaces(): %d spaces on main display is more than %d spaces, removing space from display %s",
                     spaces_len,
                     spaces_per_display,
                     screen
@@ -324,12 +324,12 @@ end
 -- Focus a specific screen if the space is already visible
 M.focus_space_or_screen = function(space)
     if M.length(M.all_spaces) > 1 then
-        local macbook_space_mission_control_id = hs.spaces.activeSpaceOnScreen(M.screen_macbook)
-        local macbook_space = M.index_of(M.ordered_spaces, macbook_space_mission_control_id)
-        if space == macbook_space then
-            M.yabai { "-m", "display", "--focus", "2" }
+        local main_space_mission_control_id = hs.spaces.activeSpaceOnScreen(hs.screen.mainScreen())
+        local main_space = M.index_of(M.ordered_spaces, main_space_mission_control_id)
+        if space == main_space then
+            M.yabai { "-m", "display", "--focus", "next" }
         else
-            M.yabai { "-m", "display", "--focus", "1" }
+            M.yabai { "-m", "display", "--focus", "prev" }
         end
     end
 end
@@ -522,6 +522,9 @@ end
 ------------------------------------------
 -- Main
 ------------------------------------------
+-- Setup mission control wait time
+hs.spaces.MCwaitTime = 0.3
+
 -- Include minimized/hidden windows, current Space only
 M.window_switcher = hs.window.switcher.new(hs.window.filter.new():setCurrentSpace(true):setDefaultFilter {})
 M.window_switcher.ui.showTitles = false

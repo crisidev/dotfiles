@@ -70,7 +70,6 @@ yabai -m rule --add app="^Signal$" space=9
 # manual rules
 yabai -m rule --add app="^Neovide$" manage=on
 yabai -m rule --add app="^Skype$" sticky=off
-yabai -m rule --add title="^.*WhatsApp Voice Call$" manage=off
 
 # rules from windows.json
 if [ -f "$HOME/.config/yabai/windows.json" ]; then
@@ -96,6 +95,6 @@ fi
 yabai -m config layout bsp
 
 # add borders
-/opt/homebrew/bin/borders active_color=0xff939ab7 inactive_color=0xff494d64 width=4.0 hidpi=on &
+/opt/homebrew/bin/borders active_color=0xff939ab7 inactive_color=0xff494d64 width=4.0 hidpi=on style=round &
 
 echo "yabai configuration loaded.."

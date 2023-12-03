@@ -30,11 +30,11 @@ hs["helpers"] = helpers
 ------------------------------------------
 -- Open terminals
 hs.hotkey.bind({ "cmd" }, "return", function()
-    os.execute(helpers.kitty_bin .. " --single-instance --instance-group=1 ~ &")
+    os.execute(helpers.kitty_bin .. " --single-instance --instance-group=1 -d ~ &")
 end)
 hs.hotkey.bind({ "cmd", "option" }, "return", function()
     helpers.set_focused_screen_for_floating_windows_to_current_screen()
-    os.execute(helpers.kitty_bin .. " --single-instance --instance-group=1 --title=float-term ~ &")
+    os.execute(helpers.kitty_bin .. " --single-instance --instance-group=1 --title=float-term -d ~ &")
 end)
 
 -- Open neovide

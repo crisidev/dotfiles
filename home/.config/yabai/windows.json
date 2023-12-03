@@ -1,7 +1,8 @@
 {
     "titles": {
         "float-term": true,
-        "Hammerspoon Console": false
+        "Hammerspoon Console": false,
+        ".*WhatsApp Voice Call": true
     },
     "apps": {
         "Preview": true,
@@ -24,7 +25,8 @@
         "Weather": true,
         "Software Update": true,
         "System Information": true,
-        "Print Center": true
+        "Print Center": true,
+        "Microsoft Defender": true
     },
     "apps_and_titles": {
         "Microsoft Outlook": {
