@@ -14,6 +14,7 @@ M.windows_configuration_file = homedir .. "/.config/yabai/windows.json"
 M.windows_configuration = {}
 M.focused_screen_for_floating_windows = nil
 M.all_spaces = hs.spaces.allSpaces()
+M.all_spaces_length = 0
 M.ordered_spaces = {}
 M.screen_main = hs.screen.primaryScreen():getUUID()
 M.screen_other = nil
@@ -67,7 +68,7 @@ M.index_of = function(array, value)
     return nil
 end
 
-function M.length(set)
+M.length = function(set)
     local c = 0
     for _, _ in pairs(set) do
         c = c + 1
@@ -95,15 +96,14 @@ M.get_ordered_spaces = function()
     M.log.vf("get_ordered_spaces(): all spaces %s", hs.inspect.inspect(M.all_spaces))
     if M.all_spaces then
         -- Main screen first
-        local screen_main = hs.screen.primaryScreen():getUUID()
-        local spaces_main = M.all_spaces[screen_main]
+        local spaces_main = M.all_spaces[M.screen_main]
         if spaces_main then
             for _, space in pairs(spaces_main) do
                 table.insert(ordered_spaces, space)
             end
         end
         for screen, spaces in pairs(M.all_spaces) do
-            if screen ~= screen_main then
+            if screen ~= M.screen_main then
                 for _, space in pairs(spaces) do
                     table.insert(ordered_spaces, space)
                 end
@@ -116,7 +116,7 @@ end
 
 -- Find the secondary screen.
 M.find_other_screen = function()
-    if M.length(M.all_spaces) > 1 then
+    if M.all_spaces_length > 1 then
         for screen, _ in pairs(M.all_spaces) do
             if screen ~= M.screen_main then
                 return screen
@@ -131,7 +131,9 @@ end
 -- Update the cached objects
 M.update_cache = function()
     M.all_spaces = hs.spaces.allSpaces()
+    M.all_spaces_length = M.length(M.all_spaces)
     M.ordered_spaces = M.get_ordered_spaces()
+    M.ordered_spaces_length = M.length(M.ordered_spaces)
     M.screen_main = hs.screen.primaryScreen():getUUID()
     M.screen_other = M.find_other_screen()
 end
@@ -216,18 +218,17 @@ end
 
 -- Focus a space in a specific direction
 M.focus_space_in_direction = function(direction)
-    local ordered_spaces_length = M.length(M.ordered_spaces)
     local current_space = hs.spaces.focusedSpace()
     local index = M.index_of(M.ordered_spaces, current_space)
     local go_to = 1
     if direction == "left" then
         if index - 1 < 1 then
-            go_to = M.ordered_spaces[ordered_spaces_length]
+            go_to = M.ordered_spaces[M.ordered_spaces_length]
         else
             go_to = M.ordered_spaces[index - 1]
         end
     elseif direction == "right" then
-        if index + 1 > ordered_spaces_length then
+        if index + 1 > M.ordered_spaces_length then
             go_to = M.ordered_spaces[1]
         else
             go_to = M.ordered_spaces[index + 1]
@@ -271,15 +272,14 @@ end
 M.ensure_all_spaces_are_present = function()
     M.update_cache()
     -- 2 monitors
-    if M.length(M.all_spaces) > 1 then
+    if M.all_spaces_length > 1 then
         local spaces_per_display = 5
-        local screen_main = hs.screen.primaryScreen():getUUID()
-        local main_spaces = M.all_spaces[screen_main]
+        local main_spaces = M.all_spaces[M.screen_main]
         if main_spaces then
-            M.add_or_remove_spaces(main_spaces, spaces_per_display, screen_main)
+            M.add_or_remove_spaces(main_spaces, spaces_per_display, M.screen_main)
         end
         for screen, spaces in pairs(M.all_spaces) do
-            if screen ~= screen_main then
+            if screen ~= M.screen_main then
                 M.add_or_remove_spaces(spaces, spaces_per_display, screen)
             end
         end
@@ -318,9 +318,8 @@ end
 
 -- Focus a specific screen if the space is already visible
 M.focus_space_or_screen = function(space)
-    if M.length(M.all_spaces) > 1 then
-        local main_screen = hs.screen.primaryScreen():getUUID()
-        local other_screen = M.find_other_screen(main_screen)
+    if M.all_spaces_length then
+        local other_screen = M.find_other_screen()
         local other_space_mission_control_id = hs.spaces.activeSpaceOnScreen(other_screen)
         local other_space = M.index_of(M.ordered_spaces, other_space_mission_control_id)
         M.log.df("focus_space_or_screen(): target space %d, other space %d", space, other_space)
@@ -341,11 +340,19 @@ M.focus_window_or_screen = function(direction)
             if exit_code == 1 then
                 if direction == "east" then
                     M.log.df "focus_window_or_screen(): reached edge of current screen, focusing next screen"
-                    M.focus_screen(hs.window.focusedWindow():screen():next())
+                    if M.all_spaces_length > 1 then
+                        M.focus_screen(hs.window.focusedWindow():screen():next())
+                    else
+                        M.focus_space_in_direction "right"
+                    end
                 end
                 if direction == "west" then
                     M.log.df "focus_window_or_screen(): reached edge of current screen, focusing previous screen"
-                    M.focus_screen(hs.window.focusedWindow():screen():previous())
+                    if M.all_spaces_length > 1 then
+                        M.focus_screen(hs.window.focusedWindow():screen():previous())
+                    else
+                        M.focus_space_in_direction "left"
+                    end
                 end
             end
         end, function()
