@@ -1,0 +1,8 @@
+#!/bin/bash
+
+sleep 3
+"$HOME/.bin/hs" -c "return hs.helpers.ensure_all_spaces_are_present()"
+echo "1" > /tmp/yabai_matteobigoi.cycle_all_spaces_mission_control
+nohup /opt/homebrew/bin/yabai --restart-service >/dev/null
+
+exit 0

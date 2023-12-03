@@ -4,8 +4,8 @@
 
 # signals
 yabai -m signal --add event=window_focused action="/opt/homebrew/bin/sketchybar --trigger window_focus"
-yabai -m signal --add event=display_added action="sleep 3 && $HOME/.bin/hs -c \"return hs.helpers.ensure_all_spaces_are_present()\""
-yabai -m signal --add event=display_removed action="sleep 3 && $HOME/.bin/hs -c \"return hs.helpers.ensure_all_spaces_are_present()\""
+yabai -m signal --add event=display_added action="$HOME/.config/yabai/screenchange"
+yabai -m signal --add event=display_removed action="$HOME/.config/yabai/screenchange"
 yabai -m signal --add event=window_destroyed active=yes action="yabai -m query --windows --window &> /dev/null || yabai -m window --focus mouse &> /dev/null || yabai -m window --focus \$(yabai -m query --windows --space | jq .[0].id) &> /dev/null"
 yabai -m signal --add event=window_minimized active=yes action="if \$(yabai -m query --windows --window \$YABAI_WINDOW_ID | jq -r '.\"is-floating\"'); then yabai -m query --windows --window &> /dev/null || yabai -m window --focus mouse &> /dev/null || yabai -m window --focus \$(yabai -m query --windows --space | jq .[0].id) &> /dev/null; fi"
 
@@ -21,7 +21,6 @@ yabai -m config active_window_opacity 1.0
 yabai -m config normal_window_opacity 0.95
 yabai -m config split_ratio 0.50
 yabai -m config auto_balance off
-yabai -m config auto_padding on
 
 # paddings, bar and gaps
 TOP_PADDING=6
@@ -96,5 +95,11 @@ yabai -m config layout bsp
 
 # add borders
 /opt/homebrew/bin/borders active_color=0xff939ab7 inactive_color=0xff494d64 width=4.0 hidpi=on style=round &
+
+# cycle spaces if yabai was restarted by itself
+if [ -e /tmp/yabai_matteobigoi.cycle_all_spaces_mission_control ]; then
+    "$HOME/.bin/hs" -c "return hs.helpers.cycle_all_spaces_mission_control()"
+    rm -f /tmp/yabai_matteobigoi.cycle_all_spaces_mission_control
+fi
 
 echo "yabai configuration loaded.."
