@@ -432,6 +432,23 @@ M.handle_window_event = function(element, _, _, _)
                     return
                 end
                 local window = element:application():focusedWindow()
+                if app_name:find "Microsoft Teams" then
+                    if
+                        not window_title:find "Activity |"
+                        or window_title ~= "Chat | Microsoft Teams"
+                        or window_title ~= "Calendar | Microsoft Teams"
+                        or not window_title:find "Teams and Channels |"
+                        or window_title ~= "Files | Microsoft Teams"
+                        or window_title ~= "Calls | Microsoft Teams"
+                        or window_title ~= "Apps | Microsoft Teams"
+                        or window_title ~= "Okta | Microsoft Teams"
+                        or window_title ~= "Kadence | Microsoft Teams"
+                    then
+                        M.log.df("Teams is on a call, move window to desktop 5, window id: %s", window:id())
+                        M.yabai { "-m", "window", tostring(window:id()), "--space", "5", "--focus" }
+                        return
+                    end
+                end
                 if window then
                     -- App only
                     for app, manage in pairs(M.windows_configuration.apps) do
