@@ -294,12 +294,20 @@ end
 
 -- Cycle all mission control spaces
 M.cycle_all_spaces_mission_control = function()
-    local current_space = hs.spaces.focusedSpace()
+    local main_space = hs.spaces.activeSpaceOnScreen(M.screen_main)
+    local other_space = nil
+    if M.all_spaces_length > 1 then
+        other_space = hs.spaces.activeSpaceOnScreen(M.screen_other)
+    end
     for i = 1, 10 do
         M.focus_space(i)
         os.execute "sleep 0.3"
     end
-    M.focus_space(M.index_of(M.ordered_spaces, current_space))
+    if M.all_spaces_length > 1 and other_space then
+        M.focus_space(M.index_of(M.ordered_spaces, other_space))
+        os.execute "sleep 0.3"
+    end
+    M.focus_space(M.index_of(M.ordered_spaces, main_space))
 end
 
 -- Checks if a window belongs to a screen
