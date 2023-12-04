@@ -58,10 +58,13 @@ update() {
 }
 
 case "$SENDER" in
-    "routine" | "forced")
+    "routine" | "forced" | "power_source_change")
         update
         ;;
     "mouse.clicked")
         popup toggle
+        ;;
+    "mouse.exited")
+        popup off
         ;;
 esac

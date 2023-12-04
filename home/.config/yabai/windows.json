@@ -2,7 +2,8 @@
     "titles": {
         "float-term": true,
         "Hammerspoon Console": false,
-        ".*WhatsApp Voice Call": true
+        ".*WhatsApp Voice Call": true,
+        ".*WhatsApp Video Call": true
     },
     "apps": {
         "Preview": true,

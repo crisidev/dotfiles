@@ -29,6 +29,7 @@ sketchybar --add item wifi right \
     --set wifi "${wifi[@]}" \
     --subscribe wifi \
     wifi_change \
+    system_woke \
     mouse.clicked \
     --add item wifi.info popup.wifi \
     --set wifi.info "${wifi_info[@]}"

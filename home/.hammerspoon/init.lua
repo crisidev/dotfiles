@@ -151,10 +151,10 @@ hs.hotkey.bind({ "cmd" }, "5", function()
     helpers.focus_space_or_previous(10)
 end)
 -- Move to left / right space
-hs.hotkey.bind({ "cmd", "ctrl" }, "left", function()
+hs.hotkey.bind({ "cmd", "option", "shift" }, "left", function()
     helpers.focus_space_in_direction "left"
 end)
-hs.hotkey.bind({ "cmd", "ctrl" }, "right", function()
+hs.hotkey.bind({ "cmd", "option", "shift" }, "right", function()
     helpers.focus_space_in_direction "right"
 end)
 

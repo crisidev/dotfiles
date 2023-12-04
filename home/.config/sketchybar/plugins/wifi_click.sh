@@ -1,9 +1,9 @@
 #!/bin/bash
 # shellcheck disable=1091
+source "$CONFIG_DIR/icons.sh"
+source "$CONFIG_DIR/colors.sh"
 
 update_details() {
-    source "$CONFIG_DIR/icons.sh"
-    source "$CONFIG_DIR/colors.sh"
     args=(--remove '/wifi.line\.*/')
 
     # Wifi info
@@ -71,8 +71,6 @@ toggle_details() {
 }
 
 update() {
-    source "$CONFIG_DIR/icons.sh"
-    source "$CONFIG_DIR/colors.sh"
 
     SSID="$(/System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport -I | awk -F ' SSID: ' '/ SSID: / {print $2}')"
     IPADDR="$(ipconfig getifaddr en0)"

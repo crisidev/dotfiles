@@ -13,7 +13,7 @@ update() {
 }
 
 case "$SENDER" in
-    "wifi_change")
+    "wifi_change" | "system_woke")
         update
         ;;
 esac

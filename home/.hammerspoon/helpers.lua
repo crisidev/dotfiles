@@ -409,6 +409,39 @@ M.handle_global_event = function(_, event, app)
     end
 end
 
+-- Cheap and dirty hack to move the Teams call window to a specific desk.
+-- It requires a C helper to be compiled, which can be found in the Hammerspoon
+-- config directory and need to be moved to ~/.hammerspoon/yellowdot.
+-- The helper checks if the microphone is currently being recorded.
+M.handle_teams_video_call = function(app_name, window_title, window_id)
+    if app_name:find "Microsoft Teams" then
+        if
+            not window_title:find "Activity |"
+            or not window_title:find "Chat |"
+            or not window_title:find "Teams and Channels |"
+            or window_title ~= "Calendar | Microsoft Teams"
+            or window_title ~= "Files | Microsoft Teams"
+            or window_title ~= "Calls | Microsoft Teams"
+            or window_title ~= "Apps | Microsoft Teams"
+            or window_title ~= "Okta | Microsoft Teams"
+            or window_title ~= "Kadence | Microsoft Teams"
+        then
+            local _, _, _, rc = hs.execute(homedir .. "/.hammerspoon/yellowdot", false)
+            -- Not yet in a call, move the window
+            if rc == 1 then
+                M.log.df(
+                    "Teams is on a call, move window with title '%s' to desktop 5, window id: %s",
+                    window_title,
+                    window_id
+                )
+                M.yabai { "-m", "window", tostring(window_id), "--space", "5", "--focus" }
+                return true
+            end
+        end
+    end
+    return false
+end
+
 -- Handle any window event
 M.handle_window_event = function(element, _, _, _)
     ---@diagnostic disable-next-line: undefined-field
@@ -432,22 +465,8 @@ M.handle_window_event = function(element, _, _, _)
                     return
                 end
                 local window = element:application():focusedWindow()
-                if app_name:find "Microsoft Teams" then
-                    if
-                        not window_title:find "Activity |"
-                        or window_title ~= "Chat | Microsoft Teams"
-                        or window_title ~= "Calendar | Microsoft Teams"
-                        or not window_title:find "Teams and Channels |"
-                        or window_title ~= "Files | Microsoft Teams"
-                        or window_title ~= "Calls | Microsoft Teams"
-                        or window_title ~= "Apps | Microsoft Teams"
-                        or window_title ~= "Okta | Microsoft Teams"
-                        or window_title ~= "Kadence | Microsoft Teams"
-                    then
-                        M.log.df("Teams is on a call, move window to desktop 5, window id: %s", window:id())
-                        M.yabai { "-m", "window", tostring(window:id()), "--space", "5", "--focus" }
-                        return
-                    end
+                if M.handle_teams_video_call(app_name, window_title, window:id()) then
+                    return
                 end
                 if window then
                     -- App only

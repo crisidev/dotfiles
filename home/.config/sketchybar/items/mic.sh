@@ -5,21 +5,22 @@ source "$CONFIG_DIR/icons.sh"
 
 mic=(
     icon="$MIC_ON"
-	script="$PLUGIN_DIR/mic.sh"
+    script="$PLUGIN_DIR/mic.sh"
+    icon.font="$FONT:Bold:19.0"
     label.width=0
     padding_right=-5
     icon.padding_left=8
 )
 
 status_bracket=(
-	background.color="$BACKGROUND_1"
-	background.border_color="$BACKGROUND_2"
+    background.color="$BACKGROUND_1"
+    background.border_color="$BACKGROUND_2"
 )
 
 sketchybar --add event mic_update \
     --add item mic right \
-	--set mic "${mic[@]}" \
-	--subscribe mic mic_update mouse.clicked
+    --set mic "${mic[@]}" \
+    --subscribe mic mic_update mouse.clicked
 
 sketchybar --add bracket status brew github.bell wifi volume_icon mic \
-	--set status "${status_bracket[@]}"
+    --set status "${status_bracket[@]}"
