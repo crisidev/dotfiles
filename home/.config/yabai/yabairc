@@ -95,7 +95,7 @@ yabai -m config layout bsp
 
 # cycle spaces if yabai was restarted by itself
 if [ -e /tmp/yabai_matteobigoi.cycle_all_spaces_mission_control ]; then
-    "$HOME/.bin/hs" -c "return hs.helpers.cycle_all_spaces_mission_control()"
+    "$HOME/.bin/hs" -c "return hs.wm.cycle_all_spaces_mission_control()"
     rm -f /tmp/yabai_matteobigoi.cycle_all_spaces_mission_control
 fi
 

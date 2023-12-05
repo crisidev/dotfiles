@@ -16,7 +16,7 @@ mouse_clicked() {
     if [ "$BUTTON" = "right" ]; then
         "$HOME/.bin/hs" -c "return hs.spaces.removeSpace($SID)"
     else
-        "$HOME/.bin/hs" -c "return hs.helpers.focus_space($SID)"
+        "$HOME/.bin/hs" -c "return hs.wm.focus_space($SID)"
     fi
 }
 
