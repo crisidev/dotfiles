@@ -1,7 +1,7 @@
 ------------------------------------------
 -- Windows management
 ------------------------------------------
-local helpers = require("helpers")
+local helpers = require "helpers"
 local module = {}
 
 module.previous_space = 1
