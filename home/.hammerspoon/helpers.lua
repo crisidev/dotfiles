@@ -332,9 +332,9 @@ M.focus_space_or_screen = function(space)
         local other_space = M.index_of(M.ordered_spaces, other_space_mission_control_id)
         M.log.df("focus_space_or_screen(): target space %d, other space %d", space, other_space)
         if space == other_space then
-            M.yabai { "-m", "display", "--focus", "2" }
+            M.focus_screen(hs.window.focusedWindow():screen():previous())
         else
-            M.yabai { "-m", "display", "--focus", "1" }
+            M.focus_screen(hs.window.focusedWindow():screen():next())
         end
     end
 end

@@ -12,7 +12,6 @@ wifi=(
     label="$LOADING"
     popup.align=right
     script="$PLUGIN_DIR/wifi.sh"
-    click_script="$PLUGIN_DIR/wifi_click.sh"
 )
 
 wifi_info=(
@@ -31,5 +30,6 @@ sketchybar --add item wifi right \
     wifi_change \
     system_woke \
     mouse.clicked \
+    mouse.exited.global \
     --add item wifi.info popup.wifi \
     --set wifi.info "${wifi_info[@]}"

@@ -83,16 +83,8 @@ update_gh() {
 
 }
 
-toggle_details() {
-    POPUP=$(sketchybar --query $NAME | jq -r .popup.drawing)
-    if [ "$POPUP" = "on" ]; then
-        sketchybar --set "$NAME" popup.drawing=off
-    else
-        sketchybar --set "$NAME" popup.drawing=on
-    fi
-    if [ "$BUTTON" = "right" ]; then
-        update
-    fi
+popup() {
+    sketchybar --set "$NAME" popup.drawing="$1"
 }
 
 update() {
@@ -134,6 +126,12 @@ case "$SENDER" in
         sleep 10 && update # Wait for network to connect
         ;;
     "mouse.clicked")
-        toggle_details
+        popup toggle
+        if [ "$BUTTON" = "right" ]; then
+            update
+        fi
+        ;;
+    "mouse.exited.global")
+        popup off
         ;;
 esac
