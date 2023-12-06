@@ -340,7 +340,7 @@ end
 -- config directory and need to be moved to ~/.hammerspoon/yellowdot.
 -- The helper checks if the microphone is currently being recorded.
 module.handle_teams_video_call = function(app_name, window_title, window_id)
-    if app_name:find "Microsoft Teams" then
+    if app_name:find "Microsoft Teams" and window_title ~= "" then
         if
             not window_title:find "Activity |"
             or not window_title:find "Chat |"
@@ -523,14 +523,6 @@ module.init = function()
         hs.inspect.inspect(module.windows_configuration)
     )
     module.log.f("there are %s application watchers", helpers.length(module.app_watchers))
-    hs
-        .notify
-        .new({
-            title = "Hammerspoon",
-            informativeText = "Started hammerspoon with ordered spaces " .. hs.inspect.inspect(module.ordered_spaces),
-        })
-        ---@diagnostic disable-next-line: undefined-field
-        :send()
     hs["wm"] = module
 end
 

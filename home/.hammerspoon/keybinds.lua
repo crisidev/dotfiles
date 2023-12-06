@@ -1,9 +1,11 @@
 ------------------------------------------
 -- Keybindings
 ------------------------------------------
-local module = {}
 local helpers = require "helpers"
 local wm = require "wm"
+local module = {}
+
+module.log = hs.logger.new("keybinds", "info")
 
 -- Applications
 module.applications = function()
@@ -216,7 +218,19 @@ module.misc = function()
 
     -- Toggle hammerspoon debug
     hs.hotkey.bind({ "cmd", "option" }, "d", function()
-        wm.set_log_level "wm"
+        helpers.set_log_level(wm.log)
+        helpers.set_log_level(helpers.log)
+        helpers.set_log_level(module.log)
+        if module.log.getLogLevel() == 3 then
+            ---@diagnostic disable-next-line: undefined-field
+            hs.notify.new({ title = "Hammerspoon", informativeText = "Log level set to debug" }):send()
+        else
+            ---@diagnostic disable-next-line: undefined-field
+            hs.notify.new({ title = "Hammerspoon", informativeText = "Log level set to info" }):send()
+        end
+    end)
+    hs.hotkey.bind({ "cmd", "option", "shift" }, "d", function()
+        hs.toggleConsole()
     end)
 
     -- Cycle all screens

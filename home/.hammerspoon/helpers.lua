@@ -23,22 +23,13 @@ end
 module.set_log_level = function(logger, level)
     if level then
         logger.setLogLevel(level)
-        ---@diagnostic disable-next-line: undefined-field
-        hs.notify.new({ title = "Hammerspoon", informativeText = "Log level set to " .. level }):send()
-        return
-    end
-    if logger.getLogLevel() == 3 then
-        ---@diagnostic disable-next-line: undefined-field
-        hs.notify.new({ title = "Hammerspoon", informativeText = "Setting log level to debug" }):send()
+        logger.wf("setting log level to %s", level)
+    elseif logger.getLogLevel() == 3 then
         logger.w "setting log level to debug"
         logger.setLogLevel "debug"
-        hs.openConsole()
     else
-        ---@diagnostic disable-next-line: undefined-field
-        hs.notify.new({ title = "Hammerspoon", informativeText = "Setting log level to info" }):send()
         logger.w "setting log level to info"
         logger.setLogLevel "info"
-        hs.closeConsole()
     end
 end
 

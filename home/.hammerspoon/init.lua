@@ -21,5 +21,15 @@ spoon.AppBindings:bind("Microsoft Teams (work or school)", {
 -- Load configuration
 ------------------------------------------
 require "hs.ipc"
-require("wm").init()
-require("keybinding").init()
+local wm = require "wm"
+require("keybinds").init()
+wm.init()
+
+hs
+    .notify
+    .new({
+        title = "Hammerspoon",
+        informativeText = "Started hammerspoon with ordered spaces " .. hs.inspect.inspect(wm.ordered_spaces),
+    })
+    ---@diagnostic disable-next-line: undefined-field
+    :send()
