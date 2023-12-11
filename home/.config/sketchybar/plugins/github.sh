@@ -7,9 +7,6 @@ PREV_COUNT=$(sketchybar --query github.bell | jq -r .label.value)
 
 source "$CONFIG_DIR/colors.sh"
 source "$CONFIG_DIR/icons.sh"
-if [ -e "$CONFIG_DIR/plugins/gitlab.sh" ]; then
-    source "$CONFIG_DIR/plugins/gitlab.sh"
-fi
 
 update_gh() {
     NOTIFICATIONS="$(gh api notifications)"
@@ -89,11 +86,12 @@ popup() {
 
 update() {
     if [ -e "$CONFIG_DIR/plugins/gitlab.sh" ]; then
+        source "$CONFIG_DIR/plugins/gitlab.sh"
         update_glab
     fi
     update_gh
     if [ "$TOTAL_NOTIFICATION" -eq 0 ]; then
-        args=(--set "$NAME" icon="$BELL" label="0")
+        args=(--set "$NAME" icon="$BELL" icon.color="$WHITE" label="" label.padding_right=-3)
         notification=(
             label="No new notifications"
             icon="$ICON Note: "

@@ -167,7 +167,7 @@ end
 -- Helper function to add or remove spaces
 module.add_or_remove_spaces = function(spaces, spaces_per_display, screen)
     if spaces then
-        local spaces_len = module.length(spaces)
+        local spaces_len = helpers.length(spaces)
         if spaces_per_display > spaces_len then
             for _ = 1, spaces_per_display - spaces_len do
                 module.log.df(
@@ -273,20 +273,26 @@ module.focus_window_or_screen = function(direction)
         .new(helpers.yabai_bin, function(exit_code)
             if exit_code == 1 then
                 if direction == "east" then
-                    module.log.df "focus_window_or_screen(): reached edge of current screen, focusing next screen"
                     if module.all_spaces_length > 1 then
+                        module.log.df "focus_window_or_screen(): reached edge of current screen, focusing next screen"
                         module.focus_screen(hs.window.focusedWindow():screen():next())
                     else
-                        module.focus_space_in_direction "right"
+                        helpers.yabai { "-m", "window", "--focus", "west" }
                     end
                 end
                 if direction == "west" then
-                    module.log.df "focus_window_or_screen(): reached edge of current screen, focusing previous screen"
                     if module.all_spaces_length > 1 then
+                        module.log.df "focus_window_or_screen(): reached edge of current screen, focusing previous screen"
                         module.focus_screen(hs.window.focusedWindow():screen():previous())
                     else
-                        module.focus_space_in_direction "left"
+                        helpers.yabai { "-m", "window", "--focus", "east" }
                     end
+                end
+                if direction == "north" then
+                    helpers.yabai { "-m", "window", "--focus", "south" }
+                end
+                if direction == "south" then
+                    helpers.yabai { "-m", "window", "--focus", "north" }
                 end
             end
         end, function()
@@ -342,9 +348,9 @@ end
 module.handle_teams_video_call = function(app_name, window_title, window_id)
     if app_name:find "Microsoft Teams" and window_title ~= "" then
         if
-            not window_title:find "Activity |"
-            or not window_title:find "Chat |"
-            or not window_title:find "Teams and Channels |"
+            not window_title:find "Activity "
+            or not window_title:find "Chat "
+            or not window_title:find "Teams and Channels "
             or window_title ~= "Calendar | Microsoft Teams"
             or window_title ~= "Files | Microsoft Teams"
             or window_title ~= "Calls | Microsoft Teams"
@@ -361,6 +367,7 @@ module.handle_teams_video_call = function(app_name, window_title, window_id)
                     window_id
                 )
                 helpers.yabai { "-m", "window", tostring(window_id), "--space", "5", "--focus" }
+                os.execute(helpers.sketchybar_bin .. " --trigger window_focus")
                 return true
             end
         end
@@ -390,7 +397,7 @@ module.handle_window_event = function(element, _, _, _)
                     helpers.yabai { "-m", "window", "--focus", tostring(element:id()) }
                     return
                 end
-                local window = element:application():focusedWindow()
+                local window = application:focusedWindow()
                 if module.handle_teams_video_call(app_name, window_title, window:id()) then
                     return
                 end

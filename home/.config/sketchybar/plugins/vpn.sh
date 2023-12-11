@@ -1,12 +1,10 @@
 #!/bin/bash
-# shellcheck disable=2016
+# shellcheck disable=1091
 
 source "$CONFIG_DIR/icons.sh"
 
-VPN=$(scutil --nc list | grep Connected | sed -E 's/.*"(.*)".*/\1/')
-
-if [[ $VPN != "" ]]; then
-  sketchybar -m --set vpn icon="$TAILSCALE_ON" drawing=on
+if /Applications/Tailscale.app/Contents/MacOS/Tailscale status >/dev/null; then
+    sketchybar -m --set vpn icon="$TAILSCALE_ON" drawing=on
 else
-  sketchybar -m --set vpn icon="$TAILSCALE_OFF" drawing=on
+    sketchybar -m --set vpn drawing=off
 fi

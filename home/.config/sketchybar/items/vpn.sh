@@ -15,4 +15,5 @@ vpn=(
 sketchybar --add item vpn right \
     --set vpn "${vpn[@]}" \
     --subscribe vpn \
-    system_woke
+    system_woke \
+    wifi_change

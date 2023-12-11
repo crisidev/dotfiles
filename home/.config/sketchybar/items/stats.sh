@@ -17,3 +17,6 @@ sketchybar --add alias "Stats,Network_label" right \
 
 sketchybar --add alias "Stats,Sensors_sensors" right \
     --set "Stats,Sensors_sensors" padding_right=-5 padding_left=-10 label.width=0
+
+sketchybar --add alias "Tailscale,Item-0" right \
+    --set "Tailscale,Item-0" padding_right=-5 padding_left=-5 label.width=0

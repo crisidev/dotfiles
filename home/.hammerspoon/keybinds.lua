@@ -14,7 +14,7 @@ module.applications = function()
         os.execute(helpers.kitty_bin .. " --single-instance --instance-group=1 -d ~ &")
     end)
     hs.hotkey.bind({ "cmd", "option" }, "return", function()
-        helpers.set_focused_screen_for_floating_windows_to_current_screen()
+        wm.set_focused_screen_for_floating_windows_to_current_screen()
         os.execute(helpers.kitty_bin .. " --single-instance --instance-group=1 --title=float-term -d ~ &")
     end)
 
@@ -88,10 +88,10 @@ module.change_focus = function()
         wm.focus_window_or_screen "west"
     end)
     hs.hotkey.bind({ "cmd" }, "up", function()
-        helpers.yabai { "-m", "window", "--focus", "north" }
+        wm.focus_window_or_screen "north"
     end)
     hs.hotkey.bind({ "cmd" }, "down", function()
-        helpers.yabai { "-m", "window", "--focus", "south" }
+        wm.focus_window_or_screen "south"
     end)
 end
 
@@ -223,10 +223,10 @@ module.misc = function()
         helpers.set_log_level(module.log)
         if module.log.getLogLevel() == 3 then
             ---@diagnostic disable-next-line: undefined-field
-            hs.notify.new({ title = "Hammerspoon", informativeText = "Log level set to debug" }):send()
+            hs.notify.new({ title = "Hammerspoon", informativeText = "Log level set to info" }):send()
         else
             ---@diagnostic disable-next-line: undefined-field
-            hs.notify.new({ title = "Hammerspoon", informativeText = "Log level set to info" }):send()
+            hs.notify.new({ title = "Hammerspoon", informativeText = "Log level set to debug" }):send()
         end
     end)
     hs.hotkey.bind({ "cmd", "option", "shift" }, "d", function()
