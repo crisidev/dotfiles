@@ -4,7 +4,7 @@ options=(
     # active_color="gradient(top_left=0xff95b5ff,bottom_right=0xa0b5c0ff)"
     # inactive_color="gradient(top_left=0xa0b5c0ff,bottom_right=0xff5566)"
     active_color="glow(0xff95b5ff)"
-    inactive_color="glow(0xa0b5c0ff)"
+    inactive_color="glow(0xff414550)"
     width=4.0
     hidpi=on
     style=round

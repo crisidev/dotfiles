@@ -1,0 +1,114 @@
+# -----------------------
+# Applications
+# -----------------------
+cmd - return :              kitty --single-instance --instance-group=1 -d ~
+cmd + alt - return :        kitty  --single-instance --instance-group=1 --title=float-term -d ~
+cmd + shift -e :            ~/.bin/ide
+ctrl - space :              ~/.bin/hs -c "return hs.application.launchOrFocus('Finder')"
+cmd + alt - y:              yabai --restart-service && ~/.bin/hs -c "return hs.helpers.notify('Yabai restarted')"
+cmd + alt - s:              ~/.bin/hs -c "return hs.helpers.notify('Reloading Hammerspoon')"; ~/.bin/hs -c "return hs.reload()"
+cmd + alt - d:              ~/.bin/hs -c "return hs.helpers.toggle_console()"
+cmd + alt + shift - d:      ~/.bin/hs -c "return hs.helpers.toggle_debug()"
+
+# -----------------------
+# Display and sleep
+# -----------------------
+cmd + alt - l:              ~/.bin/hs -c "return hs.caffeinate.lockScreen()"
+cmd + shift - m:            mirror && sketchybar --reload && bottombar --reload
+cmd + alt - m:              ~/.bin/hs -c "return hs.wm.ensure_all_spaces_are_present()"
+cmd + alt + shift - m:      ~/.bin/hs -c "return hs.wm.cycle_all_spaces_mission_control()"
+cmd + alt - n:              ~/.bin/hs -c "return hs.helpers.notify('Suspending system')"; sleep 1; osascript -e 'tell app "System Events" to sleep'
+
+# -----------------------
+# Focus spaces
+# -----------------------
+cmd  - escape:              ~/.bin/hs -c "return hs.wm.focus_space_or_previous(1)"
+cmd  - f2:                  ~/.bin/hs -c "return hs.wm.focus_space_or_previous(2)"
+cmd  - f1:                  ~/.bin/hs -c "return hs.wm.focus_space_or_previous(3)"
+cmd  - f3:                  ~/.bin/hs -c "return hs.wm.focus_space_or_previous(4)"
+cmd  - f4:                  ~/.bin/hs -c "return hs.wm.focus_space_or_previous(5)"
+cmd  - 1:                   ~/.bin/hs -c "return hs.wm.focus_space_or_previous(6)"
+cmd  - 2:                   ~/.bin/hs -c "return hs.wm.focus_space_or_previous(7)"
+cmd  - 3:                   ~/.bin/hs -c "return hs.wm.focus_space_or_previous(8)"
+cmd  - 4:                   ~/.bin/hs -c "return hs.wm.focus_space_or_previous(9)"
+cmd  - 5:                   ~/.bin/hs -c "return hs.wm.focus_space_or_previous(10)"
+
+# -----------------------
+# Focus spapce lefr / right
+# -----------------------
+cmd + alt + shift - left:   ~/.bin/hs -c "return hs.wm.focus_space_in_direction('left')"
+cmd + alt + shift - right:  ~/.bin/hs -c "return hs.wm.focus_space_in_direction('right')"
+
+# -----------------------
+# Window focus
+# -----------------------
+cmd - right:                ~/.bin/hs -c "return hs.wm.focus_window_or_screen('east')"
+cmd - left:                 ~/.bin/hs -c "return hs.wm.focus_window_or_screen('west')"
+cmd - up:                   ~/.bin/hs -c "return hs.wm.focus_window_or_screen('north')"
+cmd - down:                 ~/.bin/hs -c "return hs.wm.focus_window_or_screen('south')"
+
+# -----------------------
+# Move windows to spaces
+# -----------------------
+cmd + shift - escape:       yabai -m window --space 1 --focus
+cmd + shift - f2:           yabai -m window --space 2 --focus
+cmd + shift - f1:           yabai -m window --space 3 --focus
+cmd + shift - f3:           yabai -m window --space 4 --focus
+cmd + shift - f4:           yabai -m window --space 5 --focus
+cmd + shift - 1:            yabai -m window --space 6 --focus
+cmd + shift - 2:            yabai -m window --space 7 --focus
+cmd + shift - 3:            yabai -m window --space 8 --focus
+cmd + shift - 4:            yabai -m window --space 9 --focus
+cmd + shift - 5:            yabai -m window --space 10 --focus
+
+# -----------------------
+# Swap windows
+# -----------------------
+cmd + shift - right:        yabai -m window --swap east || yabai -m window --swap west
+cmd + shift - left:         yabai -m window --swap west || yabai -m window --swap east
+cmd + shift - up:           yabai -m window --swap north || yabai -m window --swap south
+cmd + shift - down:         yabai -m window --swap south || yabai -m window --swap north
+
+# -----------------------
+# Resize windows
+# -----------------------
+cmd + alt - right:          yabai -m window --resize right:50:0  || yabai -m window --resize left:50:0
+cmd + alt - left:           yabai -m window --resize left:-50:0 || yabai -m window --resize right:-50:0
+cmd + alt - up:             yabai -m window --resize top:0:-50 || yabai -m window --resize bottom:0:-50
+cmd + alt - down:           yabai -m window --resize bottom:0:50  || yabai -m window --resize top:0:50
+
+# ----------------------
+# Rotate windows
+# ----------------------
+cmd + ctrl - right:         ~/.config/yabai/rotate clockwise
+cmd + ctrl - left:          ~/.config/yabai/rotate counterclockwise
+
+# ----------------------
+# Window switcher
+# ----------------------
+cmd - 0x32:                 ~/.config/yabai/switch next
+cmd + shift - 0x32:         ~/.config/yabai/switch prev
+
+# ----------------------
+# Window properties
+# ----------------------
+cmd + alt - f:              yabai -m window --toggle zoom-fullscreen
+cmd - 0x2A:                 yabai -m window --toggle float --grid 4:4:1:1:2:2
+cmd + alt - 0x2A:           yabai -m window --toggle sticky --grid 4:4:1:1:2:2
+
+# ----------------------
+# Stacks
+# ----------------------
+ctrl + shift - right:       yabai -m window east --stack $(yabai -m query --windows --window | jq -r '.id')
+ctrl + shift - left:        yabai -m window west --stack $(yabai -m query --windows --window | jq -r '.id')
+ctrl + shift - up:          yabai -m window north --stack $(yabai -m query --windows --window | jq -r '.id')
+ctrl + shift - down:        yabai -m window south --stack $(yabai -m query --windows --window | jq -r '.id')
+ctrl + shift - tab:         yabai -m window --focus stack.next || yabai -m window --focus stack.prev
+
+# -----------------------
+# Yabai layouts
+# -----------------------
+cmd + alt - 4:             yabai -m space --layout bsp && sketchybar --trigger window_focus && ~/.bin/hs -c "return hs.helpers.notify('Layout set to bsp')"
+cmd + alt - 5:             yabai -m space --layout stack && sketchybar --trigger window_focus && ~/.bin/hs -c "return hs.helpers.notify('Layout set to stack')"
+cmd + alt - 6:             yabai -m space --layout float && sketchybar --trigger window_focus && ~/.bin/hs -c "return hs.helpers.notify('Layout set to float')"
+cmd + alt - h:             yabai -m space --balance && sketchybar --trigger window_focus

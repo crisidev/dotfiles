@@ -9,13 +9,12 @@
 package.cpath = package.cpath .. ";/Users/" .. os.getenv("USER") .. "/.local/share/sketchybar_lua/?.so"
 
 -- Require the sketchybar module
-sbar = require("sketchybar")
+sbar = require("bottombar")
 
 -- Load the init.lua file
 require("init")
-os.execute("bottombar &")
 
-os.execute("sketchybar --hotload on")
+os.execute("bottombar --hotload on")
 
 -- Run the event loop of the sketchybar module (without this there will be no
 -- bi-directional communication between the lua module and sketchybar)

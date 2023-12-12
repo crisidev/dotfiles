@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+DIRECTION=${1:-next}
+
+TYPE=$(yabai -m query --spaces --space | jq -r .type)
+if [ "$TYPE" = "stack" ]; then
+    if [ "$DIRECTION" = "prev" ]; then
+        yabai -m window --focus stack.next || yabai -m window --focus stack.prev
+    else
+        yabai -m window --focus stack.prev || yabai -m window --focus stack.next
+    fi
+else
+    if [ "$DIRECTION" = "prev" ]; then
+        ~/.bin/hs -c "return hs.wm.window_switcher:previous()"
+    else
+        ~/.bin/hs -c "return hs.wm.window_switcher:next()"
+    fi
+fi

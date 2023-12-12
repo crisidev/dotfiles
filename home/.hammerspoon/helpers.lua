@@ -65,6 +65,34 @@ module.yabai = function(args)
         :waitUntilExit()
 end
 
+-- Toggle debug
+module.toggle_debug = function()
+    module.set_log_level(module.log)
+    module.set_log_level(require("wm").log)
+    if module.log.getLogLevel() == 3 then
+        ---@diagnostic disable-next-line: undefined-field
+        hs.notify.new({ title = "Hammerspoon", informativeText = "Log level set to info" }):send()
+    else
+        ---@diagnostic disable-next-line: undefined-field
+        hs.notify.new({ title = "Hammerspoon", informativeText = "Log level set to debug" }):send()
+    end
+end
+
+-- Toggle console
+module.toggle_console = function()
+    if module.log.getLogLevel() == 3 then
+        module.set_log_level(module.log)
+        module.set_log_level(require("wm").log)
+    end
+    hs.toggleConsole()
+end
+
+-- Notify
+module.notify = function(message)
+    ---@diagnostic disable-next-line: undefined-field
+    hs.notify.new({ title = "Hammerspoon", informativeText = message }):send()
+end
+
 ------------------------------------------
 -- Beachballers
 ------------------------------------------

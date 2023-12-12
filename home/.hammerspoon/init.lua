@@ -22,8 +22,15 @@ spoon.AppBindings:bind("Microsoft Teams (work or school)", {
 ------------------------------------------
 require "hs.ipc"
 local wm = require "wm"
-require("keybinds").init()
 wm.init()
+
+-- Enable stackline
+local stackline = require "stackline"
+stackline:init {
+    paths = {
+        yabai = require("helpers").yabai_bin,
+    },
+}
 
 hs
     .notify

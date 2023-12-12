@@ -1,0 +1,5 @@
+require "helpers"
+require "app_mapping"
+require "bar"
+require "default"
+require "items"

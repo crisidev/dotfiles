@@ -13,7 +13,7 @@ module.all_spaces = hs.spaces.allSpaces()
 module.all_spaces_length = 0
 module.ordered_spaces = {}
 module.screen_primary = hs.screen.primaryScreen():getUUID()
-module.screen_secondary = nil
+module.screen_secondary = ""
 module.log = hs.logger.new("wm", "info")
 
 -- Get the list of spaces in order, independently from screens
@@ -48,9 +48,9 @@ module.find_other_screen = function()
                 return screen
             end
         end
-        return nil
+        return ""
     else
-        return nil
+        return ""
     end
 end
 
@@ -266,7 +266,7 @@ module.focus_window_or_screen = function(direction)
                 if direction == "east" then
                     if module.all_spaces_length > 1 then
                         module.log.df "focus_window_or_screen(): reached edge of current screen, focusing next screen"
-                        module.focus_screen "recent"
+                        module.focus_screen "next"
                     else
                         helpers.yabai { "-m", "window", "--focus", "west" }
                     end
@@ -274,7 +274,7 @@ module.focus_window_or_screen = function(direction)
                 if direction == "west" then
                     if module.all_spaces_length > 1 then
                         module.log.df "focus_window_or_screen(): reached edge of current screen, focusing previous screen"
-                        module.focus_screen "recent"
+                        module.focus_screen "prev"
                     else
                         helpers.yabai { "-m", "window", "--focus", "east" }
                     end
@@ -568,6 +568,7 @@ module.init = function()
     )
     module.log.f("there are %s application watchers", helpers.length(module.app_watchers))
     hs["wm"] = module
+    hs["helpers"] = helpers
 end
 
 return module

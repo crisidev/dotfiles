@@ -2,7 +2,9 @@
 
 sleep 3
 "$HOME/.bin/hs" -c "return hs.wm.ensure_all_spaces_are_present()"
-echo "1" > /tmp/yabai_matteobigoi.cycle_all_spaces_mission_control
+SCREEN_PRIMARY=$("$HOME/.bin/hs" -c "return hs.wm.screen_primary")
+SCREEN_SECONDARY=$("$HOME/.bin/hs" -c "return hs.wm.screen_secondary")
+echo "$SCREEN_PRIMARY $SCREEN_SECONDARY" > /tmp/yabai_matteobigoi.cycle_all_spaces_mission_control
 nohup /opt/homebrew/bin/yabai --restart-service >/dev/null
 
 exit 0
