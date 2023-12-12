@@ -12,8 +12,8 @@ module.focused_screen_for_floating_windows = nil
 module.all_spaces = hs.spaces.allSpaces()
 module.all_spaces_length = 0
 module.ordered_spaces = {}
-module.screen_main = hs.screen.primaryScreen():getUUID()
-module.screen_other = nil
+module.screen_primary = hs.screen.primaryScreen():getUUID()
+module.screen_secondary = nil
 module.log = hs.logger.new("wm", "info")
 
 -- Get the list of spaces in order, independently from screens
@@ -22,14 +22,14 @@ module.get_ordered_spaces = function()
     module.log.vf("get_ordered_spaces(): all spaces %s", hs.inspect.inspect(module.all_spaces))
     if module.all_spaces then
         -- Main screen first
-        local spaces_main = module.all_spaces[module.screen_main]
+        local spaces_main = module.all_spaces[module.screen_primary]
         if spaces_main then
             for _, space in pairs(spaces_main) do
                 table.insert(ordered_spaces, space)
             end
         end
         for screen, spaces in pairs(module.all_spaces) do
-            if screen ~= module.screen_main then
+            if screen ~= module.screen_primary then
                 for _, space in pairs(spaces) do
                     table.insert(ordered_spaces, space)
                 end
@@ -44,7 +44,7 @@ end
 module.find_other_screen = function()
     if module.all_spaces_length > 1 then
         for screen, _ in pairs(module.all_spaces) do
-            if screen ~= module.screen_main then
+            if screen ~= module.screen_primary then
                 return screen
             end
         end
@@ -60,8 +60,8 @@ module.update_cache = function()
     module.all_spaces_length = helpers.length(module.all_spaces)
     module.ordered_spaces = module.get_ordered_spaces()
     module.ordered_spaces_length = helpers.length(module.ordered_spaces)
-    module.screen_main = hs.screen.primaryScreen():getUUID()
-    module.screen_other = module.find_other_screen()
+    module.screen_primary = hs.screen.primaryScreen():getUUID()
+    module.screen_secondary = module.find_other_screen()
 end
 
 -- Check if a space is already visible
@@ -165,28 +165,28 @@ module.focus_space_in_direction = function(direction)
 end
 
 -- Helper function to add or remove spaces
-module.add_or_remove_spaces = function(spaces, spaces_per_display, screen)
+module.add_or_remove_spaces = function(spaces, spaces_per_screen, screen)
     if spaces then
         local spaces_len = helpers.length(spaces)
-        if spaces_per_display > spaces_len then
-            for _ = 1, spaces_per_display - spaces_len do
+        if spaces_per_screen > spaces_len then
+            for _ = 1, spaces_per_screen - spaces_len do
                 module.log.df(
-                    "add_or_remove_spaces(): %d spaces on main display is less than %d spaces, adding space to display %s",
+                    "add_or_remove_spaces(): %d spaces screen is less than %d spaces, adding space to screen %s",
                     spaces_len,
-                    spaces_per_display,
+                    spaces_per_screen,
                     screen
                 )
                 hs.spaces.addSpaceToScreen(screen, true)
             end
-        elseif spaces_per_display < spaces_len then
+        elseif spaces_per_screen < spaces_len then
             for i = #spaces, 1, -1 do
                 module.log.df(
-                    "add_or_remove_spaces(): %d spaces on main display is more than %d spaces, removing space from display %s",
+                    "add_or_remove_spaces(): %d spaces on screen is more than %d spaces, removing space from screen %s",
                     spaces_len,
-                    spaces_per_display,
+                    spaces_per_screen,
                     screen
                 )
-                if i > spaces_per_display then
+                if i > spaces_per_screen then
                     hs.spaces.removeSpace(spaces[i], true)
                 end
             end
@@ -199,20 +199,20 @@ module.ensure_all_spaces_are_present = function()
     module.update_cache()
     -- 2 monitors
     if module.all_spaces_length > 1 then
-        local spaces_per_display = 5
-        local main_spaces = module.all_spaces[module.screen_main]
+        local spaces_per_screen = 5
+        local main_spaces = module.all_spaces[module.screen_primary]
         if main_spaces then
-            module.add_or_remove_spaces(main_spaces, spaces_per_display, module.screen_main)
+            module.add_or_remove_spaces(main_spaces, spaces_per_screen, module.screen_primary)
         end
         for screen, spaces in pairs(module.all_spaces) do
-            if screen ~= module.screen_main then
-                module.add_or_remove_spaces(spaces, spaces_per_display, screen)
+            if screen ~= module.screen_primary then
+                module.add_or_remove_spaces(spaces, spaces_per_screen, screen)
             end
         end
     else
-        local spaces_per_display = 10
+        local spaces_per_screen = 10
         local main_spaces = hs.spaces.spacesForScreen()
-        module.add_or_remove_spaces(main_spaces, spaces_per_display, hs.screen.mainScreen():getUUID())
+        module.add_or_remove_spaces(main_spaces, spaces_per_screen, hs.screen.mainScreen():getUUID())
     end
     module.update_cache()
     os.execute(helpers.sketchybar_bin .. " --reload")
@@ -220,47 +220,38 @@ end
 
 -- Cycle all mission control spaces
 module.cycle_all_spaces_mission_control = function()
-    local main_space = hs.spaces.activeSpaceOnScreen(module.screen_main)
-    local other_space = nil
+    local primary_space = hs.spaces.activeSpaceOnScreen(module.screen_primary)
+    local secondary_space = nil
     if module.all_spaces_length > 1 then
-        other_space = hs.spaces.activeSpaceOnScreen(module.screen_other)
+        secondary_space = hs.spaces.activeSpaceOnScreen(module.screen_secondary)
     end
     for i = 1, 10 do
         module.focus_space(i)
         os.execute "sleep 0.3"
     end
-    if module.all_spaces_length > 1 and other_space then
-        module.focus_space(helpers.index_of(module.ordered_spaces, other_space))
+    if module.all_spaces_length > 1 and secondary_space then
+        module.focus_space(helpers.index_of(module.ordered_spaces, secondary_space))
         os.execute "sleep 0.3"
     end
-    module.focus_space(helpers.index_of(module.ordered_spaces, main_space))
-end
-
--- Checks if a window belongs to a screen
-module.is_in_screen = function(screen, win)
-    return win:screen() == screen
+    module.focus_space(helpers.index_of(module.ordered_spaces, primary_space))
 end
 
 -- Moves focus to a specific screen
 module.focus_screen = function(screen)
-    local windows = hs.fnutils.filter(hs.window.orderedWindows(), hs.fnutils.partial(module.is_in_screen, screen))
-    if windows then
-        local window_to_focus = #windows > 0 and windows[1] or hs.window.desktop()
-        window_to_focus:focus()
-    end
+    helpers.yabai { "-m", "display", "--focus", tostring(screen) }
 end
 
 -- Focus a specific screen if the space is already visible
 module.focus_space_or_screen = function(space)
-    if module.all_spaces_length then
+    if module.all_spaces_length > 1 then
         local other_screen = module.find_other_screen()
         local other_space_mission_control_id = hs.spaces.activeSpaceOnScreen(other_screen)
         local other_space = helpers.index_of(module.ordered_spaces, other_space_mission_control_id)
         module.log.df("focus_space_or_screen(): target space %d, other space %d", space, other_space)
         if space == other_space then
-            module.focus_screen(hs.window.focusedWindow():screen():previous())
+            module.focus_screen "next"
         else
-            module.focus_screen(hs.window.focusedWindow():screen():next())
+            module.focus_screen "prev"
         end
     end
 end
@@ -275,7 +266,7 @@ module.focus_window_or_screen = function(direction)
                 if direction == "east" then
                     if module.all_spaces_length > 1 then
                         module.log.df "focus_window_or_screen(): reached edge of current screen, focusing next screen"
-                        module.focus_screen(hs.window.focusedWindow():screen():next())
+                        module.focus_screen "recent"
                     else
                         helpers.yabai { "-m", "window", "--focus", "west" }
                     end
@@ -283,7 +274,7 @@ module.focus_window_or_screen = function(direction)
                 if direction == "west" then
                     if module.all_spaces_length > 1 then
                         module.log.df "focus_window_or_screen(): reached edge of current screen, focusing previous screen"
-                        module.focus_screen(hs.window.focusedWindow():screen():previous())
+                        module.focus_screen "recent"
                     else
                         helpers.yabai { "-m", "window", "--focus", "east" }
                     end
@@ -524,7 +515,9 @@ module.init = function()
 
     -- Update cache on startup
     module.update_cache()
-    module.log.f("started hammerspoon with ordered spaces %s", hs.inspect.inspect(module.ordered_spaces))
+    module.log.f("primary screen: %s", module.screen_primary)
+    module.log.f("secondary screen: %s", module.screen_secondary)
+    module.log.f("found these ordered spaces %s", hs.inspect.inspect(module.ordered_spaces))
     module.log.f(
         "watching for float applications and windows configuration: %s",
         hs.inspect.inspect(module.windows_configuration)

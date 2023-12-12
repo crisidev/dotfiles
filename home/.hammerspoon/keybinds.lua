@@ -177,6 +177,10 @@ module.misc = function()
         helpers.yabai { "-m", "window", "--toggle", "float", "--grid", "4:4:1:1:2:2" }
         os.execute(helpers.sketchybar_bin .. " --trigger window_focus")
     end)
+    hs.hotkey.bind({ "cmd", "option" }, "\\", function()
+        helpers.yabai { "-m", "window", "--toggle", "sticky", "--grid", "4:4:1:1:2:2" }
+        os.execute(helpers.sketchybar_bin .. " --trigger window_focus")
+    end)
     -- Lock screen
     hs.hotkey.bind({ "cmd", "option" }, "l", function()
         hs.caffeinate.lockScreen()
@@ -218,6 +222,7 @@ module.misc = function()
 
     -- Toggle hammerspoon debug
     hs.hotkey.bind({ "cmd", "option" }, "d", function()
+        helpers.set_log_level(module.log)
         helpers.set_log_level(wm.log)
         helpers.set_log_level(helpers.log)
         helpers.set_log_level(module.log)
@@ -230,6 +235,12 @@ module.misc = function()
         end
     end)
     hs.hotkey.bind({ "cmd", "option", "shift" }, "d", function()
+        if module.log.getLogLevel() == 3 then
+            helpers.set_log_level(module.log)
+            helpers.set_log_level(wm.log)
+            helpers.set_log_level(helpers.log)
+            helpers.set_log_level(module.log)
+        end
         hs.toggleConsole()
     end)
 

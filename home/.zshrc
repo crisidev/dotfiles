@@ -1,11 +1,5 @@
 # zmodload zsh/zprof
 
-# rtx and cargo are the first things to load
-[ -f $HOME/.cargo/env ] && source $HOME/.cargo/env
-if which rtx > /dev/null; then
-    eval "$(rtx activate zsh)"
-fi
-
 # paths
 MY_PATH="$HOME/.bin:$HOME/.local/share/lvim/mason/bin:$HOME/.local/bin:/opt/homebrew/bin"
 BREW_PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:/opt/homebrew/opt/coreutils/libexec/gnubin:/opt/homebrew/opt/grep/libexec/gnubin:/opt/homebrew/opt/ssh-copy-id/bin:/opt/homebrew/opt/gnu-tar/libexec/gnubin:/opt/homebrew/opt/llvm/bin"
@@ -21,6 +15,12 @@ autoload -Uz compinit
 compinit
 source /opt/homebrew/opt/antidote/share/antidote/antidote.zsh
 antidote load $HOME/.zsh_plugins
+
+# rtx and cargo are the first things to load
+[ -f $HOME/.cargo/env ] && source $HOME/.cargo/env
+if which rtx > /dev/null; then
+    _evalcache rtx activate zsh
+fi
 
 # options
 setopt NO_LIST_BEEP
