@@ -252,6 +252,14 @@ module.misc = function()
     hs.hotkey.bind({ "cmd", "option", "shift" }, "m", function()
         wm.cycle_all_spaces_mission_control()
     end)
+
+    -- Cycle windows
+    hs.hotkey.bind({ "ctrl", "option" }, "right", function()
+        wm.rotate_windows "right"
+    end)
+    hs.hotkey.bind({ "ctrl", "option" }, "left", function()
+        wm.rotate_windows "left"
+    end)
 end
 
 module.init = function()

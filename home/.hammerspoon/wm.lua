@@ -309,6 +309,50 @@ module.resize_window = function(direction1, direction2)
         :waitUntilExit()
 end
 
+-- Find window id
+module.yabai_query_window_id = function(type)
+    local args = { "-m", "query", "--windows", "--window", tostring(type) }
+    local window = nil
+    hs.task
+        .new(helpers.yabai_bin, nil, function(_, out, _)
+            local output = hs.json.decode(out)
+            if output then
+                window = output["id"]
+            end
+            return true
+        end, args)
+        :start()
+        :waitUntilExit()
+    return window
+end
+
+-- Rotate windows adjacent to current window
+module.yabai_rotate = function(window, direction)
+    local args = { "-m", "window", tostring(window), "--swap", direction }
+    local status = 0
+    while status ~= 1 do
+        hs.task
+            .new(helpers.yabai_bin, function(rc, _, _)
+                status = rc
+            end, function(_, _, _)
+                return true
+            end, args)
+            :start()
+            :waitUntilExit()
+    end
+end
+
+-- Rotate windows left and right
+module.rotate_windows = function(direction)
+    if direction == "left" then
+        local window = module.yabai_query_window_id "last"
+        module.yabai_rotate(window, "prev")
+    elseif direction == "right" then
+        local window = module.yabai_query_window_id "first"
+        module.yabai_rotate(window, "next")
+    end
+end
+
 ------------------------------------------
 -- Float windows handling
 ------------------------------------------
