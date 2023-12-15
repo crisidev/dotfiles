@@ -73,4 +73,16 @@ module.dump = function(o)
     end
 end
 
+module.slider_on = function(slider, animation, speed)
+    sbar.animate(animation, speed, function()
+        slider:set { slider = { width = 100 } }
+    end)
+end
+
+module.slider_off = function(slider, animation, speed)
+    sbar.animate(animation, speed, function()
+        slider:set { slider = { width = 0 } }
+    end)
+end
+
 return module

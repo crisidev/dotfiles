@@ -32,7 +32,7 @@ module.update = function()
     local label_color = colors.white
     if outdated_num == 0 then
         color = colors.green
-        outdated = ""
+        outdated = icons.ok
         label_color = colors.green
     elseif outdated_num <= 10 then
         color = colors.yellow

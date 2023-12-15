@@ -1,6 +1,7 @@
 local helpers = require "helpers"
 local colors = require "colors"
 local icons = require "icons"
+local homedir = os.getenv "HOME"
 local module = {}
 
 module.yabai = sbar.add("item", "yabai", {
@@ -110,7 +111,7 @@ end
 module.yabai:subscribe("window_focus", window_focus)
 
 module.yabai:subscribe("mouse.clicked", function()
-    helpers.runcmd "yabai -m window --toggle float"
+    os.execute(homedir .. "/.config/yabai/layout")
     window_focus()
 end)
 

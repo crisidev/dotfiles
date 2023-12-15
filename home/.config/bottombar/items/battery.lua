@@ -57,7 +57,6 @@ module.update = function()
             color = colors.white
         end
 
-        module.battery:set { icon = { string = icon, color = color } }
         local label = string.format("Charge %s%%", percentage)
         if time ~= "" then
             label = string.format("%s, remaining time %s", label, time)
@@ -69,9 +68,10 @@ module.update = function()
             padding_right = 15,
             label = label,
         })
-    else
-        module.battery:set { icon = { string = icon, color = color } }
     end
+    sbar.animate("sin", 10, function()
+        module.battery:set { icon = { string = icon, color = color } }
+    end)
 end
 
 module.battery:subscribe("force", module.update)

@@ -10,6 +10,8 @@ export PATH="$MY_PATH:$BREW_PATH:$SYSTEM_PATH:$PATH"
 export ZSH_FZF_HISTORY_SEARCH_BIND="^f"
 export ZSH_FZF_HISTORY_SEARCH_FZF_ARGS="+s +m +x -e --height 40% --reverse"
 
+export DISABLE_AUTO_TITLE=true
+
 # configure antidote
 autoload -Uz compinit
 compinit
@@ -125,5 +127,9 @@ export CC_AARCH64_unknown_linux_musl=aarch64-unknown-linux-musl-gcc
 export CXX_AARCH64_unknown_linux_musl=aarch64-unknown-linux-musl-g++
 export AR_AARCH64_unknown_linux_musl=aarch64-unknown-linux-musl-ar
 export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER=aarch64-unknown-linux-musl-gcc
+
+# yabai
+autoload -U add-zsh-hook
+add-zsh-hook -Uz chpwd (){ bottombar --trigger window_focus; }
 
 # zprof

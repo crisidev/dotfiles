@@ -23,7 +23,7 @@ spotify_anchor=(
     icon.background.image.scale=1
     label.font="$FONT:Black:12.0"
 	label.drawing=off
-	drawing=off
+	drawing=on
 	y_offset=0
 )
 

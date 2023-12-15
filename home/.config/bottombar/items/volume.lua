@@ -55,15 +55,39 @@ module.volume_icon = sbar.add("item", "volume_icon", {
     y_offset = 1,
 })
 
-local function details_on(env)
-    sbar.animate("tanh", 30, function()
-        module.volume_slider:set { slider = { width = 100 } }
-    end)
-end
-local function details_off(env)
-    sbar.animate("tanh", 30, function()
-        module.volume_slider:set { slider = { width = 0 } }
-    end)
+local function update_devices(env)
+    os.execute "bottombar --remove '/volume.device.*/'"
+    module.volume_slider:set { popup = { drawing = "toggle" } }
+    local current = helpers.runcmd("SwitchAudioSource -t output -c", true)
+    local devices = helpers.runcmd "SwitchAudioSource -a -t output"
+    if devices then
+        local idx = 0
+        for device in devices:gmatch "[^\r\n]+" do
+            local color = colors.grey
+            if device == current then
+                color = colors.white
+            end
+            local click_script = string.format(
+                "SwitchAudioSource -s \"%s\" && bottombar --set '/volume.device.*/' label.color=%s --set %s label.color=%s --set %s popup.drawing=off",
+                device,
+                colors.grey,
+                "volume.device." .. tostring(idx),
+                colors.white,
+                env.NAME
+            )
+            sbar.add("item", "volume.device." .. tostring(idx), {
+                position = "popup." .. module.volume_slider.name,
+                label = {
+                    string = device .. "    ",
+                    color = color,
+                },
+                padding_left = 8,
+                padding_right = 15,
+                click_script = click_script,
+            })
+            idx = idx + 1
+        end
+    end
 end
 
 module.volume_slider:subscribe("volume_change", function(env)
@@ -84,18 +108,14 @@ module.volume_slider:subscribe("volume_change", function(env)
     module.volume_slider:set { slider = { percentage = percentage } }
     local info = sbar.query(env.NAME)
     if info and info["slider"] and tonumber(info.slider.width) == 0 then
-        sbar.animate("tanh", 30, function()
-            module.volume_slider:set { slider = { width = 100 } }
-        end)
+        helpers.slider_on(module.volume_slider, "sin", 20)
     end
 
-    os.execute "sleep 2"
+    os.execute "sleep 1"
 
     info = sbar.query(env.NAME)
     if info and info["slider"] and info.slider.percentage == env.INFO then
-        sbar.animate("tanh", 30, function()
-            module.volume_slider:set { slider = { width = 0 } }
-        end)
+        helpers.slider_off(module.volume_slider, "sin", 20)
     end
 end)
 
@@ -103,50 +123,19 @@ module.volume_slider:subscribe("mouse.clicked", function(env)
     os.execute('osascript -e "set volume output volume ' .. env.PERCENTAGE .. '"')
 end)
 
-module.volume_slider:subscribe("mouse.exited.global", function(env)
-    details_off(env)
+module.volume_slider:subscribe("mouse.exited", function(env)
+    helpers.slider_off(module.volume_slider, "sin", 20)
 end)
 
 module.volume_icon:subscribe("mouse.clicked", function(env)
     if env.BUTTON == "right" or env.MODIFIER == "shift" then
-        os.execute "bottombar --remove '/volume.device.*/'"
-        module.volume_slider:set { popup = { drawing = "toggle" } }
-        local current = helpers.runcmd("SwitchAudioSource -t output -c", true)
-        local devices = helpers.runcmd "SwitchAudioSource -a -t output"
-        if devices then
-            local idx = 0
-            for device in devices:gmatch "[^\r\n]+" do
-                local color = colors.grey
-                if device == current then
-                    color = colors.white
-                end
-                local click_script = string.format(
-                    "SwitchAudioSource -s \"%s\" && bottombar --set '/volume.device.*/' label.color=%s --set %s label.color=%s --set %s popup.drawing=off",
-                    device,
-                    colors.grey,
-                    "volume.device." .. tostring(idx),
-                    colors.white,
-                    env.NAME
-                )
-                sbar.add("item", "volume.device." .. tostring(idx), {
-                    position = "popup." .. module.volume_slider.name,
-                    label = {
-                        string = device .. "    ",
-                        color = color,
-                    },
-                    padding_left = 8,
-                    padding_right = 15,
-                    click_script = click_script,
-                })
-                idx = idx + 1
-            end
-        end
+        update_devices()
     else
         local info = sbar.query "volume"
         if info and info["slider"] and tonumber(info.slider.width) == 0 then
-            details_on(env)
+            helpers.slider_on(module.volume_slider, "sin", 20)
         else
-            details_off(env)
+            helpers.slider_off(module.volume_slider, "sin", 20)
         end
     end
 end)
@@ -156,4 +145,3 @@ module.volume_icon:subscribe("mouse.exited.global", function()
 end)
 
 return module
-

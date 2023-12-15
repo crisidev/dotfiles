@@ -1,8 +1,9 @@
 local icons = require "icons"
 local colors = require "colors"
 local helpers = require "helpers"
+local module = {}
 
-local mic_slider = sbar.add("slider", "mic", {
+module.mic_slider = sbar.add("slider", "mic", {
     position = "right",
     padding_right = -5,
     updates = true,
@@ -30,7 +31,7 @@ local mic_slider = sbar.add("slider", "mic", {
     y_offset = 1,
 })
 
-local mic_icon = sbar.add("item", "mic_icon", {
+module.mic_icon = sbar.add("item", "mic_icon", {
     position = "right",
     padding_right = -5,
     padding_left = 15,
@@ -55,29 +56,19 @@ local mic_icon = sbar.add("item", "mic_icon", {
     y_offset = 1,
 })
 
-local function slider_on()
-    sbar.animate("tanh", 30, function()
-        mic_slider:set { slider = { width = 100 } }
-    end)
-end
-local function slider_off()
-    sbar.animate("tanh", 30, function()
-        mic_slider:set { slider = { width = 0 } }
-    end)
-end
-
 local function update_mute_status()
     local muted = helpers.hammerspoon_result("hs.audiodevice.defaultInputDevice():muted()", true)
     local color = colors.white
-    if muted:find "true" then
+    if muted and muted:find "true" then
         color = colors.red
-        mic_slider:set { slider = { percentage = 0 } }
+        module.mic_slider:set { slider = { percentage = 0 } }
     end
-    mic_icon:set { icon = { color = color } }
+    module.mic_icon:set { icon = { color = color } }
 end
-local function update_available_devices()
+
+local function update_available_devices(env)
     os.execute "bottombar --remove '/mic.device.*/'"
-    mic_slider:set { popup = { drawing = "toggle" } }
+    module.mic_slider:set { popup = { drawing = "toggle" } }
     local current = helpers.runcmd("SwitchAudioSource -t input -c", true)
     local devices = helpers.runcmd "SwitchAudioSource -a -t input"
     if devices then
@@ -96,7 +87,7 @@ local function update_available_devices()
                 env.NAME
             )
             sbar.add("item", "mic.device." .. tostring(idx), {
-                position = "popup." .. mic_slider.name,
+                position = "popup." .. module.mic_slider.name,
                 label = {
                     string = device .. "    ",
                     color = color,
@@ -112,43 +103,51 @@ end
 
 local function update_slider()
     local current = helpers.runcmd 'osascript -e "input volume of (get volume settings)"'
-    mic_slider:set { slider = { percentage = current } }
+    module.mic_slider:set { slider = { percentage = current } }
     local info = sbar.query "mic"
     if info then
         if tonumber(info.slider.width) == 0 then
-            slider_on()
+            helpers.slider_on(module.mic_slider, "sin", 20)
         else
-            slider_off()
+            helpers.slider_off(module.mic_slider, "sin", 20)
         end
     else
-        slider_off()
+        helpers.slider_off(module.mic_slider, "sin", 20)
     end
 end
 
-mic_icon:subscribe("mic_update", function(env)
-    update_mute_status()
-end)
+-- module.mic_slider:subscribe("volume_change", function(env)
+--     local current = helpers.runcmd 'osascript -e "input volume of (get volume settings)"'
+--     module.mic_slider:set { slider = { percentage = current } }
+--     helpers.slider_on(module.mic_slider, "tanh", 30)
+--     os.execute "sleep 1"
+--     helpers.slider_off(module.mic_slider, "tanh", 30)
+-- end)
 
-mic_icon:subscribe("mouse.clicked", function(env)
-    if env.BUTTON == "left" then
-        helpers.hammerspoon "spoon.MicMute:toggleMicMute()"
-    elseif env.BUTTON == "right" then
-        update_slider()
-    elseif env.MODIFIER == "shift" then
-        update_available_devices()
-    end
-    update_mute_status()
-end)
-
-mic_slider:subscribe("mouse.clicked", function(env)
+module.mic_slider:subscribe("mouse.clicked", function(env)
     os.execute('osascript -e "set volume input volume ' .. env.PERCENTAGE .. '"')
 end)
 
-mic_icon:subscribe("mouse.exited.global", function(env)
-    mic_slider:set { popup = { drawing = "off" } }
-    slider_off(env)
+module.mic_slider:subscribe("mouse.exited", function(env)
+    helpers.slider_off(module.mic_slider, "sin", 20)
 end)
 
-mic_slider:subscribe("mouse.exited.global", function(env)
-    slider_off(env)
+module.mic_icon:subscribe("mic_update", function(env)
+    update_mute_status()
+end)
+
+module.mic_icon:subscribe("mouse.exited.global", function(env)
+    module.mic_slider:set { popup = { drawing = "off" } }
+    helpers.slider_off(module.mic_slider, "sin", 20)
+end)
+
+module.mic_icon:subscribe("mouse.clicked", function(env)
+    if env.MODIFIER == "shift" and env.BUTTON == "left" then
+        update_available_devices(env)
+    elseif env.BUTTON == "right" then
+        helpers.hammerspoon "spoon.MicMute:toggleMicMute()"
+    elseif env.BUTTON == "left" then
+        update_slider()
+    end
+    update_mute_status()
 end)

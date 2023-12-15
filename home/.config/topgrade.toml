@@ -19,7 +19,7 @@ pull_only_repos = [
     # Home sick
     "~/.homesick/repos/homeshick",
     "~/.homesick/repos/dotfiles",
-    "~/.homesick/repos/lvim",
+    # "~/.homesick/repos/lvim",
     # Github stuff
     "~/github/neovide",
 ]

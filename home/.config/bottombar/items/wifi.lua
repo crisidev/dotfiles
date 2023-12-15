@@ -62,12 +62,6 @@ local function get_wifi_info()
     return ssid, ipaddr, icon
 end
 
-local function update()
-    local ssid, ipaddr, icon = get_wifi_info()
-    local label = string.format("%s %s", ssid, ipaddr)
-    module.wifi:set { icon = icon, label = label }
-end
-
 local function update_details(ssid, ipaddr)
     local channel =
         helpers.runcmd "/System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport -I | awk -F ' channel: ' '/ channel: / { print $2 }'"
@@ -107,13 +101,20 @@ end
 module.update = function()
     local ssid, ipaddr, icon = get_wifi_info()
     local label = string.format("%s %s", ssid, ipaddr)
-    module.wifi:set { icon = icon, label = label }
+    sbar.animate("sin", 20.0, function()
+        module.wifi:set { icon = icon, label = label }
+    end)
     update_details(ssid, ipaddr)
 end
 
 module.wifi:subscribe("force", module.update)
 module.wifi:subscribe("routine", module.update)
-module.wifi:subscribe("wifi_change", module.update)
+module.wifi:subscribe("wifi_change", function(env)
+    module.update()
+    slide(env)
+    os.execute("sleep 1")
+    slide(env)
+end)
 
 module.wifi:subscribe("mouse.clicked", function(env)
     if env.BUTTON == "right" or env.MODIFIER == "shift" then

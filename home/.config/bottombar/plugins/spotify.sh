@@ -65,8 +65,7 @@ update() {
 			background.color=0x00000000
 			--set spotify.anchor drawing=on)
 	else
-		args+=(--set spotify.anchor drawing=off popup.drawing=off
-			--set spotify.play icon=􀊄)
+		args+=(--set spotify.play icon=􀊄)
 	fi
 	bottombar -m "${args[@]}"
 }
@@ -138,10 +137,10 @@ case "$SENDER" in
 "mouse.clicked")
 	mouse_clicked
 	;;
-"mouse.entered")
-	popup on
-	;;
-"mouse.exited" | "mouse.exited.global")
+# "mouse.entered")
+# 	popup on
+# 	;;
+"mouse.exited.global")
 	popup off
 	;;
 "routine")
