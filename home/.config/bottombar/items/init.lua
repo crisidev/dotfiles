@@ -2,16 +2,16 @@ local colors = require "colors"
 local homedir = os.getenv "HOME"
 
 -- Left
-require "items.yabai"
+local yabai = require "items.yabai"
 -- require "items.spotify"
-require "items.front_app"
+local front_app = require "items.front_app"
 
 -- Right
 os.execute(homedir .. "/.config/bottombar/items/spotify.sh")
-require "items.brew"
-require "items.notify"
-require "items.wifi"
-require "items.battery"
+local brew = require "items.brew"
+local notify = require "items.notify"
+local wifi = require "items.wifi"
+local battery = require "items.battery"
 require "items.volume"
 require "items.mic"
 sbar.add("bracket", "status", { "brew", "notify", "wifi", "battery", "volume_icon", "mic_icon" }, {
@@ -21,7 +21,7 @@ sbar.add("bracket", "status", { "brew", "notify", "wifi", "battery", "volume_ico
         height = 33,
     },
 })
-os.execute(homedir .. "/.config/bottombar/plugins/spotify.sh")
-require "items.front_title"
+local front_title = require "items.front_title"
 
--- Rest
+-- System woke
+yabai.subscribe_system_woke { battery, wifi, front_app, front_title, brew, notify }

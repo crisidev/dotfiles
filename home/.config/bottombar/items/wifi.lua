@@ -1,10 +1,9 @@
 local icons = require "icons"
 local colors = require "colors"
 local helpers = require "helpers"
+local module = {}
 
-local popup_toggle = "bottombar --set wifi popup.drawing=toggle"
-
-local wifi = sbar.add("item", "wifi", {
+module.wifi = sbar.add("item", "wifi", {
     position = "right",
     icon = {
         string = icons.wifi.disconnected,
@@ -39,13 +38,13 @@ local function wifi_line(icon, label)
             string = label,
             padding_right = 6,
         },
-        position = "popup." .. wifi.name,
+        position = "popup." .. module.wifi.name,
         drawing = true,
         background = {
             corner_radius = 12,
         },
-        padding_left = 7,
-        padding_right = 7,
+        padding_left = 8,
+        padding_right = 15,
         align = "left",
         update_freq = 120,
         updates = true,
@@ -66,11 +65,10 @@ end
 local function update()
     local ssid, ipaddr, icon = get_wifi_info()
     local label = string.format("%s %s", ssid, ipaddr)
-    wifi:set { icon = icon, label = label }
+    module.wifi:set { icon = icon, label = label }
 end
 
-local function update_details()
-    local ssid, ipaddr, _ = get_wifi_info()
+local function update_details(ssid, ipaddr)
     local channel =
         helpers.runcmd "/System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport -I | awk -F ' channel: ' '/ channel: / { print $2 }'"
     local auth =
@@ -102,33 +100,31 @@ local function slide(env)
         width = "dynamic"
     end
     sbar.animate("sin", 20.0, function()
-        wifi:set { label = { width = width } }
+        module.wifi:set { label = { width = width } }
     end)
 end
 
-wifi:subscribe("force", function()
-    update()
-end)
-wifi:subscribe("routine", function()
-    update()
-end)
-wifi:subscribe("wifi_change", function()
-    update()
-    update_details()
-end)
-wifi:subscribe("system_woke", function()
-    update()
-    update_details()
-end)
-wifi:subscribe("mouse.clicked", function(env)
+module.update = function()
+    local ssid, ipaddr, icon = get_wifi_info()
+    local label = string.format("%s %s", ssid, ipaddr)
+    module.wifi:set { icon = icon, label = label }
+    update_details(ssid, ipaddr)
+end
+
+module.wifi:subscribe("force", module.update)
+module.wifi:subscribe("routine", module.update)
+module.wifi:subscribe("wifi_change", module.update)
+
+module.wifi:subscribe("mouse.clicked", function(env)
     if env.BUTTON == "right" or env.MODIFIER == "shift" then
-        os.execute(popup_toggle)
+        module.wifi:set { popup = { drawing = "toggle" } }
     else
-        os.execute "bottombar --set wifi popup.drawing=off"
-        update_details()
+        module.wifi:set { popup = { drawing = false } }
         slide(env)
     end
 end)
-wifi:subscribe("mouse.exited.global", function()
-    os.execute "bottombar --set wifi popup.drawing=off"
+module.wifi:subscribe("mouse.exited.global", function()
+    module.wifi:set { popup = { drawing = false } }
 end)
+
+return module

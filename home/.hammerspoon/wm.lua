@@ -216,6 +216,7 @@ module.ensure_all_spaces_are_present = function()
     end
     module.update_cache()
     os.execute(helpers.sketchybar_bin .. " --reload")
+    os.execute(helpers.bottombar_bin .. " --reload")
 end
 
 -- Cycle all mission control spaces
@@ -238,7 +239,7 @@ end
 
 -- Moves focus to a specific screen
 module.focus_screen = function(screen)
-    helpers.yabai { "-m", "display", "--focus", tostring(screen) }
+    return helpers.yabai { "-m", "display", "--focus", tostring(screen) }
 end
 
 -- Focus a specific screen if the space is already visible

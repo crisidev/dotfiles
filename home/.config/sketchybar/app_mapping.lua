@@ -1,6 +1,4 @@
 local module = {}
-local helpers = require "helpers"
-local json = require "cjson"
 
 local ICON_MAP = {
     { regex = "1Password 7", icon = ":one_password:" },
@@ -205,36 +203,12 @@ local function to_formatted_icon(app, c)
     return to_icon(app) .. cnt
 end
 
-local function to_formatted_icons(apps)
+module.icons = function(apps)
     local formatted_icons = {}
     for app, cnt in pairs(apps) do
         table.insert(formatted_icons, to_formatted_icon(app, cnt))
     end
     return table.concat(formatted_icons, " ")
-end
-
-module.draw = function(input)
-    local space = input["space"]
-    local apps = input["apps"]
-    if space then
-        if apps then
-            os.execute(
-                string.format(
-                    "sketchybar -m --animate sin 10 --set space.%s label='%s' label.drawing=on",
-                    space,
-                    to_formatted_icons(apps)
-                )
-            )
-        else
-            os.execute(
-                string.format(
-                    "sketchybar -m --animate sin 10 --set space.%s label='%s' label.drawing=off",
-                    space,
-                    to_formatted_icons(apps)
-                )
-            )
-        end
-    end
 end
 
 return module

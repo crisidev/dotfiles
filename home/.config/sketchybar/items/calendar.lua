@@ -1,4 +1,6 @@
-local calendar = sbar.add("item", "calendar", {
+local module = {}
+
+module.calendar = sbar.add("item", "calendar", {
     icon = {
         padding_right = 0,
         font = {
@@ -11,7 +13,7 @@ local calendar = sbar.add("item", "calendar", {
         align = "right",
     },
     position = "right",
-    update_freq = 1,
+    update_freq = 2,
     padding_left = 8,
     y_offset = -3,
 })
@@ -19,8 +21,10 @@ local calendar = sbar.add("item", "calendar", {
 local function update()
     local date = os.date "%a %d. %b"
     local time = os.date "%H:%M:%S"
-    calendar:set { icon = date, label = time }
+    module.calendar:set { icon = date, label = time }
 end
 
-calendar:subscribe("routine", update)
-calendar:subscribe("forced", update)
+module.calendar:subscribe("routine", update)
+module.calendar:subscribe("forced", update)
+
+return module

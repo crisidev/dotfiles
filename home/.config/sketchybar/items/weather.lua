@@ -1,5 +1,7 @@
 local helpers = require "helpers"
-local weather = sbar.add("item", "weather", {
+
+local module = {}
+module.weather = sbar.add("item", "weather", {
     label = {
         align = "center",
     },
@@ -9,18 +11,18 @@ local weather = sbar.add("item", "weather", {
     y_offset = -3,
 })
 
-local function update()
+module.update = function()
     sbar.animate("tanh", 10, function()
         local w = helpers.runcmd('curl -s "https://wttr.in/?format=1"', true)
         if w then
-            weather:set { drawing = true, label = w, click_script = "open /System/Applications/Weather.app" }
+            module.weather:set { drawing = true, label = w, click_script = "open /System/Applications/Weather.app" }
         else
-            weather:set { drawing = false }
+            module.weather:set { drawing = false }
         end
     end)
 end
 
-weather:subscribe("routine", update)
-weather:subscribe("forced", update)
+module.weather:subscribe("routine", module.update)
+module.weather:subscribe("forced", module.update)
 
-update()
+return module

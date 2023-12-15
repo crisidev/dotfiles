@@ -1,6 +1,9 @@
 local colors = require "colors"
 local icons = require "colors"
 local helpers = require "helpers"
+local app_mapping = require "app_mapping"
+local module = {}
+module.modules = {}
 
 local function mouse_click(env)
     if env.BUTTON == "right" then
@@ -18,6 +21,22 @@ local function space_selection(env)
         label = { highlight = env.SELECTED },
         background = { border_color = color },
     })
+end
+
+local function window_change(input)
+    local space = input["space"]
+    local apps = input["apps"]
+    if space then
+        if apps then
+            sbar.animate("sin", 10, function()
+                module.modules[space]:set { label = { string = app_mapping.icons(apps), drawing = true } }
+            end)
+        else
+            sbar.animate("sin", 10, function()
+                module.modules[space]:set { label = { drawing = false } }
+            end)
+        end
+    end
 end
 
 for i = 1, 10, 1 do
@@ -48,9 +67,10 @@ for i = 1, 10, 1 do
 
     space:subscribe("space_change", space_selection)
     space:subscribe("mouse.clicked", mouse_click)
+    module.modules[i] = space
 end
 
-local space_creator = sbar.add("item", "space.creator", {
+module.space_creator = sbar.add("item", "space.creator", {
     padding_left = 10,
     padding_right = 8,
     icon = {
@@ -65,11 +85,16 @@ local space_creator = sbar.add("item", "space.creator", {
     y_offset = -3,
 })
 
-space_creator:subscribe("mouse.clicked", function(_)
+module.space_creator:subscribe("mouse.clicked", function(_)
     helpers.hammerspoon "hs.spaces.addSpaceToScreen(hs.screen.mainScreen(), true)"
 end)
-space_creator:subscribe("space_windows_change", function(env)
-    require("app_mapping").draw(env.INFO)
+
+module.space_creator:subscribe("space_windows_change", function(env)
+    window_change(env.INFO)
 end)
 
-space_selection { ["SELECTED"] = true, ["NAME"] = "space.1" }
+module.update = function()
+    space_selection { ["SELECTED"] = true, ["NAME"] = "space.1" }
+end
+
+return module

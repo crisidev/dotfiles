@@ -1,1 +1,0 @@
-../sketchybar/default.lua

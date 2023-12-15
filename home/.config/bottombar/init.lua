@@ -1,3 +1,8 @@
+require "helpers"
+require "colors"
+require "icons"
 require "bar"
-require "default"
+require "settings"
 require "items"
+
+os.execute "bottombar --trigger system_woke"

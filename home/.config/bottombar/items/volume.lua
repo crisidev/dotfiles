@@ -1,8 +1,9 @@
 local icons = require "icons"
 local colors = require "colors"
 local helpers = require "helpers"
+local module = {}
 
-local volume_slider = sbar.add("slider", "volume", {
+module.volume_slider = sbar.add("slider", "volume", {
     position = "right",
     updates = true,
     label = {
@@ -30,7 +31,7 @@ local volume_slider = sbar.add("slider", "volume", {
     y_offset = 1,
 })
 
-local volume_icon = sbar.add("item", "volume_icon", {
+module.volume_icon = sbar.add("item", "volume_icon", {
     position = "right",
     padding_left = 10,
     icon = {
@@ -56,16 +57,16 @@ local volume_icon = sbar.add("item", "volume_icon", {
 
 local function details_on(env)
     sbar.animate("tanh", 30, function()
-        volume_slider:set { slider = { width = 100 } }
+        module.volume_slider:set { slider = { width = 100 } }
     end)
 end
 local function details_off(env)
     sbar.animate("tanh", 30, function()
-        volume_slider:set { slider = { width = 0 } }
+        module.volume_slider:set { slider = { width = 0 } }
     end)
 end
 
-volume_slider:subscribe("volume_change", function(env)
+module.volume_slider:subscribe("volume_change", function(env)
     local percentage = tonumber(env.INFO)
     local icon = icons.volume._0
     if percentage > 90 and percentage <= 100 then
@@ -79,31 +80,37 @@ volume_slider:subscribe("volume_change", function(env)
     else
         icon = icons.volume._0
     end
-    volume_icon:set { label = icon }
-    volume_slider:set { slider = { percentage = percentage } }
-    local info = helpers.runcmd("bottombar --query " .. env.NAME)
+    module.volume_icon:set { label = icon }
+    module.volume_slider:set { slider = { percentage = percentage } }
+    local info = sbar.query(env.NAME)
     if info and info["slider"] and tonumber(info.slider.width) == 0 then
         sbar.animate("tanh", 30, function()
-            volume_slider:set { slider = { width = 100 } }
+            module.volume_slider:set { slider = { width = 100 } }
         end)
     end
 
     os.execute "sleep 2"
-    info = helpers.runcmd("bottombar --query " .. env.NAME)
+
+    info = sbar.query(env.NAME)
     if info and info["slider"] and info.slider.percentage == env.INFO then
         sbar.animate("tanh", 30, function()
-            volume_slider:set { slider = { width = 0 } }
+            module.volume_slider:set { slider = { width = 0 } }
         end)
     end
 end)
-volume_slider:subscribe("mouse.clicked", function(env)
+
+module.volume_slider:subscribe("mouse.clicked", function(env)
     os.execute('osascript -e "set volume output volume ' .. env.PERCENTAGE .. '"')
 end)
 
-volume_icon:subscribe("mouse.clicked", function(env)
+module.volume_slider:subscribe("mouse.exited.global", function(env)
+    details_off(env)
+end)
+
+module.volume_icon:subscribe("mouse.clicked", function(env)
     if env.BUTTON == "right" or env.MODIFIER == "shift" then
         os.execute "bottombar --remove '/volume.device.*/'"
-        volume_slider:set { popup = { drawing = "toggle" } }
+        module.volume_slider:set { popup = { drawing = "toggle" } }
         local current = helpers.runcmd("SwitchAudioSource -t output -c", true)
         local devices = helpers.runcmd "SwitchAudioSource -a -t output"
         if devices then
@@ -122,18 +129,20 @@ volume_icon:subscribe("mouse.clicked", function(env)
                     env.NAME
                 )
                 sbar.add("item", "volume.device." .. tostring(idx), {
-                    position = "popup." .. volume_slider.name,
+                    position = "popup." .. module.volume_slider.name,
                     label = {
                         string = device .. "    ",
                         color = color,
                     },
+                    padding_left = 8,
+                    padding_right = 15,
                     click_script = click_script,
                 })
                 idx = idx + 1
             end
         end
     else
-        local info = helpers.runcmd "bottombar --query volume"
+        local info = sbar.query "volume"
         if info and info["slider"] and tonumber(info.slider.width) == 0 then
             details_on(env)
         else
@@ -142,10 +151,9 @@ volume_icon:subscribe("mouse.clicked", function(env)
     end
 end)
 
-volume_icon:subscribe("mouse.exited.global", function()
-    volume_slider:set { popup = { drawing = "off" } }
+module.volume_icon:subscribe("mouse.exited.global", function()
+    module.volume_slider:set { popup = { drawing = "off" } }
 end)
 
-volume_slider:subscribe("mouse.exited.global", function(env)
-    details_off(env)
-end)
+return module
+

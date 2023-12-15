@@ -1,8 +1,9 @@
 local helpers = require "helpers"
 local colors = require "colors"
 local icons = require "icons"
+local module = {}
 
-local yabai = sbar.add("item", "yabai", {
+module.yabai = sbar.add("item", "yabai", {
     icon = {
         width = 0,
         font = {
@@ -44,32 +45,73 @@ local function yabai_mode()
     end
 end
 
-local function window_focus()
-    local mode, icon, color = yabai_mode()
-    sbar.animate("tanh", 10, function()
-        yabai:set { icon = { string = icon, color = color, width = 28 } }
-    end)
-    os.execute("sketchybar --animate than 10 --set apple_logo icon.color=" .. color)
+local function update_borders(mode)
     if mode == "stack" then
-        os.execute 'borders active_color="glow(0xffed8796)" inactive_color="glow(0xff414550)"'
+        os.execute(
+            string.format(
+                'borders active_color="glow(%s)" inactive_color="glow(%s)"',
+                colors.red_str,
+                colors.inactive_border_str
+            )
+        )
     elseif mode == "float" then
-        os.execute 'borders active_color=0x00000000 inactive_color="glow(0xff414550)"'
+        os.execute(
+            string.format(
+                'borders active_color="%s" inactive_color="glow(%s)"',
+                colors.transparent_str,
+                colors.inactive_border_str
+            )
+        )
     elseif mode == "float-term" then
-        os.execute 'borders active_color="glow(0xffeed49f)" inactive_color="glow(0xff414550)"'
+        os.execute(
+            string.format(
+                'borders active_color="glow(%s)" inactive_color="glow(%s)"',
+                colors.yellow_str,
+                colors.inactive_border_str
+            )
+        )
     elseif mode == "fullscreen" then
-        os.execute 'borders active_color="glow(0xfff5a97f)" inactive_color="glow(0xff414550)"'
+        os.execute(
+            string.format(
+                'borders active_color="glow(0xfff5a97f)" inactive_color="glow(%s)"',
+                colors.orange_str,
+                colors.inactive_border_str
+            )
+        )
     else
-        os.execute 'borders active_color="glow(0xff95b5ff)" inactive_color="glow(0xff414550)"'
+        os.execute(
+            string.format(
+                'borders active_color="glow(%s)" inactive_color="glow(%s)"',
+                colors.active_border_str,
+                colors.inactive_border_str
+            )
+        )
     end
 end
 
-yabai:subscribe("mouse.clicked", function()
+local function window_focus()
+    local mode, icon, color = yabai_mode()
+    update_borders(mode)
+    sbar.animate("tanh", 10, function()
+        module.yabai:set { icon = { string = icon, color = color, width = 28 } }
+    end)
+    os.execute("sketchybar --animate than 10 --set apple_logo icon.color=" .. color)
+end
+
+module.subscribe_system_woke = function(args)
+    window_focus()
+    module.yabai:subscribe("system_woke", function()
+        for _, component in pairs(args) do
+            component.update()
+        end
+    end)
+end
+
+module.yabai:subscribe("mouse.clicked", function()
     helpers.runcmd "yabai -m window --toggle float"
     window_focus()
 end)
 
-yabai:subscribe("window_focus", function()
-    window_focus()
-end)
+module.yabai:subscribe("system_woke", window_focus)
 
-window_focus()
+return module

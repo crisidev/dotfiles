@@ -6,6 +6,7 @@ local module = {}
 module.homedir = os.getenv "HOME"
 module.yabai_bin = "/opt/homebrew/bin/yabai"
 module.sketchybar_bin = "/opt/homebrew/bin/sketchybar"
+module.sketchybar_bin = "/opt/homebrew/bin/bottom"
 module.mirror_bin = "/opt/homebrew/bin/mirror"
 module.kitty_bin = "/Applications/kitty.app/Contents/MacOS/kitty"
 module.log = hs.logger.new("helpers", "info")

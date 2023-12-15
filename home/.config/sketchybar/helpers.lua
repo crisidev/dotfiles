@@ -1,15 +1,5 @@
-local module = {}
 local json = require "cjson"
-local icons = require "icons"
-local colors = require "colors"
-
-string.startswith = function(self, str)
-    return self:find("^" .. str) ~= nil
-end
-
-string.endswith = function(self, str)
-    return self:find(str .. "$") ~= nil
-end
+local module = {}
 
 module.runcmd = function(command, strip)
     local handle = io.popen(command)
@@ -39,10 +29,6 @@ module.match = function(words, value)
         end
     end
     return false
-end
-
-module.window_focus = function()
-    os.execute "bottombar --trigger window_focus"
 end
 
 module.hammerspoon = function(command)

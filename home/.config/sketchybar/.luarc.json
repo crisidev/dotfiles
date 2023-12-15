@@ -1,4 +1,10 @@
 {
   "workspace.library": ["/Users/matteobigoi/.homesick/repos/dotfiles/home/.config/bottombar/"],
+    "diagnostics.globals": [
+        "vim",
+        "lvim",
+        "reload",
+        "sbar"
+    ],
 }
 

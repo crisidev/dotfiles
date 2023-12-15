@@ -1,7 +1,8 @@
 local colors = require "colors"
+local module = {}
 
 -- Equivalent to the --bar domain
-sbar.bar {
+module.bar = sbar.bar {
     corner_radius = 11,
     height = 45,
     color = colors.bar.bg,
@@ -16,3 +17,5 @@ sbar.bar {
     margin = 6,
     topmost = "window",
 }
+
+return module

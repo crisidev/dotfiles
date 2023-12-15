@@ -1,8 +1,9 @@
 local icons = require "icons"
 local colors = require "colors"
 local helpers = require "helpers"
+local module = {}
 
-local app = sbar.add("item", "front_title", {
+module.front_title = sbar.add("item", "front_title", {
     position = "right",
     click_script = "open -a 'Mission Control'",
     icon = {
@@ -19,11 +20,13 @@ local app = sbar.add("item", "front_title", {
     y_offset = 3,
 })
 
-local function update(env)
+module.update = function(_)
     local window = helpers.runcmd "yabai -m query --windows --window"
     if window and window["title"] then
-        app:set { label = window.title }
+        module.front_title:set { label = window.title }
     end
 end
 
-app:subscribe("window_focus", update)
+module.front_title:subscribe("window_focus", module.update)
+
+return module

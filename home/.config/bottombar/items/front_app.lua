@@ -1,6 +1,7 @@
 local helpers = require "helpers"
+local module = {}
 
-local app = sbar.add("item", "front_app", {
+module.front_app = sbar.add("item", "front_app", {
     position = "left",
     click_script = "open -a 'Mission Control'",
     icon = {
@@ -18,14 +19,16 @@ local app = sbar.add("item", "front_app", {
     y_offset = -1,
 })
 
-local function update(env)
-    if env.INFO ~= "com.microsoft.teams2.notificationcenter" then
-        app:set { icon = { background = { image = "app." .. env.INFO } } }
+module.update = function(env)
+    if env and env["INFO"] and env["INFO"] ~= "com.microsoft.teams2.notificationcenter" then
+        module.front_app:set { icon = { background = { image = "app." .. env.INFO } } }
         sbar.animate("tanh", 10, function()
-            app:set { icon = { background = { image = { scale = 1.2 } } } }
-            app:set { icon = { background = { image = { scale = 1.0 } } } }
+            module.front_app:set { icon = { background = { image = { scale = 1.2 } } } }
+            module.front_app:set { icon = { background = { image = { scale = 1.0 } } } }
         end)
     end
 end
 
-app:subscribe("front_app_switched", update)
+module.front_app:subscribe("front_app_switched", module.update)
+
+return module
