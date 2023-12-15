@@ -107,11 +107,12 @@ module.subscribe_system_woke = function(args)
     end)
 end
 
+module.yabai:subscribe("window_focus", window_focus)
+
 module.yabai:subscribe("mouse.clicked", function()
     helpers.runcmd "yabai -m window --toggle float"
     window_focus()
 end)
 
-module.yabai:subscribe("system_woke", window_focus)
 
 return module
