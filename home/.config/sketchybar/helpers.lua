@@ -72,47 +72,6 @@ module.length = function(set)
     return c
 end
 
-module.yabai_mode = function()
-    local window = module.runcmd "yabai -m query --windows --window"
-    local spaces = module.runcmd "yabai -m query --spaces"
-    local icon = icons.yabai.grid
-    local color = colors.active_border
-    if window and spaces then
-        local space_mode = "bsp"
-        local stack_index = window["stack-index"]
-        if stack_index == nil then
-            stack_index = 0
-        end
-        if type(spaces) == "table" then
-            for _, space in pairs(spaces) do
-                if space["has-focus"] == true then
-                    space_mode = space["type"]
-                end
-            end
-            if window["is-floating"] then
-                icon = icons.yabai.float
-                color = colors.green
-            elseif window["has-fullscreen-zoom"] then
-                icon = icons.yabai.fullscreen_zoom
-                color = colors.orange
-            elseif window["has-parent-zoom"] then
-                icon = icons.yabai.parent_zoom
-                color = colors.orange
-            elseif stack_index > 0 then
-                icon = icons.yabai.stack
-                color = colors.red
-            elseif space_mode == "stack" then
-                icon = icons.yabai.stack
-                color = colors.red
-            elseif space_mode == "float" then
-                icon = icons.yabai.float
-                color = colors.green
-            end
-        end
-    end
-    return icon, color
-end
-
 module.dump = function(o)
     if type(o) == "table" then
         local s = "{ "

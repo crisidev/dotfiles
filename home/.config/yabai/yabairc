@@ -1,13 +1,16 @@
 #!/usr/bin/env bash
 
 # signals
-yabai -m signal --add event=window_focused action="$HOME/.config/yabai/borders \$YABAI_WINDOW_ID"
-yabai -m signal --add event=window_resized action="$HOME/.config/yabai/borders \$YABAI_WINDOW_ID"
+# run window focus routine in sketckybar
 yabai -m signal --add event=window_focused action="/opt/homebrew/bin/sketchybar --trigger window_focus"
+yabai -m signal --add event=window_resized action="/opt/homebrew/bin/sketchybar --trigger window_focus"
+
+# handle adding and removing displays
 yabai -m signal --add event=display_added action="$HOME/.config/yabai/screenchange"
 yabai -m signal --add event=display_removed action="$HOME/.config/yabai/screenchange"
-yabai -m signal --add event=window_destroyed active=yes action="yabai -m query --windows --window &> /dev/null || yabai -m window --focus mouse &> /dev/null || yabai -m window --focus \$(yabai -m query --windows --space | jq .[0].id) &> /dev/null"
-yabai -m signal --add event=window_minimized active=yes action="if \$(yabai -m query --windows --window \$YABAI_WINDOW_ID | jq -r '.\"is-floating\"'); then yabai -m query --windows --window &> /dev/null || yabai -m window --focus mouse &> /dev/null || yabai -m window --focus \$(yabai -m query --windows --space | jq .[0].id) &> /dev/null; fi"
+
+# yabai -m signal --add event=window_destroyed active=yes action="yabai -m query --windows --window &> /dev/null || yabai -m window --focus mouse &> /dev/null || yabai -m window --focus \$(yabai -m query --windows --space | jq .[0].id) &> /dev/null"
+# yabai -m signal --add event=window_minimized active=yes action="if \$(yabai -m query --windows --window \$YABAI_WINDOW_ID | jq -r '.\"is-floating\"'); then yabai -m query --windows --window &> /dev/null || yabai -m window --focus mouse &> /dev/null || yabai -m window --focus \$(yabai -m query --windows --space | jq .[0].id) &> /dev/null; fi"
 
 # global settings
 yabai -m config mouse_follows_focus on

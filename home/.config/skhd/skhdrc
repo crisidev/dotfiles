@@ -94,7 +94,7 @@ cmd + shift - 0x32:         ~/.config/yabai/switch prev
 # ----------------------
 cmd + alt - f:              yabai -m window --toggle zoom-fullscreen
 cmd - 0x2A:                 yabai -m window --toggle float --grid 4:4:1:1:2:2
-cmd + alt - 0x2A:           yabai -m window --toggle sticky --grid 4:4:1:1:2:2
+cmd + shift - 0x2A:         yabai -m window --toggle sticky
 
 # ----------------------
 # Stacks
@@ -108,6 +108,7 @@ ctrl + shift - tab:         yabai -m window --focus stack.next || yabai -m windo
 # -----------------------
 # Yabai layouts
 # -----------------------
+cmd + alt - 0x2A:          ~/.config/yabai/layout && sketchybar --trigger window_focus
 cmd + alt - 4:             yabai -m space --layout bsp && sketchybar --trigger window_focus && ~/.bin/hs -c "return hs.helpers.notify('Layout set to bsp')"
 cmd + alt - 5:             yabai -m space --layout stack && sketchybar --trigger window_focus && ~/.bin/hs -c "return hs.helpers.notify('Layout set to stack')"
 cmd + alt - 6:             yabai -m space --layout float && sketchybar --trigger window_focus && ~/.bin/hs -c "return hs.helpers.notify('Layout set to float')"

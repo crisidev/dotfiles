@@ -21,13 +21,6 @@ local apple_logo = sbar.add("item", "apple_logo", {
     y_offset = -2,
 })
 
-local function window_focus()
-    local _, color = helpers.yabai_mode()
-    sbar.animate("tanh", 10, function()
-        apple_logo:set { icon = { color = color } }
-    end)
-end
-
 local preferences = sbar.add("item", {
     position = "popup." .. apple_logo.name,
     icon = icons.preferences,
@@ -58,10 +51,6 @@ lock:subscribe("mouse.clicked", function(_)
     apple_logo:set { popup = { drawing = false } }
 end)
 
-apple_logo:subscribe("window_focus", function(_)
-    helpers.window_focus()
-    window_focus()
-end)
 apple_logo:subscribe("mouse.clicked", function(_)
     apple_logo:set { popup = { drawing = "toggle" } }
 end)
@@ -69,4 +58,8 @@ apple_logo:subscribe("mouse.exited.global", function(_)
     apple_logo:set { popup = { drawing = false } }
 end)
 
-window_focus()
+-- Forward window_focus to the bottombar
+apple_logo:subscribe("window_focus", function(_)
+    helpers.window_focus()
+end)
+helpers.window_focus()

@@ -6,7 +6,7 @@ sbar.bar {
     height = 45,
     color = colors.bar.bg,
     border_color = colors.bar.border,
-    border_width = 2,
+    border_width = 1,
     shadow = true,
     sticky = true,
     padding_right = 10,

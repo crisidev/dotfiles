@@ -19,9 +19,11 @@ local app = sbar.add("item", "front_title", {
     y_offset = 3,
 })
 
-app:subscribe("front_app_switched", function(env)
+local function update(env)
     local window = helpers.runcmd "yabai -m query --windows --window"
     if window and window["title"] then
         app:set { label = window.title }
     end
-end)
+end
+
+app:subscribe("window_focus", update)

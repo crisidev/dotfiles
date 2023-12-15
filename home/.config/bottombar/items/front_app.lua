@@ -18,7 +18,7 @@ local app = sbar.add("item", "front_app", {
     y_offset = -1,
 })
 
-app:subscribe("front_app_switched", function(env)
+local function update(env)
     if env.INFO ~= "com.microsoft.teams2.notificationcenter" then
         app:set { icon = { background = { image = "app." .. env.INFO } } }
         sbar.animate("tanh", 10, function()
@@ -26,4 +26,6 @@ app:subscribe("front_app_switched", function(env)
             app:set { icon = { background = { image = { scale = 1.0 } } } }
         end)
     end
-end)
+end
+
+app:subscribe("front_app_switched", update)
