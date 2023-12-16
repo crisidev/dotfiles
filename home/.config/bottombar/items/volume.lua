@@ -38,7 +38,7 @@ module.volume_icon = sbar.add("item", "volume_icon", {
         string = icons.volume._100,
         width = 0,
         align = "left",
-        color = colors.white,
+        color = colors.grey,
         font = {
             style = "Regular",
             size = 15.0,
@@ -90,8 +90,10 @@ local function update_devices(env)
     end
 end
 
-module.volume_slider:subscribe("volume_change", function(env)
-    local percentage = tonumber(env.INFO)
+local function update(percentage)
+    if percentage == nil then
+        percentage = tonumber(helpers.runcmd('osascript -e "output volume of (get volume settings)"', true))
+    end
     local icon = icons.volume._0
     if percentage > 90 and percentage <= 100 then
         icon = icons.volume._100
@@ -104,33 +106,29 @@ module.volume_slider:subscribe("volume_change", function(env)
     else
         icon = icons.volume._0
     end
-    module.volume_icon:set { label = icon }
-    module.volume_slider:set { slider = { percentage = percentage } }
-    local info = sbar.query(env.NAME)
-    if info and info["slider"] and tonumber(info.slider.width) == 0 then
-        helpers.slider_on(module.volume_slider, "sin", 20)
-    end
+    sbar.animate("tanh", 20, function()
+        module.volume_icon:set { label = icon }
+        module.volume_slider:set { slider = { percentage = percentage } }
+    end)
+end
 
-    os.execute "sleep 1"
-
-    info = sbar.query(env.NAME)
-    if info and info["slider"] and info.slider.percentage == env.INFO then
-        helpers.slider_off(module.volume_slider, "sin", 20)
-    end
+module.volume_slider:subscribe("volume_change", function(env)
+    update(tonumber(env.INFO))
 end)
 
 module.volume_slider:subscribe("mouse.clicked", function(env)
     os.execute('osascript -e "set volume output volume ' .. env.PERCENTAGE .. '"')
 end)
 
-module.volume_slider:subscribe("mouse.exited", function(env)
-    helpers.slider_off(module.volume_slider, "sin", 20)
+module.volume_slider:subscribe("mouse.exited.global", function()
+    module.volume_slider:set { popup = { drawing = "off" } }
 end)
 
 module.volume_icon:subscribe("mouse.clicked", function(env)
     if env.BUTTON == "right" or env.MODIFIER == "shift" then
         update_devices()
     else
+        update()
         local info = sbar.query "volume"
         if info and info["slider"] and tonumber(info.slider.width) == 0 then
             helpers.slider_on(module.volume_slider, "sin", 20)
@@ -139,6 +137,13 @@ module.volume_icon:subscribe("mouse.clicked", function(env)
         end
     end
 end)
+
+module.update = function()
+    helpers.slider_on(module.volume_slider, "sin", 20)
+    update()
+    os.execute "sleep 1"
+    helpers.slider_off(module.volume_slider, "sin", 20)
+end
 
 module.volume_icon:subscribe("mouse.exited.global", function()
     module.volume_slider:set { popup = { drawing = "off" } }

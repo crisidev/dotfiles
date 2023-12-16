@@ -98,6 +98,7 @@ local function window_focus()
     sbar.animate("tanh", 10, function()
         module.yabai:set { icon = { string = icon, color = color, width = 28 } }
     end)
+    os.execute("bottombar --trigger window_focus")
 end
 
 module.subscribe_system_woke = function(args)

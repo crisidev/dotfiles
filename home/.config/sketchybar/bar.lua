@@ -15,7 +15,7 @@ module.bar = sbar.bar {
     blur_radius = 20,
     y_offset = -8,
     margin = 6,
-    topmost = "window",
+    topmost = false,
 }
 
 return module

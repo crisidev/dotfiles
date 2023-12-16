@@ -81,10 +81,6 @@ end
 
 -- Toggle console
 module.toggle_console = function()
-    if module.log.getLogLevel() == 3 then
-        module.set_log_level(module.log)
-        module.set_log_level(require("wm").log)
-    end
     hs.toggleConsole()
 end
 

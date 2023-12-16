@@ -3,7 +3,7 @@ local icons = require "colors"
 local helpers = require "helpers"
 local app_mapping = require "app_mapping"
 local module = {}
-module.modules = {}
+module.spaces = {}
 
 local function mouse_click(env)
     if env.BUTTON == "right" then
@@ -29,11 +29,11 @@ local function window_change(input)
     if space then
         if apps then
             sbar.animate("sin", 10, function()
-                module.modules[space]:set { label = { string = app_mapping.icons(apps), drawing = true } }
+                module.spaces[space]:set { label = { string = app_mapping.icons(apps), drawing = true } }
             end)
         else
             sbar.animate("sin", 10, function()
-                module.modules[space]:set { label = { drawing = false } }
+                module.spaces[space]:set { label = { drawing = false } }
             end)
         end
     end
@@ -46,7 +46,7 @@ for i = 1, 10, 1 do
             string = i,
             padding_left = 10,
             padding_right = 10,
-            highlight_color = colors.red,
+            highlight_color = colors.orange,
         },
         padding_left = 2,
         padding_right = 2,
@@ -67,14 +67,16 @@ for i = 1, 10, 1 do
 
     space:subscribe("space_change", space_selection)
     space:subscribe("mouse.clicked", mouse_click)
-    module.modules[i] = space
+    module.spaces[i] = space
 end
 
 module.space_creator = sbar.add("item", "space.creator", {
+    position = "left",
     padding_left = 10,
     padding_right = 8,
     icon = {
         string = icons.space,
+        color = colors.white,
         font = {
             style = "Heavy",
             size = 16.0,
@@ -82,11 +84,11 @@ module.space_creator = sbar.add("item", "space.creator", {
     },
     label = { drawing = false },
     associated_display = "active",
+    click_script= "~/.bin/hs -c 'hs.spaces.addSpaceToScreen(hs.screen.mainScreen(), true)'",
     y_offset = -3,
 })
 
 module.space_creator:subscribe("mouse.clicked", function(_)
-    helpers.hammerspoon "hs.spaces.addSpaceToScreen(hs.screen.mainScreen(), true)"
 end)
 
 module.space_creator:subscribe("space_windows_change", function(env)

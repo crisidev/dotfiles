@@ -87,8 +87,8 @@ local function update_details(ssid, ipaddr)
     sbar.add("item", "wifi.line.3", wifi_line(icon, label))
 end
 
-local function slide(env)
-    local item = sbar.query(env.NAME)
+local function slide()
+    local item = sbar.query("wifi")
     local width = 0
     if item.label.width == 0 then
         width = "dynamic"
@@ -98,32 +98,31 @@ local function slide(env)
     end)
 end
 
-module.update = function()
+local function update()
     local ssid, ipaddr, icon = get_wifi_info()
-    local label = string.format("%s %s", ssid, ipaddr)
     sbar.animate("sin", 20.0, function()
-        module.wifi:set { icon = icon, label = label }
+        module.wifi:set { icon = icon, label = ssid }
     end)
     update_details(ssid, ipaddr)
 end
 
-module.wifi:subscribe("force", module.update)
-module.wifi:subscribe("routine", module.update)
-module.wifi:subscribe("wifi_change", function(env)
-    module.update()
-    slide(env)
-    os.execute("sleep 1")
-    slide(env)
-end)
+module.update = function ()
+    update()
+end
+
+module.wifi:subscribe("force", update)
+module.wifi:subscribe("routine", update)
+module.wifi:subscribe("wifi_change", update)
 
 module.wifi:subscribe("mouse.clicked", function(env)
     if env.BUTTON == "right" or env.MODIFIER == "shift" then
         module.wifi:set { popup = { drawing = "toggle" } }
     else
         module.wifi:set { popup = { drawing = false } }
-        slide(env)
+        slide()
     end
 end)
+
 module.wifi:subscribe("mouse.exited.global", function()
     module.wifi:set { popup = { drawing = false } }
 end)

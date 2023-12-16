@@ -24,8 +24,10 @@ return {
     },
     spotify = {
         player = "􁁒",
+        play = "􀊄",
         back = "􀊎",
-        play_pause = "􀊈",
+        play_pause = "􀊔",
+        pause = "􀊆",
         next = "􀊐",
         shuffle = "􀊝",
         _repeat = "􀊞",

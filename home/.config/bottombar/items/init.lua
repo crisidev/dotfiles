@@ -1,25 +1,17 @@
-local colors = require "colors"
-local homedir = os.getenv "HOME"
 
 -- Left
 local front_app = require "items.front_app"
-local front_title = require "items.front_title"
 
 -- Right
-os.execute(homedir .. "/.config/bottombar/items/spotify.sh")
+local spotify = require "items.spotify"
 local brew = require "items.brew"
 local notify = require "items.notify"
 local wifi = require "items.wifi"
 local battery = require "items.battery"
-require "items.volume"
-require "items.mic"
-sbar.add("bracket", "status", { "brew", "notify", "wifi", "battery", "volume_icon", "mic_icon" }, {
-    background = {
-        color = colors.bg1,
-        border_color = colors.bg2,
-        height = 33,
-    },
-})
+local volume = require "items.volume"
+local mic = require "items.mic"
+require("items.status")
+local front_title = require "items.front_title"
 
 -- System woke
-front_app.subscribe_system_woke { battery, wifi, front_app, front_title, brew, notify }
+front_app.subscribe_system_woke { battery, front_app, front_title, spotify, notify, brew, wifi, volume, mic }

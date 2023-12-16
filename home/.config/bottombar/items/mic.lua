@@ -61,9 +61,13 @@ local function update_mute_status()
     local color = colors.white
     if muted and muted:find "true" then
         color = colors.red
-        module.mic_slider:set { slider = { percentage = 0 } }
+        sbar.animate("sin", 10, function()
+            module.mic_slider:set { slider = { percentage = 0 } }
+        end)
     end
-    module.mic_icon:set { icon = { color = color } }
+    sbar.animate("sin", 10, function()
+        module.mic_icon:set { icon = { color = color } }
+    end)
 end
 
 local function update_available_devices(env)
@@ -116,13 +120,9 @@ local function update_slider()
     end
 end
 
--- module.mic_slider:subscribe("volume_change", function(env)
---     local current = helpers.runcmd 'osascript -e "input volume of (get volume settings)"'
---     module.mic_slider:set { slider = { percentage = current } }
---     helpers.slider_on(module.mic_slider, "tanh", 30)
---     os.execute "sleep 1"
---     helpers.slider_off(module.mic_slider, "tanh", 30)
--- end)
+module.update = function()
+    update_mute_status()
+end
 
 module.mic_slider:subscribe("mouse.clicked", function(env)
     os.execute('osascript -e "set volume input volume ' .. env.PERCENTAGE .. '"')
@@ -151,3 +151,5 @@ module.mic_icon:subscribe("mouse.clicked", function(env)
     end
     update_mute_status()
 end)
+
+return module
