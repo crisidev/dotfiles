@@ -15,8 +15,8 @@ module.front_app = sbar.add("item", "front_app", {
             size = 12.0,
         },
     },
-    display = "active",
-    y_offset = -1,
+    padding_right = -5,
+    -- display = "active",
 })
 
 module.update = function(env)
@@ -27,6 +27,14 @@ module.update = function(env)
             module.front_app:set { icon = { background = { image = { scale = 1.0 } } } }
         end)
     end
+end
+
+module.subscribe_system_woke = function(args)
+    module.front_app:subscribe("system_woke", function()
+        for _, component in pairs(args) do
+            component.update()
+        end
+    end)
 end
 
 module.front_app:subscribe("front_app_switched", module.update)

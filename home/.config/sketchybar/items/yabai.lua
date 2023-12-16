@@ -18,6 +18,8 @@ module.yabai = sbar.add("item", "yabai", {
     popup = {
         height = 35,
     },
+    padding_left = -3,
+    y_offset = -3,
 })
 
 local function yabai_mode()
@@ -96,7 +98,6 @@ local function window_focus()
     sbar.animate("tanh", 10, function()
         module.yabai:set { icon = { string = icon, color = color, width = 28 } }
     end)
-    os.execute("sketchybar --animate than 10 --set apple_logo icon.color=" .. color)
 end
 
 module.subscribe_system_woke = function(args)
@@ -114,6 +115,5 @@ module.yabai:subscribe("mouse.clicked", function()
     os.execute(homedir .. "/.config/yabai/layout")
     window_focus()
 end)
-
 
 return module

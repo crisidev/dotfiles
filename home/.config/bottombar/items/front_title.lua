@@ -4,7 +4,7 @@ local helpers = require "helpers"
 local module = {}
 
 module.front_title = sbar.add("item", "front_title", {
-    position = "right",
+    position = "left",
     click_script = "open -a 'Mission Control'",
     icon = {
         drawing = false,
@@ -15,9 +15,8 @@ module.front_title = sbar.add("item", "front_title", {
             size = 12.0,
         },
     },
-    padding_right = 10,
-    display = "active",
-    y_offset = 3,
+    -- display = "active",
+    y_offset = 2,
 })
 
 module.update = function(_)

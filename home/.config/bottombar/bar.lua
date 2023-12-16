@@ -18,6 +18,7 @@ module.bar = sbar.bar {
     y_offset = -3,
     margin = 6,
     topmost = "window",
+    display = "main",
 }
 
 return module

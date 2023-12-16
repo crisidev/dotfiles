@@ -116,8 +116,8 @@ ctrl + shift - tab:         yabai -m window --focus stack.next || yabai -m windo
 # -----------------------
 # Yabai layouts
 # -----------------------
-cmd + alt - 0x2A:          ~/.config/yabai/layout && bottombar --trigger window_focus
-cmd + alt - 4:             yabai -m space --layout bsp && bottombar --trigger window_focus && ~/.bin/hs -c "return hs.helpers.notify('Layout set to bsp')"
-cmd + alt - 5:             yabai -m space --layout stack && bottombar --trigger window_focus && ~/.bin/hs -c "return hs.helpers.notify('Layout set to stack')"
-cmd + alt - 6:             yabai -m space --layout float && bottombar --trigger window_focus && ~/.bin/hs -c "return hs.helpers.notify('Layout set to float')"
-cmd + alt - h:             yabai -m space --balance && bottombar --trigger window_focus
+cmd + alt - 0x2A:          ~/.config/yabai/layout && sketchybar --trigger window_focus
+cmd + alt - 4:             yabai -m space --layout bsp && sketchybar --trigger window_focus && ~/.bin/hs -c "return hs.helpers.notify('Layout set to bsp')"
+cmd + alt - 5:             yabai -m space --layout stack && sketchybar --trigger window_focus && ~/.bin/hs -c "return hs.helpers.notify('Layout set to stack')"
+cmd + alt - 6:             yabai -m space --layout float && sketchybar --trigger window_focus && ~/.bin/hs -c "return hs.helpers.notify('Layout set to float')"
+cmd + alt - h:             yabai -m space --balance && sketchybar --trigger window_focus

@@ -2,8 +2,8 @@
 
 # signals
 # run window focus routine in sketckybar
-yabai -m signal --add event=window_focused action="/opt/homebrew/bin/bottombar --trigger window_focus"
-yabai -m signal --add event=window_resized action="/opt/homebrew/bin/bottombar --trigger window_focus"
+yabai -m signal --add event=window_focused action="/opt/homebrew/bin/sketchybar --trigger window_focus"
+yabai -m signal --add event=window_resized action="/opt/homebrew/bin/sketchybar --trigger window_focus"
 
 # handle adding and removing displays
 yabai -m signal --add event=display_added action="$HOME/.config/yabai/screenchange"
@@ -100,5 +100,8 @@ yabai -m config layout bsp
 if [ "$SCREEN_PRIMARY" == "37D8832A-2D66-02CA-B9F7-8F30A301B230" ]; then
     yabai -m config --space 3 layout stack
 fi
+
+# add gaps for sketchybar
+"$HOME/.bin/hs" -c "return hs.wm.adjust_spaces_gaps()"
 
 echo "yabai configuration loaded.."

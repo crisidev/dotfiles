@@ -130,6 +130,6 @@ export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER=aarch64-unknown-linux-musl
 
 # yabai
 autoload -U add-zsh-hook
-add-zsh-hook -Uz chpwd (){ bottombar --trigger window_focus; }
+add-zsh-hook -Uz chpwd (){ sketchybar --trigger window_focus; }
 
 # zprof

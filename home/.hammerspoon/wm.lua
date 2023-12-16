@@ -194,6 +194,20 @@ module.add_or_remove_spaces = function(spaces, spaces_per_screen, screen)
     end
 end
 
+-- Ensure the screen gaps are consistent with sketchybar.
+module.adjust_spaces_gaps = function()
+    for screen, spaces in pairs(hs.spaces.allSpaces()) do
+        for _, space in pairs(spaces) do
+            local space_id = helpers.index_of(module.ordered_spaces, space)
+            if screen == module.screen_primary then
+                helpers.yabai { "-m", "config", "--space", tostring(space_id), "bottom_padding", "46" }
+            else
+                helpers.yabai { "-m", "config", "--space", tostring(space_id), "bottom_padding", "8" }
+            end
+        end
+    end
+end
+
 -- Ensure all spaces are present
 module.ensure_all_spaces_are_present = function()
     module.update_cache()
@@ -531,7 +545,7 @@ module.find_beachballers = function()
             hs
                 .notify
                 .new({ title = "Hammerspoon", informativeText = "Found beachballing application: " .. name })
-                ---@diagnostic disable-next-line: undefined-field
+            ---@diagnostic disable-next-line: undefined-field
                 :send()
         end
     end
