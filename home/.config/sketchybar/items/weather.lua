@@ -5,7 +5,6 @@ module.weather = sbar.add("item", "weather", {
     label = {
         align = "center",
     },
-    padding_right = -3,
     position = "right",
     update_freq = 1800,
     y_offset = -3,
