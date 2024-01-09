@@ -27,4 +27,4 @@ if [ -d "$HOME/.local/bin" ] ; then
 fi
 [ -f "$HOME/.zsh_secrets" ] && source "$HOME/.zsh_secrets"
 [ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
-eval "$(rtx env -s bash)"
+eval "$(mise env -s bash)"

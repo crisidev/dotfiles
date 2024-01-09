@@ -16,8 +16,8 @@ MY_PATH="$HOME/.bin:$HOME/.local/share/lvim/mason/bin"
 BREW_PATH="/opt/homebrew/bin:/opt/homebrew/opt/gnu-sed/libexec/gnubin:/opt/homebrew/opt/coreutils/libexec/gnubin:/opt/homebrew/opt/grep/libexec/gnubin:/opt/homebrew/opt/ssh-copy-id/bin"
 SYSTEM_PATH="/usr/local/bin"
 export PATH="$MY_PATH:$BREW_PATH:$SYSTEM_PATH:$PATH"
-# Rtx
-eval "$(rtx activate bash)"
+# mise
+eval "$(mise activate bash)"
 
 # Start neovim IDE using class `ide` and listening on $NVIM_LISTEN_ADDRESS
 function start_ide() {
@@ -31,9 +31,9 @@ function start_ide() {
     export LUNARVIM_BASE_DIR="${LUNARVIM_BASE_DIR:-"$HOME/.local/share/lunarvim/lvim"}"
 
     # exec /home/ANT.AMAZON.COM/matbigoi/github/gnvim/target/release/gnvim -- -u "$LUNARVIM_BASE_DIR/init.lua" "$@"
-    # exec -a "$NVIM_APPNAME" /Applications/Neovide.app/Contents/MacOS/Neovide --multigrid --notabs --neovim-bin "$(rtx which nvim)" -- -u "$LUNARVIM_BASE_DIR/init.lua" --listen "$NVIM_LISTEN_ADDRESS" "$@"
-    exec -a "$NVIM_APPNAME" /Applications/Neovide.app/Contents/MacOS/Neovide --neovim-bin "$(rtx which nvim)" -- -u "$LUNARVIM_BASE_DIR/init.lua" --listen "$NVIM_LISTEN_ADDRESS" "$@"
-    # exec -a "$NVIM_APPNAME" ~/.cargo/bin/neovide --neovim-bin "$(rtx which nvim)" -- -u "$LUNARVIM_BASE_DIR/init.lua" --listen "$NVIM_LISTEN_ADDRESS" "$@"
+    # exec -a "$NVIM_APPNAME" /Applications/Neovide.app/Contents/MacOS/Neovide --multigrid --notabs --neovim-bin "$(mise which nvim)" -- -u "$LUNARVIM_BASE_DIR/init.lua" --listen "$NVIM_LISTEN_ADDRESS" "$@"
+    exec -a "$NVIM_APPNAME" /Applications/Neovide.app/Contents/MacOS/Neovide --neovim-bin "$(mise which nvim)" -- -u "$LUNARVIM_BASE_DIR/init.lua" --listen "$NVIM_LISTEN_ADDRESS" "$@"
+    # exec -a "$NVIM_APPNAME" ~/.cargo/bin/neovide --neovim-bin "$(mise which nvim)" -- -u "$LUNARVIM_BASE_DIR/init.lua" --listen "$NVIM_LISTEN_ADDRESS" "$@"
     # neovide --x11-wm-class ide -- -u "$LUNARVIM_RUNTIME_DIR/lvim/init.lua"  --listen $NVIM_LISTEN_ADDRESS --cmd "let g:crisidev_ide=1" "$@"
     # exec ~/github/fvim/bin/Release/net6.0/linux-x64/FVim -u "$LUNARVIM_BASE_DIR/init.lua"  "$@"
 }

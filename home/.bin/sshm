@@ -57,7 +57,7 @@ def find_host_config(hostname: str) -> None:
 
 def select_with_fzf(use_sshrc: bool) -> None:
     py = (
-        subprocess.run(["rtx", "which", "python"], stdout=subprocess.PIPE)
+        subprocess.run(["mise", "which", "python"], stdout=subprocess.PIPE)
         .stdout.decode()
         .strip()
     )

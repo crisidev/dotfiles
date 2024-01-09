@@ -345,9 +345,9 @@ end)
 
 module.spotify_anchor:subscribe("spotify_change", update)
 module.spotify_anchor:subscribe("mouse.clicked", update)
-module.spotify_anchor:subscribe("mouse.entered", function(env)
-    module.spotify_anchor:set { popup = { drawing = true } }
-end)
+-- module.spotify_anchor:subscribe("mouse.entered", function(env)
+--     module.spotify_anchor:set { popup = { drawing = true } }
+-- end)
 module.spotify_anchor:subscribe("mouse.exited.global", function(env)
     module.spotify_anchor:set { popup = { drawing = false } }
 end)

@@ -18,10 +18,10 @@ compinit
 source /opt/homebrew/opt/antidote/share/antidote/antidote.zsh
 antidote load $HOME/.zsh_plugins
 
-# rtx and cargo are the first things to load
+# mise and cargo are the first things to load
 [ -f $HOME/.cargo/env ] && source $HOME/.cargo/env
-if which rtx > /dev/null; then
-    _evalcache rtx activate zsh
+if which mise > /dev/null; then
+    _evalcache mise activate zsh
 fi
 
 # options
@@ -95,7 +95,7 @@ if which starship > /dev/null; then
 fi
 
 # aws cli completer
-complete -C "$(rtx which aws)_completer" aws
+complete -C "$(mise which aws)_completer" aws
 
 # complete jira
 if which jira > /dev/null; then

@@ -108,8 +108,8 @@ cmd + shift - 0x2A:         yabai -m window --toggle sticky
 # ----------------------
 # Stacks
 # ----------------------
-ctrl + shift - right:       yabai -m window east --stack $(yabai -m query --windows --window | jq -r '.id')
-ctrl + shift - left:        yabai -m window west --stack $(yabai -m query --windows --window | jq -r '.id')
+# ctrl + shift - right:       yabai -m window east --stack $(yabai -m query --windows --window | jq -r '.id')
+# ctrl + shift - left:        yabai -m window west --stack $(yabai -m query --windows --window | jq -r '.id')
 ctrl + shift - up:          yabai -m window north --stack $(yabai -m query --windows --window | jq -r '.id')
 ctrl + shift - down:        yabai -m window south --stack $(yabai -m query --windows --window | jq -r '.id')
 ctrl + shift - tab:         yabai -m window --focus stack.next || yabai -m window --focus stack.prev

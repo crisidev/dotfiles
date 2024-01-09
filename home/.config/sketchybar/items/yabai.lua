@@ -22,6 +22,82 @@ module.yabai = sbar.add("item", "yabai", {
     y_offset = -3,
 })
 
+module.lock = sbar.add("item", "yabai.lock", {
+    position = "popup." .. module.yabai.name,
+    padding_left = 10,
+    padding_right = 10,
+    icon = {
+        string = icons.power.lock,
+        font = {
+            style = "Bold",
+            size = 16.0,
+        },
+    },
+    label = "Lock screen",
+})
+
+module.lock:subscribe("mouse.clicked", function(_)
+    helpers.hammerspoon "hs.caffeinate.lockScreen()"
+    module.yabai:set { popup = { drawing = false } }
+end)
+
+module.sleep = sbar.add("item", "yabai.sleep", {
+    position = "popup." .. module.yabai.name,
+    padding_left = 10,
+    padding_right = 10,
+    icon = {
+        string = icons.power.sleep,
+        font = {
+            style = "Bold",
+            size = 16.0,
+        },
+    },
+    label = "Go to sleep",
+})
+
+module.sleep:subscribe("mouse.clicked", function(_)
+    os.execute "sleep 1 && osascript -e 'tell app \"System Events\" to sleep'"
+    module.yabai:set { popup = { drawing = false } }
+end)
+
+module.restart = sbar.add("item", "yabai.restart", {
+    position = "popup." .. module.yabai.name,
+    padding_left = 10,
+    padding_right = 10,
+    icon = {
+        string = icons.power.reboot,
+        font = {
+            style = "Bold",
+            size = 16.0,
+        },
+    },
+    label = "Restart system",
+})
+
+module.restart:subscribe("mouse.clicked", function(_)
+    os.execute "sleep 1 && osascript -e 'tell app \"System Events\" to restart'"
+    module.yabai:set { popup = { drawing = false } }
+end)
+
+module.shutdown = sbar.add("item", "yabai.shutdown", {
+    position = "popup." .. module.yabai.name,
+    padding_left = 10,
+    padding_right = 10,
+    icon = {
+        string = icons.power.poweroff,
+        font = {
+            style = "Bold",
+            size = 16.0,
+        },
+    },
+    label = "Shutdown system",
+})
+
+module.shutdown:subscribe("mouse.clicked", function(_)
+    os.execute "sleep 1 && osascript -e 'tell app \"System Events\" to shutdown'"
+    module.yabai:set { popup = { drawing = false } }
+end)
+
 local function yabai_mode()
     local windows = helpers.runcmd "yabai -m query --windows --space"
     local space = helpers.runcmd "yabai -m query --spaces --space"
@@ -98,7 +174,7 @@ local function window_focus()
     sbar.animate("tanh", 10, function()
         module.yabai:set { icon = { string = icon, color = color, width = 28 } }
     end)
-    os.execute("bottombar --trigger window_focus")
+    os.execute "bottombar --trigger window_focus"
 end
 
 module.subscribe_system_woke = function(args)
@@ -112,9 +188,17 @@ end
 
 module.yabai:subscribe("window_focus", window_focus)
 
-module.yabai:subscribe("mouse.clicked", function()
-    os.execute(homedir .. "/.config/yabai/layout")
-    window_focus()
+module.yabai:subscribe("mouse.clicked", function(env)
+    if env.BUTTON == "right" then
+        os.execute(homedir .. "/.config/yabai/layout")
+        window_focus()
+    elseif env.BUTTON == "left" then
+        module.yabai:set { popup = { drawing = "toggle" } }
+    end
+end)
+
+module.yabai:subscribe("mouse.exited.global", function(env)
+    module.yabai:set { popup = { drawing = false } }
 end)
 
 return module

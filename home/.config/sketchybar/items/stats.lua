@@ -98,30 +98,30 @@ module.tailscale = sbar.add("alias", "Tailscale,Item-0", {
     },
     y_offset = -3,
 })
-module.tailscale:subscribe("mouse.clicked", function()
-    os.execute "sketchybar -m --remove '/tailscale.info.*/'"
-    local tailscale_nets = helpers.runcmd("/Applications/Tailscale.app/Contents/MacOS/Tailscale switch --list")
-    if tailscale_nets then
-        local idx = 1
-        for profile in tailscale_nets:gmatch "[^\r\n]+" do
-            if not profile:match "^ID.*$" then
-                local color = colors.grey
-                if profile:match "^.**$" then
-                    color = colors.white
-                end
-                sbar.add("item", "tailscale.info." .. idx, {
-                    position = "popup." .. module.tailscale.name,
-                    label = { string = profile, color = color },
-                })
-            end
-            idx = idx + 1
-        end
-        module.tailscale:set { popup = { drawing = "toggle" } }
-    end
-end)
-module.tailscale:subscribe("mouse.exited.global", function()
-    module.tailscale:set { popup = { drawing = false } }
-end)
+-- module.tailscale:subscribe("mouse.clicked", function()
+--     os.execute "sketchybar -m --remove '/tailscale.info.*/'"
+--     local tailscale_nets = helpers.runcmd("/Applications/Tailscale.app/Contents/MacOS/Tailscale switch --list")
+--     if tailscale_nets then
+--         local idx = 1
+--         for profile in tailscale_nets:gmatch "[^\r\n]+" do
+--             if not profile:match "^ID.*$" then
+--                 local color = colors.grey
+--                 if profile:match "^.**$" then
+--                     color = colors.white
+--                 end
+--                 sbar.add("item", "tailscale.info." .. idx, {
+--                     position = "popup." .. module.tailscale.name,
+--                     label = { string = profile, color = color },
+--                 })
+--             end
+--             idx = idx + 1
+--         end
+--         module.tailscale:set { popup = { drawing = "toggle" } }
+--     end
+-- end)
+-- module.tailscale:subscribe("mouse.exited.global", function()
+--     module.tailscale:set { popup = { drawing = false } }
+-- end)
 
 module.stats = sbar.add("bracket", "stats", {
     module.cpu.name,

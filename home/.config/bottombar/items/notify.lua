@@ -178,7 +178,7 @@ module.update = function()
     local bell_red = false
     local previous_count = 0
     local previous_info = sbar.query "notify"
-    if previous_info then
+    if previous_info and previous_info.label then
         local prev = previous_info.label.value
         if prev and prev ~= icons.loading then
             previous_count = tonumber(prev)

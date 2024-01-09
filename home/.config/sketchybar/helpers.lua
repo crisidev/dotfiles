@@ -31,6 +31,10 @@ module.match = function(words, value)
     return false
 end
 
+module.now_playing = function(command)
+    return module.runcmd(string.format("~/.config/bottombar/nowplaying-cli %s", command))
+end
+
 module.hammerspoon = function(command)
     os.execute(string.format('/opt/homebrew/bin/hs -c "return %s"', command))
 end

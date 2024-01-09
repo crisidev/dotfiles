@@ -10,6 +10,7 @@ disable = [
     "nix",
     "toolbx",
     "pnpm",
+    "mas",
 ]
 ignore_failures = ["git_repos"]
 

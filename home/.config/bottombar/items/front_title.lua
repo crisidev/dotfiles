@@ -26,5 +26,8 @@ module.update = function(_)
 end
 
 module.front_title:subscribe("window_focus", module.update)
+module.front_title:subscribe("front_app_switched", module.update)
+module.front_title:subscribe("space_change", module.update)
+module.front_title:subscribe("title_change", module.update)
 
 return module

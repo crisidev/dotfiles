@@ -11,6 +11,12 @@ return {
     github = "󰊤",
     gitlab = "󰮠",
     chat = "󱋊",
+    power = {
+        sleep = "󰤄",
+        poweroff = "󰐥",
+        reboot = "󰜉",
+        lock = "󰷛",
+    },
     bell = {
         default = "􀋚 ",
         dot = "􀝗 ",
