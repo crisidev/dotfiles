@@ -75,8 +75,7 @@ export LESSOPEN="|/opt/homebrew/bin/lesspipe.sh %s"
 # fzf
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude build'
 
-# brew
-_evalcache /opt/homebrew/bin/brew shellenv
+# zsh completion
 FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
 
 # direnv
