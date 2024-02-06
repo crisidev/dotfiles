@@ -34,6 +34,7 @@
     shamer = "!echo \"And the winner is: \" && git log --format='format:%C(yellow)%h%C(reset) %C(blue)<%ae>%C(reset) %C(magenta)%aD%C(reset)%C(auto)%d%C(reset) %s' |sort -r -k5 | grep \" 0\"  |head -n 1 |awk '{print $1\" \"$2\" \"$5\" \"$4\" \"$7\" \"$8\" \"$9\" \"$10\" \"$11\" \"$12\"...\"}' |ccze -m ansi"
 [push]
     default = upstream
+    autoSetupRemote = true
 [pull]
     rebase = true
 [credential]

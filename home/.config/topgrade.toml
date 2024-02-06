@@ -16,15 +16,15 @@ ignore_failures = ["git_repos"]
 
 [git]
 max_concurrency = 5
-pull_only_repos = [
+repos = [
     # Home sick
     "~/.homesick/repos/homeshick",
     "~/.homesick/repos/dotfiles",
-    # "~/.homesick/repos/lvim",
+    "~/.homesick/repos/lvim",
     # Github stuff
     "~/github/neovide",
 ]
-pull_arguments = "--ff-only --rebase --autostash"
+arguments = "--ff-only --rebase --autostash"
 
 [python]
 enable_pip_review = true

@@ -1,4 +1,3 @@
-
 -- Left
 local front_app = require "items.front_app"
 
@@ -10,8 +9,8 @@ local wifi = require "items.wifi"
 local battery = require "items.battery"
 local volume = require "items.volume"
 local mic = require "items.mic"
-require("items.status")
+require "items.status"
 local front_title = require "items.front_title"
 
 -- System woke
-front_app.subscribe_system_woke { battery, front_app, front_title, spotify, notify, brew, wifi, volume, mic }
+front_app.subscribe_system_woke { battery, front_app, front_title, wifi, volume, mic, spotify, brew, notify }

@@ -118,13 +118,13 @@ export AR_x86_64_unknown_linux_musl=x86_64-unknown-linux-musl-ar
 export CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_LINKER=x86_64-unknown-linux-musl-gcc
 
 # needed to compile for arm64 linux
-export CC_AARCH64_unknown_linux_gnu=aarch64-unknown-linux-gnu-gcc
-export CXX_AARCH64_unknown_linux_gnu=aarch64-unknown-linux-gnu-g++
-export AR_AARCH64_unknown_linux_gnu=aarch64-unknown-linux-gnu-ar
+export CC_aarch64_unknown_linux_gnu=aarch64-unknown-linux-gnu-gcc
+export CXX_aarch64_unknown_linux_gnu=aarch64-unknown-linux-gnu-g++
+export AR_aarch64_unknown_linux_gnu=aarch64-unknown-linux-gnu-ar
 export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-unknown-linux-gnu-gcc
-export CC_AARCH64_unknown_linux_musl=aarch64-unknown-linux-musl-gcc
-export CXX_AARCH64_unknown_linux_musl=aarch64-unknown-linux-musl-g++
-export AR_AARCH64_unknown_linux_musl=aarch64-unknown-linux-musl-ar
+export CC_aarch64_unknown_linux_musl=aarch64-unknown-linux-musl-gcc
+export CXX_aarch64_unknown_linux_musl=aarch64-unknown-linux-musl-g++
+export AR_aarch64_unknown_linux_musl=aarch64-unknown-linux-musl-ar
 export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER=aarch64-unknown-linux-musl-gcc
 
 # yabai
