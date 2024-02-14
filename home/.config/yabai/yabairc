@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
 
+# set -x
+
 # signals
 # run window focus routine in sketckybar
 yabai -m signal --add event=window_focused action="/opt/homebrew/bin/sketchybar --trigger window_focus"
 yabai -m signal --add event=window_resized action="/opt/homebrew/bin/sketchybar --trigger window_focus"
 
 # handle adding and removing displays
-yabai -m signal --add event=display_added action="$HOME/.config/yabai/screenchange"
-yabai -m signal --add event=display_removed action="$HOME/.config/yabai/screenchange"
+# yabai -m signal --add event=display_added action="$HOME/.config/yabai/screenchange"
+# yabai -m signal --add event=display_removed action="$HOME/.config/yabai/screenchange"
 
 # yabai -m signal --add event=window_destroyed active=yes action="yabai -m query --windows --window &> /dev/null || yabai -m window --focus mouse &> /dev/null || yabai -m window --focus \$(yabai -m query --windows --space | jq .[0].id) &> /dev/null"
 # yabai -m signal --add event=window_minimized active=yes action="if \$(yabai -m query --windows --window \$YABAI_WINDOW_ID | jq -r '.\"is-floating\"'); then yabai -m query --windows --window &> /dev/null || yabai -m window --focus mouse &> /dev/null || yabai -m window --focus \$(yabai -m query --windows --space | jq .[0].id) &> /dev/null; fi"
@@ -82,24 +84,16 @@ if [ -f "$HOME/.config/yabai/windows.json" ]; then
     done
 fi
 
-SCREEN_PRIMARY=$("$HOME/.bin/hs" -c "return hs.wm.screen_primary")
-# cycle spaces if yabai was restarted by itself
-if [ -e /tmp/yabai_matteobigoi.cycle_all_spaces_mission_control ]; then
-    SCREEN_SECONDARY=$("$HOME/.bin/hs" -c "return hs.wm.screen_secondary")
-    SCREEN_PRIMARY_OLD=$(awk '{print $1}' /tmp/yabai_matteobigoi.cycle_all_spaces_mission_control)
-    SCREEN_SECONDARY_OLD=$(awk '{print $2}' /tmp/yabai_matteobigoi.cycle_all_spaces_mission_control)
-    if [ -z "$SCREEN_PRIMARY_OLD" ] || [ "$SCREEN_PRIMARY" != "$SCREEN_PRIMARY_OLD" ] || [ "$SCREEN_SECONDARY" != "$SCREEN_SECONDARY_OLD" ]; then
-        "$HOME/.bin/hs" -c "return hs.wm.cycle_all_spaces_mission_control()"
-    fi
-    rm -f /tmp/yabai_matteobigoi.cycle_all_spaces_mission_control
-fi
-
 # layout is always BSP
 yabai -m config layout bsp
-
+"$HOME/.bin/hs" -c "return hs.wm.ensure_all_spaces_are_present()"
+SCREEN_PRIMARY=$("$HOME/.bin/hs" -c "return hs.wm.screen_primary")
 if [ "$SCREEN_PRIMARY" == "37D8832A-2D66-02CA-B9F7-8F30A301B230" ]; then
     yabai -m config --space 3 layout stack
 fi
+
+# start borders
+/opt/homebrew/bin/borders active_color="glow(0xff95b5ff)" inactive_color="glow(0xff414550)" width=4.0 hidpi=on style=round &
 
 # add gaps for sketchybar
 "$HOME/.bin/hs" -c "return hs.wm.adjust_spaces_gaps()"

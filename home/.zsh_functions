@@ -88,3 +88,23 @@ function weather {
 function enable-sudo-touchid() {
   sudo sed -i -e '1s;^;auth       sufficient     pam_tid.so\n;' /etc/pam.d/sudo
 }
+
+function cross() {
+    local CC_x86_64_unknown_linux_gnu
+    local CXX_x86_64_unknown_linux_gnu
+    local AR_x86_64_unknown_linux_gnu
+    local CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER
+    local CC_x86_64_unknown_linux_musl
+    local CXX_x86_64_unknown_linux_musl
+    local AR_x86_64_unknown_linux_musl
+    local CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_LINKER
+    local CC_AARCH64_unknown_linux_gnu
+    local CXX_AARCH64_unknown_linux_gnu
+    local AR_AARCH64_unknown_linux_gnu
+    local CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER
+    local CC_AARCH64_unknown_linux_musl
+    local CXX_AARCH64_unknown_linux_musl
+    local AR_AARCH64_unknown_linux_musl
+    local CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER
+    $HOME/.cargo/bin/cross $@
+}

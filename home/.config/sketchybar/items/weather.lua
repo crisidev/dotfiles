@@ -12,7 +12,7 @@ module.weather = sbar.add("item", "weather", {
 
 module.update = function()
     sbar.animate("tanh", 10, function()
-        local w = helpers.runcmd('curl -s "https://wttr.in/?format=1"', true)
+        local w = helpers.runcmd('curl -s --max-time 2 "https://wttr.in/?format=1"', true)
         if w then
             module.weather:set { drawing = true, label = w, click_script = "open /System/Applications/Weather.app" }
         else

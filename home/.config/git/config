@@ -51,8 +51,8 @@
     added = yellow
     changed = green
     untracked = cyan
-[help]
-    autocorrect = 20
+; [help]
+;     autocorrect = 20
 [commit]
     gpgSign = true
 [delta]

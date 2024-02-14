@@ -96,8 +96,4 @@ module.space_creator:subscribe("space_windows_change", function(env)
     window_change(env.INFO)
 end)
 
-module.update = function()
-    space_selection { ["SELECTED"] = true, ["NAME"] = "space.1" }
-end
-
 return module
