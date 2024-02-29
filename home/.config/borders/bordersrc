@@ -8,7 +8,7 @@ options=(
     width=4.0
     hidpi=on
     style=round
-    ax_focus=true
+    ax_focus=false
 )
 
 borders "${options[@]}"

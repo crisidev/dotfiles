@@ -30,6 +30,7 @@ module.update = function(env)
 end
 
 module.subscribe_system_woke = function(args)
+    module.update()
     module.front_app:subscribe("system_woke", function()
         for _, component in pairs(args) do
             component.update()

@@ -106,5 +106,5 @@ function cross() {
     local CXX_AARCH64_unknown_linux_musl
     local AR_AARCH64_unknown_linux_musl
     local CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER
-    $HOME/.cargo/bin/cross $@
+    /usr/bin/time $HOME/.cargo/bin/cross $@
 }

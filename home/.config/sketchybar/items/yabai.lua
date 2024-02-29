@@ -168,9 +168,9 @@ local function update_borders(mode)
     end
 end
 
-local function window_focus()
+module.update = function ()
     local mode, icon, color = yabai_mode()
-    update_borders(mode)
+    -- update_borders(mode)
     sbar.animate("tanh", 10, function()
         module.yabai:set { icon = { string = icon, color = color, width = 28 } }
     end)
@@ -178,7 +178,7 @@ local function window_focus()
 end
 
 module.subscribe_system_woke = function(args)
-    window_focus()
+    module.update()
     module.yabai:subscribe("system_woke", function()
         for _, component in pairs(args) do
             component.update()
@@ -186,12 +186,12 @@ module.subscribe_system_woke = function(args)
     end)
 end
 
-module.yabai:subscribe("window_focus", window_focus)
+module.yabai:subscribe("window_focus", module.update)
 
 module.yabai:subscribe("mouse.clicked", function(env)
     if env.BUTTON == "right" then
         os.execute(homedir .. "/.config/yabai/layout")
-        window_focus()
+        module.update()
     elseif env.BUTTON == "left" then
         module.yabai:set { popup = { drawing = "toggle" } }
     end

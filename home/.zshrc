@@ -22,6 +22,7 @@ antidote load $HOME/.zsh_plugins
 [ -f $HOME/.cargo/env ] && source $HOME/.cargo/env
 if which mise > /dev/null; then
     _evalcache mise activate zsh
+    _evalcache mise completion zsh
 fi
 
 # options

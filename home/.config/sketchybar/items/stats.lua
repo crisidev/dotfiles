@@ -86,8 +86,18 @@ module.sensors_label = sbar.add("alias", "Stats,Sensors_label", {
     },
     y_offset = -3,
 })
-
 module.tailscale = sbar.add("alias", "Tailscale,Item-0", {
+    position = "right",
+    padding_left = -5,
+    label = {
+        width = 0,
+    },
+    popup = {
+        align = "right",
+    },
+    y_offset = -3,
+})
+module.zscaler = sbar.add("alias", "Zscaler,Item-0", {
     position = "right",
     padding_left = -5,
     label = {
@@ -133,7 +143,7 @@ module.stats = sbar.add("bracket", "stats", {
     module.disk_bar_chart.name,
     module.sensors.name,
     module.sensors_label.name,
-    module.tailscale.name,
+    module.zscaler.name,
 }, {
     position = "right",
     background = {
