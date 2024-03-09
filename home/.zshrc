@@ -1,37 +1,28 @@
-# antigen
-#export ANTIGEN_LOG=/tmp/antigen.log
 # zmodload zsh/zprof
 
-# direnv
-if which direnv > /dev/null; then
-    eval "$(direnv hook zsh)"
-fi
+# paths
+MY_PATH="$HOME/.bin:$HOME/.local/share/lvim/mason/bin:$HOME/.local/bin"
+SYSTEM_PATH="/usr/local/bin"
+export PATH="$MY_PATH:$SYSTEM_PATH:$PATH"
 
-# rtx
-[ -f $HOME/.cargo/env ] && source $HOME/.cargo/env
-eval "$(rtx activate zsh)"
-
-source $HOME/.cache/antigen/antigen.zsh
-
-antigen use oh-my-zsh
-
-antigen bundle command-not-found
-antigen bundle fd
-antigen bundle history
-antigen bundle zsh-users/zsh-completions
-antigen bundle zsh-users/zsh-autosuggestions
-antigen bundle zsh-users/zsh-history-substring-search
+# configure fzf history search
 export ZSH_FZF_HISTORY_SEARCH_BIND="^f"
 export ZSH_FZF_HISTORY_SEARCH_FZF_ARGS="+s +m +x -e --height 40% --reverse"
-antigen bundle joshskidmore/zsh-fzf-history-search
-antigen bundle hlissner/zsh-autopair
-antigen bundle supercrabtree/k
-antigen bundle --branch=main zdharma/fast-syntax-highlighting
-antigen bundle MichaelAquilina/zsh-you-should-use
-antigen bundle djui/alias-tips
-# antigen bundle ellie/atuin@main
 
-antigen apply
+export DISABLE_AUTO_TITLE=true
+
+# configure antidote
+autoload -Uz compinit
+compinit
+source /usr/share/zsh-antidote/antidote.zsh
+antidote load $HOME/.zsh_plugins
+
+# mise and cargo are the first things to load
+[ -f $HOME/.cargo/env ] && source $HOME/.cargo/env
+if which mise > /dev/null; then
+    _evalcache mise activate zsh
+    _evalcache mise completion zsh
+fi
 
 # options
 setopt NO_LIST_BEEP
@@ -56,7 +47,7 @@ setopt HIST_IGNORE_SPACE         # Don't record an entry starting with a space.
 setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in the history file.
 setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording entry.
 setopt HIST_VERIFY               # Don't execute immediately upon history expansion.
-unsetopt HIST_BEEP                 # Beep when accessing nonexistent history.
+unsetopt HIST_BEEP               # Beep when accessing nonexistent history.
 
 # history substring search
 bindkey '^[[A' history-substring-search-up
@@ -64,41 +55,44 @@ bindkey '^[[B' history-substring-search-down
 
 # source files
 [ -f $HOME/.zsh_aliases ] && source $HOME/.zsh_aliases
-[ -f $HOME/.zsh_amzn ] && source $HOME/.zsh_amzn
+[ -f $HOME/.zsh_private ] && source $HOME/.zsh_private
 [ -f $HOME/.zsh_functions ] && source $HOME/.zsh_functions
 [ -f $HOME/.zsh_secrets ] && source $HOME/.zsh_secrets
 
-# paths
-export PATH=$HOME/.bin:$HOME/.local/share/lvim/mason/bin:$HOME/.local/share/pnpm:$PATH
-
 # # terminal
-export TERMINFO=/usr/share/terminfo
 export GREP_COLOR='mt=1;31'
-export EDITOR=vim
+export TERMINFO=/usr/share/terminfo
+export EDITOR="$(which lvim)"
+export VISUAL="$(which lvim)"
+export MANPAGER="$(which lvim) +Man!"
+export XDG_CONFIG_HOME="$HOME/.config"
+
+# lesspipe
+export LESSOPEN="| lesspipe.sh %s"
 
 # Rustc
-# export RUSTC_WRAPPER=$HOME/.cargo/bin/sccache
-
-# sshrc
-compdef sshrc=ssh
+export RUSTC_WRAPPER=$HOME/.cargo/bin/sccache
 
 # fzf
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude build'
 
+# zsh completion
+# FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+
+# direnv
+if which direnv > /dev/null; then
+    _evalcache direnv hook zsh
+fi
+
 # zoxide
-eval "$(zoxide init zsh --no-cmd)"
-function z {
-    __zoxide_z "$@"
-}
-function zi {
-    __zoxide_zi "$@"
-}
+if which zoxide > /dev/null; then
+    _evalcache zoxide init zsh
+fi
 
 # spaceship
-eval "$(starship init zsh)"
-# zprof
+if which starship > /dev/null; then
+    _evalcache starship init zsh
+fi
 
-# pnpm
-export PNPM_HOME="/home/ANT.AMAZON.COM/matbigoi/.local/share/pnpm"
-export PATH="$PNPM_HOME:$PATH"
-# pnpm end
+# aws cli completer
+complete -C "$(mise which aws)_completer" aws
