@@ -69,7 +69,7 @@ local function update_details(ssid, ipaddr)
         helpers.runcmd "/System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport -I | awk -F ' link auth: ' '/ link auth: / { print $2 }'"
     local default_route = helpers.runcmd "route -n get default | awk -F ' gateway: ' '/ gateway: / { print $2 }'"
     local label = string.format("SSID: %s, channel: %s, auth: %s", ssid, channel, auth)
-    os.execute "bottombar -m --remove '/wifi.line.*/'"
+    sbar.exec "bottombar -m --remove '/wifi.line.*/'"
     local info = get_wifi_info()
     sbar.add("item", "wifi.line.1", wifi_line(icons.wifi.connected, label))
 
@@ -79,7 +79,7 @@ local function update_details(ssid, ipaddr)
 
     local icon = icons.tailscale.off
     label = "Tailscale disconnected"
-    if os.execute "/Applications/Tailscale.app/Contents/MacOS/Tailscale status >/dev/null 2>&1" then
+    if sbar.exec "/Applications/Tailscale.app/Contents/MacOS/Tailscale status >/dev/null 2>&1" then
         icon = icons.tailscale.on
         ipaddr = helpers.runcmd "/Applications/Tailscale.app/Contents/MacOS/Tailscale ip --4"
         label = string.format("Tailscale connected, address: %s", ipaddr)

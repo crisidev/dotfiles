@@ -71,7 +71,7 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export LESSOPEN="|/opt/homebrew/bin/lesspipe.sh %s"
 
 # Rustc
-# export RUSTC_WRAPPER=$HOME/.cargo/bin/sccache
+export RUSTC_WRAPPER=/opt/homebrew/bin/sccache
 
 # fzf
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude build'

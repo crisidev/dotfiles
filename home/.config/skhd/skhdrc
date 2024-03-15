@@ -26,7 +26,7 @@ cmd + shift - m:            mirror && sketchybar --reload && bottombar --reload
 cmd + alt - m:              ~/.bin/hs -c "return hs.wm.ensure_all_spaces_are_present()"
 cmd + alt + shift - m:      ~/.bin/hs -c "return hs.wm.cycle_all_spaces_mission_control()"
 cmd + alt - n:              ~/.bin/hs -c "return hs.helpers.notify('Suspending system')"; sleep 1; osascript -e 'tell app "System Events" to sleep'
-fn - f10:                   ~/.bin/hs -c "return spoon.MicMute:toggleMicMute()" && bottombar --trigger mic_update
+fn - f12:                   ~/.bin/hs -c "return spoon.MicMute:toggleMicMute()" && bottombar --trigger mic_update
 
 # -----------------------
 # Focus spaces

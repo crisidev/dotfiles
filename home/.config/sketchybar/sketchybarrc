@@ -12,11 +12,11 @@ package.cpath = package.cpath .. ";/Users/" .. os.getenv("USER") .. "/.local/sha
 sbar = require("sketchybar")
 
 -- Load the init.lua file
+sbar.begin_config()
 require("init")
-os.execute("sketchybar --hotload on")
-
 -- Start bottombar
-os.execute("sleep 1 && bottombar &")
+sbar.exec("bottombar &")
+sbar.end_config()
 
 -- Run the event loop of the sketchybar module (without this there will be no
 -- bi-directional communication between the lua module and sketchybar)

@@ -3,7 +3,7 @@ local colors = require "colors"
 local helpers = require "helpers"
 local module = {}
 
-module.volume_slider = sbar.add("slider", "volume", {
+module.volume_slider = sbar.add("slider", "volume", 100, {
     position = "right",
     updates = true,
     label = {
@@ -56,7 +56,7 @@ module.volume_icon = sbar.add("item", "volume_icon", {
 })
 
 local function update_devices(env)
-    os.execute "bottombar --remove '/volume.device.*/'"
+    sbar.exec "bottombar --remove '/volume.device.*/'"
     module.volume_slider:set { popup = { drawing = "toggle" } }
     local current = helpers.runcmd("SwitchAudioSource -t output -c", true)
     local devices = helpers.runcmd "SwitchAudioSource -a -t output"
@@ -117,7 +117,7 @@ module.volume_slider:subscribe("volume_change", function(env)
 end)
 
 module.volume_slider:subscribe("mouse.clicked", function(env)
-    os.execute('osascript -e "set volume output volume ' .. env.PERCENTAGE .. '"')
+    sbar.exec('osascript -e "set volume output volume ' .. env.PERCENTAGE .. '"')
 end)
 
 module.volume_slider:subscribe("mouse.exited.global", function()
@@ -141,11 +141,12 @@ end)
 module.update = function()
     helpers.slider_on(module.volume_slider, "sin", 20)
     update()
-    os.execute "sleep 1"
+    sbar.exec "sleep 1"
     helpers.slider_off(module.volume_slider, "sin", 20)
 end
 
 module.volume_icon:subscribe("mouse.exited.global", function()
+    helpers.slider_off(module.volume_slider, "sin", 20)
     module.volume_slider:set { popup = { drawing = "off" } }
 end)
 

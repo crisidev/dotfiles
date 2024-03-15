@@ -36,7 +36,7 @@ module.now_playing = function(command)
 end
 
 module.hammerspoon = function(command)
-    os.execute(string.format('/opt/homebrew/bin/hs -c "return %s"', command))
+    sbar.exec(string.format('/opt/homebrew/bin/hs -c "return %s"', command))
 end
 
 module.hammerspoon_result = function(command, strip)

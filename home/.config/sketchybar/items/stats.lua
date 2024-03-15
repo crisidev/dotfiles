@@ -11,7 +11,7 @@ module.cpu = sbar.add("alias", "Stats,CPU", {
     y_offset = -3,
 })
 module.cpu:subscribe("mouse.clicked", function()
-    os.execute 'open -a "/System/Applications/Utilities/Activity Monitor.app"'
+    sbar.exec 'open -a "/System/Applications/Utilities/Activity Monitor.app"'
 end)
 
 module.gpu = sbar.add("alias", "Stats,GPU_bar_chart", {
@@ -109,7 +109,7 @@ module.zscaler = sbar.add("alias", "Zscaler,Item-0", {
     y_offset = -3,
 })
 -- module.tailscale:subscribe("mouse.clicked", function()
---     os.execute "sketchybar -m --remove '/tailscale.info.*/'"
+--     sbar.exec "sketchybar -m --remove '/tailscale.info.*/'"
 --     local tailscale_nets = helpers.runcmd("/Applications/Tailscale.app/Contents/MacOS/Tailscale switch --list")
 --     if tailscale_nets then
 --         local idx = 1
@@ -143,6 +143,7 @@ module.stats = sbar.add("bracket", "stats", {
     module.disk_bar_chart.name,
     module.sensors.name,
     module.sensors_label.name,
+    module.tailscale.name,
     module.zscaler.name,
 }, {
     position = "right",

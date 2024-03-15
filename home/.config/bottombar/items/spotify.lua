@@ -6,7 +6,7 @@ local spotify_event = "com.spotify.client.PlaybackStateChanged"
 local homedir = os.getenv "HOME"
 local module = {}
 
-os.execute("bottombar -m --add event spotify_change " .. spotify_event)
+sbar.exec("bottombar -m --add event spotify_change " .. spotify_event)
 
 module.spotify_anchor = sbar.add("item", "spotify.anchor", {
     position = "right",
@@ -92,7 +92,7 @@ module.spotify_album = sbar.add("item", "spotify.album", {
     },
 })
 
-module.spotify_state = sbar.add("slider", "spotify.state", {
+module.spotify_state = sbar.add("slider", "spotify.state", 100, {
     position = "popup." .. module.spotify_anchor.name,
     icon = {
         drawing = true,
@@ -223,25 +223,25 @@ module.spotify_controls = sbar.add("bracket", "spotify.controls", {
 })
 
 local function play()
-    os.execute "osascript -e 'tell application \"Spotify\" to playpause'"
+    sbar.exec "osascript -e 'tell application \"Spotify\" to playpause'"
 end
 
 local function next()
-    os.execute "osascript -e 'tell application \"Spotify\" to play next track'"
+    sbar.exec "osascript -e 'tell application \"Spotify\" to play next track'"
 end
 
 local function prev()
-    os.execute "osascript -e 'tell application \"Spotify\" to play previous track'"
+    sbar.exec "osascript -e 'tell application \"Spotify\" to play previous track'"
 end
 
 local function repeatfn()
     local repeating = helpers.runcmd "osascript -e 'tell application \"Spotify\" to get repeating'"
     if not repeating then
         module.spotify_repeat:set { icon = { highlight = true } }
-        os.execute "osascript -e 'tell application \"Spotify\" to set repeating to true'"
+        sbar.exec "osascript -e 'tell application \"Spotify\" to set repeating to true'"
     else
         module.spotify_repeat:set { icon = { highlight = false } }
-        os.execute "osascript -e 'tell application \"Spotify\" to set repeating to false'"
+        sbar.exec "osascript -e 'tell application \"Spotify\" to set repeating to false'"
     end
 end
 
@@ -249,10 +249,10 @@ local function shufflefn()
     local shuffling = helpers.runcmd("osascript -e 'tell application \"Spotify\" to get shuffling'", true)
     if not shuffling then
         module.spotify_shuffle:set { icon = { highlight = true } }
-        os.execute "osascript -e 'tell application \"Spotify\" to set shuffling to true'"
+        sbar.exec "osascript -e 'tell application \"Spotify\" to set shuffling to true'"
     else
         module.spotify_shuffle:set { icon = { highlight = false } }
-        os.execute "osascript -e 'tell application \"Spotify\" to set shuffling to false'"
+        sbar.exec "osascript -e 'tell application \"Spotify\" to set shuffling to false'"
     end
 end
 
@@ -261,7 +261,7 @@ local function scrubbing(env)
         helpers.runcmd("osascript -e 'tell application \"Spotify\" to get duration of current track'", true)
     local duration = tonumber(duration_ms) / 1000
     local target = duration * env.PERCENTAGE / 100
-    os.execute(string.format("osascript -e 'tell application \"Spotify\" to set player position to %s'", target))
+    sbar.exec(string.format("osascript -e 'tell application \"Spotify\" to set player position to %s'", target))
     module.spotify_state:set { slider = { percentage = env.PERCENTAGE } }
 end
 
@@ -285,7 +285,7 @@ end
 local function update_cover()
     local cover =
         helpers.runcmd("osascript -e 'tell application \"Spotify\" to get artwork url of current track'", true)
-    os.execute(string.format("curl -s --max-time 20 '%s' -o /tmp/cover.jpg", cover))
+    sbar.exec(string.format("curl -s --max-time 20 '%s' -o /tmp/cover.jpg", cover))
 end
 
 local function update(env)

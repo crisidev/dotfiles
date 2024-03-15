@@ -35,7 +35,7 @@ local preferences = sbar.add("item", {
     label = "Preferences",
 })
 preferences:subscribe("mouse.clicked", function(_)
-    os.execute "open -a 'System Preferences'"
+    sbar.exec "open -a 'System Preferences'"
     module.apple_logo:set { popup = { drawing = false } }
 end)
 
@@ -45,7 +45,7 @@ local activity = sbar.add("item", {
     label = "Activity",
 })
 activity:subscribe("mouse.clicked", function(_)
-    os.execute "open -a 'Activity Monitor'"
+    sbar.exec "open -a 'Activity Monitor'"
     module.apple_logo:set { popup = { drawing = false } }
 end)
 
@@ -55,7 +55,7 @@ local lock = sbar.add("item", {
     label = "Lock Screen",
 })
 lock:subscribe("mouse.clicked", function(_)
-    os.execute "pmset displaysleepnow"
+    sbar.exec "pmset displaysleepnow"
     module.apple_logo:set { popup = { drawing = false } }
 end)
 

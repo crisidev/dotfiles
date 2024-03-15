@@ -13,4 +13,4 @@ require "items.status"
 local front_title = require "items.front_title"
 
 -- System woke
-front_app.subscribe_system_woke { front_app, front_title, battery, wifi, volume, mic, spotify, brew, notify }
+front_app.subscribe_system_woke { front_app, front_title, volume, mic, battery, wifi, spotify, brew, notify }

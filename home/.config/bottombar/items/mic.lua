@@ -3,7 +3,7 @@ local colors = require "colors"
 local helpers = require "helpers"
 local module = {}
 
-module.mic_slider = sbar.add("slider", "mic", {
+module.mic_slider = sbar.add("slider", "mic", 100, {
     position = "right",
     padding_right = -5,
     updates = true,
@@ -71,7 +71,7 @@ local function update_mute_status()
 end
 
 local function update_available_devices(env)
-    os.execute "bottombar --remove '/mic.device.*/'"
+    sbar.exec "bottombar --remove '/mic.device.*/'"
     module.mic_slider:set { popup = { drawing = "toggle" } }
     local current = helpers.runcmd("SwitchAudioSource -t input -c", true)
     local devices = helpers.runcmd "SwitchAudioSource -a -t input"
@@ -121,11 +121,13 @@ local function update_slider()
 end
 
 module.update = function()
+    sbar.exec "sleep 1"
     update_mute_status()
+    update_slider()
 end
 
 module.mic_slider:subscribe("mouse.clicked", function(env)
-    os.execute('osascript -e "set volume input volume ' .. env.PERCENTAGE .. '"')
+    sbar.exec('osascript -e "set volume input volume ' .. env.PERCENTAGE .. '"')
 end)
 
 module.mic_slider:subscribe("mouse.exited", function(env)

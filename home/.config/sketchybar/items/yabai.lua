@@ -56,7 +56,7 @@ module.sleep = sbar.add("item", "yabai.sleep", {
 })
 
 module.sleep:subscribe("mouse.clicked", function(_)
-    os.execute "sleep 1 && osascript -e 'tell app \"System Events\" to sleep'"
+    sbar.exec "sleep 1 && osascript -e 'tell app \"System Events\" to sleep'"
     module.yabai:set { popup = { drawing = false } }
 end)
 
@@ -75,7 +75,7 @@ module.restart = sbar.add("item", "yabai.restart", {
 })
 
 module.restart:subscribe("mouse.clicked", function(_)
-    os.execute "sleep 1 && osascript -e 'tell app \"System Events\" to restart'"
+    sbar.exec "sleep 1 && osascript -e 'tell app \"System Events\" to restart'"
     module.yabai:set { popup = { drawing = false } }
 end)
 
@@ -94,7 +94,7 @@ module.shutdown = sbar.add("item", "yabai.shutdown", {
 })
 
 module.shutdown:subscribe("mouse.clicked", function(_)
-    os.execute "sleep 1 && osascript -e 'tell app \"System Events\" to shutdown'"
+    sbar.exec "sleep 1 && osascript -e 'tell app \"System Events\" to shutdown'"
     module.yabai:set { popup = { drawing = false } }
 end)
 
@@ -126,7 +126,7 @@ end
 
 local function update_borders(mode)
     if mode == "stack" then
-        os.execute(
+        sbar.exec(
             string.format(
                 'borders active_color="glow(%s)" inactive_color="glow(%s)"',
                 colors.red_str,
@@ -134,7 +134,7 @@ local function update_borders(mode)
             )
         )
     elseif mode == "float" then
-        os.execute(
+        sbar.exec(
             string.format(
                 'borders active_color="%s" inactive_color="glow(%s)"',
                 colors.transparent_str,
@@ -142,7 +142,7 @@ local function update_borders(mode)
             )
         )
     elseif mode == "float-term" then
-        os.execute(
+        sbar.exec(
             string.format(
                 'borders active_color="glow(%s)" inactive_color="glow(%s)"',
                 colors.yellow_str,
@@ -150,7 +150,7 @@ local function update_borders(mode)
             )
         )
     elseif mode == "fullscreen" then
-        os.execute(
+        sbar.exec(
             string.format(
                 'borders active_color="glow(0xfff5a97f)" inactive_color="glow(%s)"',
                 colors.orange_str,
@@ -158,7 +158,7 @@ local function update_borders(mode)
             )
         )
     else
-        os.execute(
+        sbar.exec(
             string.format(
                 'borders active_color="glow(%s)" inactive_color="glow(%s)"',
                 colors.active_border_str,
@@ -168,13 +168,13 @@ local function update_borders(mode)
     end
 end
 
-module.update = function ()
+module.update = function()
     local mode, icon, color = yabai_mode()
     -- update_borders(mode)
     sbar.animate("tanh", 10, function()
         module.yabai:set { icon = { string = icon, color = color, width = 28 } }
     end)
-    os.execute "bottombar --trigger window_focus"
+    sbar.exec "bottombar --trigger window_focus"
 end
 
 module.subscribe_system_woke = function(args)
@@ -190,7 +190,7 @@ module.yabai:subscribe("window_focus", module.update)
 
 module.yabai:subscribe("mouse.clicked", function(env)
     if env.BUTTON == "right" then
-        os.execute(homedir .. "/.config/yabai/layout")
+        sbar.exec(homedir .. "/.config/yabai/layout")
         module.update()
     elseif env.BUTTON == "left" then
         module.yabai:set { popup = { drawing = "toggle" } }

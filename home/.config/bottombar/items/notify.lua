@@ -130,9 +130,9 @@ local function app_line(name, label, color, open, icon)
 end
 
 local function cleanup()
-    os.execute "bottombar --remove '/notify.apps.*/'"
-    os.execute "bottombar --remove '/notify.github.*/'"
-    os.execute "bottombar --remove '/notify.gitlab.*/'"
+    sbar.exec "bottombar --remove '/notify.apps.*/'"
+    sbar.exec "bottombar --remove '/notify.github.*/'"
+    sbar.exec "bottombar --remove '/notify.gitlab.*/'"
 end
 
 local function update_apps()
