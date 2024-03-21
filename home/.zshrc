@@ -15,10 +15,11 @@ compinit
 source $HOME/.antidote/antidote.zsh
 antidote load $HOME/.zsh_plugins
 
-# rtx and cargo are the first things to load
+# mise and cargo are the first things to load
 [ -f $HOME/.cargo/env ] && source $HOME/.cargo/env
-if which rtx > /dev/null; then
-    _evalcache rtx activate zsh
+if which mise > /dev/null; then
+    _evalcache mise activate zsh
+    _evalcache mise completion zsh
 fi
 
 # options
@@ -85,11 +86,14 @@ if which starship > /dev/null; then
 fi
 
 # aws cli completer
-complete -C "$(rtx which aws)_completer" aws
+complete -C "$(mise which aws)_completer" aws
 
 # ssh complete
 zstyle ':completion:*:(ssh|scp|rsync):*' ignored-patterns '*(.|:)*'
 zstyle ':completion:*:(ssh|scp|rsync):*' hosts
 zstyle ':completion:*:(ssh|scp|rsync):*' users
 
+# rust cross-compile
+export CC_aarch64_unknown_linux_musl=clang
+export CC_x86_64_unknown_linux_musl=clang
 # zprof

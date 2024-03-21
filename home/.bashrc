@@ -114,4 +114,4 @@ fi
 
 [ -f "$HOME/.zsh_secrets" ] && source "$HOME/.zsh_secrets"
 [ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
-eval "$(rtx activate bash)"
+eval "$(mise activate bash)"
