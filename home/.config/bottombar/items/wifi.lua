@@ -53,7 +53,7 @@ end
 
 local function get_wifi_info()
     local ssid =
-        helpers.runcmd "/System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport -I | awk -F ' SSID: ' '/ SSID: / {print $2}'"
+        helpers.runcmd "networksetup -getairportnetwork en0 | cut -c 24-"
     local ipaddr = helpers.runcmd "ipconfig getifaddr en0"
     local icon = icons.wifi.disconnected
     if ssid then
@@ -63,12 +63,8 @@ local function get_wifi_info()
 end
 
 local function update_details(ssid, ipaddr)
-    local channel =
-        helpers.runcmd "/System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport -I | awk -F ' channel: ' '/ channel: / { print $2 }'"
-    local auth =
-        helpers.runcmd "/System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport -I | awk -F ' link auth: ' '/ link auth: / { print $2 }'"
     local default_route = helpers.runcmd "route -n get default | awk -F ' gateway: ' '/ gateway: / { print $2 }'"
-    local label = string.format("SSID: %s, channel: %s, auth: %s", ssid, channel, auth)
+    local label = string.format("SSID: %s", ssid)
     sbar.exec "bottombar -m --remove '/wifi.line.*/'"
     local info = get_wifi_info()
     sbar.add("item", "wifi.line.1", wifi_line(icons.wifi.connected, label))
@@ -79,7 +75,7 @@ local function update_details(ssid, ipaddr)
 
     local icon = icons.tailscale.off
     label = "Tailscale disconnected"
-    if sbar.exec "/Applications/Tailscale.app/Contents/MacOS/Tailscale status >/dev/null 2>&1" then
+    if os.execute "/Applications/Tailscale.app/Contents/MacOS/Tailscale status >/dev/null 2>&1" then
         icon = icons.tailscale.on
         ipaddr = helpers.runcmd "/Applications/Tailscale.app/Contents/MacOS/Tailscale ip --4"
         label = string.format("Tailscale connected, address: %s", ipaddr)

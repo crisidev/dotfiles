@@ -126,7 +126,7 @@ end)
 
 module.volume_icon:subscribe("mouse.clicked", function(env)
     if env.BUTTON == "right" or env.MODIFIER == "shift" then
-        update_devices()
+        update_devices(env)
     else
         update()
         local info = sbar.query "volume"

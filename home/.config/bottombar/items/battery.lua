@@ -61,7 +61,7 @@ module.update = function()
         if time ~= "" then
             label = string.format("%s, remaining time %s", label, time)
         end
-        sbar.exec "bottombar -m --remove 'battery.info'"
+        -- sbar.exec "bottombar -m --remove battery.info"
         sbar.add("item", "battery.info", {
             position = "popup." .. module.battery.name,
             padding_left = 8,
