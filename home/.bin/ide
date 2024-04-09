@@ -32,18 +32,13 @@ function start_ide() {
     export LUNARVIM_CACHE_DIR="${LUNARVIM_CACHE_DIR:-"$HOME/.cache/lvim"}"
     export LUNARVIM_BASE_DIR="${LUNARVIM_BASE_DIR:-"$HOME/.local/share/lunarvim/lvim"}"
 
-    # exec /home/ANT.AMAZON.COM/matbigoi/github/gnvim/target/release/gnvim -- -u "$LUNARVIM_BASE_DIR/init.lua" "$@"
-    # exec -a "$NVIM_APPNAME" /Applications/Neovide.app/Contents/MacOS/Neovide --multigrid --notabs --neovim-bin "$(mise which nvim)" -- -u "$LUNARVIM_BASE_DIR/init.lua" --listen "$NVIM_LISTEN_ADDRESS" "$@"
-    exec -a "$NVIM_APPNAME" /Applications/Neovide.app/Contents/MacOS/Neovide --neovim-bin "$(mise which nvim)" -- -u "$LUNARVIM_BASE_DIR/init.lua" --listen "$NVIM_LISTEN_ADDRESS" "$@"
-    # exec -a "$NVIM_APPNAME" ~/.cargo/bin/neovide --neovim-bin "$(mise which nvim)" -- -u "$LUNARVIM_BASE_DIR/init.lua" --listen "$NVIM_LISTEN_ADDRESS" "$@"
-    # neovide --x11-wm-class ide -- -u "$LUNARVIM_RUNTIME_DIR/lvim/init.lua"  --listen $NVIM_LISTEN_ADDRESS --cmd "let g:crisidev_ide=1" "$@"
-    # exec ~/github/fvim/bin/Release/net6.0/linux-x64/FVim -u "$LUNARVIM_BASE_DIR/init.lua"  "$@"
+    exec -a "$NVIM_APPNAME" /Applications/Neovide.app/Contents/MacOS/Neovide -- -u "$LUNARVIM_BASE_DIR/init.lua" --listen "$NVIM_LISTEN_ADDRESS" "$@"
 }
 
 # Open a file inside the running IDE.
 function open_in_ide() {
     if ! pgrep -f "Neovide" >/dev/null; then
-        start_ide
+        start_ide "$@"
         sleep 0.5
     fi
     exec nvr --remote "$@"
