@@ -1,6 +1,7 @@
 # bash aliases
 # alias ls="ls --color -Fh"
-alias ls="lsd --icon never"
+# alias ls="lsd --icon never"
+alias ls="eza"
 alias l="ls -1"
 alias ll="ls -lh"
 alias la="ls -a"

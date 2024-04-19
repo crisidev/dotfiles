@@ -19,7 +19,7 @@ export RUSTC_WRAPPER=/opt/homebrew/bin/sccache
 export PATH="$MY_PATH:$BREW_PATH:$SYSTEM_PATH:$PATH"
 
 # mise
-eval "$(mise activate bash)"
+eval "$(mise activate bash --shims)"
 
 # Start neovim IDE using class `ide` and listening on $NVIM_LISTEN_ADDRESS
 function start_ide() {

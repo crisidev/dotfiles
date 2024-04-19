@@ -21,7 +21,7 @@ antidote load $HOME/.zsh_plugins
 # mise and cargo are the first things to load
 [ -f $HOME/.cargo/env ] && source $HOME/.cargo/env
 if which mise > /dev/null; then
-    _evalcache mise activate zsh
+    _evalcache mise activate zsh --shims
     _evalcache mise completion zsh
 fi
 
