@@ -121,7 +121,7 @@ local function update_slider()
 end
 
 module.update = function()
-    sbar.exec "sleep 1"
+    -- sbar.exec "sleep 1"
     update_mute_status()
     update_slider()
 end

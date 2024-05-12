@@ -1,7 +1,7 @@
 # zmodload zsh/zprof
 
 # paths
-MY_PATH="$HOME/.bin:$HOME/.local/share/lvim/mason/bin:$HOME/.local/bin:/opt/homebrew/bin"
+MY_PATH="$HOME/.bin:$HOME/.local/share/nvim/mason/bin:$HOME/.local/bin:/opt/homebrew/bin"
 BREW_PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:/opt/homebrew/opt/coreutils/libexec/gnubin:/opt/homebrew/opt/grep/libexec/gnubin:/opt/homebrew/opt/ssh-copy-id/bin:/opt/homebrew/opt/gnu-tar/libexec/gnubin:/opt/homebrew/opt/llvm/bin"
 SYSTEM_PATH="/usr/local/bin"
 export PATH="$MY_PATH:$BREW_PATH:$SYSTEM_PATH:$PATH"
@@ -72,6 +72,9 @@ export LESSOPEN="|/opt/homebrew/bin/lesspipe.sh %s"
 
 # Rustc
 export RUSTC_WRAPPER=/opt/homebrew/bin/sccache
+
+# Go
+export GOPATH=$HOME/.go
 
 # fzf
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude build'

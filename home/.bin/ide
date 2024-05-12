@@ -5,57 +5,46 @@ set -e -o pipefail
 
 # Functions
 usage() {
-    echo "usage: $0 toggle|new|<filenames..>"
-    exit 2
+	echo "usage: $0 toggle|new|<filenames..>"
+	exit 2
 }
 
-# Nvim listen socket
 NVIM_LISTEN_ADDRESS=/tmp/nvimsocket
-# Paths
-MY_PATH="$HOME/.bin:$HOME/.local/share/lvim/mason/bin"
+MY_PATH="$HOME/.bin:$HOME/.local/share/nvim/mason/bin"
 BREW_PATH="/opt/homebrew/bin:/opt/homebrew/opt/gnu-sed/libexec/gnubin:/opt/homebrew/opt/coreutils/libexec/gnubin:/opt/homebrew/opt/grep/libexec/gnubin:/opt/homebrew/opt/ssh-copy-id/bin"
 SYSTEM_PATH="/usr/local/bin"
-export RUSTC_WRAPPER=/opt/homebrew/bin/sccache
 export PATH="$MY_PATH:$BREW_PATH:$SYSTEM_PATH:$PATH"
-
-# mise
+export RUSTC_WRAPPER=/opt/homebrew/bin/sccache
 eval "$(mise activate bash --shims)"
 
 # Start neovim IDE using class `ide` and listening on $NVIM_LISTEN_ADDRESS
 function start_ide() {
-    [ -f "$HOME/.zsh_secrets" ] && source "$HOME/.zsh_secrets"
-    [ -f "$HOME/.zsh_private" ] && source "$HOME/.zsh_private"
-
-    export NVIM_APPNAME="${NVIM_APPNAME:-"lvim"}"
-    export LUNARVIM_RUNTIME_DIR="${LUNARVIM_RUNTIME_DIR:-"$HOME/.local/share/lunarvim"}"
-    export LUNARVIM_CONFIG_DIR="${LUNARVIM_CONFIG_DIR:-"$HOME/.config/lvim"}"
-    export LUNARVIM_CACHE_DIR="${LUNARVIM_CACHE_DIR:-"$HOME/.cache/lvim"}"
-    export LUNARVIM_BASE_DIR="${LUNARVIM_BASE_DIR:-"$HOME/.local/share/lunarvim/lvim"}"
-
-    exec -a "$NVIM_APPNAME" /Applications/Neovide.app/Contents/MacOS/Neovide -- -u "$LUNARVIM_BASE_DIR/init.lua" --listen "$NVIM_LISTEN_ADDRESS" "$@"
+	[ -f "$HOME/.zsh_secrets" ] && source "$HOME/.zsh_secrets"
+	[ -f "$HOME/.zsh_private" ] && source "$HOME/.zsh_private"
+	exec /Applications/Neovide.app/Contents/MacOS/Neovide -- --listen "$NVIM_LISTEN_ADDRESS" "$@"
 }
 
 # Open a file inside the running IDE.
 function open_in_ide() {
-    if ! pgrep -f "Neovide" >/dev/null; then
-        start_ide "$@"
-        sleep 0.5
-    fi
-    exec nvr --remote "$@"
+	if ! pgrep -f "Neovide" >/dev/null; then
+		start_ide "$@"
+		sleep 0.5
+	fi
+	exec nvr --remote "$@"
 }
 
 # main switch
 case $1 in
-    --help)
-        usage
-        ;;
-    new)
-        shift
-        start_ide "$@"
-        ;;
-    *)
-        open_in_ide "$@"
-        ;;
+--help)
+	usage
+	;;
+new)
+	shift
+	start_ide "$@"
+	;;
+*)
+	open_in_ide "$@"
+	;;
 esac
 
 exit 0
