@@ -62,9 +62,9 @@ bindkey '^[[B' history-substring-search-down
 
 # # terminal
 export GREP_COLOR='mt=1;31'
-export EDITOR="$(which lvim)"
-export VISUAL="$(which lvim)"
-export MANPAGER="$(which lvim) +Man!"
+export EDITOR=nvim
+export VISUAL=nvim
+export MANPAGER="nvim +Man!"
 export XDG_CONFIG_HOME="$HOME/.config"
 
 # lesspipe

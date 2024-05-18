@@ -21,7 +21,7 @@ eval "$(mise activate bash --shims)"
 function start_ide() {
 	[ -f "$HOME/.zsh_secrets" ] && source "$HOME/.zsh_secrets"
 	[ -f "$HOME/.zsh_private" ] && source "$HOME/.zsh_private"
-	exec /Applications/Neovide.app/Contents/MacOS/Neovide -- --listen "$NVIM_LISTEN_ADDRESS" "$@"
+	/Applications/Neovide.app/Contents/MacOS/Neovide --fork -- --listen $NVIM_LISTEN_ADDRESS -- "$@"
 }
 
 # Open a file inside the running IDE.

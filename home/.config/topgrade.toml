@@ -28,3 +28,6 @@ arguments = "--ff-only --rebase --autostash"
 
 [python]
 enable_pip_review = true
+
+[commands]
+"mise" = "mise self-update && mise up"
