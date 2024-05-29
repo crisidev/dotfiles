@@ -1,0 +1,45 @@
+{
+  "title": "PC-Style Shortcuts",
+  "rules": [
+    {
+      "description": "Home key to the beginning of the line (Control + a)",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "home",
+            "modifiers": {
+              "optional": ["any"]
+            }
+          },
+          "to": [
+            {
+              "key_code": "a",
+              "modifiers": ["left_control"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "End key to the end of the line (Control + e)",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "end",
+            "modifiers": {
+              "optional": ["any"]
+            }
+          },
+          "to": [
+            {
+              "key_code": "e",
+              "modifiers": ["left_control"]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

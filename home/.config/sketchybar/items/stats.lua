@@ -88,7 +88,7 @@ module.sensors_label = sbar.add("alias", "Stats,Sensors_label", {
 })
 module.tailscale = sbar.add("alias", "Tailscale,Item-0", {
     position = "right",
-    padding_left = -20,
+    padding_left = -10,
     label = {
         width = 0,
     },
