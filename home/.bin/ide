@@ -9,6 +9,10 @@ usage() {
 	exit 2
 }
 
+BIN=$(dirname $0)
+if [ "$BIN" = "lide" ]; then
+    export NEOVIM_RUST_TARGET=aarch64-unknown-linux-gnu
+fi
 NVIM_LISTEN_ADDRESS=/tmp/nvimsocket
 MY_PATH="$HOME/.bin:$HOME/.local/share/nvim/mason/bin"
 BREW_PATH="/opt/homebrew/bin:/opt/homebrew/opt/gnu-sed/libexec/gnubin:/opt/homebrew/opt/coreutils/libexec/gnubin:/opt/homebrew/opt/grep/libexec/gnubin:/opt/homebrew/opt/ssh-copy-id/bin"

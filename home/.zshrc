@@ -70,8 +70,12 @@ export XDG_CONFIG_HOME="$HOME/.config"
 # lesspipe
 export LESSOPEN="|/opt/homebrew/bin/lesspipe.sh %s"
 
-# Rustc
+# Rust
 export RUSTC_WRAPPER=/opt/homebrew/bin/sccache
+export CARGO_NET_GIT_FETCH_WITH_CLI=true
+export NEOVIM_RUST_TARGET=aarch64-apple-darwin
+export NEOVIM_RUST_DIAGNOSTICS=rust_analyzer
+export NEOVIM_RUST_DEVELOP_RUSTC=false
 
 # Go
 export GOPATH=$HOME/.go

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+ENV=$(poetry env info -p || echo "")
+if [ -n "${ENV}" ]; then
+    exec "${ENV}/bin/python" "$@"
+else
+    exec python "$@"
+fi

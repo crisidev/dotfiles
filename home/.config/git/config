@@ -42,6 +42,7 @@
 	guiPrompt = false
 	gitLabAuthModes = pat
 	credentialStore = keychain
+	helper = 
 	helper = /usr/local/share/gcm-core/git-credential-manager
 [color "branch"]
     current = yellow reverse
