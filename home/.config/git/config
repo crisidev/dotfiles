@@ -67,3 +67,5 @@
     hunk-header-style = omit
 [credential "https://dev.azure.com"]
 	useHttpPath = true
+[init]
+	defaultBranch = main

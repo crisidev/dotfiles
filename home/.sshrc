@@ -1,0 +1,96 @@
+#!/usr/bin/env bash
+
+# export SSHHOME if root
+if [ "$(id -u)" == "0" ]; then
+  SSHHOME=$(cat /tmp/.matteobigoi.sshhomedir)
+  export SSHHOME
+else
+  echo $SSHHOME > /tmp/.matteobigoi.sshhomedir
+fi
+
+
+# history
+export HISTCONTROL=ignoreboth
+
+# locales
+export LC_CTYPE=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+# terminal
+export TERM="xterm-256color"
+export LSCOLORS=exfxCxdxcxegedabagacad
+export GREP_COLOR='1;31'
+export VISUAL=vim
+export EDITOR=vim
+
+# prompt
+export PS1='\[\033[01;31m\]\u\[\033[00m\]@\[\033[01;34m\]\H\[\033[00m\] \w \$ '
+export SUDO_PS1='\[\033[01;34m\]\u\[\033[00m\]@\[\033[01;31m\]\H\[\033[00m\] \w \$ '
+
+# aliases
+alias ls="ls --color -Fh"
+alias ll="ls -l"
+alias la="ls -a"
+alias lla="ls -al"
+alias ltr="ls -ltr"
+alias rm="rm -iv"
+alias cp="cp -v"
+alias mv="mv -v"
+alias grepp="grep * --color=auto -H -n -r -e "
+alias grep="grep --color=auto"
+alias s="sudo"
+alias sshp="ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no"
+
+# path
+export PATH=$SSHHOME/.sshrc.d/bin:/usr/sbin:/sbin:$PATH
+
+# vim
+export VIMINIT="let \$MYVIMRC='$SSHHOME/.sshrc.d/.vimrc' | source \$MYVIMRC"
+
+# Host info
+host_info() {
+  echo -e "\\n\\e[1mHostname: \\e[0m$(hostname)\\n"
+  echo -e "\\e[1mMemory:\\e[0m\\n$(free -m)\\n"
+  echo
+}
+
+# Create home dir
+# Display mem usage sorted by memory
+mem_usage() {
+  ps -eo rss,pid,euser,args:100 --sort %mem | grep -v grep | grep -i "$@" | awk '{printf $1/1024 "MB"; $1=""; print }'
+}
+
+# Convert ip to integer
+ip2int() {
+  if [ $# -lt 1 ]; then
+    echo "missing parameter(s). usage: ip2int ip"
+    return 1
+  fi
+  local ip="$*"
+  echo "${ip}" | tr . '\n' | awk '{s = s*256 + $1} END{print s}'
+}
+
+# Convert integer to ip
+int2ip() {
+  if [ $# -lt 1 ]; then
+    echo "missing parameter(s). usage: int2ip ip"
+    return 1
+  fi
+  local ip="$*"
+  for _ in {1..4}; do
+    s='.'$((ip % 256))$s && ((ip >>= 8))
+  done
+  echo "${s:1}"
+}
+
+function finish {
+  if [ "$(id -u)" != "0" ]; then
+    echo "Cleaning up $SSHHOME directory"
+    rm -rf $SSHHOME
+  fi
+}
+trap finish EXIT
+
+# main
+host_info
+echo "SSHHOME directory is $SSHHOME"

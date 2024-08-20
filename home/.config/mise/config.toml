@@ -5,7 +5,7 @@ meson = "latest"
 ninja = "latest"
 
 # language runtimes
-python = "3.12.4"
+python = "3.11.6"
 java = "corretto-17"
 golang = "1.21.3"
 node = "20.9.0"
