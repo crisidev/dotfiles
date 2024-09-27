@@ -1,4 +1,0 @@
-#!/bin/bash
-
-chown root:video /sys/class/backlight/amdgpu_bl0/brightness
-chmod 664 /sys/class/backlight/amdgpu_bl0/brightness

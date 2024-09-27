@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-set -e
-program="gopass"
-export GOENV_ROOT="/home/ANT.AMAZON.COM/matbigoi/.goenv"
-exec "/home/ANT.AMAZON.COM/matbigoi/.goenv/libexec/goenv" exec "$program" "$@"

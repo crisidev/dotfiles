@@ -6,7 +6,7 @@ ninja = "latest"
 
 # language runtimes
 python = "3.12.2"
-java = "corretto-17"
+java = "corretto-19"
 golang = "1.22.1"
 node = "21.7.1"
 ruby = "3.2.2"
@@ -17,7 +17,6 @@ fzf = "latest"
 gitui = "latest"
 lazygit = "latest"
 awscli = "latest"
-yarn = "1.22.21"
 
 [settings]
 # configure `mise install` to always keep the downloaded archive
