@@ -65,7 +65,7 @@
     file-style = bold blue ul
     file-decoration-style = none
     hunk-header-style = omit
-[credential "https://dev.azure.com"]
-	useHttpPath = true
 [init]
 	defaultBranch = main
+[credential "https://dev.azure.com"]
+	useHttpPath = true
