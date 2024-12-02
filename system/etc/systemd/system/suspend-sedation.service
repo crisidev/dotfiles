@@ -12,7 +12,7 @@ StopWhenUnneeded=true
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-Environment="ALARM_SEC=21600"
+Environment="ALARM_SEC=28800"
 Environment="WAKEALARM=/sys/class/rtc/rtc0/wakealarm"
 
 ExecStart=/usr/sbin/rtcwake --seconds $ALARM_SEC --auto --mode no

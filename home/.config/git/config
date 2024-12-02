@@ -37,7 +37,7 @@
 [pull]
     rebase = true
 [credential]
-    helper = cache
+    helper = store
 [color "branch"]
     current = yellow reverse
     local = yellow

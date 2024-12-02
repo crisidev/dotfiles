@@ -5,11 +5,11 @@ meson = "latest"
 ninja = "latest"
 
 # language runtimes
-python = "3.12.2"
+python = "3.12"
 java = "corretto-19"
-golang = "1.22.1"
-node = "21.7.1"
-ruby = "3.2.2"
+golang = "1.22"
+node = "21.7"
+ruby = "3.2"
 
 # tools
 neovim = "nightly"
@@ -17,6 +17,18 @@ fzf = "latest"
 gitui = "latest"
 lazygit = "latest"
 awscli = "latest"
+usage = "latest"
+starship = "latest"
+zoxide = "latest"
+eza = "latest"
+bat = "latest"
+sccache = "latest"
+fd = "latest"
+direnv = "latest"
+ripgrep = "latest"
+jq = "latest"
+yq = "latest"
+gh = "latest"
 
 [settings]
 # configure `mise install` to always keep the downloaded archive

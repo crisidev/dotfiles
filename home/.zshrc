@@ -1,14 +1,11 @@
 # zmodload zsh/zprof
 
 # paths
-MY_PATH="$HOME/.bin:$HOME/.local/share/lvim/mason/bin:$HOME/.local/bin"
-SYSTEM_PATH="/usr/local/bin"
-export PATH="$MY_PATH:$SYSTEM_PATH:$PATH"
+export PATH="$HOME/.bin:$HOME/.local/share/nvim/mason/bin:$HOME/.local/bin:/usr/local/bin:/usr/sbin:$PATH"
 
 # configure fzf history search
 export ZSH_FZF_HISTORY_SEARCH_BIND="^f"
 export ZSH_FZF_HISTORY_SEARCH_FZF_ARGS="+s +m +x -e --height 40% --reverse"
-
 export DISABLE_AUTO_TITLE=true
 
 # configure antidote
@@ -20,9 +17,16 @@ antidote load $HOME/.zsh_plugins
 # mise and cargo are the first things to load
 [ -f $HOME/.cargo/env ] && source $HOME/.cargo/env
 if which mise > /dev/null; then
-    _evalcache mise activate zsh
+    _evalcache mise activate --shims zsh
     _evalcache mise completion zsh
 fi
+
+# ollama
+export ZSH_COPILOT_KEY='^h'  # Key to trigger suggestions (default: Ctrl+Z)
+export ZSH_COPILOT_OLLAMA_MODEL='llama3.1:8b'  # Ollama model to use
+export ZSH_COPILOT_SEND_CONTEXT=true  # Send shell context to the model
+export ZSH_COPILOT_DEBUG=false  # Enable debug mode
+source ~/.zsh-copilot/zsh-copilot.plugin.zsh
 
 # options
 setopt NO_LIST_BEEP
@@ -62,37 +66,36 @@ bindkey '^[[B' history-substring-search-down
 # # terminal
 export GREP_COLOR='mt=1;31'
 export TERMINFO=/usr/share/terminfo
-export EDITOR="$(which lvim)"
-export VISUAL="$(which lvim)"
-export MANPAGER="$(which lvim) +Man!"
+export EDITOR="$(which nvim)"
+export VISUAL="$(which nvim)"
+export MANPAGER="$(which nvim) +Man!"
 export XDG_CONFIG_HOME="$HOME/.config"
 
-# lesspipe
-export LESSOPEN="| lesspipe.sh %s"
-
 # Rustc
-export RUSTC_WRAPPER=$HOME/.cargo/bin/sccache
+export RUSTC_WRAPPER=sccache
 
 # fzf
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude build'
 
-# zsh completion
-# FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
-
 # direnv
-if which direnv > /dev/null; then
+if mise which direnv > /dev/null; then
     _evalcache direnv hook zsh
 fi
 
 # zoxide
-if which zoxide > /dev/null; then
+if mise which zoxide > /dev/null; then
     _evalcache zoxide init zsh
 fi
 
 # spaceship
-if which starship > /dev/null; then
+if mise which starship > /dev/null; then
     _evalcache starship init zsh
 fi
 
 # aws cli completer
 complete -C "$(mise which aws)_completer" aws
+
+# ssh complete
+zstyle ':completion:*:(ssh|scp|rsync):*' ignored-patterns '*(.|:)*'
+zstyle ':completion:*:(ssh|scp|rsync):*' hosts
+zstyle ':completion:*:(ssh|scp|rsync):*' users
