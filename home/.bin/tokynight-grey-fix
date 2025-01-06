@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# change accent color to white-ish
+for x in $(/usr/bin/grep -R 414868 * |awk -F: '{print $1}' |sort |uniq); do sed -i 's/414868/e9e9ed/g' $x; done
+# reinstall theme
+cd themes && ./install.sh --tweaks storm macos -l -t grey -s standard
+# restore git
+git reset --hard
+# override flatpak themes
+stylepak install-system

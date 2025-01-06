@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Crisidev git configs
+direnvrc_git_crisidev="$(cd $(dirname $BASH_SOURCE) &> /dev/null; pwd)/direnvrc-git-crisidev"
+if [ -f "$direnvrc_git_crisidev" ]; then
+    source "$direnvrc_git_crisidev"
+fi
+unset direnvrc_git_crisidev
+
+# Home configs
+direnvrc_git_bigo="$(cd $(dirname $BASH_SOURCE) &> /dev/null; pwd)/direnvrc-git-bigo"
+if [ -f "$direnvrc_git_bigo" ]; then
+    source "$direnvrc_git_bigo"
+fi
+unset direnvrc_git_bigo
+
+# Corporate configs
+direnvrc_git_corporate="$(cd $(dirname $BASH_SOURCE) &> /dev/null; pwd)/direnvrc-git-corporate"
+if [ -f "$direnvrc_git_corporate" ]; then
+    source "$direnvrc_git_corporate"
+fi
+unset direnvrc_git_corporate

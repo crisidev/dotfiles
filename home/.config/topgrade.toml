@@ -1,0 +1,30 @@
+[misc]
+set_title = true
+display_time = true
+disable = [
+    "containers",
+    "flatpak",
+    "gnome_shell_extensions",
+    "home_manager",
+    "nix",
+    "pnpm",
+    "poetry",
+    "snap",
+    "system",
+    "toolbx",
+    "uv"
+]
+ignore_failures = ["git_repos"]
+
+[git]
+max_concurrency = 5
+repos = [
+    # Home sick
+    "~/.homesick/repos/homeshick",
+    "~/.homesick/repos/dotfiles",
+    "~/.homesick/repos/lazyvim",
+]
+arguments = "--ff-only --rebase --autostash"
+
+[python]
+enable_pip_review = true

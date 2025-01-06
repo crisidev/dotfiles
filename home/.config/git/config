@@ -1,0 +1,79 @@
+[user]
+    email = bigo@crisidev.org
+    name = Matteo Bigoi
+    signingKey = 099F4F3AA10B27C97B746F03AEFBBD3BE8C66E4A
+    signingEmail = bigo@crisidev.org
+[color]
+    ui = auto
+[pager]
+    diff = delta
+    log = delta
+    reflog = delta
+    show = delta
+[core]
+    excludesfile = ~/.config/git/gitignore
+	attributesfile = ~/.config/git/gitattributes
+[status]
+    submoduleSummary = true
+[interactive]
+    # diffFilter = diff-so-fancy --patch
+    diffFilter = delta --color-only --features=interactive
+[alias]
+    dag = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)'
+    dagall = log --all --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)'
+    lg = log --graph --format='format:%C(yellow)%h%C(reset) %C(blue)<%ae>%C(reset) %C(magenta)%ai%C(reset)%C(auto)%d%C(reset) %s' --date-order
+    recent-branches = "!r(){ count=$1;git branch --sort=-committerdate --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset)|%(color:red)%(objectname:short)%(color:reset)|%(contents:subject)|%(authorname) (%(color:green)%(committerdate:relative)%(color:reset))' --color=always | head -n ${count:=20} | column -ts'|'; };r"
+    st = status
+    ci = commit
+    co = checkout
+    fix = commit -s --amend
+    pulf = pull --ff-only
+    pulfa = pull --ff-only --autostash
+    pulr = pull --rebase
+    fix = commit -s --amend
+    afix = commit -s -a --amend
+    shame = "!git log --format='format:%C(yellow)%h%C(reset) %C(blue)<%ae>%C(reset) %C(magenta)%aD%C(reset)%C(auto)%d%C(reset) %s' |sort -r -k5 | grep \" 0\"  |head -n 15 |awk '{print $1\" \"$2\" \"$5\" \"$4\" \"$7\" \"$8\" \"$9\" \"$10\" \"$11\" \"$12\"...\"}' |ccze -m ansi"
+    shamer = "!echo \"And the winner is: \" && git log --format='format:%C(yellow)%h%C(reset) %C(blue)<%ae>%C(reset) %C(magenta)%aD%C(reset)%C(auto)%d%C(reset) %s' |sort -r -k5 | grep \" 0\"  |head -n 1 |awk '{print $1\" \"$2\" \"$5\" \"$4\" \"$7\" \"$8\" \"$9\" \"$10\" \"$11\" \"$12\"...\"}' |ccze -m ansi"
+[push]
+    default = upstream
+    autoSetupRemote = true
+[pull]
+    rebase = true
+[credential]
+    helper = store
+[color "branch"]
+    current = yellow reverse
+    local = yellow
+    remote = green
+[color "status"]
+    added = yellow
+    changed = green
+    untracked = cyan
+[help]
+    autocorrect = 20
+[commit]
+    gpgSign = true
+[delta]
+    features = decorations
+    minus-style                   = syntax "#3f2d3d"
+    minus-non-emph-style          = syntax "#3f2d3d"
+    minus-emph-style              = syntax "#763842"
+    minus-empty-line-marker-style = syntax "#3f2d3d"
+    line-numbers-minus-style      = "#914c54"
+    plus-style                    = syntax "#283b4d"
+    plus-non-emph-style           = syntax "#283b4d"
+    plus-emph-style               = syntax "#316172"
+    plus-empty-line-marker-style  = syntax "#283b4d"
+    line-numbers-plus-style       = "#449dab"
+    line-numbers-zero-style       = "#3b4261"
+    whitespace-error-style = 22 reverse
+[delta "decorations"]
+    commit-decoration-style = bold yellow box
+    file-style = bold blue ul
+    file-decoration-style = none
+    hunk-header-style = omit
+[url "ssh://git@github.com/"]
+	insteadOf = https://github.com/
+[merge "mergiraf"]
+	name = mergiraf
+	driver = mergiraf merge --git %O %A %B -s %S -x %X -y %Y -p %P

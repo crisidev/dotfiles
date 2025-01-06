@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+
+# Input validation
+if [[ -z $1 ]]; then
+    echo "Usage: $0 <workspace-number>|startup"
+    exit 1
+fi
+
+WORKSPACE=$1
+
+# File to store the previous and current workspace states
+STATE_FILE="/tmp/.workspace_toggle_state"
+
+focus_workspace() {
+    gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval \
+        "global.workspace_manager.get_workspace_by_index($1).activate(global.get_current_time());"
+}
+
+if [ "$WORKSPACE" = "startup" ]; then
+    sleep 5
+    focus_workspace 0
+    sleep 0.5
+    focus_workspace 1
+    sleep 0.5
+    focus_workspace 2
+    sleep 0.5
+    focus_workspace 3
+    sleep 0.5
+    focus_workspace 0
+    sleep 0.5
+    gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval "Main.overview.hide();"
+    exit 0
+fi
+
+# Retrieve previous and current workspace states
+PREVIOUS_WORKSPACE=""
+CURRENT_WORKSPACE=""
+
+if [[ -f $STATE_FILE ]]; then
+    read -r CURRENT_WORKSPACE PREVIOUS_WORKSPACE <"$STATE_FILE"
+fi
+
+# Toggle logic: switch back to the previous workspace if selecting the same workspace again
+if [[ "$WORKSPACE" == "$CURRENT_WORKSPACE" ]]; then
+    TARGET_WORKSPACE=$PREVIOUS_WORKSPACE
+    echo "Toggling back to workspace: $PREVIOUS_WORKSPACE"
+else
+    TARGET_WORKSPACE=$WORKSPACE
+    echo "Switching to workspace: $WORKSPACE"
+fi
+
+# Update the state file with the new states
+echo "$TARGET_WORKSPACE $CURRENT_WORKSPACE" >"$STATE_FILE"
+
+# Activate the target workspace using gdbus
+focus_workspace "$TARGET_WORKSPACE"

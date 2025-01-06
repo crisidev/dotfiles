@@ -1,0 +1,36 @@
+# fonts
+font-family = MonoLisa Nerd Font
+font-family-bold = MonoLisa Nerd Font
+font-family-italic = MonoLisa Nerd Font
+font-family-bold-italic = MonoLisa Nerd Font
+font-size = 13
+
+# theme
+theme = tokyonight-storm
+background-opacity = 0.95
+gtk-titlebar = false
+window-theme = ghostty
+
+# keybindings
+keybind = ctrl+super+v=paste_from_clipboard
+keybind = super+/=paste_from_selection
+# keybind = performable:ctrl+c=copy_to_clipboard
+keybind = ctrl+super+c=copy_to_clipboard
+keybind = ctrl+t=new_tab
+keybind = ctrl+right=next_tab
+keybind = ctrl+left=previous_tab
+keybind = ctrl+super+right=move_tab:+1
+keybind = ctrl+super+left=move_tab:-1
+keybind = ctrl+super+w=close_surface
+keybind = shift+up=scroll_page_lines:+1
+keybind = shift+down=scroll_page_lines:-1
+keybind = shift+page_up=scroll_page_up
+keybind = shift+page_down=scroll_page_down
+keybind = ctrl+super+equal=increase_font_size:1
+keybind = ctrl+super+minus=decrease_font_size:1
+keybind = ctrl+super+backspace=reset_font_size
+keybind = ctrl+super+f=write_scrollback_file:open
+
+# misc
+shell-integration-features = cursor, sudo, title
+shell-integration = zsh

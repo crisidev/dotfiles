@@ -1,0 +1,20 @@
+[Added Associations]
+x-scheme-handler/slack=com.slack.Slack.desktop;
+x-scheme-handler/http=org.mozilla.firefox.desktop;
+application/xhtml+xml=org.mozilla.firefox.desktop;
+text/html=org.mozilla.firefox.desktop;
+x-scheme-handler/https=org.mozilla.firefox.desktop;
+text/plain=neovim.desktop;
+x-scheme-handler/bitwarden=com.bitwarden.desktop.desktop;
+x-scheme-handler/ferdium=org.ferdium.Ferdium.desktop;
+x-scheme-handler/sgnl=org.signal.Signal.desktop;
+x-scheme-handler/signalcaptcha=org.signal.Signal.desktop;
+
+[Default Applications]
+x-scheme-handler/http=org.mozilla.firefox.desktop
+application/xhtml+xml=org.mozilla.firefox.desktop
+text/html=org.mozilla.firefox.desktop
+x-scheme-handler/https=org.mozilla.firefox.desktop
+x-scheme-handler/mailto=chrome-faolnafnngnfdaknnbpnkhgohbobgegn-Default.desktop
+text/plain=neovim.desktop
+
