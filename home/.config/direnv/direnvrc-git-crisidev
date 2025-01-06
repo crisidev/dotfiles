@@ -1,8 +1,0 @@
-#!/bin/bash
-
-function use_git_crisidev() {
-  export GIT_AUTHOR_EMAIL=1781140+crisidev@users.noreply.github.com
-  export GIT_AUTHOR_NAME=Bigo
-  export GIT_COMMITTER_EMAIL=1781140+crisidev@users.noreply.github.com
-  export GIT_COMMITTER_NAME=Bigo
-}
