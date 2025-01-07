@@ -2,7 +2,7 @@
 
 # Input validation
 if [[ -z $1 ]]; then
-    echo "Usage: $0 <workspace-number>|startup"
+    echo "Usage: $0 <workspace-number>|startup|rebalance"
     exit 1
 fi
 
@@ -10,6 +10,13 @@ WORKSPACE=$1
 
 # File to store the previous and current workspace states
 STATE_FILE="/tmp/.workspace_toggle_state"
+
+# Windows and workspaces mappings
+declare -A WINDOWS
+WINDOWS["org.mozilla.firefox"]=1
+WINDOWS["org.ferdium.Ferdium"]=2
+WINDOWS["org.signal.Signal"]=3
+WINDOWS["spotify"]=5
 
 focus_workspace() {
     gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval \
@@ -29,6 +36,20 @@ if [ "$WORKSPACE" = "startup" ]; then
     focus_workspace 0
     sleep 0.5
     gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval "Main.overview.hide();"
+    exit 0
+fi
+
+if [ "$WORKSPACE" = "rebalance" ]; then
+    dbus-send --session --dest=org.gnome.Shell --print-reply=literal /org/gnome/Shell/Extensions/Windows org.gnome.Shell.Extensions.Windows.List | jq -c '.[]' | while read -r window; do
+        wm_class=$(echo "$window" | jq -r '.wm_class_instance')
+        id=$(echo "$window" | jq -r '.id')
+        if [[ -v WINDOWS["$wm_class"] ]]; then
+            workspace=${WINDOWS["$wm_class"]}
+            echo "Moving window $wm_class to workspace $workspace"
+            gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell/Extensions/Windows --method org.gnome.Shell.Extensions.Windows.MoveToWorkspace "$id" "$workspace"
+        fi
+    done
+    notify-send -a "Focus Switch" -i settings "All windows rebalanced"
     exit 0
 fi
 
