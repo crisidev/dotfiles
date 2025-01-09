@@ -41,7 +41,7 @@
             system = "x86_64-linux";
             overlays = [
               nixgl.overlay
-              # neovim.overlays.default
+              neovim.overlays.default
             ];
           };
           extraSpecialArgs = {
