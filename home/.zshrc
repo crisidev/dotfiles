@@ -60,10 +60,9 @@ bindkey '^[[B' history-substring-search-down
 
 # # terminal
 export GREP_COLOR='mt=1;31'
-export TERMINFO=/usr/share/terminfo
 export EDITOR="$(which nvim)"
 export VISUAL="$(which nvim)"
-export MANPAGER="$(which nvim) +Man!"
+export MANPAGER="sh -c 'sed -u -e \"s/\\x1B\[[0-9;]*m//g; s/.\\x08//g\" | bat -p -lman'"
 export ENABLE_WAKATIME=false
 
 # Rustc
@@ -110,6 +109,11 @@ fi
 # spaceship
 if which starship > /dev/null; then
     _evalcache starship init zsh
+fi
+
+# batpipe
+if which starship > /dev/null; then
+    _evalcache batpipe
 fi
 
 # aws cli completer
