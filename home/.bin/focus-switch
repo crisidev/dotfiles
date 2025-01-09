@@ -50,8 +50,15 @@ get_current_window() {
 }
 
 if [ "$WORKSPACE" = "startup" ]; then
-    sleep 1
+    sleep 5
+    focus_workspace 1
+    sleep 0.5
+    focus_workspace 4
+    sleep 0.5
+    focus_workspace 0
+    sleep 0.5
     gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval "Main.overview.hide();"
+    "$HOME"/.bin/clean-notifications
     exit 0
 fi
 
