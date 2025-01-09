@@ -1,5 +1,6 @@
-{ lib
-, ...
+{
+  lib,
+  ...
 }:
 {
   home.activation.gsettings = lib.mkAfter ''

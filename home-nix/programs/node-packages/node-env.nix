@@ -1,15 +1,15 @@
 # This file originates from node2nix
 
-{ lib
-, stdenv
-, nodejs
-, python2
-, pkgs
-, libtool
-, runCommand
-, writeTextFile
-, writeShellScript
-,
+{
+  lib,
+  stdenv,
+  nodejs,
+  python2,
+  pkgs,
+  libtool,
+  runCommand,
+  writeTextFile,
+  writeShellScript,
 }:
 
 let
@@ -32,10 +32,11 @@ let
 
   # Function that generates a TGZ file from a NPM project
   buildNodeSourceDist =
-    { name
-    , version
-    , src
-    , ...
+    {
+      name,
+      version,
+      src,
+      ...
     }:
 
     stdenv.mkDerivation {
@@ -111,13 +112,11 @@ let
         mkdir -p node_modules
         cd node_modules
       ''
-      + (lib.concatMapStrings
-        (dependency: ''
-          if [ ! -e "${dependency.packageName}" ]; then
-              ${composePackage dependency}
-          fi
-        '')
-        dependencies)
+      + (lib.concatMapStrings (dependency: ''
+        if [ ! -e "${dependency.packageName}" ]; then
+            ${composePackage dependency}
+        fi
+      '') dependencies)
       + ''
         cd ..
       ''
@@ -125,11 +124,12 @@ let
 
   # Recursively composes the dependencies of a package
   composePackage =
-    { name
-    , packageName
-    , src
-    , dependencies ? [ ]
-    , ...
+    {
+      name,
+      packageName,
+      src,
+      dependencies ? [ ],
+      ...
     }@args:
     builtins.addErrorContext "while evaluating node package '${packageName}'" ''
       installPackage "${packageName}" "${src}"
@@ -216,10 +216,11 @@ let
   # being used.
 
   pinpointDependenciesOfPackage =
-    { packageName
-    , dependencies ? [ ]
-    , production ? true
-    , ...
+    {
+      packageName,
+      dependencies ? [ ],
+      production ? true,
+      ...
     }@args:
     ''
       if [ -d "${packageName}" ]
@@ -441,12 +442,12 @@ let
   };
 
   prepareAndInvokeNPM =
-    { packageName
-    , bypassCache
-    , reconstructLock
-    , npmFlags
-    , production
-    ,
+    {
+      packageName,
+      bypassCache,
+      reconstructLock,
+      npmFlags,
+      production,
     }:
     let
       forceOfflineFlag = if bypassCache then "--offline" else "--registry http://www.example.com";
@@ -509,22 +510,23 @@ let
 
   # Builds and composes an NPM package including all its dependencies
   buildNodePackage =
-    { name
-    , packageName
-    , version ? null
-    , dependencies ? [ ]
-    , buildInputs ? [ ]
-    , production ? true
-    , npmFlags ? ""
-    , dontNpmInstall ? false
-    , bypassCache ? false
-    , reconstructLock ? false
-    , preRebuild ? ""
-    , dontStrip ? true
-    , unpackPhase ? "true"
-    , buildPhase ? "true"
-    , meta ? { }
-    , ...
+    {
+      name,
+      packageName,
+      version ? null,
+      dependencies ? [ ],
+      buildInputs ? [ ],
+      production ? true,
+      npmFlags ? "",
+      dontNpmInstall ? false,
+      bypassCache ? false,
+      reconstructLock ? false,
+      preRebuild ? "",
+      dontStrip ? true,
+      unpackPhase ? "true",
+      buildPhase ? "true",
+      meta ? { },
+      ...
     }@args:
 
     let
@@ -636,21 +638,22 @@ let
 
   # Builds a node environment (a node_modules folder and a set of binaries)
   buildNodeDependencies =
-    { name
-    , packageName
-    , version ? null
-    , src
-    , dependencies ? [ ]
-    , buildInputs ? [ ]
-    , production ? true
-    , npmFlags ? ""
-    , dontNpmInstall ? false
-    , bypassCache ? false
-    , reconstructLock ? false
-    , dontStrip ? true
-    , unpackPhase ? "true"
-    , buildPhase ? "true"
-    , ...
+    {
+      name,
+      packageName,
+      version ? null,
+      src,
+      dependencies ? [ ],
+      buildInputs ? [ ],
+      production ? true,
+      npmFlags ? "",
+      dontNpmInstall ? false,
+      bypassCache ? false,
+      reconstructLock ? false,
+      dontStrip ? true,
+      unpackPhase ? "true",
+      buildPhase ? "true",
+      ...
     }@args:
 
     let
@@ -731,21 +734,22 @@ let
 
   # Builds a development shell
   buildNodeShell =
-    { name
-    , packageName
-    , version ? null
-    , src
-    , dependencies ? [ ]
-    , buildInputs ? [ ]
-    , production ? true
-    , npmFlags ? ""
-    , dontNpmInstall ? false
-    , bypassCache ? false
-    , reconstructLock ? false
-    , dontStrip ? true
-    , unpackPhase ? "true"
-    , buildPhase ? "true"
-    , ...
+    {
+      name,
+      packageName,
+      version ? null,
+      src,
+      dependencies ? [ ],
+      buildInputs ? [ ],
+      production ? true,
+      npmFlags ? "",
+      dontNpmInstall ? false,
+      bypassCache ? false,
+      reconstructLock ? false,
+      dontStrip ? true,
+      unpackPhase ? "true",
+      buildPhase ? "true",
+      ...
     }@args:
 
     let

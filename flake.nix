@@ -18,21 +18,18 @@
     neovim = {
       url = "github:nix-community/neovim-nightly-overlay";
     };
-    treefmt-nix = {
-      url = "github:numtide/treefmt-nix";
-    };
   };
 
   outputs =
-    { self
-    , home-manager
-    , neovim
-    , nixgl
-    , nixpkgs
-    , nixpkgs-stable
-    , treefmt-nix
-    , tokio-console
-    , ...
+    {
+      self,
+      home-manager,
+      neovim,
+      nixgl,
+      nixpkgs,
+      nixpkgs-stable,
+      tokio-console,
+      ...
     }@inputs:
     {
 

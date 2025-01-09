@@ -1,6 +1,7 @@
-{ config
-, pkgs
-, ...
+{
+  config,
+  pkgs,
+  ...
 }:
 let
   # nixGL = import ../nixGLNvidia.nix {inherit pkgs config;};
