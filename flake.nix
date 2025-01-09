@@ -18,11 +18,15 @@
     neovim = {
       url = "github:nix-community/neovim-nightly-overlay";
     };
+    bacon-ls = {
+      url = "github:crisidev/bacon-ls";
+    };
   };
 
   outputs =
     {
       self,
+      bacon-ls,
       home-manager,
       neovim,
       nixgl,
@@ -48,6 +52,11 @@
           };
           modules = [
             ./home.nix
+            {
+              home.packages = [
+                bacon-ls.defaultPackage.x86_64-linux
+              ];
+            }
           ];
         };
       };
