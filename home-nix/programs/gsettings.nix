@@ -1,8 +1,5 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ lib
+, ...
 }:
 {
   home.activation.gsettings = lib.mkAfter ''
@@ -51,7 +48,7 @@
     /usr/bin/gsettings set org.gnome.mutter workspaces-only-on-primary true
     /usr/bin/gsettings set org.gnome.mutter focus-change-on-pointer-rest false
     /usr/bin/gsettings set org.gnome.settings-daemon.plugins.power idle-brightness 240
-    /usr/bin/gsettings set org.gnome.desktop.default-applications.terminal exec "kitty"
+    /usr/bin/gsettings set org.gnome.desktop.default-applications.terminal exec "$HOME/.bin/kitty"
     /usr/bin/gsettings set org.gnome.desktop.default-applications.terminal exec-arg "-e"
     /usr/bin/gsettings set org.gnome.desktop.peripherals.keyboard repeat true
     /usr/bin/gsettings set org.gnome.desktop.peripherals.keyboard repeat-interval 14

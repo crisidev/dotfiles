@@ -1,14 +1,4 @@
-{
-  inputs,
-  config,
-  pkgs,
-  pkgs-stable,
-  lib,
-  ...
-}:
-let
-  nixGL = import ./nixGL.nix { inherit pkgs config; };
-in
+{ ... }:
 {
   imports = [
     ./options.nix

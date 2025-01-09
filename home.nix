@@ -1,10 +1,5 @@
-{
-  inputs,
-  config,
-  pkgs,
-  pkgs-stable,
-  lib,
-  ...
+{ pkgs
+, ...
 }:
 {
   imports = [ ./home-nix ];

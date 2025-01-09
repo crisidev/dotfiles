@@ -8,29 +8,31 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # Temporary until this is merged:
-    # https://github.com/nix-community/nixGL/pull/152
     nixgl = {
-      # url = "github:oessaid/nixGL/2c7b07c43221f46ae6fedeaee9947a155720ebce";
       url = "github:nix-community/nixGL";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    tokio-console.url = "github:tokio-rs/console";
+    tokio-console = {
+      url = "github:tokio-rs/console";
+    };
     neovim = {
       url = "github:nix-community/neovim-nightly-overlay";
+    };
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
     };
   };
 
   outputs =
-    {
-      self,
-      home-manager,
-      neovim,
-      nixgl,
-      nixpkgs,
-      nixpkgs-stable,
-      tokio-console,
-      ...
+    { self
+    , home-manager
+    , neovim
+    , nixgl
+    , nixpkgs
+    , nixpkgs-stable
+    , treefmt-nix
+    , tokio-console
+    , ...
     }@inputs:
     {
 
@@ -41,7 +43,7 @@
             system = "x86_64-linux";
             overlays = [
               nixgl.overlay
-              neovim.overlays.default
+              # neovim.overlays.default
             ];
           };
           extraSpecialArgs = {

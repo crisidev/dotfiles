@@ -18,7 +18,6 @@
     font-awesome
     fzf
     gh
-    # ghostty
     gitui
     glab
     glow
@@ -61,7 +60,7 @@
     terraform-plugin-docs
     tokei
     topgrade
-    tree
+    # treefmt-nix
     valgrind
     wev
     which
