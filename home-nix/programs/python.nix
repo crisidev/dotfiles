@@ -12,7 +12,6 @@
         pip
         pynvim
         pytest
-        pyxel
         virtualenv
       ]
     ))
