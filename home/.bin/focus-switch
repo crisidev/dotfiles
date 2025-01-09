@@ -13,10 +13,10 @@ STATE_FILE="/tmp/.workspace_toggle_state"
 
 # Windows and workspaces mappings
 declare -A WINDOWS
-WINDOWS["org.mozilla.firefox"]=1
-WINDOWS["org.ferdium.Ferdium"]=2
+WINDOWS["firefox-esr-esr128"]=1
+WINDOWS["ferdium"]=4
 WINDOWS["org.signal.Signal"]=3
-WINDOWS["spotify"]=5
+WINDOWS["spotify"]=2
 
 focus_workspace() {
     gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval \
@@ -24,17 +24,7 @@ focus_workspace() {
 }
 
 if [ "$WORKSPACE" = "startup" ]; then
-    sleep 5
-    focus_workspace 0
-    sleep 0.5
-    focus_workspace 1
-    sleep 0.5
-    focus_workspace 2
-    sleep 0.5
-    focus_workspace 3
-    sleep 0.5
-    focus_workspace 0
-    sleep 0.5
+    sleep 1
     gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval "Main.overview.hide();"
     exit 0
 fi
