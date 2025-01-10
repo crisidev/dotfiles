@@ -32,7 +32,7 @@ focus_window_by_wm_class_instance() {
 }
 
 get_active_monitors() {
-    xrandr | awk '/\ connected/ && /[[:digit:]]x[[:digit:]].*+/{print $1}'
+    xrandr | awk '/ connected/ && /[[:digit:]]x[[:digit:]].*+/{print $1}'
 }
 
 focus_to_previous_window() {

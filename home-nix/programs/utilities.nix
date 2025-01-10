@@ -8,6 +8,7 @@
     brightnessctl
     cmake
     curl
+    deadnix
     delta
     direnv
     eza
@@ -55,6 +56,7 @@
     silicon
     sops
     starship
+    statix
     strace
     terraform
     terraform-plugin-docs

@@ -12,31 +12,20 @@
       url = "github:nix-community/nixGL";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    tokio-console = {
-      url = "github:tokio-rs/console";
-    };
-    neovim = {
-      url = "github:nix-community/neovim-nightly-overlay";
-    };
-    bacon-ls = {
-      url = "github:crisidev/bacon-ls";
-    };
-    # bacon = {
-    #   url = "github:crisidev/bacon";
-    # };
+    tokio-console.url = "github:tokio-rs/console";
+    neovim.url = "github:nix-community/neovim-nightly-overlay";
+    bacon-ls.url = "github:crisidev/bacon-ls";
+    bacon.url = "github:Canop/bacon";
   };
 
   outputs =
     {
-      self,
-      # bacon,
+      bacon,
       bacon-ls,
       home-manager,
       neovim,
       nixgl,
       nixpkgs,
-      nixpkgs-stable,
-      tokio-console,
       ...
     }@inputs:
     {
@@ -47,9 +36,9 @@
             system = "x86_64-linux";
             overlays = [
               nixgl.overlay
-              # bacon.overlay.x86_64-linux
-              bacon-ls.overlay.x86_64-linux
-              # neovim.overlays.default
+              bacon.overlay.${system}
+              bacon-ls.overlay.${system}
+              neovim.overlays.default
             ];
           };
           extraSpecialArgs = {
