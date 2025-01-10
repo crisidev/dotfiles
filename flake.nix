@@ -36,7 +36,6 @@
       ...
     }@inputs:
     {
-
       # Available through `home-manager --flake .#user@host switch`
       homeConfigurations = {
         falcon = home-manager.lib.homeManagerConfiguration {
@@ -52,11 +51,6 @@
           };
           modules = [
             ./home.nix
-            {
-              home.packages = [
-                bacon-ls.defaultPackage.x86_64-linux
-              ];
-            }
           ];
         };
       };
