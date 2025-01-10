@@ -1,7 +1,7 @@
-{ pkgs, inputs, ... }:
+{ pkgs, ... }:
 {
   home.packages = with pkgs; [
-    inputs.bacon-ls.defaultPackage.${pkgs.system}
+    bacon-ls
     cargo-audit
     cargo-bundle
     cargo-llvm-cov

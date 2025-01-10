@@ -43,6 +43,7 @@
             system = "x86_64-linux";
             overlays = [
               nixgl.overlay
+              bacon-ls.overlay.x86_64-linux
               # neovim.overlays.default
             ];
           };
