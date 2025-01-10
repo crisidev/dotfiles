@@ -14,26 +14,27 @@ Type=oneshot
 RemainAfterExit=yes
 Environment="ALARM_SEC=7200"
 Environment="WAKEALARM=/sys/class/rtc/rtc0/wakealarm"
+Environment="POWEROFF_LEVEL=10"
 
 ExecStart=/usr/sbin/rtcwake --seconds $ALARM_SEC --auto --mode no
 ExecStop=/bin/sh -c '\
   ALARM=$(cat $WAKEALARM); \
   NOW=$(date +%%s); \
   if [ -z "$ALARM" ] || [ "$NOW" -ge "$ALARM" ]; then \
-    echo "suspend-sedation: Woke up - no alarm set. Checking battery..."; \
+    echo "suspend-sedation: Woke up without alarm set. Checking battery..."; \
     BATTERY_LEVEL=$(cat /sys/class/power_supply/BAT0/capacity); \
-    if [ "$BATTERY_LEVEL" -lt 15 ]; then \
-      echo "Battery is below 15%. Shutting down..."; \
+    if [ "$BATTERY_LEVEL" -lt "$POWEROFF_LEVEL" ]; then \
+      echo "suspend-sedation: Battery level is $BATTERY_LEVEL% (< $POWEROFF_LEVEL%). Shutting down..."; \
       sleep 5; \
       /usr/bin/systemctl poweroff; \
       sync; \
     else \
-      echo "Battery level is sufficient. Suspending again..."; \
+      echo "suspend-sedation: Battery level is $BATTERY_LEVEL% (> $POWEROFF_LEVEL%). Suspending again..."; \
       sleep 5; \
       /usr/bin/systemctl suspend; \
     fi; \
   else \
-    echo "suspend-sedation: Woke up before alarm - normal wakeup."; \
+    echo "suspend-sedation: Normal wake up before alarm. Nothing to do..."; \
     /usr/sbin/rtcwake --auto --mode disable; \
   fi \
 '

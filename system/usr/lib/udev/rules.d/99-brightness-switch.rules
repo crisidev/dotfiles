@@ -1,2 +1,2 @@
 SUBSYSTEM=="power_supply", ATTR{online}=="0", ATTR{type}=="Mains", RUN+="/usr/bin/brightnessctl set 25%"
-SUBSYSTEM=="power_supply", ATTR{online}=="1", ATTR{type}=="Mains", RUN+="/usr/bin/brightnessctl set 100%"
+SUBSYSTEM=="power_supply", ATTR{online}=="1", ATTR{type}=="Mains", RUN+="/usr/bin/brightnessctl set 80%"

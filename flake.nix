@@ -21,11 +21,15 @@
     bacon-ls = {
       url = "github:crisidev/bacon-ls";
     };
+    # bacon = {
+    #   url = "github:crisidev/bacon";
+    # };
   };
 
   outputs =
     {
       self,
+      # bacon,
       bacon-ls,
       home-manager,
       neovim,
@@ -43,6 +47,7 @@
             system = "x86_64-linux";
             overlays = [
               nixgl.overlay
+              # bacon.overlay.x86_64-linux
               bacon-ls.overlay.x86_64-linux
               # neovim.overlays.default
             ];
