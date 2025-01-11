@@ -6,6 +6,7 @@
     awscli2
     bat
     brightnessctl
+    clang_19
     cmake
     curl
     deadnix
@@ -58,8 +59,6 @@
     starship
     statix
     strace
-    terraform
-    terraform-plugin-docs
     tokei
     topgrade
     # treefmt-nix

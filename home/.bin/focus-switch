@@ -17,8 +17,8 @@ declare -A WINDOWS_TO_WORKSPACES
 WINDOWS_TO_WORKSPACES["kitty"]=0
 WINDOWS_TO_WORKSPACES["firefox-esr-esr128"]=1
 WINDOWS_TO_WORKSPACES["spotify"]=2
-WINDOWS_TO_WORKSPACES["org.signal.Signal"]=3
 WINDOWS_TO_WORKSPACES["ferdium"]=4
+WINDOWS_TO_WORKSPACES["org.signal.Signal"]=5
 
 focus_workspace() {
     rm -f $WINDOW_FILE
