@@ -19,21 +19,14 @@
   };
 
   outputs =
-    {
-      bacon,
-      bacon-ls,
-      home-manager,
-      neovim,
-      nixgl,
-      nixpkgs,
-      ...
-    }@inputs:
-    {
+    { bacon, bacon-ls, home-manager, neovim, nixgl, nixpkgs, ... }@inputs:
+    let system = "x86_64-linux";
+    in {
       # Available through `home-manager --flake .#user@host switch`
       homeConfigurations = {
         falcon = home-manager.lib.homeManagerConfiguration {
           pkgs = import nixpkgs rec {
-            system = "x86_64-linux";
+            inherit system;
             overlays = [
               nixgl.overlay
               bacon.overlay.${system}
@@ -41,14 +34,10 @@
               neovim.overlays.default
             ];
           };
-          extraSpecialArgs = {
-            inherit inputs;
-          };
-          modules = [
-            ./home.nix
-          ];
+          extraSpecialArgs = { inherit inputs; };
+          modules = [ ./home.nix ];
         };
       };
-      formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
+      formatter.${system} = nixpkgs.legacyPackages.${system}.nixfmt;
     };
 }

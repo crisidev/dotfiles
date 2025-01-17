@@ -1,9 +1,7 @@
-{ ... }:
-{
+{ ... }: {
   imports = [
     ./chromium.nix
     ./firefox.nix
-    ./gsettings.nix
     ./python.nix
     ./neovide.nix
     ./node.nix

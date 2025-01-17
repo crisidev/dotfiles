@@ -1,9 +1,8 @@
-{ pkgs, ... }:
-{
+{ pkgs, ... }: {
   home.packages = with pkgs; [
     poetry
-    (python311.withPackages (
-      p: with p; [
+    (python311.withPackages (p:
+      with p; [
         black
         boto3
         boto3-stubs
@@ -13,8 +12,7 @@
         pynvim
         pytest
         virtualenv
-      ]
-    ))
+      ]))
     uv
   ];
 }

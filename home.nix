@@ -1,8 +1,4 @@
-{
-  pkgs,
-  ...
-}:
-{
+{ lib, pkgs, ... }: {
   imports = [ ./home-nix ];
 
   config = {
@@ -28,8 +24,10 @@
       homeDirectory = "/home/bigo/";
     };
 
-    home.sessionVariables = {
-      NIX_SHELL_PRESERVE_PROMPT = 1;
-    };
+    home.sessionVariables = { NIX_SHELL_PRESERVE_PROMPT = 1; };
+
+    home.activation.updateGsettings = lib.mkAfter ''
+      $HOME/.bin/gsettings-update
+    '';
   };
 }

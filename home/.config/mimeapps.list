@@ -1,14 +1,25 @@
 [Added Associations]
 x-scheme-handler/slack=com.slack.Slack.desktop;
-x-scheme-handler/http=org.mozilla.firefox.desktop;
-application/xhtml+xml=org.mozilla.firefox.desktop;
-text/html=org.mozilla.firefox.desktop;
-x-scheme-handler/https=org.mozilla.firefox.desktop;
-text/plain=neovim.desktop;
+x-scheme-handler/http=org.mozilla.firefox.desktop;firefox-esr.desktop;
+application/xhtml+xml=org.mozilla.firefox.desktop;firefox-esr.desktop;
+text/html=org.mozilla.firefox.desktop;firefox-esr.desktop;
+x-scheme-handler/https=org.mozilla.firefox.desktop;firefox-esr.desktop;
+text/plain=neovim.desktop;custom-desktop-starter.342765.desktop;
 x-scheme-handler/bitwarden=com.bitwarden.desktop.desktop;
 x-scheme-handler/ferdium=org.ferdium.Ferdium.desktop;
 x-scheme-handler/sgnl=org.signal.Signal.desktop;
 x-scheme-handler/signalcaptcha=org.signal.Signal.desktop;
+text/xml=firefox-esr.desktop;
+application/xml=firefox-esr.desktop;
+application/rss+xml=firefox-esr.desktop;
+application/rdf+xml=firefox-esr.desktop;
+image/gif=firefox-esr.desktop;
+image/jpeg=firefox-esr.desktop;
+image/png=firefox-esr.desktop;
+x-scheme-handler/ftp=firefox-esr.desktop;
+x-scheme-handler/chrome=firefox-esr.desktop;
+video/webm=firefox-esr.desktop;
+application/x-xpinstall=firefox-esr.desktop;
 
 [Default Applications]
 x-scheme-handler/http=org.mozilla.firefox.desktop

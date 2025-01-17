@@ -1,8 +1,6 @@
 { pkgs, ... }:
-let
-  extraNodePackages = import ./node-packages/default.nix { };
-in
-{
+let extraNodePackages = import ./node-packages/default.nix { };
+in {
   home.packages = with pkgs; [
     yarn
     nodejs_22
