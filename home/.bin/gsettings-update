@@ -68,6 +68,8 @@ gsettings set org.gnome.shell.keybindings toggle-message-tray "['<Alt><Super>n']
 gsettings set org.gnome.desktop.wm.keybindings close "['<Super>w']"
 gsettings set org.gnome.desktop.wm.keybindings minimize "['<Super><Alt>comma']"
 gsettings set org.gnome.desktop.wm.keybindings toggle-maximized "['<Super><Alt>f']"
+gsettings set org.gnome.desktop.wm.keybindings switch-input-source "['XF86Keyboard']"
+gsettings set org.gnome.desktop.wm.keybindings switch-input-source-backward "['<Shift>XF86Keyboard']"
 gsettings set org.gnome.mutter.keybindings switch-monitor "['<Super><Alt>d','XF86Display']"
 gsettings set org.gnome.settings-daemon.plugins.media-keys screensaver "['<Super><Alt>l']"
 gsettings set org.gnome.settings-daemon.plugins.media-keys terminal "['<Super>Return']"
