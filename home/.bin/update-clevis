@@ -1,0 +1,4 @@
+#!/bin/sh
+
+sudo clevis luks unbind -s 1 -d /dev/nvme0n1p3
+sudo clevis luks bind -d /dev/nvme0n1p3 tpm2 '{"pcr_bank": "sha256", "pcr_ids":"0,1,4,5,7,8,9"}'
