@@ -1,2 +1,0 @@
-#!/usr/bin/env bash
-ssh mandalore "source /home/bigo/.zsh_secrets && /home/bigo/.bin/bw $*" 
