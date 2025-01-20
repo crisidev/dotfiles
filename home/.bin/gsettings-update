@@ -60,6 +60,9 @@ gsettings set org.gnome.desktop.peripherals.touchpad natural-scroll false
 gsettings set org.gnome.desktop.peripherals.touchpad two-finger-scrolling-enabled true
 gsettings set org.gnome.shell.extensions.dash-to-dock show-trash false
 
+# Monitor detection
+"$HOME/.bin/monitor-switch"
+
 # Gnome keybindings
 echo "[gsettings] setting up gnome keybindings"
 gsettings set org.gnome.shell.keybindings toggle-overview "['<Super>Space']"
@@ -184,7 +187,5 @@ gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout 
 gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type "suspend"
 gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-timeout 900
 gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-type "suspend"
-
-"$HOME/.bin/monitor-switch"
 
 echo "[gsettings] configuration applied successfully"
