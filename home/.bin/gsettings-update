@@ -185,4 +185,6 @@ gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type "su
 gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-timeout 900
 gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-type "suspend"
 
+"$HOME/.bin/monitor-switch"
+
 echo "[gsettings] configuration applied successfully"
