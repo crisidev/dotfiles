@@ -26,6 +26,15 @@
 
     home.sessionVariables = { NIX_SHELL_PRESERVE_PROMPT = 1; };
 
+    # Enable direnv
+    programs.direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+    };
+
+    # Allow home-manager to manage itself
+    programs.home-manager.enable = true;
+
     home.activation.updateGsettings = lib.mkAfter ''
       $HOME/.bin/gsettings-update
     '';
