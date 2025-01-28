@@ -7,6 +7,7 @@ if [[ -z $1 ]]; then
 fi
 
 WORKSPACE=$1
+FORCE=$2
 
 # File to store the previous and current workspace states
 STATE_FILE="/tmp/.workspace_toggle_state"
@@ -76,15 +77,17 @@ if [ "$WORKSPACE" = "rebalance" ]; then
     exit 0
 fi
 
-if [[ "$(get_active_monitors | wc -l)" -gt 1 ]]; then
-    if [[ "$WORKSPACE" -eq 4 ]]; then
-        if [[ -e $WINDOW_FILE ]]; then
-            focus_to_previous_window
+if [ -z "$FORCE" ]; then
+    if [[ "$(get_active_monitors | wc -l)" -gt 1 ]]; then
+        if [[ "$WORKSPACE" -eq 4 ]]; then
+            if [[ -e $WINDOW_FILE ]]; then
+                focus_to_previous_window
+            fi
+            CURRENT_WINDOW=$(get_current_window)
+            echo "$CURRENT_WINDOW" >$WINDOW_FILE
+            focus_window_by_wm_class_instance "ferdium"
+            exit 0
         fi
-        CURRENT_WINDOW=$(get_current_window)
-        echo "$CURRENT_WINDOW" >$WINDOW_FILE
-        focus_window_by_wm_class_instance "ferdium"
-        exit 0
     fi
 fi
 

@@ -79,7 +79,23 @@ gsettings set org.gnome.settings-daemon.plugins.media-keys terminal "['<Super>Re
 
 # Focus workspaces
 echo "[gsettings] setting up custom workspace focus"
-gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom8/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom9/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom10/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom11/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom12/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom13/']"
+gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "[ \
+'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', \
+'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', \
+'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/', \
+'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/', \
+'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/', \
+'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/', \
+'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6/', \
+'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7/', \
+'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom8/', \
+'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom9/', \
+'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom10/', \
+'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom11/', \
+'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom12/', \
+'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom13/', \
+'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom14/' \
+]"
 dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/binding "'<Super>Escape'"
 dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/command "'$HOME/.bin/focus-switch 0'"
 dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/name "'Switch focus to workspace 1'"
@@ -95,6 +111,9 @@ dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/cus
 dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/binding "'<Super>1'"
 dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/command "'$HOME/.bin/focus-switch 4'"
 dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/name "'Switch focus to workspace 5'"
+dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom14/binding "'<Super><Alt>1'"
+dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom14/command "'$HOME/.bin/focus-switch 4 force'"
+dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom14/name "'Force switch focus to workspace 5'"
 dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/binding "'<Super>2'"
 dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/command "'$HOME/.bin/focus-switch 5'"
 dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/name "'Switch focus to workspace 6'"

@@ -19,6 +19,7 @@
     font-awesome
     fzf
     gh
+    git
     gitui
     glab
     glow
