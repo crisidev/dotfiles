@@ -52,9 +52,8 @@ bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
 
 # source files
-[ -f $HOME/.cargo/env ] && source $HOME/.cargo/env
 [ -f $HOME/.zsh_aliases ] && source $HOME/.zsh_aliases
-[ -f $HOME/.zsh_private ] && source $HOME/.zsh_private
+[ -f $HOME/.zsh_local ] && source $HOME/.zsh_local
 [ -f $HOME/.zsh_functions ] && source $HOME/.zsh_functions
 [ -f $HOME/.zsh_secrets ] && source $HOME/.zsh_secrets
 
@@ -64,9 +63,6 @@ export EDITOR="$(which nvim)"
 export VISUAL="$(which nvim)"
 export MANPAGER="sh -c 'sed -u -e \"s/\\x1B\[[0-9;]*m//g; s/.\\x08//g\" | bat -p -lman'"
 export ENABLE_WAKATIME=false
-
-# Rustc
-export RUSTC_WRAPPER=sccache
 
 # Go
 export GOPATH="$HOME/.go"
@@ -112,7 +108,7 @@ if which starship > /dev/null; then
 fi
 
 # batpipe
-if which starship > /dev/null; then
+if which batpipe > /dev/null; then
     _evalcache batpipe
 fi
 

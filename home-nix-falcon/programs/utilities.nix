@@ -2,6 +2,7 @@
   fonts.fontconfig.enable = true;
   home.packages = with pkgs; [
     age
+    antidote
     awscli2
     bat
     brightnessctl
@@ -61,6 +62,7 @@
     strace
     tokei
     topgrade
+    tzupdate
     # treefmt-nix
     valgrind
     wev

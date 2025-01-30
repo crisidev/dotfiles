@@ -35,8 +35,16 @@
             ];
           };
           extraSpecialArgs = { inherit inputs; };
-          modules = [ ./home.nix ];
+          modules = [ ./home-falcon.nix ];
         };
+        mandalore = home-manager.lib.homeManagerConfiguration {
+          pkgs = import nixpkgs rec {
+            inherit system;
+          };
+          extraSpecialArgs = { inherit inputs; };
+          modules = [ ./home-mandalore.nix ];
+        };
+
       };
       formatter.${system} = nixpkgs.legacyPackages.${system}.nixfmt;
     };

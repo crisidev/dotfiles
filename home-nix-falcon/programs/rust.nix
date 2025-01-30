@@ -11,6 +11,8 @@
     cargo-tarpaulin
     cargo-udeps
     cargo-update
+    grcov
+    llvmPackages_19.libllvm
     rustup
     sccache
     tokio-console

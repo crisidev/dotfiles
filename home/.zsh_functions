@@ -114,3 +114,7 @@ function pass {
 function otp {
   bw get otp "$1" | xclip -se c
 }
+
+function tzupdate {
+    sudo ~/.nix-profile/bin/tzupdate "$*"
+}

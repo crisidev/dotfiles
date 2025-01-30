@@ -4,12 +4,6 @@
   config = {
     targets.genericLinux.enable = true;
 
-    nixGLPrefixIntel = "${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel";
-    # These two lines make the flake impure
-    # nixGLPrefixAuto = "${pkgs.nixgl.auto.nixGLDefault}/bin/nixGL";
-    # nixGLPrefixNvidia = "${pkgs.nixgl.auto.nixGLNvidia}/bin/nixGLNvidia-560.35.03";
-    nixGLPrefixNvidia = "";
-
     nixpkgs = {
       config = {
         allowUnfree = true;
@@ -34,9 +28,5 @@
 
     # Allow home-manager to manage itself
     programs.home-manager.enable = true;
-
-    home.activation.updateGsettings = lib.mkAfter ''
-      $HOME/.bin/gsettings-update
-    '';
   };
 }
