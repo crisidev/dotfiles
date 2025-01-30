@@ -38,11 +38,14 @@
           modules = [ ./home-falcon.nix ];
         };
         mandalore = home-manager.lib.homeManagerConfiguration {
-          pkgs = import nixpkgs rec {
-            inherit system;
-          };
+          pkgs = import nixpkgs rec { inherit system; };
           extraSpecialArgs = { inherit inputs; };
           modules = [ ./home-mandalore.nix ];
+        };
+        razor-tiny = home-manager.lib.homeManagerConfiguration {
+          pkgs = import nixpkgs rec { inherit system; };
+          extraSpecialArgs = { inherit inputs; };
+          modules = [ ./home-razor.nix ];
         };
 
       };

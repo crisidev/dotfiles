@@ -1,5 +1,5 @@
 { lib, pkgs, ... }: {
-  imports = [ ./home-nix-mandalore ];
+  imports = [ ./home-nix-razor ];
 
   config = {
     targets.genericLinux.enable = true;
