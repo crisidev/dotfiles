@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+# Default values
+TYPE="md"
+
+# Parse arguments
+for arg in "$@"; do
+    case $arg in
+        html) TYPE="html"; shift ;;
+        md) TYPE="md"; shift ;;
+        *) echo "Unknown option: $arg"; exit 1 ;;
+    esac
+done
+
+LLVM_PATH="$HOME/.nix-profile/bin"
+export RUSTFLAGS="-Cinstrument-coverage" 
+export LLVM_PROFILE_FILE="./.coverage/coverage-%p-%m.profraw" 
+
+rm -rf ./.coverage
+cargo nextest run
+
+if [ "$TYPE" = "html" ]; then
+    grcov . -s . --llvm-path "$LLVM_PATH" --binary-path ./target/debug/ -t html --branch --ignore-not-existing -o ./.coverage/
+    open ./.coverage/html/index.html
+elif [ "$TYPE" = "md" ]; then
+    grcov . -s . --llvm-path "$LLVM_PATH" --binary-path ./target/debug/ -t markdown --branch --ignore-not-existing --excl-br-line '^\s*$' --ignore "/*" | glow
+else
+    echo "unknown grcov type $TYPE"
+    exit 1
+fi
