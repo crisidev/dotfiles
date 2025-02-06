@@ -23,6 +23,7 @@
     git
     gitui
     glab
+    glibc
     glow
     go
     heaptrack
@@ -57,6 +58,17 @@
     ripgrep
     silicon
     sops
+    (spotify-player.override {
+      withAudioBackend = "pulseaudio";
+      withStreaming = true;
+      withDaemon = true;
+      withMediaControl = true;
+      withLyrics = true;
+      withImage = true;
+      withNotify = true;
+      withSixel = true;
+      withFuzzy = true;
+    })
     starship
     statix
     strace

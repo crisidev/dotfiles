@@ -116,5 +116,5 @@ function otp {
 }
 
 function tzupdate {
-    sudo ~/.nix-profile/bin/tzupdate "$*"
+    sudo ~/.nix-profile/bin/tzupdate "$@"
 }
