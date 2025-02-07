@@ -22,18 +22,21 @@
     dag = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)'
     dagall = log --all --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)'
     lg = log --graph --format='format:%C(yellow)%h%C(reset) %C(blue)<%ae>%C(reset) %C(magenta)%ai%C(reset)%C(auto)%d%C(reset) %s' --date-order
-    recent-branches = "!r(){ count=$1;git branch --sort=-committerdate --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset)|%(color:red)%(objectname:short)%(color:reset)|%(contents:subject)|%(authorname) (%(color:green)%(committerdate:relative)%(color:reset))' --color=always | head -n ${count:=20} | column -ts'|'; };r"
     st = status
-    ci = commit
+    cm = commit
     co = checkout
+    cob = checkout -b
+    df = diff
     fix = commit -s --amend
+    sh = show
+    ps = push
+    pl = pull
     pulf = pull --ff-only
     pulfa = pull --ff-only --autostash
     pulr = pull --rebase
     fix = commit -s --amend
     afix = commit -s -a --amend
-    shame = "!git log --format='format:%C(yellow)%h%C(reset) %C(blue)<%ae>%C(reset) %C(magenta)%aD%C(reset)%C(auto)%d%C(reset) %s' |sort -r -k5 | grep \" 0\"  |head -n 15 |awk '{print $1\" \"$2\" \"$5\" \"$4\" \"$7\" \"$8\" \"$9\" \"$10\" \"$11\" \"$12\"...\"}' |ccze -m ansi"
-    shamer = "!echo \"And the winner is: \" && git log --format='format:%C(yellow)%h%C(reset) %C(blue)<%ae>%C(reset) %C(magenta)%aD%C(reset)%C(auto)%d%C(reset) %s' |sort -r -k5 | grep \" 0\"  |head -n 1 |awk '{print $1\" \"$2\" \"$5\" \"$4\" \"$7\" \"$8\" \"$9\" \"$10\" \"$11\" \"$12\"...\"}' |ccze -m ansi"
+    rb = "!r(){ count=$1;git branch --sort=-committerdate --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset)|%(color:red)%(objectname:short)%(color:reset)|%(contents:subject)|%(authorname) (%(color:green)%(committerdate:relative)%(color:reset))' --color=always | head -n ${count:=20} | column -ts'|'; };r"
 [push]
     default = upstream
     autoSetupRemote = true
