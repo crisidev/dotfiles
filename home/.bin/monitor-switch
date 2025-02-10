@@ -3,9 +3,9 @@
 export PATH=$PATH:/usr/bin
 
 if ddcutil detect |grep -q "BenQ PD3200U"; then 
-    echo "Detected home monitor, setting text scaling to 1.0"
-    gsettings set org.gnome.desktop.interface text-scaling-factor 1.0
+    echo "Detected home monitor, setting text scaling to 1.05"
+    gsettings set org.gnome.desktop.interface text-scaling-factor 1.05
 else
-    echo "Detected only builtin monitor, setting text scaling to 1.4"
-    gsettings set org.gnome.desktop.interface text-scaling-factor 1.4
+    echo "Detected only builtin monitor, setting text scaling to 1.3"
+    gsettings set org.gnome.desktop.interface text-scaling-factor 1.3
 fi

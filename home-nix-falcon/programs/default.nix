@@ -2,6 +2,7 @@
   imports = [
     ./chromium.nix
     ./firefox.nix
+    ./ghostty.nix
     ./python.nix
     ./neovide.nix
     ./node.nix

@@ -75,7 +75,6 @@
     tokei
     topgrade
     tzupdate
-    # treefmt-nix
     valgrind
     wev
     which

@@ -23,8 +23,8 @@ WINDOWS_TO_WORKSPACES["org.signal.Signal"]=5
 
 focus_workspace() {
     rm -f $WINDOW_FILE
-    gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval \
-        "global.workspace_manager.get_workspace_by_index($1).activate(global.get_current_time());"
+    gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell/Extensions/MouseFollowsFocus \
+        --method org.gnome.Shell.Extensions.MouseFollowsFocus.FocusWorkspace "$1"
 }
 
 focus_window_by_wm_class_instance() {
@@ -50,6 +50,11 @@ get_current_window() {
         org.gnome.Shell.Extensions.Windows.List | jq -r ".[] | select (.in_current_workspace == true) |select (.focus == true) .wm_class_instance"
 }
 
+hide_overview() {
+    gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell/Extensions/MouseFollowsFocus \
+        --method org.gnome.Shell.Extensions.MouseFollowsFocus.HideOverview
+}
+
 if [ "$WORKSPACE" = "startup" ]; then
     sleep 5
     focus_workspace 1
@@ -58,8 +63,7 @@ if [ "$WORKSPACE" = "startup" ]; then
     sleep 0.5
     focus_workspace 0
     sleep 0.5
-    gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval "Main.overview.hide();"
-    "$HOME"/.bin/clean-notifications
+    hide_overview
     exit 0
 fi
 
