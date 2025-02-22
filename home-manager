@@ -2,7 +2,7 @@
 unameOut="$(uname -s)"
 workDir=$(dirname "$0")
 cd "$workDir" || exit 1 # cd to directory with flake
-if [ "$1" = "update" ]; then
+if [ "$1" = "pull" ]; then
     nix flake update
 else
     case "${unameOut}" in

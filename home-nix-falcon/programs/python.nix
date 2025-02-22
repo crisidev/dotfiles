@@ -13,6 +13,7 @@
         pynvim
         pytest
         virtualenv
+        numpy
       ]))
     uv
   ];

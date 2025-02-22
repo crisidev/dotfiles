@@ -25,6 +25,7 @@
     glab
     glibc
     glow
+    gcc-unwrapped
     go
     heaptrack
     htop
@@ -63,7 +64,6 @@
       withStreaming = true;
       withDaemon = true;
       withMediaControl = true;
-      withLyrics = true;
       withImage = true;
       withNotify = true;
       withSixel = true;
