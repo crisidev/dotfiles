@@ -13,13 +13,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     tokio-console.url = "github:tokio-rs/console";
-    neovim.url = "github:nix-community/neovim-nightly-overlay";
     bacon-ls.url = "github:crisidev/bacon-ls";
     bacon.url = "github:Canop/bacon";
   };
 
   outputs =
-    { bacon, bacon-ls, home-manager, neovim, nixgl, nixpkgs, ... }@inputs:
+    { bacon, bacon-ls, home-manager, nixgl, nixpkgs, ... }@inputs:
     let system = "x86_64-linux";
     in {
       # Available through `home-manager --flake .#user@host switch`
@@ -31,7 +30,6 @@
               nixgl.overlay
               bacon.overlay.${system}
               bacon-ls.overlay.${system}
-              neovim.overlays.default
             ];
           };
           extraSpecialArgs = { inherit inputs; };

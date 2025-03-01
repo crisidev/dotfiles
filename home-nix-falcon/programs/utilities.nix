@@ -49,7 +49,6 @@
     minikube
     mkdocs
     neofetch
-    neovim
     nerd-fonts.symbols-only
     ninja
     nix-direnv
