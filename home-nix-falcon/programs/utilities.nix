@@ -25,7 +25,6 @@
     glab
     glibc
     glow
-    gcc-unwrapped
     go
     heaptrack
     htop
