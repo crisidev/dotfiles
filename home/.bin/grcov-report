@@ -2,29 +2,81 @@
 
 # Default values
 TYPE="md"
+OPEN_HTML=true
+HELP_MESSAGE="
+Usage: $(basename "$0") [options]
+
+Options:
+  md        Set report type to Markdown (default).
+  html      Set report type to HTML.
+  -n        Do not automatically open the HTML report.
+  --help    Display this help message and exit.
+"
+
+# OS agnostic open URL
+open_url() {
+    case "$(uname -s)" in
+    Darwin)
+        open "$1"
+        ;;
+    Linux)
+        xdg-open "$1"
+        ;;
+    *)
+        echo "Unsupported OS: $(uname)" >&2
+        exit 1
+        ;;
+    esac
+}
 
 # Parse arguments
 for arg in "$@"; do
     case $arg in
-        html) TYPE="html"; shift ;;
-        md) TYPE="md"; shift ;;
-        *) echo "Unknown option: $arg"; exit 1 ;;
+    --help)
+        echo "$HELP_MESSAGE"
+        exit 0
+        ;;
+    html)
+        TYPE="html"
+        shift
+        ;;
+    md)
+        TYPE="md"
+        shift
+        ;;
+    -n)
+        OPEN_HTML=false
+        shift
+        ;;
+    *)
+        echo "Unknown option: $arg"
+        echo "$HELP_MESSAGE"
+        exit 1
+        ;;
     esac
 done
 
 LLVM_PATH="$HOME/.nix-profile/bin"
-export RUSTFLAGS="-Cinstrument-coverage" 
-export LLVM_PROFILE_FILE="./.coverage/coverage-%p-%m.profraw" 
+export RUSTFLAGS="-Cinstrument-coverage"
+export LLVM_PROFILE_FILE="./target/coverage/coverage-%p-%m.profraw"
+export CARGO_TARGET_DIR=./target/coverage
+rm -f $CARGO_TARGET_DIR/coverage*.profraw
 
-rm -rf ./.coverage
 cargo nextest run
 
 if [ "$TYPE" = "html" ]; then
-    grcov . -s . --llvm-path "$LLVM_PATH" --binary-path ./target/debug/ -t html --branch --ignore-not-existing -o ./.coverage/
-    open ./.coverage/html/index.html
+    grcov . -s . --llvm --llvm-path "$LLVM_PATH" --binary-path ./target/coverage/debug/ -t html --branch --ignore-not-existing -o ./target/coverage/
+    if [ "$OPEN_HTML" = true ]; then
+        open_url ./target/coverage/html/index.html
+    fi
 elif [ "$TYPE" = "md" ]; then
-    grcov . -s . --llvm-path "$LLVM_PATH" --binary-path ./target/debug/ -t markdown --branch --ignore-not-existing --excl-br-line '^\s*$' --ignore "/*" | glow
+    OUTPUT=$(grcov . -s . --llvm --llvm-path "$LLVM_PATH" --binary-path ./target/coverage/debug/ -t markdown --branch --ignore-not-existing --excl-br-line '^\s*$' --ignore "/*")
+    if which glow >/dev/null; then
+        echo "$OUTPUT" | glow
+    else
+        echo "$OUTPUT"
+    fi
 else
-    echo "unknown grcov type $TYPE"
+    echo "Unknown grcov report type: $TYPE"
     exit 1
 fi
