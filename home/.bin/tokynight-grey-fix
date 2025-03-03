@@ -1,10 +1,28 @@
 #!/usr/bin/env bash
 
+read -r -d '' PATCH <<'EOF'
+--- gnome-shell.css.orig	2025-03-03 22:55:52.818215110 +0000
++++ gnome-shell.css	2025-03-03 22:57:00.046205989 +0000
+@@ -3734,8 +3734,7 @@ StWidget.focused .app-grid-running-dot {
+ .notification-banner:hover, .notification-banner:active {
+   color: #e9e9ed;
+   background-color: #292e42;
+-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
+-  margin: 20px;
++  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.25);
+ }
+ 
+ .notification-banner:focus {
+EOF
+
 # change accent color to white-ish
-for x in $(/usr/bin/grep -R 414868 * |awk -F: '{print $1}' |sort |uniq); do sed -i 's/414868/e9e9ed/g' $x; done
+cd "$HOME/github/Tokyonight-GTK-Theme"
+for x in $(/usr/bin/grep -R 414868 * |awk -F: '{print $1}' |sort |uniq); do sed -i 's/414868/b1b1c0/g' $x; done
 # reinstall theme
-cd themes && ./install.sh --tweaks storm macos -l -t grey -s standard
+cd ./themes && ./install.sh --tweaks storm macos -l -t grey -s standard
 # restore git
 git reset --hard
+# apply the notification patch 
+cd "$HOME/.themes/Tokyonight-Grey-Dark-Storm/gnome-shell" && echo "$PATCH" | patch gnome-shell.css
 # override flatpak themes
 stylepak install-system

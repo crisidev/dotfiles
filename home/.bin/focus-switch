@@ -56,11 +56,7 @@ hide_overview() {
 }
 
 if [ "$WORKSPACE" = "startup" ]; then
-    sleep 5
-    focus_workspace 1
-    sleep 0.5
-    focus_workspace 4
-    sleep 0.5
+    sleep 3
     focus_workspace 0
     sleep 0.5
     hide_overview

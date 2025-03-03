@@ -7,11 +7,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1740400237,
-        "narHash": "sha256-WVgXSG48zTocaYtdsyXtCRnXN4+pqqBrmCv0oDrWoU0=",
+        "lastModified": 1741008597,
+        "narHash": "sha256-XX/+YBwjMJmyENzo1sGDtyKg5MOhhr7w9KjiQ3GbdR8=",
         "owner": "Canop",
         "repo": "bacon",
-        "rev": "4503c78a41a042ff1f7997e7c5351f4e7ea68484",
+        "rev": "ceed1faf372a9ed32130b50b279bce92dda8b798",
         "type": "github"
       },
       "original": {
@@ -27,11 +27,11 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1740850790,
-        "narHash": "sha256-aDawi2V+2DrChO8FUjjg1/N2zF5WaK+O5p1GvH5SlRE=",
+        "lastModified": 1741006656,
+        "narHash": "sha256-JdUcEbpwgLuGWaDTV4QQjEkIMhfRmV6ZJINpeiFjbss=",
         "owner": "crisidev",
         "repo": "bacon-ls",
-        "rev": "9e90e2034347e077938e56bfc50fd8644bdaebb9",
+        "rev": "8b4eeba3f8d28686e8eb4d34696ad9ed20191727",
         "type": "github"
       },
       "original": {
@@ -264,11 +264,11 @@
     },
     "nixpkgs_5": {
       "locked": {
-        "lastModified": 1740791350,
-        "narHash": "sha256-igS2Z4tVw5W/x3lCZeeadt0vcU9fxtetZ/RyrqsCRQ0=",
+        "lastModified": 1740916017,
+        "narHash": "sha256-Ze/3XCElkVljFCnBKezLldOz2ZaGp7eozxRqFzACnMI=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "199169a2135e6b864a888e89a2ace345703c025d",
+        "rev": "b58e19b11fe72175fd7a9e014a4786a91e99da5f",
         "type": "github"
       },
       "original": {
