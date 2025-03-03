@@ -61,7 +61,7 @@ gsettings set org.gnome.desktop.peripherals.touchpad two-finger-scrolling-enable
 gsettings set org.gnome.shell.extensions.dash-to-dock show-trash false
 
 # Monitor detection
-"$HOME/.bin/monitor-switch"
+"$HOME/.bin/monitor-switch" now
 
 # Gnome keybindings
 echo "[gsettings] setting up gnome keybindings"

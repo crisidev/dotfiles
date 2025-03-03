@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Exec=/home/matteo.bigoi/.bin/monitor-switch
+Exec=/home/bigo/.bin/monitor-switch
 Hidden=false
 NoDisplay=false
 X-GNOME-Autostart-enabled=true
