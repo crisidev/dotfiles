@@ -23,6 +23,11 @@ repos = [
     "~/.homesick/repos/homeshick",
     "~/.homesick/repos/dotfiles",
     "~/.homesick/repos/lazyvim",
+    "~/.homesick/repos/homeshick",
+    "~/github/gnome-shell-extensions/gnome-github-manager",
+    "~/github/gnome-shell-extensions/shell",
+    "~/github/Tokyonight-GTK-Theme"
+
 ]
 arguments = "--ff-only --rebase --autostash"
 

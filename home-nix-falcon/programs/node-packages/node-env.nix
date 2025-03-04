@@ -1,7 +1,7 @@
 # This file originates from node2nix
 
 { lib, stdenv, nodejs, python2, pkgs, libtool, runCommand, writeTextFile
-, writeShellScript, }:
+, writeShellScript }:
 
 let
   # Workaround to cope with utillinux in Nixpkgs 20.09 and util-linux in Nixpkgs master
@@ -416,7 +416,7 @@ let
   };
 
   prepareAndInvokeNPM =
-    { packageName, bypassCache, reconstructLock, npmFlags, production, }:
+    { packageName, bypassCache, reconstructLock, npmFlags, production }:
     let
       forceOfflineFlag = if bypassCache then
         "--offline"

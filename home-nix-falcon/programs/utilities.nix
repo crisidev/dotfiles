@@ -1,4 +1,6 @@
-{ pkgs, ... }: {
+{ pkgs, config, ... }:
+let nixGL = import ../nixGL.nix { inherit pkgs config; };
+in {
   fonts.fontconfig.enable = true;
   home.packages = with pkgs; [
     age
@@ -32,6 +34,7 @@
     hyfetch
     hyperfine
     imagemagick
+    (nixGL pkgs.kitty)
     jq
     just
     k9s

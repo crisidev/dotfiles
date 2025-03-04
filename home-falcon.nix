@@ -19,7 +19,7 @@
     };
 
     home = {
-      stateVersion = "23.11";
+      stateVersion = "24.11";
       username = "bigo";
       homeDirectory = "/home/bigo/";
     };
@@ -34,6 +34,10 @@
 
     # Allow home-manager to manage itself
     programs.home-manager.enable = true;
+
+    home.activation.updateNeovim = lib.mkAfter ''
+      $HOME/.cargo/bin/bob update
+    '';
 
     home.activation.updateGsettings = lib.mkAfter ''
       $HOME/.bin/gsettings-update

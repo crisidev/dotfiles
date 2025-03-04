@@ -2,7 +2,7 @@
   home.packages = with pkgs; [
     pre-commit
     poetry
-    (python311.withPackages (p:
+    (python312.withPackages (p:
       with p; [
         black
         boto3

@@ -17,8 +17,7 @@
     bacon.url = "github:Canop/bacon";
   };
 
-  outputs =
-    { bacon, bacon-ls, home-manager, nixgl, nixpkgs, ... }@inputs:
+  outputs = { bacon, bacon-ls, home-manager, nixgl, nixpkgs, ... }@inputs:
     let system = "x86_64-linux";
     in {
       # Available through `home-manager --flake .#user@host switch`

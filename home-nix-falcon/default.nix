@@ -1,3 +1,1 @@
-{ ... }: {
-  imports = [ ./options.nix ./programs ];
-}
+{ ... }: { imports = [ ./options.nix ./programs ]; }
