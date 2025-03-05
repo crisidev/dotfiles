@@ -1,8 +1,21 @@
 [Desktop Entry]
-Name=Neovim
-Comment=Open file with Neovim in Kitty terminal
-Exec=/home/bigo/.nix-profile/bin/kitty -e nvim %f
-Terminal=false
 Type=Application
 Icon=io.neovim.nvim
-MimeType=text/plain;
+Name=NeoVim
+Name[en]=NeoVim
+Name[en_GB]=NeoVim
+Name[en_GB.UTF-8]=NeoVim
+Comment=Open NeVim
+Comment[en]=Open NeVim
+Comment[en_GB]=Open NeVim
+Comment[en_GB.UTF-8]=Open NeVim
+Keywords=editor
+Keywords[en]=editor
+Keywords[en_GB]=editor
+Keywords[en_GB.UTF-8]=editor
+Exec=/home/bigo/.bin/ide %f
+Hidden=false
+NoDisplay=false
+StartupNotify=false
+Terminal=false
+

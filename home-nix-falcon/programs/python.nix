@@ -1,5 +1,6 @@
 { pkgs, ... }: {
   home.packages = with pkgs; [
+    neovim-remote
     pre-commit
     poetry
     (python312.withPackages (p:
