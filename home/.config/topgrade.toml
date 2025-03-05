@@ -1,19 +1,7 @@
 [misc]
 set_title = true
 display_time = true
-disable = [
-    "containers",
-    "flatpak",
-    "gnome_shell_extensions",
-    "home_manager",
-    "nix",
-    "pnpm",
-    "poetry",
-    "snap",
-    "system",
-    "toolbx",
-    "uv"
-]
+disable = ["home_manager", "pnpm", "poetry", "snap", "system", "toolbx", "uv"]
 ignore_failures = ["git_repos"]
 
 [git]
@@ -23,11 +11,9 @@ repos = [
     "~/.homesick/repos/homeshick",
     "~/.homesick/repos/dotfiles",
     "~/.homesick/repos/lazyvim",
-    "~/.homesick/repos/homeshick",
-    "~/github/gnome-shell-extensions/gnome-github-manager",
-    "~/github/gnome-shell-extensions/shell",
-    "~/github/Tokyonight-GTK-Theme"
-
+    "~/github/gnome-shell-extensions/mouse-follows-focus",
+    "~/github/gnome-shell-extensions/pop-shell",
+    "~/github/Tokyonight-GTK-Theme",
 ]
 arguments = "--ff-only --rebase --autostash"
 

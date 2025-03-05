@@ -189,7 +189,7 @@ dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/cus
 dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom12/command "'systemctl suspend'"
 dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom12/name "'Suspend system'"
 dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom13/binding "'<Super><Alt>r'"
-dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom13/command "'$HOME/.bin/focus-switch rebalance'"
+dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom13/command "'$HOME/.bin/focus-switch rebalance force'"
 dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom13/name "'Rebalance windows'"
 
 # Power

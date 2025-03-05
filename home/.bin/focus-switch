@@ -73,7 +73,9 @@ if [ "$WORKSPACE" = "rebalance" ]; then
             gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell/Extensions/Windows --method org.gnome.Shell.Extensions.Windows.MoveToWorkspace "$id" "$workspace"
         fi
     done
-    notify-send -a "Focus Switch" -i settings "All windows rebalanced"
+    if [ -n "$FORCE" ]; then
+        notify-send -a "Focus Switch" -i settings "All windows rebalanced"
+    fi
     exit 0
 fi
 
