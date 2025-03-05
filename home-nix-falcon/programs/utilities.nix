@@ -22,6 +22,7 @@ in {
     font-awesome
     fzf
     gh
+    (nixGL pkgs.ghostty)
     git
     gitui
     glab
