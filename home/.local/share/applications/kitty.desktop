@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=kitty
+GenericName=Terminal emulator
+Comment=Fast, feature-rich, GPU based terminal
+TryExec=/home/bigo/.nix-profile/bin/kitty
+StartupNotify=true
+Exec=/home/bigo/.nix-profile/bin/kitty
+Icon=/home/bigo/.icons/Suru++/apps/scalable/kitty.svg
+Categories=System;TerminalEmulator;

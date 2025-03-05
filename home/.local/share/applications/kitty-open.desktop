@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=kitty URL Launcher
+GenericName=Terminal emulator
+Comment=Open URLs with kitty
+StartupNotify=true
+TryExec=/home/bigo/.nix-profile/bin/kitty
+Exec=/home/bigo/.nix-profile/bin/kitty +open %U
+Icon=/home/bigo/.icons/Suru++/apps/scalable/kitty.svg
+Categories=System;TerminalEmulator;
+NoDisplay=true
+MimeType=image/*;application/x-sh;application/x-shellscript;inode/directory;text/*;x-scheme-handler/kitty;x-scheme-handler/ssh;
