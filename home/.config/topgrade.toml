@@ -1,7 +1,7 @@
 [misc]
 set_title = true
 display_time = true
-disable = ["home_manager", "pnpm", "poetry", "snap", "system", "toolbx", "uv"]
+disable = ["home_manager", "pnpm", "poetry", "snap", "toolbx", "uv"]
 ignore_failures = ["git_repos"]
 
 [git]
@@ -13,6 +13,7 @@ repos = [
     "~/.homesick/repos/lazyvim",
     "~/github/gnome-shell-extensions/mouse-follows-focus",
     "~/github/gnome-shell-extensions/pop-shell",
+    "~/github/gnome-shell-extensions/gnome-github-manager",
     "~/github/Tokyonight-GTK-Theme",
 ]
 arguments = "--ff-only --rebase --autostash"

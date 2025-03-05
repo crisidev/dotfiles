@@ -46,7 +46,7 @@ gsettings set org.gnome.desktop.wm.preferences num-workspaces 8
 gsettings set org.gnome.mutter workspaces-only-on-primary true
 gsettings set org.gnome.mutter focus-change-on-pointer-rest false
 gsettings set org.gnome.settings-daemon.plugins.power idle-brightness 240
-gsettings set org.gnome.desktop.default-applications.terminal exec "$HOME/.bin/kitty"
+gsettings set org.gnome.desktop.default-applications.terminal exec "$HOME/.nix-profile/bin/kitty"
 gsettings set org.gnome.desktop.default-applications.terminal exec-arg "-e"
 gsettings set org.gnome.desktop.peripherals.keyboard repeat true
 gsettings set org.gnome.desktop.peripherals.keyboard repeat-interval 14

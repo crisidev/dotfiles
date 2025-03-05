@@ -16,6 +16,5 @@ Keywords[en_GB.UTF-8]=editor
 Exec=/home/bigo/.bin/ide %f
 Hidden=false
 NoDisplay=false
-StartupNotify=false
+StartupNotify=true
 Terminal=false
-
