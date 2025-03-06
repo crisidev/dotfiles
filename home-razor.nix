@@ -13,9 +13,9 @@
     };
 
     home = {
-      stateVersion = "23.11";
-      username = "bigo";
-      homeDirectory = "/home/bigo/";
+      stateVersion = "24.11";
+      username = "root";
+      homeDirectory = "/root";
     };
 
     home.sessionVariables = { NIX_SHELL_PRESERVE_PROMPT = 1; };
