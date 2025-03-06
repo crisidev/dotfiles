@@ -1,0 +1,18 @@
+[Desktop Entry]
+Type=Application
+Icon=spotify
+Name=Spotify Player
+Name[en]=Spotify Player
+Name[en_GB]=Spotify Player
+Name[en_GB.UTF-8]=Spotify Player
+Keywords=music;sportify
+Keywords[en]=music;sportify
+Keywords[en_GB]=music;sportify
+Keywords[en_GB.UTF-8]=music;sportify
+Exec=/home/bigo/.nix-profile/bin/kitty --class spotify_player --config /home/bigo/.config/kitty/ide.conf -e spotify_player
+StartupWMClass=spotify_player
+Hidden=false
+NoDisplay=false
+StartupNotify=false
+Terminal=false
+
