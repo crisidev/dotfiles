@@ -1,16 +1,14 @@
-#!/usr/bin/bash
+#!/usr/bin/zsh -l
 
 # set -x
 set -e -o pipefail
-
-# nvim listen socket
-NVIM_LISTEN_ADDRESS=/tmp/nvimsocket
 export PATH="$HOME/.bin:$HOME/.local/share/nvim/mason/bin:$HOME/.nix-profile/bin:$HOME/.local/bin:$HOME/.go/bin:$HOME/.cargo/bin:/usr/local/bin:/usr/sbin:$PATH"
 
 if [ "$1" = "--help" ]; then
     echo "usage: $0 <filenames..>"
     exit 2
 else
+    NVIM_LISTEN_ADDRESS=/tmp/nvimsocket
     if ! pgrep -f "\-class ide"; then
         rm -rf $NVIM_LISTEN_ADDRESS
         [ -f "$HOME/.zsh_secrets" ] && source "$HOME/.zsh_secrets"

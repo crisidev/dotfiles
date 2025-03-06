@@ -1,20 +1,22 @@
 [Desktop Entry]
 Type=Application
 Icon=io.neovim.nvim
-Name=NeoVim
-Name[en]=NeoVim
-Name[en_GB]=NeoVim
-Name[en_GB.UTF-8]=NeoVim
-Comment=Open NeVim
-Comment[en]=Open NeVim
-Comment[en_GB]=Open NeVim
-Comment[en_GB.UTF-8]=Open NeVim
-Keywords=editor
-Keywords[en]=editor
-Keywords[en_GB]=editor
-Keywords[en_GB.UTF-8]=editor
+Name=Neovim
+Name[en]=Neovim
+Name[en_GB]=Neovim
+Name[en_GB.UTF-8]=Neovim
+Comment=My IDE
+Comment[en]=My IDE
+Comment[en_GB]=My IDE
+Comment[en_GB.UTF-8]=My IDE
+Keywords=ide;neovim;nvim
+Keywords[en]=ide;neovim;nvim
+Keywords[en_GB]=ide;neovim;nvim
+Keywords[en_GB.UTF-8]=ide;neovim;nvim
 Exec=/home/bigo/.bin/ide %f
+StartupWMClass=ide
 Hidden=false
 NoDisplay=false
-StartupNotify=true
+StartupNotify=false
 Terminal=false
+

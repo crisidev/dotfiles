@@ -94,7 +94,8 @@ gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "[
 '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom11/', \
 '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom12/', \
 '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom13/', \
-'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom14/' \
+'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom14/', \
+'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom15/' \
 ]"
 dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/binding "'<Super>Escape'"
 dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/command "'$HOME/.bin/focus-switch 0'"
@@ -191,6 +192,9 @@ dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/cus
 dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom13/binding "'<Super><Alt>r'"
 dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom13/command "'$HOME/.bin/focus-switch rebalance force'"
 dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom13/name "'Rebalance windows'"
+dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom15/binding "'<Super>z'"
+dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom15/command "'$HOME/.bin/ide'"
+dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom15/name "'Open IDE'"
 
 # Power
 echo "[gsettings] setting up power management"
