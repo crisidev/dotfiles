@@ -1,1 +1,1 @@
-{ ... }: { imports = [ ./python.nix ./utilities.nix ]; }
+{ ... }: { imports = [ ./utilities.nix ]; }
