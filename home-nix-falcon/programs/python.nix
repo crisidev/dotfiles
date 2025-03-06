@@ -3,6 +3,7 @@
     neovim-remote
     pre-commit
     poetry
+    pyxel
     (python312.withPackages (p:
       with p; [
         black
