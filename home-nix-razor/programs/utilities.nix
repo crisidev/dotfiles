@@ -7,14 +7,10 @@
     curl
     direnv
     eza
+    delta
     fd
-    feh
-    figlet
-    file
     fzf
     git
-    htop
-    hwinfo
     jq
     neovim
     nix-direnv
@@ -36,7 +32,6 @@
     starship
     strace
     uv
-    which
     yazi
     yq
     zoxide

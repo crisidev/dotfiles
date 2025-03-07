@@ -10,10 +10,10 @@ export DISABLE_AUTO_TITLE=true
 
 # configure antidote
 autoload -Uz compinit
+compinit
 source /usr/share/zsh-antidote/antidote.zsh
 antidote load $HOME/.zsh_plugins
 FPATH="$HOME/.zfunc:${FPATH}"
-compinit
 
 # ollama
 #export ZSH_COPILOT_KEY='^h'  # Key to trigger suggestions (default: Ctrl+Z)

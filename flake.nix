@@ -39,7 +39,7 @@
           extraSpecialArgs = { inherit inputs; };
           modules = [ ./home-mandalore.nix ];
         };
-        razor-tiny = home-manager.lib.homeManagerConfiguration {
+        razor = home-manager.lib.homeManagerConfiguration {
           pkgs = import nixpkgs rec { inherit system; };
           extraSpecialArgs = { inherit inputs; };
           modules = [ ./home-razor.nix ];
