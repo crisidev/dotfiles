@@ -34,7 +34,7 @@
       strace
       uv
       yazi
-      yq
+      yq-go
       zoxide
     ];
 

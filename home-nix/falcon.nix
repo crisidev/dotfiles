@@ -83,7 +83,7 @@ in {
       which
       yazi
       ydotool
-      yq
+      yq-go
       zellij
       zenith
       zoxide

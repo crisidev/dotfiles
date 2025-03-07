@@ -12,7 +12,11 @@ export DISABLE_AUTO_TITLE=true
 autoload -Uz compinit
 compinit
 source /usr/share/zsh-antidote/antidote.zsh
-antidote load $HOME/.zsh_plugins
+if [ "$(hostname -s)" = "falcon" ]; then
+    antidote load $HOME/.zsh_plugins
+else
+    antidote load $HOME/.zsh_plugins.server
+fi
 FPATH="$HOME/.zfunc:${FPATH}"
 
 # ollama

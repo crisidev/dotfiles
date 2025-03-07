@@ -8,10 +8,13 @@
       curl
       direnv
       eza
+      deadnix
       delta
       fd
       fzf
       git
+      go
+      harper
       jq
       neovim
       nix-direnv
@@ -33,11 +36,12 @@
         ]))
       ripgrep
       starship
+      statix
       strace
       typescript
       uv
       yazi
-      yq
+      yq-go
       zoxide
       yarn
     ];
