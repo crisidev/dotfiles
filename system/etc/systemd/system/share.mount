@@ -1,0 +1,13 @@
+[Unit]
+Description=Mount Crisidev NFS Share
+After=network-online.target tailscaled.service
+Wants=network-online.target
+
+[Mount]
+What=mandalore.scale.lan:/share
+Where=/share
+Type=nfs
+Options=defaults,_netdev
+
+[Install]
+WantedBy=multi-user.target
