@@ -12,11 +12,7 @@ export DISABLE_AUTO_TITLE=true
 autoload -Uz compinit
 compinit
 source /usr/share/zsh-antidote/antidote.zsh
-if [ "$(hostname -s)" = "falcon" ]; then
-    antidote load $HOME/.zsh_plugins
-else
-    antidote load $HOME/.zsh_plugins.server
-fi
+antidote load $HOME/.zsh_plugins
 FPATH="$HOME/.zfunc:${FPATH}"
 
 # ollama
@@ -57,7 +53,6 @@ bindkey '^[[B' history-substring-search-down
 
 # source files
 [ -f $HOME/.zsh_aliases ] && source $HOME/.zsh_aliases
-[ -f $HOME/.zsh_local ] && source $HOME/.zsh_local
 [ -f $HOME/.zsh_functions ] && source $HOME/.zsh_functions
 [ -f $HOME/.zsh_secrets ] && source $HOME/.zsh_secrets
 

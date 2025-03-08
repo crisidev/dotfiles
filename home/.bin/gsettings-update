@@ -207,7 +207,7 @@ gsettings set org.gnome.settings-daemon.plugins.power lid-close-suspend-with-ext
 gsettings set org.gnome.settings-daemon.plugins.power power-button-action "nothing"
 gsettings set org.gnome.settings-daemon.plugins.power power-saver-profile-on-low-battery true
 gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout 3600
-gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type "suspend"
+gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type "nothing"
 gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-timeout 900
 gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-type "suspend"
 

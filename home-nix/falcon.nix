@@ -61,6 +61,7 @@ in {
       nix-output-monitor
       poppler
       ripgrep
+      scaleway-cli
       silicon
       sops
       (spotify-player.override {
