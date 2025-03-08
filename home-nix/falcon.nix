@@ -37,6 +37,7 @@ in {
       hyperfine
       imagemagick
       (nixGL pkgs.kitty)
+      jdk
       jq
       just
       k9s
@@ -46,7 +47,7 @@ in {
       kyverno
       lazygit
       ltrace
-      lua
+      lua51Packages.lua
       luarocks
       mergiraf
       meson
