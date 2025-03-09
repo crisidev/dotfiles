@@ -148,7 +148,7 @@ gsettings set org.gnome.shell.extensions.pop-shell pop-workspace-up "[]"
 gsettings set org.gnome.shell.extensions.pop-shell active-hint true
 gsettings set org.gnome.shell.extensions.pop-shell active-hint-border-radius 12
 gsettings set org.gnome.shell.extensions.pop-shell hint-color-rgba "rgb(233,233,237)"
-gsettings set org.gnome.shell.extensions.pop-shell tile-enter "['<Super>Backspace']"
+gsettings set org.gnome.shell.extensions.pop-shell tile-enter "['<Super><Alt>Backspace']"
 gsettings set org.gnome.shell.extensions.pop-shell tile-accept "['Return']"
 gsettings set org.gnome.shell.extensions.pop-shell tile-reject "['Escape']"
 gsettings set org.gnome.shell.extensions.pop-shell tile-orientation "['<Super><Alt>o']"
@@ -207,7 +207,7 @@ gsettings set org.gnome.settings-daemon.plugins.power lid-close-suspend-with-ext
 gsettings set org.gnome.settings-daemon.plugins.power power-button-action "nothing"
 gsettings set org.gnome.settings-daemon.plugins.power power-saver-profile-on-low-battery true
 gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout 3600
-gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type "nothing"
+gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type "suspend"
 gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-timeout 900
 gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-type "suspend"
 
