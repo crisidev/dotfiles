@@ -1,7 +1,7 @@
 # zmodload zsh/zprof
 
 # paths
-export PATH="$HOME/.bin:$HOME/.local/share/nvim/mason/bin:$HOME/.local/bin:$HOME/.go/bin:$HOME/.cargo/bin:/usr/local/bin:/usr/sbin:$PATH"
+export PATH="$HOME/.bin:$PATH:$HOME/.local/share/nvim/mason/bin:$HOME/.local/bin:$HOME/.go/bin:$HOME/.cargo/bin:/usr/local/bin:/usr/sbin"
 
 # configure fzf history search
 export ZSH_FZF_HISTORY_SEARCH_BIND="^f"
