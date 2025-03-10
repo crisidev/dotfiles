@@ -1,8 +1,8 @@
-#!/usr/bin/zsh -l
+#!/usr/bin/zsh
 
-# set -x
-set -e -o pipefail
+set -o pipefail
 export PATH="$HOME/.bin:$HOME/.local/share/nvim/mason/bin:$HOME/.nix-profile/bin:$HOME/.local/bin:$HOME/.go/bin:$HOME/.cargo/bin:/usr/local/bin:/usr/sbin:$PATH"
+source $HOME/.zshrc
 
 if [ "$1" = "--help" ]; then
     echo "usage: $0 <filenames..>"

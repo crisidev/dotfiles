@@ -56,8 +56,11 @@ in {
       neofetch
       nerd-fonts.symbols-only
       ninja
-      nix-direnv
+      nixgl.auto.nixGLDefault
+      #nixgl.auto.nixGLNvidia
+      nixgl.nixGLIntel
       nixfmt-rfc-style
+      nix-direnv
       nix-output-monitor
       poppler
       ripgrep

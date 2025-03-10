@@ -70,6 +70,17 @@ let
           "GNKqxfHG2ySmJOBSHg7LxeUx4xpuCoFjacmlCoYWEbaPXLwvfIjixRI12xCQZeULksQb23uiA8F40w5TojpV7w==";
       };
     };
+    "@eslint/config-helpers-0.1.0" = {
+      name = "_at_eslint_slash_config-helpers";
+      packageName = "@eslint/config-helpers";
+      version = "0.1.0";
+      src = fetchurl {
+        url =
+          "https://registry.npmjs.org/@eslint/config-helpers/-/config-helpers-0.1.0.tgz";
+        sha512 =
+          "kLrdPDJE1ckPo94kmPPf9Hfd0DU0Jw6oKYrhe+pwSC0iTUInmTa+w6fw8sGgcfkFJGNdWOUeOaDM4quW4a7OkA==";
+      };
+    };
     "@eslint/core-0.12.0" = {
       name = "_at_eslint_slash_core";
       packageName = "@eslint/core";
@@ -91,14 +102,14 @@ let
           "yaVPAiNAalnCZedKLdR21GOGILMLKPyqSLWaAjQFvYA2i/ciDi8ArYVr69Anohb6cH2Ukhqti4aFnYyPm8wdwQ==";
       };
     };
-    "@eslint/js-9.21.0" = {
+    "@eslint/js-9.22.0" = {
       name = "_at_eslint_slash_js";
       packageName = "@eslint/js";
-      version = "9.21.0";
+      version = "9.22.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@eslint/js/-/js-9.21.0.tgz";
+        url = "https://registry.npmjs.org/@eslint/js/-/js-9.22.0.tgz";
         sha512 =
-          "BqStZ3HX8Yz6LvsF5ByXYrtigrV5AXADWLAGc7PH/1SxOb7/FIYYMszZZWiUou/GB9P2lXWk2SV4d+Z8h0nknw==";
+          "vLFajx9o8d1/oL2ZkpMYbkLv8nDB6yaIwFNt7nI4+I80U/z03SxmfOMsLbvWr3p7C+Wnoh//aOu2pQW8cS0HCQ==";
       };
     };
     "@eslint/object-schema-2.1.6" = {
@@ -176,67 +187,67 @@ let
           "xeO57FpIu4p1Ri3Jq/EXq4ClRm86dVF2z/+kvFnyqVYRavTZmaFaUBbWCOuuTh0o/g7DSsk6kc2vrS4Vl5oPOQ==";
       };
     };
-    "@inquirer/confirm-5.1.6" = {
+    "@inquirer/confirm-5.1.7" = {
       name = "_at_inquirer_slash_confirm";
       packageName = "@inquirer/confirm";
-      version = "5.1.6";
+      version = "5.1.7";
       src = fetchurl {
         url =
-          "https://registry.npmjs.org/@inquirer/confirm/-/confirm-5.1.6.tgz";
+          "https://registry.npmjs.org/@inquirer/confirm/-/confirm-5.1.7.tgz";
         sha512 =
-          "6ZXYK3M1XmaVBZX6FCfChgtponnL0R6I7k8Nu+kaoNkT828FVZTcca1MqmWQipaW2oNREQl5AaPCUOOCVNdRMw==";
+          "Xrfbrw9eSiHb+GsesO8TQIeHSMTP0xyvTCeeYevgZ4sKW+iz9w/47bgfG9b0niQm+xaLY2EWPBINUPldLwvYiw==";
       };
     };
-    "@inquirer/core-10.1.7" = {
+    "@inquirer/core-10.1.8" = {
       name = "_at_inquirer_slash_core";
       packageName = "@inquirer/core";
-      version = "10.1.7";
+      version = "10.1.8";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@inquirer/core/-/core-10.1.7.tgz";
+        url = "https://registry.npmjs.org/@inquirer/core/-/core-10.1.8.tgz";
         sha512 =
-          "AA9CQhlrt6ZgiSy6qoAigiA1izOa751ugX6ioSjqgJ+/Gd+tEN/TORk5sUYNjXuHWfW0r1n/a6ak4u/NqHHrtA==";
+          "HpAqR8y715zPpM9e/9Q+N88bnGwqqL8ePgZ0SMv/s3673JLMv3bIkoivGmjPqXlEgisUksSXibweQccUwEx4qQ==";
       };
     };
-    "@inquirer/figures-1.0.10" = {
+    "@inquirer/figures-1.0.11" = {
       name = "_at_inquirer_slash_figures";
       packageName = "@inquirer/figures";
-      version = "1.0.10";
+      version = "1.0.11";
       src = fetchurl {
         url =
-          "https://registry.npmjs.org/@inquirer/figures/-/figures-1.0.10.tgz";
+          "https://registry.npmjs.org/@inquirer/figures/-/figures-1.0.11.tgz";
         sha512 =
-          "Ey6176gZmeqZuY/W/nZiUyvmb1/qInjcpiZjXWi6nON+nxJpD1bxtSoBxNliGISae32n6OwbY+TSXPZ1CfS4bw==";
+          "eOg92lvrn/aRUqbxRyvpEWnrvRuTYRifixHkYVpJiygTgVSBIHDqLh0SrMQXkafvULg3ck11V7xvR+zcgvpHFw==";
       };
     };
-    "@inquirer/input-4.1.6" = {
+    "@inquirer/input-4.1.7" = {
       name = "_at_inquirer_slash_input";
       packageName = "@inquirer/input";
-      version = "4.1.6";
+      version = "4.1.7";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@inquirer/input/-/input-4.1.6.tgz";
+        url = "https://registry.npmjs.org/@inquirer/input/-/input-4.1.7.tgz";
         sha512 =
-          "1f5AIsZuVjPT4ecA8AwaxDFNHny/tSershP/cTvTDxLdiIGTeILNcKozB0LaYt6mojJLUbOYhpIxicaYf7UKIQ==";
+          "rCQAipJNA14UTH84df/z4jDJ9LZ54H6zzuCAi7WZ0qVqx3CSqLjfXAMd5cpISIxbiHVJCPRB81gZksq6CZsqDg==";
       };
     };
-    "@inquirer/password-4.0.9" = {
+    "@inquirer/password-4.0.10" = {
       name = "_at_inquirer_slash_password";
       packageName = "@inquirer/password";
-      version = "4.0.9";
+      version = "4.0.10";
       src = fetchurl {
         url =
-          "https://registry.npmjs.org/@inquirer/password/-/password-4.0.9.tgz";
+          "https://registry.npmjs.org/@inquirer/password/-/password-4.0.10.tgz";
         sha512 =
-          "xBEoOw1XKb0rIN208YU7wM7oJEHhIYkfG7LpTJAEW913GZeaoQerzf5U/LSHI45EVvjAdgNXmXgH51cUXKZcJQ==";
+          "JC538ujqeYKkFqLoWZ0ILBteIUO2yajBMVEUZSxjl9x6fiEQtM+I5Rca7M2D8edMDbyHLnXifGH1hJZdh8V5rA==";
       };
     };
-    "@inquirer/type-3.0.4" = {
+    "@inquirer/type-3.0.5" = {
       name = "_at_inquirer_slash_type";
       packageName = "@inquirer/type";
-      version = "3.0.4";
+      version = "3.0.5";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@inquirer/type/-/type-3.0.4.tgz";
+        url = "https://registry.npmjs.org/@inquirer/type/-/type-3.0.5.tgz";
         sha512 =
-          "2MNFrDY8jkFYc9Il9DgLsHhMzuHnOYM1+CUYVWbzu9oT0hC7V7EcYvdCKeoll/Fcci04A+ERZ9wcc7cQ8lTkIA==";
+          "ZJpeIYYueOz/i/ONzrfof8g89kNdO2hjGuvULROo3O8rlB2CRtSseE5KeirnyE4t/thAn/EwvS/vuQeJCn+NZg==";
       };
     };
     "@isaacs/cliui-8.0.2" = {
@@ -365,14 +376,14 @@ let
           "5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==";
       };
     };
-    "@types/node-22.13.9" = {
+    "@types/node-22.13.10" = {
       name = "_at_types_slash_node";
       packageName = "@types/node";
-      version = "22.13.9";
+      version = "22.13.10";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@types/node/-/node-22.13.9.tgz";
+        url = "https://registry.npmjs.org/@types/node/-/node-22.13.10.tgz";
         sha512 =
-          "acBjXdRJ3A6Pb3tqnw9HZmyR3Fiol3aGxRCK1x3d+6CDAMjl7I649wpSd+yNURCjbOUGu9tqtLKnTGxmK6CyGw==";
+          "I6LPUvlRH+O6VRUqYOcMudhaIdUVWfsjnZavnsraHvpBwaEyMN29ry+0UVJhImYL16xsscu0aske3yA+uPOWfw==";
       };
     };
     "@types/triple-beam-1.3.5" = {
@@ -474,14 +485,14 @@ let
           "2z8JQJWAzPdDd51dRQ/oqIJxe99/hoLIqmf8RMCAJQtYDc535W/Jt2+RTP4bP0aKeBG1F65yjIZuczOXCmbWwg==";
       };
     };
-    "acorn-8.14.0" = {
+    "acorn-8.14.1" = {
       name = "acorn";
       packageName = "acorn";
-      version = "8.14.0";
+      version = "8.14.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/acorn/-/acorn-8.14.0.tgz";
+        url = "https://registry.npmjs.org/acorn/-/acorn-8.14.1.tgz";
         sha512 =
-          "cl669nCJTZBsL97OF4kUQm5g5hC2uihk0NxY3WENAC0TYdILVkAyHymAntgxGkl7K+t0cXIrH5siy5S4XkFycA==";
+          "OvQ/2pUDKmgfCg++xsTX1wGxfTaszcHVcTctW4UJB4hibJx2HXxxO5UmVgyjMa+ZDsiaf5wWLXYpRWMmBI0QHg==";
       };
     };
     "acorn-jsx-5.3.2" = {
@@ -864,14 +875,14 @@ let
           "TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==";
       };
     };
-    "eslint-9.21.0" = {
+    "eslint-9.22.0" = {
       name = "eslint";
       packageName = "eslint";
-      version = "9.21.0";
+      version = "9.22.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/eslint/-/eslint-9.21.0.tgz";
+        url = "https://registry.npmjs.org/eslint/-/eslint-9.22.0.tgz";
         sha512 =
-          "KjeihdFqTPhOMXTt7StsDxriV4n66ueuF/jfPNC3j/lduHwr/ijDwJMsF+wyMJethgiKi5wniIE243vi07d3pg==";
+          "9V/QURhsRN40xuHXWjV64yvrzMjcz7ZyNoF2jJFmy9j/SLk0u1OLSZgXi28MrXjymnjEGSR80WCdab3RGMDveQ==";
       };
     };
     "eslint-plugin-promise-7.2.1" = {
@@ -885,15 +896,15 @@ let
           "SWKjd+EuvWkYaS+uN2csvj0KoP43YTu7+phKQ5v+xw6+A0gutVX2yqCeCkC3uLCJFiPfR2dD8Es5L7yUsmvEaA==";
       };
     };
-    "eslint-scope-8.2.0" = {
+    "eslint-scope-8.3.0" = {
       name = "eslint-scope";
       packageName = "eslint-scope";
-      version = "8.2.0";
+      version = "8.3.0";
       src = fetchurl {
         url =
-          "https://registry.npmjs.org/eslint-scope/-/eslint-scope-8.2.0.tgz";
+          "https://registry.npmjs.org/eslint-scope/-/eslint-scope-8.3.0.tgz";
         sha512 =
-          "PHlWUfG6lvPc3yvP5A4PNyBL1W8fkDUccmI21JUu/+GKZBoH/W5u6usENXUrWFRsyoW5ACUjFGgAFQp5gUlb/A==";
+          "pUNxi75F8MJ/GdeKtVLSbYg4ZI34J6C0C7sbL4YOp2exGwen7ZsuBqKzUhXd0qMQ362yET3z+uPwKeg/0C2XCQ==";
       };
     };
     "eslint-visitor-keys-3.4.3" = {
@@ -2333,9 +2344,10 @@ in {
       })
       sources."@eslint-community/regexpp-4.12.1"
       sources."@eslint/config-array-0.19.2"
+      sources."@eslint/config-helpers-0.1.0"
       sources."@eslint/core-0.12.0"
       sources."@eslint/eslintrc-3.3.0"
-      sources."@eslint/js-9.21.0"
+      sources."@eslint/js-9.22.0"
       sources."@eslint/object-schema-2.1.6"
       sources."@eslint/plugin-kit-0.2.7"
       sources."@humanfs/core-0.19.1"
@@ -2344,12 +2356,12 @@ in {
       })
       sources."@humanwhocodes/module-importer-1.0.1"
       sources."@humanwhocodes/retry-0.4.2"
-      sources."@inquirer/confirm-5.1.6"
-      sources."@inquirer/core-10.1.7"
-      sources."@inquirer/figures-1.0.10"
-      sources."@inquirer/input-4.1.6"
-      sources."@inquirer/password-4.0.9"
-      sources."@inquirer/type-3.0.4"
+      sources."@inquirer/confirm-5.1.7"
+      sources."@inquirer/core-10.1.8"
+      sources."@inquirer/figures-1.0.11"
+      sources."@inquirer/input-4.1.7"
+      sources."@inquirer/password-4.0.10"
+      sources."@inquirer/type-3.0.5"
       (sources."@isaacs/cliui-8.0.2" // {
         dependencies = [
           sources."ansi-regex-6.1.0"
@@ -2370,7 +2382,7 @@ in {
       sources."@types/eslint__js-8.42.3"
       sources."@types/estree-1.0.6"
       sources."@types/json-schema-7.0.15"
-      sources."@types/node-22.13.9"
+      sources."@types/node-22.13.10"
       sources."@typescript-eslint/eslint-plugin-8.26.0"
       sources."@typescript-eslint/parser-8.26.0"
       sources."@typescript-eslint/scope-manager-8.26.0"
@@ -2382,7 +2394,7 @@ in {
       })
       sources."@typescript-eslint/utils-8.26.0"
       sources."@typescript-eslint/visitor-keys-8.26.0"
-      sources."acorn-8.14.0"
+      sources."acorn-8.14.1"
       sources."acorn-jsx-5.3.2"
       sources."ajv-6.12.6"
       sources."ansi-escapes-4.3.2"
@@ -2407,9 +2419,9 @@ in {
       sources."eastasianwidth-0.2.0"
       sources."emoji-regex-8.0.0"
       sources."escape-string-regexp-4.0.0"
-      sources."eslint-9.21.0"
+      sources."eslint-9.22.0"
       sources."eslint-plugin-promise-7.2.1"
-      sources."eslint-scope-8.2.0"
+      sources."eslint-scope-8.3.0"
       sources."eslint-visitor-keys-4.2.0"
       sources."espree-10.3.0"
       sources."esquery-1.6.0"
