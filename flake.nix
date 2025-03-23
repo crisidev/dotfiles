@@ -39,12 +39,16 @@
           extraSpecialArgs = { inherit inputs; };
           modules = [ ./home-nix/mandalore.nix ];
         };
+        corellia = home-manager.lib.homeManagerConfiguration {
+          pkgs = import nixpkgs rec { inherit system; };
+          extraSpecialArgs = { inherit inputs; };
+          modules = [ ./home-nix/corellia.nix ];
+        };
         razor = home-manager.lib.homeManagerConfiguration {
           pkgs = import nixpkgs rec { inherit system; };
           extraSpecialArgs = { inherit inputs; };
           modules = [ ./home-nix/razor.nix ];
         };
-
       };
       formatter.${system} = nixpkgs.legacyPackages.${system}.nixfmt;
     };
