@@ -23,6 +23,7 @@
       nixfmt-rfc-style
       nodejs_22
       node2nix
+      pgloader
       (python312.withPackages (p:
         with p; [
           black
@@ -38,6 +39,7 @@
         ]))
       ripgrep
       rustup
+      sops
       starship
       statix
       strace
