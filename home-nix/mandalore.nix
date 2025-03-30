@@ -12,15 +12,22 @@
       delta
       fd
       fzf
+      iotop
+      iproute2
       git
       go
       harper
       jq
+      k3sup
+      k9s
+      kubectl
+      kubectx
       neovim
       nix-direnv
       nixfmt-rfc-style
       nodejs_22
       node2nix
+      pre-commit
       (python312.withPackages (p:
         with p; [
           black
@@ -35,6 +42,8 @@
           numpy
         ]))
       ripgrep
+      rustup
+      sops
       starship
       statix
       strace

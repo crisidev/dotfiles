@@ -35,11 +35,13 @@ in {
       hwinfo
       hyfetch
       hyperfine
+      iotop
       imagemagick
       (nixGL pkgs.kitty)
       jdk
       jq
       just
+      k3sup
       k9s
       kubectl
       kubectx
