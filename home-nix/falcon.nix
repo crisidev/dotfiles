@@ -53,8 +53,9 @@ in {
       luarocks
       mergiraf
       meson
-      minikube
       mkdocs
+      mosh
+      minikube
       neofetch
       nerd-fonts.symbols-only
       ninja
@@ -65,6 +66,7 @@ in {
       nix-direnv
       nix-output-monitor
       poppler
+      redis
       ripgrep
       scaleway-cli
       silicon
