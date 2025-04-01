@@ -1,0 +1,10 @@
+[Unit]
+Description=Startup Things
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/home/bigo/.bin/startup
+
+[Install]
+WantedBy=multi-user.target

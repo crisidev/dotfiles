@@ -8,12 +8,12 @@ export ZSH_FZF_HISTORY_SEARCH_BIND="^f"
 export ZSH_FZF_HISTORY_SEARCH_FZF_ARGS="+s +m +x -e --height 40% --reverse"
 export DISABLE_AUTO_TITLE=true
 
-# configure antidote
+# configure antidote and compinit
+FPATH="$HOME/.zfunc:${FPATH}"
 autoload -Uz compinit
 compinit
 source /usr/share/zsh-antidote/antidote.zsh
 antidote load $HOME/.zsh_plugins
-FPATH="$HOME/.zfunc:${FPATH}"
 
 # ollama
 #export ZSH_COPILOT_KEY='^h'  # Key to trigger suggestions (default: Ctrl+Z)
