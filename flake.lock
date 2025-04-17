@@ -27,11 +27,11 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1743497727,
-        "narHash": "sha256-5Z07oaZIL1yLy3zqz/TBQrrbxRKaAlFP3h5NP57Lm6E=",
+        "lastModified": 1744366214,
+        "narHash": "sha256-UbgFWACA47JJ2wz7ApCQWFUc4onLE2TLeDRDCJyNpjM=",
         "owner": "crisidev",
         "repo": "bacon-ls",
-        "rev": "1257583ea71ce41457f250c32686e698fb7a4368",
+        "rev": "67d01f083395363bc1eb54e4442dcdebe061d176",
         "type": "github"
       },
       "original": {
@@ -116,11 +116,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1743527271,
-        "narHash": "sha256-EuanEW1qqXZ2h0zJnq7uz8BoHbsgHgUrqWkCZHwZ9FA=",
+        "lastModified": 1744833442,
+        "narHash": "sha256-BBMWW2m64Grcc5FlXz74+vdkUyCJOfUGnl+VcS/4x44=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "f4d9d1e2ad19d544a0a0cf3f8f371c6139c762e9",
+        "rev": "c6b75d69b6994ba68ec281bd36faebcc56097800",
         "type": "github"
       },
       "original": {
@@ -202,11 +202,11 @@
     },
     "nixpkgs-stable": {
       "locked": {
-        "lastModified": 1743367904,
-        "narHash": "sha256-sOos1jZGKmT6xxPvxGQyPTApOunXvScV4lNjBCXd/CI=",
+        "lastModified": 1744440957,
+        "narHash": "sha256-FHlSkNqFmPxPJvy+6fNLaNeWnF1lZSgqVCl/eWaJRc4=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "7ffe0edc685f14b8c635e3d6591b0bbb97365e6c",
+        "rev": "26d499fc9f1d567283d5d56fcf367edd815dba1d",
         "type": "github"
       },
       "original": {
@@ -264,11 +264,11 @@
     },
     "nixpkgs_5": {
       "locked": {
-        "lastModified": 1743472173,
-        "narHash": "sha256-xwNv3FYTC5pl4QVZ79gUxqCEvqKzcKdXycpH5UbYscw=",
+        "lastModified": 1744536153,
+        "narHash": "sha256-awS2zRgF4uTwrOKwwiJcByDzDOdo3Q1rPZbiHQg/N38=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "88e992074d86ad50249de12b7fb8dbaadf8dc0c5",
+        "rev": "18dd725c29603f582cf1900e0d25f9f1063dbf11",
         "type": "github"
       },
       "original": {
@@ -382,11 +382,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1743494320,
-        "narHash": "sha256-m/Epz2WOsCKBB/td0HI+MMLkhLQA9nrk8zlmdKG3SVk=",
+        "lastModified": 1744665355,
+        "narHash": "sha256-HGihZOh9Q7AePNYN9ZUjKTMlJHGKKgRamFr2niR9bA8=",
         "owner": "tokio-rs",
         "repo": "console",
-        "rev": "2bd1afda7987dea0505d231d9ce8bf109e5f7a96",
+        "rev": "63c70eeb1ecb5249d46629296d2712ce83290db2",
         "type": "github"
       },
       "original": {
