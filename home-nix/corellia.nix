@@ -5,6 +5,7 @@
       antidote
       awscli2
       bat
+      btop
       curl
       direnv
       eza
