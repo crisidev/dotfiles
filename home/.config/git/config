@@ -77,6 +77,8 @@
     hunk-header-style = omit
 [url "ssh://git@github.com/"]
 	insteadOf = https://github.com/
+[url "ssh://git@code.crisidev.org:2022/"]
+	insteadOf = https://code.crisidev.org/
 [merge "mergiraf"]
 	name = mergiraf
 	driver = mergiraf merge --git %O %A %B -s %S -x %X -y %Y -p %P

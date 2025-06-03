@@ -8,6 +8,7 @@ in {
       antidote
       awscli2
       bat
+      btop
       brightnessctl
       clang_19
       cmake
@@ -56,6 +57,7 @@ in {
       mkdocs
       mosh
       minikube
+      minio-client
       neofetch
       nerd-fonts.symbols-only
       ninja

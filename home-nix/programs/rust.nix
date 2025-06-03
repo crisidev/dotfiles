@@ -1,7 +1,7 @@
 { pkgs, ... }: {
   home.packages = with pkgs; [
     bacon
-    bacon-ls
+    # bacon-ls
     cargo-audit
     cargo-bundle
     cargo-llvm-cov
