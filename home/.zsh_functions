@@ -63,5 +63,5 @@ function tzupdate {
 }
 
 function btop {
-    sudo $(which btop)
+    sudo ~/.nix-profile/bin/btop "$@"
 }
