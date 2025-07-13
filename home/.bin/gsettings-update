@@ -30,17 +30,17 @@ done
 
 # Gnome general
 echo "[gsettings] setting up gnome interface"
-gsettings set org.gnome.shell.extensions.user-theme name "Tokyonight-Grey-Dark-Storm"
-gsettings set org.gnome.desktop.interface gtk-theme "Tokyonight-Grey-Dark-Storm"
+gsettings set org.gnome.shell.extensions.user-theme name "Orchis-Grey-Dark-Nord"
+gsettings set org.gnome.desktop.interface gtk-theme "Orchis-Grey-Dark-Nord"
 gsettings set org.gnome.desktop.interface icon-theme "Suru++"
 gsettings set org.gnome.desktop.interface clock-show-seconds true
-gsettings set org.gnome.desktop.background picture-uri "file://$HOME/.homesick/repos/dotfiles/wallpapers/unsplash.jpg"
-gsettings set org.gnome.desktop.background picture-uri-dark "file://$HOME/.homesick/repos/dotfiles/wallpapers/unsplash.jpg"
-gsettings set org.gnome.desktop.screensaver picture-uri "file://$HOME/.homesick/repos/dotfiles/wallpapers/unsplash.jpg"
+# gsettings set org.gnome.desktop.background picture-uri "file://$HOME/.homesick/repos/dotfiles/wallpapers/unsplash.jpg"
+# gsettings set org.gnome.desktop.background picture-uri-dark "file://$HOME/.homesick/repos/dotfiles/wallpapers/unsplash.jpg"
+# gsettings set org.gnome.desktop.screensaver picture-uri "file://$HOME/.homesick/repos/dotfiles/wallpapers/unsplash.jpg"
 gsettings set org.gnome.desktop.wm.preferences mouse-button-modifier "<Super>"
 gsettings set org.gnome.desktop.wm.preferences focus-mode "mouse"
 gsettings set org.gnome.desktop.wm.preferences auto-raise true
-gsettings set org.gnome.desktop.wm.preferences theme "Tokyonight-Grey-Dark-Storm"
+gsettings set org.gnome.desktop.wm.preferences theme "Orchis-Grey-Dark-Nord"
 gsettings set org.gnome.desktop.wm.preferences workspace-names "['terminal', 'firefox', 'outlook', 'teams', 'spotify']"
 gsettings set org.gnome.desktop.wm.preferences num-workspaces 8
 gsettings set org.gnome.mutter workspaces-only-on-primary true

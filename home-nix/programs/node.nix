@@ -6,7 +6,6 @@ in {
     nodejs_22
     node2nix
     typescript
-    extraNodePackages."@swsnr/gsebuild"
     extraNodePackages.neovim
   ];
 }

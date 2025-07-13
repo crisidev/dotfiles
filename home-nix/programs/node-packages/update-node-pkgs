@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-node2nix -i ./node-packages.json -o node-packages.nix && sed -i 's/nodejs_14/nodejs_23/g' default.nix
+node2nix -i ./node-packages.json -o node-packages.nix && sed -i 's/nodejs_14/nodejs_24/g' default.nix

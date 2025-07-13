@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -27,8 +27,8 @@
             inherit system;
             overlays = [
               nixgl.overlay
-              bacon.overlay.${system}
-              bacon-ls.overlay.${system}
+              # bacon.overlay.${system}
+              # bacon-ls.overlay.${system}
             ];
           };
           extraSpecialArgs = { inherit inputs; };
