@@ -3,10 +3,10 @@ unameOut="$(uname -s)"
 workDir=$(dirname "$0")
 cd "$workDir" || exit 1 # cd to directory with flake
 if [ "$1" = "pull" ]; then
-    nix flake update
+    nix flake update |& nom
 else
     case "${unameOut}" in
-        Linux*) nix run home-manager -- --impure --flake ".#$(hostname -s)" "$@" ;;
+        Linux*) nix run -L home-manager -- --impure --flake ".#$(hostname -s)" "$@" |& nom ;;
         *) echo "Unknown system $unameOut" && exit 1 ;;
     esac
 fi
