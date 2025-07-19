@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -x
+
+if [ "$1" = "corellia" ]; then
+    ADDRESS=10.0.1.252
+elif [ "$1" = "mandalore" ]; then
+    ADDRESS=10.0.1.253
+else
+    echo "usage: $0 corellia|mandalore"
+    exit 1
+fi
+
+while ! ping -c 1 -W 1 "$ADDRESS" > /dev/null 2>&1; do
+  sleep 1
+done
+ssh -i ~/.ssh/unlock -o "HostKeyAlgorithms ssh-rsa" "root@$ADDRESS" -t cryptroot-unlock
+sleep 10
+while ! ping -c 1 -W 1 "$ADDRESS" > /dev/null 2>&1; do
+  sleep 1
+done
+ssh "$ADDRESS"

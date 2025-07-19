@@ -51,10 +51,6 @@ unsetopt HIST_BEEP               # Beep when accessing nonexistent history.
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
 
-# source files
-[ -f $HOME/.zsh_aliases ] && source $HOME/.zsh_aliases
-[ -f $HOME/.zsh_functions ] && source $HOME/.zsh_functions
-[ -f $HOME/.zsh_secrets ] && source $HOME/.zsh_secrets
 
 # # terminal
 export GREP_COLOR='mt=1;31'
@@ -95,6 +91,11 @@ export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS \
   --color=separator:#ff9e64 \
   --color=spinner:#ff007c \
 "
+
+# source files
+[ -f $HOME/.zsh_aliases ] && source $HOME/.zsh_aliases
+[ -f $HOME/.zsh_functions ] && source $HOME/.zsh_functions
+[ -f $HOME/.zsh_secrets ] && source $HOME/.zsh_secrets
 
 # direnv
 if which direnv > /dev/null; then
