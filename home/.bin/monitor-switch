@@ -22,9 +22,11 @@ while true; do
     if echo "$monitor_info" | grep -q "BenQ PD3200U"; then
         current="home"
         scale="1.00"
+        scroll="100"
     else
         current="builtin"
         scale="1.3"
+        scroll="40"
     fi
 
     # If "now" override is active or the configuration changed, update the scaling.
@@ -33,6 +35,8 @@ while true; do
         gsettings set org.gnome.desktop.interface text-scaling-factor "$scale"
         sleep 1
         focus-switch rebalance
+        sed -i "s/^user_pref(\"mousewheel.default.delta_multiplier_x\".*/user_pref(\"mousewheel.default.delta_multiplier_x\", $scroll);/" ~/.mozilla/firefox-esr/0bx7cnjh.default-esr128/prefs.js
+        sed -i "s/^user_pref(\"mousewheel.default.delta_multiplier_y\".*/user_pref(\"mousewheel.default.delta_multiplier_y\", $scroll);/" ~/.mozilla/firefox-esr/0bx7cnjh.default-esr128/prefs.js
         # Update previous state after the change.
         prev="$current"
         if [ "$override" -eq 1 ]; then
