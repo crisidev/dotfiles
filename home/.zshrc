@@ -63,6 +63,11 @@ export VISUAL="$(which nvim)"
 export MANPAGER="sh -c 'sed -u -e \"s/\\x1B\[[0-9;]*m//g; s/.\\x08//g\" | bat -p -lman'"
 export ENABLE_WAKATIME=false
 
+# Lazyvim
+export LAZYVIM_RUST_DIAGNOSTICS=bacon-ls
+export LAZYVIM_AI=none
+export LAZYVIM_THEME=tokyonight
+
 # Go
 export GOPATH="$HOME/.go"
 
