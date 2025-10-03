@@ -1,6 +1,13 @@
-{ lib, pkgs, config, ... }:
-let nixGL = import ./nixGL.nix { inherit pkgs config; };
-in {
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
+let
+  nixGL = import ./nixGL.nix { inherit pkgs config; };
+in
+{
   config = {
     fonts.fontconfig.enable = true;
     home.packages = with pkgs; [
@@ -26,7 +33,7 @@ in {
       gh
       (nixGL pkgs.ghostty)
       git
-      gitui
+      # gitui
       glab
       glibc
       glow
@@ -67,27 +74,30 @@ in {
       nixfmt-rfc-style
       nix-direnv
       nix-output-monitor
+      openssl
+      pkg-config
       poppler
       redis
       ripgrep
       scaleway-cli
       silicon
       sops
-      (spotify-player.override {
-        withAudioBackend = "pulseaudio";
-        withStreaming = true;
-        withDaemon = true;
-        withMediaControl = true;
-        withImage = true;
-        withNotify = true;
-        withSixel = true;
-        withFuzzy = true;
-      })
+      # (spotify-player.override {
+      #   withAudioBackend = "pulseaudio";
+      #   withStreaming = true;
+      #   withDaemon = true;
+      #   withMediaControl = true;
+      #   withImage = true;
+      #   withNotify = true;
+      #   withSixel = true;
+      #   withFuzzy = true;
+      # })
       starship
       statix
       strace
       tokei
       topgrade
+      trunk
       tzupdate
       valgrind
       wev
@@ -98,6 +108,7 @@ in {
       zellij
       zenith
       zoxide
+      zstd
     ];
 
     targets.genericLinux.enable = true;
@@ -106,7 +117,7 @@ in {
     # Uncomment if needed:
     # nixGLPrefixAuto = "${pkgs.nixgl.auto.nixGLDefault}/bin/nixGL";
     # nixGLPrefixNvidia = "${pkgs.nixgl.auto.nixGLNvidia}/bin/nixGLNvidia-560.35.03";
-    nixGLPrefixNvidia = "";
+    # nixGLPrefixNvidia = "";
 
     nixpkgs = {
       config = {
@@ -119,13 +130,16 @@ in {
       stateVersion = "24.11";
       username = "bigo";
       homeDirectory = "/home/bigo/";
-      sessionVariables = { NIX_SHELL_PRESERVE_PROMPT = 1; };
+      sessionVariables = {
+        NIX_SHELL_PRESERVE_PROMPT = 1;
+      };
       activation.updateNeovim = lib.mkAfter ''
         $HOME/.cargo/bin/bob update
       '';
       activation.updateGsettings = lib.mkAfter ''
         $HOME/.bin/gsettings-update
       '';
+      extraOutputsToInstall = [ "dev" ];
     };
 
     programs.direnv = {

@@ -14,10 +14,9 @@
     };
     tokio-console.url = "github:tokio-rs/console";
     bacon-ls.url = "github:crisidev/bacon-ls";
-    bacon.url = "github:Canop/bacon";
   };
 
-  outputs = { bacon, bacon-ls, home-manager, nixgl, nixpkgs, ... }@inputs:
+  outputs = { bacon-ls, home-manager, nixgl, nixpkgs, ... }@inputs:
     let system = "x86_64-linux";
     in {
       # Available through `home-manager --flake .#user@host switch`
@@ -27,7 +26,6 @@
             inherit system;
             overlays = [
               nixgl.overlay
-              # bacon.overlay.${system}
               # bacon-ls.overlay.${system}
             ];
           };
