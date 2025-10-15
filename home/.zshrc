@@ -51,8 +51,10 @@ unsetopt HIST_BEEP               # Beep when accessing nonexistent history.
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
 
+# Nix
+export NIX_PATH="nixpkgs=$HOME/.nix-defexpr/channels/nixpkgs"
 
-# # terminal
+# terminal
 export GREP_COLOR='mt=1;31'
 export EDITOR="$(which nvim)"
 export VISUAL="$(which nvim)"
