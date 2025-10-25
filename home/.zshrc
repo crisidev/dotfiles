@@ -119,6 +119,14 @@ if which batpipe > /dev/null; then
     _evalcache batpipe
 fi
 
+if which kubectl > /dev/null; then
+    _evalcache kubectl completion zsh
+fi
+
+if which helm > /dev/null; then
+    _evalcache helm completion zsh
+fi
+
 # aws cli completer
 complete -C "aws_completer" aws
 
