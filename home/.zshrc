@@ -1,7 +1,7 @@
 # zmodload zsh/zprof
 
 # paths
-export PATH="$HOME/.bin:$PATH:$HOME/.local/share/nvim/mason/bin:$HOME/.local/bin:$HOME/.go/bin:$HOME/.cargo/bin:/usr/local/bin:/usr/sbin"
+export PATH="$HOME/.bin:$PATH:$HOME/.local/share/nvim/mason/bin:$HOME/.nix-profile/bin:$HOME/.local/bin:$HOME/.go/bin:$HOME/.cargo/bin:/usr/local/bin:/usr/sbin"
 
 # configure fzf history search
 export ZSH_FZF_HISTORY_SEARCH_BIND="^f"
@@ -14,13 +14,6 @@ autoload -Uz compinit
 compinit
 source /usr/share/zsh-antidote/antidote.zsh
 antidote load $HOME/.zsh_plugins
-
-# ollama
-#export ZSH_COPILOT_KEY='^h'  # Key to trigger suggestions (default: Ctrl+Z)
-#export ZSH_COPILOT_OLLAMA_MODEL='llama3.1:8b'  # Ollama model to use
-#export ZSH_COPILOT_SEND_CONTEXT=true  # Send shell context to the model
-#export ZSH_COPILOT_DEBUG=false  # Enable debug mode
-#source ~/.zsh-copilot/zsh-copilot.plugin.zsh
 
 # options
 setopt NO_LIST_BEEP

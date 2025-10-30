@@ -47,6 +47,12 @@
           extraSpecialArgs = { inherit inputs; };
           modules = [ ./home-nix/razor.nix ];
         };
+        scarif = home-manager.lib.homeManagerConfiguration {
+          pkgs = import nixpkgs rec { inherit system; };
+          extraSpecialArgs = { inherit inputs; };
+          modules = [ ./home-nix/scarif.nix ];
+        };
+
       };
       formatter.${system} = nixpkgs.legacyPackages.${system}.nixfmt;
     };
