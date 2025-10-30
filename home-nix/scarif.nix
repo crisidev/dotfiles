@@ -5,17 +5,37 @@
       antidote
       awscli2
       bat
+      btop
       curl
       direnv
       eza
+      deadnix
       delta
+      dig
       fd
       fzf
+      iotop
+      iproute2
       git
+      go
+      gotify-cli
+      harper
+      htop
       jq
+      k3sup
+      k9s
+      kubectl
+      kubectx
+      kubernetes-helm
+      mosh
       neovim
       nix-direnv
       nixfmt-rfc-style
+      nodejs_22
+      node2nix
+      pgloader
+      powertop
+      pre-commit
       (python312.withPackages (p:
         with p; [
           black
@@ -30,12 +50,20 @@
           numpy
         ]))
       ripgrep
+      rustup
+      sops
       starship
+      statix
       strace
+      tmux
+      tokei
+      typescript
       uv
+      wget
       yazi
       yq-go
       zoxide
+      yarn
     ];
 
     targets.genericLinux.enable = true;
