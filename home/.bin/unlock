@@ -5,15 +5,17 @@ if [ "$1" = "corellia" ]; then
     ADDRESS=10.0.1.252
 elif [ "$1" = "mandalore" ]; then
     ADDRESS=10.0.1.253
+elif [ "$1" = "tatooine" ]; then
+    ADDRESS=10.0.1.251
 else
-    echo "usage: $0 corellia|mandalore"
+    echo "usage: $0 corellia|mandalore|tatooine"
     exit 1
 fi
 
 while ! ping -c 1 -W 1 "$ADDRESS" > /dev/null 2>&1; do
   sleep 1
 done
-ssh -i ~/.ssh/unlock -o "HostKeyAlgorithms ssh-rsa" "root@$ADDRESS" -t cryptroot-unlock
+ssh -i ~/.ssh/unlock "root@$ADDRESS" -t cryptroot-unlock
 sleep 10
 while ! ping -c 1 -W 1 "$ADDRESS" > /dev/null 2>&1; do
   sleep 1
