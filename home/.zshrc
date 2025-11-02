@@ -12,7 +12,7 @@ export DISABLE_AUTO_TITLE=true
 FPATH="$HOME/.zfunc:${FPATH}"
 autoload -Uz compinit
 compinit
-source /usr/share/zsh-antidote/antidote.zsh
+source "$(nix path-info nixpkgs#antidote 2> /dev/null)/share/antidote/antidote.zsh"
 antidote load $HOME/.zsh_plugins
 
 # options

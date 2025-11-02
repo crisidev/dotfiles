@@ -62,6 +62,7 @@
       wget
       yazi
       yq-go
+      zsh
       zoxide
       yarn
     ];

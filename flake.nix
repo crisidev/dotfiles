@@ -32,10 +32,15 @@
           extraSpecialArgs = { inherit inputs; };
           modules = [ ./home-nix/falcon.nix ];
         };
+	tatooine = home-manager.lib.homeManagerConfiguration {
+          pkgs = import nixpkgs rec { inherit system; };
+          extraSpecialArgs = { inherit inputs; };
+          modules = [ ./home-nix/corellia.nix ];
+        };
         mandalore = home-manager.lib.homeManagerConfiguration {
           pkgs = import nixpkgs rec { inherit system; };
           extraSpecialArgs = { inherit inputs; };
-          modules = [ ./home-nix/mandalore.nix ];
+          modules = [ ./home-nix/corellia.nix ];
         };
         corellia = home-manager.lib.homeManagerConfiguration {
           pkgs = import nixpkgs rec { inherit system; };
