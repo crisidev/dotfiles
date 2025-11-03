@@ -49,6 +49,7 @@
           virtualenv
           numpy
         ]))
+      rclone
       ripgrep
       rustup
       sops

@@ -92,6 +92,8 @@ export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS \
 [ -f $HOME/.zsh_functions ] && source $HOME/.zsh_functions
 [ -f $HOME/.zsh_secrets ] && source $HOME/.zsh_secrets
 
+export KUBECONFIG=$HOME/.kube/config
+
 # direnv
 if which direnv > /dev/null; then
     _evalcache direnv hook zsh
