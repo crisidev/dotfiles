@@ -13,13 +13,13 @@ let
         sha512 = "Ir+AOibqzrIsL6ajt3Rz3LskB7OiMVHqltZmspbW/TJuTVuyOMirVqAkjfY6JISiLHgyNqicAC8AyHHGzNd/dA==";
       };
     };
-    "@dabh/diagnostics-2.0.3" = {
+    "@dabh/diagnostics-2.0.8" = {
       name = "_at_dabh_slash_diagnostics";
       packageName = "@dabh/diagnostics";
-      version = "2.0.3";
+      version = "2.0.8";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@dabh/diagnostics/-/diagnostics-2.0.3.tgz";
-        sha512 = "hrlQOIi7hAfzsMqlGSFyVucrx38O+j6wiGOf//H2ecvIEqYN4ADBSS2iLMh5UFyDunCNniUIPk/q3riFv45xRA==";
+        url = "https://registry.npmjs.org/@dabh/diagnostics/-/diagnostics-2.0.8.tgz";
+        sha512 = "R4MSXTVnuMzGD7bzHdW2ZhhdPC/igELENcq5IjEverBvq5hn1SXCWcsi6eSsdWP0/Ur+SItRRjAktmdoX/8R/Q==";
       };
     };
     "@msgpack/msgpack-2.8.0" = {
@@ -29,6 +29,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/@msgpack/msgpack/-/msgpack-2.8.0.tgz";
         sha512 = "h9u4u/jiIRKbq25PM+zymTyW6bhTzELvOoUd+AvYriWOAKpLGnIamaET3pnHYoI5iYphAHBI4ayx0MehR+VVPQ==";
+      };
+    };
+    "@so-ric/colorspace-1.1.6" = {
+      name = "_at_so-ric_slash_colorspace";
+      packageName = "@so-ric/colorspace";
+      version = "1.1.6";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@so-ric/colorspace/-/colorspace-1.1.6.tgz";
+        sha512 = "/KiKkpHNOBgkFJwu9sh48LkHSMYGyuTcSFK/qMBdnOAlrRJzRSXAOFB5qwzaVQuDl8wAvHVMkaASQDReTahxuw==";
       };
     };
     "@types/triple-beam-1.3.5" = {
@@ -49,58 +58,40 @@ let
         sha512 = "htCUDlxyyCLMgaM3xXg0C0LW2xqfuQ6p05pCEIsXuyQ+a1koYKTuBMzRNwmybfLgvJDMd0r1LTn4+E0Ti6C2AA==";
       };
     };
-    "color-3.2.1" = {
+    "color-5.0.2" = {
       name = "color";
       packageName = "color";
-      version = "3.2.1";
+      version = "5.0.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/color/-/color-3.2.1.tgz";
-        sha512 = "aBl7dZI9ENN6fUGC7mWpMTPNHmWUSNan9tuWN6ahh5ZLNk9baLJOnSMlrQkHcrfFgz2/RigjUVAjdx36VcemKA==";
+        url = "https://registry.npmjs.org/color/-/color-5.0.2.tgz";
+        sha512 = "e2hz5BzbUPcYlIRHo8ieAhYgoajrJr+hWoceg6E345TPsATMUKqDgzt8fSXZJJbxfpiPzkWyphz8yn8At7q3fA==";
       };
     };
-    "color-convert-1.9.3" = {
+    "color-convert-3.1.2" = {
       name = "color-convert";
       packageName = "color-convert";
-      version = "1.9.3";
+      version = "3.1.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/color-convert/-/color-convert-1.9.3.tgz";
-        sha512 = "QfAUtd+vFdAtFQcC8CCyYt1fYWxSqAiK2cSD6zDB8N3cpsEBAvRxp9zOGg6G/SHHJYAT88/az/IuDGALsNVbGg==";
+        url = "https://registry.npmjs.org/color-convert/-/color-convert-3.1.2.tgz";
+        sha512 = "UNqkvCDXstVck3kdowtOTWROIJQwafjOfXSmddoDrXo4cewMKmusCeF22Q24zvjR8nwWib/3S/dfyzPItPEiJg==";
       };
     };
-    "color-name-1.1.3" = {
+    "color-name-2.0.2" = {
       name = "color-name";
       packageName = "color-name";
-      version = "1.1.3";
+      version = "2.0.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/color-name/-/color-name-1.1.3.tgz";
-        sha512 = "72fSenhMw2HZMTVHeCA9KCmpEIbzWiQsjN+BHcBbS9vr1mtt+vJjPdksIBNUmKAW8TFUDPJK5SUU3QhE9NEXDw==";
+        url = "https://registry.npmjs.org/color-name/-/color-name-2.0.2.tgz";
+        sha512 = "9vEt7gE16EW7Eu7pvZnR0abW9z6ufzhXxGXZEVU9IqPdlsUiMwJeJfRtq0zePUmnbHGT9zajca7mX8zgoayo4A==";
       };
     };
-    "color-name-1.1.4" = {
-      name = "color-name";
-      packageName = "color-name";
-      version = "1.1.4";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/color-name/-/color-name-1.1.4.tgz";
-        sha512 = "dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==";
-      };
-    };
-    "color-string-1.9.1" = {
+    "color-string-2.1.2" = {
       name = "color-string";
       packageName = "color-string";
-      version = "1.9.1";
+      version = "2.1.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/color-string/-/color-string-1.9.1.tgz";
-        sha512 = "shrVawQFojnZv6xM40anx4CkoDP+fZsw/ZerEMsW/pyzsRbElpsL/DBVW7q3ExxwusdNXI3lXpuhEZkzs8p5Eg==";
-      };
-    };
-    "colorspace-1.1.4" = {
-      name = "colorspace";
-      packageName = "colorspace";
-      version = "1.1.4";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/colorspace/-/colorspace-1.1.4.tgz";
-        sha512 = "BgvKJiuVu1igBUF2kEjRCZXol6wiiGbY5ipL/oVPwm0BL9sIpMIzM8IK7vwuxIIzOXMV3Ey5w+vxhm0rR/TN8w==";
+        url = "https://registry.npmjs.org/color-string/-/color-string-2.1.2.tgz";
+        sha512 = "RxmjYxbWemV9gKu4zPgiZagUxbH3RQpEIO77XoSSX0ivgABDZ+h8Zuash/EMFLTI4N9QgFPOJ6JQpPZKFxa+dA==";
       };
     };
     "enabled-2.0.0" = {
@@ -137,15 +128,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/inherits/-/inherits-2.0.4.tgz";
         sha512 = "k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==";
-      };
-    };
-    "is-arrayish-0.3.2" = {
-      name = "is-arrayish";
-      packageName = "is-arrayish";
-      version = "0.3.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/is-arrayish/-/is-arrayish-0.3.2.tgz";
-        sha512 = "eVRqCvVlZbuw3GrM63ovNSNAeA1K16kaR/LRY/92w0zxQ5/1YzwblUX652i4Xs9RwAGjW9d9y6X88t8OaAJfWQ==";
       };
     };
     "is-stream-2.0.1" = {
@@ -220,15 +202,6 @@ let
         sha512 = "b3rppTKm9T+PsVCBEOUR46GWI7fdOs00VKZ1+9c1EWDaDMvjQc6tUwuFyIprgGgTcWoVHSKrU8H31ZHA2e0RHA==";
       };
     };
-    "simple-swizzle-0.2.2" = {
-      name = "simple-swizzle";
-      packageName = "simple-swizzle";
-      version = "0.2.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/simple-swizzle/-/simple-swizzle-0.2.2.tgz";
-        sha512 = "JA//kQgZtbuY83m+xT+tXJkmJncGMTFT+C+g2h2R9uxkYIrE2yy9sgmcLhCnw57/WSD+Eh3J97FPEDFnbXnDUg==";
-      };
-    };
     "stack-trace-0.0.10" = {
       name = "stack-trace";
       packageName = "stack-trace";
@@ -274,13 +247,13 @@ let
         sha512 = "EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==";
       };
     };
-    "winston-3.14.1" = {
+    "winston-3.15.0" = {
       name = "winston";
       packageName = "winston";
-      version = "3.14.1";
+      version = "3.15.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/winston/-/winston-3.14.1.tgz";
-        sha512 = "CJi4Il/msz8HkdDfXOMu+r5Au/oyEjFiOZzbX2d23hRLY0narGjqfE5lFlrT5hfYJhPtM8b85/GNFsxIML/RVA==";
+        url = "https://registry.npmjs.org/winston/-/winston-3.15.0.tgz";
+        sha512 = "RhruH2Cj0bV0WgNL+lOfoUBI4DVfdUNjVnJGVovWZmrcKtrFTTRzgXYK2O9cymSGjrERCtaAeHwMNnUWXlwZow==";
       };
     };
     "winston-transport-4.9.0" = {
@@ -298,31 +271,26 @@ in
   neovim = nodeEnv.buildNodePackage {
     name = "neovim";
     packageName = "neovim";
-    version = "5.3.0";
+    version = "5.4.0";
     src = fetchurl {
-      url = "https://registry.npmjs.org/neovim/-/neovim-5.3.0.tgz";
-      sha512 = "32Cypq6qh7vzJ5wuVPPzIsBdOlvwo0do8/3jxLu+RGdneFSJjh5CYi0ScHHAw/2HLtIjRKhRjJMXeze21M+uyw==";
+      url = "https://registry.npmjs.org/neovim/-/neovim-5.4.0.tgz";
+      sha512 = "95YXs6d5p8M0k8xrmJHQ9aVLv9ebpM3ZQnmTaSpbJtPSdxFaKq7szCP1Ou+S8K++rEsh7BvTPwqdtdlwQfT0pw==";
     };
     dependencies = [
       sources."@colors/colors-1.6.0"
-      sources."@dabh/diagnostics-2.0.3"
+      sources."@dabh/diagnostics-2.0.8"
       sources."@msgpack/msgpack-2.8.0"
+      sources."@so-ric/colorspace-1.1.6"
       sources."@types/triple-beam-1.3.5"
       sources."async-3.2.6"
-      sources."color-3.2.1"
-      (sources."color-convert-1.9.3" // {
-        dependencies = [
-          sources."color-name-1.1.3"
-        ];
-      })
-      sources."color-name-1.1.4"
-      sources."color-string-1.9.1"
-      sources."colorspace-1.1.4"
+      sources."color-5.0.2"
+      sources."color-convert-3.1.2"
+      sources."color-name-2.0.2"
+      sources."color-string-2.1.2"
       sources."enabled-2.0.0"
       sources."fecha-4.2.3"
       sources."fn.name-1.1.0"
       sources."inherits-2.0.4"
-      sources."is-arrayish-0.3.2"
       sources."is-stream-2.0.1"
       sources."kuler-2.0.0"
       sources."logform-2.7.0"
@@ -331,13 +299,12 @@ in
       sources."readable-stream-3.6.2"
       sources."safe-buffer-5.2.1"
       sources."safe-stable-stringify-2.5.0"
-      sources."simple-swizzle-0.2.2"
       sources."stack-trace-0.0.10"
       sources."string_decoder-1.3.0"
       sources."text-hex-1.0.0"
       sources."triple-beam-1.4.1"
       sources."util-deprecate-1.0.2"
-      sources."winston-3.14.1"
+      sources."winston-3.15.0"
       sources."winston-transport-4.9.0"
     ];
     buildInputs = globalBuildInputs;
@@ -345,6 +312,42 @@ in
       description = "Nvim msgpack API client and remote plugin provider";
       homepage = "https://github.com/neovim/node-client";
       license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
+  "@openai/codex" = nodeEnv.buildNodePackage {
+    name = "_at_openai_slash_codex";
+    packageName = "@openai/codex";
+    version = "0.55.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/@openai/codex/-/codex-0.55.0.tgz";
+      sha512 = "6YPwBebKIpwR0WjyO66yThSaMyi9yRizFGIfrQ6eSVUxrI3jFtm0Zhzb0RgSRNgSUFHMOJs2urkRctiLdSXADQ==";
+    };
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "<p align=\"center\"><code>npm i -g @openai/codex</code><br />or <code>brew install --cask codex</code></p>";
+      homepage = "https://github.com/openai/codex#readme";
+      license = "Apache-2.0";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
+  "@anthropic-ai/claude-code" = nodeEnv.buildNodePackage {
+    name = "_at_anthropic-ai_slash_claude-code";
+    packageName = "@anthropic-ai/claude-code";
+    version = "2.0.33";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-2.0.33.tgz";
+      sha512 = "QRVdHT28oqcfQG1eH2VjbGBd0/GeC0WqVohux3s6KkFEzSOpbCqlswFELg4/oL/h/FBGVyJm2N8zzdRNM/++Fg==";
+    };
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Use Claude, Anthropic's AI assistant, right from your terminal. Claude can understand your codebase, edit files, run terminal commands, and handle entire workflows for you.";
+      homepage = "https://github.com/anthropics/claude-code";
+      license = "SEE LICENSE IN README.md";
     };
     production = true;
     bypassCache = true;

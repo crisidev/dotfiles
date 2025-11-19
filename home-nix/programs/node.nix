@@ -7,5 +7,7 @@ in {
     node2nix
     typescript
     extraNodePackages.neovim
+    extraNodePackages."@openai/codex"
+    extraNodePackages."@anthropic-ai/claude-code"
   ];
 }

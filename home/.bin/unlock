@@ -20,4 +20,4 @@ sleep 10
 while ! ping -c 1 -W 1 "$ADDRESS" > /dev/null 2>&1; do
   sleep 1
 done
-ssh "$ADDRESS"
+ssh "$1"

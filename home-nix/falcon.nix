@@ -51,6 +51,7 @@ in
       just
       k3sup
       k9s
+      kdash
       kubectl
       kubectx
       kubernetes-helm
@@ -79,6 +80,8 @@ in
       poppler
       redis
       ripgrep
+      ruby
+      rubyPackages.rails
       scaleway-cli
       silicon
       sops
@@ -94,6 +97,7 @@ in
       # })
       starship
       statix
+      stern
       strace
       tokei
       topgrade

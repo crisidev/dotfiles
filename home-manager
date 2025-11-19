@@ -4,6 +4,9 @@ workDir=$(dirname "$0")
 cd "$workDir" || exit 1 # cd to directory with flake
 if [ "$1" = "pull" ]; then
     nix flake update
+    if [ "$2" = "--all" ]; then
+        cd ./home-nix/programs/node-packages && ./update-node-pkgs
+    fi
 else
     case "${unameOut}" in
 	Linux*) 
