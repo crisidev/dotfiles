@@ -22,22 +22,21 @@ while true; do
     if echo "$monitor_info" | grep -q "BenQ PD3200U"; then
         current="home"
         scale="1.00"
-        scroll="100"
+        kitty_font="11"
     else
         current="builtin"
         scale="1.3"
-        scroll="40"
+        kitty_font="13"
     fi
 
     # If "now" override is active or the configuration changed, update the scaling.
     if [ "$override" -eq 1 ] || [ "$current" != "$prev" ]; then
         echo "Detected ${current} monitor, setting text scaling to ${scale}"
         gsettings set org.gnome.desktop.interface text-scaling-factor "$scale"
-        sleep 1
-        focus-switch rebalance
-        sed -i "s/^user_pref(\"mousewheel.default.delta_multiplier_x\".*/user_pref(\"mousewheel.default.delta_multiplier_x\", $scroll);/" ~/.mozilla/firefox-esr/0bx7cnjh.default-esr128/prefs.js
-        sed -i "s/^user_pref(\"mousewheel.default.delta_multiplier_y\".*/user_pref(\"mousewheel.default.delta_multiplier_y\", $scroll);/" ~/.mozilla/firefox-esr/0bx7cnjh.default-esr128/prefs.js
+        sed -i "s/^font_size .*/font_size ${kitty_font}/" ~/.config/kitty/font_size.conf
+        kill -SIGUSR1 $(pidof kitty)
         # Update previous state after the change.
+        focus-switch rebalance
         prev="$current"
         if [ "$override" -eq 1 ]; then
             exit 0

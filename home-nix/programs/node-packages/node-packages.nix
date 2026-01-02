@@ -58,40 +58,40 @@ let
         sha512 = "htCUDlxyyCLMgaM3xXg0C0LW2xqfuQ6p05pCEIsXuyQ+a1koYKTuBMzRNwmybfLgvJDMd0r1LTn4+E0Ti6C2AA==";
       };
     };
-    "color-5.0.2" = {
+    "color-5.0.3" = {
       name = "color";
       packageName = "color";
-      version = "5.0.2";
+      version = "5.0.3";
       src = fetchurl {
-        url = "https://registry.npmjs.org/color/-/color-5.0.2.tgz";
-        sha512 = "e2hz5BzbUPcYlIRHo8ieAhYgoajrJr+hWoceg6E345TPsATMUKqDgzt8fSXZJJbxfpiPzkWyphz8yn8At7q3fA==";
+        url = "https://registry.npmjs.org/color/-/color-5.0.3.tgz";
+        sha512 = "ezmVcLR3xAVp8kYOm4GS45ZLLgIE6SPAFoduLr6hTDajwb3KZ2F46gulK3XpcwRFb5KKGCSezCBAY4Dw4HsyXA==";
       };
     };
-    "color-convert-3.1.2" = {
+    "color-convert-3.1.3" = {
       name = "color-convert";
       packageName = "color-convert";
-      version = "3.1.2";
+      version = "3.1.3";
       src = fetchurl {
-        url = "https://registry.npmjs.org/color-convert/-/color-convert-3.1.2.tgz";
-        sha512 = "UNqkvCDXstVck3kdowtOTWROIJQwafjOfXSmddoDrXo4cewMKmusCeF22Q24zvjR8nwWib/3S/dfyzPItPEiJg==";
+        url = "https://registry.npmjs.org/color-convert/-/color-convert-3.1.3.tgz";
+        sha512 = "fasDH2ont2GqF5HpyO4w0+BcewlhHEZOFn9c1ckZdHpJ56Qb7MHhH/IcJZbBGgvdtwdwNbLvxiBEdg336iA9Sg==";
       };
     };
-    "color-name-2.0.2" = {
+    "color-name-2.1.0" = {
       name = "color-name";
       packageName = "color-name";
-      version = "2.0.2";
+      version = "2.1.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/color-name/-/color-name-2.0.2.tgz";
-        sha512 = "9vEt7gE16EW7Eu7pvZnR0abW9z6ufzhXxGXZEVU9IqPdlsUiMwJeJfRtq0zePUmnbHGT9zajca7mX8zgoayo4A==";
+        url = "https://registry.npmjs.org/color-name/-/color-name-2.1.0.tgz";
+        sha512 = "1bPaDNFm0axzE4MEAzKPuqKWeRaT43U/hyxKPBdqTfmPF+d6n7FSoTFxLVULUJOmiLp01KjhIPPH+HrXZJN4Rg==";
       };
     };
-    "color-string-2.1.2" = {
+    "color-string-2.1.4" = {
       name = "color-string";
       packageName = "color-string";
-      version = "2.1.2";
+      version = "2.1.4";
       src = fetchurl {
-        url = "https://registry.npmjs.org/color-string/-/color-string-2.1.2.tgz";
-        sha512 = "RxmjYxbWemV9gKu4zPgiZagUxbH3RQpEIO77XoSSX0ivgABDZ+h8Zuash/EMFLTI4N9QgFPOJ6JQpPZKFxa+dA==";
+        url = "https://registry.npmjs.org/color-string/-/color-string-2.1.4.tgz";
+        sha512 = "Bb6Cq8oq0IjDOe8wJmi4JeNn763Xs9cfrBcaylK1tPypWzyoy2G3l90v9k64kjphl/ZJjPIShFztenRomi8WTg==";
       };
     };
     "enabled-2.0.0" = {
@@ -283,10 +283,10 @@ in
       sources."@so-ric/colorspace-1.1.6"
       sources."@types/triple-beam-1.3.5"
       sources."async-3.2.6"
-      sources."color-5.0.2"
-      sources."color-convert-3.1.2"
-      sources."color-name-2.0.2"
-      sources."color-string-2.1.2"
+      sources."color-5.0.3"
+      sources."color-convert-3.1.3"
+      sources."color-name-2.1.0"
+      sources."color-string-2.1.4"
       sources."enabled-2.0.0"
       sources."fecha-4.2.3"
       sources."fn.name-1.1.0"
@@ -320,10 +320,10 @@ in
   "@openai/codex" = nodeEnv.buildNodePackage {
     name = "_at_openai_slash_codex";
     packageName = "@openai/codex";
-    version = "0.55.0";
+    version = "0.77.0";
     src = fetchurl {
-      url = "https://registry.npmjs.org/@openai/codex/-/codex-0.55.0.tgz";
-      sha512 = "6YPwBebKIpwR0WjyO66yThSaMyi9yRizFGIfrQ6eSVUxrI3jFtm0Zhzb0RgSRNgSUFHMOJs2urkRctiLdSXADQ==";
+      url = "https://registry.npmjs.org/@openai/codex/-/codex-0.77.0.tgz";
+      sha512 = "1Z3tuJsePfQvBELmTT3Dpzm4GheQn0t4H8RtdZnYVBdj1vA2Hi6eGCrOHXxPSfXRKDrSZ4VvALcQmZpFmYsaHA==";
     };
     buildInputs = globalBuildInputs;
     meta = {
@@ -338,10 +338,10 @@ in
   "@anthropic-ai/claude-code" = nodeEnv.buildNodePackage {
     name = "_at_anthropic-ai_slash_claude-code";
     packageName = "@anthropic-ai/claude-code";
-    version = "2.0.33";
+    version = "2.0.76";
     src = fetchurl {
-      url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-2.0.33.tgz";
-      sha512 = "QRVdHT28oqcfQG1eH2VjbGBd0/GeC0WqVohux3s6KkFEzSOpbCqlswFELg4/oL/h/FBGVyJm2N8zzdRNM/++Fg==";
+      url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-2.0.76.tgz";
+      sha512 = "BVwPez7Pst729gxHZNb7iUdjrn4UAzO49zC+Bxlyf0fMe3SsutxEhKTT16VMs2qInE9xhEBCxajCCa888mFPBg==";
     };
     buildInputs = globalBuildInputs;
     meta = {

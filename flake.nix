@@ -13,26 +13,24 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     tokio-console.url = "github:tokio-rs/console";
-    bacon-ls.url = "github:crisidev/bacon-ls";
   };
 
-  outputs = { bacon-ls, home-manager, nixgl, nixpkgs, ... }@inputs:
+  outputs = { home-manager, nixgl, nixpkgs, ... }@inputs:
     let system = "x86_64-linux";
     in {
       # Available through `home-manager --flake .#user@host switch`
       homeConfigurations = {
         falcon = home-manager.lib.homeManagerConfiguration {
-          pkgs = import nixpkgs rec {
+          pkgs = import nixpkgs {
             inherit system;
             overlays = [
               nixgl.overlay
-              # bacon-ls.overlay.${system}
             ];
           };
           extraSpecialArgs = { inherit inputs; };
           modules = [ ./home-nix/falcon.nix ];
         };
-	tatooine = home-manager.lib.homeManagerConfiguration {
+        tatooine = home-manager.lib.homeManagerConfiguration {
           pkgs = import nixpkgs rec { inherit system; };
           extraSpecialArgs = { inherit inputs; };
           modules = [ ./home-nix/corellia.nix ];

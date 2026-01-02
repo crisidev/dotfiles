@@ -51,13 +51,13 @@ in
       just
       k3sup
       k9s
-      kdash
+      # kdash
       kubectl
       kubectx
       kubernetes-helm
       kyverno
       lazygit
-      ltrace
+      # ltrace
       lua51Packages.lua
       luarocks
       mergiraf
@@ -83,7 +83,7 @@ in
       ruby
       rubyPackages.rails
       scaleway-cli
-      silicon
+      # silicon
       sops
       # (spotify-player.override {
       #   withAudioBackend = "pulseaudio";
@@ -136,7 +136,16 @@ in
       homeDirectory = "/home/bigo/";
       sessionVariables = {
         NIX_SHELL_PRESERVE_PROMPT = 1;
+        PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig:$PKG_CONFIG_PATH";
+        OPENSSL_DIR = "${pkgs.openssl.dev}";
+        OPENSSL_LIB_DIR = "${pkgs.openssl.out}/lib";
+        OPENSSL_INCLUDE_DIR = "${pkgs.openssl.dev}/include";
+        UV_HTTP_TIMEOUT = "600";
       };
+      file = {
+        ".local/bin/uv".source = "${pkgs.uv}/bin/uv";
+      };
+
       activation.updateNeovim = lib.mkAfter ''
         $HOME/.cargo/bin/bob update
       '';
@@ -149,6 +158,7 @@ in
     programs.direnv = {
       enable = true;
       nix-direnv.enable = true;
+      enableZshIntegration = true;
     };
 
     programs.home-manager.enable = true;

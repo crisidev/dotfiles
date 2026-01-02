@@ -10,10 +10,10 @@ if [ "$1" = "pull" ]; then
 else
     case "${unameOut}" in
 	Linux*) 
-	    if which nom; then
+	    if which nom > /dev/null; then
 	        nix run -L home-manager -- --impure --flake ".#$(hostname -s)" "$@" |& nom 
 	    else
-	        nix run -L home-manager -- --impure --flake ".#$(hostname -s)" "$@"  
+	        nix run -L home-manager -- --impure --flake ".#$(hostname -s)" "$@"
 	    fi
 	;;
         *) echo "Unknown system $unameOut" && exit 1 ;;
