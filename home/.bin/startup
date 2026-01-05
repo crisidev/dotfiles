@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+NETDEV=$(ip -o route get 8.8.8.8 | cut -f 5 -d " ")
+ethtool -K "$NETDEV" rx-udp-gro-forwarding on rx-gro-list off
+HOSTNAME=$(hostname -s)
+if [ "$HOSTNAME" = "corellia" ]; then
+    echo "max_performance" | tee /sys/class/scsi_host/host*/link_power_management_policy
+    echo 256 | tee /sys/block/sd*/queue/read_ahead_kb
+    echo 32768 | tee /sys/block/md0/md/stripe_cache_size
+    cp /home/bigo/gitea/k3s.crisidev.org/system/traefik-config.yaml /var/lib/rancher/k3s/server/manifests/traefik.yaml
+    cp /home/bigo/gitea/k3s.crisidev.org/system/coredns-config.yaml /var/lib/rancher/k3s/server/manifests/coredns.yaml
+fi

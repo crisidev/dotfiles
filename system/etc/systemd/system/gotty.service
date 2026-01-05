@@ -1,0 +1,14 @@
+[Unit]
+Description=GoTTY Web Terminal
+After=network.target
+
+[Service]
+Type=simple
+User=bigo
+Group=bigo
+ExecStart=/home/bigo/.nix-profile/bin/gotty --port 8080 --permit-write --reconnect /usr/bin/zsh
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

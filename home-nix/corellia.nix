@@ -19,6 +19,7 @@
       git
       go
       gotify-cli
+      gotty
       harper
       htop
       jq
@@ -80,16 +81,29 @@
     home = {
       stateVersion = "24.11";
       username = "bigo";
-      homeDirectory = "/home/bigo";
-      sessionVariables = { NIX_SHELL_PRESERVE_PROMPT = 1; };
+      homeDirectory = "/home/bigo/";
+      sessionVariables = {
+        NIX_SHELL_PRESERVE_PROMPT = 1;
+        PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig:$PKG_CONFIG_PATH";
+        OPENSSL_DIR = "${pkgs.openssl.dev}";
+        OPENSSL_LIB_DIR = "${pkgs.openssl.out}/lib";
+        OPENSSL_INCLUDE_DIR = "${pkgs.openssl.dev}/include";
+        UV_HTTP_TIMEOUT = "600";
+      };
+      file = {
+        ".local/bin/uv".source = "${pkgs.uv}/bin/uv";
+      };
+      extraOutputsToInstall = [ "dev" ];
     };
 
     programs.direnv = {
       enable = true;
       nix-direnv.enable = true;
+      enableZshIntegration = true;
     };
 
     programs.home-manager.enable = true;
+
   };
 
   imports = [ ];
