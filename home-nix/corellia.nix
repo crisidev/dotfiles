@@ -67,6 +67,7 @@
       zsh
       zoxide
       yarn
+      zellij
     ];
 
     targets.genericLinux.enable = true;
