@@ -320,14 +320,14 @@ in
   "@openai/codex" = nodeEnv.buildNodePackage {
     name = "_at_openai_slash_codex";
     packageName = "@openai/codex";
-    version = "0.77.0";
+    version = "0.101.0";
     src = fetchurl {
-      url = "https://registry.npmjs.org/@openai/codex/-/codex-0.77.0.tgz";
-      sha512 = "1Z3tuJsePfQvBELmTT3Dpzm4GheQn0t4H8RtdZnYVBdj1vA2Hi6eGCrOHXxPSfXRKDrSZ4VvALcQmZpFmYsaHA==";
+      url = "https://registry.npmjs.org/@openai/codex/-/codex-0.101.0.tgz";
+      sha512 = "H874q5K5I3chrT588BaddMr7GNvRYypc8C1MKWytNUF2PgxWMko2g/2DgKbt5OdajZKMsWdbsPywu34KQGf5Qw==";
     };
     buildInputs = globalBuildInputs;
     meta = {
-      description = "<p align=\"center\"><code>npm i -g @openai/codex</code><br />or <code>brew install --cask codex</code></p>";
+      description = "<p align=\"center\"><code>npm i -g @openai/codex</code><br />or <code>brew install --cask codex</code></p> <p align=\"center\"><strong>Codex CLI</strong> is a coding agent from OpenAI that runs locally on your computer. <p align=\"center\">   <img src=\"https://";
       homepage = "https://github.com/openai/codex#readme";
       license = "Apache-2.0";
     };
@@ -338,16 +338,34 @@ in
   "@anthropic-ai/claude-code" = nodeEnv.buildNodePackage {
     name = "_at_anthropic-ai_slash_claude-code";
     packageName = "@anthropic-ai/claude-code";
-    version = "2.0.76";
+    version = "2.1.42";
     src = fetchurl {
-      url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-2.0.76.tgz";
-      sha512 = "BVwPez7Pst729gxHZNb7iUdjrn4UAzO49zC+Bxlyf0fMe3SsutxEhKTT16VMs2qInE9xhEBCxajCCa888mFPBg==";
+      url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-2.1.42.tgz";
+      sha512 = "6zSAsdkmY3KSiO3EtPLHvXy9NbLYFC9Zk8s5dEBUwFR/vBpCvTlCv81JAIVgX53nuuqFv/ktBYEdAVDVbJJsqA==";
     };
     buildInputs = globalBuildInputs;
     meta = {
       description = "Use Claude, Anthropic's AI assistant, right from your terminal. Claude can understand your codebase, edit files, run terminal commands, and handle entire workflows for you.";
       homepage = "https://github.com/anthropics/claude-code";
       license = "SEE LICENSE IN README.md";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
+  "@owloops/claude-powerline" = nodeEnv.buildNodePackage {
+    name = "_at_owloops_slash_claude-powerline";
+    packageName = "@owloops/claude-powerline";
+    version = "1.16.1";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/@owloops/claude-powerline/-/claude-powerline-1.16.1.tgz";
+      sha512 = "UQSZxZiKEp0fUt/p+46vCZiHOYgBngcQBD7quHpGc9gK5c/8dLJrFKvp9WX8mNp8h0I2iC1D9BMe8bR+XT6bqQ==";
+    };
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Beautiful vim-style powerline statusline for Claude Code with real-time usage tracking, git integration, and custom themes";
+      homepage = "https://github.com/Owloops/claude-powerline#readme";
+      license = "MIT";
     };
     production = true;
     bypassCache = true;

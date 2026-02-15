@@ -26,7 +26,7 @@ while true; do
     else
         current="builtin"
         scale="1.3"
-        kitty_font="13"
+        kitty_font="14"
     fi
 
     # If "now" override is active or the configuration changed, update the scaling.

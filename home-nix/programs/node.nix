@@ -9,5 +9,6 @@ in {
     extraNodePackages.neovim
     extraNodePackages."@openai/codex"
     extraNodePackages."@anthropic-ai/claude-code"
+    extraNodePackages."@owloops/claude-powerline"
   ];
 }

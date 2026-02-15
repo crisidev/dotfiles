@@ -78,6 +78,7 @@ in
       openssl
       pkg-config
       poppler
+      protobuf
       redis
       ripgrep
       ruby
