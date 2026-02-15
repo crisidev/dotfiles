@@ -13,6 +13,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     tokio-console.url = "github:tokio-rs/console";
+    mash.url = "github:crisidev/mash";
   };
 
   outputs = { home-manager, nixgl, nixpkgs, ... }@inputs:
@@ -25,6 +26,7 @@
             inherit system;
             overlays = [
               nixgl.overlay
+              inputs.mash.overlays.default
             ];
           };
           extraSpecialArgs = { inherit inputs; };

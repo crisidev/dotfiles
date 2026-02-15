@@ -338,10 +338,10 @@ in
   "@anthropic-ai/claude-code" = nodeEnv.buildNodePackage {
     name = "_at_anthropic-ai_slash_claude-code";
     packageName = "@anthropic-ai/claude-code";
-    version = "2.1.42";
+    version = "2.1.44";
     src = fetchurl {
-      url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-2.1.42.tgz";
-      sha512 = "6zSAsdkmY3KSiO3EtPLHvXy9NbLYFC9Zk8s5dEBUwFR/vBpCvTlCv81JAIVgX53nuuqFv/ktBYEdAVDVbJJsqA==";
+      url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-2.1.44.tgz";
+      sha512 = "8b5OvZg7T2nuyHWUtJduiFEV2LIkEUzx9cJFEv5jH5F328Ud0uLlFbSdrH9sItIcSIcLt64oAQAE3UpDxR6Irw==";
     };
     buildInputs = globalBuildInputs;
     meta = {
