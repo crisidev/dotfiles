@@ -34,7 +34,6 @@
       nixfmt-rfc-style
       nodejs_22
       node2nix
-      pgloader
       powertop
       pre-commit
       (python312.withPackages (p:
