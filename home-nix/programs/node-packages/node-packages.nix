@@ -320,10 +320,10 @@ in
   "@openai/codex" = nodeEnv.buildNodePackage {
     name = "_at_openai_slash_codex";
     packageName = "@openai/codex";
-    version = "0.101.0";
+    version = "0.104.0";
     src = fetchurl {
-      url = "https://registry.npmjs.org/@openai/codex/-/codex-0.101.0.tgz";
-      sha512 = "H874q5K5I3chrT588BaddMr7GNvRYypc8C1MKWytNUF2PgxWMko2g/2DgKbt5OdajZKMsWdbsPywu34KQGf5Qw==";
+      url = "https://registry.npmjs.org/@openai/codex/-/codex-0.104.0.tgz";
+      sha512 = "pPa2VGHozwjPsPOYAEXcH7nNt1QH7AZR8zV8jYx6BFi1LJlmJkan2rvIS4MYbPdi2O6cd5kWfPCAHE0fEV2ifA==";
     };
     buildInputs = globalBuildInputs;
     meta = {
@@ -338,10 +338,10 @@ in
   "@anthropic-ai/claude-code" = nodeEnv.buildNodePackage {
     name = "_at_anthropic-ai_slash_claude-code";
     packageName = "@anthropic-ai/claude-code";
-    version = "2.1.44";
+    version = "2.1.49";
     src = fetchurl {
-      url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-2.1.44.tgz";
-      sha512 = "8b5OvZg7T2nuyHWUtJduiFEV2LIkEUzx9cJFEv5jH5F328Ud0uLlFbSdrH9sItIcSIcLt64oAQAE3UpDxR6Irw==";
+      url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-2.1.49.tgz";
+      sha512 = "PonEmTZlB5IZbBu9TmtOpGZnupU7OxOXTsJKcXE/4Ak5qp3ptN1wSBRdgKYnn6GDYhXijTXuVVwrCQU+NAgwPA==";
     };
     buildInputs = globalBuildInputs;
     meta = {
@@ -356,10 +356,10 @@ in
   "@owloops/claude-powerline" = nodeEnv.buildNodePackage {
     name = "_at_owloops_slash_claude-powerline";
     packageName = "@owloops/claude-powerline";
-    version = "1.16.1";
+    version = "1.17.2";
     src = fetchurl {
-      url = "https://registry.npmjs.org/@owloops/claude-powerline/-/claude-powerline-1.16.1.tgz";
-      sha512 = "UQSZxZiKEp0fUt/p+46vCZiHOYgBngcQBD7quHpGc9gK5c/8dLJrFKvp9WX8mNp8h0I2iC1D9BMe8bR+XT6bqQ==";
+      url = "https://registry.npmjs.org/@owloops/claude-powerline/-/claude-powerline-1.17.2.tgz";
+      sha512 = "Au07z6MLyLmsrjgNtY7F8XLWKcgLKo7w0rSbQ3OLhD+MP8WjBaULG9jz5M72K5RQQlCeQB9Y4/wYz1rLH9lxVg==";
     };
     buildInputs = globalBuildInputs;
     meta = {
