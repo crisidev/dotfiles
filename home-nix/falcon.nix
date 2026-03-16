@@ -12,6 +12,7 @@ in
     fonts.fontconfig.enable = true;
     home.packages = with pkgs; [
       age
+      ansible
       antidote
       awscli2
       bat
@@ -20,10 +21,12 @@ in
       clang_19
       cmake
       curl
+      d2
       deadnix
       delta
       direnv
       eza
+      fastfetch
       fd
       feh
       figlet
@@ -67,7 +70,6 @@ in
       mosh
       minikube
       minio-client
-      neofetch
       nerd-fonts.symbols-only
       ninja
       nixgl.auto.nixGLDefault
@@ -172,5 +174,6 @@ in
     ./programs/python.nix
     ./programs/node.nix
     ./programs/zathura.nix
+    ./programs/hyprland.nix
   ];
 }

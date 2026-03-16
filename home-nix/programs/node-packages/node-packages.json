@@ -1,6 +1,5 @@
 [
     "neovim",
     "@openai/codex",
-    "@anthropic-ai/claude-code",
     "@owloops/claude-powerline"
 ]

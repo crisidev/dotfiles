@@ -12,11 +12,15 @@
       url = "github:nix-community/nixGL";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hyprland = {
+      url = "github:hyprwm/Hyprland";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     tokio-console.url = "github:tokio-rs/console";
     mash.url = "github:crisidev/mash";
   };
 
-  outputs = { home-manager, nixgl, nixpkgs, ... }@inputs:
+  outputs = { home-manager, nixgl, nixpkgs, hyprland, ... }@inputs:
     let system = "x86_64-linux";
     in {
       # Available through `home-manager --flake .#user@host switch`

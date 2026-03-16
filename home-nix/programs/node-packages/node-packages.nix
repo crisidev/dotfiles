@@ -320,34 +320,16 @@ in
   "@openai/codex" = nodeEnv.buildNodePackage {
     name = "_at_openai_slash_codex";
     packageName = "@openai/codex";
-    version = "0.106.0";
+    version = "0.114.0";
     src = fetchurl {
-      url = "https://registry.npmjs.org/@openai/codex/-/codex-0.106.0.tgz";
-      sha512 = "GgzVs+mOaJfAFalI+QqEXcuJuBODhIg217g+B5jg6HMujux3Q4yeSki57x8MD/DJ43hRq9X1DTyZL/345Bo0Ag==";
+      url = "https://registry.npmjs.org/@openai/codex/-/codex-0.114.0.tgz";
+      sha512 = "HMo8LRR6CtfKkaa28xvFK6eOarmBFTDfsrS9GJtEoaspGGemFok494CpafDspiTZaHZZGHfSUe5SWTUxYq7OaA==";
     };
     buildInputs = globalBuildInputs;
     meta = {
       description = "<p align=\"center\"><code>npm i -g @openai/codex</code><br />or <code>brew install --cask codex</code></p> <p align=\"center\"><strong>Codex CLI</strong> is a coding agent from OpenAI that runs locally on your computer. <p align=\"center\">   <img src=\"https://";
       homepage = "https://github.com/openai/codex#readme";
       license = "Apache-2.0";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  "@anthropic-ai/claude-code" = nodeEnv.buildNodePackage {
-    name = "_at_anthropic-ai_slash_claude-code";
-    packageName = "@anthropic-ai/claude-code";
-    version = "2.1.63";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-2.1.63.tgz";
-      sha512 = "pjxGFtOWc6SW4qv/c2F8hc+QFJ36+OlevYsnUvBVqr4B+4mJjH+8inSF8sH2Uf9SQd99kG5CxkkHxmUg2rakow==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Use Claude, Anthropic's AI assistant, right from your terminal. Claude can understand your codebase, edit files, run terminal commands, and handle entire workflows for you.";
-      homepage = "https://github.com/anthropics/claude-code";
-      license = "SEE LICENSE IN README.md";
     };
     production = true;
     bypassCache = true;
