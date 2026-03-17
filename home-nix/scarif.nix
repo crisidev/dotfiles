@@ -38,8 +38,7 @@
     mosh
     neovim
     nix-direnv
-    nixfmt-rfc-style
-    node2nix
+    nixfmt
     nodejs_22
     powertop
     pre-commit

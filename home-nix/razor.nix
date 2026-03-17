@@ -23,7 +23,7 @@
     git
     jq
     neovim
-    nixfmt-rfc-style
+    nixfmt
     ripgrep
     starship
     strace

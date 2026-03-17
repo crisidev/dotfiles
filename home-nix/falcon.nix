@@ -79,7 +79,7 @@ in
       nerd-fonts.symbols-only
       nix-direnv
       nix-output-monitor
-      nixfmt-rfc-style
+      nixfmt
       nixgl.auto.nixGLDefault
       nixgl.nixGLIntel
       ninja
