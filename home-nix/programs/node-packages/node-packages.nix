@@ -320,10 +320,10 @@ in
   "@openai/codex" = nodeEnv.buildNodePackage {
     name = "_at_openai_slash_codex";
     packageName = "@openai/codex";
-    version = "0.114.0";
+    version = "0.115.0";
     src = fetchurl {
-      url = "https://registry.npmjs.org/@openai/codex/-/codex-0.114.0.tgz";
-      sha512 = "HMo8LRR6CtfKkaa28xvFK6eOarmBFTDfsrS9GJtEoaspGGemFok494CpafDspiTZaHZZGHfSUe5SWTUxYq7OaA==";
+      url = "https://registry.npmjs.org/@openai/codex/-/codex-0.115.0.tgz";
+      sha512 = "uu689DHUzvuPcb39hJ+7fqy++TAvY32w9VggDpcz3HS0Sx0WadWoAPPcMK547P2T6AqfMsAtA8kspkR3tqErOg==";
     };
     buildInputs = globalBuildInputs;
     meta = {
@@ -338,10 +338,10 @@ in
   "@owloops/claude-powerline" = nodeEnv.buildNodePackage {
     name = "_at_owloops_slash_claude-powerline";
     packageName = "@owloops/claude-powerline";
-    version = "1.19.0";
+    version = "1.19.6";
     src = fetchurl {
-      url = "https://registry.npmjs.org/@owloops/claude-powerline/-/claude-powerline-1.19.0.tgz";
-      sha512 = "kjOqnig4b1zjfCsocSbJHA4XjGTVsQdYvBN9FmwHUGkNtNknPJJyZZu0NoxmQrAkF3w+L4+kybd0bY3HieffTA==";
+      url = "https://registry.npmjs.org/@owloops/claude-powerline/-/claude-powerline-1.19.6.tgz";
+      sha512 = "lyWMyeMLVjHp2Ce703cucOY74ORfkPt5sGoOPPaYnUHA9BSg32e0fpnGF0ZGAHMKLxcNnvukhxjut8bkR+TrMA==";
     };
     buildInputs = globalBuildInputs;
     meta = {

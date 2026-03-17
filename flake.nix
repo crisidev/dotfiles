@@ -20,49 +20,44 @@
     mash.url = "github:crisidev/mash";
   };
 
-  outputs = { home-manager, nixgl, nixpkgs, hyprland, ... }@inputs:
-    let system = "x86_64-linux";
-    in {
+  outputs =
+    {
+      home-manager,
+      nixgl,
+      nixpkgs,
+      hyprland,
+      ...
+    }@inputs:
+    let
+      system = "x86_64-linux";
+
+      mkHome =
+        modules: overlays:
+        home-manager.lib.homeManagerConfiguration {
+          pkgs = import nixpkgs { inherit system overlays; };
+          extraSpecialArgs = { inherit inputs; };
+          inherit modules;
+        };
+
+      corelliaConfig = mkHome [ ./home-nix/corellia.nix ] [ ];
+    in
+    {
       # Available through `home-manager --flake .#user@host switch`
       homeConfigurations = {
-        falcon = home-manager.lib.homeManagerConfiguration {
-          pkgs = import nixpkgs {
-            inherit system;
-            overlays = [
+        falcon =
+          mkHome
+            [ ./home-nix/falcon.nix ]
+            [
               nixgl.overlay
               inputs.mash.overlays.default
             ];
-          };
-          extraSpecialArgs = { inherit inputs; };
-          modules = [ ./home-nix/falcon.nix ];
-        };
-        tatooine = home-manager.lib.homeManagerConfiguration {
-          pkgs = import nixpkgs rec { inherit system; };
-          extraSpecialArgs = { inherit inputs; };
-          modules = [ ./home-nix/corellia.nix ];
-        };
-        mandalore = home-manager.lib.homeManagerConfiguration {
-          pkgs = import nixpkgs rec { inherit system; };
-          extraSpecialArgs = { inherit inputs; };
-          modules = [ ./home-nix/corellia.nix ];
-        };
-        corellia = home-manager.lib.homeManagerConfiguration {
-          pkgs = import nixpkgs rec { inherit system; };
-          extraSpecialArgs = { inherit inputs; };
-          modules = [ ./home-nix/corellia.nix ];
-        };
-        razor = home-manager.lib.homeManagerConfiguration {
-          pkgs = import nixpkgs rec { inherit system; };
-          extraSpecialArgs = { inherit inputs; };
-          modules = [ ./home-nix/razor.nix ];
-        };
-        scarif = home-manager.lib.homeManagerConfiguration {
-          pkgs = import nixpkgs rec { inherit system; };
-          extraSpecialArgs = { inherit inputs; };
-          modules = [ ./home-nix/scarif.nix ];
-        };
-
+        corellia = corelliaConfig;
+        tatooine = corelliaConfig;
+        mandalore = corelliaConfig;
+        razor = mkHome [ ./home-nix/razor.nix ] [ ];
+        scarif = mkHome [ ./home-nix/scarif.nix ] [ ];
       };
+
       formatter.${system} = nixpkgs.legacyPackages.${system}.nixfmt;
     };
 }

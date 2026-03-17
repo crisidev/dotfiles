@@ -1,4 +1,9 @@
-{ pkgs, config, inputs, ... }:
+{
+  pkgs,
+  config,
+  inputs,
+  ...
+}:
 let
   nixGL = import ../nixGL.nix { inherit pkgs config; };
 in
@@ -50,10 +55,10 @@ in
       };
 
       master = {
-        mfact = 0.618;           # golden ratio
-        new_status = "slave";    # new windows go to stack
+        mfact = 0.618; # golden ratio
+        new_status = "slave"; # new windows go to stack
         new_on_top = false;
-        orientation = "left";    # master on the left
+        orientation = "left"; # master on the left
         inherit_fullscreen = true;
         smart_resizing = true;
       };
@@ -67,13 +72,13 @@ in
         dim_strength = 0.05; # subtle depth separation
         blur = {
           enabled = true;
-          size = 4;            # 2. tighter blur — crisper frosted glass
+          size = 4; # 2. tighter blur — crisper frosted glass
           passes = 3;
           new_optimizations = true;
           noise = 0.02;
           contrast = 0.9;
-          brightness = 0.75;  # 2. slightly dimmer for depth
-          vibrancy = 0.5;     # 2. macOS-like vibrancy
+          brightness = 0.75; # 2. slightly dimmer for depth
+          vibrancy = 0.5; # 2. macOS-like vibrancy
           vibrancy_darkness = 1.0;
         };
         shadow = {
@@ -107,7 +112,6 @@ in
         ];
       };
 
-
       misc = {
         force_default_wallpaper = 0;
         disable_hyprland_logo = true;
@@ -127,7 +131,6 @@ in
         "blur, gtk-layer-shell"
         "ignorezero, gtk-layer-shell"
       ];
-
 
       "$mod" = "SUPER";
 

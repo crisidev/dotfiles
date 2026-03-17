@@ -8,16 +8,25 @@ let
   nixGL = import ./nixGL.nix { inherit pkgs config; };
 in
 {
+  imports = [
+    ./common.nix
+    ./options.nix
+    ./programs/rust.nix
+    ./programs/python.nix
+    ./programs/node.nix
+    ./programs/zathura.nix
+    ./programs/hyprland.nix
+  ];
+
   config = {
-    fonts.fontconfig.enable = true;
     home.packages = with pkgs; [
       age
       ansible
       antidote
       awscli2
       bat
-      btop
       brightnessctl
+      btop
       clang_19
       cmake
       curl
@@ -36,7 +45,6 @@ in
       gh
       (nixGL pkgs.ghostty)
       git
-      # gitui
       glab
       glibc
       glow
@@ -46,38 +54,35 @@ in
       hwinfo
       hyfetch
       hyperfine
-      iotop
       imagemagick
-      (nixGL pkgs.kitty)
+      iotop
       jdk
       jq
       just
       k3sup
       k9s
-      # kdash
+      (nixGL pkgs.kitty)
       kubectl
       kubectx
       kubernetes-helm
       kyverno
       lazygit
-      # ltrace
       lua51Packages.lua
       luarocks
       mash
       mergiraf
       meson
-      mkdocs
-      mosh
       minikube
       minio-client
+      mkdocs
+      mosh
       nerd-fonts.symbols-only
-      ninja
-      nixgl.auto.nixGLDefault
-      #nixgl.auto.nixGLNvidia
-      nixgl.nixGLIntel
-      nixfmt-rfc-style
       nix-direnv
       nix-output-monitor
+      nixfmt-rfc-style
+      nixgl.auto.nixGLDefault
+      nixgl.nixGLIntel
+      ninja
       openssl
       pkg-config
       poppler
@@ -87,18 +92,7 @@ in
       ruby
       rubyPackages.rails
       scaleway-cli
-      # silicon
       sops
-      # (spotify-player.override {
-      #   withAudioBackend = "pulseaudio";
-      #   withStreaming = true;
-      #   withDaemon = true;
-      #   withMediaControl = true;
-      #   withImage = true;
-      #   withNotify = true;
-      #   withSixel = true;
-      #   withFuzzy = true;
-      # })
       starship
       statix
       stern
@@ -119,37 +113,21 @@ in
       zstd
     ];
 
-    targets.genericLinux.enable = true;
-
     nixGLPrefixIntel = "${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel";
-    # Uncomment if needed:
     # nixGLPrefixAuto = "${pkgs.nixgl.auto.nixGLDefault}/bin/nixGL";
     # nixGLPrefixNvidia = "${pkgs.nixgl.auto.nixGLNvidia}/bin/nixGLNvidia-560.35.03";
-    # nixGLPrefixNvidia = "";
-
-    nixpkgs = {
-      config = {
-        allowUnfree = true;
-        allowUnfreePredicate = _: true;
-      };
-    };
 
     home = {
-      stateVersion = "24.11";
       username = "bigo";
       homeDirectory = "/home/bigo/";
       sessionVariables = {
-        NIX_SHELL_PRESERVE_PROMPT = 1;
         PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig:$PKG_CONFIG_PATH";
         OPENSSL_DIR = "${pkgs.openssl.dev}";
         OPENSSL_LIB_DIR = "${pkgs.openssl.out}/lib";
         OPENSSL_INCLUDE_DIR = "${pkgs.openssl.dev}/include";
         UV_HTTP_TIMEOUT = "600";
       };
-      file = {
-        ".local/bin/uv".source = "${pkgs.uv}/bin/uv";
-      };
-
+      file.".local/bin/uv".source = "${pkgs.uv}/bin/uv";
       activation.updateNeovim = lib.mkAfter ''
         $HOME/.cargo/bin/bob update
       '';
@@ -159,21 +137,6 @@ in
       extraOutputsToInstall = [ "dev" ];
     };
 
-    programs.direnv = {
-      enable = true;
-      nix-direnv.enable = true;
-      enableZshIntegration = true;
-    };
-
-    programs.home-manager.enable = true;
+    programs.direnv.enableZshIntegration = true;
   };
-
-  imports = [
-    ./options.nix
-    ./programs/rust.nix
-    ./programs/python.nix
-    ./programs/node.nix
-    ./programs/zathura.nix
-    ./programs/hyprland.nix
-  ];
 }

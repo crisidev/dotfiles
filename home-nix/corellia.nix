@@ -1,110 +1,77 @@
-{ pkgs, ... }: {
-  config = {
-    fonts.fontconfig.enable = true;
-    home.packages = with pkgs; [
-      antidote
-      awscli2
-      bat
-      btop
-      curl
-      direnv
-      eza
-      deadnix
-      delta
-      dig
-      fd
-      fzf
-      iotop
-      iproute2
-      git
-      go
-      gotify-cli
-      gotty
-      harper
-      htop
-      jq
-      k3sup
-      k9s
-      kubectl
-      kubectx
-      kubernetes-helm
-      mosh
-      neovim
-      nix-direnv
-      nixfmt-rfc-style
-      nodejs_22
-      node2nix
-      powertop
-      pre-commit
-      (python312.withPackages (p:
-        with p; [
-          black
-          boto3
-          boto3-stubs
-          ipython
-          isort
-          pip
-          pynvim
-          pytest
-          virtualenv
-          numpy
-        ]))
-      rclone
-      ripgrep
-      rustup
-      sops
-      starship
-      statix
-      strace
-      tmux
-      tokei
-      typescript
-      uv
-      wget
-      yazi
-      yq-go
-      zsh
-      zoxide
-      yarn
-      zellij
-    ];
+{ pkgs, ... }:
+{
+  imports = [
+    ./common.nix
+    ./programs/python-base.nix
+  ];
 
-    targets.genericLinux.enable = true;
-
-    nixpkgs = {
-      config = {
-        allowUnfree = true;
-        allowUnfreePredicate = _: true;
-      };
+  home = {
+    username = "bigo";
+    homeDirectory = "/home/bigo/";
+    sessionVariables = {
+      PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig:$PKG_CONFIG_PATH";
+      OPENSSL_DIR = "${pkgs.openssl.dev}";
+      OPENSSL_LIB_DIR = "${pkgs.openssl.out}/lib";
+      OPENSSL_INCLUDE_DIR = "${pkgs.openssl.dev}/include";
+      UV_HTTP_TIMEOUT = "600";
     };
-
-    home = {
-      stateVersion = "24.11";
-      username = "bigo";
-      homeDirectory = "/home/bigo/";
-      sessionVariables = {
-        NIX_SHELL_PRESERVE_PROMPT = 1;
-        PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig:$PKG_CONFIG_PATH";
-        OPENSSL_DIR = "${pkgs.openssl.dev}";
-        OPENSSL_LIB_DIR = "${pkgs.openssl.out}/lib";
-        OPENSSL_INCLUDE_DIR = "${pkgs.openssl.dev}/include";
-        UV_HTTP_TIMEOUT = "600";
-      };
-      file = {
-        ".local/bin/uv".source = "${pkgs.uv}/bin/uv";
-      };
-      extraOutputsToInstall = [ "dev" ];
-    };
-
-    programs.direnv = {
-      enable = true;
-      nix-direnv.enable = true;
-      enableZshIntegration = true;
-    };
-
-    programs.home-manager.enable = true;
-
+    file.".local/bin/uv".source = "${pkgs.uv}/bin/uv";
+    extraOutputsToInstall = [ "dev" ];
   };
 
-  imports = [ ];
+  programs.direnv.enableZshIntegration = true;
+
+  home.packages = with pkgs; [
+    antidote
+    awscli2
+    bat
+    btop
+    curl
+    deadnix
+    delta
+    dig
+    eza
+    fd
+    fzf
+    git
+    go
+    gotify-cli
+    gotty
+    harper
+    htop
+    iotop
+    iproute2
+    jq
+    k3sup
+    k9s
+    kubectl
+    kubectx
+    kubernetes-helm
+    mosh
+    neovim
+    nix-direnv
+    nixfmt-rfc-style
+    node2nix
+    nodejs_22
+    powertop
+    pre-commit
+    rclone
+    ripgrep
+    rustup
+    sops
+    starship
+    statix
+    strace
+    tmux
+    tokei
+    typescript
+    uv
+    wget
+    yarn
+    yazi
+    yq-go
+    zellij
+    zoxide
+    zsh
+  ];
 }

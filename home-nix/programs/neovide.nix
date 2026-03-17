@@ -2,7 +2,8 @@
 let
   # nixGL = import ../nixGLNvidia.nix {inherit pkgs config;};
   nixGL = import ../nixGL.nix { inherit pkgs config; };
-in {
+in
+{
   programs.neovide = {
     enable = false;
     package = nixGL pkgs.neovide;

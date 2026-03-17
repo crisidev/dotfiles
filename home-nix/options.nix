@@ -1,4 +1,5 @@
-{ lib, ... }: {
+{ lib, ... }:
+{
   options = {
     nixGLPrefixIntel = lib.mkOption {
       type = lib.types.str;
