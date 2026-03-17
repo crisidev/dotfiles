@@ -25,39 +25,45 @@
       home-manager,
       nixgl,
       nixpkgs,
-      hyprland,
       ...
     }@inputs:
     let
       system = "x86_64-linux";
+      pkgs = import nixpkgs { inherit system; };
 
-      mkHome =
-        modules: overlays:
+      # Servers: plain nixpkgs, no falcon-specific inputs leaked in
+      mkServer =
+        modules:
         home-manager.lib.homeManagerConfiguration {
-          pkgs = import nixpkgs { inherit system overlays; };
-          extraSpecialArgs = { inherit inputs; };
-          inherit modules;
+          inherit pkgs modules;
         };
 
-      corelliaConfig = mkHome [ ./home-nix/corellia.nix ] [ ];
-    in
-    {
-      # Available through `home-manager --flake .#user@host switch`
-      homeConfigurations = {
-        falcon =
-          mkHome
-            [ ./home-nix/falcon.nix ]
-            [
-              nixgl.overlay
-              inputs.mash.overlays.default
-            ];
-        corellia = corelliaConfig;
-        tatooine = corelliaConfig;
-        mandalore = corelliaConfig;
-        razor = mkHome [ ./home-nix/razor.nix ] [ ];
-        scarif = mkHome [ ./home-nix/scarif.nix ] [ ];
+      # Falcon: nixGL + mash overlays, full inputs for hyprland flake packages
+      falconPkgs = import nixpkgs {
+        inherit system;
+        overlays = [
+          nixgl.overlay
+          inputs.mash.overlays.default
+        ];
       };
 
-      formatter.${system} = nixpkgs.legacyPackages.${system}.nixfmt;
+      corelliaModules = [ ./home-nix/corellia.nix ];
+    in
+    {
+      # Available through `home-manager --flake .#host switch`
+      homeConfigurations = {
+        falcon = home-manager.lib.homeManagerConfiguration {
+          pkgs = falconPkgs;
+          extraSpecialArgs = { inherit inputs; };
+          modules = [ ./home-nix/falcon.nix ];
+        };
+        corellia = mkServer corelliaModules;
+        tatooine = mkServer corelliaModules;
+        mandalore = mkServer corelliaModules;
+        razor = mkServer [ ./home-nix/razor.nix ];
+        scarif = mkServer [ ./home-nix/scarif.nix ];
+      };
+
+      formatter.${system} = pkgs.nixfmt;
     };
 }
