@@ -134,6 +134,10 @@ in
       activation.updateGsettings = lib.mkAfter ''
         $HOME/.bin/gsettings-update
       '';
+      # GDM (runs as gdm user) only reads /usr/share/wayland-sessions/.
+      # Copy rather than symlink so gdm doesn't need to traverse ~/.local -> /nix/store.
+      # To register the Hyprland session with GDM, run once after switch:
+      # sudo cp -L ~/.local/share/wayland-sessions/hyprland.desktop /usr/share/wayland-sessions/hyprland.desktop
       extraOutputsToInstall = [ "dev" ];
     };
 

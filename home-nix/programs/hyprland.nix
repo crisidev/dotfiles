@@ -6,14 +6,16 @@
 }:
 let
   nixGL = import ../nixGL.nix { inherit pkgs config; };
+  hyprlandPkg = nixGL inputs.hyprland.packages.${pkgs.system}.hyprland;
 in
 {
   # ── Core compositor ───────────────────────────────────────────────────────
   wayland.windowManager.hyprland = {
     enable = true;
-    package = nixGL inputs.hyprland.packages.${pkgs.system}.hyprland;
+    package = hyprlandPkg;
     portalPackage = inputs.hyprland.packages.${pkgs.system}.xdg-desktop-portal-hyprland;
     xwayland.enable = true;
+    systemd.enable = false;
 
     plugins = [ ];
 
@@ -783,8 +785,20 @@ in
     }
   '';
 
+  # ── Wayland session file (GDM reads /usr/share/wayland-sessions/) ─────────
+  # Written here so the activation script in falcon.nix can symlink it there.
+  home.file.".local/share/wayland-sessions/hyprland.desktop".text = ''
+    [Desktop Entry]
+    Name=Hyprland
+    Comment=An intelligent dynamic tiling Wayland compositor
+    Exec=${config.home.homeDirectory}/.nix-profile/bin/Hyprland
+    Type=Application
+    DesktopNames=Hyprland
+  '';
+
   # ── Packages ──────────────────────────────────────────────────────────────
   home.packages = with pkgs; [
+    hyprlandPkg
     mako
     wofi
     swww
