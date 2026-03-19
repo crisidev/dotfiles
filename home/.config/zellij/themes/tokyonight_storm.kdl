@@ -10,7 +10,7 @@ themes {
         // This ensures the top and bottom bars are transparent
         black "#24283b"
         red "#f7768e"
-        green "#9ece6a"
+        green "#7aa2f7"
         yellow "#e0af68"
         blue "#7aa2f7"
         magenta "#bb9af7"
