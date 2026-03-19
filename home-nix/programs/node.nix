@@ -4,6 +4,7 @@ let
 in
 {
   home.packages = with pkgs; [
+    happy-coder
     yarn
     nodejs_22
     typescript

@@ -92,6 +92,7 @@ in
       ruby
       rubyPackages.rails
       scaleway-cli
+      socat
       sops
       starship
       statix

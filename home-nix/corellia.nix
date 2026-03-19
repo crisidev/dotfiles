@@ -3,6 +3,7 @@
   imports = [
     ./common.nix
     ./programs/python-base.nix
+    ./programs/node.nix
   ];
 
   home = {

@@ -36,6 +36,7 @@
     pulr = pull --rebase
     fix = commit -s --amend
     afix = commit -s -a --amend
+    acm = "!f(){ git add -A && msg=$(git diff --cached | claude --model haiku -p 'summarize into commit message, using https://www.conventionalcommits.org/en/v1.0.0/, explaining the change and why it has been done, max 20 lines + title. use bullet points that are gitea friendly. the commit message should be between ``` ```') && git commit -s -e -m \"$msg\"; };f"
     rb = "!r(){ count=$1;git branch --sort=-committerdate --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset)|%(color:red)%(objectname:short)%(color:reset)|%(contents:subject)|%(authorname) (%(color:green)%(committerdate:relative)%(color:reset))' --color=always | head -n ${count:=20} | column -ts'|'; };r"
 [push]
     default = upstream

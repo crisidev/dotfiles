@@ -1,5 +1,6 @@
 [
     "neovim",
+    "happy-coder",
     "@openai/codex",
     "@owloops/claude-powerline"
 ]

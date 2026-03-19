@@ -29,6 +29,9 @@ in
         "GTK_THEME,Tokyo Night Dark"
         "QT_QPA_PLATFORM,wayland"
         "QT_QPA_PLATFORMTHEME,qt6ct"
+        "XDG_CURRENT_DESKTOP,Hyprland"
+        "XDG_SESSION_TYPE,wayland"
+        "XDG_SESSION_DESKTOP,Hyprland"
         "ELECTRON_OZONE_PLATFORM_HINT,wayland"
         "MOZ_ENABLE_WAYLAND,1"
       ];
@@ -39,7 +42,7 @@ in
         mouse_refocus = false; # focus-change-on-pointer-rest false
         touchpad = {
           natural_scroll = false;
-          two_finger_scroll_speed = 1;
+          scroll_factor = 1.0;
         };
         repeat_rate = 71; # ~gsettings repeat-interval 14ms → ~71/s
         repeat_delay = 230; # gsettings delay 230
@@ -61,7 +64,7 @@ in
         new_status = "slave"; # new windows go to stack
         new_on_top = false;
         orientation = "left"; # master on the left
-        inherit_fullscreen = true;
+
         smart_resizing = true;
       };
 
@@ -124,14 +127,14 @@ in
 
       # Layer blur — frosted glass on waybar, wofi, mako
       layerrule = [
-        "blur, waybar"
-        "ignorezero, waybar"
-        "blur, wofi"
-        "ignorezero, wofi"
-        "blur, mako"
-        "ignorezero, mako"
-        "blur, gtk-layer-shell"
-        "ignorezero, gtk-layer-shell"
+        "blur on, match:namespace waybar"
+        "ignore_alpha 0, match:namespace waybar"
+        "blur on, match:namespace wofi"
+        "ignore_alpha 0, match:namespace wofi"
+        "blur on, match:namespace mako"
+        "ignore_alpha 0, match:namespace mako"
+        "blur on, match:namespace gtk-layer-shell"
+        "ignore_alpha 0, match:namespace gtk-layer-shell"
       ];
 
       "$mod" = "SUPER";
@@ -261,23 +264,12 @@ in
         "$mod, mouse:273, resizewindow"
       ];
 
-      # Resize submap — mirrors pop-shell tile-enter + arrow keys
-      submap = {
-        resize = {
-          binde = [
-            ", left, resizeactive, -20 0"
-            ", right, resizeactive, 20 0"
-            ", up, resizeactive, 0 -20"
-            ", down, resizeactive, 0 20"
-          ];
-          bind = [
-            ", Escape, submap, reset"
-            ", Return, submap, reset"
-          ];
-        };
-      };
+      # Resize submap — defined via extraConfig (traditional format)
+      # to avoid nested submap {} syntax leaking bindings to global scope.
 
       exec-once = [
+        "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP HYPRLAND_INSTANCE_SIGNATURE"
+        "systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
         "waybar"
         "mako"
         "swww-daemon"
@@ -289,143 +281,234 @@ in
         "/usr/bin/1password --silent"
         "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
         "hyprctl setcursor Bibata-Modern-Ice 24"
-        "sleep 1 && swww img $HOME/.homesick/repos/dotfiles/wallpapers/unsplash.jpg --transition-type wipe --transition-angle 30"
+        "sleep 1 && swww img $HOME/.homesick/repos/dotfiles/wallpapers/nix-d-nord-aurora.jpg --transition-type grow --transition-pos center --transition-duration 2 --transition-fps 60"
+
+        # ── Startup applications ──────────────────────────────────────
+        "[workspace 1 silent] $HOME/.nix-profile/bin/kitty"
+        "[workspace 2 silent] firefox-esr"
+        "[workspace 2 silent] flatpak run com.spotify.Client"
+        "[workspace 4 silent] flatpak run org.ferdium.Ferdium"
+        "[workspace 5 silent] flatpak run org.signal.Signal"
       ];
     };
+
+    # Resize submap — traditional flat format avoids the nested submap {}
+    # block syntax that can leak bindings to the global scope.
+    extraConfig = ''
+      submap = resize
+      binde = , left, resizeactive, -20 0
+      binde = , right, resizeactive, 20 0
+      binde = , up, resizeactive, 0 -20
+      binde = , down, resizeactive, 0 20
+      bind = , Escape, submap, reset
+      bind = , Return, submap, reset
+      submap = reset
+    '';
   };
 
   # ── Waybar ────────────────────────────────────────────────────────────────
   programs.waybar.enable = true;
 
   home.file.".config/waybar/config.jsonc".text = ''
-    {
-      "layer": "top",
-      "position": "top",
-      "height": 36,
-      "spacing": 4,
-      "margin-top": 6,
-      "margin-left": 10,
-      "margin-right": 10,
+    [
+      {
+        "layer": "top",
+        "position": "top",
+        "height": 38,
+        "spacing": 4,
+        "margin-top": 6,
+        "margin-left": 10,
+        "margin-right": 10,
 
-      "modules-left": [
-        "hyprland/workspaces",
-        "hyprland/window"
-      ],
-      "modules-center": [
-        "clock"
-      ],
-      "modules-right": [
-        "tray",
-        "custom/colortemp",
-        "backlight",
-        "pulseaudio",
-        "network",
-        "bluetooth",
-        "battery",
-        "custom/power"
-      ],
+        "modules-left": [
+          "hyprland/workspaces"
+        ],
+        "modules-center": [
+          "disk",
+          "network#speed",
+          "memory",
+          "temperature",
+          "cpu"
+        ],
+        "modules-right": [
+          "clock"
+        ],
 
-      "hyprland/workspaces": {
-        "format": "{icon}",
-        "format-icons": {
-          "1": "\uf121",
-          "2": "\uf489",
-          "3": "\uf07b",
-          "4": "\uf1de",
-          "5": "\udb80\udcb1",
-          "6": "\uf0e0",
-          "7": "\uf537",
-          "8": "\uf1b6",
-          "urgent": "\uf06a",
-          "active": "\uf111",
-          "default": "\uf10c"
+        "hyprland/workspaces": {
+          "format": "{icon}",
+          "format-icons": {
+            "1": "\uf121",
+            "2": "\uf489",
+            "3": "\uf07b",
+            "4": "\uf1de",
+            "5": "\udb80\udcb1",
+            "6": "\uf0e0",
+            "7": "\uf537",
+            "8": "\uf1b6",
+            "urgent": "\uf06a",
+            "active": "\uf111",
+            "default": "\uf10c"
+          },
+          "on-click": "activate",
+          "sort-by-number": true
         },
-        "on-click": "activate",
-        "sort-by-number": true
-      },
 
-      "hyprland/window": {
-        "max-length": 50,
-        "separate-outputs": true
-      },
-
-      "clock": {
-        "format": "{:%H:%M}",
-        "format-alt": "{:%A, %d %B %Y  %H:%M:%S}",
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "interval": 1
-      },
-
-      "tray": {
-        "icon-size": 16,
-        "spacing": 10
-      },
-
-      "custom/colortemp": {
-        "exec": "echo '\uf46a'",
-        "on-click": "pkill wlsunset || wlsunset -T 6500 -t 3500",
-        "tooltip": true,
-        "tooltip-format": "Toggle night mode",
-        "format": "{}",
-        "interval": "once"
-      },
-
-      "backlight": {
-        "format": "{icon} {percent}%",
-        "format-icons": ["\udb81\udc9e", "\udb81\udc9f", "\udb81\udca0"],
-        "on-scroll-up": "brightnessctl set +2%",
-        "on-scroll-down": "brightnessctl set 2%-"
-      },
-
-      "pulseaudio": {
-        "format": "{icon} {volume}%",
-        "format-muted": "\udb81\udd1f",
-        "format-icons": {
-          "default": ["\udb81\udd7d", "\udb81\udd81", "\udb81\udd7e"]
+        "disk": {
+          "path": "/",
+          "interval": 30,
+          "format": "\udb80\udeca {percentage_used}%",
+          "tooltip-format": "{used} / {total} ({percentage_used}%)"
         },
-        "on-click": "pavucontrol",
-        "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
-        "scroll-step": 2
+
+        "network#speed": {
+          "interval": 3,
+          "format": "\udb81\udda7 {bandwidthDownBits}  \udb81\udda8 {bandwidthUpBits}",
+          "format-disconnected": "\udb82\udd2d  No connection",
+          "tooltip-format": "{ifname}: {ipaddr}/{cidr}"
+        },
+
+        "memory": {
+          "interval": 5,
+          "format": "\udb80\udf5b {used:0.1f}G",
+          "tooltip-format": "{used:0.1f}G / {total:0.1f}G ({percentage}%)"
+        },
+
+        "temperature": {
+          "interval": 5,
+          "format": "\udb80\udf85 {temperatureC}°C",
+          "critical-threshold": 80,
+          "format-critical": "\udb80\udf85 {temperatureC}°C",
+          "tooltip-format": "CPU Temperature: {temperatureC}°C"
+        },
+
+        "cpu": {
+          "interval": 5,
+          "format": "\uf4bc {usage}%",
+          "tooltip-format": "CPU: {usage}% ({load})"
+        },
+
+        "clock": {
+          "format": "{:%a %d   %H:%M}",
+          "format-alt": "{:%A, %d %B %Y   %H:%M:%S}",
+          "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+          "interval": 1
+        }
       },
 
-      "network": {
-        "format-wifi": "\udb82\udd28 {signalStrength}%",
-        "format-ethernet": "\udb80\udc00",
-        "format-disconnected": "\udb82\udd2d",
-        "tooltip-format-wifi": "{essid} ({signalStrength}%)\n{ipaddr}",
-        "tooltip-format-ethernet": "{ifname}\n{ipaddr}",
-        "on-click": "nm-connection-editor"
-      },
+      {
+        "layer": "top",
+        "position": "bottom",
+        "height": 34,
+        "spacing": 4,
+        "margin-bottom": 6,
+        "margin-left": 10,
+        "margin-right": 10,
 
-      "bluetooth": {
-        "format": "\udb80\udcaf",
-        "format-connected": "\udb80\udcb1 {device_alias}",
-        "format-off": "\udb80\udcb2",
-        "tooltip-format": "{controller_alias} {controller_address}",
-        "tooltip-format-connected": "{controller_alias}\n\n{num_connections} connected\n{device_enumerate}",
-        "on-click": "blueman-manager"
-      },
+        "modules-left": [
+          "hyprland/window"
+        ],
+        "modules-center": [
+          "mpris"
+        ],
+        "modules-right": [
+          "tray",
+          "custom/colortemp",
+          "backlight",
+          "pulseaudio",
+          "network",
+          "bluetooth",
+          "battery",
+          "custom/power"
+        ],
 
-      "battery": {
-        "states": { "warning": 30, "critical": 15 },
-        "format": "{icon} {capacity}%",
-        "format-charging": "\udb80\udc84 {capacity}%",
-        "format-icons": ["\udb80\udcfa", "\udb80\udcfb", "\udb80\udcfc", "\udb80\udcfd", "\udb80\udcfe", "\udb80\udcff", "\udb80\udd00", "\udb80\udd01", "\udb80\udd02", "\udb80\udd79"],
-        "tooltip-format": "{timeTo}"
-      },
+        "hyprland/window": {
+          "max-length": 40,
+          "separate-outputs": true
+        },
 
-      "custom/power": {
-        "format": "\udb80\udc90",
-        "on-click": "wlogout",
-        "tooltip": false
+        "mpris": {
+          "format": "{player_icon} {artist} — {title}",
+          "format-paused": "{player_icon} {artist} — {title} \uf04c",
+          "max-length": 40,
+          "player-icons": {
+            "default": "\udb81\udccc",
+            "spotify": "\uf1bc",
+            "firefox": "\uf738"
+          },
+          "tooltip-format": "{player}: {artist} — {title} ({album})"
+        },
+
+        "tray": {
+          "icon-size": 16,
+          "spacing": 10
+        },
+
+        "custom/colortemp": {
+          "exec": "echo '\uf46a'",
+          "on-click": "pkill wlsunset || wlsunset -T 6500 -t 3500",
+          "tooltip": true,
+          "tooltip-format": "Toggle night mode",
+          "format": "{}",
+          "interval": "once"
+        },
+
+        "backlight": {
+          "format": "{icon} {percent}%",
+          "format-icons": ["\udb81\udc9e", "\udb81\udc9f", "\udb81\udca0"],
+          "on-scroll-up": "brightnessctl set +2%",
+          "on-scroll-down": "brightnessctl set 2%-"
+        },
+
+        "pulseaudio": {
+          "format": "{icon} {volume}%",
+          "format-muted": "\udb81\udd1f Muted",
+          "format-icons": {
+            "default": ["\udb81\udd7d", "\udb81\udd81", "\udb81\udd7e"]
+          },
+          "on-click": "pavucontrol",
+          "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+          "scroll-step": 2
+        },
+
+        "network": {
+          "format-wifi": "\udb82\udd28 {signalStrength}%",
+          "format-ethernet": "\udb80\udc00",
+          "format-disconnected": "\udb82\udd2d",
+          "tooltip-format-wifi": "{essid} ({signalStrength}%)\n{ipaddr}",
+          "tooltip-format-ethernet": "{ifname}\n{ipaddr}",
+          "on-click": "nm-connection-editor"
+        },
+
+        "bluetooth": {
+          "format": "\udb80\udcaf",
+          "format-connected": "\udb80\udcb1 {device_alias}",
+          "format-off": "\udb80\udcb2",
+          "tooltip-format": "{controller_alias} {controller_address}",
+          "tooltip-format-connected": "{controller_alias}\n\n{num_connections} connected\n{device_enumerate}",
+          "on-click": "blueman-manager"
+        },
+
+        "battery": {
+          "states": { "warning": 30, "critical": 15 },
+          "format": "{icon} {capacity}%",
+          "format-charging": "\udb80\udc84 {capacity}%",
+          "format-icons": ["\udb80\udcfa", "\udb80\udcfb", "\udb80\udcfc", "\udb80\udcfd", "\udb80\udcfe", "\udb80\udcff", "\udb80\udd00", "\udb80\udd01", "\udb80\udd02", "\udb80\udd79"],
+          "tooltip-format": "{timeTo}"
+        },
+
+        "custom/power": {
+          "format": "\udb80\udc90",
+          "on-click": "wlogout",
+          "tooltip": false
+        }
       }
-    }
+    ]
   '';
 
   home.file.".config/waybar/style.css".text = ''
-    /* 4. Pill-shaped modules — macOS-like frosted glass bar */
+    /* ── Tokyo Night — subtle frosted dual-bar ───────────────────────── */
     * {
-      font-family: "Inter", "JetBrainsMono Nerd Font", sans-serif;
+      font-family: "JetBrainsMono Nerd Font", "Inter", sans-serif;
       font-size: 13px;
       border: none;
       border-radius: 0;
@@ -433,9 +516,9 @@ in
       transition: all 0.2s ease;
     }
 
-    /* Bar itself — semi-transparent so layer blur shows through */
+    /* ── Bar — floating frosted glass ────────────────────────────────── */
     window#waybar {
-      background: rgba(26, 27, 38, 0.45);
+      background: rgba(26, 27, 38, 0.7);
       border-radius: 14px;
       border: 1px solid rgba(59, 66, 97, 0.4);
       color: #c0caf5;
@@ -445,16 +528,16 @@ in
     .modules-center,
     .modules-right {
       background: transparent;
-      padding: 0 2px;
+      padding: 0 4px;
     }
 
-    /* ── Workspace pills ─────────────────────────────────────────────── */
+    /* ── Workspaces ──────────────────────────────────────────────────── */
     #workspaces {
-      background: rgba(31, 35, 53, 0.6);
+      background: rgba(31, 35, 53, 0.5);
       border-radius: 20px;
       margin: 4px 6px;
       padding: 0 4px;
-      border: 1px solid rgba(59, 66, 97, 0.3);
+      border: 1px solid rgba(59, 66, 97, 0.25);
     }
 
     #workspaces button {
@@ -467,100 +550,233 @@ in
     }
 
     #workspaces button:hover {
-      background: rgba(122, 162, 247, 0.15);
+      background: rgba(122, 162, 247, 0.12);
       color: #7aa2f7;
     }
 
     #workspaces button.active {
-      background: rgba(122, 162, 247, 0.25);
+      background: rgba(122, 162, 247, 0.2);
       color: #7aa2f7;
     }
 
     #workspaces button.urgent {
-      background: rgba(247, 118, 142, 0.25);
+      background: rgba(247, 118, 142, 0.2);
       color: #f7768e;
     }
 
-    /* ── Window title ────────────────────────────────────────────────── */
-    #window {
-      background: rgba(31, 35, 53, 0.5);
-      border-radius: 20px;
-      color: #a9b1d6;
-      padding: 4px 14px;
-      margin: 4px 4px;
-      font-style: italic;
-      font-size: 12px;
-      border: 1px solid rgba(59, 66, 97, 0.3);
-    }
-
-    /* ── Clock pill ──────────────────────────────────────────────────── */
-    #clock {
-      background: rgba(31, 35, 53, 0.6);
-      border-radius: 20px;
-      color: #c0caf5;
-      font-weight: 600;
-      font-size: 13px;
-      padding: 4px 18px;
-      margin: 4px;
-      border: 1px solid rgba(59, 66, 97, 0.3);
-    }
-
-    /* ── Right-side modules — individual pills ───────────────────────── */
+    /* ── Shared pill style ───────────────────────────────────────────── */
+    #disk,
+    #network.speed,
+    #memory,
+    #temperature,
+    #cpu,
+    #clock,
+    #window,
+    #mpris,
     #tray,
+    #backlight,
     #pulseaudio,
     #network,
     #bluetooth,
     #battery,
-    #backlight,
     #custom-colortemp,
     #custom-power {
-      background: rgba(31, 35, 53, 0.6);
+      background: rgba(31, 35, 53, 0.5);
       border-radius: 20px;
-      color: #a9b1d6;
-      padding: 4px 12px;
+      padding: 4px 14px;
       margin: 4px 3px;
-      border: 1px solid rgba(59, 66, 97, 0.3);
+      border: 1px solid rgba(59, 66, 97, 0.25);
+      color: #a9b1d6;
     }
 
-    #tray {
-      padding: 4px 8px;
+    /* ── Top bar: system metrics — colored icons ─────────────────────── */
+    #disk {
+      color: #9ece6a;
+    }
+    #disk:hover {
+      background: rgba(158, 206, 106, 0.1);
+      color: #9ece6a;
+      border-color: rgba(158, 206, 106, 0.3);
     }
 
-    #tray:hover,
-    #pulseaudio:hover,
-    #network:hover,
-    #bluetooth:hover,
-    #backlight:hover,
-    #custom-colortemp:hover {
-      background: rgba(122, 162, 247, 0.2);
+    #network.speed {
+      color: #7dcfff;
+    }
+    #network.speed:hover {
+      background: rgba(125, 207, 255, 0.1);
+      color: #7dcfff;
+      border-color: rgba(125, 207, 255, 0.3);
+    }
+
+    #memory {
+      color: #bb9af7;
+    }
+    #memory:hover {
+      background: rgba(187, 154, 247, 0.1);
+      color: #bb9af7;
+      border-color: rgba(187, 154, 247, 0.3);
+    }
+
+    #temperature {
+      color: #ff9e64;
+    }
+    #temperature:hover {
+      background: rgba(255, 158, 100, 0.1);
+      color: #ff9e64;
+      border-color: rgba(255, 158, 100, 0.3);
+    }
+    #temperature.critical {
+      color: #f7768e;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    #cpu {
+      color: #7aa2f7;
+    }
+    #cpu:hover {
+      background: rgba(122, 162, 247, 0.1);
       color: #7aa2f7;
       border-color: rgba(122, 162, 247, 0.3);
     }
 
-    /* ── Status colors ───────────────────────────────────────────────── */
-    #network.disconnected { color: #f7768e; }
-    #battery.warning { color: #ff9e64; }
+    /* ── Clock ───────────────────────────────────────────────────────── */
+    #clock {
+      color: #e0af68;
+      font-weight: 600;
+      padding: 4px 18px;
+      margin-right: 6px;
+    }
+    #clock:hover {
+      background: rgba(224, 175, 104, 0.1);
+      border-color: rgba(224, 175, 104, 0.3);
+    }
+
+    /* ── Bottom bar: window title ────────────────────────────────────── */
+    #window {
+      color: #565f89;
+      font-style: italic;
+      font-size: 12px;
+      margin-left: 6px;
+    }
+
+    /* ── Bottom bar: media ───────────────────────────────────────────── */
+    #mpris {
+      color: #7dcfff;
+      font-style: italic;
+    }
+    #mpris.paused {
+      color: #565f89;
+    }
+    #mpris:hover {
+      background: rgba(125, 207, 255, 0.1);
+      border-color: rgba(125, 207, 255, 0.3);
+    }
+
+    /* ── Bottom bar: controls ────────────────────────────────────────── */
+    #tray {
+      padding: 4px 8px;
+    }
+
+    #custom-colortemp {
+      color: #e0af68;
+    }
+
+    #backlight {
+      color: #e0af68;
+    }
+    #backlight:hover {
+      background: rgba(224, 175, 104, 0.1);
+      color: #e0af68;
+      border-color: rgba(224, 175, 104, 0.3);
+    }
+
+    #pulseaudio {
+      color: #7aa2f7;
+    }
+    #pulseaudio:hover {
+      background: rgba(122, 162, 247, 0.1);
+      color: #7aa2f7;
+      border-color: rgba(122, 162, 247, 0.3);
+    }
+    #pulseaudio.muted {
+      color: #565f89;
+    }
+
+    #network {
+      color: #9ece6a;
+    }
+    #network:hover {
+      background: rgba(158, 206, 106, 0.1);
+      color: #9ece6a;
+      border-color: rgba(158, 206, 106, 0.3);
+    }
+    #network.disconnected {
+      color: #f7768e;
+    }
+
+    #bluetooth {
+      color: #7dcfff;
+    }
+    #bluetooth:hover {
+      background: rgba(125, 207, 255, 0.1);
+      color: #7dcfff;
+      border-color: rgba(125, 207, 255, 0.3);
+    }
+    #bluetooth.off {
+      color: #565f89;
+    }
+
+    #battery {
+      color: #9ece6a;
+    }
+    #battery:hover {
+      background: rgba(158, 206, 106, 0.1);
+      border-color: rgba(158, 206, 106, 0.3);
+    }
+    #battery.warning {
+      color: #ff9e64;
+    }
     #battery.critical {
       color: #f7768e;
       border-color: rgba(247, 118, 142, 0.4);
-      animation: blink 1s steps(1) infinite;
+      animation: pulse 1.5s ease-in-out infinite;
     }
-    #pulseaudio.muted { color: #565f89; }
-    #bluetooth.off { color: #565f89; }
+    #battery.charging {
+      color: #9ece6a;
+    }
 
     #custom-power {
       color: #f7768e;
-      border-color: rgba(247, 118, 142, 0.2);
+      border-color: rgba(247, 118, 142, 0.15);
       margin-right: 6px;
     }
-
     #custom-power:hover {
-      background: rgba(247, 118, 142, 0.2);
+      background: rgba(247, 118, 142, 0.15);
       border-color: rgba(247, 118, 142, 0.4);
     }
 
-    @keyframes blink {
-      to { opacity: 0.5; }
+    /* ── Shared hover for tray/colortemp ─────────────────────────────── */
+    #tray:hover,
+    #custom-colortemp:hover {
+      background: rgba(122, 162, 247, 0.1);
+      color: #7aa2f7;
+      border-color: rgba(122, 162, 247, 0.3);
+    }
+
+    /* ── Warning states ──────────────────────────────────────────────── */
+    #memory.warning,
+    #cpu.warning {
+      color: #ff9e64;
+    }
+    #memory.critical,
+    #cpu.critical {
+      color: #f7768e;
+    }
+
+    /* ── Animation ───────────────────────────────────────────────────── */
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
     }
 
     /* ── Tooltip ─────────────────────────────────────────────────────── */
@@ -587,12 +803,12 @@ in
       border-radius = 12;
       border-size = 2;
       default-timeout = 5000;
-      font = "JetBrainsMono Nerd Font 11";
-      width = 380;
-      height = 120;
+      font = "JetBrainsMono Nerd Font 14";
+      width = 600;
+      height = 150;
       padding = "16";
       margin = "16";
-      icons = true;
+      icons = 1;
       max-icon-size = 48;
     };
     extraConfig = ''
