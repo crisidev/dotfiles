@@ -7,7 +7,7 @@ cd "$workDir" # cd to directory with flake
 if [ "${1:-}" = "pull" ]; then
     nix flake update
     if [ "${2:-}" = "--all" ]; then
-        cd ./home-nix/programs/node-packages && ./update-node-pkgs
+        ./home-nix/programs/update-node-pkgs
     fi
 else
     if command -v nom > /dev/null; then

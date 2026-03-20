@@ -270,8 +270,8 @@ in
       exec-once = [
         "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP HYPRLAND_INSTANCE_SIGNATURE"
         "systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
-        "waybar"
-        "mako"
+        "$HOME/.nix-profile/bin/waybar"
+        "$HOME/.nix-profile/bin/mako"
         "swww-daemon"
         "hypridle"
         "nm-applet --indicator"
@@ -627,7 +627,6 @@ in
     }
     #temperature.critical {
       color: #f7768e;
-      animation: pulse 1.5s ease-in-out infinite;
     }
 
     #cpu {
@@ -739,7 +738,6 @@ in
     #battery.critical {
       color: #f7768e;
       border-color: rgba(247, 118, 142, 0.4);
-      animation: pulse 1.5s ease-in-out infinite;
     }
     #battery.charging {
       color: #9ece6a;
@@ -771,12 +769,6 @@ in
     #memory.critical,
     #cpu.critical {
       color: #f7768e;
-    }
-
-    /* ── Animation ───────────────────────────────────────────────────── */
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
     }
 
     /* ── Tooltip ─────────────────────────────────────────────────────── */
@@ -1007,7 +999,7 @@ in
     [Desktop Entry]
     Name=Hyprland
     Comment=An intelligent dynamic tiling Wayland compositor
-    Exec=${config.home.homeDirectory}/.nix-profile/bin/Hyprland
+    Exec=${config.home.homeDirectory}/.nix-profile/bin/start-hyprland
     Type=Application
     DesktopNames=Hyprland
   '';

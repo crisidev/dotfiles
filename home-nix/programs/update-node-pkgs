@@ -1,0 +1,98 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+NODE_NIX="$(dirname "$0")/node.nix"
+
+get_latest_tag() {
+  local owner=$1 repo=$2
+  # Try releases first, fall back to tags
+  local tag
+  tag=$(curl -sf "https://api.github.com/repos/$owner/$repo/releases/latest" 2>/dev/null | jq -r '.tag_name // empty') || true
+  if [ -z "$tag" ]; then
+    tag=$(curl -sf "https://api.github.com/repos/$owner/$repo/tags" | jq -r '.[0].name')
+  fi
+  echo "$tag"
+}
+
+update_github_pkg() {
+  local owner=$1 repo=$2 current_rev=$3 nix_file=$4
+  local tag version src_hash npm_deps_hash
+
+  tag=$(get_latest_tag "$owner" "$repo")
+
+  if [ "$tag" = "$current_rev" ]; then
+    echo "  $owner/$repo: already at $tag"
+    return
+  fi
+
+  echo "  $owner/$repo: $current_rev -> $tag"
+
+  # Prefetch source
+  src_hash=$(nix-prefetch-url --unpack "https://github.com/$owner/$repo/archive/refs/tags/$tag.tar.gz" 2>/dev/null)
+  src_hash=$(nix hash convert --hash-algo sha256 --to sri "$src_hash")
+
+  # Update version, rev, and source hash in the block for this repo
+  version="${tag#v}"
+  sed -i "/repo = \"$repo\"/,/npmDepsHash/ {
+    s|version = \"[^\"]*\";|version = \"$version\";|
+    s|rev = \"[^\"]*\";|rev = \"$tag\";|
+    s|hash = \"sha256-[^\"]*\";|hash = \"$src_hash\";|
+  }" "$nix_file"
+
+  # Set npmDepsHash to a dummy to force recalculation
+  sed -i "/repo = \"$repo\"/,/npmDepsHash/ {
+    s|npmDepsHash = \"sha256-[^\"]*\";|npmDepsHash = \"sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=\";|
+  }" "$nix_file"
+
+  # Build to get the correct npmDepsHash
+  echo "  Computing npmDepsHash (this may take a moment)..."
+  npm_deps_hash=$(nix build --impure ".#homeConfigurations.$(hostname -s).activationPackage" 2>&1 | grep -oP 'got:\s+\Ksha256-[^\s]+' | head -1) || true
+
+  if [ -n "$npm_deps_hash" ]; then
+    sed -i "/repo = \"$repo\"/,/npmDepsHash/ {
+      s|npmDepsHash = \"sha256-[^\"]*\";|npmDepsHash = \"$npm_deps_hash\";|
+    }" "$nix_file"
+    echo "  Done."
+  else
+    echo "  WARNING: could not compute npmDepsHash. Run 'nix build' manually to get the correct hash."
+  fi
+}
+
+update_codex() {
+  local current_version=$1 nix_file=$2
+  local tag version url src_hash
+
+  tag=$(curl -sf "https://api.github.com/repos/openai/codex/releases" | jq -r '[.[] | select(.tag_name | startswith("rust-v")) | select(.tag_name | test("alpha|beta|rc") | not)][0].tag_name')
+  version="${tag#rust-v}"
+
+  if [ "$version" = "$current_version" ]; then
+    echo "  openai/codex: already at $version"
+    return
+  fi
+
+  echo "  openai/codex: $current_version -> $version"
+
+  url="https://github.com/openai/codex/releases/download/$tag/codex-x86_64-unknown-linux-gnu.tar.gz"
+  src_hash=$(nix-prefetch-url "$url" 2>/dev/null)
+  src_hash=$(nix hash convert --hash-algo sha256 --to sri "$src_hash")
+
+  sed -i "/pname = \"openai-codex\"/,/installPhase/ {
+    s|version = \"[^\"]*\";|version = \"$version\";|
+    s|download/rust-v[^/]*/|download/$tag/|
+    s|hash = \"sha256-[^\"]*\";|hash = \"$src_hash\";|
+  }" "$nix_file"
+  echo "  Done."
+}
+
+echo "Updating node packages..."
+
+# Extract current versions from node.nix
+neovim_rev=$(grep -A2 'repo = "node-client"' "$NODE_NIX" | grep -oP 'rev = "\K[^"]+')
+codex_version=$(grep -A1 'pname = "openai-codex"' "$NODE_NIX" | grep -oP 'version = "\K[^"]+')
+powerline_rev=$(grep -A2 'repo = "claude-powerline"' "$NODE_NIX" | grep -oP 'rev = "\K[^"]+')
+
+update_github_pkg "neovim" "node-client" "$neovim_rev" "$NODE_NIX"
+update_codex "$codex_version" "$NODE_NIX"
+update_github_pkg "Owloops" "claude-powerline" "$powerline_rev" "$NODE_NIX"
+
+echo "All node packages up to date."

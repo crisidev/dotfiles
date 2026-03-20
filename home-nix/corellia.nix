@@ -24,6 +24,7 @@
 
   home.packages = with pkgs; [
     antidote
+    argocd
     awscli2
     bat
     btop
@@ -67,6 +68,7 @@
     typescript
     uv
     wget
+    yamllint
     yarn
     yazi
     yq-go

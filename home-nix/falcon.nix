@@ -15,7 +15,6 @@ in
     ./programs/python.nix
     ./programs/node.nix
     ./programs/zathura.nix
-    ./programs/hyprland.nix
   ];
 
   config = {
@@ -23,6 +22,7 @@ in
       age
       ansible
       antidote
+      argocd
       awscli2
       bat
       brightnessctl
@@ -105,6 +105,7 @@ in
       valgrind
       wev
       which
+      yamllint
       yazi
       ydotool
       yq-go
