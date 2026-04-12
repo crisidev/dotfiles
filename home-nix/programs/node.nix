@@ -19,10 +19,10 @@ let
 
   openai-codex = pkgs.stdenv.mkDerivation {
     pname = "openai-codex";
-    version = "0.116.0";
+    version = "0.120.0";
     src = pkgs.fetchurl {
-      url = "https://github.com/openai/codex/releases/download/rust-v0.116.0/codex-x86_64-unknown-linux-gnu.tar.gz";
-      hash = "sha256-nHzLauLazZK2ziXVUllO3JuwaD9/GDaoJZluKeje2VQ=";
+      url = "https://github.com/openai/codex/releases/download/rust-v0.120.0/codex-x86_64-unknown-linux-gnu.tar.gz";
+      hash = "sha256-DYeMydvnyr+BN3XX6l3hGU11LTLbDCMmkDZlqEFhPIo=";
     };
     nativeBuildInputs = [ pkgs.autoPatchelfHook ];
     buildInputs = with pkgs; [ libcap openssl zlib stdenv.cc.cc.lib ];
@@ -40,10 +40,10 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "Owloops";
       repo = "claude-powerline";
-      rev = "v1.20.1";
-      hash = "sha256-qTVQSusLov+BtMv7V0/ZCUJvfbMRftxZ2q4WXtc3yGI=";
+      rev = "v1.24.4";
+      hash = "sha256-tP2qcXKWtwbftvxevAWScn4SLdsZNYwxPtEwuyNuzPs=";
     };
-    npmDepsHash = "sha256-qyExxspRcLcijtzZElCi889tM7rdPm2KiwWBO65f8ug=";
+    npmDepsHash = "sha256-D3Z5tb4phZUMPQaXvfYiIWuwaX5YGI8ubgyV7sSJqQk=";
   };
 in
 {
