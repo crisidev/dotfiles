@@ -1,0 +1,360 @@
+#!/usr/bin/env bash
+# Interactively triage GitHub repositories: keep, archive, or delete.
+# Safety:
+#   - Default action on empty input is "skip" (no-op).
+#   - Delete requires typing the full "owner/name" to confirm.
+#   - --dry-run prints intended actions without calling the API.
+#   - Already-archived repos are skipped unless --include-archived.
+
+set -euo pipefail
+
+DRY_RUN=0
+FORKS_ONLY=0
+INCLUDE_ARCHIVED=0
+# Honor NO_COLOR env (https://no-color.org/) before we shadow the var.
+[[ -n "${NO_COLOR:-}" ]] && NO_COLORS=1 || NO_COLORS=0
+MAX_LOG=10
+OWNER=""
+LIMIT=1000
+
+usage() {
+    cat <<EOF
+Usage: $(basename "$0") [options]
+
+Walk your GitHub repos one-by-one and choose: keep / archive / delete / skip.
+
+Options:
+  -n, --dry-run            Show what would happen, do not call mutating APIs.
+  -f, --forks-only         Only consider repos that are forks.
+  -a, --include-archived   Include already-archived repos (otherwise skipped).
+  -o, --owner <user|org>   Operate on this owner instead of the authenticated user.
+  -l, --limit <N>          Max repos to fetch (default: ${LIMIT}).
+      --no-color           Disable ANSI colors.
+      --max-log <N>        Max ahead-commits to print per fork (default: ${MAX_LOG}).
+  -h, --help               Show this help.
+
+Per-repo prompt actions:
+  k  keep        (no change, move on)
+  a  archive     (gh repo archive)
+  d  delete      (gh repo delete -- requires retyping owner/name)
+  s  skip        (default; same as k but explicit)
+  q  quit        (stop processing)
+  o  open        (open in browser, then re-prompt)
+EOF
+}
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -n|--dry-run)          DRY_RUN=1; shift ;;
+        -f|--forks-only)       FORKS_ONLY=1; shift ;;
+        -a|--include-archived) INCLUDE_ARCHIVED=1; shift ;;
+        -o|--owner)            OWNER="$2"; shift 2 ;;
+        -l|--limit)            LIMIT="$2"; shift 2 ;;
+        --no-color)            NO_COLORS=1; shift ;;
+        --max-log)             MAX_LOG="$2"; shift 2 ;;
+        -h|--help)             usage; exit 0 ;;
+        *) echo "Unknown argument: $1" >&2; usage >&2; exit 2 ;;
+    esac
+done
+
+command -v gh >/dev/null || { echo "gh CLI not found in PATH" >&2; exit 1; }
+command -v jq >/dev/null || { echo "jq not found in PATH" >&2; exit 1; }
+
+gh auth status >/dev/null 2>&1 || { echo "gh is not authenticated. Run: gh auth login" >&2; exit 1; }
+
+# --- Retry helper -----------------------------------------------------------
+# Retries gh on transient failures (502/503/504, network blips). Captures
+# stdout to a temp file and echoes it on success; prints the last error to
+# stderr on final failure. Honors set -e via explicit return code.
+gh_retry() {
+    local attempts=6 delay=2 i=1 rc=0
+    local out err
+    out=$(mktemp); err=$(mktemp)
+    while (( i <= attempts )); do
+        if gh "$@" >"$out" 2>"$err"; then
+            cat "$out"
+            rm -f "$out" "$err"
+            return 0
+        fi
+        rc=$?
+        if grep -qE '5[0-9]{2}|Bad Gateway|Service Unavailable|Gateway Timeout|timeout|connection reset|EOF' "$err"; then
+            (( i < attempts )) && printf '  %sgh transient error (try %d/%d), retrying in %ds…%s\n' \
+                "$C_YELLOW" "$i" "$attempts" "$delay" "$C_RESET" >&2
+            sleep "$delay"
+            delay=$(( delay * 2 ))
+            (( i++ ))
+            continue
+        fi
+        # Non-transient: fail fast.
+        cat "$err" >&2
+        rm -f "$out" "$err"
+        return "$rc"
+    done
+    cat "$err" >&2
+    rm -f "$out" "$err"
+    return "$rc"
+}
+
+# --- Colors -----------------------------------------------------------------
+if [[ $NO_COLORS -eq 1 || ! -t 1 ]]; then
+    C_RESET=""; C_BOLD=""; C_DIM=""
+    C_RED=""; C_GREEN=""; C_YELLOW=""; C_BLUE=""; C_MAGENTA=""; C_CYAN=""; C_GREY=""
+else
+    C_RESET=$'\033[0m'; C_BOLD=$'\033[1m'; C_DIM=$'\033[2m'
+    C_RED=$'\033[31m'; C_GREEN=$'\033[32m'; C_YELLOW=$'\033[33m'
+    C_BLUE=$'\033[34m'; C_MAGENTA=$'\033[35m'; C_CYAN=$'\033[36m'
+    C_GREY=$'\033[90m'
+fi
+
+hr() { printf '%s%s%s\n' "$C_GREY" "────────────────────────────────────────────────────────────────────" "$C_RESET"; }
+
+# --- Auth/owner -------------------------------------------------------------
+if [[ -z "$OWNER" ]]; then
+    OWNER="$(gh_retry api user --jq .login)"
+fi
+
+printf '%sgh-repo-cleanup%s  owner=%s%s%s  dry-run=%s  forks-only=%s  include-archived=%s\n' \
+    "$C_BOLD" "$C_RESET" "$C_CYAN" "$OWNER" "$C_RESET" \
+    "$([[ $DRY_RUN -eq 1 ]] && echo yes || echo no)" \
+    "$([[ $FORKS_ONLY -eq 1 ]] && echo yes || echo no)" \
+    "$([[ $INCLUDE_ARCHIVED -eq 1 ]] && echo yes || echo no)"
+
+# --- Token scope check ------------------------------------------------------
+# Classic tokens: archive needs `repo`, delete needs `delete_repo`.
+# Fine-grained PATs: both need "Administration: read+write" granted per-repo,
+# which we can't easily introspect from the CLI — warn and suggest a fix.
+AUTH_STATUS="$(gh auth status 2>&1 || true)"
+SCOPES=$(echo "$AUTH_STATUS" \
+    | sed -n "s/.*Token scopes:[[:space:]]*//p" \
+    | tr -d "'" | tr ',' ' ')
+have_scope() { [[ " $SCOPES " == *" $1 "* ]]; }
+
+if [[ -n "$SCOPES" ]]; then
+    missing=""
+    have_scope repo        || missing+=" repo"
+    have_scope delete_repo || missing+=" delete_repo"
+    if [[ -n "$missing" ]]; then
+        printf '%s⚠ classic token is missing scope(s):%s%s\n' "$C_YELLOW" "$missing" "$C_RESET"
+        printf '  Fix:  %sgh auth refresh -h github.com -s repo,delete_repo%s\n' "$C_CYAN" "$C_RESET"
+    else
+        printf '%s✓ token has repo + delete_repo%s\n' "$C_GREEN" "$C_RESET"
+    fi
+elif echo "$AUTH_STATUS" | grep -q 'github_pat_'; then
+    printf '%s⚠ fine-grained PAT in use — archive and delete need "Administration: read+write" granted%s\n' "$C_YELLOW" "$C_RESET"
+    printf '  Either edit the token at %shttps://github.com/settings/personal-access-tokens%s\n' "$C_CYAN" "$C_RESET"
+    printf '  or switch to a classic OAuth token: %sgh auth login -h github.com -s repo,delete_repo%s\n' "$C_CYAN" "$C_RESET"
+else
+    printf '%s· could not detect token scopes; archive/delete may fail later.%s\n' "$C_DIM" "$C_RESET"
+fi
+echo
+
+# --- Fetch repos ------------------------------------------------------------
+# Use the REST API directly. `gh repo list` uses the GraphQL endpoint, which
+# has been throwing 502s and stream-cancel errors. REST is on a different
+# backend and has been stable. We normalize to the same shape the rest of
+# the script expects (.parent is filled lazily per-fork from gh api repos/X).
+SELF="$(gh_retry api user --jq .login)"
+if [[ "$OWNER" == "$SELF" ]]; then
+    REST_PATH="/user/repos?per_page=100&affiliation=owner"
+else
+    REST_PATH="/users/${OWNER}/repos?per_page=100"
+fi
+
+# --paginate emits one JSON document per page. -s 'add' concatenates them.
+repos_json="$(gh_retry api --paginate "$REST_PATH" | jq -s '
+    [ .[] | .[] | {
+        nameWithOwner: .full_name,
+        name:          .name,
+        owner:         {login: .owner.login},
+        description:   .description,
+        isFork:        .fork,
+        isArchived:    .archived,
+        isPrivate:     .private,
+        stargazerCount: .stargazers_count,
+        forkCount:     .forks_count,
+        updatedAt:     .updated_at,
+        url:           .html_url,
+        parent:        null,
+        defaultBranchRef: {name: .default_branch}
+    } ]
+')"
+
+# Sanity check — if the request silently returned nothing useful, abort
+# rather than telling the user "no repos matched".
+if ! echo "$repos_json" | jq -e 'type == "array"' >/dev/null 2>&1; then
+    printf '%sUnexpected response from GitHub — aborting before doing anything destructive.%s\n' "$C_RED" "$C_RESET" >&2
+    exit 1
+fi
+
+filter='.[]'
+[[ $FORKS_ONLY -eq 1 ]]       && filter="$filter | select(.isFork)"
+[[ $INCLUDE_ARCHIVED -eq 0 ]] && filter="$filter | select(.isArchived | not)"
+
+# Oldest-updated first so stale stuff surfaces early. Apply LIMIT after sort.
+mapfile -t repos < <(echo "$repos_json" | jq -c --argjson lim "$LIMIT" "[ $filter ] | sort_by(.updatedAt) | .[0:\$lim] | .[]")
+
+total=${#repos[@]}
+if [[ $total -eq 0 ]]; then
+    echo "No repos matched the filters."
+    exit 0
+fi
+
+printf '%sFound %d repo(s) to triage.%s\n' "$C_BOLD" "$total" "$C_RESET"
+
+kept=0; archived=0; deleted=0; skipped=0
+
+run() {
+    if [[ $DRY_RUN -eq 1 ]]; then
+        printf '  %s[dry-run]%s %s\n' "$C_YELLOW" "$C_RESET" "$*"
+    else
+        "$@"
+    fi
+}
+
+# Print fork comparison + short log of local-only commits.
+# Args: my_owner_repo my_branch parent_owner_repo parent_branch
+print_fork_compare() {
+    local mine="$1" my_branch="$2" parent="$3" parent_branch="$4"
+    local parent_owner="${parent%%/*}"
+    local cmp
+    if ! cmp=$(gh_retry api "repos/${mine}/compare/${parent_owner}:${parent_branch}...${my_branch}" 2>/dev/null); then
+        printf '       %scompare:%s could not compare against %s (%s)\n' \
+            "$C_YELLOW" "$C_RESET" "$parent" "$parent_branch"
+        return
+    fi
+    local ahead behind
+    ahead=$(echo "$cmp"  | jq -r '.ahead_by  // 0')
+    behind=$(echo "$cmp" | jq -r '.behind_by // 0')
+
+    local ahead_col="$C_GREEN" behind_col="$C_RED"
+    [[ "$ahead"  == "0" ]] && ahead_col="$C_DIM"
+    [[ "$behind" == "0" ]] && behind_col="$C_DIM"
+
+    printf '       vs %s%s%s (%s): %s↑%s ahead %s  %s↓%s behind %s\n' \
+        "$C_MAGENTA" "$parent" "$C_RESET" "$parent_branch" \
+        "$ahead_col" "$C_RESET" "$ahead" \
+        "$behind_col" "$C_RESET" "$behind"
+
+    if [[ "$ahead" != "0" ]]; then
+        local n="$ahead"
+        (( n > MAX_LOG )) && n="$MAX_LOG"
+        printf '       %slocal-only commits (showing %d of %s):%s\n' "$C_DIM" "$n" "$ahead" "$C_RESET"
+        echo "$cmp" | jq -r --argjson n "$n" '
+            .commits | reverse | .[0:$n] | .[] |
+            "       \(.sha[0:7])  \((.commit.author.date|sub("T.*";""))) \(.commit.author.name // "?"): \(.commit.message | split("\n")[0])"
+        ' | while IFS= read -r line; do
+            printf '%s%s%s\n' "$C_CYAN" "$line" "$C_RESET"
+        done
+        if (( ahead > MAX_LOG )); then
+            printf '       %s… and %d more%s\n' "$C_DIM" $((ahead - MAX_LOG)) "$C_RESET"
+        fi
+    fi
+}
+
+for i in "${!repos[@]}"; do
+    repo="${repos[$i]}"
+    name=$(echo    "$repo" | jq -r .nameWithOwner)
+    desc=$(echo    "$repo" | jq -r '.description // ""')
+    is_fork=$(echo "$repo" | jq -r .isFork)
+    is_arch=$(echo "$repo" | jq -r .isArchived)
+    is_priv=$(echo "$repo" | jq -r .isPrivate)
+    stars=$(echo   "$repo" | jq -r .stargazerCount)
+    forks=$(echo   "$repo" | jq -r .forkCount)
+    updated=$(echo "$repo" | jq -r .updatedAt)
+    url=$(echo     "$repo" | jq -r .url)
+    parent=$(echo  "$repo" | jq -r '.parent.nameWithOwner // ""')
+    my_branch=$(echo "$repo" | jq -r '.defaultBranchRef.name // "HEAD"')
+
+    flags=""
+    [[ "$is_fork" == "true" ]] && flags+=" ${C_BLUE}fork${C_RESET}"
+    [[ "$is_arch" == "true" ]] && flags+=" ${C_YELLOW}archived${C_RESET}"
+    [[ "$is_priv" == "true" ]] && flags+=" ${C_MAGENTA}private${C_RESET}"
+
+    echo
+    hr
+    printf '%s[%d/%d]%s %s%s%s\n' "$C_DIM" $((i+1)) "$total" "$C_RESET" "$C_BOLD" "$name" "$C_RESET"
+    printf '       %supdated:%s %s   %s★%s %s   %s⑂%s %s  %s\n' \
+        "$C_DIM" "$C_RESET" "${updated%T*}" \
+        "$C_YELLOW" "$C_RESET" "$stars" \
+        "$C_BLUE" "$C_RESET" "$forks" \
+        "$flags"
+    [[ -n "$desc" ]]   && printf '       %s%s%s\n' "$C_DIM" "$desc" "$C_RESET"
+    printf '       %s%s%s\n' "$C_GREY" "$url" "$C_RESET"
+
+    if [[ "$is_fork" == "true" ]]; then
+        # REST list doesn't include parent; fetch repo details to get both
+        # parent.full_name and parent.default_branch in a single call.
+        parent_info=$(gh_retry api "repos/${name}" --jq '{p: (.parent.full_name // ""), b: (.parent.default_branch // "")}' 2>/dev/null || echo '')
+        parent=$(echo "$parent_info" | jq -r '.p // ""' 2>/dev/null || echo "")
+        parent_branch=$(echo "$parent_info" | jq -r '.b // ""' 2>/dev/null || echo "")
+        if [[ -z "$parent" || -z "$parent_branch" ]]; then
+            printf '       %sparent unreachable (deleted, private, or detached fork)%s\n' \
+                "$C_YELLOW" "$C_RESET"
+        else
+            print_fork_compare "$name" "$my_branch" "$parent" "$parent_branch"
+        fi
+    fi
+
+    while true; do
+        prompt=$(printf '       %s[k]%seep / %s[a]%srchive / %s[d]%selete / %s[s]%skip / [o]pen / [q]uit%s (default skip): ' \
+            "$C_GREEN" "$C_RESET" "$C_YELLOW" "$C_RESET" "$C_RED" "$C_RESET" "$C_DIM" "$C_RESET" "")
+        read -r -p "$prompt" ans </dev/tty || ans="q"
+        case "${ans:-s}" in
+            k|K|keep)
+                printf '       %s✓ kept.%s\n' "$C_GREEN" "$C_RESET"
+                ((kept++)) || true
+                break
+                ;;
+            s|S|skip|"")
+                printf '       %s· skipped.%s\n' "$C_DIM" "$C_RESET"
+                ((skipped++)) || true
+                break
+                ;;
+            o|O|open)
+                run gh repo view --web "$name" || true
+                continue
+                ;;
+            a|A|archive)
+                if [[ "$is_arch" == "true" ]]; then
+                    printf '       %s· already archived.%s\n' "$C_DIM" "$C_RESET"
+                    ((skipped++)) || true
+                    break
+                fi
+                run gh repo archive "$name" --yes
+                printf '       %s⌫ archived.%s\n' "$C_YELLOW" "$C_RESET"
+                ((archived++)) || true
+                break
+                ;;
+            d|D|delete)
+                printf '       %s%sDANGER%s: this will permanently delete %s.\n' "$C_BOLD" "$C_RED" "$C_RESET" "$name"
+                read -r -p "       Type the full name '$name' to confirm: " confirm </dev/tty || confirm=""
+                if [[ "$confirm" != "$name" ]]; then
+                    printf '       %sconfirmation mismatch — not deleting.%s\n' "$C_YELLOW" "$C_RESET"
+                    ((skipped++)) || true
+                    break
+                fi
+                run gh repo delete "$name" --yes
+                printf '       %s✗ deleted.%s\n' "$C_RED" "$C_RESET"
+                ((deleted++)) || true
+                break
+                ;;
+            q|Q|quit)
+                printf '       %squitting.%s\n' "$C_DIM" "$C_RESET"
+                break 2
+                ;;
+            *)
+                printf '       %sunrecognized; try again.%s\n' "$C_YELLOW" "$C_RESET"
+                ;;
+        esac
+    done
+done
+
+echo
+hr
+printf '%sSummary%s  %skept=%d%s  %sarchived=%d%s  %sdeleted=%d%s  %sskipped=%d%s\n' \
+    "$C_BOLD" "$C_RESET" \
+    "$C_GREEN" "$kept" "$C_RESET" \
+    "$C_YELLOW" "$archived" "$C_RESET" \
+    "$C_RED" "$deleted" "$C_RESET" \
+    "$C_DIM" "$skipped" "$C_RESET"
+[[ $DRY_RUN -eq 1 ]] && printf '%s(dry-run: no changes were made)%s\n' "$C_DIM" "$C_RESET"
