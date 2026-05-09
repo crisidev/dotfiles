@@ -72,7 +72,7 @@ update_codex() {
 
   echo "  openai/codex: $current_version -> $version"
 
-  url="https://github.com/openai/codex/releases/download/$tag/codex-x86_64-unknown-linux-gnu.tar.gz"
+  url="https://github.com/openai/codex/releases/download/$tag/codex-x86_64-unknown-linux-musl.tar.gz"
   src_hash=$(nix-prefetch-url "$url" 2>/dev/null)
   src_hash=$(nix hash convert --hash-algo sha256 --to sri "$src_hash")
 
@@ -84,15 +84,44 @@ update_codex() {
   echo "  Done."
 }
 
+update_hunk() {
+  local current_version=$1 nix_file=$2
+  local tag version url src_hash
+
+  # hunk publishes prerelease (beta) tags; releases/latest skips them, so use the full release list.
+  tag=$(curl -sf "https://api.github.com/repos/modem-dev/hunk/releases?per_page=1" | jq -r '.[0].tag_name')
+  version="${tag#v}"
+
+  if [ "$version" = "$current_version" ]; then
+    echo "  modem-dev/hunk: already at $version"
+    return
+  fi
+
+  echo "  modem-dev/hunk: $current_version -> $version"
+
+  url="https://github.com/modem-dev/hunk/releases/download/$tag/hunkdiff-linux-x64.tar.gz"
+  src_hash=$(nix-prefetch-url "$url" 2>/dev/null)
+  src_hash=$(nix hash convert --hash-algo sha256 --to sri "$src_hash")
+
+  sed -i "/pname = \"hunk\"/,/installPhase/ {
+    s|version = \"[^\"]*\";|version = \"$version\";|
+    s|download/v[^/]*/|download/$tag/|
+    s|hash = \"sha256-[^\"]*\";|hash = \"$src_hash\";|
+  }" "$nix_file"
+  echo "  Done."
+}
+
 echo "Updating node packages..."
 
 # Extract current versions from node.nix
 neovim_rev=$(grep -A2 'repo = "node-client"' "$NODE_NIX" | grep -oP 'rev = "\K[^"]+')
 codex_version=$(grep -A1 'pname = "openai-codex"' "$NODE_NIX" | grep -oP 'version = "\K[^"]+')
 powerline_rev=$(grep -A2 'repo = "claude-powerline"' "$NODE_NIX" | grep -oP 'rev = "\K[^"]+')
+hunk_version=$(grep -A1 'pname = "hunk"' "$NODE_NIX" | grep -oP 'version = "\K[^"]+')
 
 update_github_pkg "neovim" "node-client" "$neovim_rev" "$NODE_NIX"
 update_codex "$codex_version" "$NODE_NIX"
 update_github_pkg "Owloops" "claude-powerline" "$powerline_rev" "$NODE_NIX"
+update_hunk "$hunk_version" "$NODE_NIX"
 
 echo "All node packages up to date."
