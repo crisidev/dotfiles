@@ -23,6 +23,7 @@ in
       ansible
       antidote
       argocd
+      aseprite
       awscli2
       bat
       brightnessctl
@@ -128,6 +129,7 @@ in
         OPENSSL_LIB_DIR = "${pkgs.openssl.out}/lib";
         OPENSSL_INCLUDE_DIR = "${pkgs.openssl.dev}/include";
         UV_HTTP_TIMEOUT = "600";
+        NIXPKGS_ALLOW_UNFREE = "1";
       };
       file.".local/bin/uv".source = "${pkgs.uv}/bin/uv";
       activation.updateNeovim = lib.mkAfter ''

@@ -19,10 +19,10 @@ let
 
   openai-codex = pkgs.stdenv.mkDerivation {
     pname = "openai-codex";
-    version = "0.130.0";
+    version = "0.137.0";
     src = pkgs.fetchurl {
-      url = "https://github.com/openai/codex/releases/download/rust-v0.130.0/codex-x86_64-unknown-linux-musl.tar.gz";
-      hash = "sha256-Fneee3hXUIp2ijbX1OCE7sM27COUbtcKmwlIm4+GEZA=";
+      url = "https://github.com/openai/codex/releases/download/rust-v0.137.0/codex-x86_64-unknown-linux-musl.tar.gz";
+      hash = "sha256-2W6IMTuVWX6cu4cE9tsW27gcBxQrCM+2KEeatDNpaTE=";
     };
     dontUnpack = true;
     installPhase = ''
@@ -38,18 +38,18 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "Owloops";
       repo = "claude-powerline";
-      rev = "v1.26.0";
-      hash = "sha256-lEqtNMnK94TjG9cMrJ47oxb/k175nRDosifxUfg+mNs=";
+      rev = "v1.27.0";
+      hash = "sha256-OdZ5nMNfiK3qEtW81ut2+e2SEfCzztFD34/pXadhBCE=";
     };
     npmDepsHash = "sha256-D3Z5tb4phZUMPQaXvfYiIWuwaX5YGI8ubgyV7sSJqQk=";
   };
 
   hunk = pkgs.stdenv.mkDerivation {
     pname = "hunk";
-    version = "0.11.0-beta.0";
+    version = "0.14.1";
     src = pkgs.fetchurl {
-      url = "https://github.com/modem-dev/hunk/releases/download/v0.11.0-beta.0/hunkdiff-linux-x64.tar.gz";
-      hash = "sha256-IIS4kXMWvmgv1UiCSmfVuLk99GPxt/Ltgtyl4dNk90U=";
+      url = "https://github.com/modem-dev/hunk/releases/download/v0.14.1/hunkdiff-linux-x64.tar.gz";
+      hash = "sha256-enmhID6L4tr8+KDgvi8XvJhMsFC+GVoHEKh3YkSqiP4=";
     };
     nativeBuildInputs = [ pkgs.autoPatchelfHook ];
     buildInputs = with pkgs; [ stdenv.cc.cc.lib ];

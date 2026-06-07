@@ -7,17 +7,29 @@ elif [ "$1" = "mandalore" ]; then
     ADDRESS=10.0.1.253
 elif [ "$1" = "tatooine" ]; then
     ADDRESS=10.0.1.251
+elif [ "$1" = "kamino" ] || [ "$1" == "jakku" ]; then
+    ADDRESS=10.0.1.249
+elif [ "$1" == "jakku" ]; then
+    ADDRESS=10.0.1.248
 else
     echo "usage: $0 corellia|mandalore|tatooine"
     exit 1
 fi
 
-while ! ping -c 1 -W 1 "$ADDRESS" > /dev/null 2>&1; do
-  sleep 1
-done
-ssh -i ~/.ssh/unlock "root@$ADDRESS" -t cryptroot-unlock
-sleep 10
-while ! ping -c 1 -W 1 "$ADDRESS" > /dev/null 2>&1; do
-  sleep 1
-done
-ssh "$1"
+if [ "$1" = "kamino" ] || [ "$1" == "jakku" ]; then
+    sleep 10
+    while ! ping -c 1 -W 1 "$ADDRESS" >/dev/null 2>&1; do
+        sleep 1
+    done
+    ssh "$1"
+else
+    while ! ping -c 1 -W 1 "$ADDRESS" >/dev/null 2>&1; do
+        sleep 1
+    done
+    ssh -i ~/.ssh/unlock "root@$ADDRESS" -t cryptroot-unlock
+    sleep 10
+    while ! ping -c 1 -W 1 "$ADDRESS" >/dev/null 2>&1; do
+        sleep 1
+    done
+    ssh "$1"
+fi
