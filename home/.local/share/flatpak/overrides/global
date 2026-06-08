@@ -1,0 +1,8 @@
+[Context]
+filesystems=xdg-config/gtk-3.0:ro;~/.local/share/icons:ro;xdg-config/gtk-4.0:ro;~/.themes:ro;~/.icons:ro;
+
+[Environment]
+GTK_THEME=Orchis-Grey-Dark-Nord
+ICON_THEME=Suru++
+XCURSOR_THEME=Bibata-Modern-Ice
+ELECTRON_OZONE_PLATFORM_HINT=auto
