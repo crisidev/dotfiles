@@ -19,10 +19,10 @@ let
 
   openai-codex = pkgs.stdenv.mkDerivation {
     pname = "openai-codex";
-    version = "0.137.0";
+    version = "0.143.0";
     src = pkgs.fetchurl {
-      url = "https://github.com/openai/codex/releases/download/rust-v0.137.0/codex-x86_64-unknown-linux-musl.tar.gz";
-      hash = "sha256-2W6IMTuVWX6cu4cE9tsW27gcBxQrCM+2KEeatDNpaTE=";
+      url = "https://github.com/openai/codex/releases/download/rust-v0.143.0/codex-x86_64-unknown-linux-musl.tar.gz";
+      hash = "sha256-2dxzHcZuInsXWxPAcb6eoSbMdnL8rIqHgj2lCw0rL/4=";
     };
     dontUnpack = true;
     installPhase = ''
@@ -46,10 +46,10 @@ let
 
   hunk = pkgs.stdenv.mkDerivation {
     pname = "hunk";
-    version = "0.14.1";
+    version = "0.17.0";
     src = pkgs.fetchurl {
-      url = "https://github.com/modem-dev/hunk/releases/download/v0.14.1/hunkdiff-linux-x64.tar.gz";
-      hash = "sha256-enmhID6L4tr8+KDgvi8XvJhMsFC+GVoHEKh3YkSqiP4=";
+      url = "https://github.com/modem-dev/hunk/releases/download/v0.17.0/hunkdiff-linux-x64.tar.gz";
+      hash = "sha256-DGJvemaHqYJjBOod9pbaXUnt+EJx7M31f//1g0KJ4OI=";
     };
     nativeBuildInputs = [ pkgs.autoPatchelfHook ];
     buildInputs = with pkgs; [ stdenv.cc.cc.lib ];

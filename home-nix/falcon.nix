@@ -85,6 +85,7 @@ in
       nixgl.nixGLIntel
       ninja
       openssl
+      opencode
       pkg-config
       poppler
       protobuf

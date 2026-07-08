@@ -34,3 +34,5 @@ Temporary Items
 .coverage
 .direnv
 .claude
+
+**/.claude/settings.local.json
