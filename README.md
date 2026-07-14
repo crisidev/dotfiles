@@ -38,10 +38,30 @@ home-manager switch --flake .#falcon
 
 GDM only reads `/usr/share/wayland-sessions/`, which home-manager can't write to
 as your user. A home-manager activation script (`installHyprlandSession` in
-`falcon.nix`) copies the generated `hyprland.desktop` there via `sudo` on every
-`switch` — but only when the file actually changed (guarded by `cmp`), so it
-prompts for your password just the once and stays silent on routine rebuilds. It
-also removes the stale `hyprland-nix.desktop` if present. Nothing to run by hand.
+`falcon.nix`) copies the generated `hyprland.desktop` there **as root** on every
+`switch`, but only when the file actually changed (guarded by `cmp`), and also
+removes the stale `hyprland-nix.desktop`.
+
+Activation has no TTY, so it can't prompt for a sudo password — it uses `sudo -n`
+and relies on a one-time scoped **NOPASSWD** rule. Install it once (the rule text
+is generated at `~/.config/hyprland/gdm-session.sudoers`, so it always matches the
+exact commands the script runs):
+
+```sh
+sudo install -m440 -o root -g root \
+  ~/.config/hyprland/gdm-session.sudoers /etc/sudoers.d/50-hyprland-gdm-session
+sudo visudo -c    # sanity-check syntax
+```
+
+After that, every `home-manager switch` keeps the GDM session in sync silently.
+Until it's installed, the switch prints a NOTE with these same commands; you can
+also just register the session by hand once:
+
+```sh
+sudo install -m644 ~/.local/share/wayland-sessions/hyprland.desktop \
+  /usr/share/wayland-sessions/hyprland.desktop
+sudo rm -f /usr/share/wayland-sessions/hyprland-nix.desktop
+```
 
 The `.desktop`'s `Exec` runs `start-hyprland` (the official launcher) rather than
 the `Hyprland` binary directly — launching Hyprland directly triggers a "launched
@@ -54,15 +74,6 @@ the lookup; `--no-nixgl` is right because that target is already the nixGL
 wrapper.
 
 Log out, select **Hyprland** from the GDM session menu, and log in.
-
-If the activation couldn't use `sudo` (e.g. a non-interactive rebuild), register
-it by hand:
-
-```sh
-sudo cp -L ~/.local/share/wayland-sessions/hyprland.desktop \
-  /usr/share/wayland-sessions/hyprland.desktop
-sudo rm -f /usr/share/wayland-sessions/hyprland-nix.desktop
-```
 
 ### Keybindings
 

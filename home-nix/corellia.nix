@@ -5,6 +5,7 @@
     ./programs/python-base.nix
     ./programs/node.nix
     ./programs/zellij.nix
+    ./programs/tmux.nix
   ];
 
   home = {
@@ -61,7 +62,6 @@
     sops
     statix
     strace
-    tmux
     tokei
     typescript
     uv

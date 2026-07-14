@@ -24,6 +24,16 @@
     direnv = {
       enable = true;
       nix-direnv.enable = true;
+      # Ported from the old homesick direnvrc-git-crisidev: `use git_crisidev` in an
+      # .envrc sets the git author/committer to the crisidev identity.
+      stdlib = ''
+        use_git_crisidev() {
+          export GIT_AUTHOR_EMAIL=bigo@crisidev.org
+          export GIT_AUTHOR_NAME="Matteo Bigoi"
+          export GIT_COMMITTER_EMAIL=bigo@crisidev.org
+          export GIT_COMMITTER_NAME="Matteo Bigoi"
+        }
+      '';
     };
     home-manager.enable = true;
   };

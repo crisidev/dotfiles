@@ -3,6 +3,7 @@
   imports = [
     ./common.nix
     ./programs/python-base.nix
+    ./programs/tmux.nix
   ];
 
   home = {
@@ -45,7 +46,6 @@
     sops
     statix
     strace
-    tmux
     tokei
     typescript
     uv
