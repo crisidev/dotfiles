@@ -154,6 +154,12 @@ in
         styling = {
           theme-provider = "wayle";
           palette = tokyonight;
+          # Scale Wayle's own UI (bar text/icons + notification popups) up ~15%.
+          # This is independent of the Hyprland monitor scale (1.2): the
+          # compositor sizes the surface, this sizes Wayle's internal layout,
+          # so bar/notification fonts read at the same visual weight as the
+          # 13 px terminal / GTK apps rather than Wayle's small defaults.
+          scale = 1.15;
         };
 
         # ── Per-module tweaks + unified colour scheme ───────────────────────
@@ -275,7 +281,7 @@ in
   xdg.configFile."wayle/styles/index.scss".text = ''
     // Wider notification toasts (Wayle default: 340px).
     .notification-popup-card {
-      min-width: calc(600px * var(--global-scale));
+      min-width: calc(480px * var(--global-scale));
     }
   '';
 }

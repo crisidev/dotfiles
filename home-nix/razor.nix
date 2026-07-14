@@ -13,7 +13,6 @@
   home.packages = with pkgs; [
     antidote
     awscli2
-    bat
     curl
     deadnix
     delta
@@ -26,7 +25,6 @@
     ripgrep
     strace
     uv
-    yazi
     yq-go
     zoxide
   ];

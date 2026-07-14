@@ -24,7 +24,7 @@ in
     plugins = [ ];
 
     settings = {
-      monitor = ",preferred,auto,1";
+      monitor = ",preferred,auto,1.2";
 
       env = [
         # Hyprland (launched by GDM) inherits a system PATH without
@@ -138,6 +138,16 @@ in
         animate_manual_resizes = true;
         animate_mouse_windowdragging = true;
         # NB: `vfr` moved to `debug:vfr` (default true) — no longer a misc option.
+      };
+
+      # The update-news / donation popups are drawn by hyprland-qtutils, which
+      # isn't installed (and the compositor's PATH — inherited from GDM — lacks
+      # ~/.nix-profile/bin anyway, so it couldn't find it). Disabling both stops
+      # Hyprland from attempting them, which is what emits the "qtutils not
+      # installed" error at startup.
+      ecosystem = {
+        no_update_news = true;
+        no_donation_nag = true;
       };
 
       # Layer blur — frosted glass on the Wayle shell + wofi launcher
@@ -480,7 +490,7 @@ in
     };
     font = {
       name = "Inter";
-      size = 11;
+      size = 13;
     };
     gtk3.extraConfig = {
       gtk-application-prefer-dark-theme = true;
@@ -574,12 +584,22 @@ in
   '';
 
   # ── Wayland session file (GDM reads /usr/share/wayland-sessions/) ─────────
-  # Written here so the activation script in falcon.nix can symlink it there.
+  # Written here so it can be copied into /usr/share/wayland-sessions/ (see README).
+  #
+  # start-hyprland is a watchdog that launches the compositor via
+  # execvp("Hyprland", …) — a *bare-name* PATH lookup. GDM's session PATH has no
+  # ~/.nix-profile/bin, so a plain `Exec=…/start-hyprland` fails that lookup
+  # ("fork(): execvp failed") and GDM drops straight back to the login screen.
+  # Passing an absolute --path skips the PATH lookup entirely; --no-nixgl because
+  # that target (~/.nix-profile/bin/Hyprland) is itself the nixGL wrapper, so
+  # letting start-hyprland re-apply nixGL would just make it hunt for `nixGL` on
+  # PATH and hit the same wall. Both paths are the stable profile symlinks, so the
+  # copied /usr file keeps working across rebuilds without another sudo cp.
   home.file.".local/share/wayland-sessions/hyprland.desktop".text = ''
     [Desktop Entry]
     Name=Hyprland
     Comment=An intelligent dynamic tiling Wayland compositor
-    Exec=${config.home.homeDirectory}/.nix-profile/bin/start-hyprland
+    Exec=${config.home.homeDirectory}/.nix-profile/bin/start-hyprland --no-nixgl --path ${config.home.homeDirectory}/.nix-profile/bin/Hyprland
     Type=Application
     DesktopNames=Hyprland
   '';
@@ -595,6 +615,10 @@ in
     hyprlock
     hypridle
     hyprpicker
+    # Backs the ANR "app not responding" dialog and (suppressed above) the
+    # update-news / donation popups. Found by the compositor via the PATH env
+    # directive that prepends ~/.nix-profile/bin.
+    hyprland-qtutils
     grimblast
     wl-clipboard
     udiskie

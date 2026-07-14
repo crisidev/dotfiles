@@ -3,6 +3,8 @@
   imports = [
     ./programs/starship.nix
     ./programs/git.nix
+    ./programs/bat.nix
+    ./programs/yazi.nix
   ];
 
   fonts.fontconfig.enable = true;

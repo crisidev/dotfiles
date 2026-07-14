@@ -4,6 +4,7 @@
     ./common.nix
     ./programs/python-base.nix
     ./programs/node.nix
+    ./programs/zellij.nix
   ];
 
   home = {
@@ -26,7 +27,6 @@
     antidote
     argocd
     awscli2
-    bat
     btop
     curl
     deadnix
@@ -68,9 +68,7 @@
     wget
     yamllint
     yarn
-    yazi
     yq-go
-    zellij
     zoxide
     zsh
   ];

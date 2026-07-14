@@ -13,7 +13,6 @@
   home.packages = with pkgs; [
     antidote
     awscli2
-    bat
     btop
     curl
     deadnix
@@ -52,7 +51,6 @@
     uv
     wget
     yarn
-    yazi
     yq-go
     zoxide
   ];

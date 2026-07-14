@@ -17,6 +17,9 @@ in
     ./programs/zathura.nix
     ./programs/hyprland.nix
     ./programs/wayle.nix
+    ./programs/lazygit.nix
+    ./programs/kitty.nix
+    ./programs/zellij.nix
   ];
 
   config = {
@@ -27,7 +30,6 @@ in
       argocd
       aseprite
       awscli2
-      bat
       brightnessctl
       btop
       clang_19
@@ -63,12 +65,10 @@ in
       just
       k3sup
       k9s
-      (nixGL pkgs.kitty)
       kubectl
       kubectx
       kubernetes-helm
       kyverno
-      lazygit
       lua51Packages.lua
       luarocks
       mash
@@ -108,10 +108,8 @@ in
       wev
       which
       yamllint
-      yazi
       ydotool
       yq-go
-      zellij
       zenith
       zoxide
       zstd
@@ -139,10 +137,31 @@ in
       # activation.updateGsettings = lib.mkAfter ''
       #   $HOME/.bin/gsettings-update
       # '';
-      # GDM (runs as gdm user) only reads /usr/share/wayland-sessions/.
-      # Copy rather than symlink so gdm doesn't need to traverse ~/.local -> /nix/store.
-      # To register the Hyprland session with GDM, run once after switch:
-      # sudo cp -L ~/.local/share/wayland-sessions/hyprland.desktop /usr/share/wayland-sessions/hyprland.desktop
+
+      # Register the Hyprland session with GDM. GDM (running as the gdm user)
+      # only reads /usr/share/wayland-sessions/, which home-manager (running as
+      # bigo) can't write — so this copies the generated .desktop there via sudo.
+      # We copy rather than symlink so gdm never has to traverse ~/.local into
+      # /nix/store. The cmp guard means sudo only runs (and only prompts for a
+      # password) when the file actually changed or the stale hyprland-nix.desktop
+      # is still present, so routine rebuilds stay silent and non-interactive.
+      # If sudo is unavailable (e.g. non-interactive rebuild), we warn instead of
+      # aborting the whole switch — re-run the copy by hand from the README.
+      activation.installHyprlandSession = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+        src=${config.home.file.".local/share/wayland-sessions/hyprland.desktop".source}
+        dst=/usr/share/wayland-sessions/hyprland.desktop
+        stale=/usr/share/wayland-sessions/hyprland-nix.desktop
+        if ! ${pkgs.diffutils}/bin/cmp -s "$src" "$dst" || [ -e "$stale" ]; then
+          run() { $DRY_RUN_CMD /usr/bin/sudo -n "$@" 2>/dev/null || $DRY_RUN_CMD /usr/bin/sudo "$@"; }
+          if run ${pkgs.coreutils}/bin/install -Dm644 "$src" "$dst"; then
+            run ${pkgs.coreutils}/bin/rm -f "$stale"
+            echo "Installed Hyprland GDM session -> $dst"
+          else
+            echo "WARNING: could not sudo-install $dst; register it manually (see README)." >&2
+          fi
+        fi
+      '';
+
       extraOutputsToInstall = [ "dev" ];
     };
 

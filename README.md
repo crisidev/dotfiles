@@ -34,22 +34,35 @@ cd ~/.homesick/repos/dotfiles
 home-manager switch --flake .#falcon
 ```
 
-### 2. Register the GDM session (once, requires sudo)
+### 2. Register the GDM session
 
-GDM needs a session file to show Hyprland as a login option:
+GDM only reads `/usr/share/wayland-sessions/`, which home-manager can't write to
+as your user. A home-manager activation script (`installHyprlandSession` in
+`falcon.nix`) copies the generated `hyprland.desktop` there via `sudo` on every
+`switch` — but only when the file actually changed (guarded by `cmp`), so it
+prompts for your password just the once and stays silent on routine rebuilds. It
+also removes the stale `hyprland-nix.desktop` if present. Nothing to run by hand.
+
+The `.desktop`'s `Exec` runs `start-hyprland` (the official launcher) rather than
+the `Hyprland` binary directly — launching Hyprland directly triggers a "launched
+without start-hyprland" warning at startup. It passes an absolute
+`--path …/Hyprland` (plus `--no-nixgl`) on purpose: `start-hyprland` otherwise
+finds the compositor with a bare-name `execvp("Hyprland")`, and GDM's session
+`PATH` has no `~/.nix-profile/bin`, so that lookup fails ("fork(): execvp
+failed") and GDM bounces you back to the login screen. The absolute path skips
+the lookup; `--no-nixgl` is right because that target is already the nixGL
+wrapper.
+
+Log out, select **Hyprland** from the GDM session menu, and log in.
+
+If the activation couldn't use `sudo` (e.g. a non-interactive rebuild), register
+it by hand:
 
 ```sh
-sudo tee /usr/share/wayland-sessions/hyprland-nix.desktop << 'EOF'
-[Desktop Entry]
-Name=Hyprland (Nix)
-Comment=Dynamic tiling Wayland compositor — TokyoNight
-Exec=/home/bigo/.nix-profile/bin/Hyprland
-Type=Application
-DesktopNames=Hyprland
-EOF
+sudo cp -L ~/.local/share/wayland-sessions/hyprland.desktop \
+  /usr/share/wayland-sessions/hyprland.desktop
+sudo rm -f /usr/share/wayland-sessions/hyprland-nix.desktop
 ```
-
-Log out, select **Hyprland (Nix)** from the GDM session menu, and log in.
 
 ### Keybindings
 
