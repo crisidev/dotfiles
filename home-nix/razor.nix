@@ -25,7 +25,6 @@
     neovim
     nixfmt
     ripgrep
-    starship
     strace
     uv
     yazi

@@ -60,7 +60,6 @@
     ripgrep
     rustup
     sops
-    starship
     statix
     strace
     tmux

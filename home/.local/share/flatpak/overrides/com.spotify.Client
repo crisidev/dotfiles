@@ -1,0 +1,7 @@
+# Run Spotify on XWayland so Mutter draws a normal titlebar. Native Wayland
+# (WaylandWindowDecorations) drew a plain grey Chromium titlebar that doesn't
+# match the GTK theme. Dropping the wayland socket makes the manifest's
+# fallback-x11 mount the X11 socket and set DISPLAY; CEF then picks X11 on its
+# own, so no ozone flag / spotify-flags.conf is needed.
+[Context]
+sockets=x11;!wayland;

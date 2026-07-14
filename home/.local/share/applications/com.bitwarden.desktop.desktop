@@ -1,0 +1,14 @@
+[Desktop Entry]
+Name=Bitwarden
+Exec=/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=bitwarden.sh --file-forwarding com.bitwarden.desktop @@u %U @@
+Terminal=false
+Type=Application
+Icon=com.bitwarden.desktop
+StartupWMClass=Bitwarden
+GenericName=Password Manager
+Comment=A secure and free password manager for all of your devices.
+MimeType=x-scheme-handler/bitwarden;
+Categories=System;Security;
+X-Desktop-File-Install-Version=0.28
+X-Flatpak-RenamedFrom=bitwarden.desktop;
+X-Flatpak=com.bitwarden.desktop

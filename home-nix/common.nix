@@ -1,5 +1,9 @@
 { ... }:
 {
+  imports = [
+    ./programs/starship.nix
+  ];
+
   fonts.fontconfig.enable = true;
   targets.genericLinux.enable = true;
 

@@ -1,0 +1,8 @@
+# Run Ferdium on native Wayland. The ~10px CSD border gap that pop-shell showed
+# is fixed separately by ~/.config/gtk-3.0/gtk.css (decoration { margin: 0 }),
+# which the sandbox reads via its xdg-config/gtk-3.0:ro permission.
+[Context]
+sockets=wayland;
+
+[Environment]
+ELECTRON_OZONE_PLATFORM_HINT=auto

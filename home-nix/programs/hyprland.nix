@@ -16,6 +16,10 @@ in
     portalPackage = inputs.hyprland.packages.${pkgs.system}.xdg-desktop-portal-hyprland;
     xwayland.enable = true;
     systemd.enable = false;
+    # Keep the classic hyprland config format (settings below are hyprlang).
+    # The new "lua" default is unrelated to our config; pin explicitly to
+    # silence the stateVersion-driven default-change warning.
+    configType = "hyprlang";
 
     plugins = [ ];
 
@@ -23,6 +27,12 @@ in
       monitor = ",preferred,auto,1";
 
       env = [
+        # Hyprland (launched by GDM) inherits a system PATH without
+        # ~/.nix-profile/bin, so bare-name execs (wofi, hyprlock, grimblast,
+        # hyprctl, and Wayle's discovery of its swww wallpaper backend) fail.
+        # handleEnv does a raw setenv with no $-expansion, so set an absolute
+        # PATH here with ~/.nix-profile/bin first.
+        "PATH,${config.home.homeDirectory}/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
         "XCURSOR_THEME,Bibata-Modern-Ice"
         "XCURSOR_SIZE,24"
         "HYPRCURSOR_SIZE,24"
@@ -34,6 +44,9 @@ in
         "XDG_SESSION_DESKTOP,Hyprland"
         "ELECTRON_OZONE_PLATFORM_HINT,wayland"
         "MOZ_ENABLE_WAYLAND,1"
+        # grimblast's copysave defaults to $XDG_SCREENSHOTS_DIR, else Pictures.
+        # Point it at Pictures/Screenshots so Hyprland-owned shots land there.
+        "XDG_SCREENSHOTS_DIR,${config.home.homeDirectory}/Pictures/Screenshots"
       ];
 
       input = {
@@ -54,18 +67,20 @@ in
         border_size = 2;
         "col.active_border" = "rgba(7aa2f7ee) rgba(bb9af7ee) 45deg";
         "col.inactive_border" = "rgba(3b426166)";
-        layout = "master";
+        layout = "dwindle";
         resize_on_border = true;
         allow_tearing = false;
       };
 
-      master = {
-        mfact = 0.618; # golden ratio
-        new_status = "slave"; # new windows go to stack
-        new_on_top = false;
-        orientation = "left"; # master on the left
-
-        smart_resizing = true;
+      # i3 / pop-shell-style binary space partitioning
+      dwindle = {
+        # NB: pseudotiling has no config toggle anymore — use the `pseudo`
+        # dispatcher (bound to $mod SHIFT Return below).
+        preserve_split = true; # keep split ratios when siblings close
+        smart_split = false; # split direction from cursor half, not quadrant
+        smart_resizing = true; # resize direction from cursor position on window
+        force_split = 2; # always insert the new window on the right / bottom
+        default_split_ratio = 1.0;
       };
 
       decoration = {
@@ -122,19 +137,63 @@ in
         disable_hyprland_logo = true;
         animate_manual_resizes = true;
         animate_mouse_windowdragging = true;
-        vfr = true;
+        # NB: `vfr` moved to `debug:vfr` (default true) — no longer a misc option.
       };
 
-      # Layer blur — frosted glass on waybar, wofi, mako
+      # Layer blur — frosted glass on the Wayle shell + wofi launcher
       layerrule = [
-        "blur on, match:namespace waybar"
-        "ignore_alpha 0, match:namespace waybar"
+        "blur on, match:namespace wayle"
+        "ignore_alpha 0, match:namespace wayle"
         "blur on, match:namespace wofi"
         "ignore_alpha 0, match:namespace wofi"
-        "blur on, match:namespace mako"
-        "ignore_alpha 0, match:namespace mako"
         "blur on, match:namespace gtk-layer-shell"
         "ignore_alpha 0, match:namespace gtk-layer-shell"
+      ];
+
+      # ── Workspaces (dynamic 1–8; GNOME F-row key mapping in binds below) ────
+      # No `persistent` rules: workspaces exist only when active or occupied, so
+      # the Wayle bar hides empty ones (it shows every workspace Hyprland
+      # reports, and with min-workspace-count = 0 there's no occupancy filter —
+      # persistent empties would otherwise keep showing). Auto-move rules below
+      # still create ws 2/3/5/6 on demand when their apps open.
+
+      # ── Auto-move windows (each app always opens on its workspace) ───────
+      # `silent` places the window without pulling focus. Hyprland v3 rule
+      # syntax (windowrulev2 is gone): `windowrule = EFFECT value, match:PROP
+      # regex`. Two gotchas the parser enforces (src/config/legacy):
+      #   • selectors keep the `match:` prefix and a SPACE before the regex:
+      #     `match:class ^(foo)$`  (NOT `class:^(foo)$`).
+      #   • every effect needs a value — even booleans. `float`/`center` alone
+      #     error with "invalid field float: missing a value"; use `float 1`.
+      # Classes verified from live windows.
+      windowrule = [
+        # GNOME auto-move-windows parity. Workspace IDs match the F-row key map
+        # below: ferdium/signal land on ws5/ws6 = Super+1/Super+2.
+        "workspace 2 silent, match:class ^(org\\.mozilla\\.firefox)$" # firefox → 2 (Super+F2)
+        "workspace 3 silent, match:class ^(Spotify)$" # spotify → 3 (Super+F1)
+        "workspace 5 silent, match:class ^(ferdium)$" # ferdium → 5 (Super+1)
+        "workspace 6 silent, match:class ^(org\\.signal\\.Signal)$" # signal  → 6 (Super+2)
+
+        # ── Float sensible transient / utility windows ──────────────────────
+        # GNOME-like default: dialogs, pickers and small settings/utility
+        # windows float + centre instead of tiling into the BSP layout. The two
+        # verified live are com.wayle.settings and org.gnome.Nautilus; the rest
+        # are standard reverse-DNS app-ids for apps that may or may not be
+        # installed — an unmatched rule is inert, so it's safe to list them.
+        "float 1, match:class ^(com\\.wayle\\.settings)$" # Wayle Settings
+        "float 1, match:class ^(org\\.gnome\\.Nautilus)$" # Files (the finder)
+        "float 1, match:class ^(xdg-desktop-portal-gtk)$" # GTK open/save dialogs
+        "float 1, match:class ^(org\\.gnome\\.Calculator)$" # Calculator
+        "float 1, match:class ^(org\\.gnome\\.Settings)$" # GNOME Control Center
+        "float 1, match:class ^(org\\.gnome\\.FileRoller)$" # Archive Manager
+        "float 1, match:class ^(org\\.gnome\\.DiskUtility)$" # Disks
+        "float 1, match:class ^(org\\.pulseaudio\\.pavucontrol|pavucontrol)$" # Volume mixer
+        "float 1, match:class ^(nm-connection-editor)$" # Network editor
+
+        # Centre them, and give the two "real" windows a comfortable size (the
+        # portal dialog sizes itself, so it only gets centred).
+        "center 1, match:class ^(com\\.wayle\\.settings|org\\.gnome\\.Nautilus|xdg-desktop-portal-gtk|org\\.gnome\\.Calculator|org\\.gnome\\.Settings|org\\.gnome\\.FileRoller|org\\.gnome\\.DiskUtility|pavucontrol|nm-connection-editor)$"
+        "size 60% 65%, match:class ^(com\\.wayle\\.settings|org\\.gnome\\.Nautilus|org\\.gnome\\.Settings)$"
       ];
 
       "$mod" = "SUPER";
@@ -154,17 +213,16 @@ in
         # gsettings minimize = <Super><Alt>comma (no true minimize; send to special ws)
         "$mod ALT, comma, movetoworkspacesilent, special:minimized"
         # gsettings toggle-maximized = <Super><Alt>f (simplified to <Super>f)
-        "$mod, F, fullscreen, 1"
+        "$mod ALT, F, fullscreen, 1"
         # pop-shell toggle-floating = <Super><Alt>Backslash
         "$mod ALT, backslash, togglefloating"
 
         # ── Launcher / overview ──────────────────────────────────────────
         # gsettings toggle-overview = <Super>Space
-        "$mod, Space, exec, wofi --show drun"
+        # NB: full path — Hyprland's exec PATH (from GDM) lacks ~/.nix-profile/bin.
+        "$mod, Space, exec, $HOME/.nix-profile/bin/wofi --show drun"
         # gsettings toggle-application-view = <Super><Alt>Space
-        "$mod ALT, Space, exec, wofi --show drun"
-        # gsettings panel-run-dialog = <Alt>F2
-        "ALT, F2, exec, wofi --show run"
+        "$mod ALT, Space, exec, $HOME/.nix-profile/bin/wofi --show drun"
 
         # ── Window / app switching ───────────────────────────────────────
         # gsettings switch-applications = <Super>Tab
@@ -182,7 +240,10 @@ in
         "$mod, up, movefocus, u"
         "$mod, down, movefocus, d"
 
-        # ── Workspace focus (mirrors focus-switch / custom keybindings) ──
+        # ── Workspace focus (GNOME parity: Escape/F-row → ws1-4, 1-4 → ws5-8) ─
+        # Mirrors the GNOME custom keybindings exactly. F1/F2/F3 emit real
+        # function keys on this keyboard (the XF86 media keys need Fn), so
+        # there is no clash with the media binds above.
         # custom0: <Super>Escape → ws 1
         "$mod, Escape, workspace, 1"
         # custom1: <Super>F2 → ws 2
@@ -191,19 +252,13 @@ in
         "$mod, F1, workspace, 3"
         # custom3: <Super>F3 → ws 4
         "$mod, F3, workspace, 4"
-        # custom4: <Super>1 → ws 5
+        # custom4-7: <Super>1-4 → ws 5-8
         "$mod, 1, workspace, 5"
-        # custom5: <Super>2 → ws 6
         "$mod, 2, workspace, 6"
-        # custom6: <Super>3 → ws 7
         "$mod, 3, workspace, 7"
-        # custom7: <Super>4 → ws 8
         "$mod, 4, workspace, 8"
-        # custom14: <Super><Alt>1 → force ws 5
-        "$mod ALT, 1, workspace, 5"
 
-        # ── Move window to workspace ─────────────────────────────────────
-        # gsettings move-to-workspace-*
+        # ── Move window to workspace (same GNOME mapping, + Shift) ───────
         "$mod SHIFT, Escape, movetoworkspace, 1"
         "$mod SHIFT, F2, movetoworkspace, 2"
         "$mod SHIFT, F1, movetoworkspace, 3"
@@ -222,25 +277,25 @@ in
         "$mod ALT, E, exit"
         # custom11: <Super><Alt>p → 1password
         "$mod ALT, P, exec, /usr/bin/1password --quick-access"
-        # custom10: <Super><Alt>m → clean notifications
-        "$mod ALT, M, exec, makoctl dismiss --all"
-        # gsettings toggle-message-tray = <Alt><Super>n → restore last notification
-        "$mod ALT, N, exec, makoctl restore"
+        # custom10: <Super><Alt>m → clean all notifications
+        "$mod ALT, M, exec, wayle notify dismiss-all"
+        # gsettings toggle-message-tray = <Alt><Super>n → toggle Do Not Disturb
+        "$mod ALT, N, exec, wayle notify dnd"
         # switch-monitor = <Super><Alt>d / XF86Display
         "$mod ALT, D, exec, $HOME/.bin/monitor-switch now"
         ", XF86Display, exec, $HOME/.bin/monitor-switch now"
         # custom13: <Super><Alt>r → rebalance
         "$mod ALT, R, exec, hyprctl dispatch layoutmsg preselect l"
 
-        # ── Master layout controls ───────────────────────────────────────
-        # Promote focused window to master (most important binding)
-        "$mod SHIFT, Return, layoutmsg, swapwithmaster"
-        # Cycle through stack
-        "$mod ALT, Y, layoutmsg, cyclenext"
-        # toggle-stacking-global = <Super><Alt>s → swap master/stack orientation
-        "$mod ALT, S, layoutmsg, orientationnext"
-        # tile-orientation = <Super><Alt>o → rotate orientation
-        "$mod ALT, O, layoutmsg, orientationnext"
+        # ── Dwindle (bsp) layout controls ────────────────────────────────
+        # pop-shell tile-enter → toggle pseudo-tile on the focused window
+        "$mod SHIFT, Return, pseudo"
+        # cycle focus through the tree
+        "$mod ALT, Y, cyclenext"
+        # toggle-stacking-global = <Super><Alt>s → group siblings into tabs
+        "$mod ALT, S, togglegroup"
+        # tile-orientation = <Super><Alt>o → flip the split direction
+        "$mod ALT, O, layoutmsg, togglesplit"
         # tile-move-*-global = <Super><Alt>arrows
         "$mod ALT, left, movewindow, l"
         "$mod ALT, right, movewindow, r"
@@ -250,12 +305,36 @@ in
         "$mod ALT, Backspace, submap, resize"
 
         # ── Screenshots ──────────────────────────────────────────────────
+        # Full path: Hyprland's PATH (from GDM) lacks ~/.nix-profile/bin, so a
+        # bare `grimblast` is never found (same reason wofi uses a full path).
+        # grimblast bundles its own grim/slurp/wl-clipboard, so this is enough.
+        # copysave: clipboard AND a PNG in XDG_SCREENSHOTS_DIR (set above).
         # gsettings screenshot = <Shift>Print
-        "SHIFT, Print, exec, grimblast --notify copy area"
+        "SHIFT, Print, exec, $HOME/.nix-profile/bin/grimblast --notify copysave area"
         # gsettings screenshot-window = <Alt>Print
-        "ALT, Print, exec, grimblast --notify copy active"
+        "ALT, Print, exec, $HOME/.nix-profile/bin/grimblast --notify copysave active"
         # bonus: full screen
-        ", Print, exec, grimblast --notify copy screen"
+        ", Print, exec, $HOME/.nix-profile/bin/grimblast --notify copysave screen"
+      ];
+
+      # ── Media / hardware keys ──────────────────────────────────────────
+      # GNOME handled these for free; under Hyprland they must be bound. Volume
+      # is driven through Wayle's own CLI so its OSD pops natively; brightness
+      # via brightnessctl (Wayle's OSD watches the backlight). `bindel` repeats
+      # when held, `bindl` still fires while the session is locked.
+      bindel = [
+        ",XF86AudioRaiseVolume, exec, $HOME/.nix-profile/bin/wayle audio output-volume +5"
+        ",XF86AudioLowerVolume, exec, $HOME/.nix-profile/bin/wayle audio output-volume -5"
+        ",XF86MonBrightnessUp,   exec, $HOME/.nix-profile/bin/brightnessctl set 5%+"
+        ",XF86MonBrightnessDown, exec, $HOME/.nix-profile/bin/brightnessctl set 5%-"
+      ];
+      bindl = [
+        ",XF86AudioMute,    exec, $HOME/.nix-profile/bin/wayle audio output-mute"
+        ",XF86AudioMicMute, exec, $HOME/.nix-profile/bin/wayle audio input-mute"
+        ",XF86AudioPlay,  exec, $HOME/.nix-profile/bin/wayle media play-pause"
+        ",XF86AudioPause, exec, $HOME/.nix-profile/bin/wayle media play-pause"
+        ",XF86AudioNext,  exec, $HOME/.nix-profile/bin/wayle media next"
+        ",XF86AudioPrev,  exec, $HOME/.nix-profile/bin/wayle media previous"
       ];
 
       bindm = [
@@ -270,25 +349,25 @@ in
       exec-once = [
         "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP HYPRLAND_INSTANCE_SIGNATURE"
         "systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
-        "$HOME/.nix-profile/bin/waybar"
-        "$HOME/.nix-profile/bin/mako"
-        "swww-daemon"
+        # Wayle: bar + notifications + OSD + wallpaper + control center
+        "$HOME/.nix-profile/bin/wayle shell"
         "hypridle"
-        "nm-applet --indicator"
-        "blueman-applet"
         "udiskie --tray"
-        "wlsunset -T 6500 -t 3500"
         "/usr/bin/1password --silent"
         "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
         "hyprctl setcursor Bibata-Modern-Ice 24"
-        "sleep 1 && swww img $HOME/.homesick/repos/dotfiles/wallpapers/nix-d-nord-aurora.jpg --transition-type grow --transition-pos center --transition-duration 2 --transition-fps 60"
+        # Set the wallpaper through Wayle's engine once the shell is up
+        "sleep 2 && $HOME/.nix-profile/bin/wayle wallpaper set $HOME/.homesick/repos/dotfiles/wallpapers/nix-d-nord-aurora.jpg"
 
         # ── Startup applications ──────────────────────────────────────
+        # kitty is pinned to ws1 at launch; the four apps below are placed by
+        # the windowrule auto-move rules above (firefox→2, spotify→3,
+        # ferdium→5, signal→6), matching GNOME's auto-move-windows list.
         "[workspace 1 silent] $HOME/.nix-profile/bin/kitty"
-        "[workspace 2 silent] firefox-esr"
-        "[workspace 2 silent] flatpak run com.spotify.Client"
-        "[workspace 4 silent] flatpak run org.ferdium.Ferdium"
-        "[workspace 5 silent] flatpak run org.signal.Signal"
+        "flatpak run org.mozilla.firefox"
+        "flatpak run com.spotify.Client"
+        "flatpak run org.ferdium.Ferdium"
+        "flatpak run org.signal.Signal"
       ];
     };
 
@@ -303,510 +382,6 @@ in
       bind = , Escape, submap, reset
       bind = , Return, submap, reset
       submap = reset
-    '';
-  };
-
-  # ── Waybar ────────────────────────────────────────────────────────────────
-  programs.waybar.enable = true;
-
-  home.file.".config/waybar/config.jsonc".text = ''
-    [
-      {
-        "layer": "top",
-        "position": "top",
-        "height": 38,
-        "spacing": 4,
-        "margin-top": 6,
-        "margin-left": 10,
-        "margin-right": 10,
-
-        "modules-left": [
-          "hyprland/workspaces"
-        ],
-        "modules-center": [
-          "disk",
-          "network#speed",
-          "memory",
-          "temperature",
-          "cpu"
-        ],
-        "modules-right": [
-          "clock"
-        ],
-
-        "hyprland/workspaces": {
-          "format": "{icon}",
-          "format-icons": {
-            "1": "\uf121",
-            "2": "\uf489",
-            "3": "\uf07b",
-            "4": "\uf1de",
-            "5": "\udb80\udcb1",
-            "6": "\uf0e0",
-            "7": "\uf537",
-            "8": "\uf1b6",
-            "urgent": "\uf06a",
-            "active": "\uf111",
-            "default": "\uf10c"
-          },
-          "on-click": "activate",
-          "sort-by-number": true
-        },
-
-        "disk": {
-          "path": "/",
-          "interval": 30,
-          "format": "\udb80\udeca {percentage_used}%",
-          "tooltip-format": "{used} / {total} ({percentage_used}%)"
-        },
-
-        "network#speed": {
-          "interval": 3,
-          "format": "\udb81\udda7 {bandwidthDownBits}  \udb81\udda8 {bandwidthUpBits}",
-          "format-disconnected": "\udb82\udd2d  No connection",
-          "tooltip-format": "{ifname}: {ipaddr}/{cidr}"
-        },
-
-        "memory": {
-          "interval": 5,
-          "format": "\udb80\udf5b {used:0.1f}G",
-          "tooltip-format": "{used:0.1f}G / {total:0.1f}G ({percentage}%)"
-        },
-
-        "temperature": {
-          "interval": 5,
-          "format": "\udb80\udf85 {temperatureC}°C",
-          "critical-threshold": 80,
-          "format-critical": "\udb80\udf85 {temperatureC}°C",
-          "tooltip-format": "CPU Temperature: {temperatureC}°C"
-        },
-
-        "cpu": {
-          "interval": 5,
-          "format": "\uf4bc {usage}%",
-          "tooltip-format": "CPU: {usage}% ({load})"
-        },
-
-        "clock": {
-          "format": "{:%a %d   %H:%M}",
-          "format-alt": "{:%A, %d %B %Y   %H:%M:%S}",
-          "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-          "interval": 1
-        }
-      },
-
-      {
-        "layer": "top",
-        "position": "bottom",
-        "height": 34,
-        "spacing": 4,
-        "margin-bottom": 6,
-        "margin-left": 10,
-        "margin-right": 10,
-
-        "modules-left": [
-          "hyprland/window"
-        ],
-        "modules-center": [
-          "mpris"
-        ],
-        "modules-right": [
-          "tray",
-          "custom/colortemp",
-          "backlight",
-          "pulseaudio",
-          "network",
-          "bluetooth",
-          "battery",
-          "custom/power"
-        ],
-
-        "hyprland/window": {
-          "max-length": 40,
-          "separate-outputs": true
-        },
-
-        "mpris": {
-          "format": "{player_icon} {artist} — {title}",
-          "format-paused": "{player_icon} {artist} — {title} \uf04c",
-          "max-length": 40,
-          "player-icons": {
-            "default": "\udb81\udccc",
-            "spotify": "\uf1bc",
-            "firefox": "\uf738"
-          },
-          "tooltip-format": "{player}: {artist} — {title} ({album})"
-        },
-
-        "tray": {
-          "icon-size": 16,
-          "spacing": 10
-        },
-
-        "custom/colortemp": {
-          "exec": "echo '\uf46a'",
-          "on-click": "pkill wlsunset || wlsunset -T 6500 -t 3500",
-          "tooltip": true,
-          "tooltip-format": "Toggle night mode",
-          "format": "{}",
-          "interval": "once"
-        },
-
-        "backlight": {
-          "format": "{icon} {percent}%",
-          "format-icons": ["\udb81\udc9e", "\udb81\udc9f", "\udb81\udca0"],
-          "on-scroll-up": "brightnessctl set +2%",
-          "on-scroll-down": "brightnessctl set 2%-"
-        },
-
-        "pulseaudio": {
-          "format": "{icon} {volume}%",
-          "format-muted": "\udb81\udd1f Muted",
-          "format-icons": {
-            "default": ["\udb81\udd7d", "\udb81\udd81", "\udb81\udd7e"]
-          },
-          "on-click": "pavucontrol",
-          "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
-          "scroll-step": 2
-        },
-
-        "network": {
-          "format-wifi": "\udb82\udd28 {signalStrength}%",
-          "format-ethernet": "\udb80\udc00",
-          "format-disconnected": "\udb82\udd2d",
-          "tooltip-format-wifi": "{essid} ({signalStrength}%)\n{ipaddr}",
-          "tooltip-format-ethernet": "{ifname}\n{ipaddr}",
-          "on-click": "nm-connection-editor"
-        },
-
-        "bluetooth": {
-          "format": "\udb80\udcaf",
-          "format-connected": "\udb80\udcb1 {device_alias}",
-          "format-off": "\udb80\udcb2",
-          "tooltip-format": "{controller_alias} {controller_address}",
-          "tooltip-format-connected": "{controller_alias}\n\n{num_connections} connected\n{device_enumerate}",
-          "on-click": "blueman-manager"
-        },
-
-        "battery": {
-          "states": { "warning": 30, "critical": 15 },
-          "format": "{icon} {capacity}%",
-          "format-charging": "\udb80\udc84 {capacity}%",
-          "format-icons": ["\udb80\udcfa", "\udb80\udcfb", "\udb80\udcfc", "\udb80\udcfd", "\udb80\udcfe", "\udb80\udcff", "\udb80\udd00", "\udb80\udd01", "\udb80\udd02", "\udb80\udd79"],
-          "tooltip-format": "{timeTo}"
-        },
-
-        "custom/power": {
-          "format": "\udb80\udc90",
-          "on-click": "wlogout",
-          "tooltip": false
-        }
-      }
-    ]
-  '';
-
-  home.file.".config/waybar/style.css".text = ''
-    /* ── Tokyo Night — subtle frosted dual-bar ───────────────────────── */
-    * {
-      font-family: "JetBrainsMono Nerd Font", "Inter", sans-serif;
-      font-size: 13px;
-      border: none;
-      border-radius: 0;
-      min-height: 0;
-      transition: all 0.2s ease;
-    }
-
-    /* ── Bar — floating frosted glass ────────────────────────────────── */
-    window#waybar {
-      background: rgba(26, 27, 38, 0.7);
-      border-radius: 14px;
-      border: 1px solid rgba(59, 66, 97, 0.4);
-      color: #c0caf5;
-    }
-
-    .modules-left,
-    .modules-center,
-    .modules-right {
-      background: transparent;
-      padding: 0 4px;
-    }
-
-    /* ── Workspaces ──────────────────────────────────────────────────── */
-    #workspaces {
-      background: rgba(31, 35, 53, 0.5);
-      border-radius: 20px;
-      margin: 4px 6px;
-      padding: 0 4px;
-      border: 1px solid rgba(59, 66, 97, 0.25);
-    }
-
-    #workspaces button {
-      padding: 2px 10px;
-      background: transparent;
-      color: #565f89;
-      border-radius: 16px;
-      margin: 2px;
-      font-size: 14px;
-    }
-
-    #workspaces button:hover {
-      background: rgba(122, 162, 247, 0.12);
-      color: #7aa2f7;
-    }
-
-    #workspaces button.active {
-      background: rgba(122, 162, 247, 0.2);
-      color: #7aa2f7;
-    }
-
-    #workspaces button.urgent {
-      background: rgba(247, 118, 142, 0.2);
-      color: #f7768e;
-    }
-
-    /* ── Shared pill style ───────────────────────────────────────────── */
-    #disk,
-    #network.speed,
-    #memory,
-    #temperature,
-    #cpu,
-    #clock,
-    #window,
-    #mpris,
-    #tray,
-    #backlight,
-    #pulseaudio,
-    #network,
-    #bluetooth,
-    #battery,
-    #custom-colortemp,
-    #custom-power {
-      background: rgba(31, 35, 53, 0.5);
-      border-radius: 20px;
-      padding: 4px 14px;
-      margin: 4px 3px;
-      border: 1px solid rgba(59, 66, 97, 0.25);
-      color: #a9b1d6;
-    }
-
-    /* ── Top bar: system metrics — colored icons ─────────────────────── */
-    #disk {
-      color: #9ece6a;
-    }
-    #disk:hover {
-      background: rgba(158, 206, 106, 0.1);
-      color: #9ece6a;
-      border-color: rgba(158, 206, 106, 0.3);
-    }
-
-    #network.speed {
-      color: #7dcfff;
-    }
-    #network.speed:hover {
-      background: rgba(125, 207, 255, 0.1);
-      color: #7dcfff;
-      border-color: rgba(125, 207, 255, 0.3);
-    }
-
-    #memory {
-      color: #bb9af7;
-    }
-    #memory:hover {
-      background: rgba(187, 154, 247, 0.1);
-      color: #bb9af7;
-      border-color: rgba(187, 154, 247, 0.3);
-    }
-
-    #temperature {
-      color: #ff9e64;
-    }
-    #temperature:hover {
-      background: rgba(255, 158, 100, 0.1);
-      color: #ff9e64;
-      border-color: rgba(255, 158, 100, 0.3);
-    }
-    #temperature.critical {
-      color: #f7768e;
-    }
-
-    #cpu {
-      color: #7aa2f7;
-    }
-    #cpu:hover {
-      background: rgba(122, 162, 247, 0.1);
-      color: #7aa2f7;
-      border-color: rgba(122, 162, 247, 0.3);
-    }
-
-    /* ── Clock ───────────────────────────────────────────────────────── */
-    #clock {
-      color: #e0af68;
-      font-weight: 600;
-      padding: 4px 18px;
-      margin-right: 6px;
-    }
-    #clock:hover {
-      background: rgba(224, 175, 104, 0.1);
-      border-color: rgba(224, 175, 104, 0.3);
-    }
-
-    /* ── Bottom bar: window title ────────────────────────────────────── */
-    #window {
-      color: #565f89;
-      font-style: italic;
-      font-size: 12px;
-      margin-left: 6px;
-    }
-
-    /* ── Bottom bar: media ───────────────────────────────────────────── */
-    #mpris {
-      color: #7dcfff;
-      font-style: italic;
-    }
-    #mpris.paused {
-      color: #565f89;
-    }
-    #mpris:hover {
-      background: rgba(125, 207, 255, 0.1);
-      border-color: rgba(125, 207, 255, 0.3);
-    }
-
-    /* ── Bottom bar: controls ────────────────────────────────────────── */
-    #tray {
-      padding: 4px 8px;
-    }
-
-    #custom-colortemp {
-      color: #e0af68;
-    }
-
-    #backlight {
-      color: #e0af68;
-    }
-    #backlight:hover {
-      background: rgba(224, 175, 104, 0.1);
-      color: #e0af68;
-      border-color: rgba(224, 175, 104, 0.3);
-    }
-
-    #pulseaudio {
-      color: #7aa2f7;
-    }
-    #pulseaudio:hover {
-      background: rgba(122, 162, 247, 0.1);
-      color: #7aa2f7;
-      border-color: rgba(122, 162, 247, 0.3);
-    }
-    #pulseaudio.muted {
-      color: #565f89;
-    }
-
-    #network {
-      color: #9ece6a;
-    }
-    #network:hover {
-      background: rgba(158, 206, 106, 0.1);
-      color: #9ece6a;
-      border-color: rgba(158, 206, 106, 0.3);
-    }
-    #network.disconnected {
-      color: #f7768e;
-    }
-
-    #bluetooth {
-      color: #7dcfff;
-    }
-    #bluetooth:hover {
-      background: rgba(125, 207, 255, 0.1);
-      color: #7dcfff;
-      border-color: rgba(125, 207, 255, 0.3);
-    }
-    #bluetooth.off {
-      color: #565f89;
-    }
-
-    #battery {
-      color: #9ece6a;
-    }
-    #battery:hover {
-      background: rgba(158, 206, 106, 0.1);
-      border-color: rgba(158, 206, 106, 0.3);
-    }
-    #battery.warning {
-      color: #ff9e64;
-    }
-    #battery.critical {
-      color: #f7768e;
-      border-color: rgba(247, 118, 142, 0.4);
-    }
-    #battery.charging {
-      color: #9ece6a;
-    }
-
-    #custom-power {
-      color: #f7768e;
-      border-color: rgba(247, 118, 142, 0.15);
-      margin-right: 6px;
-    }
-    #custom-power:hover {
-      background: rgba(247, 118, 142, 0.15);
-      border-color: rgba(247, 118, 142, 0.4);
-    }
-
-    /* ── Shared hover for tray/colortemp ─────────────────────────────── */
-    #tray:hover,
-    #custom-colortemp:hover {
-      background: rgba(122, 162, 247, 0.1);
-      color: #7aa2f7;
-      border-color: rgba(122, 162, 247, 0.3);
-    }
-
-    /* ── Warning states ──────────────────────────────────────────────── */
-    #memory.warning,
-    #cpu.warning {
-      color: #ff9e64;
-    }
-    #memory.critical,
-    #cpu.critical {
-      color: #f7768e;
-    }
-
-    /* ── Tooltip ─────────────────────────────────────────────────────── */
-    tooltip {
-      background: rgba(26, 27, 38, 0.95);
-      border: 1px solid rgba(59, 66, 97, 0.6);
-      border-radius: 10px;
-      color: #c0caf5;
-      padding: 6px;
-    }
-
-    tooltip label {
-      color: #c0caf5;
-    }
-  '';
-
-  # ── Mako notifications ────────────────────────────────────────────────────
-  services.mako = {
-    enable = true;
-    settings = {
-      background-color = "#1f2335ee";
-      text-color = "#c0caf5";
-      border-color = "#7aa2f7";
-      border-radius = 12;
-      border-size = 2;
-      default-timeout = 5000;
-      font = "JetBrainsMono Nerd Font 14";
-      width = 600;
-      height = 150;
-      padding = "16";
-      margin = "16";
-      icons = 1;
-      max-icon-size = 48;
-    };
-    extraConfig = ''
-      [urgency=high]
-      border-color=#f7768e
-      default-timeout=0
     '';
   };
 
@@ -910,12 +485,17 @@ in
     gtk3.extraConfig = {
       gtk-application-prefer-dark-theme = true;
     };
+    # Don't emit ~/.config/gtk-4.0/gtk.css (theme @import). GTK4 apps are mostly
+    # libadwaita and ignore it anyway, and NOT writing it removes the clobber
+    # against your homeshick gtk-4.0/gtk.css. This is the new HM default; pin it.
+    gtk4.theme = null;
     gtk4.extraConfig = {
       gtk-application-prefer-dark-theme = true;
     };
   };
 
   home.pointerCursor = {
+    enable = true;
     name = "Bibata-Modern-Ice";
     package = pkgs.bibata-cursors;
     size = 24;
@@ -923,7 +503,7 @@ in
     x11.enable = false;
   };
 
-  # ── Wofi launcher ─────────────────────────────────────────────────────────
+  # ── Wofi launcher (command palette) ───────────────────────────────────────
   home.file.".config/wofi/config".text = ''
     width=500
     height=400
@@ -955,7 +535,7 @@ in
       padding: 10px 16px;
       margin: 12px;
       font-family: "JetBrainsMono Nerd Font";
-      font-size: 14px;
+      font-size: 18px;
     }
 
     #input:focus {
@@ -985,7 +565,7 @@ in
     #text {
       color: #c0caf5;
       font-family: "JetBrainsMono Nerd Font";
-      font-size: 13px;
+      font-size: 16px;
     }
 
     #img {
@@ -1005,23 +585,21 @@ in
   '';
 
   # ── Packages ──────────────────────────────────────────────────────────────
+  # Note: bar / notifications / OSD / wallpaper / network+bt+audio applets are
+  # all provided by Wayle (see programs/wayle.nix), so mako, wlsunset,
+  # nm-applet and blueman-applet are intentionally gone. swww is NOT gone — it
+  # is Wayle's wallpaper backend and lives in wayle.nix next to the engine cfg.
   home.packages = with pkgs; [
     hyprlandPkg
-    mako
     wofi
-    swww
     hyprlock
     hypridle
     hyprpicker
     grimblast
     wl-clipboard
-    wlsunset
-    networkmanagerapplet
-    blueman
     udiskie
     nwg-displays
     pavucontrol
-    wlogout
     papirus-icon-theme
     tokyonight-gtk-theme
     bibata-cursors

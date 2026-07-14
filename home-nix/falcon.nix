@@ -15,6 +15,8 @@ in
     ./programs/python.nix
     ./programs/node.nix
     ./programs/zathura.nix
+    ./programs/hyprland.nix
+    ./programs/wayle.nix
   ];
 
   config = {
@@ -96,7 +98,6 @@ in
       scaleway-cli
       socat
       sops
-      starship
       statix
       stern
       strace
@@ -136,9 +137,9 @@ in
       activation.updateNeovim = lib.mkAfter ''
         $HOME/.cargo/bin/bob update
       '';
-      activation.updateGsettings = lib.mkAfter ''
-        $HOME/.bin/gsettings-update
-      '';
+      # activation.updateGsettings = lib.mkAfter ''
+      #   $HOME/.bin/gsettings-update
+      # '';
       # GDM (runs as gdm user) only reads /usr/share/wayland-sessions/.
       # Copy rather than symlink so gdm doesn't need to traverse ~/.local -> /nix/store.
       # To register the Hyprland session with GDM, run once after switch:

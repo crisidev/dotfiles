@@ -1,0 +1,11 @@
+# /etc/systemd/system/rfkill-unblock-bt.service
+[Unit]
+Description=Unblock bluetooth rfkill soft-block at boot
+Before=bluetooth.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/rfkill unblock bluetooth
+
+[Install]
+WantedBy=multi-user.target

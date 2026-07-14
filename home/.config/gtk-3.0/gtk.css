@@ -1,0 +1,13 @@
+/* Remove the client-side-decoration invisible shadow/resize margin.
+   Without this, pop-shell reserves ~10px around the window (the CSD
+   margin), leaving a wallpaper gap between the tile edge and content. */
+window.csd,
+window.solid-csd,
+window.csd decoration,
+decoration,
+.window-frame,
+.window-frame:backdrop {
+    box-shadow: none;
+    margin: 0;
+    border-radius: 0;
+}
