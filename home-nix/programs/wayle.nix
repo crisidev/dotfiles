@@ -93,7 +93,7 @@ in
           border-width = 1;
           border-color = "border-accent";
           rounding = "none";
-          padding = 0.2; # slimmer bar (was 0.35 — drives bar thickness)
+          padding = 0.35; # Wayle default bar thickness
           module-gap = 0.5;
 
           # Remove the "button" chrome so modules float on the frosted bar:

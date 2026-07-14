@@ -2,6 +2,7 @@
 {
   imports = [
     ./programs/starship.nix
+    ./programs/git.nix
   ];
 
   fonts.fontconfig.enable = true;

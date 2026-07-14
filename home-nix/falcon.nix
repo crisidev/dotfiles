@@ -47,7 +47,6 @@ in
       fzf
       gh
       (nixGL pkgs.ghostty)
-      git
       glab
       glibc
       glow

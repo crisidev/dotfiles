@@ -22,7 +22,6 @@
     eza
     fd
     fzf
-    git
     go
     gotify-cli
     harper

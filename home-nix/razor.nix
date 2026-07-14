@@ -20,7 +20,6 @@
     eza
     fd
     fzf
-    git
     jq
     neovim
     nixfmt
