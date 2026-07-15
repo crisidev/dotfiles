@@ -13,10 +13,9 @@ Take what you need, it also comes warrant free 😊
 ## Installation
 
 ```sh
-❯❯❯ git clone https://github.com/andsens/homeshick.git $HOME/.homesick/repos/homeshick
-❯❯❯ git clone https://github.com/crisidev/dotfiles.git $HOME/.homesick/repos/dotfiles
-❯❯❯ source "$HOME/.homesick/repos/homeshick/homeshick.sh"
-❯❯❯ homeshick link dotfiles
+❯❯❯ git clone https://github.com/crisidev/dotfiles.git $HOME/.config/home-manager
+❯❯❯ cd $HOME/.config/home-manager
+❯❯❯ ./home-manager switch
 ```
 
 ## Hyprland

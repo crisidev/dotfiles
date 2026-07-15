@@ -78,7 +78,7 @@ let
     dashboard = "#3d59a1"; # deep blue — the darkest, far end of the sweep
   };
 
-  # Detailed system monitor, opened from the bar's cpu/ram/procs click actions:
+  # Detailed system monitor, opened from the bar's cpu/ram click actions:
   # a quake-style dropdown that slides from the top edge. The kitty window is
   # pinned to Hyprland's special:htop workspace by windowrules in hyprland.nix
   # (float + full-width + anchored under the bar; the specialWorkspace slidevert
@@ -439,12 +439,12 @@ in
             ];
           };
 
-          # Control-center button (lock / logout / reboot / poweroff) — red, the
-          # universal power hue. Icon only; this module has no label-color key,
-          # so `tinted` can't be used (it would set an unknown key) — set the
+          # Control-center button (lock / logout / reboot / poweroff) — the far,
+          # darkest end of the rainbow. Icon only; this module has no label-color
+          # key, so `tinted` can't be used (it would set an unknown key) — set the
           # glyph colour directly.
           dashboard = {
-            icon-color = tn.red;
+            icon-color = rainbow.dashboard;
             icon-bg-color = "transparent";
           };
         };
