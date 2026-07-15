@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell/Extensions/MouseFollowsFocus \
-    --method org.gnome.Shell.Extensions.MouseFollowsFocus.ClearNotifications

@@ -1,0 +1,110 @@
+#!/usr/bin/env bash
+# hypr-float-window — pick a window and make it PERMANENTLY float, centered, at
+# its current size (the same shape the settings/utility windows get).
+#
+# For the chosen window it:
+#   1. writes a persistent 3-rule block into the nix config, between the
+#      FLOAT-RULES:BEGIN/END markers in hyprland.nix:
+#          float 1  |  center 1  |  size <w> <h>
+#      (size is the window's current pixel size, captured live), and
+#   2. applies the same live (float → resize → center) so it takes effect now.
+#
+# Run `home-manager switch` afterwards to bake the rules into hyprland.conf.
+# Re-running for a class that already has a float rule is a no-op.
+#
+# Usage:
+#   hypr-float-window            # pick a window from a wofi menu
+#   hypr-float-window <class>    # skip the menu, add this class directly
+set -euo pipefail
+
+CONFIG="${HYPR_NIX_CONFIG:-$HOME/.homesick/repos/dotfiles/home-nix/programs/hyprland.nix}"
+
+notify() { command -v notify-send >/dev/null 2>&1 && notify-send "hypr-float-window" "$1" || echo "$1" >&2; }
+die()    { notify "$1"; exit 1; }
+
+[ -f "$CONFIG" ] || die "config not found: $CONFIG"
+grep -q "# FLOAT-RULES:END" "$CONFIG" || die "FLOAT-RULES markers missing in $CONFIG"
+
+addr=""   # window address, so we can size/float the running instance too
+class=""
+
+if [ $# -ge 1 ]; then
+  class="$1"
+  # Best-effort: find a live window of this class to capture size/address from.
+  addr="$(hyprctl -j clients | jq -r --arg c "$class" \
+    'first(.[] | select(.class==$c) | .address) // ""')"
+else
+  # Build "class \t title \t address" for every real (non-empty-class) client
+  # and let wofi pick one. Column-align class/title for readability.
+  menu="$(hyprctl -j clients | jq -r '
+    .[] | select(.class != "") | "\(.class)\t\(.title)\t\(.address)"')"
+  [ -n "$menu" ] || die "no windows to pick from"
+
+  pick="$(printf '%s\n' "$menu" \
+    | awk -F'\t' '{ printf "%-28s  %s\n", $1, $2 }' \
+    | wofi --dmenu --prompt "Float which window?" --width 700 --height 400 --cache-file /dev/null)" \
+    || exit 0
+  [ -n "$pick" ] || exit 0
+
+  # First column (trimmed) is the class; recover the address by matching it back.
+  class="$(printf '%s' "$pick" | awk '{ print $1 }')"
+  addr="$(printf '%s\n' "$menu" | awk -F'\t' -v c="$class" '$1==c { print $3; exit }')"
+fi
+
+[ -n "$class" ] || die "no class selected"
+
+# Capture the window's current pixel size, so the float rule reopens it the same
+# size (like the fixed sizes the settings windows get). Empty if no live window.
+size=""
+if [ -n "$addr" ]; then
+  size="$(hyprctl -j clients | jq -r --arg a "$addr" \
+    'first(.[] | select(.address==$a) | "\(.size[0]) \(.size[1])") // ""')"
+fi
+
+# Regex-escape dots. `re_live` is the real regex (single backslash: \. ); the
+# nix form doubles each backslash (\\.) because Nix un-escapes one level inside
+# a "..." string, so \\. in the file yields the \. the regex needs.
+re_live="$(printf '%s' "$class" | sed 's/\./\\./g')"
+re_nix="$(printf '%s' "$class" | sed 's/\./\\\\./g')"
+
+# The persistent rule block (nix strings, 8-space indent to match the list).
+rules=(
+  "        \"float 1, match:class ^(${re_nix})\$\" # ${class} (hypr-float-window)"
+  "        \"center 1, match:class ^(${re_nix})\$\""
+)
+[ -n "$size" ] && rules+=("        \"size ${size}, match:class ^(${re_nix})\$\"")
+
+# Idempotent: bail if this class already has a float rule anywhere in the file.
+if grep -qF "float 1, match:class ^(${re_nix})" "$CONFIG"; then
+  notify "already floating in config: $class"
+else
+  # Insert the block just before FLOAT-RULES:END. Pass it via the environment
+  # (ENVIRON), NOT `awk -v`, because -v un-escapes backslashes and would collapse
+  # the \\. we need down to \. in the file. Command substitution strips the
+  # trailing newline, so awk's own `print` supplies the single line break.
+  tmp="$(mktemp)"
+  INS="$(printf '%s\n' "${rules[@]}")" awk '
+    /# FLOAT-RULES:END/ { print ENVIRON["INS"] }
+    { print }
+  ' "$CONFIG" > "$tmp"
+  mv "$tmp" "$CONFIG"
+  notify "added float + center${size:+ + size} rule for: $class"
+fi
+
+# Apply live so it takes effect without a full switch/reload: register the rules
+# for future windows of this class...
+hyprctl keyword windowrule "float 1, match:class ^(${re_live})\$" >/dev/null || true
+hyprctl keyword windowrule "center 1, match:class ^(${re_live})\$" >/dev/null || true
+[ -n "$size" ] && hyprctl keyword windowrule "size ${size}, match:class ^(${re_live})\$" >/dev/null || true
+
+# ...and float/size/center the instance we just picked, right now.
+if [ -n "$addr" ]; then
+  floating="$(hyprctl -j clients | jq -r --arg a "$addr" \
+    'first(.[] | select(.address==$a) | .floating) // false')"
+  [ "$floating" = "false" ] && hyprctl dispatch togglefloating "address:$addr" >/dev/null || true
+  [ -n "$size" ] && hyprctl dispatch resizewindowpixel "exact ${size},address:$addr" >/dev/null || true
+  hyprctl dispatch focuswindow "address:$addr" >/dev/null || true
+  hyprctl dispatch centerwindow >/dev/null || true
+fi
+
+echo "Done. Run 'home-manager switch --flake ~/.homesick/repos/dotfiles#falcon' to persist."

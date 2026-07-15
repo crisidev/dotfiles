@@ -1,8 +1,0 @@
-[Desktop Entry]
-Type=Application
-Exec=/home/bigo/.bin/monitor-switch
-Hidden=false
-NoDisplay=false
-X-GNOME-Autostart-enabled=true
-Name[en_GB]=Fix startup focus
-Name=Fix startup focus

@@ -47,7 +47,7 @@
         ];
       };
 
-      corelliaModules = [ ./home-nix/corellia.nix ];
+      corelliaModules = [ ./home/corellia.nix ];
     in
     {
       # Available through `home-manager --flake .#host switch`
@@ -55,13 +55,13 @@
         falcon = home-manager.lib.homeManagerConfiguration {
           pkgs = falconPkgs;
           extraSpecialArgs = { inherit inputs; };
-          modules = [ ./home-nix/falcon.nix ];
+          modules = [ ./home/falcon.nix ];
         };
         corellia = mkServer corelliaModules;
         tatooine = mkServer corelliaModules;
         mandalore = mkServer corelliaModules;
-        razor = mkServer [ ./home-nix/razor.nix ];
-        scarif = mkServer [ ./home-nix/scarif.nix ];
+        razor = mkServer [ ./home/razor.nix ];
+        scarif = mkServer [ ./home/scarif.nix ];
       };
 
       formatter.${system} = pkgs.nixfmt;
