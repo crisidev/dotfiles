@@ -5,23 +5,36 @@
 }:
 let
   nixGL = import ../nixGL.nix { inherit pkgs config; };
+  # Flatpak apps (Firefox, Ferdium, …) deliver notifications through
+  # xdg-desktop-portal, which forwards them with an EMPTY app_name and only a
+  # `desktop-entry` hint (org.mozilla.firefox, …). Wayle 0.6 groups and labels
+  # purely by app_name, so all of those land in one "unknown" group. The patch
+  # falls back to the desktop-entry's display name (Wayle already uses that
+  # hint for the group icon, just not the label). Drop once upstream fixes it:
+  # https://github.com/wayle-rs/wayle
+  wayleFixed = pkgs.wayle.overrideAttrs (old: {
+    patches = (old.patches or [ ]) ++ [ ./patches/wayle-notification-desktop-entry.patch ];
+  });
   # Wayle is GTK4 — wrap it with nixGL so it finds OpenGL on this non-NixOS host,
   # exactly like kitty / ghostty / hyprland. The wrapper preserves every binary
   # (wayle, wayle-settings) and forwards subcommands, so `wayle shell`,
   # `wayle wallpaper set …`, `wayle notify …` all keep working.
-  waylePkg = nixGL pkgs.wayle;
+  waylePkg = nixGL wayleFixed;
 
+  # Base is Tokyo Night, with the shifts that had been living as GUI tweaks in
+  # runtime.toml folded in (deeper Storm-ish bg/surface, lighter muted text, a
+  # cyan-leaning blue) so this file stays the single source of truth.
   tokyonight = {
-    bg = "#1a1b26"; # darkest base
-    surface = "#1f2335"; # cards / sidebars
+    bg = "#1f2335"; # base (was #1a1b26; raised to the Storm surface)
+    surface = "#24283b"; # cards / sidebars
     elevated = "#292e42"; # raised elements
     fg = "#c0caf5"; # primary text
-    "fg-muted" = "#9aa5ce"; # secondary text
+    "fg-muted" = "#a9b1d6"; # secondary text
     primary = "#7aa2f7"; # accent (blue)
     red = "#f7768e";
     yellow = "#e0af68";
     green = "#9ece6a";
-    blue = "#7aa2f7";
+    blue = "#7dcfff"; # cyan-leaning blue
   };
 
   # Base module styling: a transparent chip, a grey-blue glyph, and a plain-fg
@@ -55,27 +68,29 @@ let
   };
 
   # ── The bar rainbow ─────────────────────────────────────────────────────────
-  # A Tokyo Night rainbow that flows light → dark, one stop per icon, running in
-  # visual order from the current-window glyph on the far left across to the
-  # dashboard on the far right. Only the glyph is tinted (labels stay readable
-  # `fg` via `tinted`); the sequence below IS the on-bar order, so retune the
-  # gradient just by editing the hexes. Deliberately excluded: the workspace
-  # dots (Wayle's stateful accent), the systray (app-provided icons), and the
-  # battery — it stays the bar's one genuine *state* signal (green / yellow /
-  # red by charge), so the rainbow flows around it (… volume → [battery] → clock
-  # …) rather than through it.
+  # A Tokyo Night rainbow, one stop per icon, in visual order from the
+  # current-window glyph on the far left across to the dashboard on the far
+  # right. It broadly trends light → dark, but hue is tuned for legibility over a
+  # strict luminance ramp: bluetooth takes its namesake blue, audio is a warm
+  # orange (never red), and the clock/notifications pair is split across the hue
+  # wheel (magenta vs red) so they don't read as the same colour. Only the glyph
+  # is tinted (labels stay readable `fg` via `tinted`); the sequence below IS the
+  # on-bar order, so retune just by editing the hexes. Deliberately excluded: the
+  # workspace dots (Wayle's stateful accent), the systray (app-provided icons),
+  # and the battery — it stays the bar's one genuine *state* signal (green /
+  # yellow / red by charge), so the rainbow flows around it rather than through.
   rainbow = {
-    window-title = "#c0caf5"; # lightest — the near-white fg blue
-    storage = "#b4f9f8"; # light cyan
-    netstat = "#7dcfff"; # cyan
+    window-title = "#c0caf5"; # lightest — near-white lavender
+    storage = "#b4f9f8"; # light cyan (disk)
+    netstat = "#7dcfff"; # cyan (net traffic)
     ram = "#73daca"; # teal
     cpu = "#9ece6a"; # green
-    network = "#e0af68"; # yellow
-    bluetooth = "#ff9e64"; # orange
-    volume = "#f7768e"; # red
-    clock = "#bb9af7"; # magenta
-    notifications = "#9d7cd8"; # purple
-    dashboard = "#3d59a1"; # deep blue — the darkest, far end of the sweep
+    network = "#e0af68"; # yellow (wifi)
+    bluetooth = "#7aa2f7"; # blue — its namesake
+    volume = "#ff9e64"; # orange — audio, warm and never red
+    clock = "#bb9af7"; # magenta (calendar)
+    notifications = "#f7768e"; # red/pink — alerts, split away from the clock
+    dashboard = "#3d59a1"; # deep blue — darkest, far end of the sweep
   };
 
   # Detailed system monitor, opened from the bar's cpu/ram click actions:
@@ -104,15 +119,58 @@ let
   # Wayle 0.6's built-in cpu/ram modules have NO tooltip support — only *custom*
   # modules expose `tooltip-format`. So to get a hover-procs tooltip on cpu and
   # ram, they're reimplemented as custom modules driven by these scripts. Each
-  # emits JSON `{ text, tooltip }`: `text` becomes the bar label (replicating the
-  # native format), `tooltip` the hover text (top processes). jq assembles the
-  # JSON so process names with odd characters can't break it; jq/ps are pinned to
+  # emits JSON `{ text, tooltip[, class] }`: `text` becomes the bar label
+  # (replicating the native format), `tooltip` the hover text, and `class` an
+  # optional threshold CSS class the stylesheet colours. jq assembles the JSON so
+  # process names with odd characters can't break it; jq/ps/etc. are pinned to
   # the store so they don't depend on the bar's inherited PATH.
+
+  # Shared `emit` helper: print the module JSON. A non-empty third arg becomes the
+  # `class` field (the threshold class); empty → the field is omitted so Wayle
+  # removes any class it had (its diff drops classes absent from the new output).
+  emitJson = ''
+    emit() { # $1 = label, $2 = tooltip, $3 = css class (may be empty)
+      if [ -n "$3" ]; then
+        ${pkgs.jq}/bin/jq -n --arg text "$1" --arg tip "$2" --arg class "$3" \
+          '{ text: $text, tooltip: $tip, class: $class }'
+      else
+        ${pkgs.jq}/bin/jq -n --arg text "$1" --arg tip "$2" \
+          '{ text: $text, tooltip: $tip }'
+      fi
+    }
+  '';
+
+  # Shared process table for the cpu/ram tooltips: top 15 processes with
+  # PID / USER / CPU% / MEM% / RSS / cumulative CPU TIME / COMMAND, differing
+  # only in the sort key. Header and rows share one printf format so the
+  # columns line up (the tooltip is monospace via styles/index.scss).
+  # `user:12` stops ps truncating long usernames to 8 chars + "+"; RSS (KiB)
+  # is humanised to M/G; `times` (seconds) is rendered h:mm:ss; the command
+  # is everything from field 8 on, so names with spaces survive. Processes
+  # younger than 3 s (etimes, field 7 — displayed nowhere) are skipped: ps
+  # computes CPU% over the process's lifetime, so newborns (including the ps
+  # spawned here) show absurd spikes; rows are counted after that filter so
+  # the table stays at 15.
+  procTable = sort: ''
+    tip=$(printf '%7s  %-10s %5s  %4s  %6s  %8s  %s\n' 'PID' 'USER' 'CPU%' 'MEM%' 'RSS' 'TIME' 'COMMAND'; \
+          $ps -eo pid,user:12,pcpu,pmem,rss,times,etimes,comm --sort=${sort} \
+            | awk 'NR > 1 && $7 >= 3 && n < 15 {
+                n++
+                rss = $5
+                if (rss >= 1048576)   r = sprintf("%.1fG", rss / 1048576)
+                else if (rss >= 1024) r = sprintf("%dM", int(rss / 1024 + 0.5))
+                else                  r = rss "K"
+                t = $6
+                tm = sprintf("%d:%02d:%02d", t / 3600, (t % 3600) / 60, t % 60)
+                cmd = $8; for (i = 9; i <= NF; i++) cmd = cmd " " $i
+                printf "%7s  %-10.10s %5s  %4s  %6s  %8s  %s\n", $1, $2, $3, $4, r, tm, cmd
+              }')
+  '';
 
   # cpu: percentage (two /proc/stat samples over a short window) + package temp,
   # tooltip = top processes by CPU.
   cpuStats = pkgs.writeShellScript "wayle-cpu-stats" ''
-    jq=${pkgs.jq}/bin/jq
+    ${emitJson}
     ps=${pkgs.procps}/bin/ps
 
     # Fields after "cpu ": user nice system idle iowait irq softirq steal …
@@ -144,16 +202,18 @@ let
     done
     if [ -n "$temp" ]; then label="''${pct}%  ''${temp}°C"; else label="''${pct}%"; fi
 
-    tip=$(printf 'CPU%%   MEM%%  COMMAND\n'; \
-          $ps -eo pcpu,pmem,comm --sort=-pcpu \
-            | awk 'NR > 1 && NR <= 9 { printf "%5s  %4s  %s\n", $1, $2, $3 }')
+    ${procTable "-pcpu"}
 
-    $jq -n --arg text "$label" --arg tip "$tip" '{ text: $text, tooltip: $tip }'
+    # Threshold class on CPU load → the label goes amber/red (styles/index.scss).
+    class=""
+    if [ "$pct" -ge 95 ]; then class="metric-crit"; elif [ "$pct" -ge 80 ]; then class="metric-warn"; fi
+
+    emit "$label" "$tip" "$class"
   '';
 
   # ram: used/total GiB from /proc/meminfo, tooltip = top processes by memory.
   ramStats = pkgs.writeShellScript "wayle-ram-stats" ''
-    jq=${pkgs.jq}/bin/jq
+    ${emitJson}
     ps=${pkgs.procps}/bin/ps
 
     # Used = Total − Available (excludes reclaimable cache/buffers, matching the
@@ -164,11 +224,72 @@ let
     label=$(awk -v u="$used_kb" -v t="$total_kb" \
               'BEGIN{ printf "%.1f/%.1fG", u / 1048576, t / 1048576 }')
 
-    tip=$(printf 'MEM%%   CPU%%  COMMAND\n'; \
-          $ps -eo pmem,pcpu,comm --sort=-pmem \
-            | awk 'NR > 1 && NR <= 9 { printf "%5s  %4s  %s\n", $1, $2, $3 }')
+    ${procTable "-pmem"}
 
-    $jq -n --arg text "$label" --arg tip "$tip" '{ text: $text, tooltip: $tip }'
+    # Threshold class on memory pressure (used / total).
+    mem_pct=0
+    [ "$total_kb" -gt 0 ] && mem_pct=$(( used_kb * 100 / total_kb ))
+    class=""
+    if [ "$mem_pct" -ge 90 ]; then class="metric-crit"; elif [ "$mem_pct" -ge 80 ]; then class="metric-warn"; fi
+
+    emit "$label" "$tip" "$class"
+  '';
+
+  # disk: same idea for storage — %-used on / as the label, tooltip = a df table
+  # of the real mounts. df is instant, so no sampling needed.
+  diskStats = pkgs.writeShellScript "wayle-disk-stats" ''
+    ${emitJson}
+    df=${pkgs.coreutils}/bin/df
+
+    pct=$($df --output=pcent / 2>/dev/null | awk 'NR == 2 { gsub(/[ %]/, ""); print }')
+    [ -n "$pct" ] || pct=0
+    label="''${pct}%"
+
+    # Real filesystems only (drop tmpfs/overlay/etc.); MOUNT is last so long
+    # mount points can't push the numeric columns out of alignment.
+    tip=$($df -h --output=size,used,avail,pcent,target \
+             -x tmpfs -x devtmpfs -x efivarfs -x overlay -x squashfs 2>/dev/null \
+          | awk 'NR == 1 { printf "%5s %5s %5s %5s  %s\n", "SIZE", "USED", "FREE", "USE%", "MOUNT"; next }
+                       { printf "%5s %5s %5s %5s  %s\n", $1, $2, $3, $4, $5 }')
+
+    # Threshold class on / usage (fills slowly, so high cut-offs).
+    class=""
+    if [ "$pct" -ge 95 ]; then class="metric-crit"; elif [ "$pct" -ge 85 ]; then class="metric-warn"; fi
+
+    emit "$label" "$tip" "$class"
+  '';
+
+  # net: down/up rate on the default-route interface as the label, tooltip = each
+  # real interface with its IPv4 (docker/veth/bridge junk filtered out). Rates
+  # come from two /proc/net/dev samples, like cpu.
+  netStats = pkgs.writeShellScript "wayle-net-stats" ''
+    ${emitJson}
+    ip=${pkgs.iproute2}/bin/ip
+
+    iface=$($ip route show default 2>/dev/null \
+              | awk '{ for (i = 1; i <= NF; i++) if ($i == "dev") { print $(i + 1); exit } }')
+    [ -n "$iface" ] || iface=$($ip -o link show up 2>/dev/null | awk -F': ' '$2 != "lo" { print $2; exit }')
+
+    read_bytes() {
+      awk -v ifc="$1" 'NR > 2 { gsub(/:/, " "); if ($1 == ifc) { print $2, $10; exit } }' /proc/net/dev
+    }
+    set -- $(read_bytes "$iface"); rx1=''${1:-0}; tx1=''${2:-0}
+    sleep 0.5
+    set -- $(read_bytes "$iface"); rx2=''${1:-0}; tx2=''${2:-0}
+    drx=$(( (rx2 - rx1) * 2 )); dtx=$(( (tx2 - tx1) * 2 )) # ×2: 0.5 s window → per second
+
+    fmt() {
+      awk -v b="$1" 'BEGIN{ split("B K M G T", u, " "); i = 1;
+        while (b >= 1024 && i < 5) { b /= 1024; i++ }
+        if (i == 1) printf "%d%s", b, u[i]; else printf "%.1f%s", b, u[i] }'
+    }
+    label="↓$(fmt $drx) ↑$(fmt $dtx)"
+
+    tip=$(printf '%-12s %s\n' 'IFACE' 'ADDRESS'; \
+          $ip -brief -4 addr show up 2>/dev/null \
+            | awk '$1 != "lo" && $1 !~ /^(docker|veth|br-|virbr)/ { printf "%-12s %s\n", $1, $3 }')
+
+    emit "$label" "$tip" "" # no threshold on network
   '';
 in
 {
@@ -204,10 +325,19 @@ in
           # layer namespace (see layerrule in hyprland.nix). Lower = more
           # see-through; the blur keeps text/icons readable.
           background-opacity = 70;
-          border-location = "bottom";
-          border-width = 1;
+          # Floating pill: inset the bar from the screen edges so the rounded
+          # corners actually show (flush against the edge they'd be clipped),
+          # with a full border matching the tiled windows (border_size = 2,
+          # blue accent). Insets are Wayle Spacing units (scaled em, not px) —
+          # tuned so the on-screen gap ≈ Hyprland's gaps_out (8 px). NB: the
+          # bar's exclusive zone grows by the inset, so the htop dropdown
+          # anchor in hyprland.nix moves with it (re-tune there if changed).
+          inset-edge = 0.55;
+          inset-ends = 0.55;
+          border-location = "all";
+          border-width = 2;
           border-color = "border-accent";
-          rounding = "none";
+          rounding = "lg";
           padding = 0.35; # Wayle default bar thickness
           module-gap = 0.10; # tighter spacing between modules (left + right)
 
@@ -221,14 +351,19 @@ in
           button-bg-opacity = 0;
           button-group-opacity = 0;
           button-border-location = "none";
+          # Button shape (folded from runtime.toml). With the fills above at 0
+          # these mostly affect icon/label layout and (invisible) corner rounding.
+          button-variant = "basic";
+          button-rounding = "lg";
 
           layout = [
             {
               monitor = "*";
               show = true;
               # Single Wayle bar (Wayle can't render a second). Left: workspaces
-              # + current window title. Right: metrics, caffeine, notifications,
-              # the audio/wifi/bluetooth/battery cluster, date, tray, dashboard.
+              # + current window title. Right: tray, metrics, night light, the
+              # wifi/bluetooth/audio/battery cluster, date, notifications,
+              # dashboard.
               left = [
                 "hyprland-workspaces"
                 "window-title"
@@ -236,18 +371,21 @@ in
               center = [ ];
               right = [
                 "systray"
-                # Metrics. storage/netstat are native; ram/cpu are custom modules
-                # (custom-ram / custom-cpu) so they can carry a hover tooltip of
-                # the top processes — Wayle's native cpu/ram can't (see the
-                # cpuStats / ramStats scripts). Listed flat rather than in a
-                # `sysmon` group: the group background is transparent here
-                # (button-group-opacity = 0), so a group would be visually
-                # identical, and a group's `modules` list takes native names, not
-                # `custom-*` refs.
-                "storage"
-                "netstat"
+                # Metrics — all four are custom modules (custom-disk / custom-net
+                # / custom-ram / custom-cpu) so each carries a hover tooltip that
+                # Wayle's native storage/netstat/cpu/ram modules can't: disk → a
+                # df table, net → interfaces + IPs, ram → top procs by memory,
+                # cpu → top procs by CPU (see the *Stats scripts). Listed flat
+                # rather than in a `sysmon` group: the group background is
+                # transparent here (button-group-opacity = 0), so a group would be
+                # visually identical, and a group's `modules` list takes native
+                # names, not `custom-*` refs.
+                "custom-disk"
+                "custom-net"
                 "custom-ram"
                 "custom-cpu"
+                # night light toggle (hyprsunset must be running — see packages)
+                "hyprsunset"
                 # network / bluetooth / audio / battery — each opens its own dropdown
                 {
                   name = "status";
@@ -272,10 +410,10 @@ in
           theme-provider = "wayle";
           palette = tokyonight;
           # Scale Wayle's own UI (bar text/icons + notification popups).
-          # This is independent of the Hyprland monitor scale (1.2): the
-          # compositor sizes the surface, this sizes Wayle's internal layout.
-          # Dialed down below 1.0 to shrink bar/notification fonts.
-          scale = 0.85;
+          # This is independent of the Hyprland monitor scale: the compositor
+          # sizes the surface, this sizes Wayle's internal layout. Bumped to 1.2
+          # (folded from a live runtime.toml tweak) for a chunkier bar.
+          scale = 1.2;
         };
 
         # ── Per-module tweaks + unified colour scheme ───────────────────────
@@ -311,10 +449,12 @@ in
             # (`icon-size`), so shrinking the dot as an icon shrank the app
             # icons too. Labels have their own `label-size`, so rendering the
             # dot as a label decouples the two — tiny dot, full-size app icons.
-            # `display-mode = "label"` shows the label; a per-workspace
-            # `workspace-map` label overrides the number. Colour still tracks
-            # state (active = accent blue, occupied = fg-muted, empty = subtle).
-            display-mode = "label";
+            # `display-mode = "icon"` (folded from runtime.toml) shows each
+            # workspace-map ICON; ours only sets a `label` ("●"), and icon mode
+            # falls back to the label when a workspace has no icon — so the dot
+            # still renders, still sized by `label-size`. Colour tracks state
+            # (active = accent blue, occupied = fg-muted, empty = subtle).
+            display-mode = "icon";
             # Map ws 1–8 to a filled-circle glyph; scratchpads (neg IDs) keep
             # their number via the number fallback.
             workspace-map = builtins.listToAttrs (
@@ -351,26 +491,55 @@ in
           window-title = tinted rainbow.window-title;
           media = neutral;
 
-          # Rainbow stops (light → dark, left → right). Each placed module tints
-          # only its glyph; labels stay readable `fg` via `tinted`. cpu/ram are
-          # custom modules below, so they're tinted there, not here.
-          netstat = tinted rainbow.netstat;
-          storage = tinted rainbow.storage;
+          # Rainbow stops (left → right). Each placed module tints only its glyph;
+          # labels stay readable `fg` via `tinted`. disk/net/cpu/ram are custom
+          # modules below (for their tooltips), so they're tinted there, not here.
           volume = tinted rainbow.volume;
-          bluetooth = tinted rainbow.bluetooth;
           network = tinted rainbow.network;
+          # bluetooth: icon only (label hidden — folded from runtime.toml), so
+          # the connected device name doesn't crowd the bar.
+          bluetooth = (tinted rainbow.bluetooth) // { label-show = false; };
 
-          # Not placed on the bar; keep a canonical TN hue for if/when they are.
-          hyprsunset = tinted tn.orange;
-          idle-inhibit = tinted tn.yellow;
+          # Night-light toggle, placed between the metrics and the status
+          # cluster. Orange is its canonical hue (warm light); it sits outside
+          # the rainbow proper, like battery, because its colour means
+          # something. Icon only — the module has no useful label.
+          hyprsunset = (tinted tn.orange) // { label-show = false; };
+          # Not placed on the bar; keep a canonical TN hue for if/when it is.
+          idle-inhibit = (tinted tn.yellow) // { label-show = false; };
 
-          # cpu / ram as custom modules (referenced as custom-cpu / custom-ram in
-          # the layout). Each renders the metric label from its script's JSON
-          # `text` and shows the top processes as the hover `tooltip` — the whole
-          # point of the rewrite, since native cpu/ram can't do tooltips.
-          # Left-click still drops down the htop panel. icon-color carries the
-          # rainbow stop; the transparent chip / `fg` label match `tinted`.
+          # disk / net / ram / cpu as custom modules (custom-disk / custom-net /
+          # custom-ram / custom-cpu in the layout). Native storage/netstat/cpu/ram
+          # can't show a tooltip, so each is reimplemented here: the script's JSON
+          # `text` is the bar label, its `tooltip` the hover detail. cpu/ram also
+          # left-click to the htop dropdown; disk/net are display-only. icon-color
+          # carries the rainbow stop; the transparent chip / `fg` label match
+          # `tinted`.
           custom = [
+            {
+              id = "disk";
+              command = "${diskStats}";
+              mode = "poll";
+              interval-ms = 30000; # disk usage barely moves; matches native storage
+              icon-name = "ld-hard-drive-symbolic";
+              icon-show = true;
+              icon-color = rainbow.storage;
+              icon-bg-color = "transparent";
+              label-show = true;
+              label-color = "fg-default";
+            }
+            {
+              id = "net";
+              command = "${netStats}";
+              mode = "poll";
+              interval-ms = 2000; # rate readout; the script adds a 0.5 s sample window
+              icon-name = "ld-activity-symbolic";
+              icon-show = true;
+              icon-color = rainbow.netstat;
+              icon-bg-color = "transparent";
+              label-show = true;
+              label-color = "fg-default";
+            }
             {
               id = "ram";
               command = "${ramStats}";
@@ -401,7 +570,7 @@ in
             }
           ];
 
-          # Notifications: magenta bar glyph (via `tinted`) plus popup tuning.
+          # Notifications: red/pink bar glyph (via `tinted`) plus popup tuning.
           # Position/duration stay on Wayle's defaults (top-right, 5 s).
           # `popup-shadow = false` drops the card's drop shadow (the soft edge
           # around each toast). `popup-urgency-bar = "none"` removes the 2 px
@@ -411,6 +580,7 @@ in
           # applied as a layer-shell top margin). The popup *width* isn't a
           # config key; it's set in styles/index.scss.
           notifications = (tinted rainbow.notifications) // {
+            label-show = false; # icon only (folded from runtime.toml)
             popup-shadow = true;
             popup-urgency-bar = "none";
             popup-margin-y = 12.0;
@@ -475,6 +645,46 @@ in
     // Wider notification toasts (Wayle default: 340px).
     .notification-popup-card {
       min-width: calc(384px * var(--global-scale));
+    }
+
+    // Slightly smaller popup text (~10% down from Wayle's own sizes; there is
+    // no config key for popup fonts). Wayle sets each class from a --text-*
+    // var, so shrink relative to the same var rather than hardcoding px:
+    // title was --text-md, body was --text-base * 1.1, app/time --text-sm/xs.
+    .notification-popup-title {
+      font-size: calc(var(--text-md) * 0.9);
+    }
+    .notification-popup-body {
+      font-size: var(--text-base);
+    }
+    .notification-popup-app {
+      font-size: calc(var(--text-sm) * 0.9);
+    }
+    .notification-popup-time {
+      font-size: calc(var(--text-xs) * 0.9);
+    }
+
+    // Monospace tooltips. The cpu/ram modules print a space-padded process
+    // table in their hover tooltip; the columns only align in a fixed-width
+    // font (the bar's sans is Inter). GTK tooltips are their own top-level
+    // windows, but Wayle installs its stylesheet display-wide (that's how the
+    // notification rule above reaches its popup), so this reaches them too.
+    tooltip,
+    tooltip label {
+      font-family: "JetBrains Mono", monospace;
+    }
+
+    // Metric thresholds. The cpu/ram/disk scripts emit a `class` (metric-warn /
+    // metric-crit) once a resource crosses its cut-off; Wayle adds it to the
+    // module root, which also carries `.custom`. Colour just the numeric label —
+    // the icon keeps its rainbow hue. Wayle drives label colour through a
+    // per-button `--bar-btn-label-color` var set with a `* {}` rule at USER
+    // priority, so specificity alone can't win here; `!important` on `color` does.
+    .custom.metric-warn .bar-button-label {
+      color: #e0af68 !important; // amber — warning
+    }
+    .custom.metric-crit .bar-button-label {
+      color: #f7768e !important; // red — critical
     }
   '';
 }

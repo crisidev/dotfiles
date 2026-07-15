@@ -7,6 +7,7 @@
 let
   nixGL = import ../nixGL.nix { inherit pkgs config; };
   hyprlandPkg = nixGL inputs.hyprland.packages.${pkgs.system}.hyprland;
+  xdphPkg = inputs.hyprland.packages.${pkgs.system}.xdg-desktop-portal-hyprland;
 
   # Confirmation dialog for "quit session" (Super+Alt+E). `exit` tears the
   # whole compositor down instantly with no undo, which is easy to trigger by
@@ -18,6 +19,22 @@ let
     choice=$(printf 'Cancel\nLog out' \
       | wofi --dmenu --prompt "Exit Hyprland?" --width 260 --height 180 --cache-file /dev/null)
     [ "$choice" = "Log out" ] && hyprctl dispatch exit
+  '';
+
+  # Minimize toggle ($mod ALT comma): a normal window is sent to the
+  # special:minimized shelf; if the focused window is already ON the shelf
+  # (you opened it with $mod comma and are looking at it), it's dropped back
+  # into the workspace underneath the overlay instead — tiled, since e+0
+  # resolves to the monitor's current NORMAL workspace. One key, both ways.
+  # The shelf auto-hides once its last window leaves.
+  minimizeToggle = pkgs.writeShellScript "hypr-minimize-toggle" ''
+    export PATH="${config.home.homeDirectory}/.nix-profile/bin:$PATH"
+    ws=$(hyprctl -j activewindow | ${pkgs.jq}/bin/jq -r '.workspace.name // empty')
+    if [ "$ws" = "special:minimized" ]; then
+      hyprctl dispatch movetoworkspace e+0
+    else
+      hyprctl dispatch movetoworkspacesilent special:minimized
+    fi
   '';
 
   # GTK theme — single source of truth so the gtk module, the GTK_THEME env, and
@@ -71,7 +88,7 @@ in
   wayland.windowManager.hyprland = {
     enable = true;
     package = hyprlandPkg;
-    portalPackage = inputs.hyprland.packages.${pkgs.system}.xdg-desktop-portal-hyprland;
+    portalPackage = xdphPkg;
     xwayland.enable = true;
     systemd.enable = false;
     # Keep the classic hyprland config format (settings below are hyprlang).
@@ -79,6 +96,12 @@ in
     # silence the stateVersion-driven default-change warning.
     configType = "hyprlang";
 
+    # No overview plugin builds against this Hyprland (checked 2026-07):
+    # hyprexpo was dropped from hyprland-plugins as unmaintained (#663), and
+    # hyprtasking / Hyprspace all predate the src-tree restructure that landed
+    # on main before the v0.55.0 tag was cut (Monitor.hpp → output/,
+    # PointerManager.hpp → pointer/, CCompositor::getWorkspaceByID gone).
+    # Revisit hyprtasking once it chases the restructure.
     plugins = [ ];
 
     settings = {
@@ -119,6 +142,11 @@ in
         repeat_delay = 230; # gsettings delay 230
       };
 
+      # Touchpad gestures (GNOME parity). 0.55 has no `gestures:workspace_swipe`
+      # toggle anymore — swiping is enabled by declaring a gesture: fingers,
+      # direction, action. The `gestures:*` options that remain only tune it.
+      gesture = [ "3, horizontal, workspace" ];
+
       binds = {
         # Re-pressing the bind for the workspace you're already on jumps back to
         # the previously focused workspace. So $mod+Escape on terminals (ws1)
@@ -131,8 +159,13 @@ in
         gaps_in = 4;
         gaps_out = 8;
         border_size = 2;
-        "col.active_border" = "rgba(7aa2f7ee)";
-        "col.inactive_border" = "rgba(3b426166)";
+        # Blue → magenta gradient on the focused window (both TN accents). A
+        # static gradient deliberately — animating it via `borderangle … loop`
+        # forces continuous redraws, which is real battery drain on a laptop.
+        "col.active_border" = "rgba(7aa2f7ee) rgba(bb9af7ee) 45deg";
+        # Light grey (TN fg-muted) so inactive windows keep a visible outline;
+        # was rgba(3b426166), a dark grey-blue that vanished into the bg.
+        "col.inactive_border" = "rgba(a9b1d666)";
         layout = "dwindle";
         resize_on_border = true;
         allow_tearing = false;
@@ -147,6 +180,27 @@ in
         smart_resizing = true; # resize direction from cursor position on window
         force_split = 2; # always insert the new window on the right / bottom
         default_split_ratio = 1.0;
+      };
+
+      # Tabbed groups ($mod ALT S). Without this block the groupbar renders in
+      # Hyprland's stock yellow/grey, which clashes with everything. TN mapping:
+      # active tab = accent blue, inactive = elevated bg, and the group border
+      # takes the magenta pole of the window gradient so a grouped window reads
+      # differently from a plain focused one. `gradients = false`: flat tabs
+      # match the bar's flat chips.
+      group = {
+        "col.border_active" = "rgba(bb9af7ee)";
+        "col.border_inactive" = "rgba(a9b1d666)";
+        groupbar = {
+          font_family = "Inter";
+          font_size = 11;
+          gradients = false;
+          rounding = 6;
+          text_color = "rgba(1f2335ff)";
+          text_color_inactive = "rgba(a9b1d6ff)";
+          "col.active" = "rgba(7aa2f7ee)";
+          "col.inactive" = "rgba(292e42cc)";
+        };
       };
 
       decoration = {
@@ -191,7 +245,8 @@ in
           "windowsOut, 1, 4, winOut, popin 80%"
           "windowsMove, 1, 5, wind, slide"
           "border, 1, 1, linear"
-          "borderangle, 1, 30, linear, loop"
+          # NB: no `borderangle … loop` — a looping angle animation redraws
+          # every frame forever (battery), and the gradient looks fine static.
           "fade, 1, 5, overshot"
           "workspaces, 1, 5, wind"
           # `top`: slide in from above the screen (quake-style, matches the
@@ -285,12 +340,15 @@ in
         #   • `size`/`move` percentages ("size 85% 85%") no longer parse —
         #     rules take monitor-local EXPRESSIONS (space-separated, no spaces
         #     within one): `size monitor_w monitor_h*0.45`.
-        #   • `move` ignores the bar's reserved area, so anchor 50 logical px
-        #     down — the Wayle bar's height (re-tune if bar padding changes).
+        #   • `move` ignores the bar's reserved area, so anchor the bar's
+        #     reserved height down (62 logical px — floating bar inset + pill;
+        #     check `hyprctl -j monitors | jq '.[0].reserved'` after bar tweaks).
+        # Inset by gaps_out (8) on the sides and below the bar so it sits with
+        # the same gap as tiled windows.
         "workspace special:htop, match:class ^(htop-float)$"
         "float 1, match:class ^(htop-float)$"
-        "size monitor_w monitor_h*0.45, match:class ^(htop-float)$"
-        "move 0 65, match:class ^(htop-float)$"
+        "size monitor_w-16 monitor_h*0.65, match:class ^(htop-float)$"
+        "move 8 70, match:class ^(htop-float)$"
 
         # ── User-added floating rules ───────────────────────────────────────
         # Managed by ~/.bin/hypr-float-window. Do NOT remove the marker lines —
@@ -317,8 +375,18 @@ in
         # ── Window management ────────────────────────────────────────────
         # gsettings close = <Super>w
         "$mod, W, killactive"
-        # gsettings minimize = <Super><Alt>comma (no true minimize; send to special ws)
-        "$mod ALT, comma, movetoworkspacesilent, special:minimized"
+        # gsettings minimize = <Super><Alt>comma (no true minimize; send to the
+        # special:minimized shelf). Context-sensitive via minimizeToggle: on a
+        # shelf window the SAME key un-minimizes it into the workspace under
+        # the overlay instead. $mod SHIFT+<ws key> still sends a shelf window
+        # to a specific workspace.
+        "$mod ALT, comma, exec, ${minimizeToggle}"
+        # $mod+comma peeks the shelf: the bar hides special workspaces
+        # (show-special = false in wayle.nix), so without this bind a
+        # "minimized" window is unreachable. NB: the shelf is an OVERLAY above
+        # the tiled layout — showing it does not re-tile anything; it hides
+        # itself once the last window leaves.
+        "$mod, comma, togglespecialworkspace, minimized"
         # gsettings toggle-maximized = <Super><Alt>f (simplified to <Super>f)
         "$mod ALT, F, fullscreen, 1"
         # pop-shell toggle-floating = <Super><Alt>Backslash
@@ -338,7 +406,8 @@ in
         # gsettings switch-windows = <Alt>Tab
         "ALT, Tab, cyclenext"
         "ALT SHIFT, Tab, cyclenext, prev"
-        # overview placeholder — hyprexpo pending 0.54 compat fix
+        # overview placeholder — no overview plugin compiles against this
+        # Hyprland right now (see the `plugins` comment above)
         "$mod, grave, cyclenext"
 
         # ── Focus movement (Super+arrows for focus) ──────────────────────
@@ -422,6 +491,10 @@ in
         "ALT, Print, exec, $HOME/.nix-profile/bin/grimblast --notify copysave active"
         # bonus: full screen
         ", Print, exec, $HOME/.nix-profile/bin/grimblast --notify copysave screen"
+        # colour picker: freeze the screen, click a pixel, hex lands on the
+        # clipboard (-a = autocopy). The package was already installed; this
+        # bind finally makes it reachable.
+        "$mod ALT, C, exec, $HOME/.nix-profile/bin/hyprpicker -a"
       ];
 
       # ── Media / hardware keys ──────────────────────────────────────────
@@ -554,6 +627,22 @@ in
           present_message = "Scanning…";
         };
       };
+      # Round avatar above the clock. The source PNG is already circular, but
+      # rounding = -1 (full circle) + the accent ring make the edge crisp on
+      # the blurred wallpaper regardless.
+      image = [
+        {
+          monitor = "";
+          path = "${config.home.homeDirectory}/Pictures/bigo_hat_round_400x400.png";
+          size = 130;
+          rounding = -1;
+          border_size = 2;
+          border_color = "rgb(7aa2f7)";
+          position = "0, 250";
+          halign = "center";
+          valign = "center";
+        }
+      ];
       label = [
         {
           monitor = "";
@@ -562,6 +651,18 @@ in
           font_size = 72;
           font_family = "JetBrainsMono Nerd Font";
           position = "0, 80";
+          halign = "center";
+          valign = "center";
+        }
+        # Date line under the big clock, in the muted fg so the time stays
+        # the anchor. Updates once a minute — enough for a date.
+        {
+          monitor = "";
+          text = ''cmd[update:60000] echo "$(date +"%A, %d %B")"'';
+          color = "rgba(a9b1d6ee)";
+          font_size = 20;
+          font_family = "Inter";
+          position = "0, 0";
           halign = "center";
           valign = "center";
         }
@@ -583,6 +684,13 @@ in
           timeout = 600;
           on-timeout = "brightnessctl -s set 10%";
           on-resume = "brightnessctl -r";
+        }
+        # Heads-up 30 s before the lock fires (the screen is already dimmed by
+        # then, but the toast is unmissable). Rendered by Wayle's notification
+        # daemon; -t 25000 keeps it up almost until the lock itself.
+        {
+          timeout = 870;
+          on-timeout = ''${pkgs.libnotify}/bin/notify-send -t 25000 -u normal "Locking soon" "Screen locks in 30 seconds"'';
         }
         {
           timeout = 900;
@@ -664,6 +772,29 @@ in
   home.file.".local/lib/hyprlock/libcrypt.so.1".source =
     config.lib.file.mkOutOfStoreSymlink "/usr/lib/x86_64-linux-gnu/libcrypt.so.1";
 
+  # ── xdg-desktop-portal-hyprland activation (screen sharing) ──────────────
+  # The HOST xdg-desktop-portal broker runs on this box; it discovers our Nix
+  # hyprland.portal via XDG_DATA_DIRS, but the backend's D-Bus service file
+  # says SystemdService=xdg-desktop-portal-hyprland.service — and the unit the
+  # Nix package ships lives in ~/.nix-profile/share/systemd/user, which systemd
+  # never scans. Activation then fails ("Unit not found") and the broker comes
+  # up with no ScreenCast interface, i.e. screen sharing is silently broken.
+  # Link the shipped unit where systemd looks. The env it needs
+  # (WAYLAND_DISPLAY, HYPRLAND_INSTANCE_SIGNATURE) is pushed by our exec-once
+  # dbus-update-activation-environment/import-environment lines.
+  xdg.configFile."systemd/user/xdg-desktop-portal-hyprland.service".source =
+    "${xdphPkg}/share/systemd/user/xdg-desktop-portal-hyprland.service";
+
+  # Backend selection: the hyprland.portal file's UseIn key is deprecated
+  # upstream; pin the choice explicitly (broker reads <desktop>-portals.conf
+  # per XDG_CURRENT_DESKTOP). FileChooser stays on gtk — hyprland's backend
+  # doesn't implement file dialogs.
+  xdg.configFile."xdg-desktop-portal/hyprland-portals.conf".text = ''
+    [preferred]
+    default = hyprland;gtk
+    org.freedesktop.impl.portal.FileChooser = gtk
+  '';
+
   # ── Wofi launcher (command palette) ───────────────────────────────────────
   home.file.".config/wofi/config".text = ''
     width=500
@@ -682,14 +813,16 @@ in
   '';
 
   home.file.".config/wofi/style.css".text = ''
+    /* Translucent enough for the layerrule blur to actually show — at the old
+       0.95 the frosted glass was invisible. Border matches the bar's accent. */
     window {
-      background-color: rgba(26, 27, 38, 0.95);
-      border: 2px solid #3b4261;
+      background-color: rgba(26, 27, 38, 0.78);
+      border: 2px solid #7aa2f7;
       border-radius: 16px;
     }
 
     #input {
-      background-color: rgba(31, 35, 53, 0.9);
+      background-color: rgba(31, 35, 53, 0.7);
       border: 1px solid #3b4261;
       border-radius: 10px;
       color: #c0caf5;
@@ -766,6 +899,7 @@ in
     hyprlock
     hypridle
     hyprpicker
+    hyprutils
     # Backs the ANR "app not responding" dialog and (suppressed above) the
     # update-news / donation popups. Found by the compositor via the PATH env
     # directive that prepends ~/.nix-profile/bin.
