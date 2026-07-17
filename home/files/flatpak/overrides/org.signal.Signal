@@ -1,14 +1,13 @@
-# Keep Signal on XWayland: native Wayland CSD leaves a gap between the window
-# decorations and the pop-shell border. Dropping the wayland socket makes the
-# app's built-in fallback-x11 kick in, which mounts the X11 socket and sets
-# DISPLAY; Electron then picks X11 on its own.
+# Run Signal on native Wayland (mirrors org.ferdium.Ferdium — both Electron).
+# The old X11 forcing existed to hide a gap between native-Wayland CSD and the
+# pop-shell border under GNOME/Mutter; that's dead under Hyprland, and on a
+# fractional (1.2) monitor scale XWayland gets bitmap-upscaled → grainy text.
+# Granting the wayland socket + ELECTRON_OZONE_PLATFORM_HINT=auto makes Electron
+# render natively at the fractional scale (sharp). The nixGL LIBGL/GBM/LIBVA
+# unset-environment workaround was X11/GLX-only — native Wayland dodges it, so
+# it's dropped here (Ferdium never needed it either).
 [Context]
-sockets=x11;!wayland;
-# nixGL exports these GL driver paths into the session; flatpak forwards them
-# into the sandbox where the /nix/store paths don't exist, so Mesa fails to
-# load its DRI/GBM driver on the X11/GLX path. Drop them so the runtime's own
-# Mesa is used. (Native Wayland dodged this; explicit X11 GLX hits it.)
-unset-environment=LIBGL_DRIVERS_PATH;GBM_BACKENDS_PATH;LIBVA_DRIVERS_PATH;
+sockets=wayland;
 
 [Environment]
-ELECTRON_OZONE_PLATFORM_HINT=x11
+ELECTRON_OZONE_PLATFORM_HINT=auto

@@ -1,7 +1,9 @@
-# Run Spotify on XWayland so Mutter draws a normal titlebar. Native Wayland
-# (WaylandWindowDecorations) drew a plain grey Chromium titlebar that doesn't
-# match the GTK theme. Dropping the wayland socket makes the manifest's
-# fallback-x11 mount the X11 socket and set DISPLAY; CEF then picks X11 on its
-# own, so no ozone flag / spotify-flags.conf is needed.
+# Run Spotify on native Wayland. The old X11 forcing existed so Mutter would
+# draw a normal titlebar (native Wayland showed a plain grey Chromium one) —
+# moot under Hyprland, which tiles these borderless, and on a fractional (1.2)
+# monitor scale XWayland gets bitmap-upscaled → grainy text. Spotify is CEF, not
+# Electron, so ELECTRON_OZONE_PLATFORM_HINT does nothing; the wayland socket is
+# granted here and `--ozone-platform-hint=auto` is passed at launch instead (see
+# applications/com.spotify.Client.desktop and the exec-once in hyprland.nix).
 [Context]
-sockets=x11;!wayland;
+sockets=wayland;

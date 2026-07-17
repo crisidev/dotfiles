@@ -37,10 +37,10 @@ let
     fi
   '';
 
-  # GTK theme — single source of truth so the gtk module, the GTK_THEME env, and
-  # dconf all name the SAME theme. (The old config was broken: env said "Tokyo
-  # Night Dark" and gtk.theme said "Tokyonight-Dark-B", neither of which the
-  # tokyonight-gtk-theme package actually ships, so GTK apps fell back to Adwaita.)
+  # GTK theme — single source of truth so the gtk module (gtk-3.0/settings.ini)
+  # and dconf both name the SAME theme. NB: this is applied to GTK3 apps only;
+  # it is intentionally NOT exported as GTK_THEME (see the env block below for
+  # why forcing it onto GTK4/libadwaita apps breaks them).
   gtkThemeName = "Orchis-Grey-Dark-Nord";
   gtkThemePackage = pkgs.orchis-theme.override { tweaks = [ "nord" ]; };
 
@@ -117,7 +117,15 @@ in
         "XCURSOR_THEME,Bibata-Modern-Ice"
         "XCURSOR_SIZE,24"
         "HYPRCURSOR_SIZE,24"
-        "GTK_THEME,${gtkThemeName}"
+        # NB: deliberately NO `GTK_THEME` here. That env var is a hard override
+        # that forces libadwaita/GTK4 apps to load the named theme's gtk-4.0 CSS,
+        # bypassing libadwaita's "ignore named themes" behaviour. Orchis ships a
+        # gtk-4.0 variant written for an older libadwaita, and its stale sidebar
+        # selectors break modern apps (Nautilus 50's places sidebar collapsed and
+        # overlapped). GTK3 apps are themed via gtk-3.0/settings.ini
+        # (gtk-theme-name, written by the gtk module below), so they keep Orchis
+        # without the env; GTK4 apps get the clean libadwaita default — which is
+        # exactly the gtk4.theme = null intent documented further down.
         "QT_QPA_PLATFORM,wayland"
         "QT_QPA_PLATFORMTHEME,qt6ct"
         "XDG_CURRENT_DESKTOP,Hyprland"
@@ -125,6 +133,16 @@ in
         "XDG_SESSION_DESKTOP,Hyprland"
         "ELECTRON_OZONE_PLATFORM_HINT,wayland"
         "MOZ_ENABLE_WAYLAND,1"
+        # XWayland apps aren't Wayland-scale-aware: under the 1.2 monitor scale
+        # they render at 96 DPI and the compositor bitmap-upscales the result, so
+        # fonts land blurry AND undersized. `xwayland:force_zero_scaling` (below)
+        # stops that upscale — crisp, but now 1:1-small — so each XWayland toolkit
+        # must scale itself back to 1.2. Mesen is the only Avalonia app in the
+        # session and AVALONIA_GLOBAL_SCALE_FACTOR is Avalonia-only, so setting it
+        # globally is safe: it reaches Mesen however it's launched and touches
+        # nothing else. (Wine/Lunar Magic scales via its own LogPixels DPI in
+        # ~/github/hollow-mario/vendor/lunarmagic.)
+        "AVALONIA_GLOBAL_SCALE_FACTOR,1.2"
         # grimblast's copysave defaults to $XDG_SCREENSHOTS_DIR, else Pictures.
         # Point it at Pictures/Screenshots so Hyprland-owned shots land there.
         "XDG_SCREENSHOTS_DIR,${config.home.homeDirectory}/Pictures/Screenshots"
@@ -241,14 +259,26 @@ in
         ];
         animation = [
           "windows, 1, 5, wind, slide"
-          "windowsIn, 1, 5, winIn, slide"
+          # New windows scale up in place (popin) with a slight overshoot bounce
+          # instead of sliding in from an edge — reads more "alive" in the BSP
+          # layout, where an incoming window's final position is arbitrary.
+          "windowsIn, 1, 5, overshot, popin 70%"
           "windowsOut, 1, 4, winOut, popin 80%"
           "windowsMove, 1, 5, wind, slide"
           "border, 1, 1, linear"
           # NB: no `borderangle … loop` — a looping angle animation redraws
           # every frame forever (battery), and the gradient looks fine static.
           "fade, 1, 5, overshot"
-          "workspaces, 1, 5, wind"
+          # Layer surfaces (wofi launcher, Wayle shell/OSD, notifications) pop +
+          # fade in from 90% instead of snapping into existence. Fires only on
+          # open/close, so there's no idle cost — battery-safe, unlike a looping
+          # border. `overshot` reuses the bezier defined above for a subtle bounce.
+          "layers, 1, 4, overshot, popin 90%"
+          # Cross-fade the workspace slide: `slidefade 15%` blends a fade into
+          # the horizontal slide (the 15% caps how far it travels) so switching
+          # reads smoother than a hard slide. Slightly longer (6ds) to give the
+          # fade room to breathe.
+          "workspaces, 1, 6, wind, slidefade 15%"
           # `top`: slide in from above the screen (quake-style, matches the
           # htop dropdown anchored under the bar). Default is from the bottom.
           "specialWorkspace, 1, 6, wind, slidevert top"
@@ -261,6 +291,19 @@ in
         animate_manual_resizes = true;
         animate_mouse_windowdragging = true;
         # NB: `vfr` moved to `debug:vfr` (default true) — no longer a misc option.
+      };
+
+      # XWayland fractional-scaling fix. Default (false) makes Hyprland
+      # bitmap-upscale every XWayland surface by the 1.2 monitor scale — blurry,
+      # and for fixed-canvas apps (Wine's virtual desktop, Mesen) also mis-sized.
+      # Setting it true maps 1 X pixel → 1 physical pixel (crisp) and hands
+      # scaling back to each app: Mesen via AVALONIA_GLOBAL_SCALE_FACTOR (env
+      # above), Lunar Magic via Wine's LogPixels DPI (vendor/lunarmagic). Those
+      # two are the only XWayland clients here — everything else is native
+      # Wayland — so no other window is affected. A future XWayland app would
+      # appear small until given its own toolkit scale env/DPI.
+      xwayland = {
+        force_zero_scaling = true;
       };
 
       # The update-news / donation popups are drawn by hyprland-qtutils, which
@@ -549,7 +592,10 @@ in
         # ferdium→5, signal→6), matching GNOME's auto-move-windows list.
         "[workspace 1 silent] $HOME/.nix-profile/bin/kitty"
         "flatpak run org.mozilla.firefox"
-        "flatpak run com.spotify.Client"
+        # --ozone-platform-hint=auto: Spotify is CEF (no ozone env var), so the
+        # Wayland flag must be on the command line, else it lands on XWayland and
+        # renders grainy at the 1.2 monitor scale. Matches its .desktop launcher.
+        "flatpak run com.spotify.Client --ozone-platform-hint=auto"
         "flatpak run org.ferdium.Ferdium"
         "flatpak run org.signal.Signal"
       ];

@@ -1,0 +1,20 @@
+[Desktop Entry]
+Type=Application
+Name=Spotify
+GenericName=Music Player
+Icon=com.spotify.Client
+# Overrides the flatpak-exported Spotify launcher (must live in
+# ~/.local/share/applications to win precedence) to append
+# `--ozone-platform-hint=auto`. Spotify is CEF, not Electron, so the ozone hint
+# can't come from an env var — it has to be a launch flag. Without it, CEF picks
+# XWayland and gets bitmap-upscaled to the 1.2 monitor scale (grainy text); with
+# it, CEF renders natively at the fractional scale (sharp). The wayland socket
+# is granted in flatpak/overrides/com.spotify.Client.
+Exec=/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=spotify --file-forwarding com.spotify.Client --ozone-platform-hint=auto @@u %U @@
+Terminal=false
+MimeType=x-scheme-handler/spotify;
+Categories=Audio;Music;Player;AudioVideo;
+StartupWMClass=spotify
+X-GNOME-UsesNotifications=true
+X-Flatpak-Tags=proprietary;
+X-Flatpak=com.spotify.Client
