@@ -60,6 +60,7 @@
         corellia = mkServer corelliaModules;
         tatooine = mkServer corelliaModules;
         mandalore = mkServer corelliaModules;
+        coruscant = mkServer corelliaModules;
         razor = mkServer [ ./home/razor.nix ];
         scarif = mkServer [ ./home/scarif.nix ];
       };
