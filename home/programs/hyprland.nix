@@ -44,27 +44,15 @@ let
   gtkThemeName = "Orchis-Grey-Dark-Nord";
   gtkThemePackage = pkgs.orchis-theme.override { tweaks = [ "nord" ]; };
 
-  # ── Hyprlock host-PAM shim ────────────────────────────────────────────────
-  # hyprlock is a Nix binary, so its dynamic loader only searches the Nix
-  # RUNPATH — never /usr/lib/x86_64-linux-gnu. Our /etc/pam.d/hyprlock pins the
-  # SYSTEM pam_unix.so by absolute path (Nix's libpam can't find the host module
-  # by bare name, and only the host module's setgid unix_chkpwd can read
-  # /etc/shadow — see falcon.nix). But that host module has a DT_NEEDED on the
-  # host libcrypt.so.1, which the Nix loader can't resolve — so every unlock
-  # failed with "PAM unable to dlopen(…/pam_unix.so): libcrypt.so.1: cannot open
-  # shared object file" and hyprlock rejected the password. (Fingerprint was
-  # unaffected: it goes through hyprlock's own fprintd path, not PAM.)
-  #
-  # Fix: launch hyprlock with a scoped LD_LIBRARY_PATH exposing ONLY the host
-  # libcrypt.so.1 (symlinked into ~/.local/lib/hyprlock, see home.file below).
-  # Scoping to a dir holding just that one lib is deliberate — putting all of
-  # /usr/lib on LD_LIBRARY_PATH would make the Nix hyprlock load the host
-  # glibc/wayland at startup and crash. Verified in hyprlock's exact library
-  # context (Nix libpam+libselinux loaded) that exposing only libcrypt lets the
-  # host pam_unix.so dlopen cleanly.
-  hyprlockLibDir = "${config.home.homeDirectory}/.local/lib/hyprlock";
-  hyprlockCmd = pkgs.writeShellScript "hyprlock-host-pam" ''
-    export LD_LIBRARY_PATH="${hyprlockLibDir}''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+  # ── Hyprlock launcher ─────────────────────────────────────────────────────
+  # Absolute-path launcher so hyprlock resolves from any PATH (the hypridle
+  # systemd user service runs with a minimal PATH). Password auth goes through
+  # Nix's own pam_unix.so plus a setgid-shadow unix_chkpwd copy the module execs
+  # (see programs.hyprlock below and home/falcon.nix): no host glibc module is
+  # dlopened into this process, so there is no LD_LIBRARY_PATH shim to apply —
+  # the old host-pam_unix.so + libcrypt approach broke on the host's glibc 2.43
+  # upgrade (host module wanted GLIBC_2.43; hyprlock has Nix glibc 2.42).
+  hyprlockCmd = pkgs.writeShellScript "hyprlock-launch" ''
     exec ${config.home.homeDirectory}/.nix-profile/bin/hyprlock "$@"
   '';
 
@@ -811,13 +799,6 @@ in
     x11.enable = false;
   };
 
-  # Expose the host libcrypt.so.1 to the hyprlock shim (hyprlockCmd above). This
-  # is the ONLY lib in the dir, so the scoped LD_LIBRARY_PATH can't shadow any of
-  # hyprlock's own Nix libs — see the hyprlockCmd comment. Out-of-store symlink
-  # so it tracks whatever the host's libcrypt package currently points at.
-  home.file.".local/lib/hyprlock/libcrypt.so.1".source =
-    config.lib.file.mkOutOfStoreSymlink "/usr/lib/x86_64-linux-gnu/libcrypt.so.1";
-
   # ── xdg-desktop-portal-hyprland activation (screen sharing) ──────────────
   # The HOST xdg-desktop-portal broker runs on this box; it discovers our Nix
   # hyprland.portal via XDG_DATA_DIRS, but the backend's D-Bus service file
@@ -839,6 +820,13 @@ in
     [preferred]
     default = hyprland;gtk
     org.freedesktop.impl.portal.FileChooser = gtk
+    # Route portal notifications to Wayle's own backend (waltmck/wayle fork — see
+    # programs/wayle.nix). Wayle installs a wayle.portal declaring
+    # DBusName=org.freedesktop.impl.portal.desktop.wayle, a name the running
+    # `wayle shell` owns. Without this line the broker falls back to the
+    # gtk/builtin Notification backend, which strips flatpak apps' identity
+    # (empty app_name) — the very thing the fork exists to fix.
+    org.freedesktop.impl.portal.Notification = wayle
   '';
 
   # ── Wofi launcher (command palette) ───────────────────────────────────────

@@ -1,25 +1,39 @@
 {
   pkgs,
   config,
+  inputs,
   ...
 }:
 let
   nixGL = import ../nixGL.nix { inherit pkgs config; };
-  # Flatpak apps (Firefox, Ferdium, …) deliver notifications through
-  # xdg-desktop-portal, which forwards them with an EMPTY app_name and only a
-  # `desktop-entry` hint (org.mozilla.firefox, …). Wayle 0.6 groups and labels
-  # purely by app_name, so all of those land in one "unknown" group. The patch
-  # falls back to the desktop-entry's display name (Wayle already uses that
-  # hint for the group icon, just not the label). Drop once upstream fixes it:
-  # https://github.com/wayle-rs/wayle
-  wayleFixed = pkgs.wayle.overrideAttrs (old: {
-    patches = (old.patches or [ ]) ++ [ ./patches/wayle-notification-desktop-entry.patch ];
-  });
+  # ── TESTING the waltmck/wayle notification-portal fork ──────────────────────
+  # The maintainer's fork (flake input `wayle`) implements a real
+  # org.freedesktop.impl.portal.Notification backend, so portal-routed flatpak
+  # notifications (Firefox, Ferdium, …) arrive with their true app identity
+  # rather than an empty app_name. That supersedes BOTH the local
+  # patches/wayle-notification-desktop-entry.patch (a label/icon fallback that
+  # papered over the empty-app_name case) AND PR #333 upstream — so that patch is
+  # intentionally NOT applied here.
+  #
+  # The fork's package also installs resources/wayle.portal into
+  # share/xdg-desktop-portal/portals/. The host xdg-desktop-portal broker
+  # discovers it via XDG_DATA_DIRS (~/.nix-profile/share is on it, same as the
+  # hyprland.portal), and is pointed at this backend by the Notification line in
+  # hyprland-portals.conf (see programs/hyprland.nix). The portal file declares
+  # DBusName=org.freedesktop.impl.portal.desktop.wayle with no SystemdService=,
+  # so the backend must be the running `wayle shell` (started from hyprland's
+  # exec-once) — it owns that bus name while up.
+  #
+  # Revert to the released build: drop the `wayle` flake input and restore the
+  # `pkgs.wayle.overrideAttrs` patch that lived here.
+  wayleFork = inputs.wayle.packages.${pkgs.system}.default;
   # Wayle is GTK4 — wrap it with nixGL so it finds OpenGL on this non-NixOS host,
   # exactly like kitty / ghostty / hyprland. The wrapper preserves every binary
   # (wayle, wayle-settings) and forwards subcommands, so `wayle shell`,
-  # `wayle wallpaper set …`, `wayle notify …` all keep working.
-  waylePkg = nixGL wayleFixed;
+  # `wayle wallpaper set …`, `wayle notify …` all keep working. nixGL
+  # symlink-copies the ENTIRE output tree and only rewrites bin/, so the
+  # installed wayle.portal survives the wrap and reaches ~/.nix-profile/share.
+  waylePkg = nixGL wayleFork;
 
   # Base is Tokyo Night, with the shifts that had been living as GUI tweaks in
   # runtime.toml folded in (deeper Storm-ish bg/surface, lighter muted text, a

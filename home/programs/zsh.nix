@@ -10,8 +10,10 @@
   #
   # Generation order home-manager produces (relevant bits):
   #   500  init-early.zsh  (PATH + fzf-history-search vars, before plugins load)
+  #   545  compinit        (must run BEFORE antidote: ohmyzsh lib/directories.zsh
+  #                         calls compdef at load time; home-manager's own
+  #                         completionInit slot is 570, i.e. too late)
   #   550  antidote        (source antidote + load plugins)
-  #   570  completionInit  (compinit, now AFTER plugins so their completions register)
   #   910  HISTSIZE/SAVEHIST/HISTFILE   (from programs.zsh.history)
   #   950  history setopts              (from programs.zsh.history)
   #  1000  init.zsh        (env, setopt extras, bindkeys, _evalcache, functions)
@@ -45,12 +47,12 @@
       ];
     };
 
-    # Matches the old `FPATH="$HOME/.zfunc:${FPATH}"; autoload -Uz compinit; compinit`.
-    completionInit = ''
-      FPATH="$HOME/.zfunc:''${FPATH}"
-      autoload -Uz compinit
-      compinit
-    '';
+    # compinit is emitted via initContent at order 545 (below) instead of the
+    # 570 completionInit slot, so it runs before antidote loads the plugins.
+    # On hosts whose /etc/zsh/zshrc already runs compinit (Debian/Ubuntu) the
+    # late slot happened to work; on the others it fails with
+    # "directories.zsh: command not found: compdef".
+    enableCompletion = false;
 
     # History (the old HISTFILE/HISTSIZE/SAVEHIST + setopts). Extras that this
     # option can't express (BANG_HIST, INC_APPEND_HISTORY, HIST_REDUCE_BLANKS,
@@ -101,6 +103,12 @@
 
     initContent = lib.mkMerge [
       (lib.mkOrder 500 (builtins.readFile ../files/zsh/init-early.zsh))
+      # Matches the old `FPATH="$HOME/.zfunc:${FPATH}"; autoload -Uz compinit; compinit`.
+      (lib.mkOrder 545 ''
+        FPATH="$HOME/.zfunc:''${FPATH}"
+        autoload -Uz compinit
+        compinit
+      '')
       (lib.mkOrder 1000 (builtins.readFile ../files/zsh/init.zsh))
     ];
   };

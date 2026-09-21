@@ -11,8 +11,10 @@ elif [ "$1" = "kamino" ] || [ "$1" == "jakku" ]; then
     ADDRESS=10.0.1.249
 elif [ "$1" == "jakku" ]; then
     ADDRESS=10.0.1.248
+elif [ "$1" == "coruscant" ]; then
+    ADDRESS=10.0.1.247
 else
-    echo "usage: $0 corellia|mandalore|tatooine"
+    echo "usage: $0 corellia|mandalore|tatooine|etc.."
     exit 1
 fi
 

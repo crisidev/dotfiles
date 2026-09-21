@@ -607,6 +607,22 @@
         "type": "github"
       }
     },
+    "nixpkgs_5": {
+      "locked": {
+        "lastModified": 1782723713,
+        "narHash": "sha256-oPXCU/SSUokcGaJREHibG1CBX3+s/W7orDWQOZDsEeQ=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "b5aa0fbd538984f6e3d201be0005b4463d8b09f8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "pre-commit-hooks": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -637,7 +653,8 @@
         "nixgl": "nixgl",
         "nixpkgs": "nixpkgs_3",
         "nixpkgs-stable": "nixpkgs-stable",
-        "tokio-console": "tokio-console"
+        "tokio-console": "tokio-console",
+        "wayle": "wayle"
       }
     },
     "rust-analyzer-src": {
@@ -755,6 +772,24 @@
       "original": {
         "owner": "tokio-rs",
         "repo": "console",
+        "type": "github"
+      }
+    },
+    "wayle": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_5"
+      },
+      "locked": {
+        "lastModified": 1789976511,
+        "narHash": "sha256-WDIfo/ijHvYyqX09BmwAWVWkJU7nhwk87vKpEYnBrI8=",
+        "owner": "waltmck",
+        "repo": "wayle",
+        "rev": "3ad97ef8ff4bbfa8528b837e321fb77f53d9cdb6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "waltmck",
+        "repo": "wayle",
         "type": "github"
       }
     },

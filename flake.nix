@@ -16,6 +16,14 @@
       url = "github:hyprwm/Hyprland";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # Maintainer's fork of Wayle with a full notification-portal backend
+    # (follow-up to PR #333). Deliberately pinned to its OWN nixpkgs — NO
+    # `follows = "nixpkgs"` — because its flake.nix carries a committed cargoHash
+    # over the vendored `wayle-services` git dependencies; re-vendoring under a
+    # different nixpkgs' fetchCargoVendor could invalidate that hash. Testing
+    # only: revert by dropping this input and restoring the pkgs.wayle patch in
+    # home/programs/wayle.nix. See https://github.com/waltmck/wayle.
+    wayle.url = "github:waltmck/wayle";
     tokio-console.url = "github:tokio-rs/console";
     mash.url = "github:crisidev/mash";
   };
