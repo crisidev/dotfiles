@@ -25,6 +25,7 @@
   programs.direnv.enableZshIntegration = true;
 
   home.packages = with pkgs; [
+    amdgpu_top
     argocd
     awscli2
     btop
