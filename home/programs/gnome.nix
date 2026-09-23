@@ -640,16 +640,12 @@ in
       focus-mode = "sloppy";
       auto-raise = true;
       num-workspaces = 8;
-      workspace-names = [
-        " "
-        " "
-        " "
-        " "
-        "󰒱 "
-        " "
-        " "
-        " "
-      ];
+      # Nerd Font icons as JSON \u escapes (via fromJSON) so the file stays
+      # ASCII — raw private-use glyphs get silently dropped by editors/tools.
+      # terminal, firefox, envelope, video, chat (U+F04B1), spotify, cog, cog.
+      workspace-names = builtins.fromJSON ''
+        ["\uf120 ", "\uf269 ", "\uf0e0 ", "\uf03d ", "\udb81\udcb1 ", "\uf1bc ", "\uf013 ", "\uf013 "]
+      '';
     };
 
     "org/gnome/mutter" = {
