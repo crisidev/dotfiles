@@ -1,4 +1,9 @@
-{ ... }:
+{ lib, ... }:
+let
+  # Shared with the servers (common.nix), so read the palette file directly
+  # rather than the falcon-only config.theme.
+  c = (import ../theme/palette.nix { inherit lib; }).colors;
+in
 {
   # Starship prompt — ported 1:1 from the old homesick home/.config/starship.toml.
   # home-manager renders settings → ~/.config/starship.toml. Shell init still comes
@@ -10,6 +15,21 @@
 
     settings = {
       "$schema" = "https://starship.rs/config-schema.json";
+
+      # Named colours used below (red, yellow, …) resolve through this palette,
+      # so the prompt matches kitty/tmux regardless of the terminal's ANSI table.
+      palette = "tokyonight";
+      palettes.tokyonight = {
+        inherit (c)
+          red
+          yellow
+          green
+          blue
+          purple
+          orange
+          cyan
+          ;
+      };
 
       add_newline = false;
       command_timeout = 1000;
@@ -68,7 +88,7 @@
         staged = "[](bold blue)";
         untracked = "[](normal)";
         deleted = "[](bold red)";
-        modified = "[](#FF7F00)";
+        modified = "[](orange)";
       };
 
       line_break.disabled = true;

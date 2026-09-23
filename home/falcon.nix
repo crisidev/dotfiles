@@ -7,6 +7,7 @@
   imports = [
     ./common.nix
     ./options.nix
+    ./theme
     ./programs/flatpak.nix
     ./programs/fonts.nix
     ./programs/gh.nix
@@ -35,7 +36,6 @@
       aseprite
       awscli2
       brightnessctl
-      btop
       clang_19
       cmake
       cmctl
@@ -140,5 +140,15 @@
     };
 
     programs.direnv.enableZshIntegration = true;
+
+    # btop's bundled Tokyo Night Storm theme; no theme background, so kitty's
+    # translucency shows through like the rest of the terminal tools.
+    programs.btop = {
+      enable = true;
+      settings = {
+        color_theme = "tokyo-storm";
+        theme_background = false;
+      };
+    };
   };
 }

@@ -29,11 +29,10 @@ in
   # Small standalone config files with no dedicated home-manager module.
   xdg.configFile = {
     # bob (neovim version manager)
-    "bob/config.json".source =
-      (pkgs.formats.json { }).generate "bob-config.json" {
-        add_neovim_binary_to_path = false;
-        ignore_running_instances = true;
-      };
+    "bob/config.json".source = (pkgs.formats.json { }).generate "bob-config.json" {
+      add_neovim_binary_to_path = false;
+      ignore_running_instances = true;
+    };
 
     # markdownlint-cli2 (used by the nvim markdown tooling)
     "markdownlint-cli2.yaml".text = ''
@@ -55,7 +54,7 @@ in
       name = "kitty";
       genericName = "Terminal emulator";
       comment = "Fast, feature-rich, GPU based terminal";
-      icon = "/home/bigo/.icons/Suru++/apps/scalable/kitty.svg";
+      icon = "kitty";
       exec = "/home/bigo/.nix-profile/bin/kitty";
       terminal = false;
       type = "Application";
@@ -74,7 +73,7 @@ in
       name = "kitty URL Launcher";
       genericName = "Terminal emulator";
       comment = "Open URLs with kitty";
-      icon = "/home/bigo/.icons/Suru++/apps/scalable/kitty.svg";
+      icon = "kitty";
       exec = "/home/bigo/.nix-profile/bin/kitty +open %U";
       terminal = false;
       type = "Application";

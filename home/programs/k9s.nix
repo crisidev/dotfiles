@@ -1,11 +1,120 @@
 { lib, config, ... }:
+let
+  c = config.theme.palette.colors;
+  bg = "default"; # terminal background, so kitty's translucency shows through
+in
 {
   # k9s — ported from the hand-managed ~/.config/k9s. home-manager renders
-  # settings → config.yaml and aliases → aliases.yaml. No skin is set (the old
-  # config never selected one), and `skins` is deliberately left empty: when it
-  # is non-empty and ui.skin is unset, home-manager auto-selects the first skin.
+  # settings → config.yaml, aliases → aliases.yaml and skins → skins/*.yaml.
   programs.k9s = {
     enable = true;
+    # Tokyo Night Storm skin built from the shared palette (home/theme).
+    skins.tokyonight = {
+      k9s = {
+        body = {
+          fgColor = c.fg;
+          bgColor = bg;
+          logoColor = c.blue;
+        };
+        prompt = {
+          fgColor = c.fg;
+          bgColor = bg;
+          suggestColor = c.comment;
+        };
+        info = {
+          fgColor = c.magenta;
+          sectionColor = c.fg;
+        };
+        dialog = {
+          fgColor = c.fg;
+          bgColor = bg;
+          buttonFgColor = c.bg;
+          buttonBgColor = c.magenta;
+          buttonFocusFgColor = c.bg;
+          buttonFocusBgColor = c.blue;
+          labelFgColor = c.orange;
+          fieldFgColor = c.fg;
+        };
+        frame = {
+          border = {
+            fgColor = c.fgGutter;
+            focusColor = c.blue;
+          };
+          menu = {
+            fgColor = c.fg;
+            keyColor = c.magenta;
+            numKeyColor = c.magenta;
+          };
+          crumbs = {
+            fgColor = c.bg;
+            bgColor = c.blue0;
+            activeColor = c.blue;
+          };
+          status = {
+            newColor = c.cyan;
+            modifyColor = c.magenta;
+            addColor = c.green;
+            pendingColor = c.orange;
+            errorColor = c.red;
+            highlightColor = c.yellow;
+            killColor = c.comment;
+            completedColor = c.comment;
+          };
+          title = {
+            fgColor = c.fg;
+            bgColor = bg;
+            highlightColor = c.blue;
+            counterColor = c.magenta;
+            filterColor = c.green;
+          };
+        };
+        views = {
+          charts = {
+            bgColor = bg;
+            defaultDialColors = [
+              c.blue
+              c.red
+            ];
+            defaultChartColors = [
+              c.blue
+              c.red
+            ];
+          };
+          table = {
+            fgColor = c.fg;
+            bgColor = bg;
+            cursorFgColor = c.fg;
+            cursorBgColor = c.bgVisual;
+            markColor = c.yellow;
+            header = {
+              fgColor = c.blue;
+              bgColor = bg;
+              sorterColor = c.cyan;
+            };
+          };
+          xray = {
+            fgColor = c.fg;
+            bgColor = bg;
+            cursorColor = c.bgVisual;
+            graphicColor = c.blue;
+            showIcons = false;
+          };
+          yaml = {
+            keyColor = c.blue;
+            colonColor = c.comment;
+            valueColor = c.fg;
+          };
+          logs = {
+            fgColor = c.fg;
+            bgColor = bg;
+            indicator = {
+              fgColor = c.blue;
+              bgColor = bg;
+            };
+          };
+        };
+      };
+    };
     settings.k9s = {
       liveViewAutoRefresh = false;
       screenDumpDir = "${lib.removeSuffix "/" config.home.homeDirectory}/.local/state/k9s/screen-dumps";
@@ -15,6 +124,7 @@
       noExitOnCtrlC = false;
       portForwardAddress = "localhost";
       ui = {
+        skin = "tokyonight";
         enableMouse = false;
         headless = false;
         logoless = false;

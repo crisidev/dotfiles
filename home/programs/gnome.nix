@@ -9,6 +9,9 @@ let
     mkUint32
     mkUint64
     mkEmptyArray
+    mkVariant
+    mkInt32
+    mkTuple
     type
     ;
 
@@ -18,26 +21,120 @@ let
   # Nix `[ ]` carries no element type for the gvariant encoder.
   none = mkEmptyArray type.string;
 
-  # GTK theme — single source of truth so the gtk module (gtk-3.0/settings.ini),
-  # dconf, mutter's titlebars and the user-theme shell theme all name the SAME
-  # theme. GTK4/libadwaita apps get it via a CSS import (see gtk4 below).
-  gtkThemeName = "Orchis-Grey-Dark-Nord";
-  # `macos`: traffic-light titlebar buttons (matches the hand-installed
-  # ~/.themes build that flatpaks read — see flatpak.nix).
-  gtkThemePackage = pkgs.orchis-theme.override {
-    tweaks = [
-      "nord"
-      "macos"
+  # Theme names, packages, palette and wallpaper all come from home/theme
+  # (Tokyo Night Storm). One name feeds the gtk module (gtk-3.0/settings.ini),
+  # dconf, mutter's titlebars and the user-theme shell theme, so they all name
+  # the SAME theme. GTK4/libadwaita apps get it via a CSS import (see gtk4 below).
+  inherit (config) theme;
+  inherit (theme.palette) rgb rgba;
+  c = theme.palette.colors;
+
+  # GNOME Shell theme: Orchis restyled as a floating "islands" bar. A thin
+  # wrapper theme @imports the nix-built Orchis shell CSS (gnome-shell runs on
+  # the host, so it can read /nix/store) and overrides only the panel. The
+  # islands are inset by islandInset inside panelHeight, which makes them about
+  # as tall as the dock's background.
+  panelHeight = 54;
+  islandInset = 3;
+  dockGap = 12; # the floating dock's distance from the bottom edge
+
+  # Astra Monitor, patched: its I/O speed and sensor labels are hardcoded at
+  # 0.65em in a "lighter" weight (tiny and faint on the islands bar) and sit
+  # tight against the following icon.
+  astraMonitor = pkgs.gnomeExtensions.astra-monitor.overrideAttrs (o: {
+    postPatch = (o.postPatch or "") + ''
+      sed -i 's/font-size: 0\.65em;/font-size: 0.9em;/' \
+        src/network/networkHeader.js src/storage/storageHeader.js
+      sed -i 's/font-size: 0\.65em;/font-size: 0.8em;/' src/sensors/sensorsHeader.js
+      cat >> stylesheet.css <<'EOF'
+
+      .astra-monitor-header-speed-label,
+      .astra-monitor-header-sensors-values-label {
+        font-weight: 500;
+        color: ${c.fg};
+        margin-right: 0.7em;
+      }
+      EOF
+    '';
+  });
+
+  # Patched so a workspace with no windows (i.e. the active one; empty
+  # inactive ones are hidden) shows a single full-colour placeholder icon from
+  # the icon theme, sized like the app icons, instead of nothing.
+  emptyWorkspaceIcon = "workspace-switcher";
+  workspacesByOpenApps = pkgs.gnomeExtensions.workspaces-indicator-by-open-apps.overrideAttrs (o: {
+    postPatch = (o.postPatch or "") + ''
+      substituteInPlace workspace.js --replace-fail \
+        '    // create apps icons' \
+        '    if (windows.length === 0 && !is_other_monitor)
+          this.get_child().add_child(new St.Icon({
+            icon_name: "${emptyWorkspaceIcon}",
+            icon_size: Math.round(this._settings.size_app_icon * this._settings.indicator_height_scale),
+            y_align: Clutter.ActorAlign.CENTER,
+          }))
+
+        // create apps icons'
+
+      # Outline the active workspace with a full rounded border instead of the
+      # 2px underline, and give inactive ones the same border in transparent
+      # so nothing shifts. Inline, because the extension's stylesheet
+      # ("border: none", 5px radius) outranks the Shell theme.
+      substituteInPlace extension.js \
+        --replace-fail \
+          '`border-bottom-width: ''${indicator_height}px; margin-bottom: 0px;`' \
+          '`border-width: ''${indicator_height}px; border-radius: 10px; padding: 2px 5px; margin-bottom: 0px;`' \
+        --replace-fail \
+          ': `margin-bottom: ''${indicator_height}px;`' \
+          ': `border-width: ''${indicator_height}px; border-color: transparent; border-radius: 10px; padding: 2px 5px; margin-bottom: 0px;`'
+    '';
+  });
+
+  # blur-my-shell pipelines (a{sa{sv}}), as its prefs would write them: the
+  # stock gaussian blur followed by a translucent Tokyo Night tint, so the
+  # panel/overview/dock blur reads navy instead of neutral grey.
+  mkDictionaryEntry =
+    k: v:
+    lib.hm.gvariant.mkDictionaryEntry [
+      k
+      v
     ];
-  };
+  bmsEffect =
+    kind: id: params:
+    mkVariant [
+      (mkDictionaryEntry "type" (mkVariant kind))
+      (mkDictionaryEntry "id" (mkVariant id))
+      (mkDictionaryEntry "params" (
+        mkVariant (lib.mapAttrsToList (k: v: mkDictionaryEntry k (mkVariant v)) params)
+      ))
+    ];
+  bmsPipeline = name: effects: [
+    (mkDictionaryEntry "name" (mkVariant name))
+    (mkDictionaryEntry "effects" (mkVariant effects))
+  ];
+  bmsBlur =
+    id:
+    bmsEffect "native_static_gaussian_blur" id {
+      radius = mkInt32 30;
+      brightness = 0.6;
+    };
+  bmsTint =
+    id:
+    bmsEffect "color" id {
+      color = mkTuple (theme.palette.fractions c.bgDark 0.35);
+    };
 
-  # GNOME Shell theme: Orchis with a taller top bar. A thin wrapper theme that
-  # @imports the nix-built Orchis shell CSS (gnome-shell runs on the host, so it
-  # can read /nix/store) and only overrides the panel height. Orchis ships 38px.
-  panelHeight = 44;
-  shellThemeName = "${gtkThemeName}-Tall";
-
-  wallpaper = "file://${home}/.homesick/repos/dotfiles/wallpapers/nix-d-nord-aurora.jpg";
+  # Settings left behind by extensions that are gone (or never installed); the
+  # staleDconf activation below wipes them. github-manager's held a token.
+  staleExtensionSettings = [
+    "ding"
+    "tiling-assistant"
+    "rounded-window-corners-reborn"
+    "unsafe-mode-menu"
+    "github-manager"
+    "tophat"
+    "Battery-Health-Charging"
+    "space-bar"
+  ];
 
   # Drop the GTK client-side-decoration shadow/margin so pop-shell tiles sit
   # flush with no wallpaper gap. Ported from the old homeshick gtk-3.0/gtk-4.0/gtk.css.
@@ -179,19 +276,9 @@ in
   # ── GTK theme ─────────────────────────────────────────────────────────────
   gtk = {
     enable = true;
-    theme = {
-      name = gtkThemeName;
-      package = gtkThemePackage;
-    };
-    iconTheme = {
-      name = "Papirus-Dark";
-      package = pkgs.papirus-icon-theme;
-    };
-    cursorTheme = {
-      name = "Bibata-Modern-Ice";
-      package = pkgs.bibata-cursors;
-      size = 24;
-    };
+    theme = { inherit (theme.gtk) name package; };
+    iconTheme = { inherit (theme.icons) name package; };
+    cursorTheme = { inherit (theme.cursor) name package size; };
     font = {
       name = "Inter";
       size = 11;
@@ -213,19 +300,138 @@ in
     gtk4.extraCss = gtkCsdReset;
   };
 
-  xdg.dataFile."themes/${shellThemeName}/gnome-shell/gnome-shell.css".text = ''
-    @import url("file://${gtkThemePackage}/share/themes/${gtkThemeName}/gnome-shell/gnome-shell.css");
+  xdg.dataFile."themes/${theme.shell.name}/gnome-shell/gnome-shell.css".text = ''
+    @import url("file://${theme.gtk.package}/share/themes/${theme.gtk.name}/gnome-shell/gnome-shell.css");
 
+    /* The bar itself is invisible; its three boxes are the islands.
+       !important: Ubuntu's session stacks Yaru under the user theme, and Yaru
+       paints #panel #131313 !important. */
     #panel {
       height: ${toString panelHeight}px;
+      background-color: transparent !important;
+      margin: 0;
+      border-radius: 0;
+    }
+    #panel .panel-corner {
+      -panel-corner-opacity: 0;
+    }
+
+    #panel #panelLeft,
+    #panel #panelCenter,
+    #panel #panelRight {
+      background-color: ${rgba c.bgDark 0.7};
+      border: 2px solid ${rgba c.blue 0.6};
+      border-radius: 14px;
+      margin-top: ${toString islandInset}px;
+      margin-bottom: ${toString islandInset}px;
+      padding: 0 4px;
+    }
+    #panel #panelLeft {
+      margin-left: 8px;
+    }
+    #panel #panelRight {
+      margin-right: 8px;
+    }
+
+    /* The dock as one more island: a floating, centred bar (extend-height
+       off in dconf) with the same dimmed fill, border and corners as the top
+       bar. !important beats Yaru's and ubuntu-dock's own dock styles. dash-to-dock's own
+       custom background is off (dconf below): it writes background and border
+       colours inline, which would beat this. */
+    #dashtodockContainer.bottom #dash .dash-background,
+    #dashtodockContainer.bottom.extended #dash .dash-background {
+      background-color: ${rgba c.bgDark 0.7} !important;
+      border: 2px solid ${rgba c.blue 0.6} !important;
+      border-radius: 14px !important;
+    }
+    /* Dock island geometry: it floats dockGap above the screen edge (the
+       background's bottom margin), and is 48px tall like the top islands:
+       2px + 44px icon box (32px icon with 6px inner padding) + 2px, so the
+       icons sit centred. Running dots are pulled up inside the island, into
+       the icon box's lower inner padding. */
+    #dashtodockContainer.bottom #dash .dash-background {
+      margin-bottom: ${toString dockGap}px !important;
+    }
+    #dashtodockContainer.bottom #dash .dash-item-container .app-well-app,
+    #dashtodockContainer.bottom #dash .dash-item-container .show-apps,
+    #dashtodockContainer.bottom #dash .dash-item-container .overview-tile {
+      padding-top: 2px !important;
+      padding-bottom: ${toString (2 + dockGap)}px !important;
+    }
+    #dashtodockContainer.bottom #dash .app-grid-running-dot {
+      margin-bottom: ${toString (dockGap + 2)}px !important;
+    }
+
+    /* No islands over the overview, lock and login screens. */
+    #panel:overview #panelLeft,
+    #panel:overview #panelCenter,
+    #panel:overview #panelRight,
+    #panel.unlock-screen #panelLeft,
+    #panel.unlock-screen #panelCenter,
+    #panel.unlock-screen #panelRight,
+    #panel.login-screen #panelLeft,
+    #panel.login-screen #panelCenter,
+    #panel.login-screen #panelRight {
+      background-color: transparent;
+      border-color: transparent;
+    }
+
+    /* One typeface and weight across the whole bar: clock, battery text and
+       Astra Monitor's values (Orchis makes the panel bold; Astra's labels are
+       patched to the same weight). */
+    #panel,
+    #panel StLabel {
+      font-family: "Inter" !important;
+      font-weight: 500 !important;
+    }
+
+    /* Quick-settings indicators (brightness, wifi, volume, power, battery):
+       spaced out, sized like Astra Monitor's icons, and all monochrome
+       symbolic in the palette foreground instead of mixed full-colour ones. */
+    #panel .panel-status-indicators-box {
+      spacing: 10px !important;
+    }
+    #panel .system-status-icon {
+      icon-size: 18px !important;
+      -st-icon-style: symbolic;
+      color: ${c.fg} !important;
+      /* symbolic icons' accent parts (charging battery, warnings) */
+      success-color: ${c.green} !important;
+      warning-color: ${c.yellow} !important;
+      error-color: ${c.red} !important;
+    }
+
+    /* Hover/active pills inside an island follow its shape. */
+    #panel .panel-button {
+      border-radius: 10px;
+      color: ${c.fg};
+    }
+    #panel .panel-button.clock-display .clock {
+      border-radius: 10px;
+    }
+
+    /* Workspaces indicator (workspaces-by-open-apps): no hover/focus glow on
+       its buttons. (The active workspace's rounded border is patched into
+       the extension itself; see workspacesByOpenApps.) */
+    #panel .wboa-panel-rounded,
+    #panel .wboa-panel-rounded:hover,
+    #panel .wboa-panel-rounded:focus,
+    #panel .wboa-panel-rounded:active,
+    #panel .wboa-panel-rounded:checked {
+      background-color: transparent;
+      box-shadow: none;
     }
   '';
 
+  # Extensions from nixpkgs (patched above); see enabled-extensions.
+  xdg.dataFile."gnome-shell/extensions/${astraMonitor.extensionUuid}".source =
+    "${astraMonitor}/share/gnome-shell/extensions/${astraMonitor.extensionUuid}";
+  xdg.dataFile."gnome-shell/extensions/${workspacesByOpenApps.extensionUuid}".source =
+    "${workspacesByOpenApps}/share/gnome-shell/extensions/${workspacesByOpenApps.extensionUuid}";
+
   home.pointerCursor = {
     enable = true;
-    name = "Bibata-Modern-Ice";
-    package = pkgs.bibata-cursors;
-    size = 24;
+    inherit (theme.cursor) name package size;
     gtk.enable = true;
     x11.enable = false;
   };
@@ -254,6 +460,12 @@ in
   # entry through the xdg-desktop-portal Background API (X-XDP-Autostart) when
   # its "start on login" setting is toggled; a nix-owned file would fight that.
 
+  home.activation.staleDconf = lib.hm.dag.entryAfter [ "dconfSettings" ] ''
+    ${lib.concatMapStrings (e: ''
+      run ${pkgs.dconf}/bin/dconf reset -f /org/gnome/shell/extensions/${e}/
+    '') staleExtensionSettings}
+  '';
+
   # ── dconf ─────────────────────────────────────────────────────────────────
   # Ported from the old imperative home/.bin/gsettings-update plus the live
   # extension settings. Only the keys listed here are managed; anything else
@@ -273,7 +485,6 @@ in
         "adaptive-brightness@dmy3k.github.io"
         "AlphabeticalAppGrid@stuarthayhurst"
         "auto-move-windows@gnome-shell-extensions.gcampax.github.com"
-        "Battery-Health-Charging@maniacx.github.com"
         "batterytimepercentagecompact@sagrland.de"
         "bluetooth-quick-connect@bjarosze.gmail.com"
         "blur-my-shell@aunetx"
@@ -285,18 +496,17 @@ in
         "notification-banner-reloaded@marcinjakubowski.github.com"
         "notifications-alert-on-user-menu@hackedbellini.gmail.com"
         "pop-shell@system76.com"
-        "space-bar@luchrioh"
+        workspacesByOpenApps.extensionUuid
         "tailscale-status@maxgallup.github.com"
         "top-bar-organizer@julian.gse.jsts.xyz"
-        "tophat@fflewddur.github.io"
         "ubuntu-dock@ubuntu.com"
         "user-theme@gnome-shell-extensions.gcampax.github.com"
-        "window-calls-extended@hseliger.eu"
         "window-calls@domandoman.xyz"
         "windowIsReady_Remover@nunofarruca@gmail.com"
       ];
       disabled-extensions = [
         "ding@rastersoft.com"
+        "space-bar@luchrioh"
         "tiling-assistant@ubuntu.com"
         "unsafe-mode-menu@linushdot.local"
         "rounded-window-corners@fxgn"
@@ -344,14 +554,14 @@ in
       "org.mozilla.firefox.desktop:2"
     ];
 
-    "org/gnome/shell/extensions/user-theme".name = shellThemeName;
+    "org/gnome/shell/extensions/user-theme".name = theme.shell.name;
 
     "org/gnome/shell/extensions/pop-shell" = {
       tile-by-default = true;
       snap-to-grid = false;
       active-hint = true;
       active-hint-border-radius = mkUint32 12;
-      hint-color-rgba = "rgb(233,233,237)";
+      hint-color-rgba = rgb c.blue;
       gap-inner = mkUint32 2;
       gap-outer = mkUint32 2;
       mouse-cursor-follows-active-window = false;
@@ -395,61 +605,13 @@ in
       top-bar-height = panelHeight + 2; # keep the old 2px margin over the bar
     };
 
-    "org/gnome/shell/extensions/space-bar/appearance".application-styles = ''
-      .space-bar {
-        -natural-hpadding: 12px;
-      }
-
-      .space-bar-workspace-label.active {
-        margin: 0 4px;
-        background-color: rgba(255,255,255,0.3);
-        color: rgba(255,255,255,1);
-        border-color: rgba(0,0,0,0);
-        font-weight: 700;
-        border-radius: 4px;
-        border-width: 0px;
-        padding: 3px 8px;
-      }
-
-      .space-bar-workspace-label.inactive {
-        margin: 0 4px;
-        background-color: rgba(0,0,0,0);
-        color: rgba(255,255,255,1);
-        border-color: rgba(0,0,0,0);
-        font-weight: 700;
-        border-radius: 4px;
-        border-width: 0px;
-        padding: 3px 8px;
-      }
-
-      .space-bar-workspace-label.inactive.empty {
-        margin: 0 4px;
-        background-color: rgba(0,0,0,0);
-        color: rgba(255,255,255,0.5);
-        border-color: rgba(0,0,0,0);
-        font-weight: 700;
-        border-radius: 4px;
-        border-width: 0px;
-        padding: 3px 8px;
-      }'';
-
-    "org/gnome/shell/extensions/space-bar/shortcuts" = {
-      enable-activate-workspace-shortcuts = false;
-      activate-empty-key = none;
-      activate-previous-key = none;
-      move-workspace-left = none;
-      move-workspace-right = none;
-      open-menu = none;
-    };
-
     "org/gnome/shell/extensions/top-bar-organizer" = {
       left-box-order = [
         "activities"
-        "Space Bar"
       ];
-      center-box-order = none;
-      right-box-order = [
-        "TopHat"
+      # Centre island: tray-style indicators. Right island: system monitor,
+      # quick settings and the clock, rightmost.
+      center-box-order = [
         "appindicator-kstatusnotifieritem-unattended-upgrade"
         "appindicator-kstatusnotifieritem-spotify-client"
         "appindicator-kstatusnotifieritem-un-reboot"
@@ -465,20 +627,41 @@ in
         "a11y"
         "tailscale"
         "keyboard"
+      ];
+      right-box-order = [
         "monitor@astraext.github.io"
         "quickSettings"
         "dateMenu"
       ];
     };
 
-    # Blur my shell
+    # Blur my shell. Components use the global brightness/sigma (their own
+    # values only apply with customize = true); the tint lives in the pipelines.
+    "org/gnome/shell/extensions/blur-my-shell".pipelines = [
+      (mkDictionaryEntry "pipeline_default" (
+        bmsPipeline "Default" [
+          (bmsBlur "effect_000000000000")
+          (bmsTint "effect_000000000003")
+        ]
+      ))
+      (mkDictionaryEntry "pipeline_default_rounded" (
+        bmsPipeline "Default rounded" [
+          (bmsBlur "effect_000000000001")
+          (bmsTint "effect_000000000004")
+          (bmsEffect "corner" "effect_000000000002" { radius = mkInt32 24; })
+        ]
+      ))
+    ];
     "org/gnome/shell/extensions/blur-my-shell/appfolder" = {
       blur = true;
       brightness = 0.6;
       sigma = 30;
     };
     "org/gnome/shell/extensions/blur-my-shell/dash-to-dock" = {
-      blur = true;
+      # Off like the panel's: it would blur a square behind the rounded dock.
+      blur = false;
+      # Let the dock paint its own palette background over the blur.
+      override-background = false;
       brightness = 0.6;
       pipeline = "pipeline_default";
       sigma = 30;
@@ -495,7 +678,9 @@ in
       style-components = 2;
     };
     "org/gnome/shell/extensions/blur-my-shell/panel" = {
-      blur = true;
+      # Off: it would blur one strip behind the whole (now transparent) bar
+      # instead of the individual islands.
+      blur = false;
       brightness = 0.6;
       force-light-text = false;
       pipeline = "pipeline_default";
@@ -517,7 +702,12 @@ in
     "org/gnome/shell/extensions/dash-to-dock" = {
       dock-position = "BOTTOM";
       dash-max-icon-size = 32;
-      extend-height = true;
+      extend-height = false; # floating island, not edge to edge
+      # Auto-hide: not fixed, so windows get the full height; it slides away
+      # when a window overlaps it (intellihide) and returns at the bottom edge.
+      dock-fixed = false;
+      autohide = true;
+      intellihide = true;
       height-fraction = 0.9;
       hot-keys = false;
       multi-monitor = false;
@@ -527,7 +717,15 @@ in
       show-trash = false;
       apply-custom-theme = false;
       custom-theme-shrink = true;
+      # Background, border and corners come from the Shell theme CSS (the
+      # dock is styled as a top-bar island); only the running dots are set here.
+      custom-background-color = false;
       transparency-mode = "DEFAULT";
+      running-indicator-style = "DOTS";
+      custom-theme-customize-running-dots = true;
+      custom-theme-running-dots-color = c.blue;
+      custom-theme-running-dots-border-color = c.blue;
+      custom-theme-running-dots-border-width = 0;
     };
 
     "org/gnome/shell/extensions/alphabetical-app-grid".folder-order-position = "end";
@@ -538,112 +736,147 @@ in
       show-battery-value-on = true;
     };
 
-    "org/gnome/shell/extensions/notification-banner-reloaded".anchor-horizontal = 1;
+    # Workspaces indicator by open apps: the icons of the apps open on each
+    # workspace, in the left island; empty workspaces are hidden except the
+    # active one, which shows its workspace-names glyph (see the patch above).
+    # The active workspace is outlined by a rounded blue border (Shell theme
+    # CSS above) instead of the extension's underline and tint.
+    "org/gnome/shell/extensions/workspaces-indicator-by-open-apps" = {
+      position-in-panel = "LEFT";
+      position-index = 0;
+      hide-activities-button = true;
+      scroll-enable = true;
+      scroll-wraparound = false;
+      # Must stay on: the patched extension draws the active workspace's
+      # rounded border in place of this underline.
+      indicator-show-active-workspace = true;
+      indicator-show-focused-app = false;
+      indicator-color = c.blue;
+      indicator-round-borders = true;
+      indicator-show-background = false;
+      indicator-background-color = rgba c.blue 0.15;
+      indicator-background-padding = 4;
+      workspace-label-text-color = c.fgDark;
+      app-label-text-color = c.fg;
+      indicator-show-indexes = false;
+      indicator-use-custom-names = true;
+      indicator-hide-empty = true;
+      apps-inactive-effect = "REDUCE OPACITY";
+      apps-minimized-effect = "REDUCE OPACITY";
+      size-app-icon = 25;
+      size-labels = 20;
+      spacing-workspace-left = 3;
+      spacing-workspace-right = 3;
+      icons-group = "OFF";
+    };
+
+    "org/gnome/shell/extensions/notification-banner-reloaded" = {
+      anchor-horizontal = 1;
+      anchor-vertical = 0;
+      animation-direction = 2;
+      animation-time = 200;
+      padding-horizontal = 0;
+      padding-vertical = 0;
+    };
+
+    "org/gnome/shell/extensions/caffeine" = {
+      show-indicator = "only-active";
+      show-notifications = true;
+      show-timer = true;
+      enable-fullscreen = true;
+      restore-state = false;
+      screen-blank = "never";
+      nightlight-control = "never";
+    };
 
     "org/gnome/shell/extensions/notifications-alert" = {
       blinkrate = 500;
-      color = "rgb(237,113,137)";
+      color = rgb c.red;
     };
 
     "org/gnome/shell/extensions/tailscale-status".login-server = "https://tailscale.crisidev.org:8443";
 
-    "org/gnome/shell/extensions/tophat" = {
-      mount-to-monitor = "/";
-      network-usage-unit = "bits";
-      show-cpu = true;
-      show-disk = true;
-      show-fs = true;
-      show-icons = true;
-      show-mem = true;
-    };
-
-    "org/gnome/shell/extensions/Battery-Health-Charging" = {
-      amend-power-indicator = true;
-      charging-mode = "ful";
-      default-threshold = true;
-      show-battery-panel2 = false;
-      show-system-indicator = false;
-    };
-
-    # Astra monitor — TokyoNight blue/red accents. Its per-profile JSON blob
+    # Astra monitor — palette blue/red accents. Its per-profile JSON blob
     # (`profiles`) is left to the extension; these are the active top-level keys.
     "org/gnome/shell/extensions/astra-monitor" = {
       current-profile = "crisidev";
+      # Fill the island's height (its default caps at 32px and sits high).
+      headers-height-override = 43;
       explicit-zero = true;
       monitors-order = ''["storage","network","memory","sensors","processor","gpu"]'';
       memory-header-bars = false;
       memory-header-bars-breakdown = false;
-      memory-header-bars-color1 = "rgb(122,162,247)";
+      memory-header-bars-color1 = rgb c.blue;
       memory-header-graph = true;
-      memory-header-graph-color1 = "rgb(122,162,247)";
-      memory-header-icon-alert-color = "rgb(247,118,142)";
+      memory-header-graph-color1 = rgb c.blue;
+      memory-header-icon-alert-color = rgb c.red;
       memory-indicators-order = ''["bar","graph","percentage","value","free","icon"]'';
-      memory-menu-swap-color = "rgb(122,162,247)";
-      network-header-icon-alert-color = "rgb(247,118,142)";
+      memory-menu-swap-color = rgb c.blue;
+      network-header-icon-alert-color = rgb c.red;
       network-header-icon-custom = "network-wireless-symbolic";
       network-header-io = true;
-      network-header-io-bars-color1 = "rgb(122,162,247)";
-      network-header-io-bars-color2 = "rgb(247,118,142)";
-      network-header-io-graph-color1 = "rgb(122,162,247)";
-      network-header-io-graph-color2 = "rgb(247,118,142)";
+      network-header-io-bars-color1 = rgb c.blue;
+      network-header-io-bars-color2 = rgb c.red;
+      network-header-io-graph-color1 = rgb c.blue;
+      network-header-io-graph-color2 = rgb c.red;
       network-indicators-order = ''["IO bar","IO graph","IO speed","icon"]'';
-      network-menu-arrow-color1 = "rgb(122,162,247)";
-      network-menu-arrow-color2 = "rgb(247,118,142)";
+      network-menu-arrow-color1 = rgb c.blue;
+      network-menu-arrow-color2 = rgb c.red;
       processor-header-bars = true;
-      processor-header-bars-color1 = "rgb(122,162,247)";
-      processor-header-bars-color2 = "rgb(247,118,142)";
+      processor-header-bars-color1 = rgb c.blue;
+      processor-header-bars-color2 = rgb c.red;
       processor-header-bars-core = true;
       processor-header-frequency-mode = "max";
       processor-header-graph = false;
-      processor-header-graph-color1 = "rgb(122,162,247)";
-      processor-header-graph-color2 = "rgb(247,118,142)";
-      processor-header-icon-alert-color = "rgb(247,118,142)";
+      processor-header-graph-color1 = rgb c.blue;
+      processor-header-graph-color2 = rgb c.red;
+      processor-header-icon-alert-color = rgb c.red;
       processor-indicators-order = ''["bar","graph","percentage","frequency","icon"]'';
       processor-update = 2.0;
-      sensors-header-icon-alert-color = "rgb(247,118,142)";
+      sensors-header-icon-alert-color = rgb c.red;
       sensors-header-sensor1 = ''{"service":"hwmon","path":["coretemp","Package id 0","input"]}'';
       sensors-header-sensor1-show = true;
       sensors-header-show = true;
       sensors-header-tooltip = true;
       sensors-indicators-order = ''["value","icon"]'';
-      storage-header-bars-color1 = "rgb(122,162,247)";
-      storage-header-icon-alert-color = "rgb(247,118,142)";
+      storage-header-bars-color1 = rgb c.blue;
+      storage-header-icon-alert-color = rgb c.red;
       storage-header-io = true;
-      storage-header-io-bars-color1 = "rgb(122,162,247)";
-      storage-header-io-bars-color2 = "rgb(247,118,142)";
-      storage-header-io-graph-color1 = "rgb(122,162,247)";
-      storage-header-io-graph-color2 = "rgb(247,118,142)";
+      storage-header-io-bars-color1 = rgb c.blue;
+      storage-header-io-bars-color2 = rgb c.red;
+      storage-header-io-graph-color1 = rgb c.blue;
+      storage-header-io-graph-color2 = rgb c.red;
       storage-indicators-order = ''["bar","percentage","value","free","IO bar","IO graph","IO speed","icon"]'';
       storage-main = "name-ubuntu--vg-ubuntu--lv";
-      storage-menu-arrow-color1 = "rgb(122,162,247)";
-      storage-menu-arrow-color2 = "rgb(247,118,142)";
-      storage-menu-device-color = "rgb(122,162,247)";
+      storage-menu-arrow-color1 = rgb c.blue;
+      storage-menu-arrow-color2 = rgb c.red;
+      storage-menu-device-color = rgb c.blue;
     };
 
     # ── Interface ───────────────────────────────────────────────────────────
     # libadwaita/GTK4 apps (Nautilus, portal dialogs) read font and theme from
     # here, NOT gtk-3.0/settings.ini.
     "org/gnome/desktop/interface" = {
-      gtk-theme = gtkThemeName;
-      icon-theme = "Papirus-Dark";
+      gtk-theme = theme.gtk.name;
+      icon-theme = theme.icons.name;
       color-scheme = "prefer-dark";
-      accent-color = "purple";
+      accent-color = "blue";
       font-name = "Inter 11";
       document-font-name = "Inter 11";
       monospace-font-name = "JetBrains Mono 11";
       # macOS-like rendering, matching the fontconfig in fonts.nix.
       font-antialiasing = "grayscale";
       font-hinting = "slight";
-      cursor-theme = "Bibata-Modern-Ice";
-      cursor-size = 24;
+      cursor-theme = theme.cursor.name;
+      cursor-size = theme.cursor.size;
       clock-show-seconds = true;
       clock-show-weekday = true;
       gtk-enable-primary-paste = true;
     };
 
     "org/gnome/desktop/background" = {
-      picture-uri = wallpaper;
-      picture-uri-dark = wallpaper;
+      picture-uri = theme.wallpaper;
+      picture-uri-dark = theme.wallpaper;
       picture-options = "zoom";
       color-shading-type = "solid";
       primary-color = "#000000000000";
@@ -651,7 +884,7 @@ in
     };
 
     "org/gnome/desktop/screensaver" = {
-      picture-uri = wallpaper;
+      picture-uri = theme.wallpaper;
       picture-options = "zoom";
       color-shading-type = "solid";
       primary-color = "#000000000000";
@@ -659,17 +892,21 @@ in
     };
 
     "org/gnome/desktop/wm/preferences" = {
-      theme = gtkThemeName;
+      theme = theme.gtk.name;
       mouse-button-modifier = "<Super>";
       resize-with-right-button = true;
       focus-mode = "sloppy";
       auto-raise = true;
       num-workspaces = 8;
-      # Nerd Font icons as JSON \u escapes (via fromJSON) so the file stays
-      # ASCII — raw private-use glyphs get silently dropped by editors/tools.
-      # terminal, firefox, envelope, video, chat (U+F04B1), spotify, cog, cog.
+      # Nerd Font Material Design ("md-") icons as JSON \u escapes (via fromJSON)
+      # so the file stays ASCII — raw private-use glyphs get silently dropped by
+      # editors/tools. The trailing space stops St clipping the wide md glyphs
+      # at their right edge; the leading one balances it so the icon sits
+      # centred in its pill. One per workspace, matching auto-move-windows:
+      # console, firefox, spotify, webcam, forum (Ferdium), message-lock
+      # (Signal), code-braces, dots-grid.
       workspace-names = builtins.fromJSON ''
-        ["\uf120 ", "\uf269 ", "\uf0e0 ", "\uf03d ", "\udb81\udcb1 ", "\uf1bc ", "\uf013 ", "\uf013 "]
+        [" \udb80\udd8d ", " \udb80\ude39 ", " \udb81\udcc7 ", " \udb81\udda0 ", " \udb80\ude8c ", " \udb83\udfcc ", " \udb80\udd69 ", " \udb85\uddfc "]
       '';
     };
 

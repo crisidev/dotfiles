@@ -22,10 +22,19 @@ Take what you need, it also comes warrant free 😊
 
 The desktop is the host (Ubuntu) GNOME Shell with [pop-shell](https://github.com/pop-os/shell)
 tiling, configured declaratively in [`home/programs/gnome.nix`](home/programs/gnome.nix):
-GTK/cursor/font theming (Orchis-Grey-Dark-Nord · Papirus-Dark · Bibata · Inter) and
+GTK/cursor/font theming (Orchis · Tela · Bibata · Inter) and
 every setting as `dconf.settings` — keybindings, pop-shell, workspaces and extension
 configuration. `home-manager switch` applies it; there is no imperative
 `gsettings` script any more.
+
+Everything is themed Tokyo Night Storm from one palette,
+[`home/theme/palette.nix`](home/theme/palette.nix). [`home/theme`](home/theme/default.nix)
+builds Orchis with its `nord` colour file swapped for that palette
+(`Orchis-Dark-Tokyonight`), a single-colour Tela icon theme and a lutgen-recoloured
+wallpaper, and exposes them as `config.theme`. GNOME, Qt, flatpaks (real-file copies
+in `~/.themes` / `~/.icons`), Firefox, the extensions, starship, btop, k9s and zathura
+all read their colours from there. Change a colour in the palette and every one of
+them follows.
 
 Extensions are installed **by hand** (extensions.gnome.org / Extension Manager, into
 `~/.local/share/gnome-shell/extensions`). Nix only declares which ones are enabled
