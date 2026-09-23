@@ -944,7 +944,6 @@ in
     nwg-displays
     pavucontrol
     papirus-icon-theme
-    tokyonight-gtk-theme
     bibata-cursors
     inter
     xdg-desktop-portal-gtk

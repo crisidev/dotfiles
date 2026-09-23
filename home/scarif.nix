@@ -3,6 +3,7 @@
   imports = [
     ./common.nix
     ./programs/python-base.nix
+    ./programs/k9s.nix
     ./programs/tmux.nix
   ];
 
@@ -29,7 +30,6 @@
     iproute2
     jq
     k3sup
-    k9s
     kubectl
     kubectx
     kubernetes-helm

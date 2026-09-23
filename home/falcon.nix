@@ -41,6 +41,7 @@ in
     ./programs/gh.nix
     ./programs/ghostty.nix
     ./programs/gpg.nix
+    ./programs/k9s.nix
     ./programs/hyprland.nix
     ./programs/kitty.nix
     ./programs/lazygit.nix
@@ -67,6 +68,7 @@ in
       btop
       clang_19
       cmake
+      cmctl
       curl
       d2
       deadnix
@@ -95,8 +97,8 @@ in
       jq
       just
       k3sup
-      k9s
       kubectl
+      kubectl-cnpg
       kubectx
       kubernetes-helm
       kyverno
@@ -105,7 +107,6 @@ in
       mash
       mergiraf
       meson
-      minikube
       minio-client
       mkdocs
       mosh
