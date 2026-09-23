@@ -153,6 +153,15 @@ let
       X-GNOME-Autostart-enabled=true
     '';
   };
+
+  # Start a system-flatpak app at login with the very launcher the dash uses:
+  # an out-of-store symlink to its flatpak export, so it tracks the app's own
+  # .desktop across flatpak updates. auto-move-windows then places it on its
+  # workspace (application-list below).
+  flatpakAutostart = app: {
+    "autostart/${app}.desktop".source =
+      config.lib.file.mkOutOfStoreSymlink "/var/lib/flatpak/exports/share/applications/${app}.desktop";
+  };
 in
 {
   # ── GTK theme ─────────────────────────────────────────────────────────────
@@ -214,14 +223,12 @@ in
   xdg.configFile =
     autostart "monitor-switch" "${home}/.bin/monitor-switch"
     // autostart "focus-switch" "${home}/.bin/focus-switch startup"
-    // {
-      # Firefox at login: the same system-flatpak launcher pinned in the dash
-      # (favorite-apps below). Out-of-store symlink to the flatpak export, so it
-      # tracks the app's own .desktop across flatpak updates;
-      # auto-move-windows then puts it on ws2.
-      "autostart/org.mozilla.firefox.desktop".source =
-        config.lib.file.mkOutOfStoreSymlink "/var/lib/flatpak/exports/share/applications/org.mozilla.firefox.desktop";
-    };
+    // flatpakAutostart "org.mozilla.firefox"
+    // flatpakAutostart "org.ferdium.Ferdium"
+    // flatpakAutostart "org.signal.Signal";
+  # NB: Bitwarden's autostart is NOT managed here — the app writes its own
+  # entry through the xdg-desktop-portal Background API (X-XDP-Autostart) when
+  # its "start on login" setting is toggled; a nix-owned file would fight that.
 
   # ── dconf ─────────────────────────────────────────────────────────────────
   # Ported from the old imperative home/.bin/gsettings-update plus the live
