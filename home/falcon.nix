@@ -84,7 +84,6 @@
       nix-output-monitor
       nixd
       nixfmt
-      nixfmt-rfc-style
       nixgl.auto.nixGLDefault
       nixgl.nixGLIntel
       ninja

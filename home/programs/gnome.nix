@@ -194,11 +194,13 @@ in
       gtk-application-prefer-dark-theme = true;
     };
     gtk3.extraCss = gtkCsdReset;
-    # gtk4.theme defaults to gtk.theme, so home-manager @imports Orchis's gtk-4.0
+    # gtk4.theme = gtk.theme makes home-manager @import Orchis's gtk-4.0
     # CSS into ~/.config/gtk-4.0/gtk.css. That user CSS is the only way to theme
     # libadwaita apps (Nautilus), and it also styles mutter-x11-frames (plain
     # GTK4), which draws the titlebars of X11 windows (Bitwarden, and the
     # Electron/CEF flatpaks kept on X11 in flatpak.nix) — macos buttons everywhere.
+    # Set explicitly: the implicit default becomes null from stateVersion 26.05.
+    gtk4.theme = config.gtk.theme;
     gtk4.extraConfig = {
       gtk-application-prefer-dark-theme = true;
     };
