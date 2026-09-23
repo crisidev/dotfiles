@@ -1,17 +1,26 @@
-{ ... }:
+{ pkgs, lib, ... }:
+let
+  # Firefox (flatpak) prefs. Firefox draws its own Adwaita-style titlebar
+  # buttons by default; turning that off makes it use the GTK theme's (Orchis
+  # macos) buttons like every other app.
+  firefoxUserJs = pkgs.writeText "firefox-user.js" ''
+    user_pref("widget.gtk.non-native-titlebar-buttons.enabled", false);
+  '';
+in
 {
-  # Flatpak per-app overrides + the Spotify launcher override, ported from
-  # home/.local/share/flatpak/overrides and .local/share/applications. There's no
-  # home-manager module for flatpak overrides, so they're placed as data files.
-  # home-manager makes them read-only, so edit the sources here rather than via
-  # `flatpak override`.
+  # Flatpak per-app overrides, ported from home/.local/share/flatpak/overrides.
+  # There's no home-manager module for flatpak overrides, so they're placed as
+  # data files. home-manager makes them read-only, so edit the sources here
+  # rather than via `flatpak override`.
   #
-  # Signal + Spotify run on native Wayland (see the per-app override comments):
-  # XWayland surfaces get bitmap-upscaled under fractional scaling → grainy
-  # text; native Wayland renders sharp. Signal (Electron) needs only the
-  # wayland socket + ELECTRON_OZONE_PLATFORM_HINT=auto, so it drops its custom
-  # launcher and uses the stock export (like Ferdium). Spotify (CEF) has no ozone
-  # env var, so it keeps a custom launcher that passes --ozone-platform-hint=auto.
+  # Ferdium, Signal and Spotify are kept on XWayland (see the per-app override
+  # comments): mutter-x11-frames then draws their titlebars with the Orchis
+  # macos buttons and there's no CSD gap to pop-shell's border.
+  #
+  # Flatpaks read the theme from ~/.themes (global override), which is the
+  # hand-installed Orchis-Grey-Dark-Nord macos build — the sandbox can't follow
+  # symlinks into /nix/store, so the nix-built copy in gnome.nix isn't visible
+  # to it.
   #
   # CRITIQUE (functional config unchanged, but the rationales are dated):
   #   - global sets ICON_THEME=Suru++ for flatpaks while the host GTK now uses
@@ -23,9 +32,16 @@
     "flatpak/overrides/org.signal.Signal".source = ../files/flatpak/overrides/org.signal.Signal;
     "flatpak/overrides/com.spotify.Client".source = ../files/flatpak/overrides/com.spotify.Client;
     "flatpak/overrides/org.ferdium.Ferdium".source = ../files/flatpak/overrides/org.ferdium.Ferdium;
-
-    # Overrides the flatpak-exported Spotify launcher (must live in
-    # ~/.local/share/applications to win precedence) to add the ozone Wayland flag.
-    "applications/com.spotify.Client.desktop".source = ../files/applications/com.spotify.Client.desktop;
   };
+
+  # The sandbox can't follow a symlink into /nix/store, so install user.js as a
+  # real file into the default profile (resolved from installs.ini at switch
+  # time, so a new profile is picked up without editing this).
+  home.activation.firefoxUserJs = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    ffdir="$HOME/.var/app/org.mozilla.firefox/config/mozilla/firefox"
+    profile=$(${pkgs.gnused}/bin/sed -n 's/^Default=//p' "$ffdir/installs.ini" 2>/dev/null | head -1)
+    if [ -n "$profile" ] && [ -d "$ffdir/$profile" ]; then
+      run install -m644 ${firefoxUserJs} "$ffdir/$profile/user.js"
+    fi
+  '';
 }

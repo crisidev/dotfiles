@@ -1,7 +1,14 @@
-# Run Spotify on native Wayland: under fractional scaling XWayland gets
-# bitmap-upscaled → grainy text. Spotify is CEF, not Electron, so
-# ELECTRON_OZONE_PLATFORM_HINT does nothing; the wayland socket is granted here
-# and `--ozone-platform-hint=auto` is passed at launch instead (see
-# applications/com.spotify.Client.desktop).
+# Keep Spotify on XWayland. Spotify is CEF: on native Wayland it draws a stock
+# Chrome titlebar that ignores the GTK theme. On X11 mutter-x11-frames draws a
+# server-side
+# titlebar with the Orchis macos buttons (via the GTK4 theme import in
+# gnome.nix) and window edge == tile edge, so there's no gap to pop-shell's
+# border. XWayland isn't upscaled here: GNOME scales via text-scaling-factor,
+# not fractional monitor scaling.
 [Context]
-sockets=wayland;
+sockets=x11;!wayland;
+# nixGL exports these GL driver paths into the session; flatpak forwards them
+# into the sandbox where the /nix/store paths don't exist, so Mesa fails to
+# load its DRI/GBM driver on the X11/GLX path. Drop them so the runtime's own
+# Mesa is used.
+unset-environment=LIBGL_DRIVERS_PATH;GBM_BACKENDS_PATH;LIBVA_DRIVERS_PATH;

@@ -20,10 +20,16 @@ let
 
   # GTK theme — single source of truth so the gtk module (gtk-3.0/settings.ini),
   # dconf, mutter's titlebars and the user-theme shell theme all name the SAME
-  # theme. NB: applied to GTK3 apps only; GTK4/libadwaita apps ignore named
-  # themes and follow color-scheme = prefer-dark instead (see gtk4.theme below).
+  # theme. GTK4/libadwaita apps get it via a CSS import (see gtk4 below).
   gtkThemeName = "Orchis-Grey-Dark-Nord";
-  gtkThemePackage = pkgs.orchis-theme.override { tweaks = [ "nord" ]; };
+  # `macos`: traffic-light titlebar buttons (matches the hand-installed
+  # ~/.themes build that flatpaks read — see flatpak.nix).
+  gtkThemePackage = pkgs.orchis-theme.override {
+    tweaks = [
+      "nord"
+      "macos"
+    ];
+  };
 
   wallpaper = "file://${home}/.homesick/repos/dotfiles/wallpapers/nix-d-nord-aurora.jpg";
 
@@ -188,10 +194,11 @@ in
       gtk-application-prefer-dark-theme = true;
     };
     gtk3.extraCss = gtkCsdReset;
-    # GTK4/libadwaita apps ignore named GTK themes, so don't @import Orchis into
-    # gtk-4.0/gtk.css (leave gtk4.theme null); they follow color-scheme = prefer-dark
-    # from dconf below. Still apply the CSD reset so they tile flush too.
-    gtk4.theme = null;
+    # gtk4.theme defaults to gtk.theme, so home-manager @imports Orchis's gtk-4.0
+    # CSS into ~/.config/gtk-4.0/gtk.css. That user CSS is the only way to theme
+    # libadwaita apps (Nautilus), and it also styles mutter-x11-frames (plain
+    # GTK4), which draws the titlebars of X11 windows (Bitwarden, and the
+    # Electron/CEF flatpaks kept on X11 in flatpak.nix) — macos buttons everywhere.
     gtk4.extraConfig = {
       gtk-application-prefer-dark-theme = true;
     };

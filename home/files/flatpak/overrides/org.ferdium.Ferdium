@@ -1,8 +1,17 @@
-# Run Ferdium on native Wayland. The ~10px CSD border gap that pop-shell showed
-# is fixed separately by ~/.config/gtk-3.0/gtk.css (decoration { margin: 0 }),
-# which the sandbox reads via its xdg-config/gtk-3.0:ro permission.
+# Keep Ferdium on XWayland. Native Wayland Electron draws its own CSD with an
+# invisible resize margin that leaves a gap between the window and pop-shell's
+# border. On X11 mutter-x11-frames draws a server-side
+# titlebar with the Orchis macos buttons (via the GTK4 theme import in
+# gnome.nix) and window edge == tile edge, so there's no gap to pop-shell's
+# border. XWayland isn't upscaled here: GNOME scales via text-scaling-factor,
+# not fractional monitor scaling.
 [Context]
-sockets=wayland;
+sockets=x11;!wayland;
+# nixGL exports these GL driver paths into the session; flatpak forwards them
+# into the sandbox where the /nix/store paths don't exist, so Mesa fails to
+# load its DRI/GBM driver on the X11/GLX path. Drop them so the runtime's own
+# Mesa is used.
+unset-environment=LIBGL_DRIVERS_PATH;GBM_BACKENDS_PATH;LIBVA_DRIVERS_PATH;
 
 [Environment]
-ELECTRON_OZONE_PLATFORM_HINT=auto
+ELECTRON_OZONE_PLATFORM_HINT=x11
