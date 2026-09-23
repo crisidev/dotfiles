@@ -5,6 +5,9 @@
 # gnome.nix) and window edge == tile edge, so there's no gap to pop-shell's
 # border. XWayland isn't upscaled here: GNOME scales via text-scaling-factor,
 # not fractional monitor scaling.
+# NB: removing the socket isn't enough — current Electron ignores
+# ELECTRON_OZONE_PLATFORM_HINT, so the launcher (files/applications) passes
+# --ozone-platform=x11 explicitly.
 [Context]
 sockets=x11;!wayland;
 # nixGL exports these GL driver paths into the session; flatpak forwards them
@@ -12,6 +15,3 @@ sockets=x11;!wayland;
 # load its DRI/GBM driver on the X11/GLX path. Drop them so the runtime's own
 # Mesa is used.
 unset-environment=LIBGL_DRIVERS_PATH;GBM_BACKENDS_PATH;LIBVA_DRIVERS_PATH;
-
-[Environment]
-ELECTRON_OZONE_PLATFORM_HINT=x11

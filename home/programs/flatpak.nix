@@ -32,6 +32,13 @@ in
     "flatpak/overrides/org.signal.Signal".source = ../files/flatpak/overrides/org.signal.Signal;
     "flatpak/overrides/com.spotify.Client".source = ../files/flatpak/overrides/com.spotify.Client;
     "flatpak/overrides/org.ferdium.Ferdium".source = ../files/flatpak/overrides/org.ferdium.Ferdium;
+
+    # Launchers passing --ozone-platform=x11 (Electron ignores the env hint).
+    # They live in ~/.local/share/applications, so they shadow the flatpak
+    # exports in the dash; gnome.nix autostarts these same files.
+    "applications/org.ferdium.Ferdium.desktop".source =
+      ../files/applications/org.ferdium.Ferdium.desktop;
+    "applications/org.signal.Signal.desktop".source = ../files/applications/org.signal.Signal.desktop;
   };
 
   # The sandbox can't follow a symlink into /nix/store, so install user.js as a

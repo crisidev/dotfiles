@@ -1,0 +1,14 @@
+[Desktop Entry]
+Name=Ferdium
+Comment=Desktop app bringing all your messaging services into one installable
+# --ozone-platform=x11: keep Ferdium on XWayland (see the flatpak override for
+# why). Current Electron ignores ELECTRON_OZONE_PLATFORM_HINT and would pick
+# Wayland from the environment, crashing without the wayland socket.
+Exec=/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=ferdium --file-forwarding org.ferdium.Ferdium --ozone-platform=x11 @@u %U @@
+Terminal=false
+Type=Application
+Icon=org.ferdium.Ferdium
+StartupWMClass=Ferdium
+MimeType=x-scheme-handler/ferdium;
+Categories=Network;InstantMessaging;
+X-Flatpak=org.ferdium.Ferdium

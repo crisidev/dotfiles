@@ -233,8 +233,11 @@ in
     autostart "monitor-switch" "${home}/.bin/monitor-switch"
     // autostart "focus-switch" "${home}/.bin/focus-switch startup"
     // flatpakAutostart "org.mozilla.firefox"
-    // flatpakAutostart "org.ferdium.Ferdium"
-    // flatpakAutostart "org.signal.Signal";
+    // {
+      # X11 launchers from flatpak.nix (they add --ozone-platform=x11).
+      "autostart/org.ferdium.Ferdium.desktop".source = ../files/applications/org.ferdium.Ferdium.desktop;
+      "autostart/org.signal.Signal.desktop".source = ../files/applications/org.signal.Signal.desktop;
+    };
   # NB: Bitwarden's autostart is NOT managed here — the app writes its own
   # entry through the xdg-desktop-portal Background API (X-XDP-Autostart) when
   # its "start on login" setting is toggled; a nix-owned file would fight that.
