@@ -31,6 +31,12 @@ let
     ];
   };
 
+  # GNOME Shell theme: Orchis with a taller top bar. A thin wrapper theme that
+  # @imports the nix-built Orchis shell CSS (gnome-shell runs on the host, so it
+  # can read /nix/store) and only overrides the panel height. Orchis ships 38px.
+  panelHeight = 44;
+  shellThemeName = "${gtkThemeName}-Tall";
+
   wallpaper = "file://${home}/.homesick/repos/dotfiles/wallpapers/nix-d-nord-aurora.jpg";
 
   # Drop the GTK client-side-decoration shadow/margin so pop-shell tiles sit
@@ -207,6 +213,14 @@ in
     gtk4.extraCss = gtkCsdReset;
   };
 
+  xdg.dataFile."themes/${shellThemeName}/gnome-shell/gnome-shell.css".text = ''
+    @import url("file://${gtkThemePackage}/share/themes/${gtkThemeName}/gnome-shell/gnome-shell.css");
+
+    #panel {
+      height: ${toString panelHeight}px;
+    }
+  '';
+
   home.pointerCursor = {
     enable = true;
     name = "Bibata-Modern-Ice";
@@ -330,7 +344,7 @@ in
       "org.mozilla.firefox.desktop:2"
     ];
 
-    "org/gnome/shell/extensions/user-theme".name = gtkThemeName;
+    "org/gnome/shell/extensions/user-theme".name = shellThemeName;
 
     "org/gnome/shell/extensions/pop-shell" = {
       tile-by-default = true;
@@ -378,7 +392,7 @@ in
       enable-debugging = false;
       minimum-size-trigger = 9;
       motion-event-timeout = 100;
-      top-bar-height = 40;
+      top-bar-height = panelHeight + 2; # keep the old 2px margin over the bar
     };
 
     "org/gnome/shell/extensions/space-bar/appearance".application-styles = ''
