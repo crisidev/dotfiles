@@ -1,7 +1,7 @@
 # Run Signal on native Wayland (mirrors org.ferdium.Ferdium — both Electron).
 # The old X11 forcing existed to hide a gap between native-Wayland CSD and the
-# pop-shell border under GNOME/Mutter; that's dead under Hyprland, and on a
-# fractional (1.2) monitor scale XWayland gets bitmap-upscaled → grainy text.
+# pop-shell border; the gtk CSD reset (gnome.nix) covers that now, and under
+# fractional scaling XWayland gets bitmap-upscaled → grainy text.
 # Granting the wayland socket + ELECTRON_OZONE_PLATFORM_HINT=auto makes Electron
 # render natively at the fractional scale (sharp). The nixGL LIBGL/GBM/LIBVA
 # unset-environment workaround was X11/GLX-only — native Wayland dodges it, so

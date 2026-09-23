@@ -1,9 +1,7 @@
-# Run Spotify on native Wayland. The old X11 forcing existed so Mutter would
-# draw a normal titlebar (native Wayland showed a plain grey Chromium one) —
-# moot under Hyprland, which tiles these borderless, and on a fractional (1.2)
-# monitor scale XWayland gets bitmap-upscaled → grainy text. Spotify is CEF, not
-# Electron, so ELECTRON_OZONE_PLATFORM_HINT does nothing; the wayland socket is
-# granted here and `--ozone-platform-hint=auto` is passed at launch instead (see
-# applications/com.spotify.Client.desktop and the exec-once in hyprland.nix).
+# Run Spotify on native Wayland: under fractional scaling XWayland gets
+# bitmap-upscaled → grainy text. Spotify is CEF, not Electron, so
+# ELECTRON_OZONE_PLATFORM_HINT does nothing; the wayland socket is granted here
+# and `--ozone-platform-hint=auto` is passed at launch instead (see
+# applications/com.spotify.Client.desktop).
 [Context]
 sockets=wayland;

@@ -8,7 +8,7 @@
     enable = true;
     settings.k9s = {
       liveViewAutoRefresh = false;
-      screenDumpDir = "${config.xdg.stateHome}/k9s/screen-dumps";
+      screenDumpDir = "${lib.removeSuffix "/" config.home.homeDirectory}/.local/state/k9s/screen-dumps";
       refreshRate = 2;
       maxConnRetry = 5;
       readOnly = false;

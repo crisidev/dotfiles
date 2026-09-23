@@ -4,7 +4,7 @@
   ...
 }:
 let
-  # Wrap with nixGL for OpenGL on this non-NixOS host, like kitty/hyprland
+  # Wrap with nixGL for OpenGL on this non-NixOS host, like kitty
   # (was `(nixGL pkgs.ghostty)` in falcon's package list).
   nixGL = import ../nixGL.nix { inherit pkgs config; };
 in

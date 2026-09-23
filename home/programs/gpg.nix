@@ -13,9 +13,8 @@
   };
 
   # gpg-agent — ttls ported 1:1 from the old gpg-agent.conf. pinentry moves from
-  # the system /usr/bin/pinentry to nix's GNOME pinentry. NOTE: on Hyprland a GUI
-  # pinentry needs a running prompter; if the passphrase dialog never appears when
-  # signing, swap pinentry-gnome3 → pinentry-qt (standalone) or pinentry-curses.
+  # the system /usr/bin/pinentry to nix's GNOME pinentry (uses gnome-shell's
+  # built-in prompter).
   services.gpg-agent = {
     enable = true;
     defaultCacheTtl = 28800;

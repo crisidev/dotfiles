@@ -1,12 +1,12 @@
 { ... }:
 let
-  # Personal scripts kept from the old homesick ~/.bin. The GNOME/pop-shell-era
-  # ones (clean-notifications, focus-switch, monitor-switch, gsettings-update,
-  # tokynight-grey-fix) were dropped — they drove org.gnome.Shell extensions that
-  # don't exist under Hyprland.
+  # Personal scripts kept from the old homesick ~/.bin. gsettings-update is gone:
+  # its settings are declarative dconf in programs/gnome.nix now.
   scripts = [
     "ide" # kitty + nvim launcher (Super+Z; the `ide` in ghostty/kitty)
-    "hypr-float-window" # pick a window → persistent float rule in hyprland.nix
+    "focus-switch" # workspace focus/back-and-forth + rebalance (GNOME keybinds)
+    "monitor-switch" # per-monitor text scaling + kitty font size (autostarted)
+    "clean-notifications" # dismiss all GNOME notifications (Super+Alt+M)
     "siliconic" # silicon code screenshots (bat TokyoNight theme)
     "idle-suppressor" # nudge the mouse to defeat idle
     "startup" # boot-time net/disk tuning (guarded per-host)

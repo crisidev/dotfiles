@@ -5,7 +5,7 @@
 }:
 let
   # kitty is GTK/GL and runs on this non-NixOS host, so wrap it with nixGL exactly
-  # like ghostty / hyprland (was `(nixGL pkgs.kitty)` in falcon's package list).
+  # like ghostty (was `(nixGL pkgs.kitty)` in falcon's package list).
   nixGL = import ../nixGL.nix { inherit pkgs config; };
 in
 {
@@ -19,9 +19,9 @@ in
     shellIntegration.mode = null;
 
     # Ported from the old homesick kitty.conf (readFile keeps the nerd-font
-    # `tab_activity_symbol` glyph intact). The font size, previously kept in a
-    # stray runtime-mutable ~/.config/kitty/font_size.conf and pulled in via
-    # `include`, is now inlined as `font_size 14` so it's fully nix-managed.
+    # `tab_activity_symbol` glyph intact). The per-monitor font size lives in the
+    # runtime-mutable ~/.config/kitty/font_size.conf (written by monitor-switch,
+    # deliberately NOT nix-managed) and is pulled in via `globinclude`.
     extraConfig = builtins.readFile ../files/kitty/kitty.conf;
   };
 

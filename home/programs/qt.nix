@@ -15,8 +15,8 @@ let
   '';
 in
 {
-  # qt6ct is already the platform theme (QT_QPA_PLATFORMTHEME=qt6ct is set in
-  # hyprland.nix's env). Install it explicitly and configure it declaratively.
+  # qt6ct is the platform theme (QT_QPA_PLATFORMTHEME=qt6ct is exported to the
+  # session via environment.d in gnome.nix). Install it and configure it declaratively.
   home.packages = [ pkgs.kdePackages.qt6ct ];
 
   # qt6ct config. Fusion + the Nord palette above; icons/fonts mirror the GTK side
