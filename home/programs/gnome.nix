@@ -216,10 +216,8 @@ in
     x11.enable = false;
   };
 
-  home.packages = with pkgs; [
-    inter
-    jq # focus-switch
-  ];
+  # Fonts (Inter UI etc.) live in fonts.nix.
+  home.packages = [ pkgs.jq ]; # focus-switch
 
   # Qt apps: qt6ct as the platform theme (configured in qt.nix). environment.d
   # is read by the systemd user manager, which the GNOME session inherits.
@@ -618,9 +616,10 @@ in
       accent-color = "purple";
       font-name = "Inter 11";
       document-font-name = "Inter 11";
-      monospace-font-name = "JetBrainsMono Nerd Font 11";
-      font-antialiasing = "rgba";
-      font-hinting = "full";
+      monospace-font-name = "JetBrains Mono 11";
+      # macOS-like rendering, matching the fontconfig in fonts.nix.
+      font-antialiasing = "grayscale";
+      font-hinting = "slight";
       cursor-theme = "Bibata-Modern-Ice";
       cursor-size = 24;
       clock-show-seconds = true;

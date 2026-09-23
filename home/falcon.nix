@@ -8,6 +8,7 @@
     ./common.nix
     ./options.nix
     ./programs/flatpak.nix
+    ./programs/fonts.nix
     ./programs/gh.nix
     ./programs/ghostty.nix
     ./programs/gnome.nix

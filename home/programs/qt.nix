@@ -32,7 +32,7 @@ in
     style=Fusion
 
     [Fonts]
-    fixed="JetBrainsMono Nerd Font,11,-1,5,400,0,0,0,0,0,0,0,0,0,0,1"
+    fixed="JetBrains Mono,11,-1,5,400,0,0,0,0,0,0,0,0,0,0,1"
     general="Inter,11,-1,5,400,0,0,0,0,0,0,0,0,0,0,1"
   '';
 }
