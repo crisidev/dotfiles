@@ -213,7 +213,15 @@ in
   # hidden once the extensions are up.
   xdg.configFile =
     autostart "monitor-switch" "${home}/.bin/monitor-switch"
-    // autostart "focus-switch" "${home}/.bin/focus-switch startup";
+    // autostart "focus-switch" "${home}/.bin/focus-switch startup"
+    // {
+      # Firefox at login: the same system-flatpak launcher pinned in the dash
+      # (favorite-apps below). Out-of-store symlink to the flatpak export, so it
+      # tracks the app's own .desktop across flatpak updates;
+      # auto-move-windows then puts it on ws2.
+      "autostart/org.mozilla.firefox.desktop".source =
+        config.lib.file.mkOutOfStoreSymlink "/var/lib/flatpak/exports/share/applications/org.mozilla.firefox.desktop";
+    };
 
   # ── dconf ─────────────────────────────────────────────────────────────────
   # Ported from the old imperative home/.bin/gsettings-update plus the live
