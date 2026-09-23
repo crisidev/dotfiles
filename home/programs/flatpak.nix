@@ -83,8 +83,15 @@ in
   # The sandbox can't follow a symlink into /nix/store, so install user.js and
   # userChrome.css as real files into the default profile (resolved from installs.ini at switch
   # time, so a new profile is picked up without editing this).
+  # Firefox uses the legacy ~/.mozilla root whenever it exists and only falls
+  # back to the XDG one (config/mozilla) otherwise — pick the same.
   home.activation.firefoxUserJs = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    ffdir="$HOME/.var/app/org.mozilla.firefox/config/mozilla/firefox"
+    ffapp="$HOME/.var/app/org.mozilla.firefox"
+    if [ -d "$ffapp/.mozilla/firefox" ]; then
+      ffdir="$ffapp/.mozilla/firefox"
+    else
+      ffdir="$ffapp/config/mozilla/firefox"
+    fi
     profile=$(${pkgs.gnused}/bin/sed -n 's/^Default=//p' "$ffdir/installs.ini" 2>/dev/null | head -1)
     if [ -n "$profile" ] && [ -d "$ffdir/$profile" ]; then
       run install -m644 ${firefoxUserJs} "$ffdir/$profile/user.js"
