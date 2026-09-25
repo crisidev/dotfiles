@@ -18,6 +18,7 @@
     ./programs/kitty.nix
     ./programs/lazygit.nix
     ./programs/mimeapps.nix
+    ./programs/claude.nix
     ./programs/node.nix
     ./programs/python.nix
     ./programs/qt.nix
@@ -31,6 +32,7 @@
   config = {
     home.packages = with pkgs; [
       age
+      argonaut
       ansible
       argocd
       aseprite

@@ -35,6 +35,11 @@ let
   # islands are inset by islandInset inside panelHeight, which makes them about
   # as tall as the dock's background.
   panelHeight = 54;
+  # "islands": three separate islands (left / centre / right).
+  # "bar": one full-width bar with the same fill and border, and the centre
+  #        island's tray icons moved into the right box, next to Astra Monitor.
+  topBarStyle = "bar";
+  islands = topBarStyle == "islands";
   islandInset = 3;
   dockGap = 12; # the floating dock's distance from the bottom edge
 
@@ -46,7 +51,14 @@ let
       sed -i 's/font-size: 0\.65em;/font-size: 0.9em;/' \
         src/network/networkHeader.js src/storage/storageHeader.js
       sed -i 's/font-size: 0\.65em;/font-size: 0.8em;/' src/sensors/sensorsHeader.js
+      # Graphs: no painted background (was a hardcoded 20% black fill).
+      sed -i "s/let bg = 'rgba(0,0,0,0.2)';/let bg = 'rgba(0,0,0,0)';/" src/*/*Graph.js
       cat >> stylesheet.css <<'EOF'
+
+      .astra-monitor-graph-mini {
+        border: 1px solid ${rgba c.blue 0.6};
+        border-radius: 6px;
+      }
 
       .astra-monitor-header-speed-label,
       .astra-monitor-header-sensors-values-label {
@@ -122,6 +134,59 @@ let
     bmsEffect "color" id {
       color = mkTuple (theme.palette.fractions c.bgDark 0.35);
     };
+
+  # Tray-style indicators, in top-bar-organizer's order (see topBarStyle).
+  trayIndicators = [
+    "appindicator-kstatusnotifieritem-unattended-upgrade"
+    "appindicator-kstatusnotifieritem-spotify-client"
+    "appindicator-kstatusnotifieritem-un-reboot"
+    "appindicator-kstatusnotifieritem-steam"
+    "appindicator-kstatusnotifieritem-vlc"
+    "appindicator-kstatusnotifieritem-chrome_status_icon_1"
+    "pop-shell"
+    "GithubManager"
+    "screenRecording"
+    "appindicator-kstatusnotifieritem-software-update-available"
+    "screenSharing"
+    "dwellClick"
+    "a11y"
+    "tailscale"
+    "keyboard"
+  ];
+
+  islandsCss = ''
+    #panel #panelLeft,
+    #panel #panelCenter,
+    #panel #panelRight {
+      background-color: ${rgba c.bgDark 0.7};
+      border: 2px solid ${rgba c.blue 0.6};
+      border-radius: 14px;
+      margin-top: ${toString islandInset}px;
+      margin-bottom: ${toString islandInset}px;
+      padding: 0 4px;
+    }
+    #panel #panelLeft {
+      margin-left: 8px;
+    }
+    #panel #panelRight {
+      margin-right: 8px;
+    }
+  '';
+
+  # The whole bar as one island, inset like the islands are. #panel's own
+  # background needs !important too (Yaru, see above); the boxes stay clear.
+  # St's height is the content box: take the inset and the 2px border off so
+  # the bar still occupies panelHeight in total.
+  barCss = ''
+    #panel {
+      height: ${toString (panelHeight - 2 * islandInset - 4)}px;
+      background-color: ${rgba c.bgDark 0.7} !important;
+      border: 2px solid ${rgba c.blue 0.6};
+      border-radius: 14px;
+      margin: ${toString islandInset}px 8px;
+      padding: 0 4px;
+    }
+  '';
 
   # Settings left behind by extensions that are gone (or never installed); the
   # staleDconf activation below wipes them. github-manager's held a token.
@@ -316,22 +381,7 @@ in
       -panel-corner-opacity: 0;
     }
 
-    #panel #panelLeft,
-    #panel #panelCenter,
-    #panel #panelRight {
-      background-color: ${rgba c.bgDark 0.7};
-      border: 2px solid ${rgba c.blue 0.6};
-      border-radius: 14px;
-      margin-top: ${toString islandInset}px;
-      margin-bottom: ${toString islandInset}px;
-      padding: 0 4px;
-    }
-    #panel #panelLeft {
-      margin-left: 8px;
-    }
-    #panel #panelRight {
-      margin-right: 8px;
-    }
+    ${if islands then islandsCss else barCss}
 
     /* The dock as one more island: a floating, centred bar (extend-height
        off in dconf) with the same dimmed fill, border and corners as the top
@@ -362,7 +412,7 @@ in
       margin-bottom: ${toString (dockGap + 2)}px !important;
     }
 
-    /* No islands over the overview, lock and login screens. */
+    /* No islands (or bar) over the overview, lock and login screens. */
     #panel:overview #panelLeft,
     #panel:overview #panelCenter,
     #panel:overview #panelRight,
@@ -371,9 +421,12 @@ in
     #panel.unlock-screen #panelRight,
     #panel.login-screen #panelLeft,
     #panel.login-screen #panelCenter,
-    #panel.login-screen #panelRight {
-      background-color: transparent;
-      border-color: transparent;
+    #panel.login-screen #panelRight,
+    #panel:overview,
+    #panel.unlock-screen,
+    #panel.login-screen {
+      background-color: transparent !important;
+      border-color: transparent !important;
     }
 
     /* One typeface and weight across the whole bar: clock, battery text and
@@ -610,25 +663,10 @@ in
         "activities"
       ];
       # Centre island: tray-style indicators. Right island: system monitor,
-      # quick settings and the clock, rightmost.
-      center-box-order = [
-        "appindicator-kstatusnotifieritem-unattended-upgrade"
-        "appindicator-kstatusnotifieritem-spotify-client"
-        "appindicator-kstatusnotifieritem-un-reboot"
-        "appindicator-kstatusnotifieritem-steam"
-        "appindicator-kstatusnotifieritem-vlc"
-        "appindicator-kstatusnotifieritem-chrome_status_icon_1"
-        "pop-shell"
-        "GithubManager"
-        "screenRecording"
-        "appindicator-kstatusnotifieritem-software-update-available"
-        "screenSharing"
-        "dwellClick"
-        "a11y"
-        "tailscale"
-        "keyboard"
-      ];
-      right-box-order = [
+      # quick settings and the clock, rightmost. In "bar" style the tray
+      # indicators move to the right box, just before the system monitor.
+      center-box-order = lib.optionals islands trayIndicators;
+      right-box-order = lib.optionals (!islands) trayIndicators ++ [
         "monitor@astraext.github.io"
         "quickSettings"
         "dateMenu"
@@ -800,6 +838,11 @@ in
     # (`profiles`) is left to the extension; these are the active top-level keys.
     "org/gnome/shell/extensions/astra-monitor" = {
       current-profile = "crisidev";
+      # Header graphs 30% wider than the default 30px.
+      memory-header-graph-width = 39;
+      network-header-graph-width = 39;
+      processor-header-graph-width = 39;
+      storage-header-graph-width = 39;
       # Fill the island's height (its default caps at 32px and sits high).
       headers-height-override = 43;
       explicit-zero = true;

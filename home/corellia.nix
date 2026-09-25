@@ -4,6 +4,7 @@
     ./common.nix
     ./programs/python-base.nix
     ./programs/k9s.nix
+    ./programs/claude.nix
     ./programs/node.nix
     ./programs/zellij.nix
     ./programs/tmux.nix
@@ -28,6 +29,7 @@
   home.packages = with pkgs; [
     amdgpu_top
     argocd
+    argonaut
     awscli2
     btop
     curl

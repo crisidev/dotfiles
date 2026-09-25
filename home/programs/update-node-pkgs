@@ -5,7 +5,6 @@ NODE_NIX="$(dirname "$0")/node.nix"
 
 get_latest_tag() {
   local owner=$1 repo=$2
-  # Try releases first, fall back to tags
   local tag
   tag=$(curl -sf "https://api.github.com/repos/$owner/$repo/releases/latest" 2>/dev/null | jq -r '.tag_name // empty') || true
   if [ -z "$tag" ]; then
@@ -15,8 +14,8 @@ get_latest_tag() {
 }
 
 update_github_pkg() {
-  local owner=$1 repo=$2 current_rev=$3 nix_file=$4
-  local tag version src_hash npm_deps_hash
+  local owner=$1 repo=$2 current_rev=$3 nix_file=$4 anchor=$5
+  local tag version src_out src_hash src_path lock npm_deps_hash
 
   tag=$(get_latest_tag "$owner" "$repo")
 
@@ -27,85 +26,62 @@ update_github_pkg() {
 
   echo "  $owner/$repo: $current_rev -> $tag"
 
-  # Prefetch source
-  src_hash=$(nix-prefetch-url --unpack "https://github.com/$owner/$repo/archive/refs/tags/$tag.tar.gz" 2>/dev/null)
+  # --print-path emits the hash on line 1 and the unpacked store path on line 2.
+  src_out=$(nix-prefetch-url --unpack --print-path "https://github.com/$owner/$repo/archive/refs/tags/$tag.tar.gz" 2>/dev/null)
+  src_hash=$(echo "$src_out" | head -1)
+  src_path=$(echo "$src_out" | tail -1)
   src_hash=$(nix hash convert --hash-algo sha256 --to sri "$src_hash")
 
-  # Update version, rev, and source hash in the block for this repo
+  # Range is anchored on the derivation binding (e.g. `claude-powerline =
+  # pkgs.buildNpmPackage`) so it covers the `version =` line, which sits above
+  # `repo =` in the block and would otherwise be left stale.
   version="${tag#v}"
-  sed -i "/repo = \"$repo\"/,/npmDepsHash/ {
+  sed -i "/$anchor = pkgs.buildNpmPackage/,/npmDepsHash/ {
     s|version = \"[^\"]*\";|version = \"$version\";|
     s|rev = \"[^\"]*\";|rev = \"$tag\";|
     s|hash = \"sha256-[^\"]*\";|hash = \"$src_hash\";|
   }" "$nix_file"
 
-  # Set npmDepsHash to a dummy to force recalculation
-  sed -i "/repo = \"$repo\"/,/npmDepsHash/ {
-    s|npmDepsHash = \"sha256-[^\"]*\";|npmDepsHash = \"sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=\";|
-  }" "$nix_file"
-
-  # Build to get the correct npmDepsHash
-  echo "  Computing npmDepsHash (this may take a moment)..."
-  npm_deps_hash=$(nix build --impure ".#homeConfigurations.$(hostname -s).activationPackage" 2>&1 | grep -oP 'got:\s+\Ksha256-[^\s]+' | head -1) || true
+  # Compute npmDepsHash directly from the lockfile in the user environment.
+  # buildNpmPackage's deps FOD is built by the nix daemon as the _nixbld user,
+  # which can't validate npmjs.org's corpnet-MITM'd cert (the corp CA lives in
+  # the login keychain, not _nixbld's), so the old build-and-scrape-`got:`
+  # approach never produced a hash behind the proxy. prefetch-npm-deps run here
+  # uses our keychain trust and works.
+  echo "  Computing npmDepsHash..."
+  lock="$src_path/package-lock.json"
+  [ -f "$lock" ] || lock="$src_path/npm-shrinkwrap.json"
+  npm_deps_hash=$(nix run nixpkgs#prefetch-npm-deps -- "$lock" 2>/dev/null | tail -1) || true
 
   if [ -n "$npm_deps_hash" ]; then
-    sed -i "/repo = \"$repo\"/,/npmDepsHash/ {
+    sed -i "/$anchor = pkgs.buildNpmPackage/,/npmDepsHash/ {
       s|npmDepsHash = \"sha256-[^\"]*\";|npmDepsHash = \"$npm_deps_hash\";|
     }" "$nix_file"
-    echo "  Done."
+    echo "  Done ($npm_deps_hash)."
   else
-    echo "  WARNING: could not compute npmDepsHash. Run 'nix build' manually to get the correct hash."
+    echo "  WARNING: could not compute npmDepsHash for $owner/$repo (lockfile: $lock)."
   fi
 }
 
-update_codex() {
-  local current_version=$1 nix_file=$2
-  local tag version url src_hash
+update_npm_tarball() {
+  local name=$1 current_version=$2 nix_file=$3
+  local version src_hash
 
-  tag=$(curl -sf "https://api.github.com/repos/openai/codex/releases" | jq -r '[.[] | select(.tag_name | startswith("rust-v")) | select(.tag_name | test("alpha|beta|rc") | not)][0].tag_name')
-  version="${tag#rust-v}"
+  version=$(curl -sf "https://registry.npmjs.org/$name/latest" | jq -r '.version')
 
   if [ "$version" = "$current_version" ]; then
-    echo "  openai/codex: already at $version"
+    echo "  npm/$name: already at $version"
     return
   fi
 
-  echo "  openai/codex: $current_version -> $version"
+  echo "  npm/$name: $current_version -> $version"
 
-  url="https://github.com/openai/codex/releases/download/$tag/codex-x86_64-unknown-linux-musl.tar.gz"
-  src_hash=$(nix-prefetch-url "$url" 2>/dev/null)
+  # The url interpolates ${version}, so only version and hash need rewriting.
+  src_hash=$(nix-prefetch-url "https://registry.npmjs.org/$name/-/$name-$version.tgz" 2>/dev/null)
   src_hash=$(nix hash convert --hash-algo sha256 --to sri "$src_hash")
 
-  sed -i "/pname = \"openai-codex\"/,/installPhase/ {
+  sed -i "/pname = \"$name\"/,/installPhase/ {
     s|version = \"[^\"]*\";|version = \"$version\";|
-    s|download/rust-v[^/]*/|download/$tag/|
-    s|hash = \"sha256-[^\"]*\";|hash = \"$src_hash\";|
-  }" "$nix_file"
-  echo "  Done."
-}
-
-update_hunk() {
-  local current_version=$1 nix_file=$2
-  local tag version url src_hash
-
-  # hunk publishes prerelease (beta) tags; releases/latest skips them, so use the full release list.
-  tag=$(curl -sf "https://api.github.com/repos/modem-dev/hunk/releases?per_page=1" | jq -r '.[0].tag_name')
-  version="${tag#v}"
-
-  if [ "$version" = "$current_version" ]; then
-    echo "  modem-dev/hunk: already at $version"
-    return
-  fi
-
-  echo "  modem-dev/hunk: $current_version -> $version"
-
-  url="https://github.com/modem-dev/hunk/releases/download/$tag/hunkdiff-linux-x64.tar.gz"
-  src_hash=$(nix-prefetch-url "$url" 2>/dev/null)
-  src_hash=$(nix hash convert --hash-algo sha256 --to sri "$src_hash")
-
-  sed -i "/pname = \"hunk\"/,/installPhase/ {
-    s|version = \"[^\"]*\";|version = \"$version\";|
-    s|download/v[^/]*/|download/$tag/|
     s|hash = \"sha256-[^\"]*\";|hash = \"$src_hash\";|
   }" "$nix_file"
   echo "  Done."
@@ -113,15 +89,14 @@ update_hunk() {
 
 echo "Updating node packages..."
 
-# Extract current versions from node.nix
 neovim_rev=$(grep -A2 'repo = "node-client"' "$NODE_NIX" | grep -oP 'rev = "\K[^"]+')
-codex_version=$(grep -A1 'pname = "openai-codex"' "$NODE_NIX" | grep -oP 'version = "\K[^"]+')
 powerline_rev=$(grep -A2 'repo = "claude-powerline"' "$NODE_NIX" | grep -oP 'rev = "\K[^"]+')
-hunk_version=$(grep -A1 'pname = "hunk"' "$NODE_NIX" | grep -oP 'version = "\K[^"]+')
+moremaid_rev=$(grep -A2 'repo = "moremaid"' "$NODE_NIX" | grep -oP 'rev = "\K[^"]+')
+cc_lens_version=$(grep -A1 'pname = "cc-lens"' "$NODE_NIX" | grep -oP 'version = "\K[^"]+')
 
-update_github_pkg "neovim" "node-client" "$neovim_rev" "$NODE_NIX"
-update_codex "$codex_version" "$NODE_NIX"
-update_github_pkg "Owloops" "claude-powerline" "$powerline_rev" "$NODE_NIX"
-update_hunk "$hunk_version" "$NODE_NIX"
+update_github_pkg "neovim" "node-client" "$neovim_rev" "$NODE_NIX" "neovim-node-client"
+update_github_pkg "Owloops" "claude-powerline" "$powerline_rev" "$NODE_NIX" "claude-powerline"
+update_github_pkg "thieso2" "moremaid" "$moremaid_rev" "$NODE_NIX" "moremaid"
+update_npm_tarball "cc-lens" "$cc_lens_version" "$NODE_NIX"
 
 echo "All node packages up to date."

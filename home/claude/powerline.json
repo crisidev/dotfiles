@@ -1,0 +1,43 @@
+{
+  "theme": "tokyo-night",
+  "display": {
+    "style": "powerline",
+    "charset": "unicode",
+    "autoWrap": false,
+    "padding": 1,
+    "lines": [
+      {
+        "segments": {
+          "directory": { "enabled": true, "style": "basename" },
+          "git": {
+            "enabled": true,
+            "showSha": false,
+            "showWorkingTree": true,
+            "showOperation": true,
+            "showStashCount": true,
+            "showAheadBehind": true,
+            "showUpstream": false,
+            "showWorktree": true
+          },
+          "model": { "enabled": true },
+          "thinking": { "enabled": true, "showEnabled": false, "showEffort": true },
+          "agent": { "enabled": true, "showLabel": false },
+          "context": {
+            "enabled": true,
+            "displayStyle": "capped",
+            "percentageMode": "used"
+          },
+          "session": { "enabled": true, "type": "both", "costSource": "official", "showUnits": false },
+          "today": { "enabled": true, "type": "cost" },
+          "month": { "enabled": true, "type": "cost" },
+          "cacheTimer": { "enabled": true, "displayMode": "remaining" }
+        }
+      }
+    ]
+  },
+  "budget": {
+    "session": { "amount": 10, "warningThreshold": 80 },
+    "today": { "amount": 50, "warningThreshold": 80 },
+    "month": { "amount": 500, "warningThreshold": 80 }
+  }
+}

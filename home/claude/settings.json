@@ -1,0 +1,89 @@
+{
+  "model": "opus[1m]",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "WebFetch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"WebFetch is disabled. Use curl via the Bash tool instead (e.g. curl -sSL <url>).\"}}'"
+          }
+        ]
+      }
+    ]
+  },
+  "diffSidebarOpen": false,
+  "statusLine": {
+    "type": "command",
+    "command": "$HOME/.nix-profile/bin/claude-powerline",
+    "refreshInterval": 10
+  },
+  "enabledPlugins": {
+    "lua-lsp@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": true,
+    "rust-analyzer-lsp@claude-plugins-official": true,
+    "code-simplifier@claude-plugins-official": true,
+    "security-guidance@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "pyright-lsp@claude-plugins-official": true
+  },
+  "effortLevel": "high",
+  "tui": "default",
+  "theme": "dark",
+  "modelSettings": {
+    "claude-opus-5-5": {
+      "effortLevel": "high"
+    }
+  },
+  "permissions": {
+    "allow": [
+      "Bash(kubectl get *)",
+      "Bash(kubectl describe *)",
+      "Bash(helm list *)"
+    ]
+  },
+  "extraKnownMarketplaces": {
+    "fullstack-dev-skills": {
+      "source": {
+        "source": "github",
+        "repo": "jeffallan/claude-skills"
+      }
+    }
+  },
+  "agentPushNotifEnabled": true,
+  "autoMode": {
+    "soft_deny": [
+      "$defaults",
+      "Bash(kubectl delete:*) in namespace argocd, database, or kube-system — protected-scope manual-sync charts per CLAUDE.md",
+      "Bash(./hack/provision.sh) — CLAUDE.md explicitly flags this as reprovisioning all nodes"
+    ],
+    "environment": [
+      "### Org-wide",
+      "**Organization**: None configured",
+      "**Cloud provider(s)**: Scaleway (S3, used for restic backup target `s3.nl-ams.scw.cloud/crisidev-backup`)",
+      "**Repository visibility**: assume private — remote host `git.crisidev.org` is a self-hosted Gitea instance, gh visibility check not queryable here",
+      "**Internal sharing / snippet hosting**: None configured — treat public paste/gist services as outside the trust boundary",
+      "**Secrets management**: SOPS (PGP + age) — `charts/secrets.yaml`, decrypted at ArgoCD sync time by the helm-secrets CMP plugin using an age key from the `argocd-sops-age` Secret",
+      "**Default / protected branches**: `main` (default branch, per repo facts) — protection status not queryable here (gh visibility check unavailable)",
+      "**CI/CD deploy targets**: Gitea Actions (`.gitea/workflows/`) building multi-arch Docker images, deployed via SSH to corellia; ArgoCD (manual-sync) deploying Helm charts to the k3s cluster from `git.crisidev.org/bigo/k3s.crisidev.org`",
+      "**Network posture**: None configured",
+      "**Host containment**: None configured — assume Claude Code runs on an ordinary developer machine with open internet",
+      "**Source control**: The trusted repo `git.crisidev.org:2022/bigo/k3s.crisidev.org` (origin) and its remote only",
+      "**Trusted internal domains**: crisidev.org and its subdomains (e.g. loki.crisidev.org, prom.crisidev.org, jellyfin.crisidev.org, gotify.crisidev.org, git.crisidev.org, code.crisidev.org), crisidev.lan (e.g. lb.crisidev.lan, nfs.crisidev.lan)",
+      "**Trusted cloud buckets**: None configured",
+      "**Key internal services**: ArgoCD (GitOps controller), Pangolin/gerbil/traefik-edge/crowdsec (ingress stack on scarif), MrWolf MCP server (homelab cluster tools), Prometheus/Loki/Grafana/Alertmanager (monitoring stack), PostgreSQL/MySQL/Redis (database namespace), Headscale (coordination server on scarif)",
+      "**Internal package registry**: `code.crisidev.org/bigo/geoblock-manager` and other images under `code.crisidev.org` (Gitea container registry), `ghcr.io` for some third-party images",
+      "**Sensitive data locations & audiences**: `charts/secrets.yaml` (SOPS-encrypted, PGP+age) and per-chart `templates/secret.yaml`/`secret-*.yaml` files (argocd, cert-manager, database redis, garage, gitops/gitea, immich, k3s-upgrade rbac, kutt, librechat, meilisearch, monitoring alertmanager-gotify-bridge and prometheus-scrape, mrwolf, nextcloud, qbittorrent, system descheduler-rbac); `.envrc`; visible only to the repo owner/operator",
+      "**Data retention / declassification**: restic backups retain 4 last / 6 monthly / 1 yearly to Scaleway S3 (`crisidev-backup` bucket)",
+      "**Sensitive remote targets**: any namespace/host/container with `prod`/`production` as a name segment (none identified in this homelab cluster's naming — namespaces are service-named, e.g. monitoring, tdarr, argocd, adguard, kube-system, database, jellyfin, k3s-upgrade, garage)",
+      "**Protected deployment namespaces / environments**: `argocd`, `database`, `system`/`kube-system` (deployed via the `homelab-apps-manual` ApplicationSet as critical charts requiring manual sync) — plus the Sensitive remote targets heuristic",
+      "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; anything whose name or tag carries `prod` or `production` as a whole word or name segment; additionally the vendored SUC Plan CRD (`charts/k3s-upgrade/templates/crd.yaml`) is marked do-not-hand-edit",
+      "### User-specific",
+      "**Primary use of Claude Code**: homelab Kubernetes cluster operations and GitOps (Helm/ArgoCD) development for crisidev.org, routine under this repo",
+      "**Trusted repo**: this repo (`k3s.crisidev.org`) and its remote `ssh://git.crisidev.org:2022/bigo/k3s.crisidev.org` (origin)",
+      "**Org-specific CLIs**: None configured — mrwolf MCP tools and kubernetes MCP tools are used in-session per CLAUDE.md guidance, not standalone CLIs"
+    ]
+  }
+}

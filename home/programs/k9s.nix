@@ -1,6 +1,8 @@
 { lib, config, ... }:
 let
-  c = config.theme.palette.colors;
+  # Shared with the servers (corellia.nix), so read the palette file directly
+  # rather than the falcon-only config.theme.
+  c = (import ../theme/palette.nix { inherit lib; }).colors;
   bg = "default"; # terminal background, so kitty's translucency shows through
 in
 {
