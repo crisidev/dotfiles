@@ -77,11 +77,11 @@
       lua51Packages.lua
       luarocks
       mash
-      mergiraf
+      #mergiraf
       meson
       minio-client
       mkdocs
-      mosh
+      #mosh
       nerd-fonts.symbols-only
       nix-direnv
       nix-output-monitor
@@ -106,7 +106,7 @@
       stern
       strace
       tokei
-      trunk
+      #trunk
       tzupdate
       valgrind
       wev

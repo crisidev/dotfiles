@@ -101,6 +101,52 @@ let
     '';
   });
 
+  # The date menu keeps an invisible spacer left of the clock, bound to the
+  # notification dot's size so the clock stays centred while the dot shows.
+  # With the clock at the right end of the bar that only widens the gap after
+  # quick settings. The spacer is an unnamed actor whose size comes from a
+  # constraint, so CSS can't reach it: this drops the constraint instead.
+  clockPadRemover =
+    pkgs.runCommand "gnome-shell-extension-clock-pad-remover"
+      rec {
+        passthru.extensionUuid = "clock-pad-remover@crisidev.org";
+        metadata = builtins.toJSON {
+          uuid = passthru.extensionUuid;
+          name = "Clock pad remover";
+          description = "Drop the spacer left of the top bar clock.";
+          shell-version = [ "50" ];
+        };
+        extension = ''
+          import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+          import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
+
+          export default class ClockPadRemover extends Extension {
+              enable() {
+                  // dateMenu.js: box = [indicatorPad, clock, messages indicator]
+                  this._pad = Main.panel.statusArea.dateMenu._clockDisplay.get_parent().get_first_child();
+                  this._constraints = this._pad.get_constraints();
+                  this._pad.clear_constraints();
+              }
+
+              disable() {
+                  this._constraints.forEach(c => this._pad.add_constraint(c));
+                  this._pad = null;
+                  this._constraints = null;
+              }
+          }
+        '';
+        passAsFile = [
+          "metadata"
+          "extension"
+        ];
+      }
+      ''
+        dir=$out/share/gnome-shell/extensions/${clockPadRemover.extensionUuid}
+        mkdir -p $dir
+        cp $metadataPath $dir/metadata.json
+        cp $extensionPath $dir/extension.js
+      '';
+
   # blur-my-shell pipelines (a{sa{sv}}), as its prefs would write them: the
   # stock gaussian blur followed by a translucent Tokyo Night tint, so the
   # panel/overview/dock blur reads navy instead of neutral grey.
@@ -463,6 +509,18 @@ in
       border-radius: 10px;
     }
 
+    /* Clock spaced off quick settings like Astra Monitor is on the other
+       side: there the gap is quick settings' own padding plus the first
+       icon's 6px. Orchis adds a 3px border and 12px of padding on the clock;
+       8px keeps the hover pill symmetric. (The notification-dot spacer is
+       removed by clockPadRemover.) */
+    #panel .panel-button.clock-display {
+      border-width: 0 !important;
+    }
+    #panel .panel-button.clock-display .clock {
+      padding: 0 8px !important;
+    }
+
     /* Workspaces indicator (workspaces-by-open-apps): no hover/focus glow on
        its buttons. (The active workspace's rounded border is patched into
        the extension itself; see workspacesByOpenApps.) */
@@ -481,6 +539,8 @@ in
     "${astraMonitor}/share/gnome-shell/extensions/${astraMonitor.extensionUuid}";
   xdg.dataFile."gnome-shell/extensions/${workspacesByOpenApps.extensionUuid}".source =
     "${workspacesByOpenApps}/share/gnome-shell/extensions/${workspacesByOpenApps.extensionUuid}";
+  xdg.dataFile."gnome-shell/extensions/${clockPadRemover.extensionUuid}".source =
+    "${clockPadRemover}/share/gnome-shell/extensions/${clockPadRemover.extensionUuid}";
 
   home.pointerCursor = {
     enable = true;
@@ -542,6 +602,7 @@ in
         "bluetooth-quick-connect@bjarosze.gmail.com"
         "blur-my-shell@aunetx"
         "caffeine@patapon.info"
+        clockPadRemover.extensionUuid
         "disable-workspace-switcher-overlay@cleardevice"
         "do-not-disturb-while-screen-sharing-or-recording@marcinjahn.com"
         "monitor@astraext.github.io"

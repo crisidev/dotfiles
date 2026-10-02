@@ -127,6 +127,19 @@ let
       patchShebangs install.sh
       mkdir -p $out/share/icons
       ./install.sh -n Tela-tokyonight -d $out/share/icons blue
+      # The {16,22,24}/panel dirs (for xfce/KDE panels) also ship *-symbolic
+      # names, e.g. audio-volume-*: at GNOME's panel icon size those win over
+      # symbolic/, and their artwork sits small inside a 22px canvas, so the
+      # volume icon came out smaller than wifi/battery. Keep symbolic/ the
+      # only source for names it has. (Dark/light variants link to these dirs.)
+      for theme in $out/share/icons/*; do
+        for f in "$theme"/{16,22,24}/panel/*-symbolic.svg; do
+          [ -e "$f" ] || continue
+          if [ -n "$(find -L "$theme/symbolic" -name "$(basename "$f")" -print -quit)" ]; then
+            rm -f "$f"
+          fi
+        done
+      done
       jdupes -l -r $out/share/icons
       runHook postInstall
     '';
