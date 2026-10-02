@@ -13,6 +13,18 @@ let
   c = palette.colors;
   home = lib.removeSuffix "/" config.home.homeDirectory;
 
+  # The "island" look shared by every floating surface: top bar, dock, shell
+  # popups, the GDM login dialog and the Plymouth password entry.
+  island = rec {
+    fill = palette.rgba c.bgDark 0.7;
+    popupFill = palette.rgba c.bgDark 0.92; # nothing blurs behind popups
+    border = palette.rgba borderColour borderAlpha;
+    borderColour = c.blue;
+    borderAlpha = 0.6;
+    borderWidth = 2;
+    radius = 14;
+  };
+
   # ── GTK + Shell: Orchis, recoloured ─────────────────────────────────────────
   # Orchis' `nord` tweak swaps in src/_sass/_color-palette-nord.scss; replacing
   # that file re-skins every sass-built surface (GTK3/4 CSS, Shell CSS) while
@@ -140,6 +152,11 @@ let
           fi
         done
       done
+      # install.sh already built the caches; a stale one still lists the
+      # removed files, and GNOME then draws a blank icon.
+      for theme in $out/share/icons/*; do
+        gtk-update-icon-cache -f -t "$theme"
+      done
       jdupes -l -r $out/share/icons
       runHook postInstall
     '';
@@ -151,6 +168,9 @@ let
   wallpaperOut = "${home}/.local/share/backgrounds/tokyonight-storm-${baseNameOf wallpaperSrc}";
 in
 {
+  # Boot splash, GRUB and GDM: built here, installed by hand (system-theme).
+  imports = [ ./system.nix ];
+
   options.theme = lib.mkOption {
     type = lib.types.raw;
     readOnly = true;
@@ -159,12 +179,15 @@ in
 
   config = {
     theme = {
-      inherit palette;
+      inherit palette island;
       gtk = {
         name = gtkName;
         package = orchisTokyonight;
       };
-      shell.name = "${gtkName}-Tall";
+      shell = {
+        name = "${gtkName}-Tall";
+        popupsCss = import ./shell-popups.nix { inherit palette island; };
+      };
       icons = {
         name = "Tela-tokyonight-blue-dark";
         package = telaTokyonight;

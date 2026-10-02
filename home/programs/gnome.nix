@@ -101,51 +101,168 @@ let
     '';
   });
 
-  # The date menu keeps an invisible spacer left of the clock, bound to the
-  # notification dot's size so the clock stays centred while the dot shows.
-  # With the clock at the right end of the bar that only widens the gap after
-  # quick settings. The spacer is an unnamed actor whose size comes from a
-  # constraint, so CSS can't reach it: this drops the constraint instead.
-  clockPadRemover =
-    pkgs.runCommand "gnome-shell-extension-clock-pad-remover"
-      rec {
-        passthru.extensionUuid = "clock-pad-remover@crisidev.org";
+  # Single-file extensions written here (no prefs, no schema), linked into
+  # ~/.local/share like the patched nixpkgs ones (see nixExtensions).
+  mkLocalExtension =
+    {
+      uuid,
+      name,
+      description,
+      extension,
+    }:
+    pkgs.runCommand "gnome-shell-extension-${lib.head (lib.splitString "@" uuid)}"
+      {
+        passthru.extensionUuid = uuid;
         metadata = builtins.toJSON {
-          uuid = passthru.extensionUuid;
-          name = "Clock pad remover";
-          description = "Drop the spacer left of the top bar clock.";
+          inherit uuid name description;
           shell-version = [ "50" ];
         };
-        extension = ''
-          import * as Main from 'resource:///org/gnome/shell/ui/main.js';
-          import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
-
-          export default class ClockPadRemover extends Extension {
-              enable() {
-                  // dateMenu.js: box = [indicatorPad, clock, messages indicator]
-                  this._pad = Main.panel.statusArea.dateMenu._clockDisplay.get_parent().get_first_child();
-                  this._constraints = this._pad.get_constraints();
-                  this._pad.clear_constraints();
-              }
-
-              disable() {
-                  this._constraints.forEach(c => this._pad.add_constraint(c));
-                  this._pad = null;
-                  this._constraints = null;
-              }
-          }
-        '';
+        inherit extension;
         passAsFile = [
           "metadata"
           "extension"
         ];
       }
       ''
-        dir=$out/share/gnome-shell/extensions/${clockPadRemover.extensionUuid}
+        dir=$out/share/gnome-shell/extensions/${uuid}
         mkdir -p $dir
         cp $metadataPath $dir/metadata.json
         cp $extensionPath $dir/extension.js
       '';
+
+  # The date menu keeps an invisible spacer left of the clock, bound to the
+  # notification dot's size so the clock stays centred while the dot shows.
+  # With the clock at the right end of the bar that only widens the gap after
+  # quick settings. The spacer is an unnamed actor whose size comes from a
+  # constraint, so CSS can't reach it: this drops the constraint instead.
+  clockPadRemover = mkLocalExtension {
+    uuid = "clock-pad-remover@crisidev.org";
+    name = "Clock pad remover";
+    description = "Drop the spacer left of the top bar clock.";
+    extension = ''
+      import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+      import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
+
+      export default class ClockPadRemover extends Extension {
+          enable() {
+              // dateMenu.js: box = [indicatorPad, clock, messages indicator]
+              this._pad = Main.panel.statusArea.dateMenu._clockDisplay.get_parent().get_first_child();
+              this._constraints = this._pad.get_constraints();
+              this._pad.clear_constraints();
+          }
+
+          disable() {
+              this._constraints.forEach(c => this._pad.add_constraint(c));
+              this._pad = null;
+              this._constraints = null;
+          }
+      }
+    '';
+  };
+
+  # Thermal bar: the CPU package temperature (coretemp, the same sensor Astra
+  # Monitor shows) drives a style class on the shell's uiGroup — heat-warm
+  # from heatWarm °C, heat-hot from heatHot °C — and the Shell theme recolours
+  # the bar and dock borders from it (heatCss). A level is only left
+  # heatHysteresis below where it was entered, so a temperature sitting on a
+  # threshold doesn't flicker. hwmon numbers change across boots, so the
+  # sensor is looked up by name.
+  heatWarm = 75;
+  heatHot = 90;
+  heatHysteresis = 3;
+  heatBorder = mkLocalExtension {
+    uuid = "heat-border@crisidev.org";
+    name = "Heat border";
+    description = "Recolour the top bar and dock borders with the CPU temperature.";
+    extension = ''
+      import GLib from 'gi://GLib';
+      import Gio from 'gi://Gio';
+      import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+      import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
+
+      const LEVELS = ["", "heat-warm", "heat-hot"];
+      const THRESHOLDS = [-Infinity, ${toString heatWarm}, ${toString heatHot}];
+      const HYSTERESIS = ${toString heatHysteresis};
+      const INTERVAL_S = 2;
+
+      const read = file => new TextDecoder().decode(file.load_contents(null)[1]).trim();
+
+      function findSensor() {
+          const hwmon = Gio.File.new_for_path('/sys/class/hwmon');
+          const children = hwmon.enumerate_children('standard::name', Gio.FileQueryInfoFlags.NONE, null);
+          for (let info; (info = children.next_file(null));) {
+              const dir = hwmon.get_child(info.get_name());
+              try {
+                  if (read(dir.get_child('name')) === 'coretemp')
+                      return dir.get_child('temp1_input'); // "Package id 0"
+              } catch {}
+          }
+          return null;
+      }
+
+      export default class HeatBorder extends Extension {
+          enable() {
+              this._level = 0;
+              this._sensor = findSensor();
+              if (!this._sensor)
+                  return;
+              this._update();
+              this._timer = GLib.timeout_add_seconds(GLib.PRIORITY_LOW, INTERVAL_S, () => {
+                  this._update();
+                  return GLib.SOURCE_CONTINUE;
+              });
+          }
+
+          disable() {
+              if (this._timer)
+                  GLib.source_remove(this._timer);
+              this._timer = 0;
+              this._setLevel(0);
+              this._sensor = null;
+          }
+
+          _update() {
+              let celsius;
+              try {
+                  celsius = parseInt(read(this._sensor)) / 1000;
+              } catch {
+                  return;
+              }
+              let level = 0;
+              for (let l = LEVELS.length - 1; l > 0; l--) {
+                  if (celsius >= THRESHOLDS[l] - (this._level >= l ? HYSTERESIS : 0)) {
+                      level = l;
+                      break;
+                  }
+              }
+              this._setLevel(level);
+          }
+
+          _setLevel(level) {
+              if (level === this._level)
+                  return;
+              const ui = Main.layoutManager.uiGroup;
+              if (LEVELS[this._level])
+                  ui.remove_style_class_name(LEVELS[this._level]);
+              if (LEVELS[level])
+                  ui.add_style_class_name(LEVELS[level]);
+              this._level = level;
+          }
+      }
+    '';
+  };
+
+  # Extensions built or patched in nix, linked into ~/.local/share (the rest
+  # are installed by hand); see enabled-extensions.
+  nixExtensions = [
+    astraMonitor
+    workspacesByOpenApps
+    clockPadRemover
+    heatBorder
+    # Vicinae's companion: clipboard history, window list and launcher
+    # placement on Mutter (vicinae.nix).
+    pkgs.gnomeExtensions.vicinae
+  ];
 
   # blur-my-shell pipelines (a{sa{sv}}), as its prefs would write them: the
   # stock gaussian blur followed by a translucent Tokyo Night tint, so the
@@ -200,13 +317,18 @@ let
     "keyboard"
   ];
 
+  # The island look (fill, border, radius) comes from theme.island, shared
+  # with the shell popups (theme.shell.popupsCss), GDM and Plymouth.
+  inherit (theme) island;
+  islandBorder = "${toString island.borderWidth}px solid ${island.border}";
+
   islandsCss = ''
     #panel #panelLeft,
     #panel #panelCenter,
     #panel #panelRight {
-      background-color: ${rgba c.bgDark 0.7};
-      border: 2px solid ${rgba c.blue 0.6};
-      border-radius: 14px;
+      background-color: ${island.fill};
+      border: ${islandBorder};
+      border-radius: ${toString island.radius}px;
       margin-top: ${toString islandInset}px;
       margin-bottom: ${toString islandInset}px;
       padding: 0 4px;
@@ -225,14 +347,60 @@ let
   # the bar still occupies panelHeight in total.
   barCss = ''
     #panel {
-      height: ${toString (panelHeight - 2 * islandInset - 4)}px;
-      background-color: ${rgba c.bgDark 0.7} !important;
-      border: 2px solid ${rgba c.blue 0.6};
-      border-radius: 14px;
+      height: ${toString (panelHeight - 2 * islandInset - 2 * island.borderWidth)}px;
+      background-color: ${island.fill} !important;
+      border: ${islandBorder};
+      border-radius: ${toString island.radius}px;
       margin: ${toString islandInset}px 8px;
       padding: 0 4px;
     }
   '';
+
+  # Thermal bar (heatBorder): bar/islands and dock borders by CPU heat. One
+  # class above the base rules' specificity, and !important because the dock's
+  # base rule has it.
+  heatSurfaces =
+    (
+      if islands then
+        map (b: "#panel #${b}") [
+          "panelLeft"
+          "panelCenter"
+          "panelRight"
+        ]
+      else
+        [ "#panel" ]
+    )
+    ++ [ "#dashtodockContainer.bottom #dash .dash-background" ];
+  heatCss =
+    lib.concatMapStrings
+      (
+        { level, colour }:
+        ''
+          ${lib.concatMapStringsSep ",\n" (s: ".${level} ${s}") heatSurfaces} {
+            border-color: ${rgba colour 0.85} !important;
+          }
+        ''
+      )
+      [
+        {
+          level = "heat-warm";
+          colour = c.yellow;
+        }
+        {
+          level = "heat-hot";
+          colour = c.red;
+        }
+      ];
+
+  # Windows pop-shell must float instead of tiling. Its config.json is also
+  # written by pop-shell's own "floating window exceptions" dialog, so it stays
+  # a real file: popShellFloat (activation below) merges these rules into it.
+  # Classes are case-insensitive regexes; pop-shell reads the file at enable.
+  popShellFloatRules = [
+    # The launcher: Vicinae's extension centres it and keeps it on top, but
+    # only for a floating window.
+    { class = "^vicinae$"; }
+  ];
 
   # Settings left behind by extensions that are gone (or never installed); the
   # staleDconf activation below wipes them. github-manager's held a token.
@@ -349,6 +517,16 @@ let
       command = "${home}/.bin/ide";
       name = "Open IDE";
     }
+    {
+      binding = "<Super>space";
+      command = "${config.programs.vicinae.package}/bin/vicinae toggle";
+      name = "Toggle the Vicinae launcher";
+    }
+    {
+      binding = "<Super>v";
+      command = "${config.programs.vicinae.package}/bin/vicinae deeplink vicinae://launch/clipboard/history";
+      name = "Vicinae clipboard history";
+    }
   ];
 
   customKeybindingPath =
@@ -411,136 +589,159 @@ in
     gtk4.extraCss = gtkCsdReset;
   };
 
-  xdg.dataFile."themes/${theme.shell.name}/gnome-shell/gnome-shell.css".text = ''
-    @import url("file://${theme.gtk.package}/share/themes/${theme.gtk.name}/gnome-shell/gnome-shell.css");
+  # The Shell theme (an @import of Orchis plus the overrides below) and the
+  # nix-built extensions.
+  xdg.dataFile = {
+    "themes/${theme.shell.name}/gnome-shell/gnome-shell.css".text = ''
+      @import url("file://${theme.gtk.package}/share/themes/${theme.gtk.name}/gnome-shell/gnome-shell.css");
 
-    /* The bar itself is invisible; its three boxes are the islands.
-       !important: Ubuntu's session stacks Yaru under the user theme, and Yaru
-       paints #panel #131313 !important. */
-    #panel {
-      height: ${toString panelHeight}px;
-      background-color: transparent !important;
-      margin: 0;
-      border-radius: 0;
-    }
-    #panel .panel-corner {
-      -panel-corner-opacity: 0;
-    }
+      /* The bar itself is invisible; its three boxes are the islands.
+         !important: Ubuntu's session stacks Yaru under the user theme, and Yaru
+         paints #panel #131313 !important. */
+      #panel {
+        height: ${toString panelHeight}px;
+        background-color: transparent !important;
+        margin: 0;
+        border-radius: 0;
+      }
+      #panel .panel-corner {
+        -panel-corner-opacity: 0;
+      }
 
-    ${if islands then islandsCss else barCss}
+      ${if islands then islandsCss else barCss}
 
-    /* The dock as one more island: a floating, centred bar (extend-height
-       off in dconf) with the same dimmed fill, border and corners as the top
-       bar. !important beats Yaru's and ubuntu-dock's own dock styles. dash-to-dock's own
-       custom background is off (dconf below): it writes background and border
-       colours inline, which would beat this. */
-    #dashtodockContainer.bottom #dash .dash-background,
-    #dashtodockContainer.bottom.extended #dash .dash-background {
-      background-color: ${rgba c.bgDark 0.7} !important;
-      border: 2px solid ${rgba c.blue 0.6} !important;
-      border-radius: 14px !important;
-    }
-    /* Dock island geometry: it floats dockGap above the screen edge (the
-       background's bottom margin), and is 48px tall like the top islands:
-       2px + 44px icon box (32px icon with 6px inner padding) + 2px, so the
-       icons sit centred. Running dots are pulled up inside the island, into
-       the icon box's lower inner padding. */
-    #dashtodockContainer.bottom #dash .dash-background {
-      margin-bottom: ${toString dockGap}px !important;
-    }
-    #dashtodockContainer.bottom #dash .dash-item-container .app-well-app,
-    #dashtodockContainer.bottom #dash .dash-item-container .show-apps,
-    #dashtodockContainer.bottom #dash .dash-item-container .overview-tile {
-      padding-top: 2px !important;
-      padding-bottom: ${toString (2 + dockGap)}px !important;
-    }
-    #dashtodockContainer.bottom #dash .app-grid-running-dot {
-      margin-bottom: ${toString (dockGap + 2)}px !important;
-    }
+      /* The dock as one more island: a floating, centred bar (extend-height
+         off in dconf) with the same dimmed fill, border and corners as the top
+         bar. !important beats Yaru's and ubuntu-dock's own dock styles. dash-to-dock's own
+         custom background is off (dconf below): it writes background and border
+         colours inline, which would beat this. */
+      #dashtodockContainer.bottom #dash .dash-background,
+      #dashtodockContainer.bottom.extended #dash .dash-background {
+        background-color: ${island.fill} !important;
+        border: ${islandBorder} !important;
+        border-radius: ${toString island.radius}px !important;
+      }
+      /* Dock island geometry: it floats dockGap above the screen edge (the
+         background's bottom margin), and is 48px tall like the top islands:
+         2px + 44px icon box (32px icon with 6px inner padding) + 2px, so the
+         icons sit centred. Running dots are pulled up inside the island, into
+         the icon box's lower inner padding. */
+      #dashtodockContainer.bottom #dash .dash-background {
+        margin-bottom: ${toString dockGap}px !important;
+      }
+      #dashtodockContainer.bottom #dash .dash-item-container .app-well-app,
+      #dashtodockContainer.bottom #dash .dash-item-container .show-apps,
+      #dashtodockContainer.bottom #dash .dash-item-container .overview-tile {
+        padding-top: 2px !important;
+        padding-bottom: ${toString (2 + dockGap)}px !important;
+      }
+      #dashtodockContainer.bottom #dash .app-grid-running-dot {
+        margin-bottom: ${toString (dockGap + 2)}px !important;
+      }
 
-    /* No islands (or bar) over the overview, lock and login screens. */
-    #panel:overview #panelLeft,
-    #panel:overview #panelCenter,
-    #panel:overview #panelRight,
-    #panel.unlock-screen #panelLeft,
-    #panel.unlock-screen #panelCenter,
-    #panel.unlock-screen #panelRight,
-    #panel.login-screen #panelLeft,
-    #panel.login-screen #panelCenter,
-    #panel.login-screen #panelRight,
-    #panel:overview,
-    #panel.unlock-screen,
-    #panel.login-screen {
-      background-color: transparent !important;
-      border-color: transparent !important;
-    }
+      /* Thermal bar (heatBorder): the border colour fades over a second. Kept
+         above the overview/lock rules below, whose selectors weigh the same and
+         must win there. */
+      #panel,
+      #panel #panelLeft,
+      #panel #panelCenter,
+      #panel #panelRight,
+      #dashtodockContainer.bottom #dash .dash-background {
+        transition-duration: 1000ms;
+      }
+      ${heatCss}
 
-    /* One typeface and weight across the whole bar: clock, battery text and
-       Astra Monitor's values (Orchis makes the panel bold; Astra's labels are
-       patched to the same weight). */
-    #panel,
-    #panel StLabel {
-      font-family: "Inter" !important;
-      font-weight: 500 !important;
-    }
+      /* No islands (or bar) over the overview, lock and login screens. */
+      #panel:overview #panelLeft,
+      #panel:overview #panelCenter,
+      #panel:overview #panelRight,
+      #panel.unlock-screen #panelLeft,
+      #panel.unlock-screen #panelCenter,
+      #panel.unlock-screen #panelRight,
+      #panel.login-screen #panelLeft,
+      #panel.login-screen #panelCenter,
+      #panel.login-screen #panelRight,
+      #panel:overview,
+      #panel.unlock-screen,
+      #panel.login-screen {
+        background-color: transparent !important;
+        border-color: transparent !important;
+      }
 
-    /* Quick-settings indicators (brightness, wifi, volume, power, battery):
-       spaced out, sized like Astra Monitor's icons, and all monochrome
-       symbolic in the palette foreground instead of mixed full-colour ones. */
-    #panel .panel-status-indicators-box {
-      spacing: 10px !important;
-    }
-    #panel .system-status-icon {
-      icon-size: 18px !important;
-      -st-icon-style: symbolic;
-      color: ${c.fg} !important;
-      /* symbolic icons' accent parts (charging battery, warnings) */
-      success-color: ${c.green} !important;
-      warning-color: ${c.yellow} !important;
-      error-color: ${c.red} !important;
-    }
+      /* One typeface and weight across the whole bar: clock, battery text and
+         Astra Monitor's values (Orchis makes the panel bold; Astra's labels are
+         patched to the same weight). */
+      #panel,
+      #panel StLabel {
+        font-family: "Inter" !important;
+        font-weight: 500 !important;
+      }
 
-    /* Hover/active pills inside an island follow its shape. */
-    #panel .panel-button {
-      border-radius: 10px;
-      color: ${c.fg};
-    }
-    #panel .panel-button.clock-display .clock {
-      border-radius: 10px;
-    }
+      /* Quick-settings indicators (brightness, wifi, volume, power, battery):
+         spaced out, sized like Astra Monitor's icons, and all monochrome
+         symbolic in the palette foreground instead of mixed full-colour ones. */
+      #panel .panel-status-indicators-box {
+        spacing: 10px !important;
+      }
+      #panel .system-status-icon {
+        icon-size: 18px !important;
+        -st-icon-style: symbolic;
+        color: ${c.fg} !important;
+        /* symbolic icons' accent parts (charging battery, warnings) */
+        success-color: ${c.green} !important;
+        warning-color: ${c.yellow} !important;
+        error-color: ${c.red} !important;
+      }
 
-    /* Clock spaced off quick settings like Astra Monitor is on the other
-       side: there the gap is quick settings' own padding plus the first
-       icon's 6px. Orchis adds a 3px border and 12px of padding on the clock;
-       8px keeps the hover pill symmetric. (The notification-dot spacer is
-       removed by clockPadRemover.) */
-    #panel .panel-button.clock-display {
-      border-width: 0 !important;
-    }
-    #panel .panel-button.clock-display .clock {
-      padding: 0 8px !important;
-    }
+      /* Hover/active pills inside an island follow its shape. */
+      #panel .panel-button {
+        border-radius: 10px;
+        color: ${c.fg};
+      }
+      #panel .panel-button.clock-display .clock {
+        border-radius: 10px;
+      }
 
-    /* Workspaces indicator (workspaces-by-open-apps): no hover/focus glow on
-       its buttons. (The active workspace's rounded border is patched into
-       the extension itself; see workspacesByOpenApps.) */
-    #panel .wboa-panel-rounded,
-    #panel .wboa-panel-rounded:hover,
-    #panel .wboa-panel-rounded:focus,
-    #panel .wboa-panel-rounded:active,
-    #panel .wboa-panel-rounded:checked {
-      background-color: transparent;
-      box-shadow: none;
-    }
-  '';
+      /* Clock spaced off quick settings like Astra Monitor is on the other
+         side: there the gap is quick settings' own padding plus the first
+         icon's 6px. Orchis adds a 3px border and 12px of padding on the clock;
+         8px keeps the hover pill symmetric. (The notification-dot spacer is
+         removed by clockPadRemover.) */
+      #panel .panel-button.clock-display {
+        border-width: 0 !important;
+      }
+      #panel .panel-button.clock-display .clock {
+        padding: 0 8px !important;
+      }
+      /* The unread-notifications dot right of the clock sat 18px from the
+         time but 3px from the bar's border (measured on a screenshot); this
+         evens the two gaps. (Clutter refuses negative margins, so the left
+         gap can't shrink without unbalancing the clock's hover pill.) */
+      #panel .panel-button.clock-display .messages-indicator {
+        margin-right: 15px;
+      }
 
-  # Extensions from nixpkgs (patched above); see enabled-extensions.
-  xdg.dataFile."gnome-shell/extensions/${astraMonitor.extensionUuid}".source =
-    "${astraMonitor}/share/gnome-shell/extensions/${astraMonitor.extensionUuid}";
-  xdg.dataFile."gnome-shell/extensions/${workspacesByOpenApps.extensionUuid}".source =
-    "${workspacesByOpenApps}/share/gnome-shell/extensions/${workspacesByOpenApps.extensionUuid}";
-  xdg.dataFile."gnome-shell/extensions/${clockPadRemover.extensionUuid}".source =
-    "${clockPadRemover}/share/gnome-shell/extensions/${clockPadRemover.extensionUuid}";
+      /* Workspaces indicator (workspaces-by-open-apps): no hover/focus glow on
+         its buttons. (The active workspace's rounded border is patched into
+         the extension itself; see workspacesByOpenApps.) */
+      #panel .wboa-panel-rounded,
+      #panel .wboa-panel-rounded:hover,
+      #panel .wboa-panel-rounded:focus,
+      #panel .wboa-panel-rounded:active,
+      #panel .wboa-panel-rounded:checked {
+        background-color: transparent;
+        box-shadow: none;
+      }
+
+      ${theme.shell.popupsCss}
+    '';
+  }
+  // lib.listToAttrs (
+    map (e: {
+      name = "gnome-shell/extensions/${e.extensionUuid}";
+      value.source = "${e}/share/gnome-shell/extensions/${e.extensionUuid}";
+    }) nixExtensions
+  );
 
   home.pointerCursor = {
     enable = true;
@@ -579,6 +780,17 @@ in
     '') staleExtensionSettings}
   '';
 
+  home.activation.popShellFloat = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    cfg="$HOME/.config/pop-shell/config.json"
+    run mkdir -p "$(dirname "$cfg")"
+    [ -f "$cfg" ] || echo '{"float": [], "skiptaskbarhidden": [], "log_on_focus": false}' > "$cfg"
+    new=$(${pkgs.jq}/bin/jq --argjson rules ${lib.escapeShellArg (builtins.toJSON popShellFloatRules)} \
+      '.float = ((.float // []) + ($rules - (.float // [])))' "$cfg")
+    if [ "$new" != "$(cat "$cfg")" ]; then
+      run ${pkgs.coreutils}/bin/tee "$cfg" <<<"$new" >/dev/null
+    fi
+  '';
+
   # ── dconf ─────────────────────────────────────────────────────────────────
   # Ported from the old imperative home/.bin/gsettings-update plus the live
   # extension settings. Only the keys listed here are managed; anything else
@@ -605,6 +817,7 @@ in
         clockPadRemover.extensionUuid
         "disable-workspace-switcher-overlay@cleardevice"
         "do-not-disturb-while-screen-sharing-or-recording@marcinjahn.com"
+        heatBorder.extensionUuid
         "monitor@astraext.github.io"
         "mouse-follows-focus@crisidev.org"
         "notification-banner-reloaded@marcinjakubowski.github.com"
@@ -615,7 +828,7 @@ in
         "top-bar-organizer@julian.gse.jsts.xyz"
         "ubuntu-dock@ubuntu.com"
         "user-theme@gnome-shell-extensions.gcampax.github.com"
-        "window-calls@domandoman.xyz"
+        pkgs.gnomeExtensions.vicinae.extensionUuid
         "windowIsReady_Remover@nunofarruca@gmail.com"
       ];
       disabled-extensions = [
@@ -626,6 +839,9 @@ in
         "rounded-window-corners@fxgn"
         "ubuntu-appindicators@ubuntu.com"
         "github-manager@mackdk-on-github"
+        # Replaced by the Vicinae extension, which serves the same
+        # org.gnome.Shell.Extensions.Windows D-Bus object (focus-switch uses it).
+        "window-calls@domandoman.xyz"
         "snapd-prompting@canonical.com"
         "snapd-search-provider@canonical.com"
       ];
@@ -642,7 +858,7 @@ in
     };
 
     "org/gnome/shell/keybindings" = {
-      toggle-overview = [ "<Super>Space" ];
+      toggle-overview = [ "<Alt>space" ];
       toggle-application-view = [ "<Super><Alt>Space" ];
       toggle-message-tray = [ "<Alt><Super>n" ];
       screenshot = [ "<Shift>Print" ];

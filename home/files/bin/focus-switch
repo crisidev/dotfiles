@@ -46,9 +46,12 @@ focus_to_previous_window() {
     exit 0
 }
 
+# org.gnome.Shell.Extensions.Windows is served by the Vicinae extension (a
+# fork of window-calls, which it replaced: both can't export the same path).
+# Its List reports focus as has_focus; window-calls called it focus.
 get_current_window() {
     dbus-send --session --dest=org.gnome.Shell --print-reply=literal /org/gnome/Shell/Extensions/Windows \
-        org.gnome.Shell.Extensions.Windows.List | jq -r ".[] | select (.in_current_workspace == true) |select (.focus == true) .wm_class_instance"
+        org.gnome.Shell.Extensions.Windows.List | jq -r ".[] | select (.in_current_workspace == true) | select ((.has_focus // .focus) == true) .wm_class_instance"
 }
 
 hide_overview() {
