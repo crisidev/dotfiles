@@ -17,6 +17,7 @@
     ./programs/k9s.nix
     ./programs/kitty.nix
     ./programs/lazygit.nix
+    ./programs/luks-tpm.nix
     ./programs/mimeapps.nix
     ./programs/claude.nix
     ./programs/node.nix
@@ -121,6 +122,11 @@
     ];
 
     nixGLPrefixIntel = "${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel";
+
+    luksTpm = {
+      enable = true;
+      uuid = "4c792278-87eb-4a96-a63d-eee44b0439b8";
+    };
     # nixGLPrefixAuto = "${pkgs.nixgl.auto.nixGLDefault}/bin/nixGL";
     # nixGLPrefixNvidia = "${pkgs.nixgl.auto.nixGLNvidia}/bin/nixGLNvidia-560.35.03";
 

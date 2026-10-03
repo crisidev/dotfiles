@@ -74,32 +74,41 @@ let
   # inactive ones are hidden) shows a single full-colour placeholder icon from
   # the icon theme, sized like the app icons, instead of nothing.
   emptyWorkspaceIcon = "workspace-switcher";
-  workspacesByOpenApps = pkgs.gnomeExtensions.workspaces-indicator-by-open-apps.overrideAttrs (o: {
-    postPatch = (o.postPatch or "") + ''
-      substituteInPlace workspace.js --replace-fail \
-        '    // create apps icons' \
-        '    if (windows.length === 0 && !is_other_monitor)
-          this.get_child().add_child(new St.Icon({
-            icon_name: "${emptyWorkspaceIcon}",
-            icon_size: Math.round(this._settings.size_app_icon * this._settings.indicator_height_scale),
-            y_align: Clutter.ActorAlign.CENTER,
-          }))
+  workspacesByOpenApps =
+    pkgs.gnomeExtensions.workspaces-indicator-by-open-apps.overrideAttrs
+      (o: rec {
+        # Ahead of nixpkgs (v27); drop once it catches up.
+        version = "28";
+        src = pkgs.fetchzip {
+          url = "https://extensions.gnome.org/extension-data/workspaces-by-open-appsfavo02.github.com.v${version}.shell-extension.zip";
+          hash = "sha256-Dp8+obZr+lf3/QbuIFVbKloiKf8nvGVUNd9r7aSJMHE=";
+          stripRoot = false;
+        };
+        postPatch = (o.postPatch or "") + ''
+          substituteInPlace workspace.js --replace-fail \
+            '    // create apps icons' \
+            '    if (windows.length === 0 && !is_other_monitor)
+              this.get_child().add_child(new St.Icon({
+                icon_name: "${emptyWorkspaceIcon}",
+                icon_size: Math.round(this._settings.size_app_icon * this._settings.indicator_height_scale),
+                y_align: Clutter.ActorAlign.CENTER,
+              }))
 
-        // create apps icons'
+            // create apps icons'
 
-      # Outline the active workspace with a full rounded border instead of the
-      # 2px underline, and give inactive ones the same border in transparent
-      # so nothing shifts. Inline, because the extension's stylesheet
-      # ("border: none", 5px radius) outranks the Shell theme.
-      substituteInPlace extension.js \
-        --replace-fail \
-          '`border-bottom-width: ''${indicator_height}px; margin-bottom: 0px;`' \
-          '`border-width: ''${indicator_height}px; border-radius: 10px; padding: 2px 5px; margin-bottom: 0px;`' \
-        --replace-fail \
-          ': `margin-bottom: ''${indicator_height}px;`' \
-          ': `border-width: ''${indicator_height}px; border-color: transparent; border-radius: 10px; padding: 2px 5px; margin-bottom: 0px;`'
-    '';
-  });
+          # Outline the active workspace with a full rounded border instead of the
+          # 2px underline, and give inactive ones the same border in transparent
+          # so nothing shifts. Inline, because the extension's stylesheet
+          # ("border: none", 5px radius) outranks the Shell theme.
+          substituteInPlace extension.js \
+            --replace-fail \
+              '`border-bottom-width: ''${indicator_height}px; margin-bottom: 0px;`' \
+              '`border-width: ''${indicator_height}px; border-radius: 10px; padding: 2px 5px; margin-bottom: 0px;`' \
+            --replace-fail \
+              ': `margin-bottom: ''${indicator_height}px;`' \
+              ': `border-width: ''${indicator_height}px; border-color: transparent; border-radius: 10px; padding: 2px 5px; margin-bottom: 0px;`'
+        '';
+      });
 
   # Single-file extensions written here (no prefs, no schema), linked into
   # ~/.local/share like the patched nixpkgs ones (see nixExtensions).
@@ -252,6 +261,113 @@ let
     '';
   };
 
+  # Pop-shell's active hint only outlines the focused window and has no option
+  # for the rest, so this draws a dimmed copy of it around every other window
+  # on the workspace: same 1.5px width and radius, laid out the way pop-shell
+  # lays out its hint (outside the frame, inside it when maximized, clipped to
+  # the work area) and stacked just above each window so whatever covers the
+  # window covers its border too. Pop-shell hides the actors of background
+  # stack tabs, so following the actor's visibility skips those.
+  activeHintRadius = 12;
+  dimBorder = mkLocalExtension {
+    uuid = "dim-border@crisidev.org";
+    name = "Dim border";
+    description = "Outline unfocused windows with a dimmed pop-shell active hint.";
+    extension = ''
+      import Meta from 'gi://Meta';
+      import St from 'gi://St';
+      import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
+
+      const STYLE = 'border: 1.5px solid ${rgba c.blue 0.3}; border-radius: ${toString activeHintRadius}px;';
+
+      export default class DimBorder extends Extension {
+          enable() {
+              this._windows = new Map(); // MetaWindow → {border, actor}
+              global.display.connectObject(
+                  'window-created', (_display, win) => this._track(win),
+                  'notify::focus-window', () => this._updateAll(),
+                  'restacked', () => this._updateAll(),
+                  this);
+              global.workspace_manager.connectObject(
+                  'active-workspace-changed', () => this._updateAll(),
+                  this);
+              global.get_window_actors().forEach(actor => this._track(actor.meta_window));
+          }
+
+          disable() {
+              global.display.disconnectObject(this);
+              global.workspace_manager.disconnectObject(this);
+              for (const win of [...this._windows.keys()])
+                  this._untrack(win);
+              this._windows = null;
+          }
+
+          _track(win) {
+              if (win.get_window_type() !== Meta.WindowType.NORMAL || this._windows.has(win))
+                  return;
+              const border = new St.Widget({style: STYLE, visible: false});
+              global.window_group.add_child(border);
+              this._windows.set(win, {border, actor: null});
+              const update = () => this._update(win);
+              win.connectObject(
+                  'position-changed', update,
+                  'size-changed', update,
+                  'workspace-changed', update,
+                  'shown', update,
+                  'notify::minimized', update,
+                  'notify::fullscreen', update,
+                  'unmanaged', () => this._untrack(win),
+                  this);
+              update();
+          }
+
+          _untrack(win) {
+              const {border, actor} = this._windows.get(win);
+              win.disconnectObject(this);
+              actor?.disconnectObject(this);
+              border.destroy();
+              this._windows.delete(win);
+          }
+
+          _updateAll() {
+              for (const win of this._windows.keys())
+                  this._update(win);
+          }
+
+          _update(win) {
+              const state = this._windows.get(win);
+              const {border} = state;
+              // The actor can arrive after window-created; follow it once it does.
+              const actor = win.get_compositor_private();
+              if (actor && actor !== state.actor) {
+                  state.actor?.disconnectObject(this);
+                  actor.connectObject('notify::visible', () => this._update(win), this);
+                  state.actor = actor;
+              }
+
+              const workspace = global.workspace_manager.get_active_workspace();
+              border.visible = actor?.visible && actor.get_parent() === border.get_parent() &&
+                  win !== global.display.focus_window && !win.minimized && !win.fullscreen &&
+                  win.located_on_workspace(workspace);
+              if (!border.visible)
+                  return;
+
+              const inset = win.maximized_horizontally || win.maximized_vertically
+                  ? 0 : border.get_theme_node().get_border_width(St.Side.TOP);
+              const frame = win.get_frame_rect();
+              const area = workspace.get_work_area_for_monitor(win.get_monitor());
+              const x = frame.x - inset;
+              const y = frame.y - inset;
+              border.set_position(x, y);
+              border.set_size(
+                  Math.min(frame.width + 2 * inset, area.x + area.width - x),
+                  Math.min(frame.height + 2 * inset, area.y + area.height - y));
+              global.window_group.set_child_above_sibling(border, actor);
+          }
+      }
+    '';
+  };
+
   # Extensions built or patched in nix, linked into ~/.local/share (the rest
   # are installed by hand); see enabled-extensions.
   nixExtensions = [
@@ -259,6 +375,7 @@ let
     workspacesByOpenApps
     clockPadRemover
     heatBorder
+    dimBorder
     # Vicinae's companion: clipboard history, window list and launcher
     # placement on Mutter (vicinae.nix).
     pkgs.gnomeExtensions.vicinae
@@ -818,6 +935,7 @@ in
         "disable-workspace-switcher-overlay@cleardevice"
         "do-not-disturb-while-screen-sharing-or-recording@marcinjahn.com"
         heatBorder.extensionUuid
+        dimBorder.extensionUuid
         "monitor@astraext.github.io"
         "mouse-follows-focus@crisidev.org"
         "notification-banner-reloaded@marcinjakubowski.github.com"
@@ -890,7 +1008,7 @@ in
       tile-by-default = true;
       snap-to-grid = false;
       active-hint = true;
-      active-hint-border-radius = mkUint32 12;
+      active-hint-border-radius = mkUint32 activeHintRadius;
       hint-color-rgba = rgb c.blue;
       gap-inner = mkUint32 2;
       gap-outer = mkUint32 2;

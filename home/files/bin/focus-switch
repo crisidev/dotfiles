@@ -13,14 +13,16 @@ FORCE=$2
 STATE_FILE="/tmp/.workspace_toggle_state"
 WINDOW_FILE="/tmp/.workspace_window_state"
 
-# Windows and workspaces mappings
+# Windows and workspaces mappings, keyed by lowercase wm_class_instance: the
+# same app reports a different case under XWayland (org.signal.signal) than
+# under native Wayland (org.signal.Signal).
 declare -A WINDOWS_TO_WORKSPACES
 WINDOWS_TO_WORKSPACES["kitty"]=0
 WINDOWS_TO_WORKSPACES["firefox-esr-esr128"]=1
 WINDOWS_TO_WORKSPACES["org.mozilla.firefox"]=1
 WINDOWS_TO_WORKSPACES["spotify"]=2
 WINDOWS_TO_WORKSPACES["ferdium"]=4
-WINDOWS_TO_WORKSPACES["org.signal.Signal"]=5
+WINDOWS_TO_WORKSPACES["org.signal.signal"]=5
 
 focus_workspace() {
     rm -f $WINDOW_FILE
@@ -69,7 +71,7 @@ fi
 
 if [ "$WORKSPACE" = "rebalance" ]; then
     dbus-send --session --dest=org.gnome.Shell --print-reply=literal /org/gnome/Shell/Extensions/Windows org.gnome.Shell.Extensions.Windows.List | jq -c '.[]' | while read -r window; do
-        wm_class=$(echo "$window" | jq -r '.wm_class_instance')
+        wm_class=$(echo "$window" | jq -r '.wm_class_instance | ascii_downcase')
         id=$(echo "$window" | jq -r '.id')
         if [[ -v WINDOWS_TO_WORKSPACES["$wm_class"] ]]; then
             workspace=${WINDOWS_TO_WORKSPACES["$wm_class"]}

@@ -28,6 +28,7 @@ nix build --impure .#homeConfigurations.falcon.activationPackage   # eval/build 
 - `home/programs/*.nix` are per-program modules; host files choose which to import.
 - `home/files/` holds raw config files and scripts referenced by the modules. Scripts in `home/files/bin` are only installed to `~/.bin` if listed in `home/programs/scripts.nix`.
 - `system/` mirrors files for `/etc` and `/usr` (keyd, systemd units, udev, terminfo). These are **not** managed by home-manager; they are copied manually.
+- Disk unlock (falcon): `luksTpm.enable` (`home/programs/luks-tpm.nix`) installs `luks-tpm install|enroll|recovery|status|revert`, which switches the initrd to dracut and seals the LUKS key to the TPM (PCR 7 + PIN, passphrase as fallback) with sudo. Kernel updates keep working; re-run `luks-tpm enroll` after firmware/Secure Boot db updates.
 - GPU apps (kitty, ghostty, neovide) are wrapped via `home/nixGL.nix`, which uses the `nixGLPrefixIntel` option from `home/options.nix` (set in `falcon.nix`).
 
 ### Theming (falcon only)

@@ -22,11 +22,13 @@ let
   name = "tokyonight";
 
   # ── Plymouth ────────────────────────────────────────────────────────────────
-  # two-step (the module of Ubuntu's bgrt/spinner themes) on a flat bgDark
-  # instead of the firmware logo: a blue arc spinner while booting, and the
-  # LUKS password entry drawn as an island. Images are drawn at 4x and
-  # downsampled for clean edges; plymouth scales them by the display's device
-  # scale itself. Fonts stay Ubuntu: the initramfs hook only ships those.
+  # two-step (the module of Ubuntu's bgrt/spinner themes) over the same
+  # darkened wallpaper as GRUB instead of the firmware logo: a blue arc spinner
+  # while booting, and the LUKS password entry drawn as an island. Images are
+  # drawn at 4x and downsampled for clean edges; plymouth scales them by the
+  # display's device scale itself. Fonts stay Ubuntu: the initramfs hook only
+  # ships those. background.png is rendered from the wallpaper at install time;
+  # the dialog, spinner and title sit off the centre, where its logo is.
   plymouthDir = "/usr/share/plymouth/themes/${name}";
   plymouthConf = ''
     [Plymouth Theme]
@@ -39,11 +41,11 @@ let
     TitleFont=Ubuntu Light 30
     ImageDir=${plymouthDir}
     DialogHorizontalAlignment=.5
-    DialogVerticalAlignment=.5
+    DialogVerticalAlignment=.72
     TitleHorizontalAlignment=.5
-    TitleVerticalAlignment=.382
+    TitleVerticalAlignment=.25
     HorizontalAlignment=.5
-    VerticalAlignment=.7
+    VerticalAlignment=.72
     Transition=none
     TransitionDuration=0.0
     BackgroundStartColor=0x${hex c.bgDark}
@@ -52,6 +54,7 @@ let
     ProgressBarForegroundColor=0x${hex c.blue}
     DialogClearsFirmwareBackground=true
     MessageBelowAnimation=true
+    ScaleBackgroundImage=true
 
     [boot-up]
     UseEndAnimation=false
@@ -108,53 +111,76 @@ let
           magick -size 128x128 xc:none -fill none -strokewidth 10 \
             -stroke '${rgba c.blue 0.2}' -draw 'circle 64,64 64,14' \
             -stroke '${c.blue}' -draw "stroke-linecap round arc 14,14 114,114 $a,$((a + 100))" \
-            -resize 32x32 "$f"
+            -resize 32x32 PNG32:"$f"
           cp "$f" "$(printf 'animation-%04d.png' $((i + 1)))"
         done
 
         # Password entry: an island the size of the stock one (305x34).
-        magick -size 1220x136 xc:none -fill '${c.bg}' \
+        magick -size 1220x136 xc:none -fill '${island.popupFill}' \
           -stroke '${island.border}' -strokewidth ${toString (4 * island.borderWidth)} \
           -draw 'roundrectangle 4,4 1215,131 ${toString (4 * island.radius)},${toString (4 * island.radius)}' \
-          -resize 305x34 entry.png
-        magick -size 40x40 xc:none -fill '${c.fg}' -draw 'circle 20,20 20,4' -resize 10x10 bullet.png
+          -resize 305x34 PNG32:entry.png
+        magick -size 40x40 xc:none -fill '${c.fg}' -draw 'circle 20,20 20,4' -resize 10x10 PNG32:bullet.png
 
-        # Stock glyphs (lock, caps lock, keyboard layout), recoloured.
-        for f in lock capslock keyboard keymap-render; do
-          magick $stock/$f.png -fill '${c.fg}' -colorize 100 $f.png
+        # The stock lock.png is a filled box (Ubuntu's entry is lock + field),
+        # so recolouring it gives a solid square: draw a bare padlock instead,
+        # the stock size (35x34), with the keyhole punched out.
+        magick -size 140x136 xc:none \
+          -fill none -stroke '${c.fg}' -strokewidth 13 -draw 'roundrectangle 44,18 96,90 26,26' \
+          -fill '${c.fg}' -stroke none -draw 'roundrectangle 26,62 114,124 14,14' \
+          \( -size 140x136 xc:none -fill black -draw 'circle 70,86 70,96' -draw 'rectangle 66,90 74,108' \) \
+          -compose DstOut -composite -resize 35x34 PNG32:lock.png
+
+        # The other stock glyphs (caps lock, keyboard layout) are bare shapes:
+        # recolour them. PNG32 so they keep their alpha (the stock ones are
+        # palette images).
+        for f in capslock keyboard keymap-render; do
+          magick $stock/$f.png -channel RGB -fill '${c.fg}' -colorize 100 +channel PNG32:$f.png
         done
       '';
 
   # ── GRUB ────────────────────────────────────────────────────────────────────
-  # The menu as an island over the darkened wallpaper. Ubuntu hides the menu
-  # (GRUB_TIMEOUT_STYLE=hidden, timeout 0), which would leave the theme unseen
-  # outside recovery: the installed grub.d snippet shows it for grubTimeout
-  # seconds instead (it is sourced after /etc/default/grub, so it wins).
-  # Sizes are for the 2880x1800 panel at GRUB_GFXMODE=auto.
+  # The menu as an island over the darkened wallpaper. GRUB's PNG reader only
+  # takes 8-bit RGB(A): ImageMagick picks palette or 16-bit encodings for small
+  # or antialiased images, which GRUB rejects (an error per tile, no fill) or
+  # misreads (garbage corner colours), so every image is forced to PNG24/32.
+  # Ubuntu hides the menu (GRUB_TIMEOUT_STYLE=hidden, timeout 0), which would
+  # leave the theme unseen outside recovery: the installed grub.d snippet shows
+  # it for grubTimeout seconds instead (it is sourced after /etc/default/grub,
+  # so it wins).
+  #
+  # Fonts: with Secure Boot on, Ubuntu's signed GRUB refuses every font file
+  # on disk (kern-efi-sb-Enforce-verification-of-font-files.patch), printing
+  # an error per `loadfont`; only the memdisk's unicode.pf2 loads. So the
+  # theme ships no .pf2 (update-grub would emit a loadfont for each) and is
+  # laid out for Unifont 16 at 1440x900, half the 2880x1800 panel, so the
+  # bitmap font doubles cleanly instead of being tiny. Firmware without that
+  # mode falls back to auto.
   grubTimeout = 2;
   grubDir = "/boot/grub/themes/${name}";
-  grubFont = size: "Inter Variable Regular ${toString size}";
+  grubGfxmode = "1440x900x32,auto";
+  grubFont = "Unifont Regular 16";
   grubConf = ''
     title-text: ""
     desktop-image: "background.png"
     desktop-image-scale-method: "crop"
     desktop-color: "${c.bgDark}"
-    terminal-font: "${grubFont 32}"
+    terminal-font: "${grubFont}"
 
     + boot_menu {
-      left = 30%
-      top = 30%
-      width = 40%
-      height = 40%
+      left = 33%
+      top = 33%
+      width = 34%
+      height = 32%
       menu_pixmap_style = "menu_*.png"
-      item_font = "${grubFont 36}"
+      item_font = "${grubFont}"
       item_color = "${c.fgDark}"
-      selected_item_font = "${grubFont 36}"
+      selected_item_font = "${grubFont}"
       selected_item_color = "${c.fg}"
       selected_item_pixmap_style = "select_*.png"
-      item_height = 72
-      item_padding = 24
-      item_spacing = 8
+      item_height = 28
+      item_padding = 12
+      item_spacing = 12
       icon_width = 0
       icon_height = 0
       scrollbar = false
@@ -166,7 +192,7 @@ let
       top = 75%
       width = 100%
       align = "center"
-      font = "${grubFont 28}"
+      font = "${grubFont}"
       color = "${c.comment}"
       text = "Booting in %d seconds"
     }
@@ -175,10 +201,7 @@ let
   grubTheme =
     pkgs.runCommand "grub-theme-${name}"
       {
-        nativeBuildInputs = [
-          pkgs.grub2
-          pkgs.imagemagick
-        ];
+        nativeBuildInputs = [ pkgs.imagemagick ];
         inherit grubConf;
         passAsFile = [ "grubConf" ];
       }
@@ -186,9 +209,6 @@ let
         d=$out/share/grub/themes/${name}
         mkdir -p $d && cd $d
         cp $grubConfPath theme.txt
-        for s in 28 32 36; do
-          grub-mkfont -s $s -o inter-$s.pf2 ${pkgs.inter}/share/fonts/truetype/InterVariable.ttf 2>/dev/null
-        done
 
         # 9-slice pixmaps (GRUB stretches the edges and centre): a rounded
         # box drawn at 4x, downsampled, then cut into a 3x3 grid of r-sized
@@ -200,13 +220,13 @@ let
             -resize ''${n}x''${n} box.png
           local i=0
           for tile in nw n ne w c e sw s se; do
-            magick box.png -crop "''${r}x''${r}+$(((i % 3) * r))+$(((i / 3) * r))" +repage "$1_$tile.png"
+            magick box.png -crop "''${r}x''${r}+$(((i % 3) * r))+$(((i / 3) * r))" +repage -depth 8 "PNG32:$1_$tile.png"
             i=$((i + 1))
           done
           rm box.png
         }
-        ninepatch menu '${rgba c.bgDark 0.85}' '${island.border}' 24
-        ninepatch select '${rgba c.blue 0.2}' 'none' 16
+        ninepatch menu '${rgba c.bgDark 0.85}' '${island.border}' ${toString island.radius}
+        ninepatch select '${rgba c.blue 0.2}' 'none' 6
       '';
 
   # ── GDM ─────────────────────────────────────────────────────────────────────
@@ -268,9 +288,19 @@ let
       stage=$(mktemp -d)
       trap 'rm -rf "$stage"' EXIT
 
+      # The wallpaper darkened towards bgDark, shared by GRUB and Plymouth so
+      # the menu hands over to the splash without a jump. Half the panel's
+      # 2880x1800: both stretch it, and it keeps the initramfs small.
+      boot_background() { # out
+        magick "$wallpaper" -resize 1440x900^ -gravity center -extent 1440x900 \
+          -fill '${c.bgDark}' -colorize 45% -depth 8 "PNG24:$1"
+      }
+
       plymouth_install() {
+        cp -r --no-preserve=mode ${plymouthTheme}/share/plymouth/themes/${name} "$stage/plymouth"
+        boot_background "$stage/plymouth/background.png"
         sudo rm -rf ${plymouthDir}
-        sudo cp -rT --no-preserve=mode,ownership ${plymouthTheme}/share/plymouth/themes/${name} ${plymouthDir}
+        sudo cp -rT --no-preserve=mode,ownership "$stage/plymouth" ${plymouthDir}
         sudo update-alternatives --install /usr/share/plymouth/themes/default.plymouth default.plymouth \
           ${plymouthDir}/${name}.plymouth 150
         sudo update-alternatives --set default.plymouth ${plymouthDir}/${name}.plymouth
@@ -285,8 +315,7 @@ let
 
       grub_install() {
         cp -r --no-preserve=mode ${grubTheme}/share/grub/themes/${name} "$stage/grub"
-        magick "$wallpaper" -resize 1440x900^ -gravity center -extent 1440x900 \
-          -fill '${c.bgDark}' -colorize 45% "$stage/grub/background.png"
+        boot_background "$stage/grub/background.png"
         # /boot/grub/themes doesn't exist until a theme is installed.
         sudo mkdir -p ${dirOf grubDir}
         sudo rm -rf ${grubDir}
@@ -294,7 +323,7 @@ let
         printf '%s\n' \
           '# dotfiles: system-theme (home/theme/system.nix)' \
           'GRUB_THEME="${grubDir}/theme.txt"' \
-          'GRUB_GFXMODE=auto' \
+          'GRUB_GFXMODE=${grubGfxmode}' \
           'GRUB_TIMEOUT_STYLE=menu' \
           'GRUB_TIMEOUT=${toString grubTimeout}' |
           sudo tee /etc/default/grub.d/99-${name}.cfg >/dev/null
