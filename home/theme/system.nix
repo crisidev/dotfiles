@@ -127,9 +127,11 @@ let
 
   # ── GRUB ────────────────────────────────────────────────────────────────────
   # The menu as an island over the darkened wallpaper. Ubuntu hides the menu
-  # (GRUB_TIMEOUT_STYLE=hidden, timeout 0), so it only shows when Esc is held
-  # at boot; this doesn't change that. Sizes are for the 2880x1800 panel at
-  # GRUB_GFXMODE=auto.
+  # (GRUB_TIMEOUT_STYLE=hidden, timeout 0), which would leave the theme unseen
+  # outside recovery: the installed grub.d snippet shows it for grubTimeout
+  # seconds instead (it is sourced after /etc/default/grub, so it wins).
+  # Sizes are for the 2880x1800 panel at GRUB_GFXMODE=auto.
+  grubTimeout = 2;
   grubDir = "/boot/grub/themes/${name}";
   grubFont = size: "Inter Variable Regular ${toString size}";
   grubConf = ''
@@ -285,12 +287,16 @@ let
         cp -r --no-preserve=mode ${grubTheme}/share/grub/themes/${name} "$stage/grub"
         magick "$wallpaper" -resize 1440x900^ -gravity center -extent 1440x900 \
           -fill '${c.bgDark}' -colorize 45% "$stage/grub/background.png"
+        # /boot/grub/themes doesn't exist until a theme is installed.
+        sudo mkdir -p ${dirOf grubDir}
         sudo rm -rf ${grubDir}
         sudo cp -rT --no-preserve=mode,ownership "$stage/grub" ${grubDir}
         printf '%s\n' \
           '# dotfiles: system-theme (home/theme/system.nix)' \
           'GRUB_THEME="${grubDir}/theme.txt"' \
-          'GRUB_GFXMODE=auto' |
+          'GRUB_GFXMODE=auto' \
+          'GRUB_TIMEOUT_STYLE=menu' \
+          'GRUB_TIMEOUT=${toString grubTimeout}' |
           sudo tee /etc/default/grub.d/99-${name}.cfg >/dev/null
         sudo update-grub
       }

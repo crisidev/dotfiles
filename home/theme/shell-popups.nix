@@ -11,13 +11,11 @@ let
 in
 ''
   /* Popups as islands: every shell menu (panel menus, quick settings, the
-     calendar, dock and extension menus), notification banners, OSDs, the
-     app/window switcher, modal dialogs (polkit, run, end session), IME
-     candidates and dock tooltips. popupFill is opaquer than the bar's:
-     blur-my-shell can't blur behind popups, and text over a busy window needs
-     it. */
+     calendar, dock and extension menus), OSDs, the app/window switcher,
+     modal dialogs (polkit, run, end session), IME candidates and dock
+     tooltips. popupFill is opaquer than the bar's: blur-my-shell can't blur
+     behind popups, and text over a busy window needs it. */
   .popup-menu .popup-menu-content,
-  .notification-banner,
   .osd-window,
   .osd-monitor-label,
   .switcher-list,
@@ -37,6 +35,13 @@ in
     border-radius: ${radius} !important;
   }
 
+  /* Notification banners: island fill and corners but no border; they
+     stack in a corner, and an outline on each one is noise. */
+  .notification-banner {
+    background-color: ${island.popupFill};
+    border: none;
+    border-radius: ${radius};
+  }
   .notification-banner:hover,
   .notification-banner:focus,
   .notification-banner:active {

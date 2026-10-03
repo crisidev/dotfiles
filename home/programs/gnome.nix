@@ -1120,8 +1120,8 @@ in
       network-header-graph-width = 39;
       processor-header-graph-width = 39;
       storage-header-graph-width = 39;
-      # Fill the island's height (its default caps at 32px and sits high).
-      headers-height-override = 43;
+      # ~85% of the island's height (its default caps at 32px and sits high).
+      headers-height-override = 37;
       explicit-zero = true;
       monitors-order = ''["storage","network","memory","sensors","processor","gpu"]'';
       memory-header-bars = false;

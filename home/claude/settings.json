@@ -1,4 +1,11 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(kubectl get *)",
+      "Bash(kubectl describe *)",
+      "Bash(helm list *)"
+    ]
+  },
   "model": "opus[1m]",
   "hooks": {
     "PreToolUse": [
@@ -13,7 +20,6 @@
       }
     ]
   },
-  "diffSidebarOpen": false,
   "statusLine": {
     "type": "command",
     "command": "$HOME/.nix-profile/bin/claude-powerline",
@@ -27,22 +33,8 @@
     "code-simplifier@claude-plugins-official": true,
     "security-guidance@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true,
-    "pyright-lsp@claude-plugins-official": true
-  },
-  "effortLevel": "high",
-  "tui": "default",
-  "theme": "dark",
-  "modelSettings": {
-    "claude-opus-5-5": {
-      "effortLevel": "high"
-    }
-  },
-  "permissions": {
-    "allow": [
-      "Bash(kubectl get *)",
-      "Bash(kubectl describe *)",
-      "Bash(helm list *)"
-    ]
+    "pyright-lsp@claude-plugins-official": true,
+    "cc-plugin-you-should-know@builtin": true
   },
   "extraKnownMarketplaces": {
     "fullstack-dev-skills": {
@@ -52,6 +44,14 @@
       }
     }
   },
+  "effortLevel": "high",
+  "modelSettings": {
+    "claude-opus-5-5": {
+      "effortLevel": "high"
+    }
+  },
+  "tui": "default",
+  "theme": "dark",
   "agentPushNotifEnabled": true,
   "autoMode": {
     "soft_deny": [
@@ -85,5 +85,6 @@
       "**Trusted repo**: this repo (`k3s.crisidev.org`) and its remote `ssh://git.crisidev.org:2022/bigo/k3s.crisidev.org` (origin)",
       "**Org-specific CLIs**: None configured — mrwolf MCP tools and kubernetes MCP tools are used in-session per CLAUDE.md guidance, not standalone CLIs"
     ]
-  }
+  },
+  "diffSidebarOpen": false
 }

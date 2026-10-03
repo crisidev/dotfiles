@@ -136,6 +136,10 @@ in
             icon_theme = theme.icons.name;
           });
       font.normal.family = "Inter";
+      # The point size lives in font.json, written per monitor by
+      # monitor-switch: Vicinae is Qt and ignores GNOME's text scaling, which
+      # that script sets. Imports rank below this file, so no size here.
+      imports = [ "font.json" ];
       close_on_focus_loss = true;
       pop_to_root_on_close = true;
       launcher_window = {

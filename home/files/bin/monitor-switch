@@ -23,10 +23,12 @@ while true; do
         current="home"
         scale="1.00"
         kitty_font="11"
+        vicinae_font="11.5"
     else
         current="builtin"
         scale="1.3"
         kitty_font="14"
+        vicinae_font="15"
     fi
 
     # If "now" override is active or the configuration changed, update the scaling.
@@ -37,6 +39,13 @@ while true; do
         # file; write it fresh (it may not exist yet) and SIGUSR1 → reload.
         echo "font_size ${kitty_font}" >~/.config/kitty/font_size.conf
         pkill -USR1 -x kitty || true
+        # Same for Vicinae: its nix-managed settings.json imports font.json.
+        # It only reads settings at startup, so restart it when the size moves.
+        vicinae_conf=~/.config/vicinae/font.json
+        if ! grep -qs "\"size\": ${vicinae_font}}" "$vicinae_conf"; then
+            echo "{\"font\": {\"normal\": {\"size\": ${vicinae_font}}}}" >"$vicinae_conf"
+            systemctl --user try-restart vicinae.service || true
+        fi
         # Update previous state after the change.
         focus-switch rebalance
         prev="$current"
