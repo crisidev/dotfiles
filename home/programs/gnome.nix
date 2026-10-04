@@ -913,7 +913,6 @@ in
       tile-move-left-global = [ "<Super><Alt>Left" ];
       tile-move-right-global = [ "<Super><Alt>Right" ];
       tile-move-up-global = [ "<Super><Alt>Up" ];
-      activate-launcher = none;
       pop-monitor-down = none;
       pop-monitor-left = none;
       pop-monitor-right = none;
