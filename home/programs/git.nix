@@ -161,7 +161,7 @@
 
       url = {
         "ssh://git@github.com/".insteadOf = "https://github.com/";
-        "ssh://git@code.crisidev.org:2022/".insteadOf = "https://code.crisidev.org/";
+        "ssh://git@git.crisidev.org:2022/".insteadOf = "https://code.crisidev.org/";
       };
 
       merge.mergiraf = {
