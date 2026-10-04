@@ -20,6 +20,7 @@
     ./programs/luks-tpm.nix
     ./programs/mimeapps.nix
     ./programs/claude.nix
+    ./programs/dotnet.nix
     ./programs/node.nix
     ./programs/python.nix
     ./programs/qt.nix

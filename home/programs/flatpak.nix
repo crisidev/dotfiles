@@ -16,6 +16,21 @@ let
   firefoxUserJs = pkgs.writeText "firefox-user.js" ''
     user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
     user_pref("widget.gtk.non-native-titlebar-buttons.enabled", false);
+
+    // Page fonts stay the flatpak runtime's DejaVu rather than the
+    // fontconfig Inter/Source Serif/JetBrains aliases from fonts.nix, which
+    // only the UI should get.
+    ${lib.concatMapStrings
+      (lang: ''
+        user_pref("font.name.serif.${lang}", "DejaVu Serif");
+        user_pref("font.name.sans-serif.${lang}", "DejaVu Sans");
+        user_pref("font.name.monospace.${lang}", "DejaVu Sans Mono");
+      '')
+      [
+        "x-western"
+        "x-unicode"
+      ]
+    }
   '';
 
   firefoxUserChrome = pkgs.writeText "firefox-userChrome.css" ''

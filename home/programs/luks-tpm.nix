@@ -19,6 +19,14 @@
 # Firmware db/dbx updates, shim SBAT revocations or toggling Secure Boot
 # change PCR 7: boot falls back to the passphrase, then `luks-tpm enroll`
 # seals the key again.
+#
+# tries=0: systemd-cryptsetup's default of 3 counts loop iterations, not
+# prompts. The TPM attempt takes one and a wrong passphrase is retried once
+# unasked (the auto-discovered key file is dropped first), so a single typo
+# exhausted it and left the initrd hanging behind Plymouth. A wrong PIN is
+# re-asked on its own loop. rd.luks.options replaces the crypttab options
+# outright, so deleting `tpm2-device=auto,` from it in the GRUB editor boots
+# straight to the passphrase prompt (forgotten PIN).
 {
   config,
   lib,
@@ -30,6 +38,7 @@ let
   device = "/dev/disk/by-uuid/${cfg.uuid}";
   dracutConf = "/etc/dracut.conf.d/90-luks-tpm.conf";
   grubConf = "/etc/default/grub.d/90-luks-tpm.cfg";
+  luksOptions = "tpm2-device=auto,tries=0";
 
   luksTpm = pkgs.writeShellApplication {
     name = "luks-tpm";
@@ -91,13 +100,15 @@ let
         # Single quotes: GRUB_CMDLINE_LINUX expands when grub-mkconfig sources it.
         printf '%s\n' \
           '# dotfiles: luks-tpm (home/programs/luks-tpm.nix)' \
-          "GRUB_CMDLINE_LINUX=\"\$GRUB_CMDLINE_LINUX rd.luks.name=$uuid=$name rd.luks.options=$uuid=tpm2-device=auto\"" |
+          "GRUB_CMDLINE_LINUX=\"\$GRUB_CMDLINE_LINUX rd.luks.name=$uuid=$name rd.luks.options=$uuid=${luksOptions}\"" |
           sudo tee ${grubConf} >/dev/null
 
-        # crypttab too, so the real root agrees with the initrd.
-        if ! grep -qE "^''${name}[[:space:]].*tpm2-device=" /etc/crypttab; then
-          sudo sed -i.bak -E "s/^(''${name}[[:space:]]+[^[:space:]]+[[:space:]]+[^[:space:]]+[[:space:]]+[^[:space:]]+)/\1,tpm2-device=auto/" /etc/crypttab
-        fi
+        # crypttab too, so the real root (and dracut's hostonly copy) agree
+        # with the command line. Strip then append, so reruns update it.
+        sudo sed -i.bak -E "/^''${name}[[:space:]]/ {
+          s/,(tpm2-device|tries)=[^,[:space:]]*//g
+          s/^([^[:space:]]+[[:space:]]+[^[:space:]]+[[:space:]]+[^[:space:]]+[[:space:]]+[^[:space:]]+)/\1,${luksOptions}/
+        }" /etc/crypttab
 
         # Not dracut --regenerate-all: it walks /lib/modules, which keeps
         # module dirs of long-removed kernels, and fails on them. Ubuntu's
@@ -116,6 +127,9 @@ let
         # a PCR 7 change.
         sudo systemd-cryptenroll "$device" --wipe-slot=tpm2 \
           --tpm2-device=auto --tpm2-pcrs=${cfg.pcrs} --tpm2-with-pin=yes
+        echo
+        echo "A wrong PIN is asked again. To skip the TPM for one boot (forgotten PIN),"
+        echo "press e in GRUB and delete 'tpm2-device=auto,' from the linux line."
       }
 
       recovery() {
@@ -126,7 +140,7 @@ let
       revert() {
         sudo systemd-cryptenroll "$device" --wipe-slot=tpm2
         sudo rm -f ${dracutConf} ${grubConf}
-        sudo sed -i -E "/^''${name}[[:space:]]/ s/,tpm2-device=auto//" /etc/crypttab
+        sudo sed -i -E "/^''${name}[[:space:]]/ s/,(tpm2-device|tries)=[^,[:space:]]*//g" /etc/crypttab
         sudo update-initramfs -u -k all
         sudo update-grub
         echo "dracut stays (the passphrase works with it); to go back fully:"
