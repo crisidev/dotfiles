@@ -43,9 +43,6 @@ in `gnome.nix` after installing it, or the next switch will disable it.
 
 Helper scripts in `~/.bin` (sources in `home/files/bin`):
 
-* `focus-switch` — workspace focus with back-and-forth, plus `rebalance` to move
-  apps back to their workspaces. Talks to
-  [mouse-follows-focus](https://github.com/crisidev/mouse-follows-focus) over D-Bus.
 * `monitor-switch` — autostarted watcher that sets the text scaling and the kitty font
   size (`~/.config/kitty/font_size.conf`, deliberately not nix-managed) per monitor.
 * `clean-notifications` — dismiss all notifications.

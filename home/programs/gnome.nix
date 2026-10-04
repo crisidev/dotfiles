@@ -404,6 +404,36 @@ let
         }
       ];
 
+  # Where pop-shell puts each app: (class regex, workspace from 1, monitor,
+  # on open). Classes match case-insensitively against WM class and instance,
+  # so the XWayland and Wayland spellings of Signal both hit. Apps with "on
+  # open" move as soon as they start; the rest (terminals, which open wherever
+  # they are needed) only move on rebalance (Super+Alt+R, monitor changes).
+  # Ferdium lives on the second monitor when one is connected (off the
+  # workspaces, since they are primary-only), and on workspace 5 otherwise;
+  # there pop-shell's workspace 5 key focuses it and toggles back.
+  workspaceRules = map mkTuple [
+    [ "^kitty$" (mkUint32 1) "" false ]
+    [ "firefox" (mkUint32 2) "" true ]
+    [ "spotify" (mkUint32 3) "" true ] # the Flatpak client and spotify_player
+    [ "ferdium" (mkUint32 5) "secondary" true ]
+    [ "^org\\.signal\\.signal$" (mkUint32 6) "" true ]
+  ];
+
+  # pop-shell workspace keys: Escape/F2/F1/F3 → ws1-4, 1-4 → ws5-8; pressing
+  # the current workspace's key goes back to the previous one. Moving windows
+  # stays on mutter's move-to-workspace-N (<Super><Shift> + the same keys).
+  workspaceKeys = [
+    "Escape"
+    "F2"
+    "F1"
+    "F3"
+    "1"
+    "2"
+    "3"
+    "4"
+  ];
+
   # Windows pop-shell must float instead of tiling. Its config.json is also
   # written by pop-shell's own "floating window exceptions" dialog, so it stays
   # a real file: popShellFloat (activation below) merges these rules into it.
@@ -417,6 +447,8 @@ let
   # Settings left behind by extensions that are gone (or never installed); the
   # staleDconf activation below wipes them. github-manager's held a token.
   staleExtensionSettings = [
+    "auto-move-windows"
+    "mouse-follows-focus"
     "ding"
     "tiling-assistant"
     "rounded-window-corners-reborn"
@@ -443,52 +475,10 @@ let
   '';
 
   # ── Custom keybindings (settings-daemon media-keys) ─────────────────────────
-  # Workspace focus goes through ~/.bin/focus-switch (mouse-follows-focus D-Bus
-  # API) rather than mutter's switch-to-workspace-N, for back-and-forth toggling
-  # and the ferdium second-monitor trick. GNOME F-row/number mapping:
-  # Escape/F2/F1/F3 → ws1-4, 1-4 → ws5-8. Order matters only for the dconf path
-  # names (customN), which are generated from the list index.
+  # Workspace switching lives in pop-shell (workspaceKeys, see its dconf block).
+  # Order matters only for the dconf path names (customN), which are generated
+  # from the list index.
   customKeybindings = [
-    {
-      binding = "<Super>Escape";
-      command = "${home}/.bin/focus-switch 0";
-      name = "Switch focus to workspace 1";
-    }
-    {
-      binding = "<Super>F2";
-      command = "${home}/.bin/focus-switch 1";
-      name = "Switch focus to workspace 2";
-    }
-    {
-      binding = "<Super>F1";
-      command = "${home}/.bin/focus-switch 2";
-      name = "Switch focus to workspace 3";
-    }
-    {
-      binding = "<Super>F3";
-      command = "${home}/.bin/focus-switch 3";
-      name = "Switch focus to workspace 4";
-    }
-    {
-      binding = "<Super>1";
-      command = "${home}/.bin/focus-switch 4";
-      name = "Switch focus to workspace 5";
-    }
-    {
-      binding = "<Super>2";
-      command = "${home}/.bin/focus-switch 5";
-      name = "Switch focus to workspace 6";
-    }
-    {
-      binding = "<Super>3";
-      command = "${home}/.bin/focus-switch 6";
-      name = "Switch focus to workspace 7";
-    }
-    {
-      binding = "<Super>4";
-      command = "${home}/.bin/focus-switch 7";
-      name = "Switch focus to workspace 8";
-    }
     {
       binding = "<Ctrl>space";
       command = "nautilus";
@@ -513,16 +503,6 @@ let
       binding = "<Super><Alt>k";
       command = "systemctl suspend";
       name = "Suspend system";
-    }
-    {
-      binding = "<Super><Alt>r";
-      command = "${home}/.bin/focus-switch rebalance force";
-      name = "Rebalance windows";
-    }
-    {
-      binding = "<Super><Alt>1";
-      command = "${home}/.bin/focus-switch 4 force";
-      name = "Force switch focus to workspace 5";
     }
     {
       binding = "<Super>z";
@@ -566,8 +546,8 @@ let
 
   # Start a system-flatpak app at login with the very launcher the dash uses:
   # an out-of-store symlink to its flatpak export, so it tracks the app's own
-  # .desktop across flatpak updates. auto-move-windows then places it on its
-  # workspace (application-list below).
+  # .desktop across flatpak updates. pop-shell's workspace-rules then place it
+  # on its workspace (workspaceRules).
   flatpakAutostart = app: {
     "autostart/${app}.desktop".source =
       config.lib.file.mkOutOfStoreSymlink "/var/lib/flatpak/exports/share/applications/${app}.desktop";
@@ -763,7 +743,6 @@ in
   };
 
   # Fonts (Inter UI etc.) live in fonts.nix.
-  home.packages = [ pkgs.jq ]; # focus-switch
 
   # Qt apps: qt6ct as the platform theme (configured in qt.nix). environment.d
   # is read by the systemd user manager, which the GNOME session inherits.
@@ -771,11 +750,10 @@ in
 
   # ── Session helpers ───────────────────────────────────────────────────────
   # monitor-switch: watch the attached monitor and set text scaling + the kitty
-  # font size accordingly. focus-switch startup: land on ws1 with the overview
-  # hidden once the extensions are up.
+  # font size accordingly. Landing on ws1 at login is pop-shell's
+  # startup-workspace.
   xdg.configFile =
     autostart "monitor-switch" "${home}/.bin/monitor-switch"
-    // autostart "focus-switch" "${home}/.bin/focus-switch startup"
     // flatpakAutostart "org.mozilla.firefox"
     // {
       # X11 launchers from flatpak.nix (they add --ozone-platform=x11).
@@ -821,7 +799,6 @@ in
         "activate-window-by-title@lucaswerkmeister.de"
         "adaptive-brightness@dmy3k.github.io"
         "AlphabeticalAppGrid@stuarthayhurst"
-        "auto-move-windows@gnome-shell-extensions.gcampax.github.com"
         "batterytimepercentagecompact@sagrland.de"
         "bluetooth-quick-connect@bjarosze.gmail.com"
         "blur-my-shell@aunetx"
@@ -831,7 +808,6 @@ in
         "do-not-disturb-while-screen-sharing-or-recording@marcinjahn.com"
         heatBorder.extensionUuid
         "monitor@astraext.github.io"
-        "mouse-follows-focus@crisidev.org"
         "notification-banner-reloaded@marcinjakubowski.github.com"
         "notifications-alert-on-user-menu@hackedbellini.gmail.com"
         "pop-shell@system76.com"
@@ -852,7 +828,7 @@ in
         "ubuntu-appindicators@ubuntu.com"
         "github-manager@mackdk-on-github"
         # Replaced by the Vicinae extension, which serves the same
-        # org.gnome.Shell.Extensions.Windows D-Bus object (focus-switch uses it).
+        # org.gnome.Shell.Extensions.Windows D-Bus object.
         "window-calls@domandoman.xyz"
         "snapd-prompting@canonical.com"
         "snapd-search-provider@canonical.com"
@@ -886,19 +862,16 @@ in
 
     "org/gnome/shell/ubuntu".startup-sound = "";
 
-    # Each app always opens on its workspace: firefox → 2,
-    # spotify → 3, ferdium → 5, signal → 6.
-    "org/gnome/shell/extensions/auto-move-windows".application-list = [
-      "org.ferdium.Ferdium.desktop:5"
-      "org.signal.Signal.desktop:6"
-      "com.spotify.Client.desktop:3"
-      "spotify-player.desktop:3"
-      "org.mozilla.firefox.desktop:2"
-    ];
-
     "org/gnome/shell/extensions/user-theme".name = theme.shell.name;
 
-    "org/gnome/shell/extensions/pop-shell" = {
+    "org/gnome/shell/extensions/pop-shell" =
+      lib.listToAttrs (
+        lib.imap1 (i: key: {
+          name = "pop-switch-workspace-${toString i}";
+          value = [ "<Super>${key}" ];
+        }) workspaceKeys
+      )
+      // {
       tile-by-default = true;
       snap-to-grid = false;
       active-hint = true;
@@ -913,9 +886,18 @@ in
       inactive-hint-color-rgba = rgba c.blue 0.56;
       inactive-hint-color-end-rgba = rgba c.purple 0.48;
       inactive-dim = 0.15;
+      workspace-rules = workspaceRules;
+      workspace-back-and-forth = true;
+      startup-workspace = mkUint32 1;
+      rebalance-windows = [ "<Super><Alt>r" ];
       gap-inner = mkUint32 2;
       gap-outer = mkUint32 2;
-      mouse-cursor-follows-active-window = false;
+      # The pointer follows keyboard-driven focus changes (to the window centre),
+      # and the slow-mouse fix covers sloppy focus missing slow movements.
+      mouse-cursor-follows-active-window = true;
+      mouse-cursor-focus-location = mkUint32 4; # Center, the first time
+      mouse-cursor-warp-to-last-position = true;
+      focus-follows-mouse-fix = true;
       tile-enter = [ "<Super><Alt>Backspace" ];
       tile-accept = [ "Return" ];
       tile-reject = [ "Escape" ];
@@ -946,14 +928,6 @@ in
       tile-swap-left = none;
       tile-swap-right = none;
       tile-swap-up = none;
-    };
-
-    "org/gnome/shell/extensions/mouse-follows-focus" = {
-      bottom-bar-height = 80;
-      enable-debugging = false;
-      minimum-size-trigger = 9;
-      motion-event-timeout = 100;
-      top-bar-height = panelHeight + 2; # keep the old 2px margin over the bar
     };
 
     "org/gnome/shell/extensions/top-bar-organizer" = {
@@ -1243,7 +1217,7 @@ in
       # so the file stays ASCII — raw private-use glyphs get silently dropped by
       # editors/tools. The trailing space stops St clipping the wide md glyphs
       # at their right edge; the leading one balances it so the icon sits
-      # centred in its pill. One per workspace, matching auto-move-windows:
+      # centred in its pill. One per workspace, matching workspaceRules:
       # console, firefox, spotify, webcam, forum (Ferdium), message-lock
       # (Signal), code-braces, dots-grid.
       workspace-names = builtins.fromJSON ''
@@ -1366,7 +1340,12 @@ in
       switch-to-workspace-right = none;
       switch-to-workspace-up = none;
     }
-    // lib.genAttrs (map (n: "switch-to-workspace-${toString n}") (lib.range 1 9)) (_: none);
+    // lib.genAttrs (map (n: "switch-to-workspace-${toString n}") (lib.range 1 9)) (_: none)
+    // {
+      # Workspace 5 itself even when Ferdium sits on the second monitor, where
+      # pop-shell's workspace 5 key focuses Ferdium instead.
+      switch-to-workspace-5 = [ "<Super><Alt>1" ];
+    };
 
     "org/gnome/mutter/keybindings" = {
       switch-monitor = [

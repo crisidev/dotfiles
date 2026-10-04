@@ -4,7 +4,6 @@ let
   # its settings are declarative dconf in programs/gnome.nix now.
   scripts = [
     "ide" # kitty + nvim launcher (Super+Z; the `ide` in ghostty/kitty)
-    "focus-switch" # workspace focus/back-and-forth + rebalance (GNOME keybinds)
     "monitor-switch" # per-monitor text scaling + kitty font size (autostarted)
     "clean-notifications" # dismiss all GNOME notifications (Super+Alt+M)
     "siliconic" # silicon code screenshots (bat TokyoNight theme)

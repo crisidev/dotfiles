@@ -46,8 +46,8 @@ while true; do
             echo "{\"font\": {\"normal\": {\"size\": ${vicinae_font}}}}" >"$vicinae_conf"
             systemctl --user try-restart vicinae.service || true
         fi
+        # Windows follow their pop-shell workspace-rules on monitor changes.
         # Update previous state after the change.
-        focus-switch rebalance
         prev="$current"
         if [ "$override" -eq 1 ]; then
             exit 0
