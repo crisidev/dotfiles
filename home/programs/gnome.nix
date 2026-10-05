@@ -375,11 +375,14 @@ let
   # screen edges. The border is transparent:
   # pop-shell draws its gradient hint over it (panel-hint), and steps aside
   # whenever heatCss colours the border.
+  # The bar's border is 1px heavier than the other islands'. pop-shell's
+  # gradient hint follows it, as it takes its width from the bar's theme node.
+  barBorderWidth = island.borderWidth + 1;
   barCss = ''
     #panel {
-      height: ${toString (panelHeight - 2 * islandInset - 2 * island.borderWidth)}px;
+      height: ${toString (panelHeight - 2 * islandInset - 2 * barBorderWidth)}px;
       background-color: ${island.fill} !important;
-      border: ${toString island.borderWidth}px solid transparent;
+      border: ${toString barBorderWidth}px solid transparent;
       border-radius: ${toString island.radius}px;
       margin: ${toString islandInset}px 8px 0;
       padding: 0 4px;
@@ -487,16 +490,28 @@ let
 
   # Drop the GTK client-side-decoration shadow/margin so pop-shell tiles sit
   # flush with no wallpaper gap. Ported from the old homeshick gtk-3.0/gtk-4.0/gtk.css.
+  # The :backdrop (unfocused) states need their own selectors: Orchis gives
+  # window.csd:backdrop a smaller shadow and a 75ms transition, which out-ranks
+  # plain window.csd. mutter-x11-frames draws X11 title bars (Spotify, Signal,
+  # Ferdium, Element) as window.csd.ssd-frame, and the frame's size follows the
+  # shadow, so every focus change (e.g. switching to their workspace) animated
+  # the frame's size and visibly wobbled the window.
   gtkCsdReset = ''
     window.csd,
+    window.csd:backdrop,
+    window.csd.ssd-frame,
+    window.csd.ssd-frame:backdrop,
     window.solid-csd,
     window.csd decoration,
+    window.csd decoration:backdrop,
     decoration,
+    decoration:backdrop,
     .window-frame,
     .window-frame:backdrop {
         box-shadow: none;
         margin: 0;
         border-radius: 0;
+        transition: none;
     }
   '';
 
@@ -773,9 +788,8 @@ in
     autostart "monitor-switch" "${home}/.bin/monitor-switch"
     // flatpakAutostart "org.mozilla.firefox"
     // {
-      # X11 launchers from flatpak.nix (they add --ozone-platform=x11).
+      # X11 launcher from flatpak.nix (it adds --ozone-platform=x11).
       "autostart/element-desktop.desktop".source = ../files/applications/element-desktop.desktop;
-      "autostart/org.signal.Signal.desktop".source = ../files/applications/org.signal.Signal.desktop;
     };
   # NB: Bitwarden's autostart is NOT managed here — the app writes its own
   # entry through the xdg-desktop-portal Background API (X-XDP-Autostart) when
@@ -839,7 +853,7 @@ in
         "neovim.desktop"
         "org.mozilla.firefox.desktop"
         "org.gnome.Nautilus.desktop"
-        "org.ferdium.Ferdium.desktop"
+        "element-desktop.desktop"
         "org.signal.Signal.desktop"
         "com.spotify.Client.desktop"
         "com.bitwarden.desktop.desktop"

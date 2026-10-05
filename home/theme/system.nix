@@ -245,6 +245,38 @@ let
       background-position: center;
     }
 
+    /* GNOME 50 moved the accessibility menu (and the auth-method menu) into
+       the login dialog's bottom-right button group. Orchis predates that and
+       has no rules for them, so they fell back to the generic .button: a
+       stretched pill with an oversized icon. Match its session button. */
+    .login-dialog-button.a11y-button,
+    .login-dialog-button.login-dialog-auth-menu-button {
+      padding: 0;
+      border-radius: 99px;
+      width: 32px;
+      height: 32px;
+      border: none;
+      background-color: rgba(255, 255, 255, 0.12);
+      color: rgba(255, 255, 255, 0.7);
+    }
+    .login-dialog-button.a11y-button:hover,
+    .login-dialog-button.a11y-button:focus,
+    .login-dialog-button.login-dialog-auth-menu-button:hover,
+    .login-dialog-button.login-dialog-auth-menu-button:focus {
+      color: white;
+    }
+    .login-dialog-button.a11y-button:active,
+    .login-dialog-button.a11y-button:checked,
+    .login-dialog-button.login-dialog-auth-menu-button:active,
+    .login-dialog-button.login-dialog-auth-menu-button:checked {
+      color: white;
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+    .login-dialog-button.a11y-button StIcon,
+    .login-dialog-button.login-dialog-auth-menu-button StIcon {
+      icon-size: 16px;
+    }
+
     ${theme.shell.popupsCss}
   '';
 

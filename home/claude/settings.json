@@ -6,7 +6,6 @@
       "Bash(helm list *)"
     ]
   },
-  "model": "opus[1m]",
   "hooks": {
     "PreToolUse": [
       {
@@ -48,7 +47,7 @@
   "effortLevel": "high",
   "modelSettings": {
     "claude-opus-5-5": {
-      "effortLevel": "medium"
+      "effortLevel": "high"
     }
   },
   "tui": "default",
