@@ -96,6 +96,23 @@ let
 
             // create apps icons'
 
+          # Windows outside the workspaces (the second monitor's, as workspaces
+          # are primary-only, or pinned ones) are grouped behind an "ALL" text
+          # label. Lead the group with a dimmed glyph instead: a display while a
+          # second monitor is connected, a pin when only pinned windows can be
+          # in it. Unplugging re-renders via window-left-monitor.
+          substituteInPlace workspace.js --replace-fail \
+            'this._render_label(index, is_other_monitor)' \
+            'if (is_other_monitor)
+                this.get_child().add_child(new St.Icon({
+                  icon_name: Shell.Global.get().display.get_n_monitors() > 1
+                    ? "video-display-symbolic" : "view-pin-symbolic",
+                  icon_size: Math.round(this._settings.size_app_icon * 0.8 * this._settings.indicator_height_scale),
+                  style: `color: ''${this._settings.workspace_label_text_color}; margin-right: 6px;`,
+                  y_align: Clutter.ActorAlign.CENTER,
+                }))
+              else this._render_label(index, is_other_monitor)'
+
           # Outline the active workspace with a full rounded border instead of the
           # 2px underline, and give inactive ones the same border in transparent
           # so nothing shifts. Inline, because the extension's stylesheet
@@ -271,9 +288,6 @@ let
     workspacesByOpenApps
     clockPadRemover
     heatBorder
-    # Vicinae's companion: clipboard history, window list and launcher
-    # placement on Mutter (vicinae.nix).
-    pkgs.gnomeExtensions.vicinae
   ];
 
   # blur-my-shell pipelines (a{sa{sv}}), as its prefs would write them: the
@@ -356,14 +370,18 @@ let
   # The whole bar as one island, inset like the islands are. #panel's own
   # background needs !important too (Yaru, see above); the boxes stay clear.
   # St's height is the content box: take the inset and the 2px border off so
-  # the bar still occupies panelHeight in total.
+  # the bar keeps its size. There is no margin below it: the space between
+  # the bar and the windows is pop-shell's outer gap, the same as at the
+  # screen edges. The border is transparent:
+  # pop-shell draws its gradient hint over it (panel-hint), and steps aside
+  # whenever heatCss colours the border.
   barCss = ''
     #panel {
       height: ${toString (panelHeight - 2 * islandInset - 2 * island.borderWidth)}px;
       background-color: ${island.fill} !important;
-      border: ${islandBorder};
+      border: ${toString island.borderWidth}px solid transparent;
       border-radius: ${toString island.radius}px;
-      margin: ${toString islandInset}px 8px;
+      margin: ${toString islandInset}px 8px 0;
       padding: 0 4px;
     }
   '';
@@ -434,20 +452,26 @@ let
     "4"
   ];
 
-  # Windows pop-shell must float instead of tiling. Its config.json is also
-  # written by pop-shell's own "floating window exceptions" dialog, so it stays
-  # a real file: popShellFloat (activation below) merges these rules into it.
-  # Classes are case-insensitive regexes; pop-shell reads the file at enable.
-  popShellFloatRules = [
-    # The launcher: Vicinae's extension centres it and keeps it on top, but
-    # only for a floating window.
-    { class = "^vicinae$"; }
+  # Windows pop-shell floats instead of tiling (its float-rules setting):
+  # (class regex, title regex), case-insensitive, "" matching anything.
+  # Floats stay above tiles until another window is clicked, and open
+  # centred at no less than half the screen (float-* settings).
+  popShellFloatRules = map mkTuple [
+    [ "^org\\.gnome\\.Settings$" "" ]
+    [ "^org\\.gnome\\.Nautilus$" "" ]
+    [ "^com\\.mattjakeman\\.ExtensionManager$" "" ]
+    [ "^com\\.github\\.finefindus\\.eyedropper$" "" ]
+    [ "^Bitwarden$" "" ]
+    [ "^software-properties-gtk$" "" ]
+    # The Bitwarden browser extension's popup window.
+    [ "firefox" "^Extension: \\(Bitwarden Password Manager\\)" ]
   ];
 
   # Settings left behind by extensions that are gone (or never installed); the
   # staleDconf activation below wipes them. github-manager's held a token.
   staleExtensionSettings = [
     "auto-move-windows"
+    "vicinae"
     "mouse-follows-focus"
     "ding"
     "tiling-assistant"
@@ -508,16 +532,6 @@ let
       binding = "<Super>z";
       command = "${home}/.bin/ide";
       name = "Open IDE";
-    }
-    {
-      binding = "<Super>space";
-      command = "${config.programs.vicinae.package}/bin/vicinae toggle";
-      name = "Toggle the Vicinae launcher";
-    }
-    {
-      binding = "<Super>v";
-      command = "${config.programs.vicinae.package}/bin/vicinae deeplink vicinae://launch/clipboard/history";
-      name = "Vicinae clipboard history";
     }
   ];
 
@@ -643,7 +657,8 @@ in
       }
       ${heatCss}
 
-      /* No islands (or bar) over the overview, lock and login screens. */
+      /* No islands (or bar) over the overview, lock and login screens.
+         (pop-shell's panel hint hides itself there.) */
       #panel:overview #panelLeft,
       #panel:overview #panelCenter,
       #panel:overview #panelRight,
@@ -770,17 +785,6 @@ in
     '') staleExtensionSettings}
   '';
 
-  home.activation.popShellFloat = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    cfg="$HOME/.config/pop-shell/config.json"
-    run mkdir -p "$(dirname "$cfg")"
-    [ -f "$cfg" ] || echo '{"float": [], "skiptaskbarhidden": [], "log_on_focus": false}' > "$cfg"
-    new=$(${pkgs.jq}/bin/jq --argjson rules ${lib.escapeShellArg (builtins.toJSON popShellFloatRules)} \
-      '.float = ((.float // []) + ($rules - (.float // [])))' "$cfg")
-    if [ "$new" != "$(cat "$cfg")" ]; then
-      run ${pkgs.coreutils}/bin/tee "$cfg" <<<"$new" >/dev/null
-    fi
-  '';
-
   # ── dconf ─────────────────────────────────────────────────────────────────
   # Ported from the old imperative home/.bin/gsettings-update plus the live
   # extension settings. Only the keys listed here are managed; anything else
@@ -816,20 +820,15 @@ in
         "top-bar-organizer@julian.gse.jsts.xyz"
         "ubuntu-dock@ubuntu.com"
         "user-theme@gnome-shell-extensions.gcampax.github.com"
-        pkgs.gnomeExtensions.vicinae.extensionUuid
         "windowIsReady_Remover@nunofarruca@gmail.com"
       ];
       disabled-extensions = [
         "ding@rastersoft.com"
-        "space-bar@luchrioh"
         "tiling-assistant@ubuntu.com"
         "unsafe-mode-menu@linushdot.local"
         "rounded-window-corners@fxgn"
         "ubuntu-appindicators@ubuntu.com"
         "github-manager@mackdk-on-github"
-        # Replaced by the Vicinae extension, which serves the same
-        # org.gnome.Shell.Extensions.Windows D-Bus object.
-        "window-calls@domandoman.xyz"
         "snapd-prompting@canonical.com"
         "snapd-search-provider@canonical.com"
       ];
@@ -846,7 +845,8 @@ in
     };
 
     "org/gnome/shell/keybindings" = {
-      toggle-overview = [ "<Alt>space" ];
+      # The launcher: GNOME's overview search.
+      toggle-overview = [ "<Super>space" ];
       toggle-application-view = [ "<Super><Alt>Space" ];
       toggle-message-tray = [ "<Alt><Super>n" ];
       screenshot = [ "<Shift>Print" ];
@@ -883,10 +883,17 @@ in
       hint-color-rgba = rgb c.blue;
       hint-color-end-rgba = rgb c.magenta;
       inactive-hint = true;
+      panel-hint = true; # the same gradient around the top bar (barCss)
+      # Windows are square (gtkCsdReset), so pop-shell rounds them to sit
+      # concentrically inside their hints.
+      round-windows = true;
+      # Ease tiled windows into place (the fork's; follows enable-animations).
+      animate-tiling = true;
       inactive-hint-color-rgba = rgba c.blue 0.56;
       inactive-hint-color-end-rgba = rgba c.purple 0.48;
       inactive-dim = 0.15;
       workspace-rules = workspaceRules;
+      float-rules = popShellFloatRules;
       workspace-back-and-forth = true;
       startup-workspace = mkUint32 1;
       rebalance-windows = [ "<Super><Alt>r" ];

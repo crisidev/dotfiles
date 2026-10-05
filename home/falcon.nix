@@ -26,7 +26,6 @@
     ./programs/qt.nix
     ./programs/rust.nix
     ./programs/topgrade.nix
-    ./programs/vicinae.nix
     ./programs/xdg-config.nix
     ./programs/zathura.nix
     ./programs/zellij.nix

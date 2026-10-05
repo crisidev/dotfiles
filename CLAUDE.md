@@ -35,7 +35,7 @@ nix build --impure .#homeConfigurations.falcon.activationPackage   # eval/build 
 
 `home/theme/palette.nix` is the single source of Tokyo Night Storm colours. `home/theme/default.nix` builds a recoloured Orchis GTK/Shell theme, Tela icons and wallpaper from it and exposes them as `config.theme` (`config.theme.palette.colors`, etc.). GNOME, Qt, flatpaks, Firefox, k9s, zathura and others read colours from there — never hardcode hex values or theme names in a program module.
 
-`config.theme.island` is the shared "island" look (fill, border, radius) of the top bar, dock, shell popups (`theme.shell.popupsCss`), Vicinae, GDM and Plymouth. `home/theme/system.nix` builds the Plymouth, GRUB and GDM themes; they live outside `$HOME`, so activation doesn't install them — run `system-theme install|revert [plymouth|grub|gdm]` (sudo) after changing them.
+`config.theme.island` is the shared "island" look (fill, border, radius) of the top bar, dock, shell popups (`theme.shell.popupsCss`), GDM and Plymouth. `home/theme/system.nix` builds the Plymouth, GRUB and GDM themes; they live outside `$HOME`, so activation doesn't install them — run `system-theme install|revert [plymouth|grub|gdm]` (sudo) after changing them.
 
 ### GNOME
 
