@@ -34,7 +34,8 @@
     "security-guidance@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true,
     "pyright-lsp@claude-plugins-official": true,
-    "cc-plugin-you-should-know@builtin": true
+    "cc-plugin-you-should-know@builtin": true,
+    "clangd-lsp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "fullstack-dev-skills": {
@@ -59,8 +60,7 @@
       "Bash(kubectl delete:*) in namespace argocd, database, or kube-system — protected-scope manual-sync charts per CLAUDE.md",
       "Bash(./hack/provision.sh) — CLAUDE.md explicitly flags this as reprovisioning all nodes"
     ],
-    "environment": [
-    ]
+    "environment": []
   },
   "diffSidebarOpen": false
 }

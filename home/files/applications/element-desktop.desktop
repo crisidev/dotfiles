@@ -1,0 +1,15 @@
+[Desktop Entry]
+Name=Element
+Comment=Element: the future of secure communication
+# --ozone-platform=x11: keep Element (the Ubuntu .deb) on XWayland, like Signal
+# and Ferdium. Native Wayland Electron draws its own CSD title bar with an
+# invisible resize margin, which leaves a gap to pop-shell's border, and it
+# re-applies its saved maximized state against tiling. On X11 mutter draws the
+# themed server-side title bar and window edge == tile edge.
+Exec=/opt/Element/element-desktop --ozone-platform=x11 %U
+Terminal=false
+Type=Application
+Icon=element-desktop
+StartupWMClass=element-desktop
+MimeType=x-scheme-handler/io.element.desktop;x-scheme-handler/element;
+Categories=Network;InstantMessaging;Chat;

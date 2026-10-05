@@ -97,10 +97,13 @@ in
 
     # Launchers passing --ozone-platform=x11 (Electron ignores the env hint).
     # They live in ~/.local/share/applications, so they shadow the flatpak
-    # exports in the dash; gnome.nix autostarts these same files.
+    # exports in the dash; gnome.nix autostarts some of these same files.
     "applications/org.ferdium.Ferdium.desktop".source =
       ../files/applications/org.ferdium.Ferdium.desktop;
     "applications/org.signal.Signal.desktop".source = ../files/applications/org.signal.Signal.desktop;
+    # Element is the Ubuntu .deb, not a flatpak, but needs the same treatment;
+    # this shadows /usr/share/applications/element-desktop.desktop.
+    "applications/element-desktop.desktop".source = ../files/applications/element-desktop.desktop;
   };
 
   # The sandbox can't follow a symlink into /nix/store, so install user.js and

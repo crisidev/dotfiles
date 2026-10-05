@@ -427,14 +427,16 @@ let
   # so the XWayland and Wayland spellings of Signal both hit. Apps with "on
   # open" move as soon as they start; the rest (terminals, which open wherever
   # they are needed) only move on rebalance (Super+Alt+R, monitor changes).
-  # Ferdium lives on the second monitor when one is connected (off the
-  # workspaces, since they are primary-only), and on workspace 5 otherwise;
-  # there pop-shell's workspace 5 key focuses it and toggles back.
+  # Element (and Ferdium, when started by hand) lives on the second monitor
+  # when one is connected (off the workspaces, since they are primary-only),
+  # and on workspace 5 otherwise; there pop-shell's workspace 5 key focuses it
+  # and toggles back.
   workspaceRules = map mkTuple [
     [ "^kitty$" (mkUint32 1) "" false ]
     [ "firefox" (mkUint32 2) "" true ]
     [ "spotify" (mkUint32 3) "" true ] # the Flatpak client and spotify_player
     [ "ferdium" (mkUint32 5) "secondary" true ]
+    [ "^element" (mkUint32 5) "secondary" true ] # X11 class Element, instance element
     [ "^org\\.signal\\.signal$" (mkUint32 6) "" true ]
   ];
 
@@ -772,7 +774,7 @@ in
     // flatpakAutostart "org.mozilla.firefox"
     // {
       # X11 launchers from flatpak.nix (they add --ozone-platform=x11).
-      "autostart/org.ferdium.Ferdium.desktop".source = ../files/applications/org.ferdium.Ferdium.desktop;
+      "autostart/element-desktop.desktop".source = ../files/applications/element-desktop.desktop;
       "autostart/org.signal.Signal.desktop".source = ../files/applications/org.signal.Signal.desktop;
     };
   # NB: Bitwarden's autostart is NOT managed here — the app writes its own
@@ -1224,7 +1226,7 @@ in
       # editors/tools. The trailing space stops St clipping the wide md glyphs
       # at their right edge; the leading one balances it so the icon sits
       # centred in its pill. One per workspace, matching workspaceRules:
-      # console, firefox, spotify, webcam, forum (Ferdium), message-lock
+      # console, firefox, spotify, webcam, forum (Element), message-lock
       # (Signal), code-braces, dots-grid.
       workspace-names = builtins.fromJSON ''
         [" \udb80\udd8d ", " \udb80\ude39 ", " \udb81\udcc7 ", " \udb81\udda0 ", " \udb80\ude8c ", " \udb83\udfcc ", " \udb80\udd69 ", " \udb85\uddfc "]
@@ -1285,6 +1287,8 @@ in
       sleep-inactive-battery-type = "suspend";
     };
 
+    "org/gnome/desktop/a11y/applications".screen-reader-enabled = false;
+
     # ── Keybindings ─────────────────────────────────────────────────────────
     "org/gnome/settings-daemon/plugins/media-keys" = {
       custom-keybindings = lib.imap0 (i: _: customKeybindingPath i) customKeybindings;
@@ -1294,6 +1298,10 @@ in
       home = [ "<Super>f" ];
       www = [ "<Super>b" ];
       help = none;
+      # GNOME toggles the Orca screen reader on <Super><Alt>s, pop-shell's
+      # stacking key: stacking a window also started Orca, which walks the
+      # focused page element by element (Firefox scrolling on its own).
+      screenreader = none;
       rotate-video-lock-static = none;
     };
 
@@ -1348,8 +1356,8 @@ in
     }
     // lib.genAttrs (map (n: "switch-to-workspace-${toString n}") (lib.range 1 9)) (_: none)
     // {
-      # Workspace 5 itself even when Ferdium sits on the second monitor, where
-      # pop-shell's workspace 5 key focuses Ferdium instead.
+      # Workspace 5 itself even when Element sits on the second monitor, where
+      # pop-shell's workspace 5 key focuses Element instead.
       switch-to-workspace-5 = [ "<Super><Alt>1" ];
     };
 
