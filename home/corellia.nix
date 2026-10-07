@@ -31,6 +31,7 @@
     argocd
     argonaut
     awscli2
+    bitwarden-cli
     btop
     curl
     deadnix
