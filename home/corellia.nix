@@ -52,7 +52,7 @@
     kubectl
     kubectx
     kubernetes-helm
-    mosh
+    #mosh
     neovim
     nix-direnv
     nixfmt
