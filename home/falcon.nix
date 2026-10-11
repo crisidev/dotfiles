@@ -37,7 +37,7 @@
       argonaut
       ansible
       argocd
-      aseprite
+      #aseprite
       awscli2
       brightnessctl
       clang_19

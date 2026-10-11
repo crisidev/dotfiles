@@ -1,7 +1,7 @@
 { pkgs, ... }:
 {
   home.packages = [
-    (pkgs.python312.withPackages (
+    (pkgs.python3.withPackages (
       p: with p; [
         black
         boto3
