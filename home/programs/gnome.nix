@@ -46,7 +46,14 @@ let
   # Astra Monitor, patched: its I/O speed and sensor labels are hardcoded at
   # 0.65em in a "lighter" weight (tiny and faint on the islands bar) and sit
   # tight against the following icon.
-  astraMonitor = pkgs.gnomeExtensions.astra-monitor.overrideAttrs (o: {
+  astraMonitor = pkgs.gnomeExtensions.astra-monitor.overrideAttrs (o: rec {
+    # Ahead of nixpkgs (v60); drop once it catches up.
+    version = "62";
+    src = pkgs.fetchzip {
+      url = "https://extensions.gnome.org/extension-data/monitorastraext.github.io.v${version}.shell-extension.zip";
+      hash = "sha256-uaHkSJu2jHeRxD7lz3ZuuNd8UlN6gUivZ8B23fjFgtc=";
+      stripRoot = false;
+    };
     postPatch = (o.postPatch or "") + ''
       sed -i 's/font-size: 0\.65em;/font-size: 0.9em;/' \
         src/network/networkHeader.js src/storage/storageHeader.js
@@ -1019,6 +1026,12 @@ in
       sigma = 37;
       static-blur = true;
       unblur-in-overview = true;
+    };
+    "org/gnome/shell/extensions/blur-my-shell/popup" = {
+      # Off (on by default since v75): it blurs a square behind notification
+      # banners and menus that pokes out past their rounded island corners,
+      # and popupFill is opaque enough that the blur barely shows anyway.
+      blur = false;
     };
     "org/gnome/shell/extensions/blur-my-shell/screenshot" = {
       blur = true;

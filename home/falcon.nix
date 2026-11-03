@@ -116,6 +116,7 @@
       yamllint
       ydotool
       yq-go
+      xvfb
       zenith
       zoxide
       zstd
