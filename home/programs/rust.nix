@@ -25,7 +25,10 @@
   home.packages = with pkgs; [
     cargo-audit
     cargo-bundle
-    cargo-llvm-cov
+    # Its tests fail because instrumented binaries segfault at exit (rustc's
+    # profiler runtime is on the wrong LLVM). Restore once the rustc fix reaches
+    # unstable: https://github.com/NixOS/nixpkgs/issues/576588
+    #cargo-llvm-cov
     cargo-machete
     cargo-nextest
     cargo-outdated

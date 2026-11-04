@@ -81,7 +81,6 @@
       mash
       #mergiraf
       meson
-      minio-client
       mkdocs
       #mosh
       nerd-fonts.symbols-only
@@ -93,7 +92,13 @@
       nixgl.nixGLIntel
       ninja
       openssl
-      opencode
+      # nixpkgs ships a stale node_modules hash for opencode 2.2.5. Back to plain
+      # `opencode` once https://github.com/NixOS/nixpkgs/pull/582675 is merged.
+      (opencode.overrideAttrs (old: {
+        node_modules = old.node_modules.overrideAttrs {
+          outputHash = "sha256-prx9dX7kUvs/E3zopkaPk5LXh3xJAy5sZeum/W8L7cA=";
+        };
+      }))
       pkg-config
       poppler
       protobuf

@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: CC0-1.0
+# Tuning for the X1 Carbon Gen 10 ov2740 on the libcamera soft ISP (simple IPA).
+# libcamera searches /etc/libcamera/ipa before /usr/share, so this overrides
+# the "uncalibrated.yaml" fallback it otherwise uses for this sensor.
+%YAML 1.1
+---
+version: 1
+algorithms:
+  # ov2740 pedestal is 0x40 at 10 bit; libcamera wants it on a 16-bit scale.
+  # Without it the auto-estimate leaves a grey, milky haze over the image.
+  - BlackLevel:
+      blackLevel: 4096
+  # Grey-world AWB has no knobs and under-corrects on this sensor, leaving a
+  # green/yellow cast, so the CCM below carries a mild fixed R/B bias.
+  - Awb:
+  # Hand-tuned, not calibrated: 1.5x saturation (Rec.601 luma weights) with
+  # the R row scaled 1.15 and B row 1.2. Bigger biases turn daylight blue.
+  - Ccm:
+      ccms:
+        - ct: 6500
+          ccm: [  1.553, -0.339, -0.063,
+                 -0.150,  1.205, -0.055,
+                 -0.180, -0.354,  1.734 ]
+  - Adjust:
+  - Agc:
+...

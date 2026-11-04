@@ -19,12 +19,12 @@ let
 
   claude-powerline = pkgs.buildNpmPackage {
     pname = "claude-powerline";
-    version = "1.32.1";
+    version = "1.32.6";
     src = pkgs.fetchFromGitHub {
       owner = "Owloops";
       repo = "claude-powerline";
-      rev = "v1.32.1";
-      hash = "sha256-PBlqi48219NuicdWDaYVdqBxc3kwcTfk89WMCRM1Gew=";
+      rev = "v1.32.6";
+      hash = "sha256-Ap9v1RUYUppLY2H7A/C7mPS+KxpBnaz/xesojxWCRgU=";
     };
     npmDepsHash = "sha256-D3Z5tb4phZUMPQaXvfYiIWuwaX5YGI8ubgyV7sSJqQk=";
   };
