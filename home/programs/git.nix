@@ -45,30 +45,6 @@
       "**/.claude/settings.local.json"
     ];
 
-    # Global gitattributes (was core.attributesfile → ~/.config/git/gitattributes),
-    # written to ~/.config/git/attributes (git's XDG default).
-    attributes = [
-      "*.java merge=mergiraf"
-      "*.rs merge=mergiraf"
-      "*.go merge=mergiraf"
-      "*.js merge=mergiraf"
-      "*.jsx merge=mergiraf"
-      "*.json merge=mergiraf"
-      "*.yml merge=mergiraf"
-      "*.yaml merge=mergiraf"
-      "*.html merge=mergiraf"
-      "*.htm merge=mergiraf"
-      "*.xhtml merge=mergiraf"
-      "*.xml merge=mergiraf"
-      "*.c merge=mergiraf"
-      "*.h merge=mergiraf"
-      "*.cc merge=mergiraf"
-      "*.cpp merge=mergiraf"
-      "*.hpp merge=mergiraf"
-      "*.cs merge=mergiraf"
-      "*.dart merge=mergiraf"
-    ];
-
     # Freeform gitconfig (replaces the deprecated userName/userEmail/aliases/extraConfig).
     settings = {
       user = {
@@ -162,11 +138,6 @@
       url = {
         "ssh://git@github.com/".insteadOf = "https://github.com/";
         "ssh://git@git.crisidev.org:2022/".insteadOf = "https://code.crisidev.org/";
-      };
-
-      merge.mergiraf = {
-        name = "mergiraf";
-        driver = "mergiraf merge --git %O %A %B -s %S -x %X -y %Y -p %P";
       };
     };
   };

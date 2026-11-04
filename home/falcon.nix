@@ -79,7 +79,6 @@
       lua51Packages.lua
       luarocks
       mash
-      #mergiraf
       meson
       mkdocs
       #mosh
