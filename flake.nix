@@ -38,17 +38,7 @@
       falconPkgs = import nixpkgs {
         inherit system;
         overlays = [
-          # nixGL still takes the `pcre` that nixpkgs removed, and its overlay
-          # has no way to override it. It only runs pcregrep in a build-time
-          # check, so hand it a pcre2 shim. Go back to `nixgl.overlay` once
-          # https://github.com/nix-community/nixGL/pull/227 is merged.
-          (final: _: {
-            nixgl = final.callPackage "${nixgl}/nixGL.nix" {
-              pcre = final.writeShellScriptBin "pcregrep" ''
-                exec ${final.lib.getBin final.pcre2}/bin/pcre2grep "$@"
-              '';
-            };
-          })
+          nixgl.overlay
           inputs.mash.overlays.default
         ];
       };
