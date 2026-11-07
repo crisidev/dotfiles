@@ -829,10 +829,6 @@ in
         active-hint-glow = mkUint32 14;
         active-hint-glow-opacity = 0.6;
         focus-flash = mkUint32 400;
-        # New tiles grow out of their split; closing ones shrink into the
-        # sibling taking their space (the fork's).
-        open-animation = "grow";
-        close-animation = "shrink";
         workspace-rules = workspaceRules;
         float-rules = popShellFloatRules;
         workspace-back-and-forth = true;
