@@ -72,9 +72,10 @@ in
   # data files. home-manager makes them read-only, so edit the sources here
   # rather than via `flatpak override`.
   #
-  # Ferdium, Signal and Spotify are kept on XWayland (see the per-app override
-  # comments): mutter-x11-frames then draws their titlebars with the Orchis
-  # macos buttons and there's no CSD gap to pop-shell's border.
+  # Spotify is kept on XWayland (see its override): mutter-x11-frames then
+  # draws its titlebar with the Orchis macos buttons and there's no CSD gap to
+  # pop-shell's border. Chrome, Ferdium and Signal run on native Wayland; their
+  # CSD frames follow gtkCsdReset via the flatpakGtkCss copy below.
   #
   # Flatpaks read the GTK and icon themes from ~/.themes and ~/.icons (global
   # override). The sandbox can't follow symlinks into /nix/store, so the
@@ -95,7 +96,7 @@ in
     "flatpak/overrides/com.spotify.Client".source = ../files/flatpak/overrides/com.spotify.Client;
     "flatpak/overrides/org.ferdium.Ferdium".source = ../files/flatpak/overrides/org.ferdium.Ferdium;
 
-    # Launchers passing --ozone-platform=x11 (Electron ignores the env hint).
+    # Launchers passing --ozone-platform=wayland (Electron ignores the env hint).
     # They live in ~/.local/share/applications, so they shadow the flatpak
     # exports in the dash; gnome.nix autostarts some of these same files.
     "applications/org.ferdium.Ferdium.desktop".source =
@@ -144,4 +145,28 @@ in
       copyTheme "$d" "$HOME/.icons/$(basename "$d")"
     done
   '';
+
+  # gtk.css carries gtkCsdReset (gnome.nix), but as a /nix/store symlink it's
+  # invisible to flatpaks. Native Wayland Chrome builds its custom frame from
+  # the GTK theme's `decoration` node, so without the reset it drew Orchis's
+  # CSD shadow/margin, a gap between the window and pop-shell's border. Swap
+  # the links for real copies, pointing GTK4's @import of Orchis at the
+  # ~/.themes copy from flatpakThemes. `force` (below) lets the next switch
+  # replace the copies with links again before this re-copies them.
+  home.activation.flatpakGtkCss = lib.hm.dag.entryAfter [ "linkGeneration" "flatpakThemes" ] ''
+    for v in 3 4; do
+      css="$HOME/.config/gtk-$v.0/gtk.css"
+      if [ -L "$css" ]; then
+        src=$(readlink -f "$css")
+        run rm "$css"
+        if [ -z "''${DRY_RUN:-}" ]; then
+          ${pkgs.gnused}/bin/sed \
+            's|file://${theme.gtk.package}/share/themes/|file://'"$HOME"'/.themes/|' \
+            "$src" > "$css"
+        fi
+      fi
+    done
+  '';
+  xdg.configFile."gtk-3.0/gtk.css".force = true;
+  xdg.configFile."gtk-4.0/gtk.css".force = true;
 }

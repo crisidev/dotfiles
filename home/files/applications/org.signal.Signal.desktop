@@ -1,10 +1,9 @@
 [Desktop Entry]
 Name=Signal
 Comment=Private messaging from your desktop
-# --ozone-platform=x11: keep Signal on XWayland (see the flatpak override for
-# why). Current Electron ignores ELECTRON_OZONE_PLATFORM_HINT and would pick
-# Wayland from the environment, crashing without the wayland socket.
-Exec=/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=signal-desktop --file-forwarding org.signal.Signal --ozone-platform=x11 @@u %U @@
+# --ozone-platform=wayland: run Signal natively (see the flatpak override).
+# Current Electron ignores ELECTRON_OZONE_PLATFORM_HINT.
+Exec=/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=signal-desktop --file-forwarding org.signal.Signal --ozone-platform=wayland @@u %U @@
 Terminal=false
 Type=Application
 Icon=org.signal.Signal

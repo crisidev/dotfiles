@@ -420,8 +420,8 @@ let
   # flush with no wallpaper gap. Ported from the old homeshick gtk-3.0/gtk-4.0/gtk.css.
   # The :backdrop (unfocused) states need their own selectors: Orchis gives
   # window.csd:backdrop a smaller shadow and a 75ms transition, which out-ranks
-  # plain window.csd. mutter-x11-frames draws X11 title bars (Spotify, Signal,
-  # Ferdium, Element) as window.csd.ssd-frame, and the frame's size follows the
+  # plain window.csd. mutter-x11-frames draws X11 title bars (Spotify,
+  # Bitwarden) as window.csd.ssd-frame, and the frame's size follows the
   # shadow, so every focus change (e.g. switching to their workspace) animated
   # the frame's size and visibly wobbled the window.
   gtkCsdReset = ''
@@ -440,6 +440,24 @@ let
         margin: 0;
         border-radius: 0;
         transition: none;
+    }
+
+    /* Square titlebars to match, without Orchis's 1px top highlight. Native
+       Wayland Chrome builds its tab strip from this headerbar, and the
+       highlight + rounded top read as a gap under pop-shell's border. User
+       CSS outranks the theme whatever the selector, so restate Orchis's bottom
+       separator, and keep it off where Orchis has only the top highlight. */
+    headerbar,
+    .titlebar {
+        border-radius: 0;
+        box-shadow: inset 0 -1px rgba(255, 255, 255, 0.12);
+    }
+    headerbar.flat,
+    headerbar.default-decoration,
+    .info headerbar,
+    .about headerbar,
+    .titlebar .titlebar {
+        box-shadow: none;
     }
   '';
 
@@ -531,7 +549,7 @@ in
     # CSS into ~/.config/gtk-4.0/gtk.css. That user CSS is the only way to theme
     # libadwaita apps (Nautilus), and it also styles mutter-x11-frames (plain
     # GTK4), which draws the titlebars of X11 windows (Bitwarden, and the
-    # Electron/CEF flatpaks kept on X11 in flatpak.nix) — macos buttons everywhere.
+    # CEF Spotify kept on X11 in flatpak.nix) — macos buttons everywhere.
     # Set explicitly: the implicit default becomes null from stateVersion 26.05.
     gtk4.theme = config.gtk.theme;
     gtk4.extraConfig = {
