@@ -193,98 +193,6 @@ let
     '';
   };
 
-  # Thermal bar: the CPU package temperature (coretemp, the same sensor Astra
-  # Monitor shows) drives a style class on the shell's uiGroup — heat-warm
-  # from heatWarm °C, heat-hot from heatHot °C — and the Shell theme recolours
-  # the bar and dock borders from it (heatCss). A level is only left
-  # heatHysteresis below where it was entered, so a temperature sitting on a
-  # threshold doesn't flicker. hwmon numbers change across boots, so the
-  # sensor is looked up by name.
-  heatWarm = 75;
-  heatHot = 90;
-  heatHysteresis = 3;
-  heatBorder = mkLocalExtension {
-    uuid = "heat-border@crisidev.org";
-    name = "Heat border";
-    description = "Recolour the top bar and dock borders with the CPU temperature.";
-    extension = ''
-      import GLib from 'gi://GLib';
-      import Gio from 'gi://Gio';
-      import * as Main from 'resource:///org/gnome/shell/ui/main.js';
-      import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
-
-      const LEVELS = ["", "heat-warm", "heat-hot"];
-      const THRESHOLDS = [-Infinity, ${toString heatWarm}, ${toString heatHot}];
-      const HYSTERESIS = ${toString heatHysteresis};
-      const INTERVAL_S = 2;
-
-      const read = file => new TextDecoder().decode(file.load_contents(null)[1]).trim();
-
-      function findSensor() {
-          const hwmon = Gio.File.new_for_path('/sys/class/hwmon');
-          const children = hwmon.enumerate_children('standard::name', Gio.FileQueryInfoFlags.NONE, null);
-          for (let info; (info = children.next_file(null));) {
-              const dir = hwmon.get_child(info.get_name());
-              try {
-                  if (read(dir.get_child('name')) === 'coretemp')
-                      return dir.get_child('temp1_input'); // "Package id 0"
-              } catch {}
-          }
-          return null;
-      }
-
-      export default class HeatBorder extends Extension {
-          enable() {
-              this._level = 0;
-              this._sensor = findSensor();
-              if (!this._sensor)
-                  return;
-              this._update();
-              this._timer = GLib.timeout_add_seconds(GLib.PRIORITY_LOW, INTERVAL_S, () => {
-                  this._update();
-                  return GLib.SOURCE_CONTINUE;
-              });
-          }
-
-          disable() {
-              if (this._timer)
-                  GLib.source_remove(this._timer);
-              this._timer = 0;
-              this._setLevel(0);
-              this._sensor = null;
-          }
-
-          _update() {
-              let celsius;
-              try {
-                  celsius = parseInt(read(this._sensor)) / 1000;
-              } catch {
-                  return;
-              }
-              let level = 0;
-              for (let l = LEVELS.length - 1; l > 0; l--) {
-                  if (celsius >= THRESHOLDS[l] - (this._level >= l ? HYSTERESIS : 0)) {
-                      level = l;
-                      break;
-                  }
-              }
-              this._setLevel(level);
-          }
-
-          _setLevel(level) {
-              if (level === this._level)
-                  return;
-              const ui = Main.layoutManager.uiGroup;
-              if (LEVELS[this._level])
-                  ui.remove_style_class_name(LEVELS[this._level]);
-              if (LEVELS[level])
-                  ui.add_style_class_name(LEVELS[level]);
-              this._level = level;
-          }
-      }
-    '';
-  };
-
   # Corner radius of pop-shell's window hints (see its dconf block below).
   activeHintRadius = 12;
 
@@ -294,7 +202,6 @@ let
     astraMonitor
     workspacesByOpenApps
     clockPadRemover
-    heatBorder
   ];
 
   # blur-my-shell pipelines (a{sa{sv}}), as its prefs would write them: the
@@ -380,8 +287,7 @@ let
   # the bar keeps its size. There is no margin below it: the space between
   # the bar and the windows is pop-shell's outer gap, the same as at the
   # screen edges. The border is transparent:
-  # pop-shell draws its gradient hint over it (panel-hint), and steps aside
-  # whenever heatCss colours the border.
+  # pop-shell draws its gradient hint over it (panel-hint).
   # The bar's border is 1px heavier than the other islands'. pop-shell's
   # gradient hint follows it, as it takes its width from the bar's theme node.
   barBorderWidth = island.borderWidth + 1;
@@ -396,42 +302,6 @@ let
     }
   '';
 
-  # Thermal bar (heatBorder): bar/islands and dock borders by CPU heat. One
-  # class above the base rules' specificity, and !important because the dock's
-  # base rule has it.
-  heatSurfaces =
-    (
-      if islands then
-        map (b: "#panel #${b}") [
-          "panelLeft"
-          "panelCenter"
-          "panelRight"
-        ]
-      else
-        [ "#panel" ]
-    )
-    ++ [ "#dashtodockContainer.bottom #dash .dash-background" ];
-  heatCss =
-    lib.concatMapStrings
-      (
-        { level, colour }:
-        ''
-          ${lib.concatMapStringsSep ",\n" (s: ".${level} ${s}") heatSurfaces} {
-            border-color: ${rgba colour 0.85} !important;
-          }
-        ''
-      )
-      [
-        {
-          level = "heat-warm";
-          colour = c.yellow;
-        }
-        {
-          level = "heat-hot";
-          colour = c.red;
-        }
-      ];
-
   # Where pop-shell puts each app: (class regex, workspace from 1, monitor,
   # on open). Classes match case-insensitively against WM class and instance,
   # so the XWayland and Wayland spellings of Signal both hit. Apps with "on
@@ -442,12 +312,42 @@ let
   # and on workspace 5 otherwise; there pop-shell's workspace 5 key focuses it
   # and toggles back.
   workspaceRules = map mkTuple [
-    [ "^kitty$" (mkUint32 1) "" false ]
-    [ "firefox" (mkUint32 2) "" true ]
-    [ "spotify" (mkUint32 3) "" true ] # the Flatpak client and spotify_player
-    [ "ferdium" (mkUint32 5) "secondary" true ]
-    [ "^element" (mkUint32 5) "secondary" true ] # X11 class Element, instance element
-    [ "^org\\.signal\\.signal$" (mkUint32 6) "" true ]
+    [
+      "^kitty$"
+      (mkUint32 1)
+      ""
+      false
+    ]
+    [
+      "firefox"
+      (mkUint32 2)
+      ""
+      true
+    ]
+    [
+      "spotify"
+      (mkUint32 3)
+      ""
+      true
+    ] # the Flatpak client and spotify_player
+    [
+      "ferdium"
+      (mkUint32 5)
+      "secondary"
+      true
+    ]
+    [
+      "^element"
+      (mkUint32 5)
+      "secondary"
+      true
+    ] # X11 class Element, instance element
+    [
+      "^org\\.signal\\.signal$"
+      (mkUint32 6)
+      ""
+      true
+    ]
   ];
 
   # pop-shell workspace keys: Escape/F2/F1/F3 → ws1-4, 1-4 → ws5-8; pressing
@@ -469,14 +369,35 @@ let
   # Floats stay above tiles until another window is clicked, and open
   # centred at no less than half the screen (float-* settings).
   popShellFloatRules = map mkTuple [
-    [ "^org\\.gnome\\.Settings$" "" ]
-    [ "^org\\.gnome\\.Nautilus$" "" ]
-    [ "^com\\.mattjakeman\\.ExtensionManager$" "" ]
-    [ "^com\\.github\\.finefindus\\.eyedropper$" "" ]
-    [ "^Bitwarden$" "" ]
-    [ "^software-properties-gtk$" "" ]
+    [
+      "^org\\.gnome\\.Settings$"
+      ""
+    ]
+    [
+      "^org\\.gnome\\.Nautilus$"
+      ""
+    ]
+    [
+      "^com\\.mattjakeman\\.ExtensionManager$"
+      ""
+    ]
+    [
+      "^com\\.github\\.finefindus\\.eyedropper$"
+      ""
+    ]
+    [
+      "^Bitwarden$"
+      ""
+    ]
+    [
+      "^software-properties-gtk$"
+      ""
+    ]
     # The Bitwarden browser extension's popup window.
-    [ "firefox" "^Extension: \\(Bitwarden Password Manager\\)" ]
+    [
+      "firefox"
+      "^Extension: \\(Bitwarden Password Manager\\)"
+    ]
   ];
 
   # Settings left behind by extensions that are gone (or never installed); the
@@ -669,17 +590,6 @@ in
         margin-bottom: ${toString (dockGap + 2)}px !important;
       }
 
-      /* Thermal bar (heatBorder): the border colour fades over a second. Kept
-         above the overview/lock rules below, whose selectors weigh the same and
-         must win there. */
-      #panel,
-      #panel #panelLeft,
-      #panel #panelCenter,
-      #panel #panelRight,
-      #dashtodockContainer.bottom #dash .dash-background {
-        transition-duration: 1000ms;
-      }
-      ${heatCss}
 
       /* No islands (or bar) over the overview, lock and login screens.
          (pop-shell's panel hint hides itself there.) */
@@ -833,7 +743,6 @@ in
         clockPadRemover.extensionUuid
         "disable-workspace-switcher-overlay@cleardevice"
         "do-not-disturb-while-screen-sharing-or-recording@marcinjahn.com"
-        heatBorder.extensionUuid
         "monitor@astraext.github.io"
         "notification-banner-reloaded@marcinjakubowski.github.com"
         "notifications-alert-on-user-menu@hackedbellini.gmail.com"
@@ -895,69 +804,69 @@ in
         }) workspaceKeys
       )
       // {
-      tile-by-default = true;
-      snap-to-grid = false;
-      active-hint = true;
-      active-hint-border-radius = mkUint32 activeHintRadius;
-      active-hint-border-width = mkUint32 2;
-      # Hints are diagonal gradients from top-left to bottom-right (needs the
-      # crisidev/pop-shell fork). Unfocused windows get a fainter copy and a
-      # light dim overlay.
-      hint-color-rgba = rgb c.blue;
-      hint-color-end-rgba = rgb c.magenta;
-      inactive-hint = true;
-      panel-hint = true; # the same gradient around the top bar (barCss)
-      # Windows are square (gtkCsdReset), so pop-shell rounds them to sit
-      # concentrically inside their hints.
-      round-windows = true;
-      # Ease tiled windows into place (the fork's; follows enable-animations).
-      animate-tiling = true;
-      inactive-hint-color-rgba = rgba c.blue 0.56;
-      inactive-hint-color-end-rgba = rgba c.purple 0.48;
-      inactive-dim = 0.15;
-      workspace-rules = workspaceRules;
-      float-rules = popShellFloatRules;
-      workspace-back-and-forth = true;
-      startup-workspace = mkUint32 1;
-      rebalance-windows = [ "<Super><Alt>r" ];
-      gap-inner = mkUint32 2;
-      gap-outer = mkUint32 2;
-      # The pointer follows keyboard-driven focus changes (to the window centre),
-      # and the slow-mouse fix covers sloppy focus missing slow movements.
-      mouse-cursor-follows-active-window = true;
-      mouse-cursor-focus-location = mkUint32 4; # Center, the first time
-      mouse-cursor-warp-to-last-position = true;
-      focus-follows-mouse-fix = true;
-      tile-enter = [ "<Super><Alt>Backspace" ];
-      tile-accept = [ "Return" ];
-      tile-reject = [ "Escape" ];
-      tile-orientation = [ "<Super><Alt>o" ];
-      toggle-tiling = [ "<Super><Alt>y" ];
-      toggle-stacking-global = [ "<Super><Alt>s" ];
-      toggle-floating = [ "<Super><Alt>Backslash" ];
-      tile-resize-down = [ "Down" ];
-      tile-resize-left = [ "Left" ];
-      tile-resize-right = [ "Right" ];
-      tile-resize-up = [ "Up" ];
-      tile-move-down-global = [ "<Super><Alt>Down" ];
-      tile-move-left-global = [ "<Super><Alt>Left" ];
-      tile-move-right-global = [ "<Super><Alt>Right" ];
-      tile-move-up-global = [ "<Super><Alt>Up" ];
-      pop-monitor-down = none;
-      pop-monitor-left = none;
-      pop-monitor-right = none;
-      pop-monitor-up = none;
-      pop-workspace-down = none;
-      pop-workspace-up = none;
-      tile-move-down = none;
-      tile-move-left = none;
-      tile-move-right = none;
-      tile-move-up = none;
-      tile-swap-down = none;
-      tile-swap-left = none;
-      tile-swap-right = none;
-      tile-swap-up = none;
-    };
+        tile-by-default = true;
+        snap-to-grid = false;
+        active-hint = true;
+        active-hint-border-radius = mkUint32 activeHintRadius;
+        active-hint-border-width = mkUint32 2;
+        # Hints are diagonal gradients from top-left to bottom-right (needs the
+        # crisidev/pop-shell fork). Unfocused windows get a fainter copy and a
+        # light dim overlay.
+        hint-color-rgba = rgb c.blue;
+        hint-color-end-rgba = rgb c.magenta;
+        inactive-hint = true;
+        panel-hint = true; # the same gradient around the top bar (barCss)
+        # Windows are square (gtkCsdReset), so pop-shell rounds them to sit
+        # concentrically inside their hints.
+        round-windows = true;
+        # Ease tiled windows into place (the fork's; follows enable-animations).
+        animate-tiling = true;
+        inactive-hint-color-rgba = rgba c.blue 0.56;
+        inactive-hint-color-end-rgba = rgba c.purple 0.48;
+        inactive-dim = 0.15;
+        workspace-rules = workspaceRules;
+        float-rules = popShellFloatRules;
+        workspace-back-and-forth = true;
+        startup-workspace = mkUint32 1;
+        rebalance-windows = [ "<Super><Alt>r" ];
+        gap-inner = mkUint32 2;
+        gap-outer = mkUint32 2;
+        # The pointer follows keyboard-driven focus changes (to the window centre),
+        # and the slow-mouse fix covers sloppy focus missing slow movements.
+        mouse-cursor-follows-active-window = true;
+        mouse-cursor-focus-location = mkUint32 4; # Center, the first time
+        mouse-cursor-warp-to-last-position = true;
+        focus-follows-mouse-fix = true;
+        tile-enter = [ "<Super><Alt>Backspace" ];
+        tile-accept = [ "Return" ];
+        tile-reject = [ "Escape" ];
+        tile-orientation = [ "<Super><Alt>o" ];
+        toggle-tiling = [ "<Super><Alt>y" ];
+        toggle-stacking-global = [ "<Super><Alt>s" ];
+        toggle-floating = [ "<Super><Alt>Backslash" ];
+        tile-resize-down = [ "Down" ];
+        tile-resize-left = [ "Left" ];
+        tile-resize-right = [ "Right" ];
+        tile-resize-up = [ "Up" ];
+        tile-move-down-global = [ "<Super><Alt>Down" ];
+        tile-move-left-global = [ "<Super><Alt>Left" ];
+        tile-move-right-global = [ "<Super><Alt>Right" ];
+        tile-move-up-global = [ "<Super><Alt>Up" ];
+        pop-monitor-down = none;
+        pop-monitor-left = none;
+        pop-monitor-right = none;
+        pop-monitor-up = none;
+        pop-workspace-down = none;
+        pop-workspace-up = none;
+        tile-move-down = none;
+        tile-move-left = none;
+        tile-move-right = none;
+        tile-move-up = none;
+        tile-swap-down = none;
+        tile-swap-left = none;
+        tile-swap-right = none;
+        tile-swap-up = none;
+      };
 
     "org/gnome/shell/extensions/top-bar-organizer" = {
       left-box-order = [
@@ -1301,7 +1210,9 @@ in
     "org/gnome/desktop/session".idle-delay = mkUint32 300;
     "org/gnome/settings-daemon/plugins/power" = {
       ambient-enabled = false;
-      idle-brightness = 240;
+      # Panel brightness (%) while dimmed for idle, not a timeout: values over
+      # 100 make gsd-power fail its range assertion and skip the dim.
+      idle-brightness = 30;
       idle-dim = true;
       lid-close-ac-action = "suspend";
       lid-close-battery-action = "suspend";
