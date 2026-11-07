@@ -805,7 +805,6 @@ in
       )
       // {
         tile-by-default = true;
-        snap-to-grid = false;
         active-hint = true;
         active-hint-border-radius = mkUint32 activeHintRadius;
         active-hint-border-width = mkUint32 2;
@@ -857,20 +856,6 @@ in
         tile-move-left-global = [ "<Super><Alt>Left" ];
         tile-move-right-global = [ "<Super><Alt>Right" ];
         tile-move-up-global = [ "<Super><Alt>Up" ];
-        pop-monitor-down = none;
-        pop-monitor-left = none;
-        pop-monitor-right = none;
-        pop-monitor-up = none;
-        pop-workspace-down = none;
-        pop-workspace-up = none;
-        tile-move-down = none;
-        tile-move-left = none;
-        tile-move-right = none;
-        tile-move-up = none;
-        tile-swap-down = none;
-        tile-swap-left = none;
-        tile-swap-right = none;
-        tile-swap-up = none;
       };
 
     "org/gnome/shell/extensions/top-bar-organizer" = {
