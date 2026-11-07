@@ -824,6 +824,11 @@ in
         inactive-hint-color-rgba = rgba c.blue 0.56;
         inactive-hint-color-end-rgba = rgba c.purple 0.48;
         inactive-dim = 0.15;
+        # A soft glow in the hint colors around the focused window, which
+        # flashes and fades back when keyboard focus lands on it (the fork's).
+        active-hint-glow = mkUint32 14;
+        active-hint-glow-opacity = 0.6;
+        focus-flash = mkUint32 400;
         workspace-rules = workspaceRules;
         float-rules = popShellFloatRules;
         workspace-back-and-forth = true;
