@@ -752,7 +752,6 @@ in
         "top-bar-organizer@julian.gse.jsts.xyz"
         "ubuntu-dock@ubuntu.com"
         "user-theme@gnome-shell-extensions.gcampax.github.com"
-        "windowIsReady_Remover@nunofarruca@gmail.com"
       ];
       disabled-extensions = [
         "ding@rastersoft.com"
@@ -846,7 +845,6 @@ in
         tile-reject = [ "Escape" ];
         tile-orientation = [ "<Super><Alt>o" ];
         toggle-tiling = [ "<Super><Alt>y" ];
-        toggle-stacking-global = [ "<Super><Alt>s" ];
         toggle-floating = [ "<Super><Alt>Backslash" ];
         tile-resize-down = [ "Down" ];
         tile-resize-left = [ "Left" ];
@@ -1226,9 +1224,9 @@ in
       home = [ "<Super>f" ];
       www = [ "<Super>b" ];
       help = none;
-      # GNOME toggles the Orca screen reader on <Super><Alt>s, pop-shell's
-      # stacking key: stacking a window also started Orca, which walks the
-      # focused page element by element (Firefox scrolling on its own).
+      # GNOME toggles the Orca screen reader on <Super><Alt>s; pressed by
+      # accident, Orca walks the focused page element by element (Firefox
+      # scrolling on its own).
       screenreader = none;
       rotate-video-lock-static = none;
     };
