@@ -26,6 +26,18 @@
         (wallpapers are gitignored, so not flake-visible); skipped if missing.
       '';
     };
+    dotfiles.display = {
+      width = lib.mkOption {
+        type = lib.types.ints.positive;
+        default = 2880;
+        description = "Native width of the built-in panel, sizes the boot and login backgrounds.";
+      };
+      height = lib.mkOption {
+        type = lib.types.ints.positive;
+        default = 1800;
+        description = "Native height of the built-in panel, sizes the boot and login backgrounds.";
+      };
+    };
     dotfiles.repoDir = lib.mkOption {
       type = lib.types.str;
       default = "${lib.removeSuffix "/" config.home.homeDirectory}/.homesick/repos/dotfiles";

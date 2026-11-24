@@ -19,6 +19,14 @@ let
   hex = lib.removePrefix "#";
   wallpaper = lib.removePrefix "file://" theme.wallpaper;
 
+  # Boot images are half the panel (dotfiles.display): GRUB's bitmap font
+  # doubles cleanly at that mode, Plymouth stretches the background anyway and
+  # it keeps the initramfs small. The GDM background keeps the panel's aspect
+  # at 1920 wide (it's blurred, more pixels buy nothing).
+  inherit (config.dotfiles) display;
+  bootSize = "${toString (display.width / 2)}x${toString (display.height / 2)}";
+  gdmSize = "1920x${toString (1920 * display.height / display.width)}";
+
   name = "tokyonight";
 
   # ── Plymouth ────────────────────────────────────────────────────────────────
@@ -153,12 +161,12 @@ let
   # on disk (kern-efi-sb-Enforce-verification-of-font-files.patch), printing
   # an error per `loadfont`; only the memdisk's unicode.pf2 loads. So the
   # theme ships no .pf2 (update-grub would emit a loadfont for each) and is
-  # laid out for Unifont 16 at 1440x900, half the 2880x1800 panel, so the
-  # bitmap font doubles cleanly instead of being tiny. Firmware without that
-  # mode falls back to auto.
+  # laid out for Unifont 16 at half the panel (bootSize), so the bitmap font
+  # doubles cleanly instead of being tiny. Firmware without that mode falls
+  # back to auto.
   grubTimeout = 2;
   grubDir = "/boot/grub/themes/${name}";
-  grubGfxmode = "1440x900x32,auto";
+  grubGfxmode = "${bootSize}x32,auto";
   grubFont = "Unifont Regular 16";
   grubConf = ''
     title-text: ""
@@ -296,6 +304,7 @@ let
 
   gdmResource = "/usr/share/gnome-shell/theme/${name}/gnome-shell-theme.gresource";
   gdmStock = "/usr/share/gnome-shell/gnome-shell-theme.gresource";
+  gdmHome = "/var/lib/gdm3";
 
   systemTheme = pkgs.writeShellApplication {
     name = "system-theme";
@@ -321,10 +330,9 @@ let
       trap 'rm -rf "$stage"' EXIT
 
       # The wallpaper darkened towards bgDark, shared by GRUB and Plymouth so
-      # the menu hands over to the splash without a jump. Half the panel's
-      # 2880x1800: both stretch it, and it keeps the initramfs small.
+      # the menu hands over to the splash without a jump.
       boot_background() { # out
-        magick "$wallpaper" -resize 1440x900^ -gravity center -extent 1440x900 \
+        magick "$wallpaper" -resize ${bootSize}^ -gravity center -extent ${bootSize} \
           -fill '${c.bgDark}' -colorize 45% -depth 8 "PNG24:$1"
       }
 
@@ -376,7 +384,7 @@ let
           gresource extract ${gdmStock} "$f" > "$res/''${f#/org/gnome/shell/theme/}"
         done
         cp -r --no-preserve=mode ${gdmTheme}/share/gnome-shell/theme/${name}/. "$res/"
-        magick "$wallpaper" -resize 1920x1200^ -gravity center -extent 1920x1200 \
+        magick "$wallpaper" -resize ${gdmSize}^ -gravity center -extent ${gdmSize} \
           -blur 0x24 -fill '${c.bgDark}' -colorize 40% -quality 90 "$res/login-background.jpg"
         {
           echo '<?xml version="1.0" encoding="UTF-8"?>'
@@ -389,12 +397,19 @@ let
         sudo update-alternatives --install /usr/share/gnome-shell/gdm-theme.gresource gdm-theme.gresource \
           ${gdmResource} 15
         sudo update-alternatives --set gdm-theme.gresource ${gdmResource}
+        # The greeter has its own mutter config: without the session's
+        # monitors.xml it picks its own modes and primary, so the login screen
+        # lands on a different monitor (and resolution) than the desktop.
+        if [ -f "$HOME/.config/monitors.xml" ]; then
+          sudo install -d -o gdm -g gdm -m 755 ${gdmHome}/.config
+          sudo install -o gdm -g gdm -m 644 "$HOME/.config/monitors.xml" ${gdmHome}/.config/monitors.xml
+        fi
         echo "gdm: takes effect at the next login screen"
       }
       gdm_revert() {
         sudo update-alternatives --set gdm-theme.gresource ${gdmStock}
         sudo update-alternatives --remove gdm-theme.gresource ${gdmResource} || true
-        sudo rm -rf "$(dirname ${gdmResource})"
+        sudo rm -rf "$(dirname ${gdmResource})" ${gdmHome}/.config/monitors.xml
       }
 
       case $action in
