@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 {
   # Git — ported 1:1 from the old homesick home/.config/git/{config,gitattributes,
   # gitignore}. Uses the current programs.git schema (settings = freeform gitconfig;
@@ -48,10 +48,8 @@
     # Freeform gitconfig (replaces the deprecated userName/userEmail/aliases/extraConfig).
     settings = {
       user = {
-        name = "Matteo Bigoi";
-        email = "bigo@crisidev.org";
-        signingKey = "099F4F3AA10B27C97B746F03AEFBBD3BE8C66E4A";
-        signingEmail = "bigo@crisidev.org";
+        inherit (config.identity) name email signingKey;
+        signingEmail = config.identity.email;
       };
 
       commit.gpgSign = true;

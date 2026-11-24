@@ -74,7 +74,7 @@ in
   #
   # Spotify is kept on XWayland (see its override): mutter-x11-frames then
   # draws its titlebar with the Orchis macos buttons and there's no CSD gap to
-  # pop-shell's border. Chrome, Ferdium and Signal run on native Wayland; their
+  # pop-shell's border. Chrome and Signal run on native Wayland; their
   # CSD frames follow gtkCsdReset via the flatpakGtkCss copy below.
   #
   # Flatpaks read the GTK and icon themes from ~/.themes and ~/.icons (global
@@ -94,13 +94,10 @@ in
     '';
     "flatpak/overrides/org.signal.Signal".source = ../files/flatpak/overrides/org.signal.Signal;
     "flatpak/overrides/com.spotify.Client".source = ../files/flatpak/overrides/com.spotify.Client;
-    "flatpak/overrides/org.ferdium.Ferdium".source = ../files/flatpak/overrides/org.ferdium.Ferdium;
 
     # Launchers passing --ozone-platform=wayland (Electron ignores the env hint).
     # They live in ~/.local/share/applications, so they shadow the flatpak
     # exports in the dash; gnome.nix autostarts some of these same files.
-    "applications/org.ferdium.Ferdium.desktop".source =
-      ../files/applications/org.ferdium.Ferdium.desktop;
     "applications/org.signal.Signal.desktop".source = ../files/applications/org.signal.Signal.desktop;
     # Element is the Ubuntu .deb, not a flatpak, but needs the same treatment;
     # this shadows /usr/share/applications/element-desktop.desktop.

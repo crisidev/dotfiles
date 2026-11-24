@@ -2,7 +2,7 @@
 Name=Element
 Comment=Element: the future of secure communication
 # --ozone-platform=wayland: run Element (the Ubuntu .deb) natively, like
-# Signal and Ferdium. Its Electron CSD frame is built from the GTK theme, and
+# Signal. Its Electron CSD frame is built from the GTK theme, and
 # gtkCsdReset (gnome.nix) squares it so it sits flush in pop-shell's border.
 Exec=/opt/Element/element-desktop --ozone-platform=wayland %U
 Terminal=false

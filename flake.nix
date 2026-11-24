@@ -61,6 +61,16 @@
         scarif = mkServer [ ./home/scarif.nix ];
       };
 
+      # Reusable from other flakes (e.g. a private work config) without them
+      # living in this repo: import a module and set `identity`/`dotfiles.repoDir`
+      # on top. They expect nixgl's overlay in pkgs (see `overlays.default`).
+      homeModules = {
+        common = ./home/common.nix;
+        workstation = ./home/profiles/workstation.nix;
+        luks-tpm = ./home/programs/luks-tpm.nix;
+      };
+      overlays.default = nixgl.overlay;
+
       formatter.${system} = pkgs.nixfmt;
     };
 }

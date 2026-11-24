@@ -6,35 +6,16 @@
       "Bash(helm list *)"
     ]
   },
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "WebFetch",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"WebFetch is disabled. Use curl via the Bash tool instead (e.g. curl -sSL <url>).\"}}'"
-          }
-        ]
-      }
-    ]
-  },
   "statusLine": {
     "type": "command",
     "command": "$HOME/.nix-profile/bin/claude-powerline",
     "refreshInterval": 10
   },
   "enabledPlugins": {
-    "lua-lsp@claude-plugins-official": true,
-    "frontend-design@claude-plugins-official": true,
-    "skill-creator@claude-plugins-official": true,
     "rust-analyzer-lsp@claude-plugins-official": true,
     "code-simplifier@claude-plugins-official": true,
     "security-guidance@claude-plugins-official": true,
-    "typescript-lsp@claude-plugins-official": true,
-    "pyright-lsp@claude-plugins-official": true,
     "cc-plugin-you-should-know@builtin": true,
-    "clangd-lsp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "fullstack-dev-skills": {

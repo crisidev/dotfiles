@@ -98,7 +98,7 @@
       nix-shell = "nix-shell --run zsh";
       nix = "noglob nix";
       nom = "noglob nom";
-      home-manager = "$HOME/.homesick/repos/dotfiles/home-manager";
+      home-manager = "${config.dotfiles.repoDir}/home-manager";
     };
 
     initContent = lib.mkMerge [

@@ -1,7 +1,7 @@
-{ lib, config, ... }:
+{ config, ... }:
 let
   claudeDir = ../claude;
-  repoClaudeDir = "${lib.removeSuffix "/" config.home.homeDirectory}/.homesick/repos/dotfiles/home/claude";
+  repoClaudeDir = "${config.dotfiles.repoDir}/home/claude";
   inherit (config.programs.claude-code) configDir;
 in
 {
@@ -16,6 +16,11 @@ in
 
   home.file = {
     "${configDir}/CLAUDE.md".force = true;
+    # Imported from CLAUDE.md (@STYLE.md), so it has to sit next to it.
+    "${configDir}/STYLE.md" = {
+      source = claudeDir + "/STYLE.md";
+      force = true;
+    };
     # Claude Code writes to settings.json (/model, /config, plugins, permission
     # grants), so link it to the repo copy instead of a read-only store path.
     "${configDir}/settings.json" = {

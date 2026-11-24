@@ -16,6 +16,7 @@ let
     ;
 
   home = "/home/${config.home.username}";
+  cfg = config.gnome;
 
   # Typed empty list — dconf needs `@as []` to clear a keybinding, and a bare
   # Nix `[ ]` carries no element type for the gvariant encoder.
@@ -91,47 +92,59 @@ let
           hash = "sha256-Dp8+obZr+lf3/QbuIFVbKloiKf8nvGVUNd9r7aSJMHE=";
           stripRoot = false;
         };
-        postPatch = (o.postPatch or "") + ''
-          substituteInPlace workspace.js --replace-fail \
-            '    // create apps icons' \
-            '    if (windows.length === 0 && !is_other_monitor)
-              this.get_child().add_child(new St.Icon({
-                icon_name: "${emptyWorkspaceIcon}",
-                icon_size: Math.round(this._settings.size_app_icon * this._settings.indicator_height_scale),
-                y_align: Clutter.ActorAlign.CENTER,
-              }))
-
-            // create apps icons'
-
-          # Windows outside the workspaces (the second monitor's, as workspaces
-          # are primary-only, or pinned ones) are grouped behind an "ALL" text
-          # label. Lead the group with a dimmed glyph instead: a display while a
-          # second monitor is connected, a pin when only pinned windows can be
-          # in it. Unplugging re-renders via window-left-monitor.
-          substituteInPlace workspace.js --replace-fail \
-            'this._render_label(index, is_other_monitor)' \
-            'if (is_other_monitor)
+        postPatch =
+          (o.postPatch or "")
+          + ''
+            substituteInPlace workspace.js --replace-fail \
+              '    // create apps icons' \
+              '    if (windows.length === 0 && !is_other_monitor)
                 this.get_child().add_child(new St.Icon({
-                  icon_name: Shell.Global.get().display.get_n_monitors() > 1
-                    ? "video-display-symbolic" : "view-pin-symbolic",
-                  icon_size: Math.round(this._settings.size_app_icon * 0.8 * this._settings.indicator_height_scale),
-                  style: `color: ''${this._settings.workspace_label_text_color}; margin-right: 6px;`,
+                  icon_name: "${emptyWorkspaceIcon}",
+                  icon_size: Math.round(this._settings.size_app_icon * this._settings.indicator_height_scale),
                   y_align: Clutter.ActorAlign.CENTER,
                 }))
-              else this._render_label(index, is_other_monitor)'
 
-          # Outline the active workspace with a full rounded border instead of the
-          # 2px underline, and give inactive ones the same border in transparent
-          # so nothing shifts. Inline, because the extension's stylesheet
-          # ("border: none", 5px radius) outranks the Shell theme.
-          substituteInPlace extension.js \
-            --replace-fail \
-              '`border-bottom-width: ''${indicator_height}px; margin-bottom: 0px;`' \
-              '`border-width: ''${indicator_height}px; border-radius: 10px; padding: 2px 5px; margin-bottom: 0px;`' \
-            --replace-fail \
-              ': `margin-bottom: ''${indicator_height}px;`' \
-              ': `border-width: ''${indicator_height}px; border-color: transparent; border-radius: 10px; padding: 2px 5px; margin-bottom: 0px;`'
-        '';
+              // create apps icons'
+
+            # Windows outside the workspaces (the second monitor's, as workspaces
+            # are primary-only, or pinned ones) are grouped behind an "ALL" text
+            # label. Lead the group with a dimmed glyph instead: a display while a
+            # second monitor is connected, a pin when only pinned windows can be
+            # in it. Unplugging re-renders via window-left-monitor.
+            substituteInPlace workspace.js --replace-fail \
+              'this._render_label(index, is_other_monitor)' \
+              'if (is_other_monitor)
+                  this.get_child().add_child(new St.Icon({
+                    icon_name: Shell.Global.get().display.get_n_monitors() > 1
+                      ? "video-display-symbolic" : "view-pin-symbolic",
+                    icon_size: Math.round(this._settings.size_app_icon * 0.8 * this._settings.indicator_height_scale),
+                    style: `color: ''${this._settings.workspace_label_text_color}; margin-right: 6px;`,
+                    y_align: Clutter.ActorAlign.CENTER,
+                  }))
+                else this._render_label(index, is_other_monitor)'
+
+            # Outline the active workspace with a full rounded border instead of the
+            # 2px underline, and give inactive ones the same border in transparent
+            # so nothing shifts. Inline, because the extension's stylesheet
+            # ("border: none", 5px radius) outranks the Shell theme.
+            substituteInPlace extension.js \
+              --replace-fail \
+                '`border-bottom-width: ''${indicator_height}px; margin-bottom: 0px;`' \
+                '`border-width: ''${indicator_height}px; border-radius: 10px; padding: 2px 5px; margin-bottom: 0px;`' \
+              --replace-fail \
+                ': `margin-bottom: ''${indicator_height}px;`' \
+                ': `border-width: ''${indicator_height}px; border-color: transparent; border-radius: 10px; padding: 2px 5px; margin-bottom: 0px;`'
+          ''
+          + lib.optionalString (cfg.workspaceIndicator.otherMonitor == "inline") ''
+            # Inline: the off-workspace windows render as a plain pill (app
+            # icons only, no glyph), moved after the workspaces.
+            substituteInPlace workspace.js --replace-fail \
+              'if (this._settings.indicator_show_indexes || is_other_monitor) {' \
+              'if (this._settings.indicator_show_indexes && !is_other_monitor) {'
+            substituteInPlace extension.js --replace-fail \
+              'this._container.add_child(workspace)' \
+              'this._container.add_child(workspace); if (other_monitor) this._container.set_child_above_sibling(other_monitor, null)'
+          '';
       });
 
   # Single-file extensions written here (no prefs, no schema), linked into
@@ -193,6 +206,49 @@ let
     '';
   };
 
+  # crisidev/pop-shell fork (gradient hints, workspace rules, focus glow…),
+  # built with nixpkgs' recipe. Upstream's patches target pop-os/shell and
+  # are already folded into the fork.
+  popShell = pkgs.gnomeExtensions.pop-shell.overrideAttrs (_: {
+    # Testing a local checkout: point src at it, e.g.
+    #   src = builtins.path { path = /home/<user>/.config/pop-shell; name = "pop-shell"; };
+    # (needs --impure, which ./home-manager already passes).
+    version = "1.2.0-crisidev-2026-11-20";
+    src = pkgs.fetchFromGitHub {
+      owner = "crisidev";
+      repo = "pop-shell";
+      rev = "573018f61997a0442d397fc2682e872404acf22d";
+      hash = "sha256-tIwt8Jv5QDMSAuv9UMJN4NWhGJbNOhE7W80xAHHY8dk=";
+    };
+    patches = [ ];
+    # nixpkgs chmods the launcher's scripts; the fork dropped the launcher.
+    preFixup = "";
+  });
+
+  # The extensions falcon installs by hand, for machines where nix should
+  # install them too (gnome.nixExtensions.enable).
+  managedExtensions = with pkgs.gnomeExtensions; [
+    activate-window-by-title
+    adaptive-brightness
+    alphabetical-app-grid
+    battery-time-percentage-compact
+    bluetooth-quick-connect
+    blur-my-shell
+    caffeine
+    disable-workspace-switcher-overlay
+    do-not-disturb-while-screen-sharing-or-recording
+    # v17 stops at GNOME 49 and has no newer release; claim 50 so it loads.
+    (notification-banner-reloaded.overrideAttrs (o: {
+      postPatch = (o.postPatch or "") + ''
+        ${pkgs.jq}/bin/jq '."shell-version" += ["50"]' metadata.json > m && mv m metadata.json
+      '';
+    }))
+    notifications-alert-on-user-menu
+    popShell
+    top-bar-organizer
+    user-themes
+  ];
+
   # Corner radius of pop-shell's window hints (see its dconf block below).
   activeHintRadius = 12;
 
@@ -202,7 +258,11 @@ let
     astraMonitor
     workspacesByOpenApps
     clockPadRemover
-  ];
+  ]
+  ++ lib.optionals config.gnome.nixExtensions.enable (
+    managedExtensions
+    ++ lib.optional config.gnome.tailscale.enable pkgs.gnomeExtensions.tailscale-status
+  );
 
   # blur-my-shell pipelines (a{sa{sv}}), as its prefs would write them: the
   # stock gaussian blur followed by a translucent Tokyo Night tint, so the
@@ -307,48 +367,45 @@ let
   # so the XWayland and Wayland spellings of Signal both hit. Apps with "on
   # open" move as soon as they start; the rest (terminals, which open wherever
   # they are needed) only move on rebalance (Super+Alt+R, monitor changes).
-  # Element (and Ferdium, when started by hand) lives on the second monitor
+  # Element lives on the second monitor
   # when one is connected (off the workspaces, since they are primary-only),
   # and on workspace 5 otherwise; there pop-shell's workspace 5 key focuses it
   # and toggles back.
-  workspaceRules = map mkTuple [
-    [
-      "^kitty$"
-      (mkUint32 1)
-      ""
-      false
+  workspaceRules = map mkTuple (
+    cfg.popShell.extraWorkspaceRules
+    ++ [
+      [
+        "^kitty$"
+        (mkUint32 1)
+        ""
+        false
+      ]
+      [
+        "firefox"
+        (mkUint32 2)
+        ""
+        true
+      ]
+      [
+        "spotify"
+        (mkUint32 7)
+        ""
+        true
+      ] # the Flatpak client and spotify_player
+      [
+        "^element"
+        (mkUint32 5)
+        "secondary"
+        true
+      ] # X11 class Element, instance element
+      [
+        "^org\\.signal\\.signal$"
+        (mkUint32 6)
+        ""
+        true
+      ]
     ]
-    [
-      "firefox"
-      (mkUint32 2)
-      ""
-      true
-    ]
-    [
-      "spotify"
-      (mkUint32 3)
-      ""
-      true
-    ] # the Flatpak client and spotify_player
-    [
-      "ferdium"
-      (mkUint32 5)
-      "secondary"
-      true
-    ]
-    [
-      "^element"
-      (mkUint32 5)
-      "secondary"
-      true
-    ] # X11 class Element, instance element
-    [
-      "^org\\.signal\\.signal$"
-      (mkUint32 6)
-      ""
-      true
-    ]
-  ];
+  );
 
   # pop-shell workspace keys: Escape/F2/F1/F3 → ws1-4, 1-4 → ws5-8; pressing
   # the current workspace's key goes back to the previous one. Moving windows
@@ -368,37 +425,40 @@ let
   # (class regex, title regex), case-insensitive, "" matching anything.
   # Floats stay above tiles until another window is clicked, and open
   # centred at no less than half the screen (float-* settings).
-  popShellFloatRules = map mkTuple [
-    [
-      "^org\\.gnome\\.Settings$"
-      ""
+  popShellFloatRules = map mkTuple (
+    cfg.popShell.extraFloatRules
+    ++ [
+      [
+        "^org\\.gnome\\.Settings$"
+        ""
+      ]
+      [
+        "^org\\.gnome\\.Nautilus$"
+        ""
+      ]
+      [
+        "^com\\.mattjakeman\\.ExtensionManager$"
+        ""
+      ]
+      [
+        "^com\\.github\\.finefindus\\.eyedropper$"
+        ""
+      ]
+      [
+        "^Bitwarden$"
+        ""
+      ]
+      [
+        "^software-properties-gtk$"
+        ""
+      ]
+      # The Bitwarden browser extension's popup window.
+      [
+        "firefox"
+        "^Extension: \\(Bitwarden Password Manager\\)"
+      ]
     ]
-    [
-      "^org\\.gnome\\.Nautilus$"
-      ""
-    ]
-    [
-      "^com\\.mattjakeman\\.ExtensionManager$"
-      ""
-    ]
-    [
-      "^com\\.github\\.finefindus\\.eyedropper$"
-      ""
-    ]
-    [
-      "^Bitwarden$"
-      ""
-    ]
-    [
-      "^software-properties-gtk$"
-      ""
-    ]
-    # The Bitwarden browser extension's popup window.
-    [
-      "firefox"
-      "^Extension: \\(Bitwarden Password Manager\\)"
-    ]
-  ];
+  );
 
   # Settings left behind by extensions that are gone (or never installed); the
   # staleDconf activation below wipes them. github-manager's held a token.
@@ -531,793 +591,893 @@ let
   };
 in
 {
-  # ── GTK theme ─────────────────────────────────────────────────────────────
-  gtk = {
-    enable = true;
-    theme = { inherit (theme.gtk) name package; };
-    iconTheme = { inherit (theme.icons) name package; };
-    cursorTheme = { inherit (theme.cursor) name package size; };
-    font = {
-      name = "Inter";
-      size = 11;
-    };
-    gtk3.extraConfig = {
-      gtk-application-prefer-dark-theme = true;
-    };
-    gtk3.extraCss = gtkCsdReset;
-    # gtk4.theme = gtk.theme makes home-manager @import Orchis's gtk-4.0
-    # CSS into ~/.config/gtk-4.0/gtk.css. That user CSS is the only way to theme
-    # libadwaita apps (Nautilus), and it also styles mutter-x11-frames (plain
-    # GTK4), which draws the titlebars of X11 windows (Bitwarden, and the
-    # CEF Spotify kept on X11 in flatpak.nix) — macos buttons everywhere.
-    # Set explicitly: the implicit default becomes null from stateVersion 26.05.
-    gtk4.theme = config.gtk.theme;
-    gtk4.extraConfig = {
-      gtk-application-prefer-dark-theme = true;
-    };
-    gtk4.extraCss = gtkCsdReset;
-  };
-
-  # The Shell theme (an @import of Orchis plus the overrides below) and the
-  # nix-built extensions.
-  xdg.dataFile = {
-    "themes/${theme.shell.name}/gnome-shell/gnome-shell.css".text = ''
-      @import url("file://${theme.gtk.package}/share/themes/${theme.gtk.name}/gnome-shell/gnome-shell.css");
-
-      /* The bar itself is invisible; its three boxes are the islands.
-         !important: Ubuntu's session stacks Yaru under the user theme, and Yaru
-         paints #panel #131313 !important. */
-      #panel {
-        height: ${toString panelHeight}px;
-        background-color: transparent !important;
-        margin: 0;
-        border-radius: 0;
-      }
-      #panel .panel-corner {
-        -panel-corner-opacity: 0;
-      }
-
-      ${if islands then islandsCss else barCss}
-
-      /* The dock as one more island: a floating, centred bar (extend-height
-         off in dconf) with the same dimmed fill, border and corners as the top
-         bar. !important beats Yaru's and ubuntu-dock's own dock styles. dash-to-dock's own
-         custom background is off (dconf below): it writes background and border
-         colours inline, which would beat this. */
-      #dashtodockContainer.bottom #dash .dash-background,
-      #dashtodockContainer.bottom.extended #dash .dash-background {
-        background-color: ${island.fill} !important;
-        border: ${islandBorder} !important;
-        border-radius: ${toString island.radius}px !important;
-      }
-      /* Dock island geometry: it floats dockGap above the screen edge (the
-         background's bottom margin), and is 48px tall like the top islands:
-         2px + 44px icon box (32px icon with 6px inner padding) + 2px, so the
-         icons sit centred. Running dots are pulled up inside the island, into
-         the icon box's lower inner padding. */
-      #dashtodockContainer.bottom #dash .dash-background {
-        margin-bottom: ${toString dockGap}px !important;
-      }
-      #dashtodockContainer.bottom #dash .dash-item-container .app-well-app,
-      #dashtodockContainer.bottom #dash .dash-item-container .show-apps,
-      #dashtodockContainer.bottom #dash .dash-item-container .overview-tile {
-        padding-top: 2px !important;
-        padding-bottom: ${toString (2 + dockGap)}px !important;
-      }
-      #dashtodockContainer.bottom #dash .app-grid-running-dot {
-        margin-bottom: ${toString (dockGap + 2)}px !important;
-      }
-
-
-      /* No islands (or bar) over the overview, lock and login screens.
-         (pop-shell's panel hint hides itself there.) */
-      #panel:overview #panelLeft,
-      #panel:overview #panelCenter,
-      #panel:overview #panelRight,
-      #panel.unlock-screen #panelLeft,
-      #panel.unlock-screen #panelCenter,
-      #panel.unlock-screen #panelRight,
-      #panel.login-screen #panelLeft,
-      #panel.login-screen #panelCenter,
-      #panel.login-screen #panelRight,
-      #panel:overview,
-      #panel.unlock-screen,
-      #panel.login-screen {
-        background-color: transparent !important;
-        border-color: transparent !important;
-      }
-
-      /* One typeface and weight across the whole bar: clock, battery text and
-         Astra Monitor's values (Orchis makes the panel bold; Astra's labels are
-         patched to the same weight). */
-      #panel,
-      #panel StLabel {
-        font-family: "Inter" !important;
-        font-weight: 500 !important;
-      }
-
-      /* Quick-settings indicators (brightness, wifi, volume, power, battery):
-         spaced out, sized like Astra Monitor's icons, and all monochrome
-         symbolic in the palette foreground instead of mixed full-colour ones. */
-      #panel .panel-status-indicators-box {
-        spacing: 10px !important;
-      }
-      #panel .system-status-icon {
-        icon-size: 18px !important;
-        -st-icon-style: symbolic;
-        color: ${c.fg} !important;
-        /* symbolic icons' accent parts (charging battery, warnings) */
-        success-color: ${c.green} !important;
-        warning-color: ${c.yellow} !important;
-        error-color: ${c.red} !important;
-      }
-
-      /* Hover/active pills inside an island follow its shape. */
-      #panel .panel-button {
-        border-radius: 10px;
-        color: ${c.fg};
-      }
-      #panel .panel-button.clock-display .clock {
-        border-radius: 10px;
-      }
-
-      /* Clock spaced off quick settings like Astra Monitor is on the other
-         side: there the gap is quick settings' own padding plus the first
-         icon's 6px. Orchis adds a 3px border and 12px of padding on the clock;
-         8px keeps the hover pill symmetric. (The notification-dot spacer is
-         removed by clockPadRemover.) */
-      #panel .panel-button.clock-display {
-        border-width: 0 !important;
-      }
-      #panel .panel-button.clock-display .clock {
-        padding: 0 8px !important;
-      }
-      /* The unread-notifications dot right of the clock sat 18px from the
-         time but 3px from the bar's border (measured on a screenshot); this
-         evens the two gaps. (Clutter refuses negative margins, so the left
-         gap can't shrink without unbalancing the clock's hover pill.) */
-      #panel .panel-button.clock-display .messages-indicator {
-        margin-right: 15px;
-      }
-
-      /* Workspaces indicator (workspaces-by-open-apps): no hover/focus glow on
-         its buttons. (The active workspace's rounded border is patched into
-         the extension itself; see workspacesByOpenApps.) */
-      #panel .wboa-panel-rounded,
-      #panel .wboa-panel-rounded:hover,
-      #panel .wboa-panel-rounded:focus,
-      #panel .wboa-panel-rounded:active,
-      #panel .wboa-panel-rounded:checked {
-        background-color: transparent;
-        box-shadow: none;
-      }
-
-      ${theme.shell.popupsCss}
-    '';
-  }
-  // lib.listToAttrs (
-    map (e: {
-      name = "gnome-shell/extensions/${e.extensionUuid}";
-      value.source = "${e}/share/gnome-shell/extensions/${e.extensionUuid}";
-    }) nixExtensions
-  );
-
-  home.pointerCursor = {
-    enable = true;
-    inherit (theme.cursor) name package size;
-    gtk.enable = true;
-    x11.enable = false;
-  };
-
-  # Fonts (Inter UI etc.) live in fonts.nix.
-
-  # Qt apps: qt6ct as the platform theme (configured in qt.nix). environment.d
-  # is read by the systemd user manager, which the GNOME session inherits.
-  systemd.user.sessionVariables.QT_QPA_PLATFORMTHEME = "qt6ct";
-
-  # ── Session helpers ───────────────────────────────────────────────────────
-  # monitor-switch: watch the attached monitor and set text scaling + the kitty
-  # font size accordingly. Landing on ws1 at login is pop-shell's
-  # startup-workspace.
-  xdg.configFile =
-    autostart "monitor-switch" "${home}/.bin/monitor-switch"
-    // flatpakAutostart "org.mozilla.firefox"
-    // {
-      # X11 launcher from flatpak.nix (it adds --ozone-platform=x11).
-      "autostart/element-desktop.desktop".source = ../files/applications/element-desktop.desktop;
-    };
-  # NB: Bitwarden's autostart is NOT managed here — the app writes its own
-  # entry through the xdg-desktop-portal Background API (X-XDP-Autostart) when
-  # its "start on login" setting is toggled; a nix-owned file would fight that.
-
-  home.activation.staleDconf = lib.hm.dag.entryAfter [ "dconfSettings" ] ''
-    ${lib.concatMapStrings (e: ''
-      run ${pkgs.dconf}/bin/dconf reset -f /org/gnome/shell/extensions/${e}/
-    '') staleExtensionSettings}
-  '';
-
-  # ── dconf ─────────────────────────────────────────────────────────────────
-  # Ported from the old imperative home/.bin/gsettings-update plus the live
-  # extension settings. Only the keys listed here are managed; anything else
-  # (e.g. astra-monitor's `profiles` blob, extension runtime state) stays as-is.
-  #
-  # Extensions themselves are installed by hand (extensions.gnome.org /
-  # Extension Manager into ~/.local/share/gnome-shell/extensions); nix only
-  # declares which are enabled and how they're configured.
-  #
-  # NB: text-scaling-factor is deliberately NOT set — monitor-switch owns it.
-  dconf.settings = customKeybindingSettings // {
-    # ── Shell & extensions ──────────────────────────────────────────────────
-    "org/gnome/shell" = {
-      disable-user-extensions = false;
-      enabled-extensions = [
-        "activate-window-by-title@lucaswerkmeister.de"
-        "adaptive-brightness@dmy3k.github.io"
-        "AlphabeticalAppGrid@stuarthayhurst"
-        "batterytimepercentagecompact@sagrland.de"
-        "bluetooth-quick-connect@bjarosze.gmail.com"
-        "blur-my-shell@aunetx"
-        "caffeine@patapon.info"
-        clockPadRemover.extensionUuid
-        "disable-workspace-switcher-overlay@cleardevice"
-        "do-not-disturb-while-screen-sharing-or-recording@marcinjahn.com"
-        "monitor@astraext.github.io"
-        "notification-banner-reloaded@marcinjakubowski.github.com"
-        "notifications-alert-on-user-menu@hackedbellini.gmail.com"
-        "pop-shell@system76.com"
-        workspacesByOpenApps.extensionUuid
-        "tailscale-status@maxgallup.github.com"
-        "top-bar-organizer@julian.gse.jsts.xyz"
-        "ubuntu-dock@ubuntu.com"
-        "user-theme@gnome-shell-extensions.gcampax.github.com"
-      ];
-      disabled-extensions = [
-        "ding@rastersoft.com"
-        "tiling-assistant@ubuntu.com"
-        "unsafe-mode-menu@linushdot.local"
-        "rounded-window-corners@fxgn"
-        "ubuntu-appindicators@ubuntu.com"
-        "github-manager@mackdk-on-github"
-        "snapd-prompting@canonical.com"
-        "snapd-search-provider@canonical.com"
-      ];
-      favorite-apps = [
-        "kitty.desktop"
-        "neovim.desktop"
-        "org.mozilla.firefox.desktop"
-        "org.gnome.Nautilus.desktop"
-        "element-desktop.desktop"
-        "org.signal.Signal.desktop"
-        "com.spotify.Client.desktop"
-        "com.bitwarden.desktop.desktop"
-      ];
-    };
-
-    "org/gnome/shell/keybindings" = {
-      # The launcher: GNOME's overview search.
-      toggle-overview = [ "<Super>space" ];
-      toggle-application-view = [ "<Super><Alt>Space" ];
-      toggle-message-tray = [ "<Alt><Super>n" ];
-      screenshot = [ "<Shift>Print" ];
-      screenshot-window = [ "<Alt>Print" ];
-      focus-active-notification = none;
-      open-application-menu = none;
-      shift-overview-down = none;
-      shift-overview-up = none;
-      toggle-quick-settings = none;
-    }
-    // lib.genAttrs (map (n: "switch-to-application-${toString n}") (lib.range 1 9)) (_: none)
-    // lib.genAttrs (map (n: "open-new-window-application-${toString n}") (lib.range 1 9)) (_: none);
-
-    "org/gnome/shell/ubuntu".startup-sound = "";
-
-    "org/gnome/shell/extensions/user-theme".name = theme.shell.name;
-
-    "org/gnome/shell/extensions/pop-shell" =
-      lib.listToAttrs (
-        lib.imap1 (i: key: {
-          name = "pop-switch-workspace-${toString i}";
-          value = [ "<Super>${key}" ];
-        }) workspaceKeys
-      )
-      // {
-        tile-by-default = true;
-        active-hint = true;
-        active-hint-border-radius = mkUint32 activeHintRadius;
-        active-hint-border-width = mkUint32 2;
-        # Hints are diagonal gradients from top-left to bottom-right (needs the
-        # crisidev/pop-shell fork). Unfocused windows get a fainter copy and a
-        # light dim overlay.
-        hint-color-rgba = rgb c.blue;
-        hint-color-end-rgba = rgb c.magenta;
-        inactive-hint = true;
-        panel-hint = true; # the same gradient around the top bar (barCss)
-        # Windows are square (gtkCsdReset), so pop-shell rounds them to sit
-        # concentrically inside their hints.
-        round-windows = true;
-        # Ease tiled windows into place (the fork's; follows enable-animations).
-        animate-tiling = true;
-        inactive-hint-color-rgba = rgba c.blue 0.56;
-        inactive-hint-color-end-rgba = rgba c.purple 0.48;
-        inactive-dim = 0.15;
-        # A soft glow in the hint colors around the focused window, which
-        # flashes and fades back when keyboard focus lands on it (the fork's).
-        active-hint-glow = mkUint32 14;
-        active-hint-glow-opacity = 0.6;
-        focus-flash = mkUint32 400;
-        workspace-rules = workspaceRules;
-        float-rules = popShellFloatRules;
-        workspace-back-and-forth = true;
-        startup-workspace = mkUint32 1;
-        rebalance-windows = [ "<Super><Alt>r" ];
-        gap-inner = mkUint32 2;
-        gap-outer = mkUint32 2;
-        # The pointer follows keyboard-driven focus changes (to the window centre),
-        # and the slow-mouse fix covers sloppy focus missing slow movements.
-        mouse-cursor-follows-active-window = true;
-        mouse-cursor-focus-location = mkUint32 4; # Center, the first time
-        mouse-cursor-warp-to-last-position = true;
-        focus-follows-mouse-fix = true;
-        tile-enter = [ "<Super><Alt>Backspace" ];
-        tile-accept = [ "Return" ];
-        tile-reject = [ "Escape" ];
-        tile-orientation = [ "<Super><Alt>o" ];
-        toggle-tiling = [ "<Super><Alt>y" ];
-        toggle-floating = [ "<Super><Alt>Backslash" ];
-        tile-resize-down = [ "Down" ];
-        tile-resize-left = [ "Left" ];
-        tile-resize-right = [ "Right" ];
-        tile-resize-up = [ "Up" ];
-        tile-move-down-global = [ "<Super><Alt>Down" ];
-        tile-move-left-global = [ "<Super><Alt>Left" ];
-        tile-move-right-global = [ "<Super><Alt>Right" ];
-        tile-move-up-global = [ "<Super><Alt>Up" ];
-      };
-
-    "org/gnome/shell/extensions/top-bar-organizer" = {
-      left-box-order = [
-        "activities"
-      ];
-      # Centre island: tray-style indicators. Right island: system monitor,
-      # quick settings and the clock, rightmost. In "bar" style the tray
-      # indicators move to the right box, just before the system monitor.
-      center-box-order = lib.optionals islands trayIndicators;
-      right-box-order = lib.optionals (!islands) trayIndicators ++ [
-        "monitor@astraext.github.io"
-        "quickSettings"
-        "dateMenu"
-      ];
-    };
-
-    # Blur my shell. Components use the global brightness/sigma (their own
-    # values only apply with customize = true); the tint lives in the pipelines.
-    "org/gnome/shell/extensions/blur-my-shell".pipelines = [
-      (mkDictionaryEntry "pipeline_default" (
-        bmsPipeline "Default" [
-          (bmsBlur "effect_000000000000")
-          (bmsTint "effect_000000000003")
-        ]
-      ))
-      (mkDictionaryEntry "pipeline_default_rounded" (
-        bmsPipeline "Default rounded" [
-          (bmsBlur "effect_000000000001")
-          (bmsTint "effect_000000000004")
-          (bmsEffect "corner" "effect_000000000002" { radius = mkInt32 24; })
-        ]
-      ))
-    ];
-    "org/gnome/shell/extensions/blur-my-shell/appfolder" = {
-      blur = true;
-      brightness = 0.6;
-      sigma = 30;
-    };
-    "org/gnome/shell/extensions/blur-my-shell/dash-to-dock" = {
-      # Off like the panel's: it would blur a square behind the rounded dock.
-      blur = false;
-      # Let the dock paint its own palette background over the blur.
-      override-background = false;
-      brightness = 0.6;
-      pipeline = "pipeline_default";
-      sigma = 30;
-      static-blur = true;
-      style-dash-to-dock = 0;
-    };
-    "org/gnome/shell/extensions/blur-my-shell/lockscreen" = {
-      blur = true;
-      pipeline = "pipeline_default";
-    };
-    "org/gnome/shell/extensions/blur-my-shell/overview" = {
-      blur = true;
-      pipeline = "pipeline_default";
-      style-components = 2;
-    };
-    "org/gnome/shell/extensions/blur-my-shell/panel" = {
-      # Off: it would blur one strip behind the whole (now transparent) bar
-      # instead of the individual islands.
-      blur = false;
-      brightness = 0.6;
-      force-light-text = false;
-      pipeline = "pipeline_default";
-      sigma = 37;
-      static-blur = true;
-      unblur-in-overview = true;
-    };
-    "org/gnome/shell/extensions/blur-my-shell/popup" = {
-      # Off (on by default since v75): it blurs a square behind notification
-      # banners and menus that pokes out past their rounded island corners,
-      # and popupFill is opaque enough that the blur barely shows anyway.
-      blur = false;
-    };
-    "org/gnome/shell/extensions/blur-my-shell/screenshot" = {
-      blur = true;
-      pipeline = "pipeline_default";
-    };
-    "org/gnome/shell/extensions/blur-my-shell/window-list" = {
-      blur = true;
-      brightness = 0.6;
-      sigma = 30;
-    };
-
-    # Ubuntu dock (dash-to-dock schema)
-    "org/gnome/shell/extensions/dash-to-dock" = {
-      dock-position = "BOTTOM";
-      dash-max-icon-size = 32;
-      extend-height = false; # floating island, not edge to edge
-      # Auto-hide: not fixed, so windows get the full height; it slides away
-      # when a window overlaps it (intellihide) and returns at the bottom edge.
-      dock-fixed = false;
-      autohide = true;
-      intellihide = true;
-      height-fraction = 0.9;
-      hot-keys = false;
-      multi-monitor = false;
-      scroll-action = "do-nothing";
-      show-apps-at-top = false;
-      show-mounts-only-mounted = true;
-      show-trash = false;
-      apply-custom-theme = false;
-      custom-theme-shrink = true;
-      # Background, border and corners come from the Shell theme CSS (the
-      # dock is styled as a top-bar island); only the running dots are set here.
-      custom-background-color = false;
-      transparency-mode = "DEFAULT";
-      running-indicator-style = "DOTS";
-      custom-theme-customize-running-dots = true;
-      custom-theme-running-dots-color = c.blue;
-      custom-theme-running-dots-border-color = c.blue;
-      custom-theme-running-dots-border-width = 0;
-    };
-
-    "org/gnome/shell/extensions/alphabetical-app-grid".folder-order-position = "end";
-
-    "org/gnome/shell/extensions/bluetooth-quick-connect" = {
-      keep-menu-on-toggle = true;
-      refresh-button-on = true;
-      show-battery-value-on = true;
-    };
-
-    # Workspaces indicator by open apps: the icons of the apps open on each
-    # workspace, in the left island; empty workspaces are hidden except the
-    # active one, which shows its workspace-names glyph (see the patch above).
-    # The active workspace is outlined by a rounded blue border (Shell theme
-    # CSS above) instead of the extension's underline and tint.
-    "org/gnome/shell/extensions/workspaces-indicator-by-open-apps" = {
-      position-in-panel = "LEFT";
-      position-index = 0;
-      hide-activities-button = true;
-      scroll-enable = true;
-      scroll-wraparound = false;
-      # Must stay on: the patched extension draws the active workspace's
-      # rounded border in place of this underline.
-      indicator-show-active-workspace = true;
-      indicator-show-focused-app = false;
-      indicator-color = c.blue;
-      indicator-round-borders = true;
-      indicator-show-background = false;
-      indicator-background-color = rgba c.blue 0.15;
-      indicator-background-padding = 4;
-      workspace-label-text-color = c.fgDark;
-      app-label-text-color = c.fg;
-      indicator-show-indexes = false;
-      indicator-use-custom-names = true;
-      indicator-hide-empty = true;
-      apps-inactive-effect = "REDUCE OPACITY";
-      apps-minimized-effect = "REDUCE OPACITY";
-      size-app-icon = 25;
-      size-labels = 20;
-      spacing-workspace-left = 3;
-      spacing-workspace-right = 3;
-      icons-group = "OFF";
-    };
-
-    "org/gnome/shell/extensions/notification-banner-reloaded" = {
-      anchor-horizontal = 1;
-      anchor-vertical = 0;
-      animation-direction = 2;
-      animation-time = 200;
-      padding-horizontal = 0;
-      padding-vertical = 0;
-    };
-
-    "org/gnome/shell/extensions/caffeine" = {
-      show-indicator = "only-active";
-      show-notifications = true;
-      show-timer = true;
-      enable-fullscreen = true;
-      restore-state = false;
-      screen-blank = "never";
-      nightlight-control = "never";
-    };
-
-    "org/gnome/shell/extensions/notifications-alert" = {
-      blinkrate = 500;
-      color = rgb c.red;
-    };
-
-    "org/gnome/shell/extensions/tailscale-status".login-server = "https://tailscale.crisidev.org:8443";
-
-    # Astra monitor — palette blue/red accents. Its per-profile JSON blob
-    # (`profiles`) is left to the extension; these are the active top-level keys.
-    "org/gnome/shell/extensions/astra-monitor" = {
-      current-profile = "crisidev";
-      # Header graphs 30% wider than the default 30px.
-      memory-header-graph-width = 39;
-      network-header-graph-width = 39;
-      processor-header-graph-width = 39;
-      storage-header-graph-width = 39;
-      # ~85% of the island's height (its default caps at 32px and sits high).
-      headers-height-override = 37;
-      explicit-zero = true;
-      monitors-order = ''["storage","network","memory","sensors","processor","gpu"]'';
-      memory-header-bars = false;
-      memory-header-bars-breakdown = false;
-      memory-header-bars-color1 = rgb c.blue;
-      memory-header-graph = true;
-      memory-header-graph-color1 = rgb c.blue;
-      memory-header-icon-alert-color = rgb c.red;
-      memory-indicators-order = ''["bar","graph","percentage","value","free","icon"]'';
-      memory-menu-swap-color = rgb c.blue;
-      network-header-icon-alert-color = rgb c.red;
-      network-header-icon-custom = "network-wireless-symbolic";
-      network-header-io = true;
-      network-header-io-bars-color1 = rgb c.blue;
-      network-header-io-bars-color2 = rgb c.red;
-      network-header-io-graph-color1 = rgb c.blue;
-      network-header-io-graph-color2 = rgb c.red;
-      network-indicators-order = ''["IO bar","IO graph","IO speed","icon"]'';
-      network-menu-arrow-color1 = rgb c.blue;
-      network-menu-arrow-color2 = rgb c.red;
-      processor-header-bars = true;
-      processor-header-bars-color1 = rgb c.blue;
-      processor-header-bars-color2 = rgb c.red;
-      processor-header-bars-core = true;
-      processor-header-frequency-mode = "max";
-      processor-header-graph = false;
-      processor-header-graph-color1 = rgb c.blue;
-      processor-header-graph-color2 = rgb c.red;
-      processor-header-icon-alert-color = rgb c.red;
-      processor-indicators-order = ''["bar","graph","percentage","frequency","icon"]'';
-      processor-update = 2.0;
-      sensors-header-icon-alert-color = rgb c.red;
-      sensors-header-sensor1 = ''{"service":"hwmon","path":["coretemp","Package id 0","input"]}'';
-      sensors-header-sensor1-show = true;
-      sensors-header-show = true;
-      sensors-header-tooltip = true;
-      sensors-indicators-order = ''["value","icon"]'';
-      storage-header-bars-color1 = rgb c.blue;
-      storage-header-icon-alert-color = rgb c.red;
-      storage-header-io = true;
-      storage-header-io-bars-color1 = rgb c.blue;
-      storage-header-io-bars-color2 = rgb c.red;
-      storage-header-io-graph-color1 = rgb c.blue;
-      storage-header-io-graph-color2 = rgb c.red;
-      storage-indicators-order = ''["bar","percentage","value","free","IO bar","IO graph","IO speed","icon"]'';
-      storage-main = "name-ubuntu--vg-ubuntu--lv";
-      storage-menu-arrow-color1 = rgb c.blue;
-      storage-menu-arrow-color2 = rgb c.red;
-      storage-menu-device-color = rgb c.blue;
-    };
-
-    # ── Interface ───────────────────────────────────────────────────────────
-    # libadwaita/GTK4 apps (Nautilus, portal dialogs) read font and theme from
-    # here, NOT gtk-3.0/settings.ini.
-    "org/gnome/desktop/interface" = {
-      gtk-theme = theme.gtk.name;
-      icon-theme = theme.icons.name;
-      color-scheme = "prefer-dark";
-      accent-color = "blue";
-      font-name = "Inter 11";
-      document-font-name = "Inter 11";
-      monospace-font-name = "JetBrains Mono 11";
-      # macOS-like rendering, matching the fontconfig in fonts.nix.
-      font-antialiasing = "grayscale";
-      font-hinting = "slight";
-      cursor-theme = theme.cursor.name;
-      cursor-size = theme.cursor.size;
-      clock-show-seconds = true;
-      clock-show-weekday = true;
-      gtk-enable-primary-paste = true;
-    };
-
-    "org/gnome/desktop/background" = {
-      picture-uri = theme.wallpaper;
-      picture-uri-dark = theme.wallpaper;
-      picture-options = "zoom";
-      color-shading-type = "solid";
-      primary-color = "#000000000000";
-      secondary-color = "#000000000000";
-    };
-
-    "org/gnome/desktop/screensaver" = {
-      picture-uri = theme.wallpaper;
-      picture-options = "zoom";
-      color-shading-type = "solid";
-      primary-color = "#000000000000";
-      secondary-color = "#000000000000";
-    };
-
-    "org/gnome/desktop/wm/preferences" = {
-      theme = theme.gtk.name;
-      mouse-button-modifier = "<Super>";
-      resize-with-right-button = true;
-      focus-mode = "sloppy";
-      auto-raise = true;
-      num-workspaces = 8;
-      # Nerd Font Material Design ("md-") icons as JSON \u escapes (via fromJSON)
-      # so the file stays ASCII — raw private-use glyphs get silently dropped by
-      # editors/tools. The trailing space stops St clipping the wide md glyphs
-      # at their right edge; the leading one balances it so the icon sits
-      # centred in its pill. One per workspace, matching workspaceRules:
-      # console, firefox, spotify, webcam, forum (Element), message-lock
-      # (Signal), code-braces, dots-grid.
-      workspace-names = builtins.fromJSON ''
-        [" \udb80\udd8d ", " \udb80\ude39 ", " \udb81\udcc7 ", " \udb81\udda0 ", " \udb80\ude8c ", " \udb83\udfcc ", " \udb80\udd69 ", " \udb85\uddfc "]
+  options.gnome.popShell = {
+    extraWorkspaceRules = lib.mkOption {
+      type = lib.types.listOf lib.types.anything;
+      default = [ ];
+      example = lib.literalExpression ''[ [ "^slack$" (lib.hm.gvariant.mkUint32 5) "" true ] ]'';
+      description = ''
+        Extra pop-shell workspace rules, (class regex, workspace from 1,
+        monitor, on open), checked before the built-in ones.
       '';
     };
-
-    "org/gnome/mutter" = {
-      overlay-key = "";
-      dynamic-workspaces = false;
-      edge-tiling = false;
-      workspaces-only-on-primary = true;
-      focus-change-on-pointer-rest = false;
-    };
-
-    "org/gnome/desktop/default-applications/terminal" = {
-      exec = "${home}/.nix-profile/bin/kitty";
-      exec-arg = "-e";
-    };
-
-    "org/gnome/nautilus/preferences".thumbnail-limit = mkUint64 10485760;
-
-    "org/gnome/desktop/sound" = {
-      event-sounds = false;
-      input-feedback-sounds = false;
-      theme-name = "Yaru";
-    };
-
-    # ── Input ───────────────────────────────────────────────────────────────
-    "org/gnome/desktop/peripherals/keyboard" = {
-      repeat = true;
-      repeat-interval = mkUint32 14;
-      delay = mkUint32 230;
-    };
-    "org/gnome/desktop/peripherals/mouse".natural-scroll = false;
-    "org/gnome/desktop/peripherals/touchpad" = {
-      click-method = "fingers";
-      edge-scrolling-enabled = false;
-      natural-scroll = false;
-      two-finger-scrolling-enabled = true;
-    };
-    "org/freedesktop/ibus/general/hotkey".triggers = none;
-    "org/freedesktop/ibus/panel/emoji".hotkey = none;
-
-    # ── Power / idle ────────────────────────────────────────────────────────
-    "org/gnome/desktop/session".idle-delay = mkUint32 300;
-    "org/gnome/settings-daemon/plugins/power" = {
-      ambient-enabled = false;
-      # Panel brightness (%) while dimmed for idle, not a timeout: values over
-      # 100 make gsd-power fail its range assertion and skip the dim.
-      idle-brightness = 30;
-      idle-dim = true;
-      lid-close-ac-action = "suspend";
-      lid-close-battery-action = "suspend";
-      lid-close-suspend-with-external-monitor = false;
-      power-button-action = "nothing";
-      power-saver-profile-on-low-battery = true;
-      sleep-inactive-ac-timeout = 3600;
-      sleep-inactive-ac-type = "suspend";
-      sleep-inactive-battery-timeout = 900;
-      sleep-inactive-battery-type = "suspend";
-    };
-
-    "org/gnome/desktop/a11y/applications".screen-reader-enabled = false;
-
-    # ── Keybindings ─────────────────────────────────────────────────────────
-    "org/gnome/settings-daemon/plugins/media-keys" = {
-      custom-keybindings = lib.imap0 (i: _: customKeybindingPath i) customKeybindings;
-      screensaver = [ "<Super><Alt>l" ];
-      terminal = [ "<Super>Return" ];
-      email = [ "<Super>e" ];
-      home = [ "<Super>f" ];
-      www = [ "<Super>b" ];
-      help = none;
-      # GNOME toggles the Orca screen reader on <Super><Alt>s; pressed by
-      # accident, Orca walks the focused page element by element (Firefox
-      # scrolling on its own).
-      screenreader = none;
-      rotate-video-lock-static = none;
-    };
-
-    "org/gnome/desktop/wm/keybindings" = {
-      close = [ "<Super>w" ];
-      minimize = [ "<Super><Alt>comma" ];
-      toggle-maximized = [ "<Super><Alt>f" ];
-      panel-run-dialog = [ "<Alt>F2" ];
-      switch-applications = [ "<Super>Tab" ];
-      switch-applications-backward = [ "<Shift><Super>Tab" ];
-      switch-group = [
-        "<Super>Above_Tab"
-        "<Alt>Above_Tab"
+    extraFloatRules = lib.mkOption {
+      type = lib.types.listOf (lib.types.listOf lib.types.str);
+      default = [ ];
+      example = [
+        [
+          "^warp-taskbar$"
+          ""
+        ]
       ];
-      switch-group-backward = [
-        "<Shift><Super>Above_Tab"
-        "<Shift><Alt>Above_Tab"
-      ];
-      switch-windows = [ "<Alt>Tab" ];
-      switch-windows-backward = [ "<Shift><Alt>Tab" ];
-      switch-input-source = [ "XF86Keyboard" ];
-      switch-input-source-backward = [ "<Shift>XF86Keyboard" ];
-      move-to-workspace-1 = [ "<Super><Shift>Escape" ];
-      move-to-workspace-2 = [ "<Super><Shift>F2" ];
-      move-to-workspace-3 = [ "<Super><Shift>F1" ];
-      move-to-workspace-4 = [ "<Super><Shift>F3" ];
-      move-to-workspace-5 = [ "<Super><Shift>1" ];
-      move-to-workspace-6 = [ "<Super><Shift>2" ];
-      move-to-workspace-7 = [ "<Super><Shift>3" ];
-      move-to-workspace-8 = [ "<Super><Shift>4" ];
-      activate-window-menu = none;
-      cycle-group = none;
-      cycle-group-backward = none;
-      cycle-windows = none;
-      cycle-windows-backward = none;
-      maximize = none;
-      unmaximize = none;
-      move-to-monitor-down = none;
-      move-to-monitor-left = none;
-      move-to-monitor-right = none;
-      move-to-monitor-up = none;
-      move-to-workspace-down = none;
-      move-to-workspace-last = none;
-      move-to-workspace-left = none;
-      move-to-workspace-right = none;
-      move-to-workspace-up = none;
-      panel-main-menu = none;
-      switch-to-workspace-down = none;
-      switch-to-workspace-left = none;
-      switch-to-workspace-right = none;
-      switch-to-workspace-up = none;
+      description = "Extra pop-shell float rules, (class regex, title regex).";
+    };
+  };
+
+  options.gnome.workspaceIcons = lib.mkOption {
+    type = lib.types.listOf lib.types.str;
+    # Nerd Font Material Design glyphs, written as JSON \u escapes (fromJSON)
+    # so the file stays ASCII; raw private-use glyphs get silently dropped by
+    # editors and tools. Workspaces 1-8: console (kitty), firefox, code-braces,
+    # webcam, forum (Element), message-lock (Signal), spotify, dots-grid.
+    default = builtins.fromJSON ''
+      ["\udb80\udd8d", "\udb80\ude39", "\udb80\udd69", "\udb81\udda0", "\udb80\ude8c", "\udb83\udfcc", "\udb81\udcc7", "\udb85\uddfc"]
+    '';
+    description = "Top-bar glyph per workspace (1-8), matching the workspace rules.";
+  };
+
+  options.gnome.autostart = {
+    flatpaks = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ "org.mozilla.firefox" ];
+      description = ''
+        System Flatpaks started at login with their own launcher (linked from
+        /var/lib/flatpak/exports, so it follows app updates). pop-shell's
+        workspace rules then place them.
+      '';
+    };
+    element = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Start Element (the Ubuntu .deb) at login.";
+    };
+  };
+
+  options.gnome.workspaceIndicator.otherMonitor = lib.mkOption {
+    type = lib.types.enum [
+      "group"
+      "inline"
+    ];
+    default = "group";
+    description = ''
+      How the top bar shows windows outside the workspaces (on the second
+      monitor, or pinned): "group" leads them with a display/pin glyph before
+      the workspaces; "inline" shows them as a plain app pill after the
+      workspaces, as they'd look on a workspace.
+    '';
+  };
+
+  options.gnome.favoriteApps = lib.mkOption {
+    type = lib.types.listOf lib.types.str;
+    default = [
+      "kitty.desktop"
+      "neovim.desktop"
+      "org.mozilla.firefox.desktop"
+      "org.gnome.Nautilus.desktop"
+      "element-desktop.desktop"
+      "org.signal.Signal.desktop"
+      "com.spotify.Client.desktop"
+      "com.bitwarden.desktop.desktop"
+    ];
+    description = "Apps pinned to the dock, in order (desktop-file ids).";
+  };
+
+  options.gnome.tailscale.enable = lib.mkOption {
+    type = lib.types.bool;
+    default = true;
+    description = "Tailscale status extension (personal tailnet).";
+  };
+  options.gnome.appIndicators.enable = lib.mkEnableOption ''
+    Ubuntu's AppIndicator extension, for apps that only have a tray icon (no
+    Shell extension). top-bar-organizer appends their icons to the right box
+  '';
+
+  options.gnome.nixExtensions.enable = lib.mkEnableOption ''
+    installing every enabled GNOME Shell extension from nix, not just the
+    patched ones. Off on falcon, where they're installed by hand (linking over
+    them would make activation fail)
+  '';
+
+  config = {
+    # ── GTK theme ─────────────────────────────────────────────────────────────
+    gtk = {
+      enable = true;
+      theme = { inherit (theme.gtk) name package; };
+      iconTheme = { inherit (theme.icons) name package; };
+      cursorTheme = { inherit (theme.cursor) name package size; };
+      font = {
+        name = "Inter";
+        size = 11;
+      };
+      gtk3.extraConfig = {
+        gtk-application-prefer-dark-theme = true;
+      };
+      gtk3.extraCss = gtkCsdReset;
+      # gtk4.theme = gtk.theme makes home-manager @import Orchis's gtk-4.0
+      # CSS into ~/.config/gtk-4.0/gtk.css. That user CSS is the only way to theme
+      # libadwaita apps (Nautilus), and it also styles mutter-x11-frames (plain
+      # GTK4), which draws the titlebars of X11 windows (Bitwarden, and the
+      # CEF Spotify kept on X11 in flatpak.nix) — macos buttons everywhere.
+      # Set explicitly: the implicit default becomes null from stateVersion 26.05.
+      gtk4.theme = config.gtk.theme;
+      gtk4.extraConfig = {
+        gtk-application-prefer-dark-theme = true;
+      };
+      gtk4.extraCss = gtkCsdReset;
+    };
+
+    # The Shell theme (an @import of Orchis plus the overrides below) and the
+    # nix-built extensions.
+    xdg.dataFile = {
+      "themes/${theme.shell.name}/gnome-shell/gnome-shell.css".text = ''
+        @import url("file://${theme.gtk.package}/share/themes/${theme.gtk.name}/gnome-shell/gnome-shell.css");
+
+        /* The bar itself is invisible; its three boxes are the islands.
+           !important: Ubuntu's session stacks Yaru under the user theme, and Yaru
+           paints #panel #131313 !important. */
+        #panel {
+          height: ${toString panelHeight}px;
+          background-color: transparent !important;
+          margin: 0;
+          border-radius: 0;
+        }
+        #panel .panel-corner {
+          -panel-corner-opacity: 0;
+        }
+
+        ${if islands then islandsCss else barCss}
+
+        /* The dock as one more island: a floating, centred bar (extend-height
+           off in dconf) with the same dimmed fill, border and corners as the top
+           bar. !important beats Yaru's and ubuntu-dock's own dock styles. dash-to-dock's own
+           custom background is off (dconf below): it writes background and border
+           colours inline, which would beat this. */
+        #dashtodockContainer.bottom #dash .dash-background,
+        #dashtodockContainer.bottom.extended #dash .dash-background {
+          background-color: ${island.fill} !important;
+          border: ${islandBorder} !important;
+          border-radius: ${toString island.radius}px !important;
+        }
+        /* Dock island geometry: it floats dockGap above the screen edge (the
+           background's bottom margin), and is 48px tall like the top islands:
+           2px + 44px icon box (32px icon with 6px inner padding) + 2px, so the
+           icons sit centred. Running dots are pulled up inside the island, into
+           the icon box's lower inner padding. */
+        #dashtodockContainer.bottom #dash .dash-background {
+          margin-bottom: ${toString dockGap}px !important;
+        }
+        #dashtodockContainer.bottom #dash .dash-item-container .app-well-app,
+        #dashtodockContainer.bottom #dash .dash-item-container .show-apps,
+        #dashtodockContainer.bottom #dash .dash-item-container .overview-tile {
+          padding-top: 2px !important;
+          padding-bottom: ${toString (2 + dockGap)}px !important;
+        }
+        #dashtodockContainer.bottom #dash .app-grid-running-dot {
+          margin-bottom: ${toString (dockGap + 2)}px !important;
+        }
+
+
+        /* No islands (or bar) over the overview, lock and login screens.
+           (pop-shell's panel hint hides itself there.) */
+        #panel:overview #panelLeft,
+        #panel:overview #panelCenter,
+        #panel:overview #panelRight,
+        #panel.unlock-screen #panelLeft,
+        #panel.unlock-screen #panelCenter,
+        #panel.unlock-screen #panelRight,
+        #panel.login-screen #panelLeft,
+        #panel.login-screen #panelCenter,
+        #panel.login-screen #panelRight,
+        #panel:overview,
+        #panel.unlock-screen,
+        #panel.login-screen {
+          background-color: transparent !important;
+          border-color: transparent !important;
+        }
+
+        /* One typeface and weight across the whole bar: clock, battery text and
+           Astra Monitor's values (Orchis makes the panel bold; Astra's labels are
+           patched to the same weight). */
+        #panel,
+        #panel StLabel {
+          font-family: "Inter" !important;
+          font-weight: 500 !important;
+        }
+
+        /* Quick-settings indicators (brightness, wifi, volume, power, battery):
+           spaced out, sized like Astra Monitor's icons, and all monochrome
+           symbolic in the palette foreground instead of mixed full-colour ones. */
+        #panel .panel-status-indicators-box {
+          spacing: 10px !important;
+        }
+        #panel .system-status-icon {
+          icon-size: 18px !important;
+          -st-icon-style: symbolic;
+          color: ${c.fg} !important;
+          /* symbolic icons' accent parts (charging battery, warnings) */
+          success-color: ${c.green} !important;
+          warning-color: ${c.yellow} !important;
+          error-color: ${c.red} !important;
+        }
+
+        /* Hover/active pills inside an island follow its shape. */
+        #panel .panel-button {
+          border-radius: 10px;
+          color: ${c.fg};
+        }
+        #panel .panel-button.clock-display .clock {
+          border-radius: 10px;
+        }
+
+        /* Clock spaced off quick settings like Astra Monitor is on the other
+           side: there the gap is quick settings' own padding plus the first
+           icon's 6px. Orchis adds a 3px border and 12px of padding on the clock;
+           8px keeps the hover pill symmetric. (The notification-dot spacer is
+           removed by clockPadRemover.) */
+        #panel .panel-button.clock-display {
+          border-width: 0 !important;
+        }
+        #panel .panel-button.clock-display .clock {
+          padding: 0 8px !important;
+        }
+        /* The unread-notifications dot right of the clock sat 18px from the
+           time but 3px from the bar's border (measured on a screenshot); this
+           evens the two gaps. (Clutter refuses negative margins, so the left
+           gap can't shrink without unbalancing the clock's hover pill.) */
+        #panel .panel-button.clock-display .messages-indicator {
+          margin-right: 15px;
+        }
+
+        /* Workspaces indicator (workspaces-by-open-apps): no hover/focus glow on
+           its buttons. (The active workspace's rounded border is patched into
+           the extension itself; see workspacesByOpenApps.) */
+        #panel .wboa-panel-rounded,
+        #panel .wboa-panel-rounded:hover,
+        #panel .wboa-panel-rounded:focus,
+        #panel .wboa-panel-rounded:active,
+        #panel .wboa-panel-rounded:checked {
+          background-color: transparent;
+          box-shadow: none;
+        }
+
+        ${theme.shell.popupsCss}
+      '';
     }
-    // lib.genAttrs (map (n: "switch-to-workspace-${toString n}") (lib.range 1 9)) (_: none)
-    // {
-      # Workspace 5 itself even when Element sits on the second monitor, where
-      # pop-shell's workspace 5 key focuses Element instead.
-      switch-to-workspace-5 = [ "<Super><Alt>1" ];
+    // lib.listToAttrs (
+      map (e: {
+        name = "gnome-shell/extensions/${e.extensionUuid}";
+        value.source = "${e}/share/gnome-shell/extensions/${e.extensionUuid}";
+      }) nixExtensions
+    );
+
+    home.pointerCursor = {
+      enable = true;
+      inherit (theme.cursor) name package size;
+      gtk.enable = true;
+      x11.enable = false;
     };
 
-    "org/gnome/mutter/keybindings" = {
-      switch-monitor = [
-        "<Super><Alt>d"
-        "XF86Display"
+    # Fonts (Inter UI etc.) live in fonts.nix.
+
+    # Qt apps: qt6ct as the platform theme (configured in qt.nix). environment.d
+    # is read by the systemd user manager, which the GNOME session inherits.
+    systemd.user.sessionVariables.QT_QPA_PLATFORMTHEME = "qt6ct";
+
+    # ── Session helpers ───────────────────────────────────────────────────────
+    # monitor-switch: watch the attached monitor and set text scaling + the kitty
+    # font size accordingly. Landing on ws1 at login is pop-shell's
+    # startup-workspace.
+    xdg.configFile =
+      autostart "monitor-switch" "${home}/.bin/monitor-switch"
+      // lib.mergeAttrsList (map flatpakAutostart cfg.autostart.flatpaks)
+      // lib.optionalAttrs cfg.autostart.element {
+        # X11 launcher from flatpak.nix (it adds --ozone-platform=x11).
+        "autostart/element-desktop.desktop".source = ../files/applications/element-desktop.desktop;
+      };
+    # NB: Bitwarden's autostart is NOT managed here — the app writes its own
+    # entry through the xdg-desktop-portal Background API (X-XDP-Autostart) when
+    # its "start on login" setting is toggled; a nix-owned file would fight that.
+
+    home.activation.staleDconf = lib.hm.dag.entryAfter [ "dconfSettings" ] ''
+      ${lib.concatMapStrings (e: ''
+        run ${pkgs.dconf}/bin/dconf reset -f /org/gnome/shell/extensions/${e}/
+      '') staleExtensionSettings}
+    '';
+
+    # ── dconf ─────────────────────────────────────────────────────────────────
+    # Ported from the old imperative home/.bin/gsettings-update plus the live
+    # extension settings. Only the keys listed here are managed; anything else
+    # (e.g. astra-monitor's `profiles` blob, extension runtime state) stays as-is.
+    #
+    # Extensions themselves are installed by hand (extensions.gnome.org /
+    # Extension Manager into ~/.local/share/gnome-shell/extensions); nix only
+    # declares which are enabled and how they're configured.
+    #
+    # NB: text-scaling-factor is deliberately NOT set — monitor-switch owns it.
+    dconf.settings = customKeybindingSettings // {
+      # ── Shell & extensions ──────────────────────────────────────────────────
+      "org/gnome/shell" = {
+        disable-user-extensions = false;
+        enabled-extensions = [
+          "activate-window-by-title@lucaswerkmeister.de"
+          "adaptive-brightness@dmy3k.github.io"
+          "AlphabeticalAppGrid@stuarthayhurst"
+          "batterytimepercentagecompact@sagrland.de"
+          "bluetooth-quick-connect@bjarosze.gmail.com"
+          "blur-my-shell@aunetx"
+          "caffeine@patapon.info"
+          clockPadRemover.extensionUuid
+          "disable-workspace-switcher-overlay@cleardevice"
+          "do-not-disturb-while-screen-sharing-or-recording@marcinjahn.com"
+          "monitor@astraext.github.io"
+          "notification-banner-reloaded@marcinjakubowski.github.com"
+          "notifications-alert-on-user-menu@hackedbellini.gmail.com"
+          "pop-shell@system76.com"
+          workspacesByOpenApps.extensionUuid
+          "top-bar-organizer@julian.gse.jsts.xyz"
+          "ubuntu-dock@ubuntu.com"
+          "user-theme@gnome-shell-extensions.gcampax.github.com"
+        ]
+        ++ lib.optional cfg.tailscale.enable "tailscale-status@maxgallup.github.com"
+        ++ lib.optional (cfg.appIndicators.enable) "ubuntu-appindicators@ubuntu.com";
+        disabled-extensions = [
+          "ding@rastersoft.com"
+          "tiling-assistant@ubuntu.com"
+          "unsafe-mode-menu@linushdot.local"
+          "rounded-window-corners@fxgn"
+          "github-manager@mackdk-on-github"
+          "snapd-prompting@canonical.com"
+          "snapd-search-provider@canonical.com"
+        ]
+        ++ lib.optional (!cfg.tailscale.enable) "tailscale-status@maxgallup.github.com"
+        ++ lib.optional (!cfg.appIndicators.enable) "ubuntu-appindicators@ubuntu.com";
+        favorite-apps = cfg.favoriteApps;
+      };
+
+      "org/gnome/shell/keybindings" = {
+        # The launcher: GNOME's overview search.
+        toggle-overview = [ "<Super>space" ];
+        toggle-application-view = [ "<Super><Alt>Space" ];
+        toggle-message-tray = [ "<Alt><Super>n" ];
+        screenshot = [ "<Shift>Print" ];
+        screenshot-window = [ "<Alt>Print" ];
+        focus-active-notification = none;
+        open-application-menu = none;
+        shift-overview-down = none;
+        shift-overview-up = none;
+        toggle-quick-settings = none;
+      }
+      // lib.genAttrs (map (n: "switch-to-application-${toString n}") (lib.range 1 9)) (_: none)
+      // lib.genAttrs (map (n: "open-new-window-application-${toString n}") (lib.range 1 9)) (_: none);
+
+      "org/gnome/shell/ubuntu".startup-sound = "";
+
+      "org/gnome/shell/extensions/user-theme".name = theme.shell.name;
+
+      "org/gnome/shell/extensions/pop-shell" =
+        lib.listToAttrs (
+          lib.imap1 (i: key: {
+            name = "pop-switch-workspace-${toString i}";
+            value = [ "<Super>${key}" ];
+          }) workspaceKeys
+        )
+        // {
+          tile-by-default = true;
+          active-hint = true;
+          active-hint-border-radius = mkUint32 activeHintRadius;
+          active-hint-border-width = mkUint32 2;
+          # Hints are diagonal gradients from top-left to bottom-right (needs the
+          # crisidev/pop-shell fork). Unfocused windows get a fainter copy and a
+          # light dim overlay.
+          hint-color-rgba = rgb c.blue;
+          hint-color-end-rgba = rgb c.magenta;
+          inactive-hint = true;
+          panel-hint = true; # the same gradient around the top bar (barCss)
+          # Windows are square (gtkCsdReset), so pop-shell rounds them to sit
+          # concentrically inside their hints.
+          round-windows = true;
+          # Ease tiled windows into place (the fork's; follows enable-animations).
+          animate-tiling = true;
+          inactive-hint-color-rgba = rgba c.blue 0.56;
+          inactive-hint-color-end-rgba = rgba c.purple 0.48;
+          inactive-dim = 0.15;
+          # A soft glow in the hint colors around the focused window, which
+          # flashes and fades back when keyboard focus lands on it (the fork's).
+          active-hint-glow = mkUint32 14;
+          active-hint-glow-opacity = 0.6;
+          focus-flash = mkUint32 400;
+          workspace-rules = workspaceRules;
+          float-rules = popShellFloatRules;
+          workspace-back-and-forth = true;
+          startup-workspace = mkUint32 1;
+          rebalance-windows = [ "<Super><Alt>r" ];
+          gap-inner = mkUint32 2;
+          gap-outer = mkUint32 2;
+          # The pointer follows keyboard-driven focus changes (to the window centre),
+          # and the slow-mouse fix covers sloppy focus missing slow movements.
+          mouse-cursor-follows-active-window = true;
+          mouse-cursor-focus-location = mkUint32 4; # Center, the first time
+          mouse-cursor-warp-to-last-position = true;
+          focus-follows-mouse-fix = true;
+          tile-enter = [ "<Super><Alt>Backspace" ];
+          tile-accept = [ "Return" ];
+          tile-reject = [ "Escape" ];
+          tile-orientation = [ "<Super><Alt>o" ];
+          toggle-tiling = [ "<Super><Alt>y" ];
+          toggle-floating = [ "<Super><Alt>Backslash" ];
+          tile-resize-down = [ "Down" ];
+          tile-resize-left = [ "Left" ];
+          tile-resize-right = [ "Right" ];
+          tile-resize-up = [ "Up" ];
+          tile-move-down-global = [ "<Super><Alt>Down" ];
+          tile-move-left-global = [ "<Super><Alt>Left" ];
+          tile-move-right-global = [ "<Super><Alt>Right" ];
+          tile-move-up-global = [ "<Super><Alt>Up" ];
+        };
+
+      "org/gnome/shell/extensions/top-bar-organizer" = {
+        left-box-order = [
+          "activities"
+        ];
+        # Centre island: tray-style indicators. Right island: system monitor,
+        # quick settings and the clock, rightmost. In "bar" style the tray
+        # indicators move to the right box, just before the system monitor.
+        center-box-order = lib.optionals islands trayIndicators;
+        right-box-order = lib.optionals (!islands) trayIndicators ++ [
+          "monitor@astraext.github.io"
+          "quickSettings"
+          "dateMenu"
+        ];
+      };
+
+      # Blur my shell. Components use the global brightness/sigma (their own
+      # values only apply with customize = true); the tint lives in the pipelines.
+      "org/gnome/shell/extensions/blur-my-shell".pipelines = [
+        (mkDictionaryEntry "pipeline_default" (
+          bmsPipeline "Default" [
+            (bmsBlur "effect_000000000000")
+            (bmsTint "effect_000000000003")
+          ]
+        ))
+        (mkDictionaryEntry "pipeline_default_rounded" (
+          bmsPipeline "Default rounded" [
+            (bmsBlur "effect_000000000001")
+            (bmsTint "effect_000000000004")
+            (bmsEffect "corner" "effect_000000000002" { radius = mkInt32 24; })
+          ]
+        ))
       ];
-      cancel-input-capture = none;
-      toggle-tiled-left = none;
-      toggle-tiled-right = none;
-    };
+      "org/gnome/shell/extensions/blur-my-shell/appfolder" = {
+        blur = true;
+        brightness = 0.6;
+        sigma = 30;
+      };
+      "org/gnome/shell/extensions/blur-my-shell/dash-to-dock" = {
+        # Off like the panel's: it would blur a square behind the rounded dock.
+        blur = false;
+        # Let the dock paint its own palette background over the blur.
+        override-background = false;
+        brightness = 0.6;
+        pipeline = "pipeline_default";
+        sigma = 30;
+        static-blur = true;
+        style-dash-to-dock = 0;
+      };
+      "org/gnome/shell/extensions/blur-my-shell/lockscreen" = {
+        blur = true;
+        pipeline = "pipeline_default";
+      };
+      "org/gnome/shell/extensions/blur-my-shell/overview" = {
+        blur = true;
+        pipeline = "pipeline_default";
+        style-components = 2;
+      };
+      "org/gnome/shell/extensions/blur-my-shell/panel" = {
+        # Off: it would blur one strip behind the whole (now transparent) bar
+        # instead of the individual islands.
+        blur = false;
+        brightness = 0.6;
+        force-light-text = false;
+        pipeline = "pipeline_default";
+        sigma = 37;
+        static-blur = true;
+        unblur-in-overview = true;
+      };
+      "org/gnome/shell/extensions/blur-my-shell/popup" = {
+        # Off (on by default since v75): it blurs a square behind notification
+        # banners and menus that pokes out past their rounded island corners,
+        # and popupFill is opaque enough that the blur barely shows anyway.
+        blur = false;
+      };
+      "org/gnome/shell/extensions/blur-my-shell/screenshot" = {
+        blur = true;
+        pipeline = "pipeline_default";
+      };
+      "org/gnome/shell/extensions/blur-my-shell/window-list" = {
+        blur = true;
+        brightness = 0.6;
+        sigma = 30;
+      };
 
-    "org/gnome/mutter/wayland/keybindings" = {
-      restore-shortcuts = none;
-    }
-    // lib.genAttrs (map (n: "switch-to-session-${toString n}") (lib.range 1 9)) (_: none);
+      # Ubuntu dock (dash-to-dock schema)
+      "org/gnome/shell/extensions/dash-to-dock" = {
+        dock-position = "BOTTOM";
+        dash-max-icon-size = 32;
+        extend-height = false; # floating island, not edge to edge
+        # Auto-hide: not fixed, so windows get the full height; it slides away
+        # when a window overlaps it (intellihide) and returns at the bottom edge.
+        dock-fixed = false;
+        autohide = true;
+        intellihide = true;
+        height-fraction = 0.9;
+        hot-keys = false;
+        multi-monitor = false;
+        scroll-action = "do-nothing";
+        show-apps-at-top = false;
+        show-mounts-only-mounted = true;
+        show-trash = false;
+        # Every running app on the dock regardless of workspace or monitor
+        # (the defaults are off, but a hand-set true would otherwise linger).
+        isolate-workspaces = false;
+        isolate-monitors = false;
+        apply-custom-theme = false;
+        custom-theme-shrink = true;
+        # Background, border and corners come from the Shell theme CSS (the
+        # dock is styled as a top-bar island); only the running dots are set here.
+        custom-background-color = false;
+        transparency-mode = "DEFAULT";
+        running-indicator-style = "DOTS";
+        custom-theme-customize-running-dots = true;
+        custom-theme-running-dots-color = c.blue;
+        custom-theme-running-dots-border-color = c.blue;
+        custom-theme-running-dots-border-width = 0;
+      };
+
+      # Ubuntu's dock forces isolate-workspaces on whenever Alt+Tab is limited
+      # to the current workspace (docking.js maps app-switcher's
+      # current-workspace-only onto it). Then other workspaces' apps vanish
+      # from the dock and clicking one launches a new instance instead of
+      # switching to it. Keep it off so the dock really is global.
+      "org/gnome/shell/app-switcher".current-workspace-only = false;
+
+      "org/gnome/shell/extensions/alphabetical-app-grid".folder-order-position = "end";
+
+      "org/gnome/shell/extensions/bluetooth-quick-connect" = {
+        keep-menu-on-toggle = true;
+        refresh-button-on = true;
+        show-battery-value-on = true;
+      };
+
+      # Workspaces indicator by open apps: the icons of the apps open on each
+      # workspace, in the left island; empty workspaces are hidden except the
+      # active one, which shows its workspace-names glyph (see the patch above).
+      # The active workspace is outlined by a rounded blue border (Shell theme
+      # CSS above) instead of the extension's underline and tint.
+      "org/gnome/shell/extensions/workspaces-indicator-by-open-apps" = {
+        position-in-panel = "LEFT";
+        position-index = 0;
+        hide-activities-button = true;
+        scroll-enable = true;
+        scroll-wraparound = false;
+        # Must stay on: the patched extension draws the active workspace's
+        # rounded border in place of this underline.
+        indicator-show-active-workspace = true;
+        indicator-show-focused-app = false;
+        indicator-color = c.blue;
+        indicator-round-borders = true;
+        indicator-show-background = false;
+        indicator-background-color = rgba c.blue 0.15;
+        indicator-background-padding = 4;
+        workspace-label-text-color = c.fgDark;
+        app-label-text-color = c.fg;
+        indicator-show-indexes = false;
+        indicator-use-custom-names = true;
+        indicator-hide-empty = true;
+        apps-inactive-effect = "REDUCE OPACITY";
+        apps-minimized-effect = "REDUCE OPACITY";
+        size-app-icon = 25;
+        size-labels = 20;
+        spacing-workspace-left = 3;
+        spacing-workspace-right = 3;
+        icons-group = "OFF";
+      };
+
+      "org/gnome/shell/extensions/notification-banner-reloaded" = {
+        anchor-horizontal = 1;
+        anchor-vertical = 0;
+        animation-direction = 2;
+        animation-time = 200;
+        padding-horizontal = 0;
+        padding-vertical = 0;
+      };
+
+      "org/gnome/shell/extensions/caffeine" = {
+        show-indicator = "only-active";
+        show-notifications = true;
+        show-timer = true;
+        enable-fullscreen = true;
+        restore-state = false;
+        screen-blank = "never";
+        nightlight-control = "never";
+      };
+
+      "org/gnome/shell/extensions/notifications-alert" = {
+        blinkrate = 500;
+        color = rgb c.red;
+      };
+
+      "org/gnome/shell/extensions/tailscale-status" = lib.mkIf cfg.tailscale.enable {
+        login-server = "https://tailscale.crisidev.org:8443";
+      };
+
+      # Astra monitor — palette blue/red accents. Its per-profile JSON blob
+      # (`profiles`) is left to the extension; these are the active top-level keys.
+      "org/gnome/shell/extensions/astra-monitor" = {
+        current-profile = "crisidev";
+        # Header graphs 30% wider than the default 30px.
+        memory-header-graph-width = 39;
+        network-header-graph-width = 39;
+        processor-header-graph-width = 39;
+        storage-header-graph-width = 39;
+        # ~85% of the island's height (its default caps at 32px and sits high).
+        headers-height-override = 37;
+        explicit-zero = true;
+        monitors-order = ''["storage","network","memory","sensors","processor","gpu"]'';
+        memory-header-bars = false;
+        memory-header-bars-breakdown = false;
+        memory-header-bars-color1 = rgb c.blue;
+        memory-header-graph = true;
+        memory-header-graph-color1 = rgb c.blue;
+        memory-header-icon-alert-color = rgb c.red;
+        memory-indicators-order = ''["bar","graph","percentage","value","free","icon"]'';
+        memory-menu-swap-color = rgb c.blue;
+        network-header-icon-alert-color = rgb c.red;
+        network-header-icon-custom = "network-wireless-symbolic";
+        network-header-io = true;
+        network-header-io-bars-color1 = rgb c.blue;
+        network-header-io-bars-color2 = rgb c.red;
+        network-header-io-graph-color1 = rgb c.blue;
+        network-header-io-graph-color2 = rgb c.red;
+        network-indicators-order = ''["IO bar","IO graph","IO speed","icon"]'';
+        network-menu-arrow-color1 = rgb c.blue;
+        network-menu-arrow-color2 = rgb c.red;
+        processor-header-bars = true;
+        processor-header-bars-color1 = rgb c.blue;
+        processor-header-bars-color2 = rgb c.red;
+        processor-header-bars-core = true;
+        processor-header-frequency-mode = "max";
+        processor-header-graph = false;
+        processor-header-graph-color1 = rgb c.blue;
+        processor-header-graph-color2 = rgb c.red;
+        processor-header-icon-alert-color = rgb c.red;
+        processor-indicators-order = ''["bar","graph","percentage","frequency","icon"]'';
+        processor-update = 2.0;
+        sensors-header-icon-alert-color = rgb c.red;
+        sensors-header-sensor1 = ''{"service":"hwmon","path":["coretemp","Package id 0","input"]}'';
+        sensors-header-sensor1-show = true;
+        sensors-header-show = true;
+        sensors-header-tooltip = true;
+        sensors-indicators-order = ''["value","icon"]'';
+        storage-header-bars-color1 = rgb c.blue;
+        storage-header-icon-alert-color = rgb c.red;
+        storage-header-io = true;
+        storage-header-io-bars-color1 = rgb c.blue;
+        storage-header-io-bars-color2 = rgb c.red;
+        storage-header-io-graph-color1 = rgb c.blue;
+        storage-header-io-graph-color2 = rgb c.red;
+        storage-indicators-order = ''["bar","percentage","value","free","IO bar","IO graph","IO speed","icon"]'';
+        storage-main = "name-ubuntu--vg-ubuntu--lv";
+        storage-menu-arrow-color1 = rgb c.blue;
+        storage-menu-arrow-color2 = rgb c.red;
+        storage-menu-device-color = rgb c.blue;
+      };
+
+      # ── Interface ───────────────────────────────────────────────────────────
+      # libadwaita/GTK4 apps (Nautilus, portal dialogs) read font and theme from
+      # here, NOT gtk-3.0/settings.ini.
+      "org/gnome/desktop/interface" = {
+        gtk-theme = theme.gtk.name;
+        icon-theme = theme.icons.name;
+        color-scheme = "prefer-dark";
+        accent-color = "blue";
+        font-name = "Inter 11";
+        document-font-name = "Inter 11";
+        monospace-font-name = "JetBrains Mono 11";
+        # macOS-like rendering, matching the fontconfig in fonts.nix.
+        font-antialiasing = "grayscale";
+        font-hinting = "slight";
+        cursor-theme = theme.cursor.name;
+        cursor-size = theme.cursor.size;
+        clock-show-seconds = true;
+        clock-show-weekday = true;
+        gtk-enable-primary-paste = true;
+      };
+
+      "org/gnome/desktop/background" = {
+        picture-uri = theme.wallpaper;
+        picture-uri-dark = theme.wallpaper;
+        picture-options = "zoom";
+        color-shading-type = "solid";
+        primary-color = "#000000000000";
+        secondary-color = "#000000000000";
+      };
+
+      "org/gnome/desktop/screensaver" = {
+        picture-uri = theme.wallpaper;
+        picture-options = "zoom";
+        color-shading-type = "solid";
+        primary-color = "#000000000000";
+        secondary-color = "#000000000000";
+      };
+
+      "org/gnome/desktop/wm/preferences" = {
+        theme = theme.gtk.name;
+        mouse-button-modifier = "<Super>";
+        resize-with-right-button = true;
+        focus-mode = "sloppy";
+        auto-raise = true;
+        num-workspaces = 8;
+        # The trailing space stops St clipping the wide md glyphs
+        # at their right edge; the leading one balances it so the icon sits
+        # centred in its pill. One per workspace, matching workspaceRules
+        # (gnome.workspaceIcons; see its default for the layout).
+        workspace-names = map (i: " ${i} ") cfg.workspaceIcons;
+      };
+
+      "org/gnome/mutter" = {
+        overlay-key = "";
+        dynamic-workspaces = false;
+        edge-tiling = false;
+        workspaces-only-on-primary = true;
+        focus-change-on-pointer-rest = false;
+      };
+
+      "org/gnome/desktop/default-applications/terminal" = {
+        exec = "${config.home.profileDirectory}/bin/kitty";
+        exec-arg = "-e";
+      };
+
+      "org/gnome/nautilus/preferences".thumbnail-limit = mkUint64 10485760;
+
+      "org/gnome/desktop/sound" = {
+        event-sounds = false;
+        input-feedback-sounds = false;
+        theme-name = "Yaru";
+      };
+
+      # ── Input ───────────────────────────────────────────────────────────────
+      "org/gnome/desktop/peripherals/keyboard" = {
+        repeat = true;
+        repeat-interval = mkUint32 14;
+        delay = mkUint32 230;
+      };
+      "org/gnome/desktop/peripherals/mouse".natural-scroll = false;
+      "org/gnome/desktop/peripherals/touchpad" = {
+        click-method = "fingers";
+        edge-scrolling-enabled = false;
+        natural-scroll = false;
+        two-finger-scrolling-enabled = true;
+      };
+      "org/freedesktop/ibus/general/hotkey".triggers = none;
+      "org/freedesktop/ibus/panel/emoji".hotkey = none;
+
+      # ── Power / idle ────────────────────────────────────────────────────────
+      "org/gnome/desktop/session".idle-delay = mkUint32 300;
+      "org/gnome/settings-daemon/plugins/power" = {
+        ambient-enabled = false;
+        # Panel brightness (%) while dimmed for idle, not a timeout: values over
+        # 100 make gsd-power fail its range assertion and skip the dim.
+        idle-brightness = 30;
+        idle-dim = true;
+        lid-close-ac-action = "suspend";
+        lid-close-battery-action = "suspend";
+        lid-close-suspend-with-external-monitor = false;
+        power-button-action = "nothing";
+        power-saver-profile-on-low-battery = true;
+        sleep-inactive-ac-timeout = 3600;
+        sleep-inactive-ac-type = "suspend";
+        sleep-inactive-battery-timeout = 900;
+        sleep-inactive-battery-type = "suspend";
+      };
+
+      "org/gnome/desktop/a11y/applications".screen-reader-enabled = false;
+
+      # ── Keybindings ─────────────────────────────────────────────────────────
+      "org/gnome/settings-daemon/plugins/media-keys" = {
+        custom-keybindings = lib.imap0 (i: _: customKeybindingPath i) customKeybindings;
+        screensaver = [ "<Super><Alt>l" ];
+        terminal = [ "<Super>Return" ];
+        email = [ "<Super>e" ];
+        home = [ "<Super>f" ];
+        www = [ "<Super>b" ];
+        help = none;
+        # GNOME toggles the Orca screen reader on <Super><Alt>s; pressed by
+        # accident, Orca walks the focused page element by element (Firefox
+        # scrolling on its own).
+        screenreader = none;
+        rotate-video-lock-static = none;
+      };
+
+      "org/gnome/desktop/wm/keybindings" = {
+        close = [ "<Super>w" ];
+        minimize = [ "<Super><Alt>comma" ];
+        toggle-maximized = [ "<Super><Alt>f" ];
+        panel-run-dialog = [ "<Alt>F2" ];
+        switch-applications = [ "<Super>Tab" ];
+        switch-applications-backward = [ "<Shift><Super>Tab" ];
+        switch-group = [
+          "<Super>Above_Tab"
+          "<Alt>Above_Tab"
+        ];
+        switch-group-backward = [
+          "<Shift><Super>Above_Tab"
+          "<Shift><Alt>Above_Tab"
+        ];
+        switch-windows = [ "<Alt>Tab" ];
+        switch-windows-backward = [ "<Shift><Alt>Tab" ];
+        switch-input-source = [ "XF86Keyboard" ];
+        switch-input-source-backward = [ "<Shift>XF86Keyboard" ];
+        move-to-workspace-1 = [ "<Super><Shift>Escape" ];
+        move-to-workspace-2 = [ "<Super><Shift>F2" ];
+        move-to-workspace-3 = [ "<Super><Shift>F1" ];
+        move-to-workspace-4 = [ "<Super><Shift>F3" ];
+        move-to-workspace-5 = [ "<Super><Shift>1" ];
+        move-to-workspace-6 = [ "<Super><Shift>2" ];
+        move-to-workspace-7 = [ "<Super><Shift>3" ];
+        move-to-workspace-8 = [ "<Super><Shift>4" ];
+        activate-window-menu = none;
+        cycle-group = none;
+        cycle-group-backward = none;
+        cycle-windows = none;
+        cycle-windows-backward = none;
+        maximize = none;
+        unmaximize = none;
+        move-to-monitor-down = none;
+        move-to-monitor-left = none;
+        move-to-monitor-right = none;
+        move-to-monitor-up = none;
+        move-to-workspace-down = none;
+        move-to-workspace-last = none;
+        move-to-workspace-left = none;
+        move-to-workspace-right = none;
+        move-to-workspace-up = none;
+        panel-main-menu = none;
+        switch-to-workspace-down = none;
+        switch-to-workspace-left = none;
+        switch-to-workspace-right = none;
+        switch-to-workspace-up = none;
+      }
+      // lib.genAttrs (map (n: "switch-to-workspace-${toString n}") (lib.range 1 9)) (_: none)
+      // {
+        # Workspace 5 itself even when Element sits on the second monitor, where
+        # pop-shell's workspace 5 key focuses Element instead.
+        switch-to-workspace-5 = [ "<Super><Alt>1" ];
+      };
+
+      "org/gnome/mutter/keybindings" = {
+        switch-monitor = [
+          "<Super><Alt>d"
+          "XF86Display"
+        ];
+        cancel-input-capture = none;
+        toggle-tiled-left = none;
+        toggle-tiled-right = none;
+      };
+
+      "org/gnome/mutter/wayland/keybindings" = {
+        restore-shortcuts = none;
+      }
+      // lib.genAttrs (map (n: "switch-to-session-${toString n}") (lib.range 1 9)) (_: none);
+    };
   };
 }

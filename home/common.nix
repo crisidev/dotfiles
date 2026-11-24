@@ -1,6 +1,7 @@
 { pkgs, ... }:
 {
   imports = [
+    ./options.nix
     ./programs/starship.nix
     ./programs/git.nix
     ./programs/bat.nix
@@ -31,7 +32,7 @@
   };
 
   home = {
-    stateVersion = "24.11";
+    stateVersion = "26.05";
     sessionVariables.NIX_SHELL_PRESERVE_PROMPT = 1;
   };
 

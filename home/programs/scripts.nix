@@ -14,6 +14,7 @@ let
     "grcov-report" # rust coverage report
     "gh-repo-cleanup" # github repo housekeeping
     "stylepak" # apply the host GTK theme to flatpaks
+    "firefox" # open urls in firefox via command line
   ];
 in
 {

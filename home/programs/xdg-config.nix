@@ -26,9 +26,19 @@ in
     videos = home;
   };
 
+  # bob's active neovim, for the GNOME session too (launchers, `ide`).
+  home.sessionPath = [ "$HOME/.local/share/bob/nvim-bin" ];
+
   # Small standalone config files with no dedicated home-manager module.
   xdg.configFile = {
-    # bob (neovim version manager)
+    # xdg-terminal-exec (Ubuntu's "open a terminal": Super+T, Nautilus, …)
+    # otherwise falls back to the distro list, i.e. Ptyxis.
+    "xdg-terminals.list".text = ''
+      kitty.desktop
+    '';
+
+    # bob (neovim version manager). It doesn't touch PATH itself; its
+    # nvim-bin is added in init-early.zsh and home.sessionPath (below).
     "bob/config.json".source = (pkgs.formats.json { }).generate "bob-config.json" {
       add_neovim_binary_to_path = false;
       ignore_running_instances = true;
@@ -55,7 +65,7 @@ in
       genericName = "Terminal emulator";
       comment = "Fast, feature-rich, GPU based terminal";
       icon = "kitty";
-      exec = "/home/bigo/.nix-profile/bin/kitty";
+      exec = "${config.home.profileDirectory}/bin/kitty";
       terminal = false;
       type = "Application";
       categories = [
@@ -65,7 +75,7 @@ in
       startupNotify = true;
       settings = {
         Version = "1.0";
-        TryExec = "/home/bigo/.nix-profile/bin/kitty";
+        TryExec = "${config.home.profileDirectory}/bin/kitty";
       };
     };
 
@@ -74,7 +84,7 @@ in
       genericName = "Terminal emulator";
       comment = "Open URLs with kitty";
       icon = "kitty";
-      exec = "/home/bigo/.nix-profile/bin/kitty +open %U";
+      exec = "${config.home.profileDirectory}/bin/kitty +open %U";
       terminal = false;
       type = "Application";
       categories = [
@@ -94,7 +104,7 @@ in
       noDisplay = true;
       settings = {
         Version = "1.0";
-        TryExec = "/home/bigo/.nix-profile/bin/kitty";
+        TryExec = "${config.home.profileDirectory}/bin/kitty";
       };
     };
   };

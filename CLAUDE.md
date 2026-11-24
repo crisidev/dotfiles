@@ -43,7 +43,7 @@ nix build --impure .#homeConfigurations.falcon.activationPackage   # eval/build 
 
 ### Flatpaks
 
-Flatpaks (Firefox, Ferdium, Signal, Spotify) cannot see `/nix/store` or host fontconfig, so `flatpak.nix` and `fonts.nix` use `home.activation` steps to copy themes, fonts, fontconfig and Firefox `user.js`/`userChrome.css` as real files (not symlinks). Firefox uses the legacy `~/.mozilla` profile root when it exists. Overrides live in `home/files/flatpak/overrides`.
+Flatpaks (Firefox, Signal, Spotify) cannot see `/nix/store` or host fontconfig, so `flatpak.nix` and `fonts.nix` use `home.activation` steps to copy themes, fonts, fontconfig and Firefox `user.js`/`userChrome.css` as real files (not symlinks). Firefox uses the legacy `~/.mozilla` profile root when it exists. Overrides live in `home/files/flatpak/overrides`.
 
 ## Conventions
 

@@ -16,13 +16,22 @@ apply() {
         edid-decode "$edid" 2>/dev/null | grep "Display Product Name"
     done)
 
+    # Determine the current monitor configuration and the associated text scaling factor.
     if echo "$monitor_info" | grep -q "BenQ PD3200U"; then
         current="home"
-        scale="1.00"
+        scale="1.1"
         kitty_font="11"
+    elif echo "$monitor_info" | grep -q "LG ULTRAFINE"; then
+        current="work"
+        scale="1.1"
+        kitty_font="12"
+    elif echo "$monitor_info" | grep -q "LG HDR 4K"; then
+        current="work"
+        scale="1.15"
+        kitty_font="12"
     else
         current="builtin"
-        scale="1.3"
+        scale="1.2"
         kitty_font="14"
     fi
 

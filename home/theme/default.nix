@@ -164,7 +164,7 @@ let
 
   # ── Wallpaper: an existing (gitignored, so not flake-visible) image
   # recoloured onto the palette with lutgen at activation. ──────────────────────
-  wallpaperSrc = "${home}/.homesick/repos/dotfiles/wallpapers/nix-d-nord-aurora.jpg";
+  wallpaperSrc = config.dotfiles.wallpaper;
   wallpaperOut = "${home}/.local/share/backgrounds/tokyonight-storm-${baseNameOf wallpaperSrc}";
 in
 {
