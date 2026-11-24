@@ -312,6 +312,7 @@ let
       coreutils
       findutils
       glib
+      glib.dev # glib-compile-resources
       imagemagick
     ];
     text = ''
