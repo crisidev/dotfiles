@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Set text scaling and the kitty font size for the attached monitor:
-# BenQ PD3200U at home, the built-in panel otherwise. Runs once at login, then
-# waits for Mutter's MonitorsChanged D-Bus signal instead of polling.
+# the known external monitors first, the built-in panel otherwise. Runs once at
+# login, then waits for Mutter's MonitorsChanged D-Bus signal instead of polling.
 # `monitor-switch now` applies the settings once and exits.
 export PATH=$PATH:/usr/bin:$HOME/.bin
 
@@ -11,9 +11,10 @@ prev=""
 apply() {
     local force=$1 monitor_info current scale kitty_font
 
-    # Decode the EDID of every connector, keeping the product names.
+    # Decode the EDID of every connector, keeping the product names. Laptop
+    # panels have no product name, only their part number as a plain string.
     monitor_info=$(for edid in /sys/class/drm/*/edid; do
-        edid-decode "$edid" 2>/dev/null | grep "Display Product Name"
+        edid-decode "$edid" 2>/dev/null | grep -E "Display Product Name|Alphanumeric Data String"
     done)
 
     # Determine the current monitor configuration and the associated text scaling factor.
@@ -29,6 +30,13 @@ apply() {
         current="work"
         scale="1.15"
         kitty_font="12"
+    elif echo "$monitor_info" | grep -q "ATNA40YK01"; then
+        # falcon's 14" 2880x1800 panel: 1.2 is too small to read on it. The
+        # panel's EDID is there with an external monitor attached too, so this
+        # must stay after the external ones.
+        current="builtin"
+        scale="1.3"
+        kitty_font="14"
     else
         current="builtin"
         scale="1.2"
