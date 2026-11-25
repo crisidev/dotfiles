@@ -229,7 +229,6 @@ let
   # install them too (gnome.nixExtensions.enable).
   managedExtensions = with pkgs.gnomeExtensions; [
     activate-window-by-title
-    adaptive-brightness
     alphabetical-app-grid
     battery-time-percentage-compact
     bluetooth-quick-connect
@@ -262,6 +261,7 @@ let
   ++ lib.optionals config.gnome.nixExtensions.enable (
     managedExtensions
     ++ lib.optional config.gnome.tailscale.enable pkgs.gnomeExtensions.tailscale-status
+    ++ lib.optional config.gnome.adaptiveBrightness.enable pkgs.gnomeExtensions.adaptive-brightness
   );
 
   # blur-my-shell pipelines (a{sa{sv}}), as its prefs would write them: the
@@ -424,7 +424,7 @@ let
   # Windows pop-shell floats instead of tiling (its float-rules setting):
   # (class regex, title regex), case-insensitive, "" matching anything.
   # Floats stay above tiles until another window is clicked, and open
-  # centred at no less than half the screen (float-* settings).
+  # centred at no less than 30% of the screen (float-* settings).
   popShellFloatRules = map mkTuple (
     cfg.popShell.extraFloatRules
     ++ [
@@ -484,6 +484,19 @@ let
   # Bitwarden) as window.csd.ssd-frame, and the frame's size follows the
   # shadow, so every focus change (e.g. switching to their workspace) animated
   # the frame's size and visibly wobbled the window.
+  # Orchis zeroes the padding of Nautilus's sidebar rows, pulls them together
+  # with -8px margins and puts the height back with min-height on
+  # label.sidebar-label. Nautilus 50's NautilusSidebarRow dropped that class,
+  # so the rows collapsed into one another. Select the label by position,
+  # which still matches the labelled rows of older Nautilus.
+  nautilusSidebarRows = ''
+
+    .nautilus-window .sidebar-pane > toolbarview > placessidebar > scrolledwindow > viewport > list.navigation-sidebar > row.activatable > revealer.sidebar-revealer > box > label {
+        min-height: 54px;
+        padding-left: 6px;
+    }
+  '';
+
   gtkCsdReset = ''
     window.csd,
     window.csd:backdrop,
@@ -677,6 +690,11 @@ in
     default = true;
     description = "Tailscale status extension (personal tailnet).";
   };
+  options.gnome.adaptiveBrightness.enable = lib.mkOption {
+    type = lib.types.bool;
+    default = true;
+    description = "Adaptive Brightness extension (backlight from the ambient light sensor).";
+  };
   options.gnome.appIndicators.enable = lib.mkEnableOption ''
     Ubuntu's AppIndicator extension, for apps that only have a tray icon (no
     Shell extension). top-bar-organizer appends their icons to the right box
@@ -713,7 +731,7 @@ in
       gtk4.extraConfig = {
         gtk-application-prefer-dark-theme = true;
       };
-      gtk4.extraCss = gtkCsdReset;
+      gtk4.extraCss = gtkCsdReset + nautilusSidebarRows;
     };
 
     # The Shell theme (an @import of Orchis plus the overrides below) and the
@@ -910,7 +928,6 @@ in
         disable-user-extensions = false;
         enabled-extensions = [
           "activate-window-by-title@lucaswerkmeister.de"
-          "adaptive-brightness@dmy3k.github.io"
           "AlphabeticalAppGrid@stuarthayhurst"
           "batterytimepercentagecompact@sagrland.de"
           "bluetooth-quick-connect@bjarosze.gmail.com"
@@ -929,6 +946,7 @@ in
           "user-theme@gnome-shell-extensions.gcampax.github.com"
         ]
         ++ lib.optional cfg.tailscale.enable "tailscale-status@maxgallup.github.com"
+        ++ lib.optional cfg.adaptiveBrightness.enable "adaptive-brightness@dmy3k.github.io"
         ++ lib.optional (cfg.appIndicators.enable) "ubuntu-appindicators@ubuntu.com";
         disabled-extensions = [
           "ding@rastersoft.com"
@@ -940,6 +958,7 @@ in
           "snapd-search-provider@canonical.com"
         ]
         ++ lib.optional (!cfg.tailscale.enable) "tailscale-status@maxgallup.github.com"
+        ++ lib.optional (!cfg.adaptiveBrightness.enable) "adaptive-brightness@dmy3k.github.io"
         ++ lib.optional (!cfg.appIndicators.enable) "ubuntu-appindicators@ubuntu.com";
         favorite-apps = cfg.favoriteApps;
       };
@@ -998,6 +1017,9 @@ in
           focus-flash = mkUint32 400;
           workspace-rules = workspaceRules;
           float-rules = popShellFloatRules;
+          # Floats open at no less than 30% of the work area: the default 50%
+          # turned Nautilus's saved size into 1920x1055 on a 4K monitor.
+          float-min-size = mkUint32 30;
           workspace-back-and-forth = true;
           startup-workspace = mkUint32 1;
           rebalance-windows = [ "<Super><Alt>r" ];
@@ -1348,6 +1370,14 @@ in
       };
 
       "org/gnome/nautilus/preferences".thumbnail-limit = mkUint64 10485760;
+      # Nautilus opens at the size it saved when its last window closed, which
+      # had grown to 1920x1055. 60% of that, which is 30% of a 4K work area,
+      # so pop-shell's float-min-size doesn't grow it back.
+      # Each switch puts it back if a resize has been saved since.
+      "org/gnome/nautilus/window-state".initial-size = mkTuple [
+        1152
+        633
+      ];
 
       "org/gnome/desktop/sound" = {
         event-sounds = false;

@@ -103,6 +103,19 @@ in
   .prompt-dialog .modal-dialog-button:last-child:hover {
     background-color: ${c.cyan};
   }
+  /* End session (Log Out, Power Off, Restart): Orchis paints the action red
+     with !important dark text; the neutral fill above wins over its red, which
+     left dark text on grey. Restate the red. */
+  .end-session-dialog .modal-dialog-button:last-child {
+    color: ${c.bgDark} !important;
+    background-color: ${c.red};
+  }
+  .end-session-dialog .modal-dialog-button:last-child:hover {
+    background-color: ${rgba c.red 0.8};
+  }
+  .end-session-dialog .modal-dialog-button:last-child:active {
+    background-color: ${c.red1};
+  }
   /* Entries: a quiet field with a thin accent outline on focus, instead of
      a shadowed pill with a 2px ring. */
   .modal-dialog StEntry {
