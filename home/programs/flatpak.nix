@@ -17,6 +17,11 @@ let
     user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
     user_pref("widget.gtk.non-native-titlebar-buttons.enabled", false);
 
+    // Middle-click autoscroll takes a GNOME idle inhibitor ("Autoscroll")
+    // that Firefox can fail to release, which stops the screen from ever
+    // auto-locking until Firefox restarts.
+    user_pref("general.autoScroll", false);
+
     // Page fonts stay the flatpak runtime's DejaVu rather than the
     // fontconfig Inter/Source Serif/JetBrains aliases from fonts.nix, which
     // only the UI should get.
