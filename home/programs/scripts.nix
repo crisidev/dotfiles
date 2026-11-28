@@ -15,7 +15,6 @@ let
     "gh-repo-cleanup" # github repo housekeeping
     "stylepak" # apply the host GTK theme to flatpaks
     "firefox" # open urls in firefox via command line
-    "wl-copy" # skip Claude Code's wl-copy (it uses OSC 52); avoids the GNOME focus-grab flicker
   ];
 in
 {

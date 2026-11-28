@@ -88,7 +88,7 @@
       removeall = "sed -i /$*/d **/*(.)";
       calc = "noglob calc";
       ack = "rg -L --hidden --stats --pretty -z";
-      pbc = "wl-copy"; # was `xclip -sel clip` (X11); wl-copy is native Wayland
+      pbc = "xclip -selection clipboard"; # wl-copy flashes a focus-grab window on GNOME
       cat = "bat -p";
       sshpass = "ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no";
       open = "xdg-open";
