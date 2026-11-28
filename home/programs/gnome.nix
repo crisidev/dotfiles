@@ -1391,6 +1391,11 @@ in
         repeat-interval = mkUint32 14;
         delay = mkUint32 230;
       };
+      # keyd's AltGr "dia" layer (system/etc/keyd/default.conf) types accents as
+      # macro(compose <letter> <accent>); keyd's `compose` emits KEY_COMPOSE
+      # (Menu), so XKB must treat Menu as Multi_key or the macro just types the
+      # letter followed by the accent (a`, e', c,).
+      "org/gnome/desktop/input-sources".xkb-options = [ "compose:menu" ];
       "org/gnome/desktop/peripherals/mouse".natural-scroll = false;
       "org/gnome/desktop/peripherals/touchpad" = {
         click-method = "fingers";
