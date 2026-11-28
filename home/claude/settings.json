@@ -15,7 +15,8 @@
     "rust-analyzer-lsp@claude-plugins-official": true,
     "code-simplifier@claude-plugins-official": true,
     "security-guidance@claude-plugins-official": true,
-    "cc-plugin-you-should-know@builtin": true
+    "cc-plugin-you-should-know@builtin": true,
+    "clangd-lsp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "fullstack-dev-skills": {
@@ -31,7 +32,7 @@
       "effortLevel": "high"
     }
   },
-  "tui": "default",
+  "tui": "fullscreen",
   "theme": "dark",
   "agentPushNotifEnabled": true,
   "autoMode": {

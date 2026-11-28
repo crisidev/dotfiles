@@ -1,0 +1,8 @@
+#!/bin/sh
+# Claude Code also copies through OSC 52, so skip its wl-copy call:
+# on GNOME, wl-copy flashes a window to grab focus.
+if [ "$(ps -o comm= -p "$PPID")" = claude ]; then
+    cat >/dev/null   # read the input so Claude Code doesn't get a broken pipe
+    exit 0
+fi
+exec /usr/bin/wl-copy "$@"
